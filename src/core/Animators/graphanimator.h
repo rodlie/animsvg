@@ -17,6 +17,7 @@
 #ifndef GRAPHANIMATOR_H
 #define GRAPHANIMATOR_H
 #include "animator.h"
+#include <QPainterPath>
 #define GetAsGK(key) static_cast<GraphKey*>(key)
 
 class GraphKey;
