@@ -19,11 +19,7 @@
 
 #include <qglobal.h>
 
-#if defined(Q_OS_LINUX)
-    #include <stdint-gcc.h>
-#else
-    #include <stdint.h>
-#endif
+#include <stdint.h>
 
 void rgba8_to_rgba16(uint8_t* src,
                      const int srcWidth,
