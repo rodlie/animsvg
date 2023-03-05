@@ -76,8 +76,11 @@ include_directories(
     ${QSCINTILLA_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/../core
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia
-    ${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/include
 )
+
+if(UNIX)
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/include)
+endif()
 
 set(
     SOURCES
@@ -352,19 +355,25 @@ add_executable(
     tips.qrc
 )
 
-set_target_properties(
-    ${PROJECT_NAME}
-    PROPERTIES
-    BUILD_WITH_INSTALL_RPATH FALSE
-    LINK_FLAGS "-Wl,-rpath,$ORIGIN/"
-)
-
 target_link_directories(
     ${PROJECT_NAME}
     PRIVATE
     ${QSCINTILLA_LIBARIES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/.libs
 )
+
+if(UNIX)
+    set_target_properties(
+        ${PROJECT_NAME}
+        PROPERTIES
+        BUILD_WITH_INSTALL_RPATH FALSE
+        LINK_FLAGS "-Wl,-rpath,$ORIGIN/"
+    )
+    target_link_directories(
+        ${PROJECT_NAME}
+        PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/.libs
+    )
+endif()
 
 target_link_libraries(
     ${PROJECT_NAME}
@@ -389,5 +398,12 @@ target_link_libraries(
     ${SWSCALE_LIBRARIES}
     ${SWRESAMPLE_LIBRARIES}
     qscintilla2_qt5
-    tcmalloc
 )
+
+if(UNIX)
+    target_link_libraries(
+        ${PROJECT_NAME}
+        PRIVATE
+        tcmalloc
+    )
+endif()
