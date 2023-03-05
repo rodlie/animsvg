@@ -2,18 +2,6 @@
 	path = third_party/skia
 	url = https://skia.googlesource.com/skia
     ignore = dirty
-[submodule "third_party/libmypaint"]
-	path = third_party/libmypaint
-	url = https://github.com/mypaint/libmypaint.git
-    ignore = dirty
-[submodule "third_party/qscintilla"]
-	path = third_party/qscintilla
-	url = https://github.com/opencor/qscintilla.git
-    ignore = dirty
-[submodule "third_party/quazip"]
-	path = third_party/quazip
-	url = https://github.com/stachenov/quazip.git
-    ignore = dirty
 [submodule "third_party/gperftools"]
 	path = third_party/gperftools
 	url = https://github.com/gperftools/gperftools.git
