@@ -37,7 +37,7 @@ Requirements:
 * libswresample
 * libunwind
 
-Consult your package manager on how to install these development packages.
+Consult your package manager on how to install these development packages. For Ubuntu see [here](docs/build_ubuntu.sh).
 
 Clone the repository, this might take a while.
 
