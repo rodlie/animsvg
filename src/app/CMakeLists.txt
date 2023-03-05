@@ -352,6 +352,13 @@ add_executable(
     tips.qrc
 )
 
+set_target_properties(
+    ${PROJECT_NAME}
+    PROPERTIES
+    BUILD_WITH_INSTALL_RPATH FALSE
+    LINK_FLAGS "-Wl,-rpath,$ORIGIN/"
+)
+
 target_link_directories(
     ${PROJECT_NAME}
     PRIVATE
