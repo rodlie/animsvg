@@ -4,7 +4,7 @@ This is a community fork of [enve](https://github.com/MaurycyLiebner/enve). A 2d
 
 ## Build
 
-We are moving to CMake and currently only Linux is supported, see #1 for progress on other platforms.
+We are moving to CMake and currently only Linux is supported, see open [issue](https://github.com/enve2d/enve2d/issues/1) for progress on other platforms.
 
 ### Linux
 
@@ -69,7 +69,23 @@ Now you can build enve2d:
 cd enve2d
 mkdir build
 cd build
+```
+
+Note that if you are not using Ubuntu you will need to set paths for qscintilla:
+
+```
+cmake -DCMAKE_BUILD_TYPE=Release -DQSCINTILLA_LIBARIES="path/to/libraries" -DQSCINTILLA_INCLUDES="path/to/includes" ..
+```
+
+else just use:
+
+```
 cmake -DCMAKE_BUILD_TYPE=Release ..
+```
+
+Now build:
+
+```
 make -j4
 ```
 
