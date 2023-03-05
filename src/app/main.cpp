@@ -28,7 +28,7 @@
 #include "ShaderEffects/shadereffectprogram.h"
 #include "videoencoder.h"
 #include "iconloader.h"
-#include "GUI/envesplash.h"
+//#include "GUI/envesplash.h"
 #ifdef Q_OS_WIN
     #include "windowsincludes.h"
 #endif // Q_OS_WIN
@@ -174,7 +174,7 @@ int main(int argc, char *argv[]) {
 
     eFilterSettings filterSettings;
     QDir(eSettings::sSettingsDir()).mkpath(eSettings::sIconsDir());
-    try {
+    /*try {
         const QString pngPath = EnveSplash::sSplashPath();
 #ifdef QT_DEBUG
         QFile(pngPath).remove();
@@ -182,13 +182,13 @@ int main(int argc, char *argv[]) {
         IconLoader::generate(":/pixmaps/splash.svg", eSizesUI::widget/22., pngPath);
     } catch(const std::exception& e) {
         gPrintExceptionCritical(e);
-    }
-    const auto splash = new EnveSplash;
-    splash->show();
-    app.processEvents();
+    }*/
+    //const auto splash = new EnveSplash;
+    //splash->show();
+    //app.processEvents();
 
-    splash->showMessage("Generate icons...");
-    app.processEvents();
+    //splash->showMessage("Generate icons...");
+    //app.processEvents();
     eSizesUI::button.add([](const int size) {
         IconLoader::generateAll(eSizesUI::widget, size);
     });
@@ -196,8 +196,8 @@ int main(int argc, char *argv[]) {
     eWidgetsImpl widImpl;
     ImportHandler importHandler;
 
-    splash->showMessage("Initialize task scheduler...");
-    app.processEvents();
+    //splash->showMessage("Initialize task scheduler...");
+    //app.processEvents();
     MemoryHandler memoryHandler;
     TaskScheduler taskScheduler;
     QObject::connect(&memoryHandler, &MemoryHandler::enteredCriticalState,
@@ -208,8 +208,8 @@ int main(int argc, char *argv[]) {
     Document document(taskScheduler);
     Actions actions(document);
 
-    splash->showMessage("Initialize gpu resources...");
-    app.processEvents();
+    //splash->showMessage("Initialize gpu resources...");
+    //app.processEvents();
     EffectsLoader effectsLoader;
     try {
         effectsLoader.initializeGpu();
@@ -219,18 +219,18 @@ int main(int argc, char *argv[]) {
         gPrintExceptionFatal(e);
     }
 
-    splash->showMessage("Initialize custom path effects...");
-    app.processEvents();
+    //splash->showMessage("Initialize custom path effects...");
+    //app.processEvents();
     effectsLoader.iniCustomPathEffects();
     std::cout << "Custom path effects initialized" << std::endl;
 
-    splash->showMessage("Initialize custom raster effects...");
-    app.processEvents();
+    //splash->showMessage("Initialize custom raster effects...");
+    //app.processEvents();
     effectsLoader.iniCustomRasterEffects();
     std::cout << "Custom raster effects initialized" << std::endl;
 
-    splash->showMessage("Initialize shader effects...");
-    app.processEvents();
+    //splash->showMessage("Initialize shader effects...");
+    //app.processEvents();
     try {
         effectsLoader.iniShaderEffects();
     } catch(const std::exception& e) {
@@ -245,13 +245,13 @@ int main(int argc, char *argv[]) {
     });
     std::cout << "Shader effects initialized" << std::endl;
 
-    splash->showMessage("Initialize custom objects...");
-    app.processEvents();
+    //splash->showMessage("Initialize custom objects...");
+    //app.processEvents();
     effectsLoader.iniCustomBoxes();
     std::cout << "Custom objects initialized" << std::endl;
 
-    splash->showMessage("Initialize audio...");
-    app.processEvents();
+    //splash->showMessage("Initialize audio...");
+    //app.processEvents();
 
     eSoundSettings soundSettings;
     AudioHandler audioHandler;
@@ -263,8 +263,8 @@ int main(int argc, char *argv[]) {
     }
     std::cout << "Audio initialized" << std::endl;
 
-    splash->showMessage("Initialize render handler...");
-    app.processEvents();
+    //splash->showMessage("Initialize render handler...");
+    //app.processEvents();
     const auto videoEncoder = enve::make_shared<VideoEncoder>();
     RenderHandler renderHandler(document, audioHandler,
                                 *videoEncoder, memoryHandler);
@@ -273,23 +273,23 @@ int main(int argc, char *argv[]) {
     MainWindow w(document, actions, audioHandler, renderHandler);
     if(argc > 1) {
         try {
-            splash->showMessage("Load file...");
+            //splash->showMessage("Load file...");
             app.processEvents();
             w.openFile(argv[1]);
         } catch(const std::exception& e) {
             gPrintExceptionCritical(e);
         }
     }
-    splash->showMessage("Done");
+    //splash->showMessage("Done");
     app.processEvents();
     w.show();
 
-    const bool keepSplashVisible = true;
+    /*const bool keepSplashVisible = true;
     if(keepSplashVisible) {
         splash->setParent(&w);
         splash->move(splash->pos() + w.mapFromGlobal({0, 0}));
         splash->show();
-    } else splash->finish(&w);
+    } else splash->finish(&w);*/
 
     try {
         return app.exec();
