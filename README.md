@@ -56,7 +56,7 @@ mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 make -j4
-cp src/app/enve2d
+cp src/app/enve2d .
 cp src/core/libenve2dcore.so.0 .
 cp ../src/gperftools/.libs/libtcmalloc.so.4 .
 ./enve2d
