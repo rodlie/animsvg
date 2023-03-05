@@ -363,7 +363,6 @@ target_link_directories(
     ${PROJECT_NAME}
     PRIVATE
     ${QSCINTILLA_LIBARIES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../skia/out/build
     ${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/.libs
 )
 
@@ -391,6 +390,4 @@ target_link_libraries(
     ${SWRESAMPLE_LIBRARIES}
     qscintilla2_qt5
     tcmalloc
-    skia
-    fontconfig
 )
