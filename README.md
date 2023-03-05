@@ -94,6 +94,6 @@ Run the application:
 ```
 cp src/app/enve2d .
 cp src/core/libenve2dcore.so.0 .
-cp ../src/gperftools/.libs/libtcmalloc.so.4 .
+cp ../src/gperftools/.libs/libtcmalloc.so.90 .
 ./enve2d
 ```
