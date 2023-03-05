@@ -2,6 +2,7 @@
 set -e -x
 
 APT=${APT:-0}
+PYSYM=${PYSYM:-0}
 
 if [ "${APT}" = 1 ]; then
 sudo apt update -y
@@ -42,7 +43,9 @@ git submodule update -i --recursive
 
 CWD=`pwd`
 
-sudo ln -sf /usr/bin/python2 /usr/bin/python
+if [ "${PYSYM}" = 1 ]; then
+    sudo ln -sf /usr/bin/python2 /usr/bin/python
+fi
 
 cd ${CWD}/src/gperftools
 ./autogen.sh

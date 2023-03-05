@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=@PROJECT_NAME@
+Exec=@PROJECT_NAME@
+Icon=@PROJECT_NAME@
+Comment=@PROJECT_DESCRIPTION@
+Terminal=false
+Type=Application
+Categories=Graphics;Video;
+MimeType=application/vnd.@PROJECT_NAME@-project;

@@ -14,4 +14,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: build
-      run: APT=1 ./docs/build_ubuntu.sh
+      run: APT=1 PYSYM=1 ./src/scripts/build_ubuntu.sh

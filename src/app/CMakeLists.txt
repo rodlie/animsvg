@@ -39,6 +39,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(PROJECT_DESCRIPTION "2D Animation Software")
+
 find_package(PkgConfig)
 find_package(OpenMP REQUIRED)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
@@ -84,6 +86,16 @@ if(UNIX)
         set(TCMALLOC "libtcmalloc.dylib.90")
     else()
         set(TCMALLOC "libtcmalloc.so.90")
+        configure_file(
+            app.desktop.in
+            ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.desktop
+            @ONLY
+        )
+        configure_file(
+            meta.xml.in
+            ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.xml
+            @ONLY
+        )
     endif()
     configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/.libs/${TCMALLOC}
@@ -434,6 +446,22 @@ if(UNIX AND NOT APPLE)
         ${CMAKE_BINARY_DIR}/${TCMALLOC}
         DESTINATION
         ${CMAKE_INSTALL_LIBDIR}
+    )
+    install(FILES
+        ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.desktop
+        DESTINATION
+        ${CMAKE_INSTALL_DATAROOTDIR}/applications
+    )
+    install(
+        FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.xml
+        DESTINATION
+        ${CMAKE_INSTALL_DATAROOTDIR}/mime/packages
+    )
+    install(
+        DIRECTORY
+        hicolor
+        DESTINATION
+        ${CMAKE_INSTALL_DATAROOTDIR}/icons/
     )
     install(
         FILES

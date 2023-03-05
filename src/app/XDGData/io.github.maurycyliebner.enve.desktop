@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=enve
-Exec=enve
-Icon=io.github.maurycyliebner.enve
-Comment=Create 2D Animations
-Terminal=false
-Type=Application
-Categories=Graphics;
-MimeType=application/vnd.enve-project;

@@ -10,7 +10,7 @@ We are moving to CMake and currently only Linux is supported, see open [issue](h
 
 General instructions for building enve2d on Linux *(tested on Ubuntu Jammy)*.
 
-Requirements:
+### Requirements
 
 * automake
 * autoconf
@@ -37,7 +37,40 @@ Requirements:
 * libswresample
 * libunwind
 
-Consult your package manager on how to install these development packages. For Ubuntu see [here](docs/build_ubuntu.sh).
+### Ubuntu
+
+```
+sudo apt install -y \
+build-essential \
+autoconf \
+automake \
+cmake \
+python2 \
+ninja-build \
+libfontconfig1-dev \
+libfreetype-dev \
+libavcodec-dev \
+libavformat-dev \
+libavutil-dev \
+libmypaint-dev \
+libqscintilla2-qt5-dev \
+libqt5opengl5-dev \
+libqt5svg5-dev \
+libquazip5-dev \
+libswresample-dev \
+libswscale-dev \
+libunwind-dev \
+qt5-image-formats-plugins \
+libqt5multimedia5-plugins \
+qtbase5-dev-tools \
+qtbase5-dev \
+qtdeclarative5-dev-tools \
+qtdeclarative5-dev \
+qtmultimedia5-dev \
+qttools5-dev-tools \
+qtwebengine5-dev \
+libqt5xmlpatterns5-dev
+```
 
 Clone the repository, this might take a while.
 
@@ -45,7 +78,7 @@ Clone the repository, this might take a while.
 git clone --recurse-submodules https://github.com/enve2d/enve2d
 ```
 
-Build a custom version of gperftools:
+Build a custom version of ``libtcmalloc``:
 
 ```
 cd enve2d/src/gperftools
@@ -54,7 +87,17 @@ cd enve2d/src/gperftools
 make -j4
 ```
 
-Build skia:
+Build ``skia``:
+
+Note that python2 is required. ``/usr/bin/python`` should be a symlink to the python2 binary on your system.
+
+On Ubuntu run:
+
+```
+sudo ln -sf /usr/bin/python2 /usr/bin/python
+```
+
+Now build ``skia`` (might take a while):
 
 ```
 cd enve2d/src/skia
@@ -63,7 +106,7 @@ bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=
 ninja -C out/build -j4 skia
 ```
 
-Now you can build enve2d:
+Now you are ready to build ``enve2d``:
 
 ```
 cd enve2d
@@ -71,7 +114,7 @@ mkdir build
 cd build
 ```
 
-Note that if you are not using Ubuntu you will need to set paths for qscintilla:
+Note that if you are not using Ubuntu you will need to set paths for ``qscintilla``:
 
 ```
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DQSCINTILLA_LIBARIES="path/to/libraries" -DQSCINTILLA_INCLUDES="path/to/includes" ..
@@ -97,14 +140,14 @@ cp src/core/libenve2dcore.so.0 .
 ./enve2d
 ```
 
-Install:
+Install (or prepare for package):
 
 ```
 make DESTDIR=`pwd`/enve2d install 
 ```
 
 ```
-enve2d/
+enve2d
 └── usr
     ├── bin
     │   └── enve2d
@@ -115,10 +158,27 @@ enve2d/
     │       ├── libenve2dcore.so.0.9.0
     │       └── libtcmalloc.so.90
     └── share
-        └── doc
-            └── enve2d-0.9.0
-                ├── LICENSE.md
-                └── README.md
+        ├── applications
+        │   └── enve2d.desktop
+        ├── doc
+        │   └── enve2d-0.9.0
+        │       ├── LICENSE.md
+        │       └── README.md
+        ├── icons
+        │   └── hicolor
+        │       ├── 16x16
+        │       │   └── enve2d.png
+        │       ├── 256x256
+        │       │   └── enve2d.png
+        │       ├── 32x32
+        │       │   └── enve2d.png
+        │       ├── 48x48
+        │       │   └── enve2d.png
+        │       └── scalable
+        │           └── enve2d.svg
+        └── mime
+            └── packages
+                └── enve2d.xml
 ```
 
 or make a DEB package:
