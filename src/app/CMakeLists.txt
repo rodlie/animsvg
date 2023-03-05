@@ -371,13 +371,16 @@ target_link_directories(
     ${QSCINTILLA_LIBARIES}
 )
 
-if(UNIX)
+if(UNIX AND NOT APPLE)
     set_target_properties(
         ${PROJECT_NAME}
         PROPERTIES
         BUILD_WITH_INSTALL_RPATH FALSE
         LINK_FLAGS "-Wl,-rpath,$ORIGIN/"
     )
+endif()
+
+if(UNIX)
     target_link_directories(
         ${PROJECT_NAME}
         PRIVATE
@@ -416,6 +419,9 @@ if(UNIX)
         PRIVATE
         tcmalloc
     )
+endif()
+
+if(UNIX AND NOT APPLE)
     include(GNUInstallDirs)
     install(
         TARGETS

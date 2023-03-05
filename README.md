@@ -120,3 +120,9 @@ enve2d/
                 ├── LICENSE.md
                 └── README.md
 ```
+
+or make a DEB package:
+
+```
+make package
+```
