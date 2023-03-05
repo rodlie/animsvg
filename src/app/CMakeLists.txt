@@ -342,7 +342,15 @@ set(
     GUI/Settings/labeledslider.h
 )
 
-add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES} resources.qrc)
+add_executable(
+    ${PROJECT_NAME}
+    ${HEADERS}
+    ${SOURCES}
+    resources.qrc
+    brushes.qrc
+    icons.qrc
+    tips.qrc
+)
 
 target_link_directories(
     ${PROJECT_NAME}
