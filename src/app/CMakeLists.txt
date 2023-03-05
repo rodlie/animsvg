@@ -147,7 +147,6 @@ set(
     GUI/editablecombobox.cpp
     GUI/ekeyfilter.cpp
     GUI/envelicense.cpp
-    GUI/envesplash.cpp
     GUI/ewidgetsimpl.cpp
     GUI/fakemenubar.cpp
     GUI/layouthandler.cpp
@@ -277,7 +276,6 @@ set(
     GUI/editablecombobox.h
     GUI/ekeyfilter.h
     GUI/envelicense.h
-    GUI/envesplash.h
     GUI/ewidgetsimpl.h
     GUI/fakemenubar.h
     GUI/layouthandler.h
