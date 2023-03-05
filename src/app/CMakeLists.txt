@@ -80,6 +80,16 @@ include_directories(
 
 if(UNIX)
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/include)
+    if(APPLE)
+        set(TCMALLOC "libtcmalloc.dylib.90")
+    else()
+        set(TCMALLOC "libtcmalloc.so.90")
+    endif()
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/.libs/${TCMALLOC}
+        ${CMAKE_BINARY_DIR}/${TCMALLOC}
+        COPYONLY
+    )
 endif()
 
 set(
@@ -405,5 +415,25 @@ if(UNIX)
         ${PROJECT_NAME}
         PRIVATE
         tcmalloc
+    )
+    include(GNUInstallDirs)
+    install(
+        TARGETS
+        ${PROJECT_NAME}
+        DESTINATION
+        ${CMAKE_INSTALL_BINDIR}
+    )
+    install(
+        FILES
+        ${CMAKE_BINARY_DIR}/${TCMALLOC}
+        DESTINATION
+        ${CMAKE_INSTALL_LIBDIR}
+    )
+    install(
+        FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../LICENSE.md
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../README.md
+        DESTINATION
+        ${CMAKE_INSTALL_DOCDIR}-${PROJECT_VERSION}
     )
 endif()

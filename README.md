@@ -74,13 +74,13 @@ cd build
 Note that if you are not using Ubuntu you will need to set paths for qscintilla:
 
 ```
-cmake -DCMAKE_BUILD_TYPE=Release -DQSCINTILLA_LIBARIES="path/to/libraries" -DQSCINTILLA_INCLUDES="path/to/includes" ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DQSCINTILLA_LIBARIES="path/to/libraries" -DQSCINTILLA_INCLUDES="path/to/includes" ..
 ```
 
 else just use:
 
 ```
-cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr ..
 ```
 
 Now build:
@@ -89,11 +89,34 @@ Now build:
 make -j4
 ```
 
-Run the application:
+Run:
 
 ```
 cp src/app/enve2d .
 cp src/core/libenve2dcore.so.0 .
-cp ../src/gperftools/.libs/libtcmalloc.so.90 .
 ./enve2d
+```
+
+Install:
+
+```
+make DESTDIR=`pwd`/enve2d install 
+```
+
+```
+enve2d/
+└── usr
+    ├── bin
+    │   └── enve2d
+    ├── lib
+    │   └── x86_64-linux-gnu
+    │       ├── libenve2dcore.so -> libenve2dcore.so.0
+    │       ├── libenve2dcore.so.0 -> libenve2dcore.so.0.9.0
+    │       ├── libenve2dcore.so.0.9.0
+    │       └── libtcmalloc.so.90
+    └── share
+        └── doc
+            └── enve2d-0.9.0
+                ├── LICENSE.md
+                └── README.md
 ```

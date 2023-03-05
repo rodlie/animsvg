@@ -804,3 +804,13 @@ target_link_libraries(
     skia
     fontconfig
 )
+
+if(UNIX)
+    include(GNUInstallDirs)
+    install(
+        TARGETS
+        ${PROJECT_NAME}
+        DESTINATION
+        ${CMAKE_INSTALL_LIBDIR}
+    )
+endif()
