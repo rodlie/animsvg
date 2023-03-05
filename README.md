@@ -1,10 +1,16 @@
 # enve2d
 
-This is a community fork of [enve](https://github.com/MaurycyLiebner/enve).
+This is a community fork of [enve](https://github.com/MaurycyLiebner/enve). A 2d animation application.
 
 ## Build
 
-### Requirements
+We are moving to CMake and currently only Linux is supported, see #1 for progress on other platforms.
+
+### Linux
+
+General instructions for building enve2d on Linux *(tested on Ubuntu Jammy)*.
+
+Requirements:
 
 * automake
 * autoconf
@@ -29,12 +35,17 @@ This is a community fork of [enve](https://github.com/MaurycyLiebner/enve).
 * libavutil
 * libswscale
 * libswresample
+* libunwind
 
-### Linux
+Consult your package manager on how to install these development packages.
+
+Clone the repository, this might take a while.
 
 ```
 git clone --recurse-submodules https://github.com/enve2d/enve2d
 ```
+
+Build a custom version of gperftools:
 
 ```
 cd enve2d/src/gperftools
@@ -43,6 +54,8 @@ cd enve2d/src/gperftools
 make -j4
 ```
 
+Build skia:
+
 ```
 cd enve2d/src/skia
 python tools/git-sync-deps
@@ -50,12 +63,19 @@ bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=
 ninja -C out/build -j4 skia
 ```
 
+Now you can build enve2d:
+
 ```
 cd enve2d
 mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 make -j4
+```
+
+Run the application:
+
+```
 cp src/app/enve2d .
 cp src/core/libenve2dcore.so.0 .
 cp ../src/gperftools/.libs/libtcmalloc.so.4 .
