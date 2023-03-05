@@ -2,8 +2,3 @@
 	path = third_party/skia
 	url = https://skia.googlesource.com/skia
     ignore = dirty
-[submodule "third_party/gperftools"]
-	path = third_party/gperftools
-	url = https://github.com/gperftools/gperftools.git
-	branch = 9608fa3
-    ignore = dirty
