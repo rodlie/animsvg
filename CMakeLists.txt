@@ -21,3 +21,4 @@ cmake_minimum_required(VERSION 3.9)
 project(enve2dproject)
 
 add_subdirectory(src/core)
+add_subdirectory(src/app)
