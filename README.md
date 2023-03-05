@@ -4,7 +4,7 @@ This is a community fork of [enve](https://github.com/MaurycyLiebner/enve).
 
 ## Build
 
-## Requirements
+### Requirements
 
 * automake
 * autoconf
@@ -30,7 +30,7 @@ This is a community fork of [enve](https://github.com/MaurycyLiebner/enve).
 * libswscale
 * libswresample
 
-## Linux
+### Linux
 
 ```
 git clone --recurse-submodules https://github.com/enve2d/enve2d
@@ -56,4 +56,8 @@ mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 make -j4
+cp src/app/enve2d
+cp src/core/libenve2dcore.so.0 .
+cp ../src/gperftools/.libs/libtcmalloc.so.4 .
+./enve2d
 ```
