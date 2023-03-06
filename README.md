@@ -167,15 +167,20 @@ enve2d
         ├── icons
         │   └── hicolor
         │       ├── 16x16
-        │       │   └── enve2d.png
+        │       │   └── apps
+        │       │       └── enve2d.png
         │       ├── 256x256
-        │       │   └── enve2d.png
+        │       │   └── apps
+        │       │       └── enve2d.png
         │       ├── 32x32
-        │       │   └── enve2d.png
+        │       │   └── apps
+        │       │       └── enve2d.png
         │       ├── 48x48
-        │       │   └── enve2d.png
+        │       │   └── apps
+        │       │       └── enve2d.png
         │       └── scalable
-        │           └── enve2d.svg
+        │           └── apps
+        │               └── enve2d.svg
         └── mime
             └── packages
                 └── enve2d.xml
