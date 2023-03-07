@@ -25,7 +25,8 @@ class HardwareUsageWidget;
 class ComplexTaskWidget;
 class ComplexTask;
 
-class UsageWidget : public QStatusBar {
+class UsageWidget : public QStatusBar
+{
 public:
     explicit UsageWidget(QWidget * const parent = nullptr);
     void setThreadsUsage(const int threads);
@@ -36,6 +37,7 @@ public:
     void setTotalRam(const qreal totalRamMB);
 
     void addComplexTask(ComplexTask* const task);
+
 private:
     HardwareUsageWidget* mGpuBar;
     HardwareUsageWidget* mCpuBar;
