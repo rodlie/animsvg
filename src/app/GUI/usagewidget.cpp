@@ -28,14 +28,15 @@
 #include <QProgressBar>
 #include <QPushButton>
 
-class ComplexTaskWidget : public QWidget {
+class ComplexTaskWidget : public QWidget
+{
 public:
-    ComplexTaskWidget(QWidget* const parent = nullptr) :
-        QWidget(parent),
-        mLabel(new QLabel(this)),
-        mProgress(new QProgressBar(this)),
-        mCancel(new QPushButton("x", this)) {
-
+    ComplexTaskWidget(QWidget* const parent = nullptr)
+        : QWidget(parent)
+        , mLabel(new QLabel(this))
+        , mProgress(new QProgressBar(this))
+        , mCancel(new QPushButton("x", this))
+    {
         mProgress->setObjectName("task");
         mProgress->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
@@ -49,19 +50,20 @@ public:
         layout->addWidget(mProgress);
         setLayout(layout);
 
-        eSizesUI::widget.add(this, [this](const int size) {
+        /*eSizesUI::widget.add(this, [this](const int size) {
             const int halfSize = size/2;
             mLabel->setFixedHeight(halfSize);
             mLabel->setContentsMargins(0, 0, halfSize, 0);
             mCancel->setFixedHeight(halfSize);
             mProgress->setFixedHeight(halfSize);
             setContentsMargins(0, 0, halfSize, 0);
-        });
+        });*/
     }
 
-    void setComplexTask(ComplexTask* const task) {
+    void setComplexTask(ComplexTask* const task)
+    {
         auto& conn = mTask.assign(task);
-        if(task) {
+        if (task) {
             mLabel->setText(task->name() + ":");
             mProgress->setMaximum(task->finishValue());
             mProgress->setValue(task->value());
@@ -76,6 +78,7 @@ public:
         }
         setVisible(task);
     }
+
 private:
     void resetTask() { setComplexTask(nullptr); }
 
@@ -85,39 +88,47 @@ private:
     QPushButton* const mCancel;
 };
 
-class HardwareUsageWidget : public QProgressBar {
+class HardwareUsageWidget : public QProgressBar
+{
 public:
-    HardwareUsageWidget(QWidget* const parent = nullptr) :
-        QProgressBar(parent) {
-        eSizesUI::widget.add(this, [this](const int size) {
+    HardwareUsageWidget(QWidget* const parent = nullptr)
+        : QProgressBar(parent)
+    {
+        /*eSizesUI::widget.add(this, [this](const int size) {
             setFixedHeight(size/2);
-        });
+        });*/
+        setFormat(QString());
         setObjectName("hardwareUsage");
         setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
     }
 
-    void pushValue(const int value) {
-        if(mValues.count() > 3) popValue();
+    void pushValue(const int value)
+    {
+        if (mValues.count() > 3) { popValue(); }
         mValues << value;
         mValueSum += value;
         updateValue();
     }
 
-    void popValue() {
+    void popValue()
+    {
         mValueSum -= mValues.takeFirst();
         updateValue();
     }
 
-    void popAllButLast() {
-        if(mValues.isEmpty()) return;
+    void popAllButLast()
+    {
+        if (mValues.isEmpty()) { return; }
         const int lastValue = mValues.last();
         mValues.clear();
         mValueSum = 0;
         pushValue(lastValue);
     }
+
 private:
-    void updateValue() {
-        if(mValues.isEmpty()) return setValue(0);
+    void updateValue()
+    {
+        if (mValues.isEmpty()) { return setValue(0); }
         setValue(mValueSum/mValues.count());
     }
 
@@ -125,29 +136,31 @@ private:
     int mValueSum = 0;
 };
 
-UsageWidget::UsageWidget(QWidget * const parent) : QStatusBar(parent) {
-    setContentsMargins(0, 0, 0, 0);
+UsageWidget::UsageWidget(QWidget * const parent)
+    : QStatusBar(parent)
+{
+    //setContentsMargins(0, 0, 0, 0);
     const auto layout = QStatusBar::layout();
     layout->setAlignment(Qt::AlignCenter);
-    layout->setContentsMargins(0, 0, 0, 0);
+    //layout->setContentsMargins(0, 0, 0, 0);
 
-    const auto gpuLabel = new QLabel("  gpu: ", this);
+    const auto gpuLabel = new QLabel(tr("GPU:"), this);
     mGpuBar = new HardwareUsageWidget(this);
     mGpuBar->setRange(0, 100);
 
-    const auto cpuLabel = new QLabel("  cpu: ", this);
+    const auto cpuLabel = new QLabel(tr("CPU:"), this);
     mCpuBar = new HardwareUsageWidget(this);
 
-    const auto hddLabel = new QLabel("  hdd: ", this);
+    const auto hddLabel = new QLabel(tr("HDD:"), this);
     mHddBar = new HardwareUsageWidget(this);
     mHddBar->setRange(0, 100);
 
-    const auto ramLabel = new QLabel("  ram: ", this);
+    const auto ramLabel = new QLabel(tr("RAM:"), this);
     mRamBar = new HardwareUsageWidget(this);
 
     mRamLabel = new QLabel(this);
 
-    const auto clearRamButton = new QPushButton("clear memory", this);
+    const auto clearRamButton = new QPushButton(tr("Clear"), this);
     connect(clearRamButton, &QPushButton::clicked,
             this, []() {
         const auto m = MemoryHandler::sInstance;
