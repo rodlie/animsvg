@@ -67,6 +67,7 @@ pkg_check_modules(AVCODEC REQUIRED libavcodec)
 pkg_check_modules(AVUTIL REQUIRED libavutil)
 pkg_check_modules(SWSCALE REQUIRED libswscale)
 pkg_check_modules(SWRESAMPLE REQUIRED libswresample)
+pkg_check_modules(UNWIND REQUIRED libunwind)
 
 set(QSCINTILLA_LIBARIES "/usr/lib" CACHE STRING "qscintilla library path")
 set(QSCINTILLA_INCLUDES "/usr/include/x86_64-linux-gnu/qt5" CACHE STRING "qscintilla includes path")
@@ -97,9 +98,19 @@ if(UNIX)
             @ONLY
         )
     endif()
+    #configure_file(
+    #    ${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/.libs/${TCMALLOC}
+    #    ${CMAKE_BINARY_DIR}/${TCMALLOC}
+    #    COPYONLY
+    #)
     configure_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/.libs/${TCMALLOC}
-        ${CMAKE_BINARY_DIR}/${TCMALLOC}
+        ${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/COPYING
+        ${CMAKE_BINARY_DIR}/LICENSE-gperftools.md
+        COPYONLY
+    )
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/../skia/LICENSE
+        ${CMAKE_BINARY_DIR}/LICENSE-skia.md
         COPYONLY
     )
 endif()
@@ -428,6 +439,7 @@ if(UNIX)
         ${PROJECT_NAME}
         PRIVATE
         tcmalloc
+        ${UNWIND_LIBRARIES}
     )
 endif()
 
@@ -439,19 +451,20 @@ if(UNIX AND NOT APPLE)
         DESTINATION
         ${CMAKE_INSTALL_BINDIR}
     )
-    install(
-        FILES
-        ${CMAKE_BINARY_DIR}/${TCMALLOC}
-        DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}
-    )
+    #install(
+    #    FILES
+    #    ${CMAKE_BINARY_DIR}/${TCMALLOC}
+    #    DESTINATION
+    #    ${CMAKE_INSTALL_LIBDIR}
+    #)
     install(FILES
         ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.desktop
         DESTINATION
         ${CMAKE_INSTALL_DATAROOTDIR}/applications
     )
     install(
-        FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.xml
+        FILES
+        ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.xml
         DESTINATION
         ${CMAKE_INSTALL_DATAROOTDIR}/mime/packages
     )
@@ -465,6 +478,8 @@ if(UNIX AND NOT APPLE)
         FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/../../LICENSE.md
         ${CMAKE_CURRENT_SOURCE_DIR}/../../README.md
+        ${CMAKE_BINARY_DIR}/LICENSE-gperftools.md
+        ${CMAKE_BINARY_DIR}/LICENSE-skia.md
         DESTINATION
         ${CMAKE_INSTALL_DOCDIR}-${PROJECT_VERSION}
     )

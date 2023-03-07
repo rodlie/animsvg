@@ -83,7 +83,7 @@ Build a custom version of ``libtcmalloc``:
 ```
 cd enve2d/src/gperftools
 ./autogen.sh
-./configure --disable-static
+./configure --disable-shared
 make -j4
 ```
 
@@ -155,14 +155,15 @@ enve2d
     │   └── x86_64-linux-gnu
     │       ├── libenve2dcore.so -> libenve2dcore.so.0
     │       ├── libenve2dcore.so.0 -> libenve2dcore.so.0.9.0
-    │       ├── libenve2dcore.so.0.9.0
-    │       └── libtcmalloc.so.90
+    │       └── libenve2dcore.so.0.9.0
     └── share
         ├── applications
         │   └── enve2d.desktop
         ├── doc
         │   └── enve2d-0.9.0
+        │       ├── LICENSE-gperftools.md
         │       ├── LICENSE.md
+        │       ├── LICENSE-skia.md
         │       └── README.md
         ├── icons
         │   └── hicolor

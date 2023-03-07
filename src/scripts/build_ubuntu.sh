@@ -49,7 +49,7 @@ fi
 
 cd ${CWD}/src/gperftools
 ./autogen.sh
-./configure --disable-static
+./configure --disable-shared
 make -j2
 
 cd ${CWD}/src/skia
