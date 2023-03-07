@@ -76,6 +76,7 @@ include_directories(
 
 set(
     SOURCES
+    appsupport.cpp
     Boxes/nullobject.cpp
     Expressions/expression.cpp
     Expressions/framebinding.cpp
@@ -400,6 +401,7 @@ set(
 
 set(
     HEADERS
+    appsupport.h
     Boxes/nullobject.h
     Expressions/expression.h
     Expressions/framebinding.h
