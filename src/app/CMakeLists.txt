@@ -60,6 +60,10 @@ find_package(
     REQUIRED
 )
 
+option(SHARED_TCMALLOC "Use shared libtcmalloc.so" OFF)
+set(QSCINTILLA_LIBARIES "/usr/lib" CACHE STRING "qscintilla library path")
+set(QSCINTILLA_INCLUDES "/usr/include/x86_64-linux-gnu/qt5" CACHE STRING "qscintilla includes path")
+
 pkg_search_module(MYPAINT REQUIRED libmypaint)
 pkg_search_module(QUAZIP REQUIRED quazip)
 pkg_check_modules(AVFORMAT REQUIRED libavformat)
@@ -67,10 +71,9 @@ pkg_check_modules(AVCODEC REQUIRED libavcodec)
 pkg_check_modules(AVUTIL REQUIRED libavutil)
 pkg_check_modules(SWSCALE REQUIRED libswscale)
 pkg_check_modules(SWRESAMPLE REQUIRED libswresample)
-pkg_check_modules(UNWIND REQUIRED libunwind)
-
-set(QSCINTILLA_LIBARIES "/usr/lib" CACHE STRING "qscintilla library path")
-set(QSCINTILLA_INCLUDES "/usr/include/x86_64-linux-gnu/qt5" CACHE STRING "qscintilla includes path")
+if(UNIX AND NOT ${SHARED_TCMALLOC})
+    pkg_check_modules(UNWIND REQUIRED libunwind)
+endif()
 
 include_directories(
     ${MYPAINT_INCLUDE_DIRS}
@@ -98,11 +101,13 @@ if(UNIX)
             @ONLY
         )
     endif()
-    #configure_file(
-    #    ${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/.libs/${TCMALLOC}
-    #    ${CMAKE_BINARY_DIR}/${TCMALLOC}
-    #    COPYONLY
-    #)
+    if(${SHARED_TCMALLOC})
+        configure_file(
+            ${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/.libs/${TCMALLOC}
+            ${CMAKE_BINARY_DIR}/${TCMALLOC}
+            COPYONLY
+        )
+    endif()
     configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/COPYING
         ${CMAKE_BINARY_DIR}/LICENSE-gperftools.md
@@ -439,8 +444,14 @@ if(UNIX)
         ${PROJECT_NAME}
         PRIVATE
         tcmalloc
-        ${UNWIND_LIBRARIES}
     )
+    if(NOT ${SHARED_TCMALLOC})
+        target_link_libraries(
+            ${PROJECT_NAME}
+            PRIVATE
+            ${UNWIND_LIBRARIES}
+        )
+    endif()
 endif()
 
 if(UNIX AND NOT APPLE)
@@ -451,12 +462,14 @@ if(UNIX AND NOT APPLE)
         DESTINATION
         ${CMAKE_INSTALL_BINDIR}
     )
-    #install(
-    #    FILES
-    #    ${CMAKE_BINARY_DIR}/${TCMALLOC}
-    #    DESTINATION
-    #    ${CMAKE_INSTALL_LIBDIR}
-    #)
+    if(${SHARED_TCMALLOC})
+        install(
+            FILES
+            ${CMAKE_BINARY_DIR}/${TCMALLOC}
+            DESTINATION
+            ${CMAKE_INSTALL_LIBDIR}
+        )
+    endif()
     install(FILES
         ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.desktop
         DESTINATION
@@ -468,11 +481,20 @@ if(UNIX AND NOT APPLE)
         DESTINATION
         ${CMAKE_INSTALL_DATAROOTDIR}/mime/packages
     )
+    set(HICOLOR_DIRS "16x16;32x32;48x48;256x256")
+    foreach(HICOLOR_DIR ${HICOLOR_DIRS})
+        install(
+            FILES
+            icons/hicolor/${HICOLOR_DIR}/apps/${PROJECT_NAME}.png
+            DESTINATION
+            ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${HICOLOR_DIR}/apps/
+        )
+    endforeach()
     install(
-        DIRECTORY
-        hicolor
+        FILES
+        icons/hicolor/scalable/apps/${PROJECT_NAME}.svg
         DESTINATION
-        ${CMAKE_INSTALL_DATAROOTDIR}/icons/
+        ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps/
     )
     install(
         FILES
