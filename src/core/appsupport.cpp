@@ -35,8 +35,6 @@ AppSupport::AppSupport(QObject *parent)
 
 void AppSupport::setupTheme()
 {
-    qDebug() << "setupTheme";
-
     QIcon::setThemeName(QString::fromUtf8("hicolor"));
     qApp->setStyle(QString::fromUtf8("fusion"));
 
