@@ -32,12 +32,6 @@
         <file>icons/toolbarButtons/checkable/textCreate.svg</file>
         <file>icons/toolbarButtons/plain/+.svg</file>
         <file>icons/toolbarButtons/plain/-.svg</file>
-        <file>icons/toolbarButtons/plain/alignBottom.svg</file>
-        <file>icons/toolbarButtons/plain/alignCenter.svg</file>
-        <file>icons/toolbarButtons/plain/alignLeft.svg</file>
-        <file>icons/toolbarButtons/plain/alignRight.svg</file>
-        <file>icons/toolbarButtons/plain/alignTop.svg</file>
-        <file>icons/toolbarButtons/plain/alignVCenter.svg</file>
         <file>icons/toolbarButtons/plain/brush+.svg</file>
         <file>icons/toolbarButtons/plain/brush-.svg</file>
         <file>icons/toolbarButtons/plain/dissolvedAndNormalNodes.svg</file>
@@ -105,5 +99,60 @@
         <file>icons/unmuted.svg</file>
         <file>icons/up-arrow.svg</file>
         <file>icons/visible.svg</file>
+        <file>icons/hicolor/index.theme</file>
+        <file>icons/hicolor/16x16/actions/alignBottom.png</file>
+        <file>icons/hicolor/16x16/actions/alignCenter.png</file>
+        <file>icons/hicolor/16x16/actions/alignLeft.png</file>
+        <file>icons/hicolor/16x16/actions/alignRight.png</file>
+        <file>icons/hicolor/16x16/actions/alignTop.png</file>
+        <file>icons/hicolor/16x16/actions/alignVCenter.png</file>
+        <file>icons/hicolor/22x22/actions/alignBottom.png</file>
+        <file>icons/hicolor/22x22/actions/alignCenter.png</file>
+        <file>icons/hicolor/22x22/actions/alignLeft.png</file>
+        <file>icons/hicolor/22x22/actions/alignRight.png</file>
+        <file>icons/hicolor/22x22/actions/alignTop.png</file>
+        <file>icons/hicolor/22x22/actions/alignVCenter.png</file>
+        <file>icons/hicolor/32x32/actions/alignBottom.png</file>
+        <file>icons/hicolor/32x32/actions/alignCenter.png</file>
+        <file>icons/hicolor/32x32/actions/alignLeft.png</file>
+        <file>icons/hicolor/32x32/actions/alignRight.png</file>
+        <file>icons/hicolor/32x32/actions/alignTop.png</file>
+        <file>icons/hicolor/32x32/actions/alignVCenter.png</file>
+        <file>icons/hicolor/48x48/actions/alignBottom.png</file>
+        <file>icons/hicolor/48x48/actions/alignCenter.png</file>
+        <file>icons/hicolor/48x48/actions/alignLeft.png</file>
+        <file>icons/hicolor/48x48/actions/alignRight.png</file>
+        <file>icons/hicolor/48x48/actions/alignTop.png</file>
+        <file>icons/hicolor/48x48/actions/alignVCenter.png</file>
+        <file>icons/hicolor/64x64/actions/alignBottom.png</file>
+        <file>icons/hicolor/64x64/actions/alignCenter.png</file>
+        <file>icons/hicolor/64x64/actions/alignLeft.png</file>
+        <file>icons/hicolor/64x64/actions/alignRight.png</file>
+        <file>icons/hicolor/64x64/actions/alignTop.png</file>
+        <file>icons/hicolor/64x64/actions/alignVCenter.png</file>
+        <file>icons/hicolor/96x96/actions/alignBottom.png</file>
+        <file>icons/hicolor/96x96/actions/alignCenter.png</file>
+        <file>icons/hicolor/96x96/actions/alignLeft.png</file>
+        <file>icons/hicolor/96x96/actions/alignRight.png</file>
+        <file>icons/hicolor/96x96/actions/alignTop.png</file>
+        <file>icons/hicolor/96x96/actions/alignVCenter.png</file>
+        <file>icons/hicolor/128x128/actions/alignBottom.png</file>
+        <file>icons/hicolor/128x128/actions/alignCenter.png</file>
+        <file>icons/hicolor/128x128/actions/alignLeft.png</file>
+        <file>icons/hicolor/128x128/actions/alignRight.png</file>
+        <file>icons/hicolor/128x128/actions/alignTop.png</file>
+        <file>icons/hicolor/128x128/actions/alignVCenter.png</file>
+        <file>icons/hicolor/192x192/actions/alignBottom.png</file>
+        <file>icons/hicolor/192x192/actions/alignCenter.png</file>
+        <file>icons/hicolor/192x192/actions/alignLeft.png</file>
+        <file>icons/hicolor/192x192/actions/alignRight.png</file>
+        <file>icons/hicolor/192x192/actions/alignTop.png</file>
+        <file>icons/hicolor/192x192/actions/alignVCenter.png</file>
+        <file>icons/hicolor/256x256/actions/alignBottom.png</file>
+        <file>icons/hicolor/256x256/actions/alignCenter.png</file>
+        <file>icons/hicolor/256x256/actions/alignLeft.png</file>
+        <file>icons/hicolor/256x256/actions/alignRight.png</file>
+        <file>icons/hicolor/256x256/actions/alignTop.png</file>
+        <file>icons/hicolor/256x256/actions/alignVCenter.png</file>
     </qresource>
 </RCC>
