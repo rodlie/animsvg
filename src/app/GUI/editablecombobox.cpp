@@ -18,8 +18,9 @@
 
 #include <QLineEdit>
 
-EditableComboBox::EditableComboBox(QWidget* const parent) :
-    QComboBox(parent) {
+EditableComboBox::EditableComboBox(QWidget* const parent)
+    : QComboBox(parent)
+{
     setEditable(true);
     const auto lineEdit = new QLineEdit(parent);
     lineEdit->setObjectName("comboEdit");

@@ -19,7 +19,8 @@
 
 #include <QComboBox>
 
-class EditableComboBox : public QComboBox {
+class EditableComboBox : public QComboBox
+{
 public:
     EditableComboBox(QWidget* const parent);
 };
