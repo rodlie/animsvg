@@ -481,7 +481,7 @@ if(UNIX AND NOT APPLE)
         DESTINATION
         ${CMAKE_INSTALL_DATAROOTDIR}/mime/packages
     )
-    set(HICOLOR_DIRS "16x16;32x32;48x48;256x256")
+    set(HICOLOR_DIRS "16x16;22x22;32x32;48x48;64x64;96x96;128x128;192x192;256x256")
     foreach(HICOLOR_DIR ${HICOLOR_DIRS})
         install(
             FILES
