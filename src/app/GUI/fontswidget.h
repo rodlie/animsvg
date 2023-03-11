@@ -21,11 +21,12 @@
 #include <QHBoxLayout>
 #include <QComboBox>
 #include <QFontDatabase>
-#include "actionbutton.h"
+#include <QPushButton>
 
 class SkFontStyle;
 
-class FontsWidget : public QWidget {
+class FontsWidget : public QWidget
+{
     Q_OBJECT
 public:
     FontsWidget(QWidget *parent = nullptr);
@@ -37,12 +38,14 @@ public:
     void setDisplayedSettings(const float size,
                               const QString &family,
                               const SkFontStyle& style);
+
 signals:
     void fontFamilyAndStyleChanged(const QString& family,
                                    const SkFontStyle& style);
     void fontSizeChanged(qreal size);
     void textAlignmentChanged(Qt::Alignment alignment);
     void textVAlignmentChanged(Qt::Alignment alignment);
+
 private:
     void updateStyles();
     void updateSizes();
@@ -53,7 +56,7 @@ private:
     void afterFamilyChange();
     void afterStyleChange();
 
-    int mBlockEmit = 0;
+    int mBlockEmit;
 
     QHBoxLayout *mMainLayout;
 
@@ -61,13 +64,13 @@ private:
     QComboBox *mFontStyleCombo;
     QComboBox *mFontSizeCombo;
 
-    ActionButton *mAlignLeft;
-    ActionButton *mAlignCenter;
-    ActionButton *mAlignRight;
+    QPushButton *mAlignLeft;
+    QPushButton *mAlignCenter;
+    QPushButton *mAlignRight;
 
-    ActionButton *mAlignTop;
-    ActionButton *mAlignVCenter;
-    ActionButton *mAlignBottom;
+    QPushButton *mAlignTop;
+    QPushButton *mAlignVCenter;
+    QPushButton *mAlignBottom;
 
     QFontDatabase mFontDatabase;
 };
