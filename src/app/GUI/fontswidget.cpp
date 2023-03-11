@@ -40,12 +40,17 @@ FontsWidget::FontsWidget(QWidget *parent)
 {
     mFontStyleCombo = new QComboBox(this);
     mFontStyleCombo->setFocusPolicy(Qt::NoFocus);
+    mFontStyleCombo->setToolTip(tr("Font style"));
+
     mFontFamilyCombo = new QComboBox(this);
     mFontFamilyCombo->setFocusPolicy(Qt::NoFocus);
+    mFontFamilyCombo->setToolTip(tr("Font family"));
+
     mFontSizeCombo = new EditableComboBox(this);
     mFontSizeCombo->setFocusPolicy(Qt::ClickFocus);
-    mFontSizeCombo->setAutoCompletion(false);
+    mFontSizeCombo->setCompleter(nullptr);
     mFontSizeCombo->setMinimumContentsLength(3);
+    mFontSizeCombo->setToolTip(tr("Font size"));
 
     MainWindow::sGetInstance()->installNumericFilter(mFontSizeCombo);
     mFontSizeCombo->setValidator(new QDoubleValidator(1, 999, 2, mFontSizeCombo));
