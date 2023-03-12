@@ -21,6 +21,7 @@
 #include <QGraphicsView>
 #include <QComboBox>
 #include <QPushButton>
+#include <QActionGroup>
 #include "undoredo.h"
 #include "Private/Tasks/taskscheduler.h"
 #include "effectsloader.h"
@@ -57,7 +58,8 @@ class CloseSignalingDockWidget;
 class PaintColorWidget;
 //class SoundComposition;
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow
+{
     Q_OBJECT
 public:
     MainWindow(Document &document, Actions &actions,
@@ -107,9 +109,9 @@ public:
     }
     SimpleBrushWrapper *getCurrentBrush() const;
 
-    UsageWidget* getUsageWidget() const {
+    /*UsageWidget* getUsageWidget() const {
         return mUsageWidget;
-    }
+    }*/
 
     //void playPreview();
    // void stopPreview();
@@ -238,22 +240,21 @@ private:
     TimelineDockWidget *mTimeline = nullptr;
     BrushSelectionWidget *mBrushSelectionWidget = nullptr;
 
-    QStatusBar* mStatusBar;
-    UsageWidget* mUsageWidget = nullptr;
+    //QStatusBar* mStatusBar;
+    //UsageWidget* mUsageWidget = nullptr;
     QToolBar *mToolBar;
 
-    SwitchButton *mBoxTransformMode;
+    QActionGroup *mToolbarActGroup;
+    /*SwitchButton *mBoxTransformMode;
     SwitchButton *mPointTransformMode;
     SwitchButton *mAddPointMode;
     SwitchButton *mDrawPathMode;
-//
     SwitchButton *mPaintMode;
     SwitchButton *mCircleMode;
     SwitchButton *mRectangleMode;
     SwitchButton *mTextMode;
-//
     SwitchButton *mNullMode;
-    SwitchButton *mPickPaintSettingsMode;
+    SwitchButton *mPickPaintSettingsMode;*/
 
     ActionButton *mActionConnectPoints;
     ActionButton *mActionDisconnectPoints;
