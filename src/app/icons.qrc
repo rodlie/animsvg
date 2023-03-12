@@ -12,7 +12,6 @@
         <file>icons/noInterpolation/settings_dots.png</file>
         <file>icons/noInterpolation/split_h.png</file>
         <file>icons/noInterpolation/split_v.png</file>
-        <file>icons/toolbarButtons/checkable/boxTransform.svg</file>
         <file>icons/toolbarButtons/checkable/circleCreate.svg</file>
         <file>icons/toolbarButtons/checkable/colorize.svg</file>
         <file>icons/toolbarButtons/checkable/drawPath.svg</file>
@@ -154,5 +153,23 @@
         <file>icons/hicolor/256x256/actions/alignRight.png</file>
         <file>icons/hicolor/256x256/actions/alignTop.png</file>
         <file>icons/hicolor/256x256/actions/alignVCenter.png</file>
+        <file>icons/hicolor/16x16/apps/enve2d.png</file>
+        <file>icons/hicolor/22x22/apps/enve2d.png</file>
+        <file>icons/hicolor/32x32/apps/enve2d.png</file>
+        <file>icons/hicolor/48x48/apps/enve2d.png</file>
+        <file>icons/hicolor/64x64/apps/enve2d.png</file>
+        <file>icons/hicolor/96x96/apps/enve2d.png</file>
+        <file>icons/hicolor/128x128/apps/enve2d.png</file>
+        <file>icons/hicolor/192x192/apps/enve2d.png</file>
+        <file>icons/hicolor/256x256/apps/enve2d.png</file>
+        <file>icons/hicolor/16x16/actions/boxTransform.png</file>
+        <file>icons/hicolor/22x22/actions/boxTransform.png</file>
+        <file>icons/hicolor/32x32/actions/boxTransform.png</file>
+        <file>icons/hicolor/48x48/actions/boxTransform.png</file>
+        <file>icons/hicolor/64x64/actions/boxTransform.png</file>
+        <file>icons/hicolor/96x96/actions/boxTransform.png</file>
+        <file>icons/hicolor/128x128/actions/boxTransform.png</file>
+        <file>icons/hicolor/192x192/actions/boxTransform.png</file>
+        <file>icons/hicolor/256x256/actions/boxTransform.png</file>
     </qresource>
 </RCC>
