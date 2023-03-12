@@ -10,6 +10,7 @@
  <file>icons/hicolor/16x16/actions/boxTransform.png</file>
  <file>icons/hicolor/16x16/actions/circleCreate.png</file>
  <file>icons/hicolor/16x16/actions/drawPath.png</file>
+ <file>icons/hicolor/16x16/actions/minus.png</file>
  <file>icons/hicolor/16x16/actions/newEmpty.png</file>
  <file>icons/hicolor/16x16/actions/nodeConnect.png</file>
  <file>icons/hicolor/16x16/actions/nodeCorner.png</file>
@@ -22,6 +23,7 @@
  <file>icons/hicolor/16x16/actions/paint.png</file>
  <file>icons/hicolor/16x16/actions/pathCreate.png</file>
  <file>icons/hicolor/16x16/actions/pick.png</file>
+ <file>icons/hicolor/16x16/actions/plus.png</file>
  <file>icons/hicolor/16x16/actions/pointTransform.png</file>
  <file>icons/hicolor/16x16/actions/rectCreate.png</file>
  <file>icons/hicolor/16x16/actions/segmentCurve.png</file>
@@ -37,6 +39,7 @@
  <file>icons/hicolor/22x22/actions/boxTransform.png</file>
  <file>icons/hicolor/22x22/actions/circleCreate.png</file>
  <file>icons/hicolor/22x22/actions/drawPath.png</file>
+ <file>icons/hicolor/22x22/actions/minus.png</file>
  <file>icons/hicolor/22x22/actions/newEmpty.png</file>
  <file>icons/hicolor/22x22/actions/nodeConnect.png</file>
  <file>icons/hicolor/22x22/actions/nodeCorner.png</file>
@@ -49,6 +52,7 @@
  <file>icons/hicolor/22x22/actions/paint.png</file>
  <file>icons/hicolor/22x22/actions/pathCreate.png</file>
  <file>icons/hicolor/22x22/actions/pick.png</file>
+ <file>icons/hicolor/22x22/actions/plus.png</file>
  <file>icons/hicolor/22x22/actions/pointTransform.png</file>
  <file>icons/hicolor/22x22/actions/rectCreate.png</file>
  <file>icons/hicolor/22x22/actions/segmentCurve.png</file>
@@ -64,6 +68,7 @@
  <file>icons/hicolor/32x32/actions/boxTransform.png</file>
  <file>icons/hicolor/32x32/actions/circleCreate.png</file>
  <file>icons/hicolor/32x32/actions/drawPath.png</file>
+ <file>icons/hicolor/32x32/actions/minus.png</file>
  <file>icons/hicolor/32x32/actions/newEmpty.png</file>
  <file>icons/hicolor/32x32/actions/nodeConnect.png</file>
  <file>icons/hicolor/32x32/actions/nodeCorner.png</file>
@@ -76,6 +81,7 @@
  <file>icons/hicolor/32x32/actions/paint.png</file>
  <file>icons/hicolor/32x32/actions/pathCreate.png</file>
  <file>icons/hicolor/32x32/actions/pick.png</file>
+ <file>icons/hicolor/32x32/actions/plus.png</file>
  <file>icons/hicolor/32x32/actions/pointTransform.png</file>
  <file>icons/hicolor/32x32/actions/rectCreate.png</file>
  <file>icons/hicolor/32x32/actions/segmentCurve.png</file>
@@ -91,6 +97,7 @@
  <file>icons/hicolor/48x48/actions/boxTransform.png</file>
  <file>icons/hicolor/48x48/actions/circleCreate.png</file>
  <file>icons/hicolor/48x48/actions/drawPath.png</file>
+ <file>icons/hicolor/48x48/actions/minus.png</file>
  <file>icons/hicolor/48x48/actions/newEmpty.png</file>
  <file>icons/hicolor/48x48/actions/nodeConnect.png</file>
  <file>icons/hicolor/48x48/actions/nodeCorner.png</file>
@@ -103,6 +110,7 @@
  <file>icons/hicolor/48x48/actions/paint.png</file>
  <file>icons/hicolor/48x48/actions/pathCreate.png</file>
  <file>icons/hicolor/48x48/actions/pick.png</file>
+ <file>icons/hicolor/48x48/actions/plus.png</file>
  <file>icons/hicolor/48x48/actions/pointTransform.png</file>
  <file>icons/hicolor/48x48/actions/rectCreate.png</file>
  <file>icons/hicolor/48x48/actions/segmentCurve.png</file>
@@ -118,6 +126,7 @@
  <file>icons/hicolor/64x64/actions/boxTransform.png</file>
  <file>icons/hicolor/64x64/actions/circleCreate.png</file>
  <file>icons/hicolor/64x64/actions/drawPath.png</file>
+ <file>icons/hicolor/64x64/actions/minus.png</file>
  <file>icons/hicolor/64x64/actions/newEmpty.png</file>
  <file>icons/hicolor/64x64/actions/nodeConnect.png</file>
  <file>icons/hicolor/64x64/actions/nodeCorner.png</file>
@@ -130,6 +139,7 @@
  <file>icons/hicolor/64x64/actions/paint.png</file>
  <file>icons/hicolor/64x64/actions/pathCreate.png</file>
  <file>icons/hicolor/64x64/actions/pick.png</file>
+ <file>icons/hicolor/64x64/actions/plus.png</file>
  <file>icons/hicolor/64x64/actions/pointTransform.png</file>
  <file>icons/hicolor/64x64/actions/rectCreate.png</file>
  <file>icons/hicolor/64x64/actions/segmentCurve.png</file>
@@ -145,6 +155,7 @@
  <file>icons/hicolor/96x96/actions/boxTransform.png</file>
  <file>icons/hicolor/96x96/actions/circleCreate.png</file>
  <file>icons/hicolor/96x96/actions/drawPath.png</file>
+ <file>icons/hicolor/96x96/actions/minus.png</file>
  <file>icons/hicolor/96x96/actions/newEmpty.png</file>
  <file>icons/hicolor/96x96/actions/nodeConnect.png</file>
  <file>icons/hicolor/96x96/actions/nodeCorner.png</file>
@@ -157,6 +168,7 @@
  <file>icons/hicolor/96x96/actions/paint.png</file>
  <file>icons/hicolor/96x96/actions/pathCreate.png</file>
  <file>icons/hicolor/96x96/actions/pick.png</file>
+ <file>icons/hicolor/96x96/actions/plus.png</file>
  <file>icons/hicolor/96x96/actions/pointTransform.png</file>
  <file>icons/hicolor/96x96/actions/rectCreate.png</file>
  <file>icons/hicolor/96x96/actions/segmentCurve.png</file>
@@ -172,6 +184,7 @@
  <file>icons/hicolor/128x128/actions/boxTransform.png</file>
  <file>icons/hicolor/128x128/actions/circleCreate.png</file>
  <file>icons/hicolor/128x128/actions/drawPath.png</file>
+ <file>icons/hicolor/128x128/actions/minus.png</file>
  <file>icons/hicolor/128x128/actions/newEmpty.png</file>
  <file>icons/hicolor/128x128/actions/nodeConnect.png</file>
  <file>icons/hicolor/128x128/actions/nodeCorner.png</file>
@@ -184,6 +197,7 @@
  <file>icons/hicolor/128x128/actions/paint.png</file>
  <file>icons/hicolor/128x128/actions/pathCreate.png</file>
  <file>icons/hicolor/128x128/actions/pick.png</file>
+ <file>icons/hicolor/128x128/actions/plus.png</file>
  <file>icons/hicolor/128x128/actions/pointTransform.png</file>
  <file>icons/hicolor/128x128/actions/rectCreate.png</file>
  <file>icons/hicolor/128x128/actions/segmentCurve.png</file>
@@ -199,6 +213,7 @@
  <file>icons/hicolor/192x192/actions/boxTransform.png</file>
  <file>icons/hicolor/192x192/actions/circleCreate.png</file>
  <file>icons/hicolor/192x192/actions/drawPath.png</file>
+ <file>icons/hicolor/192x192/actions/minus.png</file>
  <file>icons/hicolor/192x192/actions/newEmpty.png</file>
  <file>icons/hicolor/192x192/actions/nodeConnect.png</file>
  <file>icons/hicolor/192x192/actions/nodeCorner.png</file>
@@ -211,6 +226,7 @@
  <file>icons/hicolor/192x192/actions/paint.png</file>
  <file>icons/hicolor/192x192/actions/pathCreate.png</file>
  <file>icons/hicolor/192x192/actions/pick.png</file>
+ <file>icons/hicolor/192x192/actions/plus.png</file>
  <file>icons/hicolor/192x192/actions/pointTransform.png</file>
  <file>icons/hicolor/192x192/actions/rectCreate.png</file>
  <file>icons/hicolor/192x192/actions/segmentCurve.png</file>
@@ -226,6 +242,7 @@
  <file>icons/hicolor/256x256/actions/boxTransform.png</file>
  <file>icons/hicolor/256x256/actions/circleCreate.png</file>
  <file>icons/hicolor/256x256/actions/drawPath.png</file>
+ <file>icons/hicolor/256x256/actions/minus.png</file>
  <file>icons/hicolor/256x256/actions/newEmpty.png</file>
  <file>icons/hicolor/256x256/actions/nodeConnect.png</file>
  <file>icons/hicolor/256x256/actions/nodeCorner.png</file>
@@ -238,6 +255,7 @@
  <file>icons/hicolor/256x256/actions/paint.png</file>
  <file>icons/hicolor/256x256/actions/pathCreate.png</file>
  <file>icons/hicolor/256x256/actions/pick.png</file>
+ <file>icons/hicolor/256x256/actions/plus.png</file>
  <file>icons/hicolor/256x256/actions/pointTransform.png</file>
  <file>icons/hicolor/256x256/actions/rectCreate.png</file>
  <file>icons/hicolor/256x256/actions/segmentCurve.png</file>
