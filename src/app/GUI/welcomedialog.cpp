@@ -21,13 +21,11 @@
 #include <QFontMetrics>
 #include <QPainter>
 #include <QDir>
-#include <QFrame>
 #include <QLabel>
 
 #include "GUI/global.h"
 #include "BoxesList/OptimalScrollArea/scrollarea.h"
 #include "buttonslist.h"
-#include "tipswidget.h"
 
 WelcomeDialog::WelcomeDialog(const QStringList &recentPaths,
                              const std::function<void()>& newFunc,
@@ -51,24 +49,16 @@ WelcomeDialog::WelcomeDialog(const QStringList &recentPaths,
 
     const auto sceneLay = new QVBoxLayout;
 
-    const auto headerLay = new QHBoxLayout;
-    mainLay->addLayout(headerLay);
-
-    const auto headerFrame = new QFrame(this);
-    headerLay->addWidget(headerFrame);
-
     const auto logoLabel = new QLabel(this);
-    logoLabel->setMinimumWidth(256);
-    logoLabel->setMaximumWidth(256);
+    int logoSize = 128;
+    logoLabel->setMinimumWidth(logoSize*2);
     logoLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-    logoLabel->setText(QString::fromUtf8("<div style=\"text-align: center; font-weight: normal;\">"
-                                         "<p><img src=\":/icons/hicolor/256x256/apps/enve2d.png\" width=\"256\" height=\"256\"></p>"
-                                         "<h1>enve2d<br><span style=\"font-size: large;\">version %1</span></h1>"
-                                         "<p style=\"font-size: small;\">Copyright &copy; 2023 enve2d developers<br>Copyright &copy; 2016-2022 Maurycy Liebner</p>"
+    logoLabel->setText(QString::fromUtf8("<div style=\"margin: 0; padding: 0; text-align: center; font-weight: normal;\">"
+                                         "<p style=\"margin: 0; padding: 0;\"><img src=\":/icons/hicolor/%2x%2/apps/enve2d.png\" width=\"%2\" height=\"%2\"></p>"
+                                         "<h1 style=\"margin-top: 0; padding-top: 0;\">enve2d<br><span style=\"font-size: large;\">version %1</span></h1>"
                                          "</div>")
-                                        .arg(ENVE_VERSION));
-    headerLay->addWidget(logoLabel);
-    headerLay->addStretch();
+                                        .arg(ENVE_VERSION).arg(logoSize));
+    sceneLay->addWidget(logoLabel);
 
     const auto buttonLay = new QHBoxLayout;
     sceneLay->addLayout(buttonLay);
@@ -86,7 +76,7 @@ WelcomeDialog::WelcomeDialog(const QStringList &recentPaths,
     const auto textTriggerGetter = [&](const int id) {
         const auto& path = recentPaths.at(id);
         QString ttPath = path;
-        if(ttPath.left(homePath.count()) == homePath) {
+        if (ttPath.left(homePath.count()) == homePath) {
             ttPath = "~" + ttPath.mid(homePath.count());
         }
         return ButtonsList::TextTrigger{
@@ -97,16 +87,16 @@ WelcomeDialog::WelcomeDialog(const QStringList &recentPaths,
     const int count = qMin(recentPaths.count(), 11);
     const auto recentWidget = new ButtonsList(textTriggerGetter, count, this);
 
-    eSizesUI::widget.addSpacing(sceneLay);
+    //eSizesUI::widget.addSpacing(sceneLay);
 
     sceneLay->addWidget(recentWidget);
 
-    const auto tipWidget = new TipsWidget(this);
-    tipWidget->load();
+    //const auto tipWidget = new TipsWidget(this);
+    //tipWidget->load();
 
     mainLay->addLayout(sceneLay);
-    eSizesUI::widget.addSpacing(mainLay);
-    mainLay->addWidget(tipWidget);
+    //eSizesUI::widget.addSpacing(mainLay);
+    //mainLay->addWidget(tipWidget);
 }
 
 void WelcomeDialog::paintEvent(QPaintEvent *) {

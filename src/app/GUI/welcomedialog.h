@@ -16,10 +16,12 @@
 
 #ifndef WELCOMEDIALOG_H
 #define WELCOMEDIALOG_H
+
 #include <QWidget>
 #include <functional>
 
-class WelcomeDialog : public QWidget {
+class WelcomeDialog : public QWidget
+{
 public:
     WelcomeDialog(const QStringList& recentPaths,
                   const std::function<void()>& newFunc,

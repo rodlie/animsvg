@@ -172,7 +172,6 @@ set(
     GUI/timelinehighlightwidget.cpp
     GUI/timelinewidget.cpp
     GUI/timelinewrappernode.cpp
-    GUI/tipswidget.cpp
     GUI/triggerlabel.cpp
     GUI/twocolumnlayout.cpp
     GUI/welcomedialog.cpp
@@ -300,7 +299,6 @@ set(
     GUI/timelinehighlightwidget.h
     GUI/timelinewidget.h
     GUI/timelinewrappernode.h
-    GUI/tipswidget.h
     GUI/triggerlabel.h
     GUI/twocolumnlayout.h
     GUI/welcomedialog.h
@@ -387,7 +385,6 @@ add_executable(
     brushes.qrc
     icons.qrc
     hicolor.qrc
-    tips.qrc
 )
 
 target_link_directories(
