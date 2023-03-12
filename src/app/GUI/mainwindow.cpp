@@ -22,12 +22,15 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QStatusBar>
-#include "usagewidget.h"
 #include <QToolBar>
-#include "GUI/ColorWidgets/colorsettingswidget.h"
 #include <QMenuBar>
-#include "GUI/edialogs.h"
 #include <QMessageBox>
+#include <QAudioOutput>
+#include <QSpacerItem>
+
+#include "usagewidget.h"
+#include "GUI/ColorWidgets/colorsettingswidget.h"
+#include "GUI/edialogs.h"
 #include "timelinedockwidget.h"
 #include "Private/Tasks/taskexecutor.h"
 #include "qdoubleslider.h"
@@ -44,7 +47,7 @@
 #include "filesourcelist.h"
 #include "videoencoder.h"
 #include "fillstrokesettings.h"
-#include <QAudioOutput>
+
 #include "Sound/soundcomposition.h"
 #include "GUI/BoxesList/boxsinglewidget.h"
 #include "memoryhandler.h"
@@ -66,10 +69,17 @@
 #include "ColorWidgets/paintcolorwidget.h"
 #include "Dialogs/exportsvgdialog.h"
 #include "alignwidget.h"
+#include "welcomedialog.h"
+#include "Boxes/textbox.h"
+#include "noshortcutaction.h"
+#include "efiltersettings.h"
+#include "Settings/settingsdialog.h"
+#include "appsupport.h"
 
 MainWindow *MainWindow::sInstance = nullptr;
 
-void MainWindow::keyPressEvent(QKeyEvent *event) {
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
     processKeyEvent(event);
 }
 
@@ -78,11 +88,12 @@ MainWindow::MainWindow(Document& document,
                        AudioHandler& audioHandler,
                        RenderHandler& renderHandler,
                        QWidget * const parent)
-    : QMainWindow(parent),
-      mDocument(document),
-      mActions(actions),
-      mAudioHandler(audioHandler),
-      mRenderHandler(renderHandler) {
+    : QMainWindow(parent)
+      , mDocument(document)
+      , mActions(actions)
+      , mAudioHandler(audioHandler)
+      , mRenderHandler(renderHandler)
+{
     Q_ASSERT(!sInstance);
     sInstance = this;
 
@@ -109,9 +120,9 @@ MainWindow::MainWindow(Document& document,
 
 
 
-    const auto iconDir = eSettings::sIconsDir();
-    setWindowIcon(QIcon(iconDir + "/enve.png"));
-    const auto downArr = iconDir + "/down-arrow.png";
+    //const auto iconDir = eSettings::sIconsDir();
+    setWindowIcon(QIcon::fromTheme("enve2d"));
+    /*const auto downArr = iconDir + "/down-arrow.png";
     const auto upArr = iconDir + "/up-arrow.png";
     const auto dockClose = iconDir + "/dockClose.png";
     const auto dockMaximize = iconDir + "/dockMaximize.png";
@@ -123,9 +134,9 @@ MainWindow::MainWindow(Document& document,
             "QDockWidget {"
                 "titlebar-close-icon: url(" + dockClose + ");"
                 "titlebar-normal-icon: url(" + dockMaximize + ");"
-            "}";
+            "}";*/
 
-    QFile customSS(eSettings::sSettingsDir() + "/stylesheet.qss");
+    /*QFile customSS(eSettings::sSettingsDir() + "/stylesheet.qss");
     if(customSS.exists()) {
         if(customSS.open(QIODevice::ReadOnly | QIODevice::Text)) {
             setStyleSheet(customSS.readAll());
@@ -137,8 +148,8 @@ MainWindow::MainWindow(Document& document,
             setStyleSheet(file.readAll() + iconSS);
             file.close();
         }
-    }
-    BoxSingleWidget::loadStaticPixmaps();
+    }*/
+    //BoxSingleWidget::loadStaticPixmaps();
 
     BrushSelectionWidget::sPaintContext = BrushSelectionWidget::sCreateNewContext();
     BrushSelectionWidget::sOutlineContext = BrushSelectionWidget::sCreateNewContext();
@@ -156,10 +167,10 @@ MainWindow::MainWindow(Document& document,
     //fillStrokeSettingsScroll->setWidget(mFillStrokeSettings);
     mFillStrokeSettingsDock->setWidget(mFillStrokeSettings);
     addDockWidget(Qt::RightDockWidgetArea, mFillStrokeSettingsDock);
-    eSizesUI::widget.add(mFillStrokeSettingsDock, [this](const int size) {
+    /*eSizesUI::widget.add(mFillStrokeSettingsDock, [this](const int size) {
         mFillStrokeSettingsDock->setMinimumWidth(size*12);
         mFillStrokeSettingsDock->setMaximumWidth(size*20);
-    });
+    });*/
 
     mPaintColorWidget = new PaintColorWidget(this);
     mPaintColorWidget->hide();
@@ -169,7 +180,7 @@ MainWindow::MainWindow(Document& document,
             mPaintColorWidget, &PaintColorWidget::setDisplayedColor);
 
     mTimelineDock = new CloseSignalingDockWidget(tr("Timeline", "Dock"), this);
-    mTimelineDock->setTitleBarWidget(new QWidget());
+    //mTimelineDock->setTitleBarWidget(new QWidget());
     addDockWidget(Qt::BottomDockWidgetArea, mTimelineDock);
 
     mLayoutHandler = new LayoutHandler(mDocument, mAudioHandler, this);
@@ -178,10 +189,10 @@ MainWindow::MainWindow(Document& document,
 
     mBrushSettingsDock = new CloseSignalingDockWidget(
                 tr("Brush Settings", "Dock"), this);
-    eSizesUI::widget.add(mBrushSettingsDock, [this](const int size) {
+    /*eSizesUI::widget.add(mBrushSettingsDock, [this](const int size) {
         mBrushSettingsDock->setMinimumWidth(size*10);
         mBrushSettingsDock->setMaximumWidth(size*20);
-    });
+    });*/
 
     const auto pCtxt = BrushSelectionWidget::sPaintContext;
     mBrushSelectionWidget = new BrushSelectionWidget(*pCtxt.get(), this);
@@ -206,7 +217,7 @@ MainWindow::MainWindow(Document& document,
                          const AlignPivot pivot,
                          const AlignRelativeTo relativeTo) {
         const auto scene = *mDocument.fActiveScene;
-        if(!scene) return;
+        if (!scene) { return; }
         scene->alignSelectedBoxes(align, pivot, relativeTo);
         mDocument.actionFinished();
     });
@@ -217,10 +228,10 @@ MainWindow::MainWindow(Document& document,
 
     mSelectedObjectDock = new CloseSignalingDockWidget(
                 tr("Selected Objects", "Dock"), this);
-    eSizesUI::widget.add(mSelectedObjectDock, [this](const int size) {
+    /*eSizesUI::widget.add(mSelectedObjectDock, [this](const int size) {
         mSelectedObjectDock->setMinimumWidth(size*10);
         mSelectedObjectDock->setMaximumWidth(size*20);
-    });
+    });*/
 
     mObjectSettingsScrollArea = new ScrollArea(this);
     mObjectSettingsWidget = new BoxScrollWidget(
@@ -237,19 +248,19 @@ MainWindow::MainWindow(Document& document,
     connect(mObjectSettingsScrollArea, &ScrollArea::widthChanged,
             mObjectSettingsWidget, &BoxScrollWidget::setWidth);
 
-    const auto vBar = mObjectSettingsScrollArea->verticalScrollBar();
-    eSizesUI::widget.add(vBar, [vBar](const int size) {
+    //const auto vBar = mObjectSettingsScrollArea->verticalScrollBar();
+    /*eSizesUI::widget.add(vBar, [vBar](const int size) {
         vBar->setSingleStep(size);
-    });
+    });*/
 
     mSelectedObjectDock->setWidget(mObjectSettingsScrollArea);
     addDockWidget(Qt::LeftDockWidgetArea, mSelectedObjectDock);
 
     mFilesDock = new CloseSignalingDockWidget(tr("Files", "Dock"), this);
-    eSizesUI::widget.add(mFilesDock, [this](const int size) {
+    /*eSizesUI::widget.add(mFilesDock, [this](const int size) {
         mFilesDock->setMinimumWidth(size*10);
         mFilesDock->setMaximumWidth(size*20);
-    });
+    });*/
 
     const auto fsl = new FileSourceList(this);
     mFilesDock->setWidget(fsl);
@@ -285,20 +296,19 @@ MainWindow::MainWindow(Document& document,
     installEventFilter(this);
 
     openWelcomeDialog();
-    showMaximized();
+    //showMaximized();
 }
 
-MainWindow::~MainWindow() {
+MainWindow::~MainWindow()
+{
     sInstance = nullptr;
 //    mtaskExecutorThread->terminate();
 //    mtaskExecutorThread->quit();
-    BoxSingleWidget::clearStaticPixmaps();
+    //BoxSingleWidget::clearStaticPixmaps();
 }
 
-#include "noshortcutaction.h"
-#include "efiltersettings.h"
-#include "Settings/settingsdialog.h"
-void MainWindow::setupMenuBar() {
+void MainWindow::setupMenuBar()
+{
     mMenuBar = new QMenuBar(nullptr);
     connectAppFont(mMenuBar);
 
@@ -420,6 +430,9 @@ void MainWindow::setupMenuBar() {
 //    mSelectSameMenu->addAction("Stroke Color");
 //    mSelectSameMenu->addAction("Stroke Style");
 //    mSelectSameMenu->addAction("Object Type");
+
+    auto mToolsMenu = mMenuBar->addMenu(tr("Tools", "MenuBar"));
+    mToolsMenu->addActions(mToolbarActGroup->actions());
 
     mObjectMenu = mMenuBar->addMenu(tr("Object", "MenuBar"));
 
@@ -619,7 +632,7 @@ void MainWindow::setupMenuBar() {
             this, [](){
         const auto target = KeyFocusTarget::KFT_getCurrentTarget();
         const auto cwTarget = dynamic_cast<CanvasWindow*>(target);
-        if (!cwTarget) return;
+        if (!cwTarget) { return; }
         cwTarget->zoomInView();
     });
 
@@ -629,7 +642,7 @@ void MainWindow::setupMenuBar() {
             this, [](){
         const auto target = KeyFocusTarget::KFT_getCurrentTarget();
         const auto cwTarget = dynamic_cast<CanvasWindow*>(target);
-        if (!cwTarget) return;
+        if (!cwTarget) { return; }
         cwTarget->zoomOutView();
     });
 
@@ -641,7 +654,7 @@ void MainWindow::setupMenuBar() {
             this, [](){
         const auto target = KeyFocusTarget::KFT_getCurrentTarget();
         const auto cwTarget = dynamic_cast<CanvasWindow*>(target);
-        if (!cwTarget) return;
+        if (!cwTarget) { return; }
         cwTarget->fitCanvasToSize();
     });
 
@@ -651,7 +664,7 @@ void MainWindow::setupMenuBar() {
             this, [](){
         const auto target = KeyFocusTarget::KFT_getCurrentTarget();
         const auto cwTarget = dynamic_cast<CanvasWindow*>(target);
-        if (!cwTarget) return;
+        if (!cwTarget) { return; }
         cwTarget->resetTransormation();
     });
 
@@ -827,30 +840,29 @@ void MainWindow::setupMenuBar() {
     connect(mBrushColorBookmarksAction, &QAction::toggled,
             mCentralWidget, &CentralWidget::setSidesVisibilitySetting);
 
-    const auto help = mMenuBar->addMenu(tr("Help", "MenuBar"));
+    //const auto help = mMenuBar->addMenu(tr("Help", "MenuBar"));
 
-    help->addAction(tr("License", "MenuBar_Help"), this, [this]() {
+    /*help->addAction(tr("License", "MenuBar_Help"), this, [this]() {
         if(EnveLicense::sInstance) {
             delete EnveLicense::sInstance;
         } else {
             const auto license = new EnveLicense(this);
             license->show();
         }
-    });
+    });*/
 
     mMenuBar->addSeparator();
-    mMenuBar->addAction(tr("Support enve", "MenuBar"), this, []() {
+    /*mMenuBar->addAction(tr("Support enve", "MenuBar"), this, []() {
         QDesktopServices::openUrl(QUrl("https://maurycyliebner.github.io/"));
-    });
+    });*/
 
     setMenuBar(mMenuBar);
-    mMenuBar->setStyleSheet("QMenuBar { padding-top: 1px; }");
+    //mMenuBar->setStyleSheet("QMenuBar { padding-top: 1px; }");
 }
 
-
-#include "welcomedialog.h"
-void MainWindow::openWelcomeDialog() {
-    if(mWelcomeDialog) return;
+void MainWindow::openWelcomeDialog()
+{
+    if (mWelcomeDialog) { return; }
     mWelcomeDialog = new WelcomeDialog(getRecentFiles(),
        [this]() { SceneSettingsDialog::sNewSceneDialog(mDocument, this); },
        []() { MainWindow::sGetInstance()->openFile(); },
@@ -860,21 +872,24 @@ void MainWindow::openWelcomeDialog() {
     setCentralWidget(mWelcomeDialog);
 }
 
-void MainWindow::closeWelcomeDialog() {
+void MainWindow::closeWelcomeDialog()
+{
     SimpleTask::sScheduleContexted(this, [this]() {
-        if(!mWelcomeDialog) return;
+        if (!mWelcomeDialog) { return; }
         mWelcomeDialog = nullptr;
         setCentralWidget(mCentralWidget);
     });
 }
 
-void MainWindow::addCanvasToRenderQue() {
-    if(!mDocument.fActiveScene) return;
+void MainWindow::addCanvasToRenderQue()
+{
+    if (!mDocument.fActiveScene) { return; }
     mTimeline->getRenderWidget()->
     createNewRenderInstanceWidgetForCanvas(mDocument.fActiveScene);
 }
 
-void MainWindow::updateSettingsForCurrentCanvas(Canvas* const scene) {
+void MainWindow::updateSettingsForCurrentCanvas(Canvas* const scene)
+{
     mObjectSettingsWidget->setCurrentScene(scene);
     if(!scene) {
         mObjectSettingsWidget->setMainTarget(nullptr);
@@ -888,94 +903,288 @@ void MainWindow::updateSettingsForCurrentCanvas(Canvas* const scene) {
     mObjectSettingsWidget->setMainTarget(scene->getCurrentGroup());
 }
 
-#include <QSpacerItem>
-void MainWindow::setupStatusBar() {
-    mUsageWidget = new UsageWidget(this);
-    setStatusBar(mUsageWidget);
+void MainWindow::setupStatusBar()
+{
+    // seems like a wip widget
+    // only ram does anything, and that shows total system usage
+    // not really useful...
+    //mUsageWidget = new UsageWidget(this);
+    //setStatusBar(mUsageWidget);
 }
 
-void MainWindow::setupToolBar() {
+void MainWindow::setupToolBar()
+{
+    const QSize iconSize(AppSupport::getSettings("ui",
+                                                 "toolbarIconSize",
+                                                 QSize(24, 24)).toSize());
+
     mToolBar = new QToolBar(tr("Toolbar"), this);
+    mToolBar->setIconSize(iconSize);
     mToolBar->setMovable(false);
 
-    eSizesUI::button.add(mToolBar, [this](const int size) {
-        mToolBar->setIconSize(QSize(size, size));
+    mToolbarActGroup = new QActionGroup(this);
+
+    // boxTransform
+    QAction *boxTransformAct = new QAction(QIcon::fromTheme("boxTransform"),
+                                           tr("Object"),
+                                           this);
+    boxTransformAct->setCheckable(true);
+    boxTransformAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                      "boxTransform",
+                                                                      "F1").toString()));
+    connect(boxTransformAct,
+            &QAction::triggered,
+            this,
+            [boxTransformAct, this]() {
+        if (boxTransformAct->isChecked()) { mActions.setMovePathMode(); }
     });
+    connect(&mDocument,
+            &Document::canvasModeSet,
+            this,
+            [this, boxTransformAct]() {
+        if (mDocument.fCanvasMode == CanvasMode::boxTransform) {
+            qDebug() << "check boxTransform";
+            boxTransformAct->setChecked(true);
+        }
+    });
+    boxTransformAct->setChecked(true); // default
+    mToolbarActGroup->addAction(boxTransformAct);
 
+    // pointTransform
+    QAction *pointTransformAct = new QAction(QIcon::fromTheme("pointTransform"),
+                                                              tr("Point"),
+                                                              this);
+    pointTransformAct->setCheckable(true);
+    pointTransformAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                        "pointTransform",
+                                                                        "F2").toString()));
+    connect(pointTransformAct,
+            &QAction::triggered,
+            this,
+            [pointTransformAct, this]() {
+        if (pointTransformAct->isChecked()) { mActions.setMovePointMode(); }
+    });
+    connect(&mDocument,
+            &Document::canvasModeSet,
+            this,
+            [this, pointTransformAct]() {
+        if (mDocument.fCanvasMode == CanvasMode::pointTransform) {
+            qDebug() << "check pointTransform";
+            pointTransformAct->setChecked(true);
+        }
+    });
+    mToolbarActGroup->addAction(pointTransformAct);
+
+    // addPointMode
+    QAction *addPointModeAct = new QAction(QIcon::fromTheme("pathCreate"),
+                                                            tr("Add Path"),
+                                                            this);
+    addPointModeAct->setCheckable(true);
+    addPointModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                      "pathCreate",
+                                                                      "F3").toString()));
+    connect(addPointModeAct,
+            &QAction::triggered,
+            this,
+            [addPointModeAct, this]() {
+        if (addPointModeAct->isChecked()) { mActions.setAddPointMode(); }
+    });
+    connect(&mDocument,
+            &Document::canvasModeSet,
+            this,
+            [this, addPointModeAct]() {
+        if (mDocument.fCanvasMode == CanvasMode::pathCreate) {
+            qDebug() << "check addPointModeAct";
+            addPointModeAct->setChecked(true);
+        }
+    });
+    mToolbarActGroup->addAction(addPointModeAct);
+
+    // drawPathMode
+    QAction *drawPathModeAct = new QAction(QIcon::fromTheme("drawPath"),
+                                                            tr("Draw Path"),
+                                                            this);
+    drawPathModeAct->setCheckable(true);
+    drawPathModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                      "drawPath",
+                                                                      "F4").toString()));
+    connect(drawPathModeAct,
+            &QAction::triggered,
+            this,
+            [drawPathModeAct, this]() {
+        if (drawPathModeAct->isChecked()) { mActions.setDrawPathMode(); }
+    });
+    connect(&mDocument,
+            &Document::canvasModeSet,
+            this,
+            [this, drawPathModeAct]() {
+        if (mDocument.fCanvasMode == CanvasMode::drawPath) {
+            qDebug() << "check drawPathModeAct";
+            drawPathModeAct->setChecked(true);
+        }
+    });
+    mToolbarActGroup->addAction(drawPathModeAct);
+
+    // paintMode
+    QAction *paintModeAct = new QAction(QIcon::fromTheme("paint"),
+                                                         tr("Paint"),
+                                                         this);
+    paintModeAct->setCheckable(true);
+    paintModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                   "paintMode",
+                                                                   "F5").toString()));
+    connect(paintModeAct,
+            &QAction::triggered,
+            this,
+            [paintModeAct, this]() {
+        if (paintModeAct->isChecked()) { mActions.setPaintMode(); }
+    });
+    connect(&mDocument,
+            &Document::canvasModeSet,
+            this,
+            [this, paintModeAct]() {
+        if (mDocument.fCanvasMode == CanvasMode::paint) {
+            qDebug() << "check paintModeAct";
+            paintModeAct->setChecked(true);
+        }
+    });
+    mToolbarActGroup->addAction(paintModeAct);
+
+    // circleMode
+    QAction *circleModeAct = new QAction(QIcon::fromTheme("circleCreate"),
+                                                          tr("Add Circle"),
+                                                          this);
+    circleModeAct->setCheckable(true);
+    circleModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                    "circleMode",
+                                                                    "F6").toString()));
+    connect(circleModeAct,
+            &QAction::triggered,
+            this,
+            [circleModeAct, this]() {
+        if (circleModeAct->isChecked()) { mActions.setCircleMode(); }
+    });
+    connect(&mDocument,
+            &Document::canvasModeSet,
+            this,
+            [this, circleModeAct]() {
+        if (mDocument.fCanvasMode == CanvasMode::circleCreate) {
+            qDebug() << "check circleModeAct";
+            circleModeAct->setChecked(true);
+        }
+    });
+    mToolbarActGroup->addAction(circleModeAct);
+
+    // rectangleMode
+    QAction *rectModeAct = new QAction(QIcon::fromTheme("rectCreate"),
+                                                        tr("Add Rectangle"),
+                                                        this);
+    rectModeAct->setCheckable(true);
+    rectModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                  "rectMode",
+                                                                  "F7").toString()));
+    connect(rectModeAct,
+            &QAction::triggered,
+            this,
+            [rectModeAct, this]() {
+        if (rectModeAct->isChecked()) { mActions.setRectangleMode(); }
+    });
+    connect(&mDocument,
+            &Document::canvasModeSet,
+            this,
+            [this, rectModeAct]() {
+        if (mDocument.fCanvasMode == CanvasMode::rectCreate) {
+            qDebug() << "check rectModeAct";
+            rectModeAct->setChecked(true);
+        }
+    });
+    mToolbarActGroup->addAction(rectModeAct);
+
+    // textMode
+    QAction *textModeAct = new QAction(QIcon::fromTheme("textCreate"),
+                                                        tr("Add Text"),
+                                                        this);
+    textModeAct->setCheckable(true);
+    textModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                  "textMode",
+                                                                  "F8").toString()));
+    connect(textModeAct,
+            &QAction::triggered,
+            this,
+            [textModeAct, this]() {
+        if (textModeAct->isChecked()) { mActions.setTextMode(); }
+    });
+    connect(&mDocument,
+            &Document::canvasModeSet,
+            this,
+            [this, textModeAct]() {
+        if (mDocument.fCanvasMode == CanvasMode::textCreate) {
+            qDebug() << "check textModeAct";
+            textModeAct->setChecked(true);
+        }
+    });
+    mToolbarActGroup->addAction(textModeAct);
+
+    // nullMode
+    QAction *nullModeAct = new QAction(QIcon::fromTheme("nullCreate"),
+                                                        tr("Add Null Object"),
+                                                        this);
+    nullModeAct->setCheckable(true);
+    nullModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                  "nullMode",
+                                                                  "F9").toString()));
+    connect(nullModeAct,
+            &QAction::triggered,
+            this,
+            [nullModeAct, this]() {
+        if (nullModeAct->isChecked()) { mActions.setNullMode(); }
+    });
+    connect(&mDocument,
+            &Document::canvasModeSet,
+            this,
+            [this, nullModeAct]() {
+        if (mDocument.fCanvasMode == CanvasMode::nullCreate) {
+            qDebug() << "check nullModeAct";
+            nullModeAct->setChecked(true);
+        }
+    });
+    mToolbarActGroup->addAction(nullModeAct);
+
+    // pickMode
+    QAction *pickModeAct = new QAction(QIcon::fromTheme("pick"),
+                                                        tr("Pick"),
+                                                        this);
+    pickModeAct->setCheckable(true);
+    pickModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                  "pickMode",
+                                                                  "F10").toString()));
+    connect(pickModeAct,
+            &QAction::triggered,
+            this,
+            [pickModeAct, this]() {
+        if (pickModeAct->isChecked()) { mActions.setPickPaintSettingsMode(); }
+    });
+    connect(&mDocument,
+            &Document::canvasModeSet,
+            this,
+            [this, pickModeAct]() {
+        if (mDocument.fCanvasMode == CanvasMode::pickFillStroke) {
+            qDebug() << "check pickModeAct";
+            pickModeAct->setChecked(true);
+        }
+    });
+    mToolbarActGroup->addAction(pickModeAct);
+
+    // add toolbar group actions
     mToolBar->addSeparator();
+    mToolBar->addActions(mToolbarActGroup->actions());
 
-    mBoxTransformMode = SwitchButton::sCreate2Switch(
-                "toolbarButtons/boxTransformUnchecked.png",
-                "toolbarButtons/boxTransformChecked.png",
-                gSingleLineTooltip(tr("Object Mode", "ToolBar"), "F1"), this);
-    mBoxTransformMode->toggle();
-    mToolBar->addWidget(mBoxTransformMode);
+    // spacer
+    QWidget* spacer1 = new QWidget(this);
+    spacer1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    mToolBar->addWidget(spacer1);
 
-    mPointTransformMode = SwitchButton::sCreate2Switch(
-                "toolbarButtons/pointTransformUnchecked.png",
-                "toolbarButtons/pointTransformChecked.png",
-                gSingleLineTooltip(tr("Point Mode", "ToolBar"), "F2"), this);
-    mToolBar->addWidget(mPointTransformMode);
-
-    mAddPointMode = SwitchButton::sCreate2Switch(
-                "toolbarButtons/pathCreateUnchecked.png",
-                "toolbarButtons/pathCreateChecked.png",
-                gSingleLineTooltip(tr("Add Path Mode", "ToolBar"), "F3"), this);
-    mToolBar->addWidget(mAddPointMode);
-
-
-    mDrawPathMode = SwitchButton::sCreate2Switch(
-                "toolbarButtons/drawPathUnchecked.png",
-                "toolbarButtons/drawPathChecked.png",
-                gSingleLineTooltip(tr("Draw Path Mode", "ToolBar"), "F4"), this);
-    mToolBar->addWidget(mDrawPathMode);
-
-    mToolBar->addSeparator();
-
-    mPaintMode = SwitchButton::sCreate2Switch(
-                "toolbarButtons/paintUnchecked.png",
-                "toolbarButtons/paintChecked.png",
-                gSingleLineTooltip(tr("Paint Mode", "ToolBar"), "F5"), this);
-    mToolBar->addWidget(mPaintMode);
-
-    mCircleMode = SwitchButton::sCreate2Switch(
-                "toolbarButtons/circleCreateUnchecked.png",
-                "toolbarButtons/circleCreateChecked.png",
-                gSingleLineTooltip(tr("Add Circle Mode", "ToolBar"), "F6"), this);
-    mToolBar->addWidget(mCircleMode);
-
-    mRectangleMode = SwitchButton::sCreate2Switch(
-                "toolbarButtons/rectCreateUnchecked.png",
-                "toolbarButtons/rectCreateChecked.png",
-                gSingleLineTooltip(tr("Add Rectangle Mode", "ToolBar"), "F7"), this);
-    mToolBar->addWidget(mRectangleMode);
-
-    mTextMode = SwitchButton::sCreate2Switch(
-                "toolbarButtons/textCreateUnchecked.png",
-                "toolbarButtons/textCreateChecked.png",
-                gSingleLineTooltip(tr("Add Text Mode", "ToolBar"), "F8"), this);
-    mToolBar->addWidget(mTextMode);
-
-    mToolBar->addSeparator();
-
-    mNullMode = SwitchButton::sCreate2Switch(
-                "toolbarButtons/nullCreateUnchecked.png",
-                "toolbarButtons/nullCreateChecked.png",
-                gSingleLineTooltip(tr("Add Null Object Mode", "ToolBar"), "F9"), this);
-    mToolBar->addWidget(mNullMode);
-
-    mPickPaintSettingsMode = SwitchButton::sCreate2Switch(
-                "toolbarButtons/pickUnchecked.png",
-                "toolbarButtons/pickChecked.png",
-                gSingleLineTooltip(tr("Pick Mode", "ToolBar"), "F10"), this);
-    mToolBar->addWidget(mPickPaintSettingsMode);
-
-    mToolBar->widgetForAction(mToolBar->addAction("     "))->
-            setObjectName("emptyToolButton");
-    mToolBar->addWidget(mLayoutHandler->comboWidget());
-    mToolBar->widgetForAction(mToolBar->addAction("     "))->
-            setObjectName("emptyToolButton");
-
+    // other
     mActionConnectPoints = new ActionButton("toolbarButtons/nodeConnect.png",
                                             tr("Connect Nodes", "ToolBar"), this);
     mActionConnectPointsAct = mToolBar->addWidget(mActionConnectPoints);
@@ -1025,17 +1234,29 @@ void MainWindow::setupToolBar() {
                 gSingleLineTooltip(tr("New Empty Frame", "ToolBar"), "N"), this);
     mActionNewEmptyPaintFrameAct = mToolBar->addWidget(mActionNewEmptyPaintFrame);
 
-    eSizesUI::widget.add(mToolBar, [this](const int size) {
+    /*eSizesUI::widget.add(mToolBar, [this](const int size) {
         mToolBar->setFixedHeight(2*size);
-    });
+    });*/
 
+    // spacer
+    QWidget* spacer2 = new QWidget(this);
+    spacer2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    mToolBar->addWidget(spacer2);
+
+    // sceneCombo
+    mToolBar->addWidget(mLayoutHandler->comboWidget());
+    mToolBar->addSeparator();
+
+    // add toolbar
     addToolBar(mToolBar);
 
+    // set default mode
     mDocument.setCanvasMode(CanvasMode::boxTransform);
 }
 
-void MainWindow::connectToolBarActions() {
-    connect(mBoxTransformMode, &ActionButton::pressed,
+void MainWindow::connectToolBarActions()
+{
+    /*connect(mBoxTransformMode, &QPushButton::pressed,
             &mActions, &Actions::setMovePathMode);
     connect(mPointTransformMode, &ActionButton::pressed,
             &mActions, &Actions::setMovePointMode);
@@ -1056,7 +1277,7 @@ void MainWindow::connectToolBarActions() {
     connect(mNullMode, &ActionButton::pressed,
             &mActions, &Actions::setNullMode);
     connect(mPickPaintSettingsMode, &ActionButton::pressed,
-            &mActions, &Actions::setPickPaintSettingsMode);
+            &mActions, &Actions::setPickPaintSettingsMode);*/
 
     connect(mActionConnectPoints, &ActionButton::pressed,
             &mActions, &Actions::connectPointsSlot);
@@ -1093,15 +1314,17 @@ void MainWindow::connectToolBarActions() {
 
 }
 
-MainWindow *MainWindow::sGetInstance() {
+MainWindow *MainWindow::sGetInstance()
+{
     return sInstance;
 }
 
-void MainWindow::updateCanvasModeButtonsChecked() {
+void MainWindow::updateCanvasModeButtonsChecked()
+{
     const CanvasMode mode = mDocument.fCanvasMode;
     mCentralWidget->setCanvasMode(mode);
 
-    mBoxTransformMode->setState(mode == CanvasMode::boxTransform);
+    /*mBoxTransformMode->setState(mode == CanvasMode::boxTransform);
     mPointTransformMode->setState(mode == CanvasMode::pointTransform);
     mAddPointMode->setState(mode == CanvasMode::pathCreate);
     mDrawPathMode->setState(mode == CanvasMode::drawPath);
@@ -1112,7 +1335,7 @@ void MainWindow::updateCanvasModeButtonsChecked() {
     mTextMode->setState(mode == CanvasMode::textCreate);
 
     mNullMode->setState(mode == CanvasMode::nullCreate);
-    mPickPaintSettingsMode->setState(mode == CanvasMode::pickFillStroke);
+    mPickPaintSettingsMode->setState(mode == CanvasMode::pickFillStroke);*/
 
     const bool boxMode = mode == CanvasMode::boxTransform;
     mFontWidgetAct->setVisible(boxMode);
@@ -1132,7 +1355,7 @@ void MainWindow::updateCanvasModeButtonsChecked() {
 
     const bool paintMode = mode == CanvasMode::paint;
     mActionNewEmptyPaintFrameAct->setVisible(paintMode);
-    if(paintMode) {
+    if (paintMode) {
         mFillStrokeSettingsDock->setWidget(mPaintColorWidget);
     } else {
         mFillStrokeSettingsDock->setWidget(mFillStrokeSettings);
@@ -1149,38 +1372,42 @@ void MainWindow::updateCanvasModeButtonsChecked() {
 //    }
 //}
 
-void MainWindow::setResolutionValue(const qreal value) {
-    if(!mDocument.fActiveScene) return;
+void MainWindow::setResolutionValue(const qreal value)
+{
+    if (!mDocument.fActiveScene) { return; }
     mDocument.fActiveScene->setResolution(value);
     mDocument.actionFinished();
 }
 
-void MainWindow::setFileChangedSinceSaving(const bool changed) {
-    if(changed == mChangedSinceSaving) return;
+void MainWindow::setFileChangedSinceSaving(const bool changed)
+{
+    if (changed == mChangedSinceSaving) { return; }
     mChangedSinceSaving = changed;
     updateTitle();
 }
 
-SimpleBrushWrapper *MainWindow::getCurrentBrush() const {
+SimpleBrushWrapper *MainWindow::getCurrentBrush() const
+{
     return mBrushSelectionWidget->getCurrentBrush();
 }
 
-#include "Boxes/textbox.h"
-void MainWindow::setCurrentBox(BoundingBox *box) {
+void MainWindow::setCurrentBox(BoundingBox *box)
+{
     mFillStrokeSettings->setCurrentBox(box);
-    if(const auto txtBox = enve_cast<TextBox*>(box)) {
+    if (const auto txtBox = enve_cast<TextBox*>(box)) {
         mFontWidget->setDisplayedSettings(txtBox->getFontSize(),
                                           txtBox->getFontFamily(),
                                           txtBox->getFontStyle());
     }
 }
 
-FillStrokeSettingsWidget *MainWindow::getFillStrokeSettings() {
+FillStrokeSettingsWidget *MainWindow::getFillStrokeSettings()
+{
     return mFillStrokeSettings;
 }
 
 bool MainWindow::askForSaving() {
-    if(mChangedSinceSaving) {
+    if (mChangedSinceSaving) {
         const QString title = tr("Save", "AskSaveDialog_Title");
         const QString fileName = mDocument.fEvFile.split("/").last();
 
@@ -1194,9 +1421,9 @@ bool MainWindow::askForSaving() {
         const int buttonId = QMessageBox::question(
                     this, title, questionWithTarget,
                     closeNoSave, cancel, save);
-        if(buttonId == 1) {
+        if (buttonId == 1) {
             return false;
-        } else if(buttonId == 2) {
+        } else if (buttonId == 2) {
             saveFile();
             return true;
         }
@@ -1204,19 +1431,23 @@ bool MainWindow::askForSaving() {
     return true;
 }
 
-BoxScrollWidget *MainWindow::getObjectSettingsList() {
+BoxScrollWidget *MainWindow::getObjectSettingsList()
+{
     return mObjectSettingsWidget;
 }
 
-void MainWindow::disableEventFilter() {
+void MainWindow::disableEventFilter()
+{
     mEventFilterDisabled = true;
 }
 
-void MainWindow::enableEventFilter() {
+void MainWindow::enableEventFilter()
+{
     mEventFilterDisabled = false;
 }
 
-void MainWindow::disable() {
+void MainWindow::disable()
+{
     disableEventFilter();
     mGrayOutWidget = new QWidget(this);
     mGrayOutWidget->setFixedSize(size());
@@ -1226,101 +1457,109 @@ void MainWindow::disable() {
     mGrayOutWidget->update();
 }
 
-void MainWindow::enable() {
-    if(!mGrayOutWidget) return;
+void MainWindow::enable()
+{
+    if (!mGrayOutWidget) { return; }
     enableEventFilter();
     delete mGrayOutWidget;
     mGrayOutWidget = nullptr;
     mDocument.actionFinished();
 }
 
-void MainWindow::newFile() {
-    if(askForSaving()) {
+void MainWindow::newFile()
+{
+    if (askForSaving()) {
         closeProject();
         SceneSettingsDialog::sNewSceneDialog(mDocument, this);
     }
 }
 
-bool handleCanvasModeKeyPress(Document& document, const int key) {
-    if(key == Qt::Key_F1) {
+bool handleCanvasModeKeyPress(Document& document,
+                              const int key)
+{
+    if (key == Qt::Key_F1) {
         document.setCanvasMode(CanvasMode::boxTransform);
-    } else if(key == Qt::Key_F2) {
+    } else if (key == Qt::Key_F2) {
         document.setCanvasMode(CanvasMode::pointTransform);
-    } else if(key == Qt::Key_F3) {
+    } else if (key == Qt::Key_F3) {
         document.setCanvasMode(CanvasMode::pathCreate);
-    }  else if(key == Qt::Key_F4) {
+    }  else if (key == Qt::Key_F4) {
         document.setCanvasMode(CanvasMode::drawPath);
-    } else if(key == Qt::Key_F5) {
+    } else if (key == Qt::Key_F5) {
         document.setCanvasMode(CanvasMode::paint);
-    } else if(key == Qt::Key_F6) {
+    } else if (key == Qt::Key_F6) {
         document.setCanvasMode(CanvasMode::circleCreate);
-    } else if(key == Qt::Key_F7) {
+    } else if (key == Qt::Key_F7) {
         document.setCanvasMode(CanvasMode::rectCreate);
-    } else if(key == Qt::Key_F8) {
+    } else if (key == Qt::Key_F8) {
         document.setCanvasMode(CanvasMode::textCreate);
-    } else if(key == Qt::Key_F9) {
+    } else if (key == Qt::Key_F9) {
         document.setCanvasMode(CanvasMode::nullCreate);
-    } else if(key == Qt::Key_F10) {
+    } else if (key == Qt::Key_F10) {
         document.setCanvasMode(CanvasMode::pickFillStroke);
-    } else return false;
+    } else { return false; }
     KeyFocusTarget::KFT_sSetRandomTarget();
     return true;
 }
 
-bool MainWindow::eventFilter(QObject *obj, QEvent *e) {
-    if(mLock) if(dynamic_cast<QInputEvent*>(e)) return true;
-    if(mEventFilterDisabled) return QMainWindow::eventFilter(obj, e);
+bool MainWindow::eventFilter(QObject *obj, QEvent *e)
+{
+    if (mLock) { if (dynamic_cast<QInputEvent*>(e)) { return true; } }
+    if (mEventFilterDisabled) { return QMainWindow::eventFilter(obj, e); }
     const auto type = e->type();
     const auto focusWidget = QApplication::focusWidget();
-    if(type == QEvent::KeyPress) {
+    if (type == QEvent::KeyPress) {
         const auto keyEvent = static_cast<QKeyEvent*>(e);
-        if(keyEvent->key() == Qt::Key_Delete && focusWidget) {
+        if (keyEvent->key() == Qt::Key_Delete && focusWidget) {
             mEventFilterDisabled = true;
             const bool widHandled =
                     QCoreApplication::sendEvent(focusWidget, keyEvent);
             mEventFilterDisabled = false;
-            if(widHandled) return false;
+            if (widHandled) { return false; }
         }
         return processKeyEvent(keyEvent);
-    } else if(type == QEvent::ShortcutOverride) {
+    } else if (type == QEvent::ShortcutOverride) {
         const auto keyEvent = static_cast<QKeyEvent*>(e);
         const int key = keyEvent->key();
-        if(key == Qt::Key_Tab) {
+        if (key == Qt::Key_Tab) {
             KeyFocusTarget::KFT_sTab();
             return true;
         }
-        if(handleCanvasModeKeyPress(mDocument, key)) return true;
-        if(keyEvent->modifiers() & Qt::SHIFT && key == Qt::Key_D) {
+        if (handleCanvasModeKeyPress(mDocument, key)) { return true; }
+        if (keyEvent->modifiers() & Qt::SHIFT && key == Qt::Key_D) {
             return processKeyEvent(keyEvent);
         }
-        if(keyEvent->modifiers() & Qt::CTRL) {
-            if(key == Qt::Key_C || key == Qt::Key_V ||
-               key == Qt::Key_X || key == Qt::Key_D) {
+        if (keyEvent->modifiers() & Qt::CTRL) {
+            if (key == Qt::Key_C || key == Qt::Key_V ||
+                key == Qt::Key_X || key == Qt::Key_D) {
                 return processKeyEvent(keyEvent);
             }
-        } else if(key == Qt::Key_A || key == Qt::Key_I ||
-                  key == Qt::Key_Delete) {
+        } else if (key == Qt::Key_A || key == Qt::Key_I ||
+                   key == Qt::Key_Delete) {
               return processKeyEvent(keyEvent);
         }
-    } else if(type == QEvent::KeyRelease) {
+    } else if (type == QEvent::KeyRelease) {
         const auto keyEvent = static_cast<QKeyEvent*>(e);
-        if(processKeyEvent(keyEvent)) return true;
+        if (processKeyEvent(keyEvent)) { return true; }
         //finishUndoRedoSet();
-    } else if(type == QEvent::MouseButtonRelease) {
+    } else if (type == QEvent::MouseButtonRelease) {
         //finishUndoRedoSet();
     }
     return QMainWindow::eventFilter(obj, e);
 }
 
-void MainWindow::closeEvent(QCloseEvent *e) {
-    if(!closeProject()) e->ignore();
+void MainWindow::closeEvent(QCloseEvent *e)
+{
+    if (!closeProject()) { e->ignore(); }
 }
 
-bool MainWindow::processKeyEvent(QKeyEvent *event) {
-    if(isActiveWindow()) {
+bool MainWindow::processKeyEvent(QKeyEvent *event)
+{
+    if (isActiveWindow()) {
         bool returnBool = false;
-        if(event->type() == QEvent::KeyPress &&
-            mTimeline->processKeyPress(event)) {
+        if (event->type() == QEvent::KeyPress &&
+            mTimeline->processKeyPress(event))
+        {
             returnBool = true;
         } else {
             returnBool = KeyFocusTarget::KFT_handleKeyEvent(event);
@@ -1331,11 +1570,13 @@ bool MainWindow::processKeyEvent(QKeyEvent *event) {
     return false;
 }
 
-bool MainWindow::isEnabled() {
+bool MainWindow::isEnabled()
+{
     return !mGrayOutWidget;
 }
 
-void MainWindow::clearAll() {
+void MainWindow::clearAll()
+{
     TaskScheduler::instance()->clearTasks();
     setFileChangedSinceSaving(false);
     mObjectSettingsWidget->setMainTarget(nullptr);
@@ -1353,14 +1594,16 @@ void MainWindow::clearAll() {
     openWelcomeDialog();
 }
 
-void MainWindow::updateTitle() {
-    QString star = "";
-    if(mChangedSinceSaving) star = "*";
-    setWindowTitle(mDocument.fEvFile.split("/").last() + star + " - enve");
+void MainWindow::updateTitle()
+{
+    QString unsaved = mChangedSinceSaving ? " *" : "";
+    QFileInfo info(mDocument.fEvFile);
+    setWindowTitle(QString("%1%2").arg(info.baseName(), unsaved));
 }
 
-void MainWindow::openFile() {
-    if(askForSaving()) {
+void MainWindow::openFile()
+{
+    if (askForSaving()) {
         disable();
         const QString defPath = mDocument.fEvFile.isEmpty() ?
                     QDir::homePath() : mDocument.fEvFile;
@@ -1369,21 +1612,22 @@ void MainWindow::openFile() {
         const QString files = tr("enve Files %1", "OpenDialog_FileType");
         const QString openPath = eDialogs::openFile(title, defPath,
                                                     files.arg("(*.ev *.xev)"));
-        if(!openPath.isEmpty()) openFile(openPath);
+        if (!openPath.isEmpty()) { openFile(openPath); }
         enable();
     }
 }
 
-void MainWindow::openFile(const QString& openPath) {
+void MainWindow::openFile(const QString& openPath)
+{
     clearAll();
     try {
         QFileInfo fi(openPath);
         const QString suffix = fi.suffix();
-        if(suffix == "ev") {
+        if (suffix == "ev") {
             loadEVFile(openPath);
-        } else if(suffix == "xev") {
+        } else if (suffix == "xev") {
             loadXevFile(openPath);
-        } else RuntimeThrow("Unrecognized file extension " + suffix);
+        } else { RuntimeThrow("Unrecognized file extension " + suffix); }
         mDocument.setPath(openPath);
         setFileChangedSinceSaving(false);
     } catch(const std::exception& e) {
@@ -1392,31 +1636,34 @@ void MainWindow::openFile(const QString& openPath) {
     mDocument.actionFinished();
 }
 
-void MainWindow::saveFile() {
-    if(mDocument.fEvFile.isEmpty()) {
-        saveFileAs(true);
-    } else saveFile(mDocument.fEvFile);
+void MainWindow::saveFile()
+{
+    if (mDocument.fEvFile.isEmpty()) { saveFileAs(true); }
+    else { saveFile(mDocument.fEvFile); }
 }
 
-void MainWindow::saveFile(const QString& path, const bool setPath) {
+void MainWindow::saveFile(const QString& path,
+                          const bool setPath)
+{
     try {
         QFileInfo fi(path);
         const QString suffix = fi.suffix();
-        if(suffix == "ev") {
+        if (suffix == "ev") {
             saveToFile(path);
-        } else if(suffix == "xev") {
+        } else if (suffix == "xev") {
             saveToFileXEV(path);
             const auto& inst = DialogsInterface::instance();
             inst.displayMessageToUser("Please note that the XEV format is still in the testing phase.");
-        } else RuntimeThrow("Unrecognized file extension " + suffix);
-        if(setPath) mDocument.setPath(path);
+        } else { RuntimeThrow("Unrecognized file extension " + suffix); }
+        if (setPath) mDocument.setPath(path);
         setFileChangedSinceSaving(false);
     } catch(const std::exception& e) {
         gPrintExceptionCritical(e);
     }
 }
 
-void MainWindow::saveFileAs(const bool setPath) {
+void MainWindow::saveFileAs(const bool setPath)
+{
     disableEventFilter();
     const QString defPath = mDocument.fEvFile.isEmpty() ?
                 QDir::homePath() : mDocument.fEvFile;
@@ -1425,21 +1672,22 @@ void MainWindow::saveFileAs(const bool setPath) {
     const QString fileType = tr("enve Files %1", "SaveDialog_FileType");
     QString saveAs = eDialogs::saveFile(title, defPath, fileType.arg("(*.ev *.xev)"));
     enableEventFilter();
-    if(!saveAs.isEmpty()) {
+    if (!saveAs.isEmpty()) {
         const bool isXEV = saveAs.right(4) == ".xev";
-        if(!isXEV && saveAs.right(3) != ".ev") saveAs += ".ev";
+        if (!isXEV && saveAs.right(3) != ".ev") { saveAs += ".ev"; }
 
         saveFile(saveAs, setPath);
     }
 }
 
-void MainWindow::saveBackup() {
+void MainWindow::saveBackup()
+{
     const QString defPath = mDocument.fEvFile.isEmpty() ?
                 QDir::homePath() : mDocument.fEvFile;
     const QString backupPath = defPath + "backup/backup_%1.ev";
     int id = 1;
     QFile backupFile(backupPath.arg(id));
-    while(backupFile.exists()) {
+    while (backupFile.exists()) {
         id++;
         backupFile.setFileName(backupPath.arg(id) );
     }
@@ -1450,21 +1698,24 @@ void MainWindow::saveBackup() {
     }
 }
 
-void MainWindow::exportSVG() {
+void MainWindow::exportSVG()
+{
     const auto dialog = new ExportSvgDialog(this);
     dialog->show();
     dialog->setAttribute(Qt::WA_DeleteOnClose);
 }
 
-bool MainWindow::closeProject() {
-    if(askForSaving()) {
+bool MainWindow::closeProject()
+{
+    if (askForSaving()) {
         clearAll();
         return true;
     }
     return false;
 }
 
-void MainWindow::importFile() {
+void MainWindow::importFile()
+{
     disableEventFilter();
     const QString defPath = mDocument.fEvFile.isEmpty() ?
                 QDir::homePath() : mDocument.fEvFile;
@@ -1479,9 +1730,9 @@ void MainWindow::importFile() {
     const auto importPaths = eDialogs::openFiles(
                 title, defPath, fileType.arg(fileTypes));
     enableEventFilter();
-    if(!importPaths.isEmpty()) {
+    if (!importPaths.isEmpty()) {
         for(const QString &path : importPaths) {
-            if(path.isEmpty()) continue;
+            if (path.isEmpty()) { continue; }
             try {
                 mActions.importFile(path);
             } catch(const std::exception& e) {
@@ -1491,7 +1742,8 @@ void MainWindow::importFile() {
     }
 }
 
-void MainWindow::linkFile() {
+void MainWindow::linkFile()
+{
     disableEventFilter();
     const QString defPath = mDocument.fEvFile.isEmpty() ?
                 QDir::homePath() : mDocument.fEvFile;
@@ -1500,9 +1752,9 @@ void MainWindow::linkFile() {
     const auto importPaths = eDialogs::openFiles(
                 title, defPath, fileType.arg("(*.svg *.ora *.kra)"));
     enableEventFilter();
-    if(!importPaths.isEmpty()) {
-        for(const QString &path : importPaths) {
-            if(path.isEmpty()) continue;
+    if (!importPaths.isEmpty()) {
+        for (const QString &path : importPaths) {
+            if (path.isEmpty()) { continue; }
             try {
                 mActions.linkFile(path);
             } catch(const std::exception& e) {
@@ -1512,7 +1764,8 @@ void MainWindow::linkFile() {
     }
 }
 
-void MainWindow::importImageSequence() {
+void MainWindow::importImageSequence()
+{
     disableEventFilter();
     const QString defPath = mDocument.fEvFile.isEmpty() ?
                 QDir::homePath() : mDocument.fEvFile;
@@ -1520,16 +1773,18 @@ void MainWindow::importImageSequence() {
                              "ImportSequenceDialog_Title");
     const auto folder = eDialogs::openDir(title, defPath);
     enableEventFilter();
-    if(!folder.isEmpty()) mActions.importFile(folder);
+    if (!folder.isEmpty()) { mActions.importFile(folder); }
 }
 
-void MainWindow::revert() {
+void MainWindow::revert()
+{
     const QString path = mDocument.fEvFile;
     openFile(path);
 }
 
-stdsptr<void> MainWindow::lock() {
-    if(mLock) return mLock->ref<Lock>();
+stdsptr<void> MainWindow::lock()
+{
+    if (mLock) { return mLock->ref<Lock>(); }
     setEnabled(false);
     const auto newLock = enve::make_shared<Lock>(this);
     mLock = newLock.get();
@@ -1537,8 +1792,9 @@ stdsptr<void> MainWindow::lock() {
     return newLock;
 }
 
-void MainWindow::lockFinished() {
-    if(mLock) {
+void MainWindow::lockFinished()
+{
+    if (mLock) {
         gPrintException(false, "Lock finished before lock object deleted");
     } else {
         QApplication::restoreOverrideCursor();
@@ -1546,22 +1802,25 @@ void MainWindow::lockFinished() {
     }
 }
 
-void MainWindow::resizeEvent(QResizeEvent* e) {
-    if(statusBar()) statusBar()->setMaximumWidth(width());
+void MainWindow::resizeEvent(QResizeEvent* e)
+{
+    if (statusBar()) { statusBar()->setMaximumWidth(width()); }
     QMainWindow::resizeEvent(e);
 }
 
-void MainWindow::showEvent(QShowEvent *e) {
-    if(statusBar()) statusBar()->setMaximumWidth(width());
+void MainWindow::showEvent(QShowEvent *e)
+{
+    if (statusBar()) { statusBar()->setMaximumWidth(width()); }
     QMainWindow::showEvent(e);
 }
 
-void MainWindow::updateRecentMenu() {
+void MainWindow::updateRecentMenu()
+{
     mRecentMenu->clear();
     const auto homePath = QDir::homePath();
-    for(const auto& path : mRecentFiles) {
+    for (const auto& path : mRecentFiles) {
         QString ttPath = path;
-        if(ttPath.left(homePath.count()) == homePath) {
+        if (ttPath.left(homePath.count()) == homePath) {
             ttPath = "~" + ttPath.mid(homePath.count());
         }
         mRecentMenu->addAction(path, [path, this]() {
