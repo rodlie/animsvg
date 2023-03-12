@@ -49,6 +49,12 @@ PanelSizes=16,32
 INDEX_THEME_DIRS="Directories="
 INDEX_THEME_CATS=""
 
+QRC="${CWD}/src/app/hicolor.qrc"
+RCC="<RCC> \n
+    <qresource prefix=\"/\"> \n
+    <file>icons/hicolor/index.theme</file> \n
+"
+
 for W in $HICOLOR_SIZES; do
     for C in $HICOLOR_CATS; do
         if [ "${C}" = "actions" ]; then
@@ -89,11 +95,24 @@ Type=Fixed
                 echo "==> ${DIR}/${ICON}.png already exists"
             fi
         done
+        PNGS=`ls ${DIR}`
+        for PNG in $PNGS; do
+            RCC="${RCC}
+        <file>icons/hicolor/${W}x${W}/${C}/${PNG}</file>\n
+"
+        done
     done
 done
+
+RCC="${RCC}
+    </qresource>\n
+</RCC>\n
+"
 
 if [ "${INDEX}" = 1 ]; then
     echo "${INDEX_THEME_HEADER}" > "${INDEX_THEME}"
     echo "${INDEX_THEME_DIRS}" >> "${INDEX_THEME}"
     echo "${INDEX_THEME_CATS}" >> "${INDEX_THEME}"
 fi
+
+echo ${RCC} > ${QRC}
