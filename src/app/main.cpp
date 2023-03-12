@@ -28,6 +28,7 @@
 #include "ShaderEffects/shadereffectprogram.h"
 #include "videoencoder.h"
 #include "iconloader.h"
+#include "appsupport.h"
 #ifdef Q_OS_WIN
     #include "windowsincludes.h"
 #endif // Q_OS_WIN
@@ -93,7 +94,11 @@ int main(int argc, char *argv[]) {
     SetProcessDPIAware(); // call before the main event loop
 #endif // Q_OS_WIN
 
-    QApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
+    QApplication::setApplicationDisplayName(QString::fromUtf8("enve2d"));
+    QApplication::setApplicationName(QString::fromUtf8("enve2d"));
+    QApplication::setApplicationVersion(ENVE_VERSION);
+
+    //QApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     QApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
 
@@ -102,6 +107,8 @@ int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
     app.setStyleSheet("QStatusBar::item { border: 0; }");
     setlocale(LC_NUMERIC, "C");
+
+    AppSupport::setupTheme();
 
     const bool threadedOpenGL = QOpenGLContext::supportsThreadedOpenGL();
     if(!threadedOpenGL) {
@@ -174,9 +181,9 @@ int main(int argc, char *argv[]) {
     eFilterSettings filterSettings;
     QDir(eSettings::sSettingsDir()).mkpath(eSettings::sIconsDir());
 
-    eSizesUI::button.add([](const int size) {
+    /*eSizesUI::button.add([](const int size) {
         IconLoader::generateAll(eSizesUI::widget, size);
-    });
+    });*/
 
     eWidgetsImpl widImpl;
     ImportHandler importHandler;
