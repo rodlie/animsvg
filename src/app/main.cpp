@@ -107,7 +107,7 @@ int main(int argc, char *argv[]) {
     setDefaultFormat();
     std::cout << "Setup Default QSurfaceFormat" << std::endl;
     QApplication app(argc, argv);
-    app.setStyleSheet("QStatusBar::item { border: 0; }");
+    app.setStyleSheet("QStatusBar::item, QToolBar { border: 0; }"); // TODO: move to qss
     setlocale(LC_NUMERIC, "C");
 
     AppSupport::setupTheme();
