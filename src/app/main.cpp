@@ -96,6 +96,8 @@ int main(int argc, char *argv[]) {
 
     QApplication::setApplicationDisplayName(QString::fromUtf8("enve2d"));
     QApplication::setApplicationName(QString::fromUtf8("enve2d"));
+    QApplication::setOrganizationName(QString::fromUtf8("enve2d"));
+    QApplication::setOrganizationDomain(QString::fromUtf8("enve2d.github.io"));
     QApplication::setApplicationVersion(ENVE_VERSION);
 
     //QApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
