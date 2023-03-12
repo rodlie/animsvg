@@ -31,9 +31,7 @@
     <qresource prefix="/pixmaps">
         <file>splash.svg</file>
     </qresource>
-    <qresource prefix="/other">
-        <file>GPL3-license.txt</file>
-    </qresource>
+    <qresource prefix="/other"/>
     <qresource prefix="/checkbox">
         <file alias="Checkbox_checked_normal.png">pixmaps/Checkbox_checked_normal.png</file>
         <file alias="Checkbox_checked_disabled.png">pixmaps/Checkbox_checked_disabled.png</file>
