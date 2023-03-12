@@ -103,11 +103,15 @@ void MemoryHandler::freeMemory(const MemoryState newState,
     emit memoryFreed();
 }
 
-void MemoryHandler::memoryChecked(const intKB memKb, const intKB totMemKb) {
-    const auto window = MainWindow::sGetInstance();
-    if(!window) return;
+void MemoryHandler::memoryChecked(const intKB memKb,
+                                  const intKB totMemKb)
+{
+    Q_UNUSED(memKb)
+    Q_UNUSED(totMemKb)
+    /*const auto window = MainWindow::sGetInstance();
+    if (!window) { return; }
     const auto usageWidget = window->getUsageWidget();
-    if(!usageWidget) return;
+    if (!usageWidget) { return; }
     usageWidget->setTotalRam(totMemKb.fValue/qreal(1024));
-    usageWidget->setRamUsage((totMemKb - memKb).fValue/qreal(1024));
+    usageWidget->setRamUsage((totMemKb - memKb).fValue/qreal(1024));*/
 }
