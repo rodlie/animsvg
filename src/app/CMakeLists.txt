@@ -162,7 +162,6 @@ set(
     GUI/ecombobox.cpp
     GUI/editablecombobox.cpp
     GUI/ekeyfilter.cpp
-    GUI/envelicense.cpp
     GUI/ewidgetsimpl.cpp
     GUI/fakemenubar.cpp
     GUI/layouthandler.cpp
@@ -291,7 +290,6 @@ set(
     GUI/ecombobox.h
     GUI/editablecombobox.h
     GUI/ekeyfilter.h
-    GUI/envelicense.h
     GUI/ewidgetsimpl.h
     GUI/fakemenubar.h
     GUI/layouthandler.h
@@ -388,6 +386,7 @@ add_executable(
     resources.qrc
     brushes.qrc
     icons.qrc
+    hicolor.qrc
     tips.qrc
 )
 
