@@ -26,6 +26,7 @@
 #include "core_global.h"
 
 #include <QObject>
+#include <QVariant>
 
 #define ICON_THEME_ENVE2D "enve2d"
 
@@ -36,6 +37,12 @@ class CORE_EXPORT AppSupport : public QObject
 public:
     explicit AppSupport(QObject *parent = nullptr);
     static void setupTheme();
+    static QVariant getSettings(const QString &group,
+                                const QString &key,
+                                const QVariant &fallback);
+    static void setSettings(const QString &group,
+                            const QString &key,
+                            const QVariant &value);
 };
 
 #endif // APPSUPPORT_H

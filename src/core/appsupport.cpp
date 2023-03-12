@@ -26,6 +26,7 @@
 #include <QDebug>
 #include <QIcon>
 #include <QPalette>
+#include <QSettings>
 
 AppSupport::AppSupport(QObject *parent)
     : QObject{parent}
@@ -55,4 +56,26 @@ void AppSupport::setupTheme()
     palette.setColor(QPalette::Disabled, QPalette::Text, Qt::darkGray);
     palette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
     qApp->setPalette(palette);
+}
+
+QVariant AppSupport::getSettings(const QString &group,
+                                 const QString &key,
+                                 const QVariant &fallback)
+{
+    QVariant variant;
+    QSettings settings;
+    settings.beginGroup(group);
+    variant = settings.value(key, fallback);
+    settings.endGroup();
+    return variant;
+}
+
+void AppSupport::setSettings(const QString &group,
+                             const QString &key,
+                             const QVariant &value)
+{
+    QSettings settings;
+    settings.beginGroup(group);
+    settings.setValue(key, value);
+    settings.endGroup();
 }
