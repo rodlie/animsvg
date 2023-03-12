@@ -109,7 +109,7 @@ RCC="${RCC}
 </RCC>\n
 "
 
-if [ "${INDEX}" = 1 ]; then
+if [ "${INDEX}" = 1 ] || [ ! -f "${INDEX_THEME}" ]; then
     echo "${INDEX_THEME_HEADER}" > "${INDEX_THEME}"
     echo "${INDEX_THEME_DIRS}" >> "${INDEX_THEME}"
     echo "${INDEX_THEME_CATS}" >> "${INDEX_THEME}"
