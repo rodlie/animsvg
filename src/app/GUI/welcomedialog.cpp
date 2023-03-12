@@ -21,6 +21,8 @@
 #include <QFontMetrics>
 #include <QPainter>
 #include <QDir>
+#include <QFrame>
+#include <QLabel>
 
 #include "GUI/global.h"
 #include "BoxesList/OptimalScrollArea/scrollarea.h"
@@ -31,14 +33,16 @@ WelcomeDialog::WelcomeDialog(const QStringList &recentPaths,
                              const std::function<void()>& newFunc,
                              const std::function<void()>& openFunc,
                              const std::function<void(QString)>& openRecentFunc,
-                             QWidget * const parent) :
-    QWidget(parent) {
+                             QWidget * const parent)
+    : QWidget(parent)
+{
     const auto thisLay = new QVBoxLayout;
 
     const auto mainWid = new QWidget(this);
-    eSizesUI::widget.add(mainWid, [mainWid](const int size) {
+    /*eSizesUI::widget.add(mainWid, [mainWid](const int size) {
         mainWid->setMinimumWidth(24*size);
-    });
+    });*/
+
     setLayout(thisLay);
     thisLay->addWidget(mainWid, 0, Qt::AlignHCenter | Qt::AlignVCenter);
 
@@ -46,6 +50,25 @@ WelcomeDialog::WelcomeDialog(const QStringList &recentPaths,
     mainWid->setLayout(mainLay);
 
     const auto sceneLay = new QVBoxLayout;
+
+    const auto headerLay = new QHBoxLayout;
+    mainLay->addLayout(headerLay);
+
+    const auto headerFrame = new QFrame(this);
+    headerLay->addWidget(headerFrame);
+
+    const auto logoLabel = new QLabel(this);
+    logoLabel->setMinimumWidth(256);
+    logoLabel->setMaximumWidth(256);
+    logoLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    logoLabel->setText(QString::fromUtf8("<div style=\"text-align: center; font-weight: normal;\">"
+                                         "<p><img src=\":/icons/hicolor/256x256/apps/enve2d.png\" width=\"256\" height=\"256\"></p>"
+                                         "<h1>enve2d<br><span style=\"font-size: large;\">version %1</span></h1>"
+                                         "<p style=\"font-size: small;\">Copyright &copy; 2023 enve2d developers<br>Copyright &copy; 2016-2022 Maurycy Liebner</p>"
+                                         "</div>")
+                                        .arg(ENVE_VERSION));
+    headerLay->addWidget(logoLabel);
+    headerLay->addStretch();
 
     const auto buttonLay = new QHBoxLayout;
     sceneLay->addLayout(buttonLay);
