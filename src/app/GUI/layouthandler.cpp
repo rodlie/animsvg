@@ -32,27 +32,29 @@ LayoutHandler::LayoutHandler(Document& document,
     mComboWidget->setContentsMargins(0, 0, 0, 0);
     mComboWidget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
     mComboWidget->setLayout(canvasComboLayout);
-    mComboWidget->setObjectName("transparentWidget");
+    //mComboWidget->setObjectName("transparentWidget");
 
     mComboBox = new EditableComboBox(mComboWidget);
     mComboBox->setMinimumContentsLength(20);
-    mComboBox->setObjectName("currentLayoutComboBox");
+    //mComboBox->setObjectName("currentLayoutComboBox");
     mComboBox->setLayoutDirection(Qt::RightToLeft);
-    mComboBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    //mComboBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    const auto newLayPush = new QPushButton("+", mComboWidget);
-    newLayPush->setObjectName("addCanvasButton");
-    eSizesUI::widget.add(newLayPush, [newLayPush](const int size) {
+    const auto newLayPush = new QPushButton(QIcon::fromTheme("plus"), QString(), mComboWidget);
+    newLayPush->setToolTip(tr("Add"));
+    //newLayPush->setObjectName("addCanvasButton");
+    /*eSizesUI::widget.add(newLayPush, [newLayPush](const int size) {
         newLayPush->setFixedWidth(size);
-    });
-    newLayPush->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
+    });*/
+    //newLayPush->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
 
-    const auto removeLayPush = new QPushButton("x", mComboWidget);
-    removeLayPush->setObjectName("removeCanvasButton");
-    eSizesUI::widget.add(removeLayPush, [removeLayPush](const int size) {
+    const auto removeLayPush = new QPushButton(QIcon::fromTheme("minus"), QString(), mComboWidget);
+    removeLayPush->setToolTip(tr("Remove"));
+    //removeLayPush->setObjectName("removeCanvasButton");
+    /*eSizesUI::widget.add(removeLayPush, [removeLayPush](const int size) {
         removeLayPush->setFixedWidth(size);
-    });
-    removeLayPush->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
+    });*/
+    //removeLayPush->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
 
     canvasComboLayout->addWidget(mComboBox);
     canvasComboLayout->addWidget(newLayPush);
