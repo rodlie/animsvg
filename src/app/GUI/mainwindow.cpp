@@ -1184,59 +1184,93 @@ void MainWindow::setupToolBar()
     spacer1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     mToolBar->addWidget(spacer1);
 
-    // other
-    mActionConnectPoints = new ActionButton("toolbarButtons/nodeConnect.png",
-                                            tr("Connect Nodes", "ToolBar"), this);
-    mActionConnectPointsAct = mToolBar->addWidget(mActionConnectPoints);
+    // nodeConnect
+    mActionConnectPointsAct = new QAction(QIcon::fromTheme("nodeConnect"),
+                                          tr("Connect Nodes"),
+                                          this);
+    connect(mActionConnectPointsAct, &QAction::triggered,
+            this, [this]() { mActions.connectPointsSlot(); });
+    mToolBar->addAction(mActionConnectPointsAct);
 
-    mActionDisconnectPoints = new ActionButton("toolbarButtons/nodeDisconnect.png",
-                                               tr("Disconnect Nodes", "ToolBar"), this);
-    mActionDisconnectPointsAct = mToolBar->addWidget(mActionDisconnectPoints);
+    // nodeDisconnect
+    mActionDisconnectPointsAct = new QAction(QIcon::fromTheme("nodeDisconnect"),
+                                             tr("Disconnect Nodes"),
+                                             this);
+    connect(mActionDisconnectPointsAct, &QAction::triggered,
+            this, [this]() { mActions.disconnectPointsSlot(); });
+    mToolBar->addAction(mActionDisconnectPointsAct);
 
-    mActionMergePoints = new ActionButton("toolbarButtons/nodeMerge.png",
-                                          tr("Merge Nodes", "ToolBar"), this);
-    mActionMergePointsAct = mToolBar->addWidget(mActionMergePoints);
+    // nodeMerge
+    mActionMergePointsAct = new QAction(QIcon::fromTheme("nodeMerge"),
+                                        tr("Merge Nodes"),
+                                        this);
+    connect(mActionMergePointsAct, &QAction::triggered,
+            this, [this]() { mActions.mergePointsSlot(); });
+    mToolBar->addAction(mActionMergePointsAct);
 
-    mActionNewNode = new ActionButton("toolbarButtons/nodeNew.png",
-                                      tr("New Node", "ToolBar"), this);
-    mActionNewNodeAct = mToolBar->addWidget(mActionNewNode);
-//
+    // nodeNew
+    mActionNewNodeAct = new QAction(QIcon::fromTheme("nodeNew"),
+                                        tr("New Node"),
+                                        this);
+    connect(mActionNewNodeAct, &QAction::triggered,
+            this, [this]() { mActions.subdivideSegments(); });
+    mToolBar->addAction(mActionNewNodeAct);
+
     mSeparator1 = mToolBar->addSeparator();
 
-    mActionSymmetricPointCtrls = new ActionButton("toolbarButtons/nodeSymmetric.png",
-                                                  tr("Symmetric Nodes", "ToolBar"), this);
-    mActionSymmetricPointCtrlsAct = mToolBar->addWidget(mActionSymmetricPointCtrls);
+    // nodeSymmetric
+    mActionSymmetricPointCtrlsAct = new QAction(QIcon::fromTheme("nodeSymmetric"),
+                                                tr("Symmetric Nodes"),
+                                                this);
+    connect(mActionSymmetricPointCtrlsAct, &QAction::triggered,
+            this, [this]() { mActions.makePointCtrlsSymmetric(); });
+    mToolBar->addAction(mActionSymmetricPointCtrlsAct);
 
-    mActionSmoothPointCtrls = new ActionButton("toolbarButtons/nodeSmooth.png",
-                                               tr("Smooth Nodes", "ToolBar"), this);
-    mActionSmoothPointCtrlsAct = mToolBar->addWidget(mActionSmoothPointCtrls);
+    // nodeSmooth
+    mActionSmoothPointCtrlsAct = new QAction(QIcon::fromTheme("nodeSmooth"),
+                                             tr("Smooth Nodes"),
+                                             this);
+    connect(mActionSmoothPointCtrlsAct, &QAction::triggered,
+            this, [this]() { mActions.makePointCtrlsSmooth(); });
+    mToolBar->addAction(mActionSmoothPointCtrlsAct);
 
-    mActionCornerPointCtrls = new ActionButton("toolbarButtons/nodeCorner.png",
-                                               tr("Corner Nodes", "ToolBar"), this);
-    mActionCornerPointCtrlsAct = mToolBar->addWidget(mActionCornerPointCtrls);
+    // nodeCorner
+    mActionCornerPointCtrlsAct = new QAction(QIcon::fromTheme("nodeCorner"),
+                                             tr("Corner Nodes"),
+                                             this);
+    connect(mActionCornerPointCtrlsAct, &QAction::triggered,
+            this, [this]() { mActions.makePointCtrlsCorner(); });
+    mToolBar->addAction(mActionCornerPointCtrlsAct);
 
-//
     mSeparator2 = mToolBar->addSeparator();
 
-    mActionLine = new ActionButton("toolbarButtons/segmentLine.png",
-                                   gSingleLineTooltip(tr("Make Segment Line", "ToolBar")), this);
-    mActionLineAct = mToolBar->addWidget(mActionLine);
+    // segmentLine
+    mActionLineAct = new QAction(QIcon::fromTheme("segmentLine"),
+                                 tr("Make Segment Line"),
+                                 this);
+    connect(mActionLineAct, &QAction::triggered,
+            this, [this]() { mActions.makeSegmentLine(); });
+    mToolBar->addAction(mActionLineAct);
 
-    mActionCurve = new ActionButton("toolbarButtons/segmentCurve.png",
-                                    gSingleLineTooltip(tr("Make Segment Curve", "ToolBar")), this);
-    mActionCurveAct = mToolBar->addWidget(mActionCurve);
+    // segmentCurve
+    mActionCurveAct = new QAction(QIcon::fromTheme("segmentCurve"),
+                                 tr("Make Segment Curve"),
+                                 this);
+    connect(mActionCurveAct, &QAction::triggered,
+            this, [this]() { mActions.makeSegmentCurve(); });
+    mToolBar->addAction(mActionCurveAct);
 
+    // fontWidget
     mFontWidget = new FontsWidget(this);
     mFontWidgetAct = mToolBar->addWidget(mFontWidget);
 
-    mActionNewEmptyPaintFrame = new ActionButton(
-                "toolbarButtons/newEmpty.png",
-                gSingleLineTooltip(tr("New Empty Frame", "ToolBar"), "N"), this);
-    mActionNewEmptyPaintFrameAct = mToolBar->addWidget(mActionNewEmptyPaintFrame);
-
-    /*eSizesUI::widget.add(mToolBar, [this](const int size) {
-        mToolBar->setFixedHeight(2*size);
-    });*/
+    // newEmpty
+    mActionNewEmptyPaintFrameAct = new QAction(QIcon::fromTheme("newEmpty"),
+                                               tr("New Empty Frame"),
+                                               this);
+    connect(mActionNewEmptyPaintFrameAct, &QAction::triggered,
+            this, [this]() { mActions.newEmptyPaintFrame(); });
+    mToolBar->addAction(mActionNewEmptyPaintFrameAct);
 
     // spacer
     QWidget* spacer2 = new QWidget(this);
@@ -1256,50 +1290,6 @@ void MainWindow::setupToolBar()
 
 void MainWindow::connectToolBarActions()
 {
-    /*connect(mBoxTransformMode, &QPushButton::pressed,
-            &mActions, &Actions::setMovePathMode);
-    connect(mPointTransformMode, &ActionButton::pressed,
-            &mActions, &Actions::setMovePointMode);
-    connect(mAddPointMode, &ActionButton::pressed,
-            &mActions, &Actions::setAddPointMode);
-    connect(mDrawPathMode, &ActionButton::pressed,
-            &mActions, &Actions::setDrawPathMode);
-
-    connect(mPaintMode, &ActionButton::pressed,
-            &mActions, &Actions::setPaintMode);
-    connect(mCircleMode, &ActionButton::pressed,
-            &mActions, &Actions::setCircleMode);
-    connect(mRectangleMode, &ActionButton::pressed,
-            &mActions, &Actions::setRectangleMode);
-    connect(mTextMode, &ActionButton::pressed,
-            &mActions, &Actions::setTextMode);
-
-    connect(mNullMode, &ActionButton::pressed,
-            &mActions, &Actions::setNullMode);
-    connect(mPickPaintSettingsMode, &ActionButton::pressed,
-            &mActions, &Actions::setPickPaintSettingsMode);*/
-
-    connect(mActionConnectPoints, &ActionButton::pressed,
-            &mActions, &Actions::connectPointsSlot);
-    connect(mActionDisconnectPoints, &ActionButton::pressed,
-            &mActions, &Actions::disconnectPointsSlot);
-    connect(mActionMergePoints, &ActionButton::pressed,
-            &mActions, &Actions::mergePointsSlot);
-    connect(mActionNewNode, &ActionButton::pressed,
-            &mActions, &Actions::subdivideSegments);
-
-    connect(mActionSymmetricPointCtrls, &ActionButton::pressed,
-            &mActions, &Actions::makePointCtrlsSymmetric);
-    connect(mActionSmoothPointCtrls, &ActionButton::pressed,
-            &mActions, &Actions::makePointCtrlsSmooth);
-    connect(mActionCornerPointCtrls, &ActionButton::pressed,
-            &mActions, &Actions::makePointCtrlsCorner);
-
-    connect(mActionLine, &ActionButton::pressed,
-            &mActions, &Actions::makeSegmentLine);
-    connect(mActionCurve, &ActionButton::pressed,
-            &mActions, &Actions::makeSegmentCurve);
-
     connect(mFontWidget, &FontsWidget::fontSizeChanged,
             &mActions, &Actions::setFontSize);
     connect(mFontWidget, &FontsWidget::fontFamilyAndStyleChanged,
@@ -1308,10 +1298,6 @@ void MainWindow::connectToolBarActions()
             &mActions, &Actions::setTextAlignment);
     connect(mFontWidget, &FontsWidget::textVAlignmentChanged,
             &mActions, &Actions::setTextVAlignment);
-
-    connect(mActionNewEmptyPaintFrame, &ActionButton::pressed,
-            &mActions, &Actions::newEmptyPaintFrame);
-
 }
 
 MainWindow *MainWindow::sGetInstance()
@@ -1323,19 +1309,6 @@ void MainWindow::updateCanvasModeButtonsChecked()
 {
     const CanvasMode mode = mDocument.fCanvasMode;
     mCentralWidget->setCanvasMode(mode);
-
-    /*mBoxTransformMode->setState(mode == CanvasMode::boxTransform);
-    mPointTransformMode->setState(mode == CanvasMode::pointTransform);
-    mAddPointMode->setState(mode == CanvasMode::pathCreate);
-    mDrawPathMode->setState(mode == CanvasMode::drawPath);
-
-    mPaintMode->setState(mode == CanvasMode::paint);
-    mCircleMode->setState(mode == CanvasMode::circleCreate);
-    mRectangleMode->setState(mode == CanvasMode::rectCreate);
-    mTextMode->setState(mode == CanvasMode::textCreate);
-
-    mNullMode->setState(mode == CanvasMode::nullCreate);
-    mPickPaintSettingsMode->setState(mode == CanvasMode::pickFillStroke);*/
 
     const bool boxMode = mode == CanvasMode::boxTransform;
     mFontWidgetAct->setVisible(boxMode);
@@ -1474,7 +1447,7 @@ void MainWindow::newFile()
     }
 }
 
-bool handleCanvasModeKeyPress(Document& document,
+/*bool handleCanvasModeKeyPress(Document& document,
                               const int key)
 {
     if (key == Qt::Key_F1) {
@@ -1500,7 +1473,7 @@ bool handleCanvasModeKeyPress(Document& document,
     } else { return false; }
     KeyFocusTarget::KFT_sSetRandomTarget();
     return true;
-}
+}*/
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *e)
 {
@@ -1525,7 +1498,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
             KeyFocusTarget::KFT_sTab();
             return true;
         }
-        if (handleCanvasModeKeyPress(mDocument, key)) { return true; }
+        //if (handleCanvasModeKeyPress(mDocument, key)) { return true; }
         if (keyEvent->modifiers() & Qt::SHIFT && key == Qt::Key_D) {
             return processKeyEvent(keyEvent);
         }

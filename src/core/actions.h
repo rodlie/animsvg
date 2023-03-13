@@ -58,7 +58,7 @@ public:
     void makeSegmentLine() const;
     void makeSegmentCurve() const;
 
-    void newEmptyPaintFrame();
+    void newEmptyPaintFrame() const;
 
     void selectAllAction() const;
     void invertSelectionAction() const;

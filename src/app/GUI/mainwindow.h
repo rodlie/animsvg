@@ -245,50 +245,30 @@ private:
     QToolBar *mToolBar;
 
     QActionGroup *mToolbarActGroup;
-    /*SwitchButton *mBoxTransformMode;
-    SwitchButton *mPointTransformMode;
-    SwitchButton *mAddPointMode;
-    SwitchButton *mDrawPathMode;
-    SwitchButton *mPaintMode;
-    SwitchButton *mCircleMode;
-    SwitchButton *mRectangleMode;
-    SwitchButton *mTextMode;
-    SwitchButton *mNullMode;
-    SwitchButton *mPickPaintSettingsMode;*/
 
-    ActionButton *mActionConnectPoints;
-    ActionButton *mActionDisconnectPoints;
-    ActionButton *mActionMergePoints;
-    ActionButton *mActionNewNode;
     QAction *mActionConnectPointsAct;
     QAction *mActionDisconnectPointsAct;
     QAction *mActionMergePointsAct;
     QAction* mActionNewNodeAct;
-//
+
     QAction* mSeparator1;
-//
-    ActionButton *mActionSymmetricPointCtrls;
-    ActionButton *mActionSmoothPointCtrls;
-    ActionButton *mActionCornerPointCtrls;
+
     QAction *mActionSymmetricPointCtrlsAct;
     QAction *mActionSmoothPointCtrlsAct;
     QAction *mActionCornerPointCtrlsAct;
-//
+
     QAction* mSeparator2;
-//
-    ActionButton *mActionLine;
-    ActionButton *mActionCurve;
+
     QAction *mActionLineAct;
     QAction *mActionCurveAct;
-//
-    ActionButton *mActionNewEmptyPaintFrame;
+
     QAction *mActionNewEmptyPaintFrameAct;
-//
+
     QAction *mResetZoomAction;
     QAction *mZoomInAction;
     QAction *mZoomOutAction;
     QAction *mFitViewAction;
-//
+
     QAction *mNoneQuality;
     QAction *mLowQuality;
     QAction *mMediumQuality;

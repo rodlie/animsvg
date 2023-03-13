@@ -470,62 +470,82 @@ void Actions::setFontSize(const qreal size) const {
     afterAction();
 }
 
-void Actions::connectPointsSlot() const {
-    if(!mActiveScene) return;
+void Actions::connectPointsSlot() const
+{
+    qDebug() << "connectPointsSlot";
+    if (!mActiveScene) { return; }
     mActiveScene->connectPoints();
     afterAction();
 }
 
-void Actions::disconnectPointsSlot() const {
-    if(!mActiveScene) return;
+void Actions::disconnectPointsSlot() const
+{
+    qDebug() << "disconnectPointsSlot";
+    if (!mActiveScene) { return; }
     mActiveScene->disconnectPoints();
     afterAction();
 }
 
-void Actions::mergePointsSlot() const {
-    if(!mActiveScene) return;
+void Actions::mergePointsSlot() const
+{
+    qDebug() << "mergePointsSlot";
+    if (!mActiveScene) { return; }
     mActiveScene->mergePoints();
     afterAction();
 }
 
-void Actions::subdivideSegments() const {
-    if(!mActiveScene) return;
+void Actions::subdivideSegments() const
+{
+    qDebug() << "subdivideSegments";
+    if (!mActiveScene) { return; }
     mActiveScene->subdivideSegments();
     afterAction();
 }
 
-void Actions::makePointCtrlsSymmetric() const {
-    if(!mActiveScene) return;
+void Actions::makePointCtrlsSymmetric() const
+{
+    qDebug() << "makePointCtrlsSymmetric";
+    if (!mActiveScene) { return; }
     mActiveScene->makePointCtrlsSymmetric();
     afterAction();
 }
 
-void Actions::makePointCtrlsSmooth() const {
-    if(!mActiveScene) return;
+void Actions::makePointCtrlsSmooth() const
+{
+    qDebug() << "makePointCtrlsSmooth";
+    if (!mActiveScene) { return; }
     mActiveScene->makePointCtrlsSmooth();
     afterAction();
 }
 
-void Actions::makePointCtrlsCorner() const {
-    if(!mActiveScene) return;
+void Actions::makePointCtrlsCorner() const
+{
+    qDebug() << "makePointCtrlsCorner";
+    if (!mActiveScene) { return; }
     mActiveScene->makePointCtrlsCorner();
     afterAction();
 }
 
-void Actions::makeSegmentLine() const {
-    if(!mActiveScene) return;
+void Actions::makeSegmentLine() const
+{
+    qDebug() << "makeSegmentLine";
+    if (!mActiveScene) { return; }
     mActiveScene->makeSegmentLine();
     afterAction();
 }
 
-void Actions::makeSegmentCurve() const {
-    if(!mActiveScene) return;
+void Actions::makeSegmentCurve() const
+{
+    qDebug() << "makeSegmentCurve";
+    if (!mActiveScene) { return; }
     mActiveScene->makeSegmentCurve();
     afterAction();
 }
 
-void Actions::newEmptyPaintFrame() {
-    if(!mActiveScene) return;
+void Actions::newEmptyPaintFrame() const
+{
+    qDebug()<< "newEmptyPaintFrame";
+    if (!mActiveScene) { return; }
     mActiveScene->newEmptyPaintFrameAction();
     afterAction();
 }
