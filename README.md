@@ -2,6 +2,27 @@
 
 This is a community fork of [enve](https://github.com/MaurycyLiebner/enve). A 2d animation application.
 
+A lot of changes are currently happening under the hood, so don't expect anything usable until our first [release](https://github.com/enve2d/enve2d/milestone/1).
+
+Features currently present will be checked, if they are broken or not fully implemented a review will be done:
+
+* If they are broken check if a fix is feasible, else remove or disable
+* If they are not fully implemented check if this is a feature worth implementing, else remove or disable
+
+The goal is to end up with a [v1.0.0](https://github.com/enve2d/enve2d/milestone/7) release in the not too distant future.
+
+See our issue [tracker](https://github.com/enve2d/enve2d/issues) for more information.
+
+## License
+
+Copyright &copy; 2023 enve2d developers
+
+Copyright &copy; 2016-2022 Maurycy Liebner
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
 ## Build
 
 We are moving to CMake and currently only Linux is supported, see open [issue](https://github.com/enve2d/enve2d/issues/1) for progress on other platforms.
@@ -167,7 +188,16 @@ enve2d
         │       └── README.md
         ├── icons
         │   └── hicolor
+        │       ├── 128x128
+        │       │   └── apps
+        │       │       └── enve2d.png
         │       ├── 16x16
+        │       │   └── apps
+        │       │       └── enve2d.png
+        │       ├── 192x192
+        │       │   └── apps
+        │       │       └── enve2d.png
+        │       ├── 22x22
         │       │   └── apps
         │       │       └── enve2d.png
         │       ├── 256x256
@@ -177,6 +207,12 @@ enve2d
         │       │   └── apps
         │       │       └── enve2d.png
         │       ├── 48x48
+        │       │   └── apps
+        │       │       └── enve2d.png
+        │       ├── 64x64
+        │       │   └── apps
+        │       │       └── enve2d.png
+        │       ├── 96x96
         │       │   └── apps
         │       │       └── enve2d.png
         │       └── scalable
