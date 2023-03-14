@@ -915,7 +915,7 @@ void MainWindow::setupStatusBar()
 void MainWindow::setupToolBar()
 {
     const QSize iconSize(AppSupport::getSettings("ui",
-                                                 "toolbarIconSize",
+                                                 "mainToolbarIconSize",
                                                  QSize(24, 24)).toSize());
 
     mToolBar = new QToolBar(tr("Toolbar"), this);

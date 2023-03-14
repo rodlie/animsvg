@@ -25,13 +25,16 @@
  <file>icons/hicolor/16x16/actions/paint.png</file>
  <file>icons/hicolor/16x16/actions/pathCreate.png</file>
  <file>icons/hicolor/16x16/actions/pick.png</file>
+ <file>icons/hicolor/16x16/actions/play.png</file>
  <file>icons/hicolor/16x16/actions/plus.png</file>
  <file>icons/hicolor/16x16/actions/pointTransform.png</file>
+ <file>icons/hicolor/16x16/actions/preview.png</file>
  <file>icons/hicolor/16x16/actions/rectCreate.png</file>
  <file>icons/hicolor/16x16/actions/segmentCurve.png</file>
  <file>icons/hicolor/16x16/actions/segmentLine.png</file>
  <file>icons/hicolor/16x16/actions/split_h.png</file>
  <file>icons/hicolor/16x16/actions/split_v.png</file>
+ <file>icons/hicolor/16x16/actions/stop.png</file>
  <file>icons/hicolor/16x16/actions/textCreate.png</file>
  <file>icons/hicolor/16x16/apps/enve2d.png</file>
  <file>icons/hicolor/22x22/actions/alignBottom.png</file>
@@ -58,13 +61,16 @@
  <file>icons/hicolor/22x22/actions/paint.png</file>
  <file>icons/hicolor/22x22/actions/pathCreate.png</file>
  <file>icons/hicolor/22x22/actions/pick.png</file>
+ <file>icons/hicolor/22x22/actions/play.png</file>
  <file>icons/hicolor/22x22/actions/plus.png</file>
  <file>icons/hicolor/22x22/actions/pointTransform.png</file>
+ <file>icons/hicolor/22x22/actions/preview.png</file>
  <file>icons/hicolor/22x22/actions/rectCreate.png</file>
  <file>icons/hicolor/22x22/actions/segmentCurve.png</file>
  <file>icons/hicolor/22x22/actions/segmentLine.png</file>
  <file>icons/hicolor/22x22/actions/split_h.png</file>
  <file>icons/hicolor/22x22/actions/split_v.png</file>
+ <file>icons/hicolor/22x22/actions/stop.png</file>
  <file>icons/hicolor/22x22/actions/textCreate.png</file>
  <file>icons/hicolor/22x22/apps/enve2d.png</file>
  <file>icons/hicolor/32x32/actions/alignBottom.png</file>
@@ -91,13 +97,16 @@
  <file>icons/hicolor/32x32/actions/paint.png</file>
  <file>icons/hicolor/32x32/actions/pathCreate.png</file>
  <file>icons/hicolor/32x32/actions/pick.png</file>
+ <file>icons/hicolor/32x32/actions/play.png</file>
  <file>icons/hicolor/32x32/actions/plus.png</file>
  <file>icons/hicolor/32x32/actions/pointTransform.png</file>
+ <file>icons/hicolor/32x32/actions/preview.png</file>
  <file>icons/hicolor/32x32/actions/rectCreate.png</file>
  <file>icons/hicolor/32x32/actions/segmentCurve.png</file>
  <file>icons/hicolor/32x32/actions/segmentLine.png</file>
  <file>icons/hicolor/32x32/actions/split_h.png</file>
  <file>icons/hicolor/32x32/actions/split_v.png</file>
+ <file>icons/hicolor/32x32/actions/stop.png</file>
  <file>icons/hicolor/32x32/actions/textCreate.png</file>
  <file>icons/hicolor/32x32/apps/enve2d.png</file>
  <file>icons/hicolor/48x48/actions/alignBottom.png</file>
@@ -124,13 +133,16 @@
  <file>icons/hicolor/48x48/actions/paint.png</file>
  <file>icons/hicolor/48x48/actions/pathCreate.png</file>
  <file>icons/hicolor/48x48/actions/pick.png</file>
+ <file>icons/hicolor/48x48/actions/play.png</file>
  <file>icons/hicolor/48x48/actions/plus.png</file>
  <file>icons/hicolor/48x48/actions/pointTransform.png</file>
+ <file>icons/hicolor/48x48/actions/preview.png</file>
  <file>icons/hicolor/48x48/actions/rectCreate.png</file>
  <file>icons/hicolor/48x48/actions/segmentCurve.png</file>
  <file>icons/hicolor/48x48/actions/segmentLine.png</file>
  <file>icons/hicolor/48x48/actions/split_h.png</file>
  <file>icons/hicolor/48x48/actions/split_v.png</file>
+ <file>icons/hicolor/48x48/actions/stop.png</file>
  <file>icons/hicolor/48x48/actions/textCreate.png</file>
  <file>icons/hicolor/48x48/apps/enve2d.png</file>
  <file>icons/hicolor/64x64/actions/alignBottom.png</file>
@@ -157,13 +169,16 @@
  <file>icons/hicolor/64x64/actions/paint.png</file>
  <file>icons/hicolor/64x64/actions/pathCreate.png</file>
  <file>icons/hicolor/64x64/actions/pick.png</file>
+ <file>icons/hicolor/64x64/actions/play.png</file>
  <file>icons/hicolor/64x64/actions/plus.png</file>
  <file>icons/hicolor/64x64/actions/pointTransform.png</file>
+ <file>icons/hicolor/64x64/actions/preview.png</file>
  <file>icons/hicolor/64x64/actions/rectCreate.png</file>
  <file>icons/hicolor/64x64/actions/segmentCurve.png</file>
  <file>icons/hicolor/64x64/actions/segmentLine.png</file>
  <file>icons/hicolor/64x64/actions/split_h.png</file>
  <file>icons/hicolor/64x64/actions/split_v.png</file>
+ <file>icons/hicolor/64x64/actions/stop.png</file>
  <file>icons/hicolor/64x64/actions/textCreate.png</file>
  <file>icons/hicolor/64x64/apps/enve2d.png</file>
  <file>icons/hicolor/96x96/actions/alignBottom.png</file>
@@ -190,13 +205,16 @@
  <file>icons/hicolor/96x96/actions/paint.png</file>
  <file>icons/hicolor/96x96/actions/pathCreate.png</file>
  <file>icons/hicolor/96x96/actions/pick.png</file>
+ <file>icons/hicolor/96x96/actions/play.png</file>
  <file>icons/hicolor/96x96/actions/plus.png</file>
  <file>icons/hicolor/96x96/actions/pointTransform.png</file>
+ <file>icons/hicolor/96x96/actions/preview.png</file>
  <file>icons/hicolor/96x96/actions/rectCreate.png</file>
  <file>icons/hicolor/96x96/actions/segmentCurve.png</file>
  <file>icons/hicolor/96x96/actions/segmentLine.png</file>
  <file>icons/hicolor/96x96/actions/split_h.png</file>
  <file>icons/hicolor/96x96/actions/split_v.png</file>
+ <file>icons/hicolor/96x96/actions/stop.png</file>
  <file>icons/hicolor/96x96/actions/textCreate.png</file>
  <file>icons/hicolor/96x96/apps/enve2d.png</file>
  <file>icons/hicolor/128x128/actions/alignBottom.png</file>
@@ -223,13 +241,16 @@
  <file>icons/hicolor/128x128/actions/paint.png</file>
  <file>icons/hicolor/128x128/actions/pathCreate.png</file>
  <file>icons/hicolor/128x128/actions/pick.png</file>
+ <file>icons/hicolor/128x128/actions/play.png</file>
  <file>icons/hicolor/128x128/actions/plus.png</file>
  <file>icons/hicolor/128x128/actions/pointTransform.png</file>
+ <file>icons/hicolor/128x128/actions/preview.png</file>
  <file>icons/hicolor/128x128/actions/rectCreate.png</file>
  <file>icons/hicolor/128x128/actions/segmentCurve.png</file>
  <file>icons/hicolor/128x128/actions/segmentLine.png</file>
  <file>icons/hicolor/128x128/actions/split_h.png</file>
  <file>icons/hicolor/128x128/actions/split_v.png</file>
+ <file>icons/hicolor/128x128/actions/stop.png</file>
  <file>icons/hicolor/128x128/actions/textCreate.png</file>
  <file>icons/hicolor/128x128/apps/enve2d.png</file>
  <file>icons/hicolor/192x192/actions/alignBottom.png</file>
@@ -256,13 +277,16 @@
  <file>icons/hicolor/192x192/actions/paint.png</file>
  <file>icons/hicolor/192x192/actions/pathCreate.png</file>
  <file>icons/hicolor/192x192/actions/pick.png</file>
+ <file>icons/hicolor/192x192/actions/play.png</file>
  <file>icons/hicolor/192x192/actions/plus.png</file>
  <file>icons/hicolor/192x192/actions/pointTransform.png</file>
+ <file>icons/hicolor/192x192/actions/preview.png</file>
  <file>icons/hicolor/192x192/actions/rectCreate.png</file>
  <file>icons/hicolor/192x192/actions/segmentCurve.png</file>
  <file>icons/hicolor/192x192/actions/segmentLine.png</file>
  <file>icons/hicolor/192x192/actions/split_h.png</file>
  <file>icons/hicolor/192x192/actions/split_v.png</file>
+ <file>icons/hicolor/192x192/actions/stop.png</file>
  <file>icons/hicolor/192x192/actions/textCreate.png</file>
  <file>icons/hicolor/192x192/apps/enve2d.png</file>
  <file>icons/hicolor/256x256/actions/alignBottom.png</file>
@@ -289,13 +313,16 @@
  <file>icons/hicolor/256x256/actions/paint.png</file>
  <file>icons/hicolor/256x256/actions/pathCreate.png</file>
  <file>icons/hicolor/256x256/actions/pick.png</file>
+ <file>icons/hicolor/256x256/actions/play.png</file>
  <file>icons/hicolor/256x256/actions/plus.png</file>
  <file>icons/hicolor/256x256/actions/pointTransform.png</file>
+ <file>icons/hicolor/256x256/actions/preview.png</file>
  <file>icons/hicolor/256x256/actions/rectCreate.png</file>
  <file>icons/hicolor/256x256/actions/segmentCurve.png</file>
  <file>icons/hicolor/256x256/actions/segmentLine.png</file>
  <file>icons/hicolor/256x256/actions/split_h.png</file>
  <file>icons/hicolor/256x256/actions/split_v.png</file>
+ <file>icons/hicolor/256x256/actions/stop.png</file>
  <file>icons/hicolor/256x256/actions/textCreate.png</file>
  <file>icons/hicolor/256x256/apps/enve2d.png</file>
  </qresource>

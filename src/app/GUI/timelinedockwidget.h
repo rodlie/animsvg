@@ -103,9 +103,9 @@ private:
     QVBoxLayout *mMainLayout;
     QComboBox *mResolutionComboBox;
 
-    ActionButton *mPlayFromBeginningButton;
+    QPushButton *mPlayFromBeginningButton;
     SwitchButton *mPlayButton;
-    ActionButton *mStopButton;
+    QPushButton *mStopButton;
     SwitchButton *mLoopButton;
 
     QAction* mLocalPivotAct;

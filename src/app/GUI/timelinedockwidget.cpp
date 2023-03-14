@@ -36,6 +36,7 @@
 #include "switchbutton.h"
 #include "GUI/BrushWidgets/brushlabel.h"
 #include "editablecombobox.h"
+#include "appsupport.h"
 
 TimelineDockWidget::TimelineDockWidget(Document& document,
                                        LayoutHandler * const layoutH,
@@ -56,9 +57,9 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
 
     setFocusPolicy(Qt::NoFocus);
 
-    eSizesUI::widget.add(this, [this](const int size) {
+    /*eSizesUI::widget.add(this, [this](const int size) {
         setMinimumSize(10*size, 10*size);
-    });
+    });*/
     mMainLayout = new QVBoxLayout(this);
     setLayout(mMainLayout);
     mMainLayout->setSpacing(0);
@@ -78,16 +79,22 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     connect(mResolutionComboBox, &QComboBox::currentTextChanged,
             this, &TimelineDockWidget::setResolutionText);
 
-    const int iconSize = 5*eSizesUI::widget/4;
+    //const int iconSize = 5*eSizesUI::widget/4;
+    const QSize iconSize(AppSupport::getSettings("ui",
+                                                 "timelineToolbarIconSize",
+                                                 QSize(24, 24)).toSize());
     const QString iconsDir = eSettings::sIconsDir() + "/toolbarButtons";
 
-    mPlayFromBeginningButton = new ActionButton(
-                "toolbarButtons/preview.png",
-                gSingleLineTooltip("Play From the Beginning"), this);
-    connect(mPlayFromBeginningButton, &ActionButton::pressed,
-            this, [this]() {
+    mPlayFromBeginningButton = new QPushButton(QIcon::fromTheme("preview"),
+                                               QString(),
+                                               this);
+    mPlayFromBeginningButton->setToolTip(tr("Play From the Beginning"));
+    connect(mPlayFromBeginningButton,
+            &QPushButton::pressed,
+            this,
+            [this]() {
         const auto scene = *mDocument.fActiveScene;
-        if(!scene) return;
+        if (!scene) { return; }
         scene->anim_setAbsFrame(scene->getFrameRange().fMin);
         renderPreview();
     });
@@ -96,9 +103,10 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
                       "toolbarButtons/play.png",
                       "toolbarButtons/pause.png",
                       gSingleLineTooltip("Render Preview", "Space"), this);
-    mStopButton = new ActionButton("toolbarButtons/stop.png",
-                                   gSingleLineTooltip("Stop Preview", "Esc"), this);
-    connect(mStopButton, &ActionButton::pressed,
+
+    mStopButton = new QPushButton(QIcon::fromTheme("stop"), QString(), this);
+    mStopButton->setToolTip(tr("Stop Preview"));
+    connect(mStopButton, &QPushButton::pressed,
             this, &TimelineDockWidget::interruptPreview);
 
     mLoopButton = SwitchButton::sCreate2Switch(
@@ -167,9 +175,9 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
             this, [this](const float size) {
         mBrushSizeLabel->setText(QString("%1").arg(exp(qreal(size)), 0, 'f', 2));
     });
-    eSizesUI::widget.add(mBrushSizeLabel, [this](const int size) {
+    /*eSizesUI::widget.add(mBrushSizeLabel, [this](const int size) {
         mBrushSizeLabel->setFixedWidth(2*size);
-    });
+    });*/
     mIncBrushSize = new ActionButton(
                 "toolbarButtons/brush+.png",
                 gSingleLineTooltip("Increase Brush Size", "W"), this);
@@ -269,7 +277,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mToolBar = new QToolBar(this);
     mToolBar->setMovable(false);
 
-    mToolBar->setIconSize(QSize(iconSize, iconSize));
+    mToolBar->setIconSize(iconSize);
     mToolBar->addSeparator();
 
 //    mControlButtonsLayout->addWidget(mGoToPreviousKeyButton);
