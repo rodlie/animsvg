@@ -55,14 +55,14 @@ private:
 
 class WidgetWrapperCornerMenu : public FakeMenuBar {
 public:
-    WidgetWrapperCornerMenu(WidgetWrapperNode* const target) {
-        const auto iconsDir = eSettings::sIconsDir();
-        mSplitV = addAction(QIcon(iconsDir + "/split_v.png"),
-                            "Split Vertically");
-        mSplitH = addAction(QIcon(iconsDir + "/split_h.png"),
-                            "Split Horizontally");
-        mClose = addAction(QIcon(iconsDir + "/close.png"),
-                           "Close");
+    WidgetWrapperCornerMenu(WidgetWrapperNode* const target)
+    {
+        mSplitV = addAction(QIcon::fromTheme("split_v"),
+                            tr("Split Vertically"));
+        mSplitH = addAction(QIcon::fromTheme("split_h"),
+                            tr("Split Horizontally"));
+        mClose = addAction(QIcon::fromTheme("close"),
+                           tr("Close"));
 
         connect(mSplitV, &QAction::triggered,
                 target, &WidgetWrapperNode::splitV);

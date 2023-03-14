@@ -77,13 +77,13 @@ TimelineWidget::TimelineWidget(Document &document,
 
     mCornerMenuBar = new FakeMenuBar(this);
     mCornerMenuBar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    mCornerMenuBar->setStyleSheet("QMenuBar::item { padding: 1px 0px; }");
+    //mCornerMenuBar->setStyleSheet("QMenuBar::item { padding: 1px 0px; }");
 
     const auto iconsDir = eSettings::sIconsDir();
 
-    QMenu * const settingsMenu = mCornerMenuBar->addMenu(
-                QIcon(iconsDir + "/settings_dots.png"), "Settings");
-    QMenu * const objectsMenu = settingsMenu->addMenu("State");
+    QMenu * const settingsMenu = mCornerMenuBar->addMenu(QIcon::fromTheme("dots"),
+                                                         tr("Settings"));
+    QMenu * const objectsMenu = settingsMenu->addMenu(tr("State"));
 
     const auto ruleActionAdder = [this, objectsMenu](
             const SWT_BoxRule rule, const QString& text) {
