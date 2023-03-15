@@ -104,7 +104,7 @@ private:
     QComboBox *mResolutionComboBox;
 
     QPushButton *mPlayFromBeginningButton;
-    SwitchButton *mPlayButton;
+    QPushButton *mPlayButton;
     QPushButton *mStopButton;
     SwitchButton *mLoopButton;
 

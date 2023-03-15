@@ -40,9 +40,12 @@
 
 TimelineDockWidget::TimelineDockWidget(Document& document,
                                        LayoutHandler * const layoutH,
-                                       MainWindow * const parent) :
-    QWidget(parent), mDocument(document), mMainWindow(parent),
-    mTimelineLayout(layoutH->timelineLayout()) {
+                                       MainWindow * const parent)
+    : QWidget(parent)
+    , mDocument(document)
+    , mMainWindow(parent)
+    , mTimelineLayout(layoutH->timelineLayout())
+{
     connect(RenderHandler::sInstance, &RenderHandler::previewFinished,
             this, &TimelineDockWidget::previewFinished);
     connect(RenderHandler::sInstance, &RenderHandler::previewBeingPlayed,
@@ -79,7 +82,6 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     connect(mResolutionComboBox, &QComboBox::currentTextChanged,
             this, &TimelineDockWidget::setResolutionText);
 
-    //const int iconSize = 5*eSizesUI::widget/4;
     const QSize iconSize(AppSupport::getSettings("ui",
                                                  "timelineToolbarIconSize",
                                                  QSize(24, 24)).toSize());
@@ -99,10 +101,11 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
         renderPreview();
     });
 
-    mPlayButton = SwitchButton::sCreate2Switch(
+    /*mPlayButton = SwitchButton::sCreate2Switch(
                       "toolbarButtons/play.png",
                       "toolbarButtons/pause.png",
-                      gSingleLineTooltip("Render Preview", "Space"), this);
+                      gSingleLineTooltip("Render Preview", "Space"), this);*/
+    mPlayButton = new QPushButton(QIcon::fromTheme("play"), QString(), this);
 
     mStopButton = new QPushButton(QIcon::fromTheme("stop"), QString(), this);
     mStopButton->setToolTip(tr("Stop Preview"));
@@ -141,7 +144,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
         QMenu menu(this);
         menu.addAction("Bookmark");
         const auto act = menu.exec(pos);
-        if(act) {
+        if (act) {
             if(act->text() == "Bookmark") {
                 const QColor& col = mDocument.fBrushColor;
                 Document::sInstance->addBookmarkColor(col);
@@ -199,9 +202,9 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
                 gSingleLineTooltip("Paint", "B"), this);
     connect(mPaintNormalMode, &SwitchButton::toggled,
             this, [this](const int state) {
-        if(state == 0) {
+        if (state == 0) {
             mDocument.setPaintMode(PaintMode::normal);
-        } else mPaintNormalMode->setState(0);
+        } else { mPaintNormalMode->setState(0);}
     });
 
     mPaintEraseMode = SwitchButton::sCreate2Switch(
@@ -211,9 +214,9 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mPaintEraseMode->setState(1);
     connect(mPaintEraseMode, &SwitchButton::toggled,
             this, [this](const int state) {
-        if(state == 0) {
+        if (state == 0) {
             mDocument.setPaintMode(PaintMode::erase);
-        } else mPaintEraseMode->setState(0);
+        } else { mPaintEraseMode->setState(0); }
     });
 
     mPaintLockAlphaMode = SwitchButton::sCreate2Switch(
@@ -223,9 +226,9 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mPaintLockAlphaMode->setState(1);
     connect(mPaintLockAlphaMode, &SwitchButton::toggled,
             this, [this](const int state) {
-        if(state == 0) {
+        if (state == 0) {
             mDocument.setPaintMode(PaintMode::lockAlpha);
-        } else mPaintLockAlphaMode->setState(0);
+        } else { mPaintLockAlphaMode->setState(0); }
     });
 
     mPaintColorizeMode = SwitchButton::sCreate2Switch(
@@ -235,9 +238,9 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mPaintColorizeMode->setState(1);
     connect(mPaintColorizeMode, &SwitchButton::toggled,
             this, [this](const int state) {
-        if(state == 0) {
+        if (state == 0) {
             mDocument.setPaintMode(PaintMode::colorize);
-        } else mPaintColorizeMode->setState(0);
+        } else { mPaintColorizeMode->setState(0); }
     });
 
     mPaintMoveMode = SwitchButton::sCreate2Switch(
@@ -247,9 +250,9 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mPaintMoveMode->setState(1);
     connect(mPaintMoveMode, &SwitchButton::toggled,
             this, [this](const int state) {
-        if(state == 0) {
+        if (state == 0) {
             mDocument.setPaintMode(PaintMode::move);
-        } else mPaintMoveMode->setState(0);
+        } else { mPaintMoveMode->setState(0); }
     });
 
     mPaintCropMode = SwitchButton::sCreate2Switch(
@@ -259,9 +262,9 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mPaintCropMode->setState(1);
     connect(mPaintCropMode, &SwitchButton::toggled,
             this, [this](const int state) {
-        if(state == 0) {
+        if (state == 0) {
             mDocument.setPaintMode(PaintMode::crop);
-        } else mPaintCropMode->setState(0);
+        } else { mPaintCropMode->setState(0); }
     });
 
     connect(&mDocument, &Document::paintModeChanged,
@@ -387,7 +390,8 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     setBrushColor(Qt::black);
 }
 
-QAction* TimelineDockWidget::addSpaceToToolbar() {
+QAction* TimelineDockWidget::addSpaceToToolbar()
+{
     const auto spaceAct = mToolBar->addAction("");
     const auto spaceWidget = mToolBar->widgetForAction(spaceAct);
     spaceWidget->setObjectName("emptyToolButton");
@@ -396,7 +400,8 @@ QAction* TimelineDockWidget::addSpaceToToolbar() {
 
 QAction* addSlider(const QString& name,
                    QDoubleSlider* const slider,
-                   QToolBar* const toolBar) {
+                   QToolBar* const toolBar)
+{
     const auto widget = new QWidget;
     widget->setObjectName("transparentWidget");
     const auto layout = new QHBoxLayout;
@@ -408,7 +413,8 @@ QAction* addSlider(const QString& name,
     return toolBar->addWidget(widget);
 }
 
-void TimelineDockWidget::setupDrawPathSpins() {
+void TimelineDockWidget::setupDrawPathSpins()
+{
     mDrawPathAuto = SwitchButton::sCreate2Switch(
                 "toolbarButtons/drawPathAutoUnchecked.png",
                 "toolbarButtons/drawPathAutoChecked.png",
@@ -440,33 +446,38 @@ void TimelineDockWidget::setupDrawPathSpins() {
     mDrawPathSmoothAct = addSlider("smooth", mDrawPathSmooth, mToolBar);
 }
 
-void TimelineDockWidget::setResolutionText(QString text) {
+void TimelineDockWidget::setResolutionText(QString text)
+{
     text = text.remove(" %");
     const qreal res = clamp(text.toDouble(), 1, 200)/100;
     mMainWindow->setResolutionValue(res);
 }
 
-void TimelineDockWidget::setLoop(const bool loop) {
+void TimelineDockWidget::setLoop(const bool loop)
+{
     RenderHandler::sInstance->setLoop(loop);
 }
 
-void TimelineDockWidget::clearAll() {
+void TimelineDockWidget::clearAll()
+{
     mRenderWidget->clearRenderQueue();
 }
 
-RenderWidget *TimelineDockWidget::getRenderWidget() {
+RenderWidget *TimelineDockWidget::getRenderWidget()
+{
     return mRenderWidget;
 }
 
-bool TimelineDockWidget::processKeyPress(QKeyEvent *event) {
+bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
+{
     const CanvasMode mode = mDocument.fCanvasMode;
     const int key = event->key();
     const auto mods = event->modifiers();
-    if(key == Qt::Key_Escape) {
+    if (key == Qt::Key_Escape) {
         const auto state = RenderHandler::sInstance->currentPreviewState();
-        if(state == PreviewSate::stopped) return false;
+        if (state == PreviewSate::stopped) { return false; }
         interruptPreview();
-    } else if(key == Qt::Key_Space) {
+    } else if (key == Qt::Key_Space) {
         const auto state = RenderHandler::sInstance->currentPreviewState();
         switch(state) {
             case PreviewSate::stopped: renderPreview(); break;
@@ -474,31 +485,31 @@ bool TimelineDockWidget::processKeyPress(QKeyEvent *event) {
             case PreviewSate::playing: pausePreview(); break;
             case PreviewSate::paused: resumePreview(); break;
         }
-    } else if(key == Qt::Key_Right && !(mods & Qt::ControlModifier)) {
+    } else if (key == Qt::Key_Right && !(mods & Qt::ControlModifier)) {
         mDocument.incActiveSceneFrame();
-    } else if(key == Qt::Key_Left && !(mods & Qt::ControlModifier)) {
+    } else if (key == Qt::Key_Left && !(mods & Qt::ControlModifier)) {
         mDocument.decActiveSceneFrame();
-    } else if(key == Qt::Key_Down && !(mods & Qt::ControlModifier)) {
+    } else if (key == Qt::Key_Down && !(mods & Qt::ControlModifier)) {
         const auto scene = *mDocument.fActiveScene;
-        if(!scene) return false;
+        if (!scene) { return false; }
         int targetFrame;
         const int frame = mDocument.getActiveSceneFrame();
-        if(scene->anim_prevRelFrameWithKey(frame, targetFrame)) {
+        if (scene->anim_prevRelFrameWithKey(frame, targetFrame)) {
             mDocument.setActiveSceneFrame(targetFrame);
         }
-    } else if(key == Qt::Key_Up && !(mods & Qt::ControlModifier)) {
+    } else if (key == Qt::Key_Up && !(mods & Qt::ControlModifier)) {
         const auto scene = *mDocument.fActiveScene;
-        if(!scene) return false;
+        if (!scene) { return false; }
         int targetFrame;
         const int frame = mDocument.getActiveSceneFrame();
-        if(scene->anim_nextRelFrameWithKey(frame, targetFrame)) {
+        if (scene->anim_nextRelFrameWithKey(frame, targetFrame)) {
             mDocument.setActiveSceneFrame(targetFrame);
         }
-    } else if(key == Qt::Key_P &&
-              !(mods & Qt::ControlModifier) && !(mods & Qt::AltModifier)) {
+    } else if (key == Qt::Key_P &&
+               !(mods & Qt::ControlModifier) && !(mods & Qt::AltModifier)) {
         mLocalPivot->toggle();
-    } else if(mode == CanvasMode::pointTransform && key == Qt::Key_N &&
-              !(mods & Qt::ControlModifier) && !(mods & Qt::AltModifier)) {
+    } else if (mode == CanvasMode::pointTransform && key == Qt::Key_N &&
+               !(mods & Qt::ControlModifier) && !(mods & Qt::AltModifier)) {
         mNodeVisibility->toggle();
     } else {
         return false;
@@ -506,52 +517,58 @@ bool TimelineDockWidget::processKeyPress(QKeyEvent *event) {
     return true;
 }
 
-void TimelineDockWidget::previewFinished() {
+void TimelineDockWidget::previewFinished()
+{
     //setPlaying(false);
     mPlayFromBeginningButton->setDisabled(false);
     mStopButton->setDisabled(true);
-    mPlayButton->setState(0);
-    mPlayButton->setToolTip(gSingleLineTooltip("Render Preview", "Space"));
+    mPlayButton->setIcon(QIcon::fromTheme("play")); //setState(0);
+    mPlayButton->setToolTip(tr("Render Preview"));
     disconnect(mPlayButton, nullptr, this, nullptr);
-    connect(mPlayButton, &ActionButton::pressed,
+    connect(mPlayButton, &QPushButton::pressed,
             this, &TimelineDockWidget::renderPreview);
 }
 
-void TimelineDockWidget::previewBeingPlayed() {
+void TimelineDockWidget::previewBeingPlayed()
+{
     mPlayFromBeginningButton->setDisabled(true);
     mStopButton->setDisabled(false);
-    mPlayButton->setState(1);
-    mPlayButton->setToolTip(gSingleLineTooltip("Pause Preview", "Space"));
+    mPlayButton->setIcon(QIcon::fromTheme("pause")); //setState(1);
+    mPlayButton->setToolTip(tr("Pause Preview"));
     disconnect(mPlayButton, nullptr, this, nullptr);
-    connect(mPlayButton, &ActionButton::pressed,
+    connect(mPlayButton, &QPushButton::pressed,
             this, &TimelineDockWidget::pausePreview);
 }
 
-void TimelineDockWidget::previewBeingRendered() {
+void TimelineDockWidget::previewBeingRendered()
+{
     mPlayFromBeginningButton->setDisabled(true);
     mStopButton->setDisabled(false);
-    mPlayButton->setState(0);
+    mPlayButton->setIcon(QIcon::fromTheme("play")); //setState(0);
     mPlayButton->setToolTip(gSingleLineTooltip("Play Preview", "Space"));
     disconnect(mPlayButton, nullptr, this, nullptr);
-    connect(mPlayButton, &ActionButton::pressed,
+    connect(mPlayButton, &QPushButton::pressed,
             this, &TimelineDockWidget::playPreview);
 }
 
-void TimelineDockWidget::previewPaused() {
+void TimelineDockWidget::previewPaused()
+{
     mPlayFromBeginningButton->setDisabled(true);
     mStopButton->setDisabled(false);
-    mPlayButton->setState(0);
-    mPlayButton->setToolTip(gSingleLineTooltip("Resume Preview", "Space"));
+    mPlayButton->setIcon(QIcon::fromTheme("play")); //setState(0);
+    mPlayButton->setToolTip(tr("Resume Preview"));
     disconnect(mPlayButton, nullptr, this, nullptr);
-    connect(mPlayButton, &ActionButton::pressed,
+    connect(mPlayButton, &QPushButton::pressed,
             this, &TimelineDockWidget::resumePreview);
 }
 
-void TimelineDockWidget::resumePreview() {
+void TimelineDockWidget::resumePreview()
+{
     RenderHandler::sInstance->resumePreview();
 }
 
-void TimelineDockWidget::updateButtonsVisibility(const CanvasMode mode) {
+void TimelineDockWidget::updateButtonsVisibility(const CanvasMode mode)
+{
     mLocalPivotAct->setVisible(mode == CanvasMode::pointTransform ||
                                mode == CanvasMode::boxTransform);
     mNodeVisibilityAct->setVisible(mode == CanvasMode::pointTransform);
@@ -582,10 +599,11 @@ void TimelineDockWidget::updateButtonsVisibility(const CanvasMode mode) {
 
 void setSomeBrushColor(const int height,
                        TriggerLabel* const label,
-                       const QColor &color) {
+                       const QColor &color)
+{
     const int dim = height - 2;
     QPixmap pix(dim, dim);
-    if(color.alpha() == 255) {
+    if (color.alpha() == 255) {
         pix.fill(color);
     } else {
         QPainter p(&pix);
@@ -597,41 +615,48 @@ void setSomeBrushColor(const int height,
     label->setPixmap(pix);
 }
 
-void TimelineDockWidget::setBrushColor(const QColor &color) {
+void TimelineDockWidget::setBrushColor(const QColor &color)
+{
     setSomeBrushColor(mToolBar->height(), mColorLabel, color);
 }
 
-void TimelineDockWidget::setBrush(BrushContexedWrapper* const brush) {
+void TimelineDockWidget::setBrush(BrushContexedWrapper* const brush)
+{
     mBrushLabel->setContentsMargins(1, 1, 1, 0);
     const int dim = mToolBar->height() - 1;
     mBrushLabel->setFixedSize(dim, dim);
     mBrushLabel->setBrush(brush);
 }
 
-void TimelineDockWidget::pausePreview() {
+void TimelineDockWidget::pausePreview()
+{
     RenderHandler::sInstance->pausePreview();
 }
 
-void TimelineDockWidget::playPreview() {
+void TimelineDockWidget::playPreview()
+{
     RenderHandler::sInstance->playPreview();
 }
 
-void TimelineDockWidget::renderPreview() {
+void TimelineDockWidget::renderPreview()
+{
     RenderHandler::sInstance->renderPreview();
 }
 
-void TimelineDockWidget::interruptPreview() {
+void TimelineDockWidget::interruptPreview()
+{
     RenderHandler::sInstance->interruptPreview();
 }
 
-void TimelineDockWidget::setLocalPivot(const bool local) {
+void TimelineDockWidget::setLocalPivot(const bool local)
+{
     mDocument.fLocalPivot = local;
-    for(const auto& scene : mDocument.fScenes)
-        scene->updatePivot();
+    for (const auto& scene : mDocument.fScenes) { scene->updatePivot(); }
     Document::sInstance->actionFinished();
 }
 
-void TimelineDockWidget::setTimelineMode() {
+void TimelineDockWidget::setTimelineMode()
+{
     mTimelineAction->setDisabled(true);
     mRenderAction->setDisabled(false);
 
@@ -640,7 +665,8 @@ void TimelineDockWidget::setTimelineMode() {
     mTimelineLayout->show();
 }
 
-void TimelineDockWidget::setRenderMode() {
+void TimelineDockWidget::setRenderMode()
+{
     mTimelineAction->setDisabled(false);
     mRenderAction->setDisabled(true);
 
@@ -649,13 +675,13 @@ void TimelineDockWidget::setRenderMode() {
     mRenderWidget->show();
 }
 
-void TimelineDockWidget::updateSettingsForCurrentCanvas(Canvas* const canvas) {
-    if(canvas) {
-        disconnect(mResolutionComboBox, &QComboBox::currentTextChanged,
-                   this, &TimelineDockWidget::setResolutionText);
-        mResolutionComboBox->setCurrentText(
-                    QString::number(canvas->getResolution()*100) + " %");
-        connect(mResolutionComboBox, &QComboBox::currentTextChanged,
-                this, &TimelineDockWidget::setResolutionText);
-    }
+void TimelineDockWidget::updateSettingsForCurrentCanvas(Canvas* const canvas)
+{
+    if (!canvas) { return; }
+    disconnect(mResolutionComboBox, &QComboBox::currentTextChanged,
+               this, &TimelineDockWidget::setResolutionText);
+    mResolutionComboBox->setCurrentText(
+                QString::number(canvas->getResolution()*100) + " %");
+    connect(mResolutionComboBox, &QComboBox::currentTextChanged,
+            this, &TimelineDockWidget::setResolutionText);
 }
