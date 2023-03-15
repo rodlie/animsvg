@@ -8,6 +8,8 @@
  <file>icons/hicolor/16x16/actions/alignTop.png</file>
  <file>icons/hicolor/16x16/actions/alignVCenter.png</file>
  <file>icons/hicolor/16x16/actions/boxTransform.png</file>
+ <file>icons/hicolor/16x16/actions/childrenHidden.png</file>
+ <file>icons/hicolor/16x16/actions/childrenVisible.png</file>
  <file>icons/hicolor/16x16/actions/circleCreate.png</file>
  <file>icons/hicolor/16x16/actions/close.png</file>
  <file>icons/hicolor/16x16/actions/dots.png</file>
@@ -45,6 +47,8 @@
  <file>icons/hicolor/22x22/actions/alignTop.png</file>
  <file>icons/hicolor/22x22/actions/alignVCenter.png</file>
  <file>icons/hicolor/22x22/actions/boxTransform.png</file>
+ <file>icons/hicolor/22x22/actions/childrenHidden.png</file>
+ <file>icons/hicolor/22x22/actions/childrenVisible.png</file>
  <file>icons/hicolor/22x22/actions/circleCreate.png</file>
  <file>icons/hicolor/22x22/actions/close.png</file>
  <file>icons/hicolor/22x22/actions/dots.png</file>
@@ -82,6 +86,8 @@
  <file>icons/hicolor/32x32/actions/alignTop.png</file>
  <file>icons/hicolor/32x32/actions/alignVCenter.png</file>
  <file>icons/hicolor/32x32/actions/boxTransform.png</file>
+ <file>icons/hicolor/32x32/actions/childrenHidden.png</file>
+ <file>icons/hicolor/32x32/actions/childrenVisible.png</file>
  <file>icons/hicolor/32x32/actions/circleCreate.png</file>
  <file>icons/hicolor/32x32/actions/close.png</file>
  <file>icons/hicolor/32x32/actions/dots.png</file>
@@ -119,6 +125,8 @@
  <file>icons/hicolor/48x48/actions/alignTop.png</file>
  <file>icons/hicolor/48x48/actions/alignVCenter.png</file>
  <file>icons/hicolor/48x48/actions/boxTransform.png</file>
+ <file>icons/hicolor/48x48/actions/childrenHidden.png</file>
+ <file>icons/hicolor/48x48/actions/childrenVisible.png</file>
  <file>icons/hicolor/48x48/actions/circleCreate.png</file>
  <file>icons/hicolor/48x48/actions/close.png</file>
  <file>icons/hicolor/48x48/actions/dots.png</file>
@@ -156,6 +164,8 @@
  <file>icons/hicolor/64x64/actions/alignTop.png</file>
  <file>icons/hicolor/64x64/actions/alignVCenter.png</file>
  <file>icons/hicolor/64x64/actions/boxTransform.png</file>
+ <file>icons/hicolor/64x64/actions/childrenHidden.png</file>
+ <file>icons/hicolor/64x64/actions/childrenVisible.png</file>
  <file>icons/hicolor/64x64/actions/circleCreate.png</file>
  <file>icons/hicolor/64x64/actions/close.png</file>
  <file>icons/hicolor/64x64/actions/dots.png</file>
@@ -193,6 +203,8 @@
  <file>icons/hicolor/96x96/actions/alignTop.png</file>
  <file>icons/hicolor/96x96/actions/alignVCenter.png</file>
  <file>icons/hicolor/96x96/actions/boxTransform.png</file>
+ <file>icons/hicolor/96x96/actions/childrenHidden.png</file>
+ <file>icons/hicolor/96x96/actions/childrenVisible.png</file>
  <file>icons/hicolor/96x96/actions/circleCreate.png</file>
  <file>icons/hicolor/96x96/actions/close.png</file>
  <file>icons/hicolor/96x96/actions/dots.png</file>
@@ -230,6 +242,8 @@
  <file>icons/hicolor/128x128/actions/alignTop.png</file>
  <file>icons/hicolor/128x128/actions/alignVCenter.png</file>
  <file>icons/hicolor/128x128/actions/boxTransform.png</file>
+ <file>icons/hicolor/128x128/actions/childrenHidden.png</file>
+ <file>icons/hicolor/128x128/actions/childrenVisible.png</file>
  <file>icons/hicolor/128x128/actions/circleCreate.png</file>
  <file>icons/hicolor/128x128/actions/close.png</file>
  <file>icons/hicolor/128x128/actions/dots.png</file>
@@ -267,6 +281,8 @@
  <file>icons/hicolor/192x192/actions/alignTop.png</file>
  <file>icons/hicolor/192x192/actions/alignVCenter.png</file>
  <file>icons/hicolor/192x192/actions/boxTransform.png</file>
+ <file>icons/hicolor/192x192/actions/childrenHidden.png</file>
+ <file>icons/hicolor/192x192/actions/childrenVisible.png</file>
  <file>icons/hicolor/192x192/actions/circleCreate.png</file>
  <file>icons/hicolor/192x192/actions/close.png</file>
  <file>icons/hicolor/192x192/actions/dots.png</file>
@@ -304,6 +320,8 @@
  <file>icons/hicolor/256x256/actions/alignTop.png</file>
  <file>icons/hicolor/256x256/actions/alignVCenter.png</file>
  <file>icons/hicolor/256x256/actions/boxTransform.png</file>
+ <file>icons/hicolor/256x256/actions/childrenHidden.png</file>
+ <file>icons/hicolor/256x256/actions/childrenVisible.png</file>
  <file>icons/hicolor/256x256/actions/circleCreate.png</file>
  <file>icons/hicolor/256x256/actions/close.png</file>
  <file>icons/hicolor/256x256/actions/dots.png</file>

@@ -101,11 +101,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
         renderPreview();
     });
 
-    /*mPlayButton = SwitchButton::sCreate2Switch(
-                      "toolbarButtons/play.png",
-                      "toolbarButtons/pause.png",
-                      gSingleLineTooltip("Render Preview", "Space"), this);*/
-    mPlayButton = new QPushButton(QIcon::fromTheme("play"), QString(), this);
+    mPlayButton = new QAction(QIcon::fromTheme("play"), tr("Render Preview"), this);
 
     mStopButton = new QPushButton(QIcon::fromTheme("stop"), QString(), this);
     mStopButton->setToolTip(tr("Stop Preview"));
@@ -296,7 +292,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     //mResolutionComboBox->setFocusPolicy(Qt::NoFocus);
 
     mToolBar->addWidget(mPlayFromBeginningButton);
-    mToolBar->addWidget(mPlayButton);
+    mToolBar->addAction(mPlayButton);
     mToolBar->addWidget(mStopButton);
     mToolBar->addSeparator();
     mToolBar->addWidget(mLoopButton);
@@ -522,10 +518,10 @@ void TimelineDockWidget::previewFinished()
     //setPlaying(false);
     mPlayFromBeginningButton->setDisabled(false);
     mStopButton->setDisabled(true);
-    mPlayButton->setIcon(QIcon::fromTheme("play")); //setState(0);
-    mPlayButton->setToolTip(tr("Render Preview"));
+    mPlayButton->setIcon(QIcon::fromTheme("play"));
+    mPlayButton->setText(tr("Render Preview"));
     disconnect(mPlayButton, nullptr, this, nullptr);
-    connect(mPlayButton, &QPushButton::pressed,
+    connect(mPlayButton, &QAction::triggered,
             this, &TimelineDockWidget::renderPreview);
 }
 
@@ -533,10 +529,10 @@ void TimelineDockWidget::previewBeingPlayed()
 {
     mPlayFromBeginningButton->setDisabled(true);
     mStopButton->setDisabled(false);
-    mPlayButton->setIcon(QIcon::fromTheme("pause")); //setState(1);
-    mPlayButton->setToolTip(tr("Pause Preview"));
+    mPlayButton->setIcon(QIcon::fromTheme("pause"));
+    mPlayButton->setText(tr("Pause Preview"));
     disconnect(mPlayButton, nullptr, this, nullptr);
-    connect(mPlayButton, &QPushButton::pressed,
+    connect(mPlayButton, &QAction::triggered,
             this, &TimelineDockWidget::pausePreview);
 }
 
@@ -544,10 +540,10 @@ void TimelineDockWidget::previewBeingRendered()
 {
     mPlayFromBeginningButton->setDisabled(true);
     mStopButton->setDisabled(false);
-    mPlayButton->setIcon(QIcon::fromTheme("play")); //setState(0);
-    mPlayButton->setToolTip(gSingleLineTooltip("Play Preview", "Space"));
+    mPlayButton->setIcon(QIcon::fromTheme("play"));
+    mPlayButton->setText(tr("Play Preview"));
     disconnect(mPlayButton, nullptr, this, nullptr);
-    connect(mPlayButton, &QPushButton::pressed,
+    connect(mPlayButton, &QAction::triggered,
             this, &TimelineDockWidget::playPreview);
 }
 
@@ -555,10 +551,10 @@ void TimelineDockWidget::previewPaused()
 {
     mPlayFromBeginningButton->setDisabled(true);
     mStopButton->setDisabled(false);
-    mPlayButton->setIcon(QIcon::fromTheme("play")); //setState(0);
-    mPlayButton->setToolTip(tr("Resume Preview"));
+    mPlayButton->setIcon(QIcon::fromTheme("play"));
+    mPlayButton->setText(tr("Resume Preview"));
     disconnect(mPlayButton, nullptr, this, nullptr);
-    connect(mPlayButton, &QPushButton::pressed,
+    connect(mPlayButton, &QAction::triggered,
             this, &TimelineDockWidget::resumePreview);
 }
 
