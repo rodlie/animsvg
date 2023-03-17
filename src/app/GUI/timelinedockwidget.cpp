@@ -87,32 +87,33 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
                                                  QSize(24, 24)).toSize());
     const QString iconsDir = eSettings::sIconsDir() + "/toolbarButtons";
 
-    mPlayFromBeginningButton = new QPushButton(QIcon::fromTheme("preview"),
-                                               QString(),
-                                               this);
-    mPlayFromBeginningButton->setToolTip(tr("Play From the Beginning"));
-    connect(mPlayFromBeginningButton,
-            &QPushButton::pressed,
-            this,
-            [this]() {
+    mPlayFromBeginningButton = new QAction(QIcon::fromTheme("preview"),
+                                           tr("Play From the Beginning"),
+                                           this);
+    connect(mPlayFromBeginningButton, &QAction::triggered,
+            this, [this]() {
         const auto scene = *mDocument.fActiveScene;
         if (!scene) { return; }
         scene->anim_setAbsFrame(scene->getFrameRange().fMin);
         renderPreview();
     });
 
-    mPlayButton = new QAction(QIcon::fromTheme("play"), tr("Render Preview"), this);
+    mPlayButton = new QAction(QIcon::fromTheme("play"),
+                              tr("Render Preview"),
+                              this);
 
-    mStopButton = new QPushButton(QIcon::fromTheme("stop"), QString(), this);
-    mStopButton->setToolTip(tr("Stop Preview"));
-    connect(mStopButton, &QPushButton::pressed,
+    mStopButton = new QAction(QIcon::fromTheme("stop"),
+                              tr("Stop Preview"),
+                              this);
+
+    connect(mStopButton, &QAction::triggered,
             this, &TimelineDockWidget::interruptPreview);
 
-    mLoopButton = SwitchButton::sCreate2Switch(
-                      "toolbarButtons/loopUnchecked.png",
-                      "toolbarButtons/loopChecked.png",
-                      gSingleLineTooltip("Loop"), this);
-    connect(mLoopButton, &SwitchButton::toggled,
+    mLoopButton = new QAction(QIcon::fromTheme("loop"),
+                              tr("Loop"),
+                              this);
+    mLoopButton->setCheckable(true);
+    connect(mLoopButton, &QAction::triggered,
             this, &TimelineDockWidget::setLoop);
 
     mLocalPivot = SwitchButton::sCreate2Switch(
@@ -291,11 +292,11 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mToolBar->addSeparator();
     //mResolutionComboBox->setFocusPolicy(Qt::NoFocus);
 
-    mToolBar->addWidget(mPlayFromBeginningButton);
+    mToolBar->addAction(mPlayFromBeginningButton);
     mToolBar->addAction(mPlayButton);
-    mToolBar->addWidget(mStopButton);
+    mToolBar->addAction(mStopButton);
     mToolBar->addSeparator();
-    mToolBar->addWidget(mLoopButton);
+    mToolBar->addAction(mLoopButton);
 
     addSpaceToToolbar()->setText("     ");
 

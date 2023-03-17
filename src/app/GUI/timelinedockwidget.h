@@ -103,10 +103,10 @@ private:
     QVBoxLayout *mMainLayout;
     QComboBox *mResolutionComboBox;
 
-    QPushButton *mPlayFromBeginningButton;
+    QAction *mPlayFromBeginningButton;
     QAction *mPlayButton;
-    QPushButton *mStopButton;
-    SwitchButton *mLoopButton;
+    QAction *mStopButton;
+    QAction *mLoopButton;
 
     QAction* mLocalPivotAct;
     SwitchButton *mLocalPivot;
