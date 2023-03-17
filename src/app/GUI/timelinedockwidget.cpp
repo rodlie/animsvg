@@ -136,6 +136,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
 
     mColorLabel = new TriggerLabel("");
     mColorLabel->setToolTip(gSingleLineTooltip("Current Color", "E"));
+    mColorLabel->setMinimumWidth(32);
     connect(mColorLabel, &TriggerLabel::requestContextMenu,
             this, [this](const QPoint& pos) {
         QMenu menu(this);
@@ -598,7 +599,8 @@ void setSomeBrushColor(const int height,
                        TriggerLabel* const label,
                        const QColor &color)
 {
-    const int dim = height - 2;
+    Q_UNUSED(height)
+    /*const int dim = height - 2;
     QPixmap pix(dim, dim);
     if (color.alpha() == 255) {
         pix.fill(color);
@@ -607,9 +609,11 @@ void setSomeBrushColor(const int height,
         p.drawTiledPixmap(0, 0, dim, dim, *ALPHA_MESH_PIX);
         p.fillRect(0, 0, dim, dim, color);
         p.end();
-    }
+    }*/
 
-    label->setPixmap(pix);
+    //label->setPixmap(pix);
+    label->setStyleSheet(QString::fromUtf8("background-color: %1;")
+                         .arg(color.name()));
 }
 
 void TimelineDockWidget::setBrushColor(const QColor &color)
