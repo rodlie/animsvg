@@ -183,9 +183,9 @@ int main(int argc, char *argv[]) {
     eFilterSettings filterSettings;
     QDir(eSettings::sSettingsDir()).mkpath(eSettings::sIconsDir());
 
-    /*eSizesUI::button.add([](const int size) {
+    eSizesUI::button.add([](const int size) {
         IconLoader::generateAll(eSizesUI::widget, size);
-    });*/
+    });
 
     eWidgetsImpl widImpl;
     ImportHandler importHandler;

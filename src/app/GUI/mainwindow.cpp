@@ -149,7 +149,7 @@ MainWindow::MainWindow(Document& document,
             file.close();
         }
     }*/
-    //BoxSingleWidget::loadStaticPixmaps();
+    BoxSingleWidget::loadStaticPixmaps();
 
     BrushSelectionWidget::sPaintContext = BrushSelectionWidget::sCreateNewContext();
     BrushSelectionWidget::sOutlineContext = BrushSelectionWidget::sCreateNewContext();
