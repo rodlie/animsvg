@@ -149,6 +149,13 @@ MainWindow::MainWindow(Document& document,
             file.close();
         }
     }*/
+
+    QFile stylesheet(QString::fromUtf8(":/styles/enve2d.qss"));
+    if (stylesheet.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        setStyleSheet(stylesheet.readAll());
+        stylesheet.close();
+    }
+
     BoxSingleWidget::loadStaticPixmaps();
 
     BrushSelectionWidget::sPaintContext = BrushSelectionWidget::sCreateNewContext();

@@ -35,6 +35,8 @@ WelcomeDialog::WelcomeDialog(const QStringList &recentPaths,
                              QWidget * const parent)
     : QWidget(parent)
 {
+    setObjectName(QString::fromUtf8("welcomeDialog"));
+
     const auto thisLay = new QVBoxLayout;
 
     const auto mainWid = new QWidget(this);

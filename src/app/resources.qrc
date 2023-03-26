@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/styles">
         <file alias="stylesheet.qss">stylesheet.qss</file>
+        <file>enve2d.qss</file>
     </qresource>
     <qresource prefix="/cursors">
         <file alias="cursor-node.xpm">pixmaps/cursor-node.xpm</file>
