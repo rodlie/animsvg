@@ -22,6 +22,7 @@
 #include <QPainter>
 #include <QDir>
 #include <QLabel>
+#include <QFileInfo>
 
 #include "GUI/global.h"
 #include "BoxesList/OptimalScrollArea/scrollarea.h"
@@ -63,11 +64,13 @@ WelcomeDialog::WelcomeDialog(const QStringList &recentPaths,
     const auto buttonLay = new QHBoxLayout;
     sceneLay->addLayout(buttonLay);
 
-    const auto newButton = new QPushButton("New", this);
+    const auto newButton = new QPushButton(tr("New"), this);
+    newButton->setObjectName(QString::fromUtf8("welcomeDialogNew"));
     connect(newButton, &QPushButton::released, newFunc);
     buttonLay->addWidget(newButton);
 
-    const auto openButton = new QPushButton("Open...", this);
+    const auto openButton = new QPushButton(tr("Open..."), this);
+    openButton->setObjectName(QString::fromUtf8("welcomeDialogOpen"));
     connect(openButton, &QPushButton::released, openFunc);
     buttonLay->addWidget(openButton);
 
@@ -75,16 +78,13 @@ WelcomeDialog::WelcomeDialog(const QStringList &recentPaths,
 
     const auto textTriggerGetter = [&](const int id) {
         const auto& path = recentPaths.at(id);
-        QString ttPath = path;
-        if (ttPath.left(homePath.count()) == homePath) {
-            ttPath = "~" + ttPath.mid(homePath.count());
-        }
-        return ButtonsList::TextTrigger{
-            ttPath, [path, openRecentFunc]() {
+        QFileInfo fileInfo(path);
+        return ButtonsList::TextTrigger {
+            fileInfo.baseName(), [path, openRecentFunc]() {
             openRecentFunc(path);
         }};
     };
-    const int count = qMin(recentPaths.count(), 11);
+    const int count = qMin(recentPaths.count(), 5);
     const auto recentWidget = new ButtonsList(textTriggerGetter, count, this);
 
     //eSizesUI::widget.addSpacing(sceneLay);

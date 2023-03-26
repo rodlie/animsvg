@@ -42,10 +42,12 @@ private:
 };
 
 ButtonsList::ButtonsList(const TextTriggerGetter& getter,
-                         const int count, QWidget* const parent) :
-    QWidget(parent) {
+                         const int count,
+                         QWidget* const parent)
+    : QWidget(parent)
+{
     const auto recentLay = new QVBoxLayout;
-    recentLay->setSpacing(0);
+    recentLay->setSpacing(2);
     recentLay->setAlignment(Qt::AlignTop);
     recentLay->setContentsMargins(0, 0, 0, 0);
 
@@ -53,19 +55,19 @@ ButtonsList::ButtonsList(const TextTriggerGetter& getter,
 
     const QFontMetrics fm = QApplication::fontMetrics();
 
-    for(int i = 0; i < count; i++) {
+    for (int i = 0; i < count; i++) {
         const auto textTrigger = getter(i);
         const auto pathButton = new ElidedButton(textTrigger.first, this);
-        eSizesUI::widget.add(pathButton, [pathButton](const int size) {
+        /*eSizesUI::widget.add(pathButton, [pathButton](const int size) {
             pathButton->setMinimumHeight(5*size/4);
-        });
+        });*/
         pathButton->setToolTip(gSingleLineTooltip(textTrigger.first));
         connect(pathButton, &QPushButton::released, textTrigger.second);
         recentLay->addWidget(pathButton, 0, Qt::AlignTop);
-        if(i == 0) {
-            if(i == count - 1) break;
+        if (i == 0) {
+            if (i == count - 1) { break; }
             pathButton->setObjectName("topButton");
-        } else if(i == count - 1) {
+        } else if (i == count - 1) {
             pathButton->setObjectName("bottomButton");
         } else {
             pathButton->setObjectName("vmiddleButton");
