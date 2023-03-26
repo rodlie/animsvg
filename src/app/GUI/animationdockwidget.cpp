@@ -15,8 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "animationdockwidget.h"
-#include <QStyleOption>
-#include <QPainter>
+
 #include "GUI/global.h"
 #include "keysview.h"
 #include "actionbutton.h"
@@ -24,44 +23,43 @@
 #include "Private/esettings.h"
 
 AnimationDockWidget::AnimationDockWidget(QWidget *parent,
-                                         KeysView *keysView) :
-    QToolBar(parent) {
-    setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-
-    eSizesUI::widget.add(this, [this](const int size) {
-        setIconSize(QSize(qRound(1.25*size), qRound(1.25*size)));
-    });
+                                         KeysView *keysView)
+    : QToolBar(parent)
+{
+    setObjectName(QString::fromUtf8("animationDockWidget"));
+    setSizePolicy(QSizePolicy::Maximum,
+                  QSizePolicy::Maximum);
 
     const QString iconsDir = eSettings::sIconsDir() + "/toolbarButtons";
 
-    mLineButton = new ActionButton("toolbarButtons/segmentLine.png",
-                                   "Make Segment Line", this);
-    connect(mLineButton, &ActionButton::pressed,
+    QAction *mLineButton = new QAction(QIcon::fromTheme("segmentLine"),
+                                       tr("Make Segment Line"), this);
+    connect(mLineButton, &QAction::triggered,
             keysView, &KeysView::graphMakeSegmentsLinearAction);
 
-    mCurveButton = new ActionButton("toolbarButtons/segmentCurve.png",
-                                    "Make Segment Curve", this);
-    connect(mCurveButton, &ActionButton::pressed,
+    QAction *mCurveButton = new QAction(QIcon::fromTheme("segmentCurve"),
+                                        tr("Make Segment Curve"), this);
+    connect(mCurveButton, &QAction::triggered,
             keysView, qOverload<>(&KeysView::graphMakeSegmentsSmoothAction));
 
-    mSymmetricButton = new ActionButton("toolbarButtons/nodeSymmetric.png",
-                                        "Symmetric Nodes", this);
-    connect(mSymmetricButton, &ActionButton::pressed,
+    QAction *mSymmetricButton = new QAction(QIcon::fromTheme("nodeSymmetric"),
+                                            tr("Symmetric Nodes"), this);
+    connect(mSymmetricButton, &QAction::triggered,
             keysView, &KeysView::graphSetSymmetricCtrlAction);
 
-    mSmoothButton = new ActionButton("toolbarButtons/nodeSmooth.png",
-                                     "Smooth Nodes", this);
-    connect(mSmoothButton, &ActionButton::pressed,
+    QAction *mSmoothButton = new QAction(QIcon::fromTheme("nodeSmooth"),
+                                         tr("Smooth Nodes"), this);
+    connect(mSmoothButton, &QAction::triggered,
             keysView, &KeysView::graphSetSmoothCtrlAction);
 
-    mCornerButton = new ActionButton("toolbarButtons/nodeCorner.png",
-                                     "Corner Nodes", this);
-    connect(mCornerButton, &ActionButton::pressed,
+    QAction *mCornerButton = new QAction(QIcon::fromTheme("nodeCorner"),
+                                         tr("Corner Nodes"), this);
+    connect(mCornerButton, &QAction::triggered,
             keysView, &KeysView::graphSetCornerCtrlAction);
 
-    mFitToHeightButton = new ActionButton("toolbarButtons/zoom.png",
-                                          "Fit Vertical", this);
-    connect(mFitToHeightButton, &ActionButton::pressed,
+    QAction *mFitToHeightButton = new QAction(QIcon::fromTheme("zoom"),
+                                              tr("Fit Vertical"), this);
+    connect(mFitToHeightButton, &QAction::triggered,
             keysView, &KeysView::graphResetValueScaleAndMinShownAction);
 
     const auto valueLines = SwitchButton::sCreate2Switch(
@@ -80,29 +78,15 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
     connect(selectedVisible, &SwitchButton::toggled,
             keysView, &KeysView::graphSetOnlySelectedVisible);
 
-    addWidget(mLineButton);
-    addWidget(mCurveButton);
+    addAction(mLineButton);
+    addAction(mCurveButton);
     addSeparator();
-    addWidget(mSymmetricButton);
-    addWidget(mSmoothButton);
-    addWidget(mCornerButton);
+    addAction(mSymmetricButton);
+    addAction(mSmoothButton);
+    addAction(mCornerButton);
     addSeparator();
-    addWidget(mFitToHeightButton);
+    addAction(mFitToHeightButton);
     addWidget(valueLines);
     addSeparator();
     addWidget(selectedVisible);
-
-    setStyleSheet("QToolBar {"
-                      "padding: 10px;"
-                      "margin-bottom: -1px;"
-                      "border: 3px solid rgb(25, 25, 25);"
-                  "}");
-}
-
-void AnimationDockWidget::paintEvent(QPaintEvent *) {
-    QStyleOption opt;
-    opt.init(this);
-    QPainter p(this);
-    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-    p.end();
 }

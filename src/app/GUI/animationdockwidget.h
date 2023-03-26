@@ -16,27 +16,18 @@
 
 #ifndef ANIMATIONDOCKWIDGET_H
 #define ANIMATIONDOCKWIDGET_H
+
 #include <QToolBar>
-#include <QVBoxLayout>
-#include <QPushButton>
-class ActionButton;
+
 class KeysView;
 
-class AnimationDockWidget : public QToolBar {
+class AnimationDockWidget : public QToolBar
+{
     Q_OBJECT
-public:
-    explicit AnimationDockWidget(QWidget *parent, KeysView *keysView);
 
-protected:
-    void paintEvent(QPaintEvent *);
-private:
-    QHBoxLayout *mButtonsLayout;
-    ActionButton *mLineButton;
-    ActionButton *mCurveButton;
-    ActionButton *mSmoothButton;
-    ActionButton *mSymmetricButton;
-    ActionButton *mCornerButton;
-    ActionButton *mFitToHeightButton;
+public:
+    explicit AnimationDockWidget(QWidget *parent,
+                                 KeysView *keysView);
 };
 
 #endif // ANIMATIONDOCKWIDGET_H

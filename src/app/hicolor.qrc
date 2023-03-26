@@ -40,6 +40,7 @@
  <file>icons/hicolor/16x16/actions/split_v.png</file>
  <file>icons/hicolor/16x16/actions/stop.png</file>
  <file>icons/hicolor/16x16/actions/textCreate.png</file>
+ <file>icons/hicolor/16x16/actions/zoom.png</file>
  <file>icons/hicolor/16x16/apps/enve2d.png</file>
  <file>icons/hicolor/22x22/actions/alignBottom.png</file>
  <file>icons/hicolor/22x22/actions/alignCenter.png</file>
@@ -80,6 +81,7 @@
  <file>icons/hicolor/22x22/actions/split_v.png</file>
  <file>icons/hicolor/22x22/actions/stop.png</file>
  <file>icons/hicolor/22x22/actions/textCreate.png</file>
+ <file>icons/hicolor/22x22/actions/zoom.png</file>
  <file>icons/hicolor/22x22/apps/enve2d.png</file>
  <file>icons/hicolor/32x32/actions/alignBottom.png</file>
  <file>icons/hicolor/32x32/actions/alignCenter.png</file>
@@ -120,6 +122,7 @@
  <file>icons/hicolor/32x32/actions/split_v.png</file>
  <file>icons/hicolor/32x32/actions/stop.png</file>
  <file>icons/hicolor/32x32/actions/textCreate.png</file>
+ <file>icons/hicolor/32x32/actions/zoom.png</file>
  <file>icons/hicolor/32x32/apps/enve2d.png</file>
  <file>icons/hicolor/48x48/actions/alignBottom.png</file>
  <file>icons/hicolor/48x48/actions/alignCenter.png</file>
@@ -160,6 +163,7 @@
  <file>icons/hicolor/48x48/actions/split_v.png</file>
  <file>icons/hicolor/48x48/actions/stop.png</file>
  <file>icons/hicolor/48x48/actions/textCreate.png</file>
+ <file>icons/hicolor/48x48/actions/zoom.png</file>
  <file>icons/hicolor/48x48/apps/enve2d.png</file>
  <file>icons/hicolor/64x64/actions/alignBottom.png</file>
  <file>icons/hicolor/64x64/actions/alignCenter.png</file>
@@ -200,6 +204,7 @@
  <file>icons/hicolor/64x64/actions/split_v.png</file>
  <file>icons/hicolor/64x64/actions/stop.png</file>
  <file>icons/hicolor/64x64/actions/textCreate.png</file>
+ <file>icons/hicolor/64x64/actions/zoom.png</file>
  <file>icons/hicolor/64x64/apps/enve2d.png</file>
  <file>icons/hicolor/96x96/actions/alignBottom.png</file>
  <file>icons/hicolor/96x96/actions/alignCenter.png</file>
@@ -240,6 +245,7 @@
  <file>icons/hicolor/96x96/actions/split_v.png</file>
  <file>icons/hicolor/96x96/actions/stop.png</file>
  <file>icons/hicolor/96x96/actions/textCreate.png</file>
+ <file>icons/hicolor/96x96/actions/zoom.png</file>
  <file>icons/hicolor/96x96/apps/enve2d.png</file>
  <file>icons/hicolor/128x128/actions/alignBottom.png</file>
  <file>icons/hicolor/128x128/actions/alignCenter.png</file>
@@ -280,6 +286,7 @@
  <file>icons/hicolor/128x128/actions/split_v.png</file>
  <file>icons/hicolor/128x128/actions/stop.png</file>
  <file>icons/hicolor/128x128/actions/textCreate.png</file>
+ <file>icons/hicolor/128x128/actions/zoom.png</file>
  <file>icons/hicolor/128x128/apps/enve2d.png</file>
  <file>icons/hicolor/192x192/actions/alignBottom.png</file>
  <file>icons/hicolor/192x192/actions/alignCenter.png</file>
@@ -320,6 +327,7 @@
  <file>icons/hicolor/192x192/actions/split_v.png</file>
  <file>icons/hicolor/192x192/actions/stop.png</file>
  <file>icons/hicolor/192x192/actions/textCreate.png</file>
+ <file>icons/hicolor/192x192/actions/zoom.png</file>
  <file>icons/hicolor/192x192/apps/enve2d.png</file>
  <file>icons/hicolor/256x256/actions/alignBottom.png</file>
  <file>icons/hicolor/256x256/actions/alignCenter.png</file>
@@ -360,6 +368,7 @@
  <file>icons/hicolor/256x256/actions/split_v.png</file>
  <file>icons/hicolor/256x256/actions/stop.png</file>
  <file>icons/hicolor/256x256/actions/textCreate.png</file>
+ <file>icons/hicolor/256x256/actions/zoom.png</file>
  <file>icons/hicolor/256x256/apps/enve2d.png</file>
  </qresource>
  </RCC>
