@@ -627,7 +627,7 @@ void MainWindow::setupMenuBar()
                 tr("Zoom","MenuBar_View"));
 
     mZoomInAction = zoomMenu->addAction(tr("Zoom In", "MenuBar_View_Zoom"));
-    mZoomInAction->setShortcut(Qt::KeypadModifier + Qt::Key_Plus);
+    mZoomInAction->setShortcut(QKeySequence("Ctrl+Shift++"));
     connect(mZoomInAction, &QAction::triggered,
             this, [](){
         const auto target = KeyFocusTarget::KFT_getCurrentTarget();
@@ -637,7 +637,7 @@ void MainWindow::setupMenuBar()
     });
 
     mZoomOutAction = zoomMenu->addAction(tr("Zoom Out", "MenuBar_View_Zoom"));
-    mZoomOutAction->setShortcut(Qt::KeypadModifier + Qt::Key_Minus);
+    mZoomOutAction->setShortcut(QKeySequence("Ctrl+Shift+-"));
     connect(mZoomOutAction, &QAction::triggered,
             this, [](){
         const auto target = KeyFocusTarget::KFT_getCurrentTarget();
@@ -649,7 +649,7 @@ void MainWindow::setupMenuBar()
 
 
     mFitViewAction = zoomMenu->addAction(tr("Fit to Canvas", "MenuBar_View_Zoom"));
-    mFitViewAction->setShortcut(Qt::KeypadModifier + Qt::Key_0);
+    mFitViewAction->setShortcut(QKeySequence("Ctrl+0"));
     connect(mFitViewAction, &QAction::triggered,
             this, [](){
         const auto target = KeyFocusTarget::KFT_getCurrentTarget();
@@ -659,7 +659,7 @@ void MainWindow::setupMenuBar()
     });
 
     mResetZoomAction = zoomMenu->addAction(tr("Reset Zoom", "MenuBar_View_Zoom"));
-    mResetZoomAction->setShortcut(Qt::KeypadModifier + Qt::Key_1);
+    mResetZoomAction->setShortcut(QKeySequence("Ctrl+1"));
     connect(mResetZoomAction, &QAction::triggered,
             this, [](){
         const auto target = KeyFocusTarget::KFT_getCurrentTarget();
