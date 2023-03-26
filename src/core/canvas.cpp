@@ -177,7 +177,8 @@ void Canvas::updateHovered(const eMouseEvent& e) {
 }
 
 void drawTransparencyMesh(SkCanvas * const canvas,
-                          const SkRect &drawRect) {
+                          const SkRect &drawRect)
+{
     SkPaint paint;
     SkBitmap bitmap;
     bitmap.setInfo(SkImageInfo::MakeA8(2, 2), 2);
@@ -191,7 +192,7 @@ void drawTransparencyMesh(SkCanvas * const canvas,
     const auto shader = bitmap.makeShader(SkTileMode::kRepeat,
                                           SkTileMode::kRepeat, &matr);
     paint.setShader(shader);
-    paint.setColor(SkColorSetARGB(255, 200, 200, 200));
+    paint.setColor(SkColorSetARGB(255, 100, 100, 100));
     canvas->drawRect(drawRect, paint);
 }
 
