@@ -39,7 +39,23 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(COMPANY "enve2d")
+set(COPYRIGHT "Copyright enve2d developers. All rights reserved.")
+set(IDENTIFIER "io.github.enve2d")
 set(PROJECT_DESCRIPTION "2D Animation Software")
+
+if(APPLE)
+    set(ICON_FILE ${CMAKE_CURRENT_SOURCE_DIR}/icons/${PROJECT_NAME}.icns)
+    set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
+    set(MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION})
+    set(MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION})
+    set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
+    set(MACOSX_BUNDLE_COPYRIGHT ${COPYRIGHT})
+    set(MACOSX_BUNDLE_GUI_IDENTIFIER ${IDENTIFIER})
+    set(MACOSX_BUNDLE_ICON_FILE ${PROJECT_NAME})
+    set_source_files_properties(${ICON_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+    set(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks")
+endif()
 
 find_package(PkgConfig)
 find_package(OpenMP)
@@ -392,6 +408,7 @@ set(
 
 add_executable(
     ${PROJECT_NAME}
+    ${ICON_FILE}
     ${HEADERS}
     ${SOURCES}
     resources.qrc
@@ -399,6 +416,10 @@ add_executable(
     icons.qrc
     hicolor.qrc
 )
+
+if(APPLE)
+    set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE TRUE)
+endif()
 
 target_link_directories(
     ${PROJECT_NAME}
