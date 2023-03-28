@@ -113,9 +113,9 @@ void AutoTiledSurfaceBase::free() {
     mypaint_tiled_surface_destroy(&mParent);
 }
 
-//#ifdef _OPENMP
+#ifdef _OPENMP
 #include <omp.h>
-//#endif
+#endif
 
 void AutoTiledSurface::sRequestStart(MyPaintTiledSurface *surface,
                                      MyPaintTileRequest *request) {

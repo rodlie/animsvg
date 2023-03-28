@@ -17,7 +17,7 @@
 #ifndef ZIPFILESAVER_H
 #define ZIPFILESAVER_H
 
-#include <quazip5/quazipfile.h>
+#include <quazip/quazipfile.h>
 
 #include "exceptions.h"
 
