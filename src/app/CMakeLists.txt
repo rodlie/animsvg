@@ -39,10 +39,26 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(COMPANY "enve2d")
+set(COPYRIGHT "Copyright enve2d developers. All rights reserved.")
+set(IDENTIFIER "io.github.enve2d")
 set(PROJECT_DESCRIPTION "2D Animation Software")
 
+if(APPLE)
+    set(ICON_FILE ${CMAKE_CURRENT_SOURCE_DIR}/icons/${PROJECT_NAME}.icns)
+    set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
+    set(MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION})
+    set(MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION})
+    set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
+    set(MACOSX_BUNDLE_COPYRIGHT ${COPYRIGHT})
+    set(MACOSX_BUNDLE_GUI_IDENTIFIER ${IDENTIFIER})
+    set(MACOSX_BUNDLE_ICON_FILE ${PROJECT_NAME})
+    set_source_files_properties(${ICON_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+    set(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks")
+endif()
+
 find_package(PkgConfig)
-find_package(OpenMP REQUIRED)
+find_package(OpenMP)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
 find_package(
     Qt${QT_VERSION_MAJOR}
@@ -61,23 +77,32 @@ find_package(
 )
 
 option(SHARED_TCMALLOC "Use shared libtcmalloc.so" OFF)
-set(QSCINTILLA_LIBARIES "/usr/lib" CACHE STRING "qscintilla library path")
-set(QSCINTILLA_INCLUDES "/usr/include/x86_64-linux-gnu/qt5" CACHE STRING "qscintilla includes path")
+
+set(QSCINTILLA_LIBRARIES_DIRS "/usr/lib" CACHE STRING "qscintilla library path")
+set(QSCINTILLA_LIBRARIES "qscintilla2_qt5" CACHE STRING "qscintilla library")
+set(QSCINTILLA_INCLUDE_DIRS "/usr/include/x86_64-linux-gnu/qt5" CACHE STRING "qscintilla includes path")
+
+set(QUAZIP_LIBRARIES_DIRS "/usr/lib" CACHE STRING "quazip library path")
+set(QUAZIP_LIBRARIES "quazip5" CACHE STRING "quazip library")
+set(QUAZIP_INCLUDE_DIRS "/usr/include/quazip5" CACHE STRING "quazip includes path")
 
 pkg_search_module(MYPAINT REQUIRED libmypaint)
-pkg_search_module(QUAZIP REQUIRED quazip)
+#pkg_search_module(QUAZIP REQUIRED quazip)
 pkg_check_modules(AVFORMAT REQUIRED libavformat)
 pkg_check_modules(AVCODEC REQUIRED libavcodec)
 pkg_check_modules(AVUTIL REQUIRED libavutil)
 pkg_check_modules(SWSCALE REQUIRED libswscale)
 pkg_check_modules(SWRESAMPLE REQUIRED libswresample)
 if(UNIX AND NOT ${SHARED_TCMALLOC})
-    pkg_check_modules(UNWIND REQUIRED libunwind)
+    if(NOT APPLE)
+        pkg_check_modules(UNWIND REQUIRED libunwind)
+    endif()
 endif()
 
 include_directories(
     ${MYPAINT_INCLUDE_DIRS}
     ${QUAZIP_INCLUDE_DIRS}
+    ${QSCINTILLA_INCLUDE_DIRS}
     ${AVFORMAT_INCLUDE_DIRS}
     ${QSCINTILLA_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/../core
@@ -379,6 +404,7 @@ set(
 
 add_executable(
     ${PROJECT_NAME}
+    ${ICON_FILE}
     ${HEADERS}
     ${SOURCES}
     resources.qrc
@@ -387,11 +413,25 @@ add_executable(
     hicolor.qrc
 )
 
+if(APPLE)
+    set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE TRUE)
+endif()
+
 target_link_directories(
     ${PROJECT_NAME}
     PRIVATE
-    ${QSCINTILLA_LIBARIES}
+    ${QSCINTILLA_LIBRARIES_DIRS}
+    ${QUAZIP_LIBRARIES_DIRS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../skia/out/build
 )
+
+if(APPLE)
+    target_link_directories(
+        ${PROJECT_NAME}
+        PRIVATE
+        /opt/local/lib
+    )
+endif()
 
 if(UNIX AND NOT APPLE)
     set_target_properties(
@@ -424,16 +464,35 @@ target_link_libraries(
     Qt${QT_VERSION_MAJOR}::Xml
     Qt${QT_VERSION_MAJOR}::Svg
     Qt${QT_VERSION_MAJOR}::WebEngineWidgets
-    OpenMP::OpenMP_CXX
     ${MYPAINT_LIBRARIES}
     ${QUAZIP_LIBRARIES}
+    ${QSCINTILLA_LIBRARIES}
     ${AVFORMAT_LIBRARIES}
     ${AVCODEC_LIBRARIES}
     ${AVUTIL_LIBRARIES}
     ${SWSCALE_LIBRARIES}
     ${SWRESAMPLE_LIBRARIES}
-    qscintilla2_qt5
+    skia
 )
+
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(
+        ${PROJECT_NAME}
+        PRIVATE
+        OpenMP::OpenMP_CXX
+    )
+endif()
+
+if(APPLE)
+    target_link_libraries(
+        ${PROJECT_NAME}
+        PRIVATE
+        "-framework CoreFoundation"
+        "-framework CoreGraphics"
+        "-framework CoreText"
+        "-framework CoreServices"
+    )
+endif()
 
 if(UNIX)
     target_link_libraries(

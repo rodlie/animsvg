@@ -216,7 +216,7 @@ private:
                      QIODevice::Truncate)) {
             QTextStream stream(&file);
             for(const auto& recent : mRecentFiles) {
-                stream << recent << Qt::endl;
+                stream << recent << endl;
             }
         }
     }

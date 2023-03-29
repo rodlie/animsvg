@@ -40,7 +40,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(PkgConfig)
-find_package(OpenMP REQUIRED)
+find_package(OpenMP)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
 find_package(
     Qt${QT_VERSION_MAJOR}
@@ -57,8 +57,16 @@ find_package(
     REQUIRED
 )
 
+set(QSCINTILLA_LIBRARIES_DIRS "/usr/lib" CACHE STRING "qscintilla library path")
+set(QSCINTILLA_LIBRARIES "qscintilla2_qt5" CACHE STRING "qscintilla library")
+set(QSCINTILLA_INCLUDE_DIRS "/usr/include/x86_64-linux-gnu/qt5" CACHE STRING "qscintilla includes path")
+
+set(QUAZIP_LIBRARIES_DIRS "/usr/lib" CACHE STRING "quazip library path")
+set(QUAZIP_LIBRARIES "quazip5" CACHE STRING "quazip library")
+set(QUAZIP_INCLUDE_DIRS "/usr/include/quazip5" CACHE STRING "quazip includes path")
+
 pkg_search_module(MYPAINT REQUIRED libmypaint)
-pkg_search_module(QUAZIP REQUIRED quazip)
+#pkg_search_module(QUAZIP REQUIRED quazip)
 pkg_check_modules(AVFORMAT REQUIRED libavformat)
 pkg_check_modules(AVCODEC REQUIRED libavcodec)
 pkg_check_modules(AVUTIL REQUIRED libavutil)
@@ -781,7 +789,16 @@ target_link_directories(
     ${PROJECT_NAME}
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia/out/build
+    ${QUAZIP_LIBRARIES_DIRS}
 )
+
+if(APPLE)
+    target_link_directories(
+        ${PROJECT_NAME}
+        PRIVATE
+        /opt/local/lib
+    )
+endif()
 
 target_link_libraries(
     ${PROJECT_NAME}
@@ -795,7 +812,6 @@ target_link_libraries(
     Qt${QT_VERSION_MAJOR}::Qml
     Qt${QT_VERSION_MAJOR}::Xml
     Qt${QT_VERSION_MAJOR}::Svg
-    OpenMP::OpenMP_CXX
     ${MYPAINT_LIBRARIES}
     ${QUAZIP_LIBRARIES}
     ${AVFORMAT_LIBRARIES}
@@ -807,7 +823,26 @@ target_link_libraries(
     fontconfig
 )
 
-if(UNIX)
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(
+        ${PROJECT_NAME}
+        PRIVATE
+        OpenMP::OpenMP_CXX
+    )
+endif()
+
+if(APPLE)
+    target_link_libraries(
+        ${PROJECT_NAME}
+        PRIVATE
+        "-framework CoreFoundation"
+        "-framework CoreGraphics"
+        "-framework CoreText"
+        "-framework CoreServices"
+    )
+endif()
+
+if(UNIX AND NOT APPLE)
     include(GNUInstallDirs)
     install(
         TARGETS
