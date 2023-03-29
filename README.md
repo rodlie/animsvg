@@ -1,17 +1,18 @@
 # enve2d
 
-This is a community fork of [enve](https://github.com/MaurycyLiebner/enve). A 2d animation application.
+This is a community fork of [enve](https://github.com/MaurycyLiebner/enve). A 2d animation application for macOS and Linux.
 
-A lot of changes are currently happening under the hood, so don't expect anything usable until our first [release](https://github.com/enve2d/enve2d/milestone/1).
+*A lot of changes are currently happening under the hood, so don't expect anything usable until our first [release](https://github.com/enve2d/enve2d/milestone/1).*
 
-Features currently present will be checked, if they are broken or not fully implemented a review will be done:
-
-* If they are broken check if a fix is feasible, else remove or disable
-* If they are not fully implemented check if this is a feature worth implementing, else remove or disable
-
-The goal is to end up with a [v1.0.0](https://github.com/enve2d/enve2d/milestone/7) release in the not too distant future.
+*The goal is to end up with a [v1.0.0](https://github.com/enve2d/enve2d/milestone/7) release in the not too distant future.*
 
 See our issue [tracker](https://github.com/enve2d/enve2d/issues) for more information.
+
+## System requirements
+
+* OpenGL 3.3 compatible graphics card and driver
+* macOS High Sierra *(10.13)* or newer
+* Ubuntu 20.04 *(Focal)* or similar/newer
 
 # License
 
@@ -25,7 +26,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 # Build
 
-Currently only macOS and Linux is supported.
+Generic build instructions for macOS and Linux.
 
 ## Requirements
 
@@ -94,11 +95,15 @@ qttools5-dev-tools \
 qtwebengine5-dev
 ```
 
+### Get the source
+
 Clone the repository, this might take a while.
 
 ```
 git clone --recurse-submodules https://github.com/enve2d/enve2d
 ```
+
+### Build libtcmalloc
 
 Build a custom version of ``libtcmalloc``:
 
@@ -109,7 +114,7 @@ cd enve2d/src/gperftools
 make -j4
 ```
 
-Build ``skia``:
+### Build skia
 
 Note that python2 is required. ``/usr/bin/python`` should be a symlink to the python2 binary on your system.
 
@@ -128,7 +133,9 @@ bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=
 ninja -C out/build -j4 skia
 ```
 
-Now you are ready to build ``enve2d``:
+### Build enve2d
+
+Now you are ready to build ``enve2d``.
 
 ```
 cd enve2d
@@ -136,10 +143,19 @@ mkdir build
 cd build
 ```
 
-Note that if you are not using Ubuntu you will need to set paths for ``qscintilla``:
+Note that if you are not using Ubuntu you will need to set paths for ``qscintilla`` and ``quazip``:
 
 ```
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DQSCINTILLA_LIBARIES="path/to/libraries" -DQSCINTILLA_INCLUDES="path/to/includes" ..
+cmake \
+-DCMAKE_BUILD_TYPE=Release \
+-DCMAKE_INSTALL_PREFIX=/usr \
+-DQUAZIP_INCLUDE_DIRS=<PATH_TO_QUAZIP_INCLUDE_FILES> \
+-DQUAZIP_LIBRARIES_DIRS=<PATH_TO_LIBS> \
+-DQUAZIP_LIBRARIES=<QUAZIP_LIBRARY_NAME> \
+-DQSCINTILLA_INCLUDE_DIRS=<PATH_TO_QSCINTILLA_INCLUDE_DIR> \
+-DQSCINTILLA_LIBRARIES_DIRS=<PATH_TO_LIBS> \
+-DQSCINTILLA_LIBRARIES=<QSCINTILLA_LIBRARY_NAME> \
+..
 ```
 
 else just use:
@@ -165,7 +181,7 @@ cp src/core/libenve2dcore.so.0 .
 Install:
 
 ```
-make DESTDIR=<SOME_DIR> install 
+make DESTDIR=<SOME_TEMP_DIR> install 
 ```
 
 or make a DEB package:
@@ -176,7 +192,7 @@ make package
 
 ## macOS
 
-These instructions asume you have macOS High Sierra (10.13) or greater with Qt 5.12.12 *(through the official online installer)* and macports installed running on an Intel CPU.
+These instructions assume you have macOS High Sierra (10.13) or greater with Qt 5.12.12 *(through the official online installer)* and macports installed running on an Intel CPU.
 
 ### Dependencies
 
@@ -245,11 +261,11 @@ mkdir build && cd build
 cmake \
 -DCMAKE_BUILD_TYPE=Release \
 -DCMAKE_PREFIX_PATH=/$HOME/Qt/5.12.12/clang_64 \
--DQUAZIP_INCLUDE_DIRS=`pwd`/quazip/quazip \
--DQUAZIP_LIBRARIES_DIRS=`pwd`/quazip/build/quazip \
+-DQUAZIP_INCLUDE_DIRS=`pwd`/../quazip/quazip \
+-DQUAZIP_LIBRARIES_DIRS=`pwd`/../quazip/build/quazip \
 -DQUAZIP_LIBRARIES=quazip1-qt5 \
--DQSCINTILLA_INCLUDE_DIRS=`pwd`/qscintilla/src \
--DQSCINTILLA_LIBRARIES_DIRS=`pwd`/qscintilla/src \
+-DQSCINTILLA_INCLUDE_DIRS=`pwd`/../qscintilla/src \
+-DQSCINTILLA_LIBRARIES_DIRS=`pwd`/../qscintilla/src \
 -DQSCINTILLA_LIBRARIES=qscintilla2_qt5 \
 ..
 make -j4
