@@ -25,7 +25,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 # Build
 
-We are moving to CMake, see open [issue](https://github.com/enve2d/enve2d/issues/1) for progress.
+Currently only macOS and Linux is supported.
 
 ## Requirements
 
@@ -34,7 +34,7 @@ We are moving to CMake, see open [issue](https://github.com/enve2d/enve2d/issues
 * python *(v2)*
 * ninja
 * cmake
-* Qt5
+* Qt5 *(5.12+)*
     * Gui
     * Concurrent
     * Widgets
@@ -176,7 +176,7 @@ make package
 
 ## macOS
 
-These instructions asume you have macOS High Sierra (10.13) or greater with Qt 5.12.12 (official) and macports installed running on an Intel CPU.
+These instructions asume you have macOS High Sierra (10.13) or greater with Qt 5.12.12 *(through the official online installer)* and macports installed running on an Intel CPU.
 
 ### Dependencies
 
@@ -218,4 +218,38 @@ bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=
 ninja -C out/build -j4 skia
 ```
 
-to be continued ...
+### Build quazip
+
+Download [quazip](https://github.com/stachenov/quazip/archive/refs/tags/v1.4.tar.gz), then extract and move to ``enve2d/quazip``.
+
+```
+cd enve2d/quazip
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$HOME/Qt/5.12.12/clang_64 .. && make
+```
+
+### Build qscintilla
+
+Download [qscintilla](https://www.riverbankcomputing.com/static/Downloads/QScintilla/2.13.4/QScintilla_src-2.13.4.tar.gz), then extract and move to ``enve2d/qscintilla``.
+
+```
+$HOME/Qt/5.12.12/clang_64/bin/qmake && make
+```
+
+### Build enve2d
+
+```
+cd enve2d
+mkdir build && cd build
+-DCMAKE_BUILD_TYPE=Release \
+-DCMAKE_PREFIX_PATH=/$HOME/Qt/5.12.12/clang_64 \
+-DQUAZIP_INCLUDE_DIRS=`pwd`/quazip \
+-DQUAZIP_LIBRARIES_DIRS=`pwd`/quazip/build/quazip \
+-DQUAZIP_LIBRARIES=quazip1-qt5 \
+-DQSCINTILLA_INCLUDE_DIRS=`pwd`/qscintilla/src \
+-DQSCINTILLA_LIBRARIES_DIRS=`pwd`/qscintilla/src \
+-DQSCINTILLA_LIBRARIES=qscintilla2_qt5 \
+..
+make -j4
+$HOME/Qt/5.12.12/clang_64/bin/macdeployqt src/app/enve2d.app
+```
