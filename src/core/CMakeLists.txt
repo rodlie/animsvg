@@ -57,10 +57,6 @@ find_package(
     REQUIRED
 )
 
-if(OpenMP_CXX_FOUND)
-    add_definitions(-D_OPENMP)
-endif()
-
 set(QSCINTILLA_LIBRARIES_DIRS "/usr/lib" CACHE STRING "qscintilla library path")
 set(QSCINTILLA_LIBRARIES "qscintilla2_qt5" CACHE STRING "qscintilla library")
 set(QSCINTILLA_INCLUDE_DIRS "/usr/include/x86_64-linux-gnu/qt5" CACHE STRING "qscintilla includes path")

@@ -76,10 +76,6 @@ find_package(
     REQUIRED
 )
 
-if(OpenMP_CXX_FOUND)
-    add_definitions(-D_OPENMP)
-endif()
-
 option(SHARED_TCMALLOC "Use shared libtcmalloc.so" OFF)
 
 set(QSCINTILLA_LIBRARIES_DIRS "/usr/lib" CACHE STRING "qscintilla library path")
