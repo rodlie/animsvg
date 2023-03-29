@@ -233,6 +233,7 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$HOME/Qt/5.12.12/clang_64 .
 Download [qscintilla](https://www.riverbankcomputing.com/static/Downloads/QScintilla/2.13.4/QScintilla_src-2.13.4.tar.gz), then extract and move to ``enve2d/qscintilla``.
 
 ```
+cd enve2d/qscintilla
 $HOME/Qt/5.12.12/clang_64/bin/qmake && make
 ```
 
