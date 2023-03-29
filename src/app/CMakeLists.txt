@@ -87,8 +87,8 @@ set(QSCINTILLA_LIBRARIES "qscintilla2_qt5" CACHE STRING "qscintilla library")
 set(QSCINTILLA_INCLUDE_DIRS "/usr/include/x86_64-linux-gnu/qt5" CACHE STRING "qscintilla includes path")
 
 set(QUAZIP_LIBRARIES_DIRS "/usr/lib" CACHE STRING "quazip library path")
-set(QUAZIP_LIBRARIES "quazip1-qt5" CACHE STRING "quazip library")
-set(QUAZIP_INCLUDE_DIRS "/usr/include" CACHE STRING "quazip includes path")
+set(QUAZIP_LIBRARIES "quazip5" CACHE STRING "quazip library")
+set(QUAZIP_INCLUDE_DIRS "/usr/include/quazip5" CACHE STRING "quazip includes path")
 
 pkg_search_module(MYPAINT REQUIRED libmypaint)
 #pkg_search_module(QUAZIP REQUIRED quazip)

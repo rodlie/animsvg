@@ -242,9 +242,10 @@ $HOME/Qt/5.12.12/clang_64/bin/qmake && make
 ```
 cd enve2d
 mkdir build && cd build
+cmake \
 -DCMAKE_BUILD_TYPE=Release \
 -DCMAKE_PREFIX_PATH=/$HOME/Qt/5.12.12/clang_64 \
--DQUAZIP_INCLUDE_DIRS=`pwd`/quazip \
+-DQUAZIP_INCLUDE_DIRS=`pwd`/quazip/quazip \
 -DQUAZIP_LIBRARIES_DIRS=`pwd`/quazip/build/quazip \
 -DQUAZIP_LIBRARIES=quazip1-qt5 \
 -DQSCINTILLA_INCLUDE_DIRS=`pwd`/qscintilla/src \

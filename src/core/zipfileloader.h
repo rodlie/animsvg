@@ -17,7 +17,7 @@
 #ifndef ZIPFILELOADER_H
 #define ZIPFILELOADER_H
 
-#include <quazip/quazipfile.h>
+#include <quazipfile.h>
 
 #include <QDir>
 
