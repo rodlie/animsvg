@@ -112,11 +112,14 @@ int main(int argc, char *argv[]) {
 
     AppSupport::setupTheme();
 
+#ifndef Q_OS_DARWIN
     const bool threadedOpenGL = QOpenGLContext::supportsThreadedOpenGL();
-    if(!threadedOpenGL) {
+    if (!threadedOpenGL) {
         gPrintException("Your GPU drivers do not support OpenGL "
                         "rendering outside the main thread");
     }
+#endif
+
     try {
         HardwareInfo::sUpdateInfo();
     } catch(const std::exception& e) {
