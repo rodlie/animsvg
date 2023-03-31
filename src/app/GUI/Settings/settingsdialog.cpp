@@ -32,8 +32,8 @@ SettingsDialog::SettingsDialog(QWidget * const parent) :
     const auto performance = new PerformanceSettingsWidget(this);
     addSettingsWidget(performance, "Performance");
 
-    const auto ui = new InterfaceSettingsWidget(this);
-    addSettingsWidget(ui, "Interface");
+    //const auto ui = new InterfaceSettingsWidget(this);
+    //addSettingsWidget(ui, "Interface");
 
     const auto canvas = new CanvasSettingsWidget(this);
     addSettingsWidget(canvas, "Canvas");
@@ -41,8 +41,8 @@ SettingsDialog::SettingsDialog(QWidget * const parent) :
     const auto timeline = new TimelineSettingsWidget(this);
     addSettingsWidget(timeline, "Timeline");
 
-    const auto external = new ExternalAppsSettingsWidget(this);
-    addSettingsWidget(external, "External Apps");
+    //const auto external = new ExternalAppsSettingsWidget(this);
+    //addSettingsWidget(external, "External Apps");
 
     mainLauout->addWidget(mTabWidget);
 
