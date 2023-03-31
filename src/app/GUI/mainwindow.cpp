@@ -424,7 +424,7 @@ void MainWindow::setupMenuBar()
                              &mActions, &Actions::clearSelectionAction,
                              Qt::ALT + Qt::Key_A, mEditMenu));
     mEditMenu->addSeparator();
-    mEditMenu->addAction(tr("Settings...", "MenuBar_Edit"), [this]() {
+    mEditMenu->addAction(tr("Settings", "MenuBar_Edit"), [this]() {
         const auto settDial = new SettingsDialog(this);
         settDial->setAttribute(Qt::WA_DeleteOnClose);
         settDial->show();
@@ -605,7 +605,7 @@ void MainWindow::setupMenuBar()
 
     mSceneMenu = mMenuBar->addMenu(tr("Scene", "MenuBar"));
 
-    mSceneMenu->addAction(tr("New Scene...", "MenuBar_Scene"), this, [this]() {
+    mSceneMenu->addAction(tr("New Scene", "MenuBar_Scene"), this, [this]() {
         SceneSettingsDialog::sNewSceneDialog(mDocument, this);
     });
 
@@ -624,7 +624,7 @@ void MainWindow::setupMenuBar()
 
     {
         const auto qAct = mSceneMenu->addAction(
-                    tr("Settings...", "MenuBar_Scene"));
+                    tr("Scene Properties", "MenuBar_Scene"));
         mActions.sceneSettingsAction->connect(qAct);
     }
 

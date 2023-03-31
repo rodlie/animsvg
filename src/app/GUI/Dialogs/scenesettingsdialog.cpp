@@ -42,7 +42,7 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
                                            ColorAnimator * const bg,
                                            QWidget * const parent) :
     QDialog(parent) {
-    setWindowTitle("Scene Settings");
+    setWindowTitle(tr("Scene Properties"));
     mMainLayout = new QVBoxLayout(this);
     mMainLayout->setSizeConstraint(QLayout::SetFixedSize);
 

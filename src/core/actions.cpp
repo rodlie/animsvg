@@ -76,7 +76,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
         sceneSettingsAction = new Action(sceneSettingsActionCan,
                                          sceneSettingsActionExec,
-                                         "Settings...",
+                                         tr("Scene Properties"),
                                          this);
     }
 

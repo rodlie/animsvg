@@ -28,3 +28,4 @@ build/Release/*
 qscintilla
 quazip
 3rdparty
+.DS_Store
