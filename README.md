@@ -10,9 +10,10 @@ See our issue [tracker](https://github.com/enve2d/enve2d/issues) for more inform
 
 ## System requirements
 
+* Minimum screen resolution of 1280 x 800 
 * OpenGL 3.3 compatible graphics card and driver
 * macOS High Sierra *(10.13)* or newer
-* Ubuntu 20.04 *(Focal)* or similar/newer
+* Ubuntu 22.04 *(Jammy)* or similar/newer
 
 # License
 
