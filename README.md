@@ -206,7 +206,7 @@ These instructions assume you have macOS High Sierra (10.13) or greater with Qt 
 Install the following packages if not already installed:
 
 ```
-sudo port install libmypaint ffmpeg ninja cmake automake autoconf
+sudo port install libmypaint ffmpeg ninja cmake automake autoconf libtool pkgconfig
 ```
 
 ### Get the source

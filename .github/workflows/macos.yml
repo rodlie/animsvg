@@ -1,0 +1,23 @@
+name: macOS Big Sur
+
+on:
+  push:
+    branches: [ "mac" ]
+  pull_request:
+    branches: [ "mac" ]
+
+jobs:
+  build:
+
+    runs-on: macos-11
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build
+      run: CI=1 ./src/scripts/build_macos.sh
+    - name: Artifact
+      run: sudo cp build/enve2d.dmg /opt/
+    - uses: actions/upload-artifact@v2
+      with:
+        name: enve2d-${{github.sha}}-macOS
+        path: /opt/enve2d.dmg

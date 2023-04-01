@@ -1,7 +1,6 @@
 # enve2d - https://github.com/enve2d
 #
-# Copyright (c) 2023 enve2d developers
-# Copyright (c) 2016-2022 Maurycy Liebner
+# Copyright (c) enve2d developers
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -66,7 +65,6 @@ set(QUAZIP_LIBRARIES "quazip5" CACHE STRING "quazip library")
 set(QUAZIP_INCLUDE_DIRS "/usr/include/quazip5" CACHE STRING "quazip includes path")
 
 pkg_search_module(MYPAINT REQUIRED libmypaint)
-#pkg_search_module(QUAZIP REQUIRED quazip)
 pkg_check_modules(AVFORMAT REQUIRED libavformat)
 pkg_check_modules(AVCODEC REQUIRED libavcodec)
 pkg_check_modules(AVUTIL REQUIRED libavutil)
