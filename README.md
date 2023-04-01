@@ -1,12 +1,8 @@
 # enve2d
 
-This is a community fork of [enve](https://github.com/MaurycyLiebner/enve). A 2d animation application for macOS and Linux.
+2D animation application for macOS and Linux.
 
-*A lot of changes are currently happening under the hood, so don't expect anything usable until our first [release](https://github.com/enve2d/enve2d/milestone/1).*
-
-*The goal is to end up with a [v1.0.0](https://github.com/enve2d/enve2d/milestone/7) release in the not too distant future.*
-
-See our issue [tracker](https://github.com/enve2d/enve2d/issues) for more information.
+See our issue [tracker](https://github.com/enve2d/enve2d/issues) or [forum](https://github.com/enve2d/enve2d/discussions) for more information.
 
 ## System requirements
 
@@ -15,15 +11,25 @@ See our issue [tracker](https://github.com/enve2d/enve2d/issues) for more inform
 * macOS High Sierra *(10.13)* or newer
 * Ubuntu 22.04 *(Jammy)* or similar/newer
 
+## FAQ
+
+### is this a fork?
+
+Yes, this is a fork of [enve](https://github.com/MaurycyLiebner/enve). The upstream project has stalled and is not responding to issues and/or requests.
+
+We will continue the development under the name ``enve2d`` for the foreseeable future.
+
+This project is currently lead by [Ole-André Rodlie](https://github.com/rodlie) on behalf of NettStudio AS.
+
 # License
 
-Copyright &copy; 2023 enve2d developers
+Copyright &copy; enve2d [developers](https://github.com/enve2d/enve2d/graphs/contributors)
 
 Copyright &copy; 2016-2022 Maurycy Liebner
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+**This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the [GNU General Public License](LICENSE.md) for more details.**
 
 # Build
 
@@ -261,7 +267,7 @@ cd enve2d
 mkdir build && cd build
 cmake \
 -DCMAKE_BUILD_TYPE=Release \
--DCMAKE_PREFIX_PATH=/$HOME/Qt/5.12.12/clang_64 \
+-DCMAKE_PREFIX_PATH=$HOME/Qt/5.12.12/clang_64 \
 -DQUAZIP_INCLUDE_DIRS=`pwd`/../quazip/quazip \
 -DQUAZIP_LIBRARIES_DIRS=`pwd`/../quazip/build/quazip \
 -DQUAZIP_LIBRARIES=quazip1-qt5 \

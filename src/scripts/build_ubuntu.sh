@@ -35,8 +35,7 @@ qtdeclarative5-dev-tools \
 qtdeclarative5-dev \
 qtmultimedia5-dev \
 qttools5-dev-tools \
-qtwebengine5-dev \
-libqt5xmlpatterns5-dev
+qtwebengine5-dev
 fi
 
 git submodule update -i --recursive
