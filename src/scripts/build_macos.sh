@@ -52,23 +52,23 @@ if [ "${CI}" = 1 ]; then
         rm -rf ${SDK}/qt || true
         curl -k -L ${QT_DOWNLOAD} --output qt.tar.bz2
         mkdir -p ${SDK}/qt
-        tar xvf qt.tar.bz2 -C ${SDK}/qt/
+        tar xf qt.tar.bz2 -C ${SDK}/qt/
     fi
     if [ ! -d "${SDK}/skia-build" ]; then
         curl -k -L ${SKIA_DOWNLOAD} --output skia.tar.bz2
-        tar xvf skia.tar.bz2 -C ${SDK}/
+        tar xf skia.tar.bz2 -C ${SDK}/
     fi
     if [ ! -d "${QUAZIP}" ]; then
         curl -k -L ${QUAZIP_DOWNLOAD} --output quazip.tar.bz2
-        tar xvf quazip.tar.bz2 -C ${SDK}/
+        tar xf quazip.tar.bz2 -C ${SDK}/
     fi
     if [ ! -d "${SDK}/gperftools-build" ]; then
         curl -k -L ${GPERFTOOLS_DOWNLOAD} --output gperftools.tar.bz2
-        tar xvf gperftools.tar.bz2 -C ${SDK}/
+        tar xf gperftools.tar.bz2 -C ${SDK}/
     fi
     if [ ! -d "${QSCINTILLA}" ]; then
         curl -k -L ${QSCINTILLA_DOWNLOAD} --output qscintilla.tar.bz2
-        tar xvf qscintilla.tar.bz2 -C ${SDK}/
+        tar xf qscintilla.tar.bz2 -C ${SDK}/
     fi
     if [ ! -d "/opt/local" ]; then
         sudo mkdir -p /opt/local
@@ -78,11 +78,11 @@ if [ "${CI}" = 1 ]; then
         curl -k -L ${PORTS_LIBEXEC_DOWNLOAD} --output libexec.tar.bz2
         curl -k -L ${PORTS_SHARE_DOWNLOAD} --output share.tar.bz2
         curl -k -L ${PORTS_INCLUDE_DOWNLOAD} --output include.tar.bz2
-        tar xvf bin.tar.bz2 -C /opt/local/
-        tar xvf lib.tar.bz2 -C /opt/local/
-        tar xvf libexec.tar.bz2 -C /opt/local/
-        tar xvf share.tar.bz2 -C /opt/local/
-        tar xvf include.tar.bz2 -C /opt/local/
+        tar xf bin.tar.bz2 -C /opt/local/
+        tar xf lib.tar.bz2 -C /opt/local/
+        tar xf libexec.tar.bz2 -C /opt/local/
+        tar xf share.tar.bz2 -C /opt/local/
+        tar xf include.tar.bz2 -C /opt/local/
     fi
     if [ ! -d "${CWD}/src/gperftools/.libs" ]; then
         rm -rf ${CWD}/src/gperftools
