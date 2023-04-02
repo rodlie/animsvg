@@ -1,6 +1,6 @@
 # enve2d
 
-2D animation application for macOS and Linux.
+2D animation software for macOS and Linux.
 
 See our issue [tracker](https://github.com/enve2d/enve2d/issues) or [forum](https://github.com/enve2d/enve2d/discussions) for more information.
 
@@ -9,7 +9,26 @@ See our issue [tracker](https://github.com/enve2d/enve2d/issues) or [forum](http
 * Minimum screen resolution of 1280 x 800 
 * OpenGL 3.3 compatible graphics card and driver
 * macOS High Sierra *(10.13)* or newer
-* Ubuntu 22.04 *(Jammy)* or similar/newer
+  * *Only Intel Mac's running macOS 10.13 to 12 are tested.*
+* Ubuntu 22.04 *(Jammy)* and compatible
+  * *Will build on other distros, but is not tested*
+
+## Downloads
+
+### Releases
+
+No releases are currently available.
+
+### Snapshots
+
+Snapshots are available for push or pull request on the main branch.
+
+* [Snapshots](https://github.com/enve2d/enve2d/actions/workflows/macos.yml) for macOS High Sierra *(10.13)* or newer
+* [Snapshots](https://github.com/enve2d/enve2d/actions/workflows/ubuntu.yml) for Ubuntu 22.04 *(Jammy)* and compatible
+
+Select commit and scroll to end of page to download asset.
+
+*Only available if you are logged in (on Github), snapshots will expire within 90 days after commit that triggered the build.*
 
 ## FAQ
 
