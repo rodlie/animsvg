@@ -1,18 +1,23 @@
-// enve - 2D animations software
-// Copyright (C) 2016-2020 Maurycy Liebner
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+# enve2d - https://github.com/enve2d
+#
+# Copyright (c) enve2d developers
+# Copyright (C) 2016-2020 Maurycy Liebner
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+*/
 
 #include "exportsvgdialog.h"
 
@@ -29,30 +34,12 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QMenuBar>
-#include <QWebEngineView>
+#include <QDesktopServices>
 
-class SvgPreview : public QWebEngineView {
-public:
-    SvgPreview(QWidget* const parent = nullptr) : QWebEngineView(parent) {
-        setSizePolicy(QSizePolicy::MinimumExpanding,
-                      QSizePolicy::MinimumExpanding);
-        setMinimumSize(10*eSizesUI::widget, 10*eSizesUI::widget);
-    }
-protected:
-    void contextMenuEvent(QContextMenuEvent *e) {
-        QMenu* menu = new QMenu(this);
-        const auto action = menu->addAction("Restart");
-        action->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
-        connect(action, &QAction::triggered, this, &SvgPreview::reload);
-        menu->popup(e->globalPos());
-        connect(menu, &QMenu::aboutToHide, menu, &QObject::deleteLater);
-    }
-};
-
-ExportSvgDialog::ExportSvgDialog(QWidget* const parent) :
-    QDialog(parent) {
-
-    setWindowTitle("Export SVG");
+ExportSvgDialog::ExportSvgDialog(QWidget* const parent)
+    : QDialog(parent)
+{
+    setWindowTitle(tr("Export SVG"));
 
     const auto settingsLayout = new QVBoxLayout();
 
@@ -61,12 +48,12 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent) :
     const auto document = Document::sInstance;
     mScene = new SceneChooser(*document, false, this);
     auto scene = *document->fActiveScene;
-    if(!scene) {
+    if (!scene) {
         const auto& visScenes = document->fVisibleScenes;
-        if(!visScenes.empty()) scene = visScenes.begin()->first;
+        if (!visScenes.empty()) { scene = visScenes.begin()->first; }
         else {
             const auto& scenes = document->fScenes;
-            if(!scenes.isEmpty()) scene = scenes.first().get();
+            if (!scenes.isEmpty()) { scene = scenes.first().get(); }
         }
     }
     mScene->setCurrentScene(scene);
@@ -93,16 +80,13 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent) :
     mLoop->setChecked(true);
 
     twoColLayout->addPair(new QLabel("Scene:"), sceneButton);
-    eSizesUI::widget.addSpacing(twoColLayout);
     twoColLayout->addPair(new QLabel("First Frame:"), mFirstFrame);
     twoColLayout->addPair(new QLabel("Last Frame:"), mLastFrame);
 
     settingsLayout->addLayout(twoColLayout);
-    eSizesUI::widget.addSpacing(settingsLayout);
     settingsLayout->addWidget(mBackground);
     settingsLayout->addWidget(mFixedSize);
     settingsLayout->addWidget(mLoop);
-    eSizesUI::widget.addSpacing(settingsLayout);
 
     connect(mFirstFrame, qOverload<int>(&QSpinBox::valueChanged),
             mLastFrame, &QSpinBox::setMinimum);
@@ -123,34 +107,33 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent) :
         const QString fileType = tr("SVG Files %1", "ExportDialog_FileType");
         QString saveAs = eDialogs::saveFile("Export SVG", dir,
                                             fileType.arg("(*.svg)"));
-        if(saveAs.isEmpty()) return;
-        if(saveAs.right(4) != ".svg") saveAs += ".svg";
+        if (saveAs.isEmpty()) { return; }
+        if (!saveAs.endsWith(".svg")) { saveAs.append(".svg"); }
         const bool success = exportTo(saveAs);
-        if(success) accept();
+        if (success) { accept(); }
     });
 
     connect(buttons, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
     settingsLayout->addWidget(buttons, 0, Qt::AlignBottom);
 
-    mPreview = new SvgPreview(this);
-    mPreviewButton = new QPushButton("Preview", this);
+    mPreviewButton = new QPushButton(tr("Preview"), this);
     buttons->addButton(mPreviewButton, QDialogButtonBox::ActionRole);
     connect(mPreviewButton, &QPushButton::released, this, [this]() {
-        if(!mPreviewFile) {
-            const QString templ = QDir::tempPath() + "/enve_svg_preview_XXXXXX.svg";
+        if (!mPreviewFile) {
+            const QString templ =  QString::fromUtf8("%1/enve_svg_preview_XXXXXX.html").arg(QDir::tempPath());
             mPreviewFile = qsptr<QTemporaryFile>::create(templ);
             mPreviewFile->open();
             mPreviewFile->close();
         }
-        const auto task = exportTo(mPreviewFile->fileName());
-        if(!task) return;
+        const auto task = exportTo(mPreviewFile->fileName(), true);
+        if (!task) { return; }
         QPointer<ExportSvgDialog> ptr = this;
         task->addDependent(
         {[ptr]() {
-            if(ptr) {
+            if (ptr) {
                 const auto fileName = ptr->mPreviewFile->fileName();
-                ptr->mPreview->load(QUrl::fromLocalFile(fileName));
+                QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
             }
         }, nullptr});
     });
@@ -161,16 +144,16 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent) :
                                   QSizePolicy::MinimumExpanding);
 
     const auto mainLayout = new QHBoxLayout(this);
-    mainLayout->addWidget(mPreview);
-    eSizesUI::widget.addHalfSpacing(mainLayout);
     mainLayout->addWidget(settingsWidget);
     setLayout(mainLayout);
 }
 
-ComplexTask* ExportSvgDialog::exportTo(const QString& file) {
+ComplexTask* ExportSvgDialog::exportTo(const QString& file,
+                                       bool preview)
+{
     try {
         const auto scene = mScene->getCurrentScene();
-        if(!scene) RuntimeThrow("No scene selected");
+        if (!scene) { RuntimeThrow(tr("No scene selected")); }
         const int firstFrame = mFirstFrame->value();
         const int lastFrame = mLastFrame->value();
 
@@ -182,7 +165,7 @@ ComplexTask* ExportSvgDialog::exportTo(const QString& file) {
         const qreal fps = scene->getFps();
 
         const auto task = new SvgExporter(file, scene, frameRange, fps,
-                                          background, fixedSize, loop);
+                                          background, fixedSize, loop, preview);
         const auto taskSPtr = qsptr<SvgExporter>(task, &QObject::deleteLater);
         task->nextStep();
         TaskScheduler::instance()->addComplexTask(taskSPtr);

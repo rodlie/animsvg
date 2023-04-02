@@ -28,7 +28,7 @@ Snapshots are available for push or pull request on the main branch.
 
 Select commit and scroll to end of page to download asset.
 
-*Only available if you are logged in (on Github), snapshots will expire within 90 days after commit that triggered the build.*
+*Only available if you are logged in (on GitHub), snapshots will expire within 90 days after commit that triggered the build.*
 
 ## FAQ
 
@@ -70,7 +70,6 @@ Generic build instructions for macOS and Linux.
     * Qml
     * Xml
     * Svg
-    * WebEngineWidgets
 * libmypaint
 * quazip
 * qscintilla
@@ -117,8 +116,7 @@ qtbase5-dev \
 qtdeclarative5-dev-tools \
 qtdeclarative5-dev \
 qtmultimedia5-dev \
-qttools5-dev-tools \
-qtwebengine5-dev
+qttools5-dev-tools
 ```
 
 ### Get the source

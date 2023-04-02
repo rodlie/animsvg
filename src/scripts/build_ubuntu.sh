@@ -53,8 +53,7 @@ qtbase5-dev \
 qtdeclarative5-dev-tools \
 qtdeclarative5-dev \
 qtmultimedia5-dev \
-qttools5-dev-tools \
-qtwebengine5-dev
+qttools5-dev-tools
 fi
 
 git submodule update -i --recursive

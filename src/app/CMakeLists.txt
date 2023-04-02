@@ -71,7 +71,6 @@ find_package(
     Qml
     Xml
     Svg
-    WebEngineWidgets
     REQUIRED
 )
 
@@ -461,7 +460,6 @@ target_link_libraries(
     Qt${QT_VERSION_MAJOR}::Qml
     Qt${QT_VERSION_MAJOR}::Xml
     Qt${QT_VERSION_MAJOR}::Svg
-    Qt${QT_VERSION_MAJOR}::WebEngineWidgets
     ${MYPAINT_LIBRARIES}
     ${QUAZIP_LIBRARIES}
     ${QSCINTILLA_LIBRARIES}
