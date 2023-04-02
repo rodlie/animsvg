@@ -1,18 +1,23 @@
-// enve - 2D animations software
-// Copyright (C) 2016-2020 Maurycy Liebner
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+# enve2d - https://github.com/enve2d
+#
+# Copyright (c) enve2d developers
+# Copyright (C) 2016-2020 Maurycy Liebner
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+*/
 
 #ifndef CANVAS_H
 #define CANVAS_H
@@ -71,12 +76,14 @@ enum class AlignRelativeTo {
     scene, lastSelected
 };
 
-class CORE_EXPORT Canvas : public CanvasBase {
+class CORE_EXPORT Canvas : public CanvasBase
+{
     friend class CanvasWindow;
     typedef qCubicSegment1DAnimator::Action SegAction;
     Q_OBJECT
     e_OBJECT
     e_DECLARE_TYPE(Canvas)
+
 protected:
     explicit Canvas(Document& document,
                     const int canvasWidth = 1920,
@@ -154,18 +161,20 @@ public:
     void setSelectedJoinStyle(const SkPaint::Join joinStyle);
     void setSelectedStrokeBrush(SimpleBrushWrapper * const brush);
 
-    void applyStrokeBrushWidthActionToSelected(const SegAction& action);
-    void applyStrokeBrushPressureActionToSelected(const SegAction& action);
-    void applyStrokeBrushSpacingActionToSelected(const SegAction& action);
-    void applyStrokeBrushTimeActionToSelected(const SegAction& action);
+    void applyStrokeBrushWidthActionToSelected(const SegAction &action);
+    void applyStrokeBrushPressureActionToSelected(const SegAction &action);
+    void applyStrokeBrushSpacingActionToSelected(const SegAction &action);
+    void applyStrokeBrushTimeActionToSelected(const SegAction &action);
 
     void strokeWidthAction(const QrealAction &action);
 
     void startSelectedStrokeColorTransform();
     void startSelectedFillColorTransform();
 
-    void scaleSelectedBy(const qreal scaleXBy, const qreal scaleYBy,
-                         const QPointF &absOrigin, const bool startTrans);
+    void scaleSelectedBy(const qreal scaleXBy,
+                         const qreal scaleYBy,
+                         const QPointF &absOrigin,
+                         const bool startTrans);
 
     qreal getResolution() const;
     void setResolution(const qreal percent);
@@ -180,7 +189,7 @@ public:
     void rotateSelectedPointsBy(const qreal rotBy,
                                 const QPointF &absOrigin,
                                 const bool startTrans);
-    int getPointsSelectionCount() const ;
+    int getPointsSelectionCount() const;
 
     void clearPointsSelectionOrDeselect();
     NormalSegment getSegment(const eMouseEvent &e) const;
@@ -195,16 +204,16 @@ public:
 
     void setSelectedTextAlignment(const Qt::Alignment alignment) const;
     void setSelectedTextVAlignment(const Qt::Alignment alignment) const;
-    void setSelectedFontFamilyAndStyle(const QString& family,
-                                       const SkFontStyle& style);
+    void setSelectedFontFamilyAndStyle(const QString &family,
+                                       const SkFontStyle &style);
     void setSelectedFontSize(const qreal size);
     void removeSelectedPointsAndClearList();
     void removeSelectedBoxesAndClearList();
 
     BoundingBox* getCurrentBox() const { return mCurrentBox; }
     void setCurrentBox(BoundingBox* const box);
-    void addBoxToSelection(BoundingBox * const box);
-    void removeBoxFromSelection(BoundingBox * const box);
+    void addBoxToSelection(BoundingBox* const box);
+    void removeBoxFromSelection(BoundingBox* const box);
     void clearBoxesSelection();
     void clearBoxesSelectionList();
 
@@ -230,11 +239,19 @@ public:
     void mouseMoveEvent(const eMouseEvent &e);
     void mouseDoubleClickEvent(const eMouseEvent &e);
 
-    struct TabletEvent {
-        TabletEvent(const QPointF& pos, QTabletEvent * const e) :
-            fPos(pos), fType(e->type()),
-            fButton(e->button()), fButtons(e->buttons()),
-            fModifiers(e->modifiers()), fTimestamp(e->timestamp()) {}
+    struct TabletEvent
+    {
+        TabletEvent(const QPointF &pos,
+                    QTabletEvent* const e)
+            : fPos(pos)
+            , fType(e->type())
+            , fButton(e->button())
+            , fButtons(e->buttons())
+            , fModifiers(e->modifiers())
+            , fTimestamp(e->timestamp())
+        {
+
+        }
 
         QPointF fPos;
         QEvent::Type fType;
@@ -247,7 +264,8 @@ public:
         int fYTilt;
     };
 
-    void tabletEvent(const QTabletEvent * const e, const QPointF &pos);
+    void tabletEvent(const QTabletEvent* const e,
+                     const QPointF &pos);
 
     bool keyPressEvent(QKeyEvent *event);
 
@@ -260,73 +278,89 @@ public:
                              const bool parentSatisfies,
                              const bool parentMainTarget) const;
 
-    ContainerBox *getCurrentGroup() {
+    ContainerBox *getCurrentGroup()
+    {
         return mCurrentContainer;
     }
 
     void updateTotalTransform() {}
 
-    QMatrix getTotalTransform() const {
+    QMatrix getTotalTransform() const
+    {
         return QMatrix();
     }
 
-    QMatrix getRelativeTransformAtCurrentFrame() const {
+    QMatrix getRelativeTransformAtCurrentFrame() const
+    {
         return QMatrix();
     }
 
-    QPointF mapAbsPosToRel(const QPointF &absPos) {
+    QPointF mapAbsPosToRel(const QPointF &absPos)
+    {
         return absPos;
     }
 
-    void scheduleEffectsMarginUpdate() {}
+    void scheduleEffectsMarginUpdate()
+    {
 
-    void renderSk(SkCanvas * const canvas,
+    }
+
+    void renderSk(SkCanvas* const canvas,
                   const QRect &drawRect,
                   const QMatrix &viewTrans,
                   const bool mouseGrabbing);
 
-    void setCanvasSize(const int width, const int height) {
-        if(width == mWidth && height == mHeight) return;
+    void setCanvasSize(const int width,
+                       const int height)
+    {
+        if (width == mWidth && height == mHeight) { return; }
         mWidth = width;
         mHeight = height;
         prp_afterWholeInfluenceRangeChanged();
         emit dimensionsChanged(width, height);
     }
 
-    int getCanvasWidth() const {
+    int getCanvasWidth() const
+    {
         return mWidth;
     }
 
-    QRect getCanvasBounds() const {
+    QRect getCanvasBounds() const
+    {
         return QRect(0, 0, mWidth, mHeight);
     }
 
-    QRect getMaxBounds() const {
+    QRect getMaxBounds() const
+    {
         return QRect(-mWidth/2, - mHeight/2, 2*mWidth, 2*mHeight);
     }
 
-    QRect getCurrentBounds() const {
+    QRect getCurrentBounds() const
+    {
         //if(mClipToCanvasSize) return getCanvasBounds();
         //else return getMaxBounds();
         return getMaxBounds();
     }
 
-    int getCanvasHeight() const {
+    int getCanvasHeight() const
+    {
         return mHeight;
     }
 
     void setFrameRange(const FrameRange& range);
 
-    ColorAnimator *getBgColorAnimator() {
+    ColorAnimator *getBgColorAnimator()
+    {
         return mBackgroundColor.get();
     }
 
     stdsptr<BoxRenderData> createRenderData();
 
     void setupRenderData(const qreal relFrame,
-                         const QMatrix& parentM,
-                         BoxRenderData * const data,
-                         Canvas* const scene) {
+                         const QMatrix &parentM,
+                         BoxRenderData* const data,
+                         Canvas* const scene)
+    {
         ContainerBox::setupRenderData(relFrame, parentM, data, scene);
         auto canvasData = static_cast<CanvasRenderData*>(data);
         canvasData->fBgColor = toSkColor(mBackgroundColor->getColor());
@@ -334,20 +368,34 @@ public:
         canvasData->fCanvasWidth = mWidth;
     }
 
-    bool clipToCanvas() { return mClipToCanvasSize; }
+    bool clipToCanvas()
+    {
+        return mClipToCanvasSize;
+    }
 
     void schedulePivotUpdate();
-    void setClipToCanvas(const bool bT) { mClipToCanvasSize = bT; }
-    void setRasterEffectsVisible(const bool bT) { mRasterEffectsVisible = bT; }
-    void setPathEffectsVisible(const bool bT) { mPathEffectsVisible = bT; }
+    void setClipToCanvas(const bool bT)
+    {
+        mClipToCanvasSize = bT;
+    }
+    void setRasterEffectsVisible(const bool bT)
+    {
+        mRasterEffectsVisible = bT;
+    }
+    void setPathEffectsVisible(const bool bT)
+    {
+        mPathEffectsVisible = bT;
+    }
+
 protected:
-    void setCurrentSmartEndPoint(SmartNodePoint * const point);
+    void setCurrentSmartEndPoint(SmartNodePoint* const point);
 
     void handleMovePathMouseRelease(const eMouseEvent &e);
     void handleMovePointMouseRelease(const eMouseEvent &e);
 
     void handleRightButtonMouseRelease(const eMouseEvent &e);
     void handleLeftButtonMousePress(const eMouseEvent &e);
+
 signals:
     void requestUpdate();
     void newFrameRange(FrameRange);
@@ -361,6 +409,7 @@ signals:
     void fpsChanged(qreal);
     void gradientCreated(SceneBoundGradient*);
     void gradientRemoved(SceneBoundGradient*);
+
 public:
     void makePointCtrlsSymmetric();
     void makePointCtrlsSmooth();
@@ -379,12 +428,15 @@ public:
     void applyPaintSettingToSelected(const PaintSettingsApplier &setting);
 
     int getCurrentFrame() const;
-    FrameRange getFrameRange() const { return mRange; }
+    FrameRange getFrameRange() const
+    {
+        return mRange;
+    }
 
     SoundComposition *getSoundComposition();
 
-    void updateHoveredBox(const eMouseEvent& e);
-    void updateHoveredPoint(const eMouseEvent& e);
+    void updateHoveredBox(const eMouseEvent &e);
+    void updateHoveredPoint(const eMouseEvent &e);
     void updateHoveredEdge(const eMouseEvent &e);
     void updateHovered(const eMouseEvent &e);
     void clearHoveredEdge();
@@ -392,15 +444,22 @@ public:
 
     bool getPivotLocal() const;
 
-    int getMinFrame() const { return mRange.fMin; }
-    int getMaxFrame() const { return mRange.fMax; }
+    int getMinFrame() const
+    {
+        return mRange.fMin;
+    }
+    int getMaxFrame() const
+    {
+        return mRange.fMax;
+    }
 
     //void updatePixmaps();
-    HddCachableCacheHandler& getSceneFramesHandler() {
+    HddCachableCacheHandler &getSceneFramesHandler()
+    {
         return mSceneFramesHandler;
     }
 
-    HddCachableCacheHandler& getSoundCacheHandler();
+    HddCachableCacheHandler &getSoundCacheHandler();
 
     void setSceneFrame(const int relFrame);
     void setSceneFrame(const stdsptr<SceneFrameContainer> &cont);
@@ -408,27 +467,35 @@ public:
 
     void setRenderingPreview(const bool bT);
 
-    bool isPreviewingOrRendering() const {
+    bool isPreviewingOrRendering() const
+    {
         return mPreviewing || mRenderingPreview || mRenderingOutput;
     }
 
-    qreal getFps() const { return mFps; }
-    void setFps(const qreal fps) {
+    qreal getFps() const
+    {
+        return mFps;
+    }
+    void setFps(const qreal fps)
+    {
         mFps = fps;
         emit fpsChanged(fps);
     }
 
-    BoundingBox *getBoxAt(const QPointF &absPos) {
-        if(mClipToCanvasSize) {
+    BoundingBox *getBoxAt(const QPointF &absPos)
+    {
+        if (mClipToCanvasSize) {
             const auto bRect = Canvas::getCurrentBounds();
-            if(!QRectF(bRect).contains(absPos)) return nullptr;
+            if (!QRectF(bRect).contains(absPos)) { return nullptr; }
         }
         return ContainerBox::getBoxAt(absPos);
     }
 
-    void anim_scaleTime(const int pivotAbsFrame, const qreal scale);
+    void anim_scaleTime(const int pivotAbsFrame,
+                        const qreal scale);
 
-    void changeFpsTo(const qreal fps) {
+    void changeFpsTo(const qreal fps)
+    {
         anim_scaleTime(0, fps/mFps);
         setFps(fps);
     }
@@ -443,27 +510,31 @@ public:
     void selectAllAction();
     void clearSelectionAction();
     void rotateSelectedBoxesStartAndFinish(const qreal rotBy);
-    bool shouldScheduleUpdate() {
+    bool shouldScheduleUpdate()
+    {
         return mSceneFrameOutdated;
     }
 
     void renderDataFinished(BoxRenderData *renderData);
     FrameRange prp_getIdenticalRelRange(const int relFrame) const;
 
-    void writeSettings(eWriteStream& dst) const;
-    void readSettings(eReadStream& src);
+    void writeSettings(eWriteStream &dst) const;
+    void readSettings(eReadStream &src);
     void writeBoundingBox(eWriteStream& dst) const;
     void readBoundingBox(eReadStream& src);
 
-    void writeBoxOrSoundXEV(const stdsptr<XevZipFileSaver>& xevFileSaver,
-                            const RuntimeIdToWriteId& objListIdConv,
-                            const QString& path) const;
-    void readBoxOrSoundXEV(XevReadBoxesHandler& boxReadHandler,
-                           ZipFileLoader &fileLoader, const QString &path,
-                           const RuntimeIdToWriteId& objListIdConv);
+    void writeBoxOrSoundXEV(const stdsptr<XevZipFileSaver> &xevFileSaver,
+                            const RuntimeIdToWriteId &objListIdConv,
+                            const QString &path) const;
+    void readBoxOrSoundXEV(XevReadBoxesHandler &boxReadHandler,
+                           ZipFileLoader &fileLoader,
+                           const QString &path,
+                           const RuntimeIdToWriteId &objListIdConv);
 
-    bool anim_prevRelFrameWithKey(const int relFrame, int &prevRelFrame);
-    bool anim_nextRelFrameWithKey(const int relFrame, int &nextRelFrame);
+    bool anim_prevRelFrameWithKey(const int relFrame,
+                                  int &prevRelFrame);
+    bool anim_nextRelFrameWithKey(const int relFrame,
+                                  int &nextRelFrame);
 
     void shiftAllPointsForAllKeys(const int by);
     void revertAllPointsForAllKeys();
@@ -472,16 +543,19 @@ public:
     void flipSelectedBoxesHorizontally();
     void flipSelectedBoxesVertically();
     int getByteCountPerFrame();
-    int getMaxPreviewFrame(const int minFrame, const int maxFrame);
+    int getMaxPreviewFrame(const int minFrame,
+                           const int maxFrame);
     void selectedPathsCombine();
     void selectedPathsBreakApart();
     void invertSelectionAction();
 
-    bool getRasterEffectsVisible() const {
+    bool getRasterEffectsVisible() const
+    {
         return mRasterEffectsVisible;
     }
 
-    bool getPathEffectsVisible() const {
+    bool getPathEffectsVisible() const
+    {
         return mPathEffectsVisible;
     }
 
@@ -526,55 +600,67 @@ public:
 
     void setCurrentGroupParentAsCurrentGroup();
 
-    bool hasValidPaintTarget() const {
+    bool hasValidPaintTarget() const
+    {
         return mPaintTarget.isValid();
     }
 
     void queTasks();
 
-    void setMinFrameUseRange(const int min) {
+    void setMinFrameUseRange(const int min)
+    {
         mSceneFramesHandler.setMinUseRange(min);
     }
 
-    void setMaxFrameUseRange(const int max) {
+    void setMaxFrameUseRange(const int max)
+    {
         mSceneFramesHandler.setMaxUseRange(max);
     }
 
-    void clearUseRange() {
+    void clearUseRange()
+    {
         mSceneFramesHandler.clearUseRange();
     }
 
     //! Used for clip to canvas, when frames are not really changed.
-    void sceneFramesUpToDate() const {
-        for(const auto& cont : mSceneFramesHandler) {
+    void sceneFramesUpToDate() const
+    {
+        for (const auto &cont : mSceneFramesHandler) {
             const auto sceneCont = static_cast<SceneFrameContainer*>(cont.second.get());
             sceneCont->fBoxState = mStateId;
         }
     }
 
-    void addSelectedForGraph(const int widgetId, GraphAnimator* const anim);
-    bool removeSelectedForGraph(const int widgetId, GraphAnimator* const anim);
+    void addSelectedForGraph(const int widgetId,
+                             GraphAnimator* const anim);
+    bool removeSelectedForGraph(const int widgetId,
+                                GraphAnimator* const anim);
     const ConnContextObjList<GraphAnimator*>* getSelectedForGraph(const int widgetId) const;
     void addUndoRedo(const QString &name,
                      const stdfunc<void ()> &undo,
                      const stdfunc<void ()> &redo);
-    void pushUndoRedoName(const QString& name) const;
+    void pushUndoRedoName(const QString &name) const;
 
     UndoRedoStack* undoRedoStack() const
-    { return mUndoRedoStack.get(); }
+    {
+        return mUndoRedoStack.get();
+    }
 
-    const QList<qsptr<SceneBoundGradient>>& gradients() const
-    { return mGradients; }
+    const QList<qsptr<SceneBoundGradient>> &gradients() const
+    {
+        return mGradients;
+    }
     SceneBoundGradient * createNewGradient();
-    bool removeGradient(const qsptr<SceneBoundGradient>& gradient);
+    bool removeGradient(const qsptr<SceneBoundGradient> &gradient);
 
     SceneBoundGradient * getGradientWithRWId(const int rwId) const;
     SceneBoundGradient * getGradientWithDocumentId(const int id) const;
 
     void addNullObject(NullObject* const obj);
     void removeNullObject(NullObject* const obj);
+
 private:
-    void addGradient(const qsptr<SceneBoundGradient>& grad);
+    void addGradient(const qsptr<SceneBoundGradient> &grad);
 
     void readGradients(eReadStream &src);
     void writeGradients(eWriteStream &dst) const;
@@ -595,6 +681,7 @@ private:
 
     QList<qsptr<SceneBoundGradient>> mGradients;
     QList<NullObject*> mNullObjects;
+
 protected:
     Document& mDocument;
     bool mDrawnSinceQue = true;
@@ -680,8 +767,8 @@ protected:
 
     std::map<int, stdsptr<ConnContextObjList<GraphAnimator*>>> mSelectedForGraph;
 
-    void handleMovePointMousePressEvent(const eMouseEvent& e);
-    void handleMovePointMouseMove(const eMouseEvent& e);
+    void handleMovePointMousePressEvent(const eMouseEvent &e);
+    void handleMovePointMouseMove(const eMouseEvent &e);
 
     void handleMovePathMousePressEvent(const eMouseEvent &e);
     void handleMovePathMouseMove(const eMouseEvent &e);
