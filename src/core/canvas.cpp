@@ -1,18 +1,23 @@
-// enve - 2D animations software
-// Copyright (C) 2016-2020 Maurycy Liebner
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+# enve2d - https://github.com/enve2d
+#
+# Copyright (c) enve2d developers
+# Copyright (C) 2016-2020 Maurycy Liebner
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+*/
 
 #include "canvas.h"
 #include <QPainter>
@@ -39,18 +44,23 @@
 #include "ReadWrite/evformat.h"
 #include "eevent.h"
 #include "Boxes/nullobject.h"
+#include "simpletask.h"
 
 Canvas::Canvas(Document &document,
-               const int canvasWidth, const int canvasHeight,
-               const int frameCount, const qreal fps) :
-    mDocument(document), mPaintTarget(this) {
+               const int canvasWidth,
+               const int canvasHeight,
+               const int frameCount,
+               const qreal fps)
+    : mDocument(document)
+    , mPaintTarget(this)
+{
     SceneParentSelfAssign(this);
     connect(&mDocument, &Document::canvasModeSet,
             this, &Canvas::setCanvasMode);
     std::function<bool(int)> changeFrameFunc =
     [this](const int undoRedoFrame) {
-        if(mDocument.fActiveScene != this) return false;
-        if(undoRedoFrame != anim_getCurrentAbsFrame()) {
+        if (mDocument.fActiveScene != this) { return false; }
+        if (undoRedoFrame != anim_getCurrentAbsFrame()) {
             mDocument.setActiveSceneFrame(undoRedoFrame);
             return true;
         }
@@ -80,58 +90,69 @@ Canvas::Canvas(Document &document,
     //setCanvasMode(MOVE_PATH);
 }
 
-Canvas::~Canvas() {
+Canvas::~Canvas()
+{
     clearPointsSelection();
     clearBoxesSelection();
 }
 
-qreal Canvas::getResolution() const {
+qreal Canvas::getResolution() const
+{
     return mResolution;
 }
 
-void Canvas::setResolution(const qreal percent) {
+void Canvas::setResolution(const qreal percent)
+{
     mResolution = percent;
     prp_afterWholeInfluenceRangeChanged();
     updateAllBoxes(UpdateReason::userChange);
 }
 
-void Canvas::setCurrentGroupParentAsCurrentGroup() {
+void Canvas::setCurrentGroupParentAsCurrentGroup()
+{
     setCurrentBoxesGroup(mCurrentContainer->getParentGroup());
 }
 
-void Canvas::queTasks() {
-    if(Actions::sInstance->smoothChange() && mCurrentContainer) {
-        if(!mDrawnSinceQue) return;
+void Canvas::queTasks()
+{
+    if (Actions::sInstance->smoothChange() && mCurrentContainer) {
+        if (!mDrawnSinceQue) { return; }
         mCurrentContainer->queChildrenTasks();
     } else ContainerBox::queTasks();
     mDrawnSinceQue = false;
 }
 
-void Canvas::addSelectedForGraph(const int widgetId, GraphAnimator * const anim) {
+void Canvas::addSelectedForGraph(const int widgetId,
+                                 GraphAnimator* const anim)
+{
     const auto it = mSelectedForGraph.find(widgetId);
-    if(it == mSelectedForGraph.end()) {
+    if (it == mSelectedForGraph.end()) {
         const auto list = std::make_shared<ConnContextObjList<GraphAnimator*>>();
         mSelectedForGraph.insert({widgetId, list});
     }
-    auto& connCtxt = mSelectedForGraph[widgetId]->addObj(anim);
+    auto &connCtxt = mSelectedForGraph[widgetId]->addObj(anim);
     connCtxt << connect(anim, &QObject::destroyed,
                         this, [this, widgetId, anim]() {
         removeSelectedForGraph(widgetId, anim);
     });
 }
 
-bool Canvas::removeSelectedForGraph(const int widgetId, GraphAnimator * const anim) {
+bool Canvas::removeSelectedForGraph(const int widgetId,
+                                    GraphAnimator* const anim)
+{
     return mSelectedForGraph[widgetId]->removeObj(anim);
 }
 
-const ConnContextObjList<GraphAnimator*>* Canvas::getSelectedForGraph(const int widgetId) const {
+const ConnContextObjList<GraphAnimator*>* Canvas::getSelectedForGraph(const int widgetId) const
+{
     const auto it = mSelectedForGraph.find(widgetId);
-    if(it == mSelectedForGraph.end()) return nullptr;
+    if (it == mSelectedForGraph.end()) { return nullptr; }
     return it->second.get();
 }
 
-void Canvas::setCurrentBoxesGroup(ContainerBox * const group) {
-    if(mCurrentContainer) {
+void Canvas::setCurrentBoxesGroup(ContainerBox* const group)
+{
+    if (mCurrentContainer) {
         mCurrentContainer->setIsCurrentGroup_k(false);
     }
     clearBoxesSelection();
@@ -144,39 +165,47 @@ void Canvas::setCurrentBoxesGroup(ContainerBox * const group) {
     emit currentContainerSet(group);
 }
 
-void Canvas::updateHoveredBox(const eMouseEvent& e) {
+void Canvas::updateHoveredBox(const eMouseEvent &e)
+{
     mHoveredBox = mCurrentContainer->getBoxAt(e.fPos);
 }
 
-void Canvas::updateHoveredPoint(const eMouseEvent& e) {
+void Canvas::updateHoveredPoint(const eMouseEvent &e)
+{
     mHoveredPoint_d = getPointAtAbsPos(e.fPos, mCurrentMode, 1/e.fScale);
 }
 
-void Canvas::updateHoveredEdge(const eMouseEvent& e) {
-    if(mCurrentMode != CanvasMode::pointTransform || mHoveredPoint_d)
+void Canvas::updateHoveredEdge(const eMouseEvent &e)
+{
+    if (mCurrentMode != CanvasMode::pointTransform || mHoveredPoint_d) {
         return mHoveredNormalSegment.clear();
+    }
     mHoveredNormalSegment = getSegment(e);
-    if(mHoveredNormalSegment.isValid())
+    if (mHoveredNormalSegment.isValid()) {
         mHoveredNormalSegment.generateSkPath();
+    }
 }
 
-void Canvas::clearHovered() {
+void Canvas::clearHovered()
+{
     mHoveredBox.clear();
     mHoveredPoint_d.clear();
     mHoveredNormalSegment.clear();
 }
 
-bool Canvas::getPivotLocal() const {
+bool Canvas::getPivotLocal() const
+{
     return mDocument.fLocalPivot;
 }
 
-void Canvas::updateHovered(const eMouseEvent& e) {
+void Canvas::updateHovered(const eMouseEvent &e)
+{
     updateHoveredPoint(e);
     updateHoveredEdge(e);
     updateHoveredBox(e);
 }
 
-void drawTransparencyMesh(SkCanvas * const canvas,
+void drawTransparencyMesh(SkCanvas* const canvas,
                           const SkRect &drawRect)
 {
     SkPaint paint;
@@ -197,7 +226,7 @@ void drawTransparencyMesh(SkCanvas * const canvas,
 }
 
 #include "efiltersettings.h"
-void Canvas::renderSk(SkCanvas * const canvas,
+void Canvas::renderSk(SkCanvas* const canvas,
                       const QRect& drawRect,
                       const QMatrix& viewTrans,
                       const bool mouseGrabbing) {
@@ -492,8 +521,9 @@ void Canvas::prp_afterChangedAbsRange(const FrameRange &range, const bool clip) 
     }
 }
 
-void Canvas::saveSceneSVG(SvgExporter& exp) const {
-    auto& svg = exp.svg();
+void Canvas::saveSceneSVG(SvgExporter& exp) const
+{
+    auto &svg = exp.svg();
     svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
     svg.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
 
@@ -501,16 +531,16 @@ void Canvas::saveSceneSVG(SvgExporter& exp) const {
                          arg(mWidth).arg(mHeight);
     svg.setAttribute("viewBox", viewBox);
 
-    if(exp.fFixedSize) {
+    if (exp.fFixedSize) {
         svg.setAttribute("width", mWidth);
         svg.setAttribute("height", mHeight);
     }
 
-    for(const auto& grad : mGradients) {
+    for (const auto &grad : mGradients) {
         grad->saveSVG(exp);
     }
 
-    if(exp.fBackground) {
+    if (exp.fBackground) {
         auto bg = exp.createElement("rect");
         bg.setAttribute("width", mWidth);
         bg.setAttribute("height", mHeight);
@@ -524,62 +554,73 @@ void Canvas::saveSceneSVG(SvgExporter& exp) const {
     task->queTask();
 }
 
-qsptr<BoundingBox> Canvas::createLink(const bool inner) {
+qsptr<BoundingBox> Canvas::createLink(const bool inner)
+{
     return enve::make_shared<InternalLinkCanvas>(this, inner);
 }
 
-void Canvas::schedulePivotUpdate() {
-    if(mTransMode == TransformMode::rotate ||
-            mTransMode == TransformMode::scale ||
-       mRotPivot->isSelected()) return;
+void Canvas::schedulePivotUpdate()
+{
+    if (mTransMode == TransformMode::rotate ||
+        mTransMode == TransformMode::scale ||
+        mRotPivot->isSelected()) { return; }
     mPivotUpdateNeeded = true;
 }
 
-void Canvas::updatePivotIfNeeded() {
-    if(mPivotUpdateNeeded) {
+void Canvas::updatePivotIfNeeded()
+{
+    if (mPivotUpdateNeeded) {
         mPivotUpdateNeeded = false;
         updatePivot();
     }
 }
 
-void Canvas::makePointCtrlsSymmetric() {
+void Canvas::makePointCtrlsSymmetric()
+{
     prp_pushUndoRedoName("Make Nodes Symmetric");
     setPointCtrlsMode(CtrlsMode::symmetric);
 }
 
-void Canvas::makePointCtrlsSmooth() {
+void Canvas::makePointCtrlsSmooth()
+{
     prp_pushUndoRedoName("Make Nodes Smooth");
     setPointCtrlsMode(CtrlsMode::smooth);
 }
 
-void Canvas::makePointCtrlsCorner() {
+void Canvas::makePointCtrlsCorner()
+{
     prp_pushUndoRedoName("Make Nodes Corner");
     setPointCtrlsMode(CtrlsMode::corner);
 }
 
-void Canvas::newEmptyPaintFrameAction() {
+void Canvas::newEmptyPaintFrameAction()
+{
     if(mPaintTarget.isValid()) mPaintTarget.newEmptyFrame();
 }
 
-void Canvas::moveSecondSelectionPoint(const QPointF &pos) {
+void Canvas::moveSecondSelectionPoint(const QPointF &pos)
+{
     mSelectionRect.setBottomRight(pos);
 }
 
-void Canvas::startSelectionAtPoint(const QPointF &pos) {
+void Canvas::startSelectionAtPoint(const QPointF &pos)
+{
     mSelecting = true;
     mSelectionRect.setTopLeft(pos);
     mSelectionRect.setBottomRight(pos);
 }
 
-void Canvas::updatePivot() {
-    if(mCurrentMode == CanvasMode::pointTransform) {
+void Canvas::updatePivot()
+{
+    if (mCurrentMode == CanvasMode::pointTransform) {
         mRotPivot->setAbsolutePos(getSelectedPointsAbsPivotPos());
-    } else if(mCurrentMode == CanvasMode::boxTransform) {
+    } else if (mCurrentMode == CanvasMode::boxTransform) {
         mRotPivot->setAbsolutePos(getSelectedBoxesAbsPivotPos());
     }
 }
 
-void Canvas::setCanvasMode(const CanvasMode mode) {
+void Canvas::setCanvasMode(const CanvasMode mode)
+{
     mCurrentMode = mode;
     mSelecting = false;
     mStylusDrawing = false;
@@ -590,122 +631,134 @@ void Canvas::setCanvasMode(const CanvasMode mode) {
     updatePaintBox();
 }
 
-void Canvas::updatePaintBox() {
+void Canvas::updatePaintBox()
+{
     mPaintTarget.setPaintBox(nullptr);
-    if(mCurrentMode != CanvasMode::paint) return;
-    for(int i = mSelectedBoxes.count() - 1; i >= 0; i--) {
+    if (mCurrentMode != CanvasMode::paint) { return; }
+    for (int i = mSelectedBoxes.count() - 1; i >= 0; i--) {
         const auto& iBox = mSelectedBoxes.at(i);
-        if(enve_cast<PaintBox*>(iBox)) {
+        if (enve_cast<PaintBox*>(iBox)) {
             mPaintTarget.setPaintBox(static_cast<PaintBox*>(iBox));
             break;
         }
     }
 }
 
-bool Canvas::handlePaintModeKeyPress(const eKeyEvent &e) {
-    if(mCurrentMode != CanvasMode::paint) return false;
-    if(e.fKey == Qt::Key_N && mPaintTarget.isValid()) {
+bool Canvas::handlePaintModeKeyPress(const eKeyEvent &e)
+{
+    if (mCurrentMode != CanvasMode::paint) { return false; }
+    if (e.fKey == Qt::Key_N && mPaintTarget.isValid()) {
         newEmptyPaintFrameAction();
-    } else return false;
+    } else { return false; }
     return true;
 }
 
-bool Canvas::handleModifierChange(const eKeyEvent &e) {
-    if(mCurrentMode == CanvasMode::pointTransform) {
-        if(e.fKey == Qt::Key_Alt ||
-           e.fKey == Qt::Key_Shift ||
-           e.fKey == Qt::Key_Meta) {
+bool Canvas::handleModifierChange(const eKeyEvent &e)
+{
+    if (mCurrentMode == CanvasMode::pointTransform) {
+        if (e.fKey == Qt::Key_Alt ||
+            e.fKey == Qt::Key_Shift ||
+            e.fKey == Qt::Key_Meta) {
             handleMovePointMouseMove(e);
             return true;
-        } else if(e.fKey == Qt::Key_Control) return true;
+        } else if (e.fKey == Qt::Key_Control) { return true; }
     }
     return false;
 }
 
-bool Canvas::handleTransormationInputKeyEvent(const eKeyEvent &e) {
-    if(mValueInput.handleTransormationInputKeyEvent(e.fKey)) {
-        if(mTransMode == TransformMode::rotate) mValueInput.setupRotate();
+bool Canvas::handleTransormationInputKeyEvent(const eKeyEvent &e)
+{
+    if (mValueInput.handleTransormationInputKeyEvent(e.fKey)) {
+        if (mTransMode == TransformMode::rotate) { mValueInput.setupRotate(); }
         updateTransformation(e);
         mStartTransform = false;
-    } else if(e.fKey == Qt::Key_Escape) {
-        if(!e.fMouseGrabbing) return false;
+    } else if (e.fKey == Qt::Key_Escape) {
+        if (!e.fMouseGrabbing) { return false; }
         cancelCurrentTransform();
         e.fReleaseMouse();
-    } else if(e.fKey == Qt::Key_Return ||
-              e.fKey == Qt::Key_Enter) {
+    } else if (e.fKey == Qt::Key_Return ||
+               e.fKey == Qt::Key_Enter) {
         handleLeftMouseRelease(e);
-    } else if(e.fKey == Qt::Key_X) {
-        if(e.fAutorepeat) return false;
+    } else if (e.fKey == Qt::Key_X) {
+        if (e.fAutorepeat) { return false; }
         mValueInput.switchXOnlyMode();
         updateTransformation(e);
-    } else if(e.fKey == Qt::Key_Y) {
-        if(e.fAutorepeat) return false;
+    } else if (e.fKey == Qt::Key_Y) {
+        if (e.fAutorepeat) { return false; }
         mValueInput.switchYOnlyMode();
         updateTransformation(e);
-    } else return false;
+    } else { return false; }
     return true;
 }
 
-void Canvas::deleteAction() {
-    if(mCurrentMode == CanvasMode::pointTransform) {
+void Canvas::deleteAction()
+{
+    if (mCurrentMode == CanvasMode::pointTransform) {
         removeSelectedPointsAndClearList();
-    } else if(mCurrentMode == CanvasMode::boxTransform) {
+    } else if (mCurrentMode == CanvasMode::boxTransform) {
         removeSelectedBoxesAndClearList();
     }
 }
 
-void Canvas::copyAction() {
-    if(mSelectedBoxes.isEmpty()) return;
+void Canvas::copyAction()
+{
+    if (mSelectedBoxes.isEmpty()) { return; }
     const auto container = enve::make_shared<BoxesClipboard>(mSelectedBoxes.getList());
     Document::sInstance->replaceClipboard(container);
 }
 
-void Canvas::pasteAction() {
+void Canvas::pasteAction()
+{
     const auto container = Document::sInstance->getBoxesClipboard();
-    if(!container) return;
+    if (!container) { return; }
     clearBoxesSelection();
     container->pasteTo(mCurrentContainer);
 }
 
-void Canvas::cutAction() {
-    if(mSelectedBoxes.isEmpty()) return;
+void Canvas::cutAction()
+{
+    if (mSelectedBoxes.isEmpty()) { return; }
     copyAction();
     deleteAction();
 }
 
-void Canvas::duplicateAction() {
+void Canvas::duplicateAction()
+{
     copyAction();
     pasteAction();
 }
 
-void Canvas::selectAllAction() {
-    if(mCurrentMode == CanvasMode::pointTransform) {
+void Canvas::selectAllAction()
+{
+    if (mCurrentMode == CanvasMode::pointTransform) {
         selectAllPointsAction();
     } else {//if(mCurrentMode == MOVE_PATH) {
         selectAllBoxesFromBoxesGroup();
     }
 }
 
-void Canvas::invertSelectionAction() {
-    if(mCurrentMode == CanvasMode::pointTransform) {
+void Canvas::invertSelectionAction()
+{
+    if (mCurrentMode == CanvasMode::pointTransform) {
         QList<MovablePoint*> selectedPts = mSelectedPoints_d;
         selectAllPointsAction();
-        for(const auto& pt : selectedPts) removePointFromSelection(pt);
+        for (const auto &pt : selectedPts) { removePointFromSelection(pt); }
     } else {//if(mCurrentMode == MOVE_PATH) {
         QList<BoundingBox*> boxes = mSelectedBoxes.getList();
         selectAllBoxesFromBoxesGroup();
-        for(const auto& box : boxes) removeBoxFromSelection(box);
+        for (const auto &box : boxes) { removeBoxFromSelection(box); }
     }
 }
 
-void Canvas::anim_setAbsFrame(const int frame) {
-    if(frame == anim_getCurrentAbsFrame()) return;
+void Canvas::anim_setAbsFrame(const int frame)
+{
+    if (frame == anim_getCurrentAbsFrame()) { return; }
     ContainerBox::anim_setAbsFrame(frame);
     const int newRelFrame = anim_getCurrentRelFrame();
 
     const auto cont = mSceneFramesHandler.atFrame<SceneFrameContainer>(newRelFrame);
-    if(cont) {
-        if(cont->storesDataInMemory()) {
+    if (cont) {
+        if (cont->storesDataInMemory()) {
             setSceneFrame(cont->ref<SceneFrameContainer>());
         } else {
             setLoadingSceneFrame(cont->ref<SceneFrameContainer>());
@@ -718,14 +771,15 @@ void Canvas::anim_setAbsFrame(const int frame) {
 
     mUndoRedoStack->setFrame(frame);
 
-    if(mCurrentMode == CanvasMode::paint) mPaintTarget.setupOnionSkin();
+    if (mCurrentMode == CanvasMode::paint) { mPaintTarget.setupOnionSkin(); }
     emit currentFrameChanged(frame);
 
     schedulePivotUpdate();
 }
 
-void Canvas::clearSelectionAction() {
-    if(mCurrentMode == CanvasMode::pointTransform) {
+void Canvas::clearSelectionAction()
+{
+    if (mCurrentMode == CanvasMode::pointTransform) {
         clearPointsSelection();
     } else {//if(mCurrentMode == MOVE_PATH) {
         clearPointsSelection();
@@ -733,28 +787,31 @@ void Canvas::clearSelectionAction() {
     }
 }
 
-void Canvas::clearParentForSelected() {
-    for(int i = 0; i < mSelectedBoxes.count(); i++) {
+void Canvas::clearParentForSelected()
+{
+    for (int i = 0; i < mSelectedBoxes.count(); i++) {
         mSelectedBoxes.at(i)->clearParent();
     }
 }
 
-void Canvas::setParentToLastSelected() {
-    if(mSelectedBoxes.count() > 1) {
+void Canvas::setParentToLastSelected()
+{
+    if (mSelectedBoxes.count() > 1) {
         const auto& lastBox = mSelectedBoxes.last();
         const auto trans = lastBox->getTransformAnimator();
-        for(int i = 0; i < mSelectedBoxes.count() - 1; i++) {
+        for (int i = 0; i < mSelectedBoxes.count() - 1; i++) {
             mSelectedBoxes.at(i)->setParentTransform(trans);
         }
     }
 }
 
-bool Canvas::startRotatingAction(const eKeyEvent &e) {
-    if(mCurrentMode != CanvasMode::boxTransform &&
-       mCurrentMode != CanvasMode::pointTransform) return false;
-    if(mSelectedBoxes.isEmpty()) return false;
-    if(mCurrentMode == CanvasMode::pointTransform) {
-        if(mSelectedPoints_d.isEmpty()) return false;
+bool Canvas::startRotatingAction(const eKeyEvent &e)
+{
+    if (mCurrentMode != CanvasMode::boxTransform &&
+        mCurrentMode != CanvasMode::pointTransform) { return false; }
+    if (mSelectedBoxes.isEmpty()) { return false; }
+    if (mCurrentMode == CanvasMode::pointTransform) {
+        if (mSelectedPoints_d.isEmpty()) { return false; }
     }
     mValueInput.clearAndDisableInput();
     mValueInput.setupRotate();
@@ -770,13 +827,14 @@ bool Canvas::startRotatingAction(const eKeyEvent &e) {
     return true;
 }
 
-bool Canvas::startScalingAction(const eKeyEvent &e) {
-    if(mCurrentMode != CanvasMode::boxTransform &&
-       mCurrentMode != CanvasMode::pointTransform) return false;
+bool Canvas::startScalingAction(const eKeyEvent &e)
+{
+    if (mCurrentMode != CanvasMode::boxTransform &&
+        mCurrentMode != CanvasMode::pointTransform) { return false; }
 
-    if(mSelectedBoxes.isEmpty()) return false;
-    if(mCurrentMode == CanvasMode::pointTransform) {
-        if(mSelectedPoints_d.isEmpty()) return false;
+    if (mSelectedBoxes.isEmpty()) { return false; }
+    if (mCurrentMode == CanvasMode::pointTransform) {
+        if (mSelectedPoints_d.isEmpty()) { return false; }
     }
     mValueInput.clearAndDisableInput();
     mValueInput.setupScale();
@@ -789,9 +847,10 @@ bool Canvas::startScalingAction(const eKeyEvent &e) {
     return true;
 }
 
-bool Canvas::startMovingAction(const eKeyEvent &e) {
-    if(mCurrentMode != CanvasMode::boxTransform &&
-       mCurrentMode != CanvasMode::pointTransform) return false;
+bool Canvas::startMovingAction(const eKeyEvent &e)
+{
+    if (mCurrentMode != CanvasMode::boxTransform &&
+        mCurrentMode != CanvasMode::pointTransform) { return false; }
     mValueInput.clearAndDisableInput();
     mValueInput.setupMove();
 
@@ -802,165 +861,206 @@ bool Canvas::startMovingAction(const eKeyEvent &e) {
     return true;
 }
 
-void Canvas::selectAllBoxesAction() {
+void Canvas::selectAllBoxesAction()
+{
     mCurrentContainer->selectAllBoxesFromBoxesGroup();
 }
 
-void Canvas::deselectAllBoxesAction() {
+void Canvas::deselectAllBoxesAction()
+{
     mCurrentContainer->deselectAllBoxesFromBoxesGroup();
 }
 
-void Canvas::selectAllPointsAction() {
+void Canvas::selectAllPointsAction()
+{
     const auto adder = [this](MovablePoint* const pt) {
         addPointToSelection(pt);
     };
-    for(const auto& box : mSelectedBoxes)
+    for (const auto& box : mSelectedBoxes) {
         box->selectAllCanvasPts(adder, mCurrentMode);
+    }
 }
 
-void Canvas::selectOnlyLastPressedBox() {
+void Canvas::selectOnlyLastPressedBox()
+{
     clearBoxesSelection();
-    if(mPressedBox) addBoxToSelection(mPressedBox);
+    if (mPressedBox) { addBoxToSelection(mPressedBox); }
 }
 
-void Canvas::selectOnlyLastPressedPoint() {
+void Canvas::selectOnlyLastPressedPoint()
+{
     clearPointsSelection();
-    if(mPressedPoint) addPointToSelection(mPressedPoint);
+    if (mPressedPoint) { addPointToSelection(mPressedPoint); }
 }
 
 bool Canvas::SWT_shouldBeVisible(const SWT_RulesCollection &rules,
                                  const bool parentSatisfies,
-                                 const bool parentMainTarget) const {
+                                 const bool parentMainTarget) const
+{
     Q_UNUSED(parentSatisfies)
     Q_UNUSED(parentMainTarget)
     const SWT_BoxRule rule = rules.fRule;
     const bool alwaysShowChildren = rules.fAlwaysShowChildren;
-    if(alwaysShowChildren) {
+    if (alwaysShowChildren) {
         return false;
     } else {
-        if(rules.fType == SWT_Type::sound) return false;
+        if (rules.fType == SWT_Type::sound) { return false; }
 
-        if(rule == SWT_BoxRule::all) {
+        if (rule == SWT_BoxRule::all) {
             return true;
-        } else if(rule == SWT_BoxRule::selected) {
+        } else if (rule == SWT_BoxRule::selected) {
             return false;
-        } else if(rule == SWT_BoxRule::animated) {
+        } else if (rule == SWT_BoxRule::animated) {
             return false;
-        } else if(rule == SWT_BoxRule::notAnimated) {
+        } else if (rule == SWT_BoxRule::notAnimated) {
             return false;
-        } else if(rule == SWT_BoxRule::visible) {
+        } else if (rule == SWT_BoxRule::visible) {
             return true;
-        } else if(rule == SWT_BoxRule::hidden) {
+        } else if (rule == SWT_BoxRule::hidden) {
             return false;
-        } else if(rule == SWT_BoxRule::locked) {
+        } else if (rule == SWT_BoxRule::locked) {
             return false;
-        } else if(rule == SWT_BoxRule::unlocked) {
+        } else if (rule == SWT_BoxRule::unlocked) {
             return true;
         }
     }
     return false;
 }
 
-int Canvas::getCurrentFrame() const {
+int Canvas::getCurrentFrame() const
+{
     return anim_getCurrentAbsFrame();
 }
 
-HddCachableCacheHandler &Canvas::getSoundCacheHandler() {
+HddCachableCacheHandler &Canvas::getSoundCacheHandler()
+{
     return mSoundComposition->getCacheHandler();
 }
 
-void Canvas::startDurationRectPosTransformForAllSelected() {
-    for(const auto& box : mSelectedBoxes)
+void Canvas::startDurationRectPosTransformForAllSelected()
+{
+    for (const auto &box : mSelectedBoxes) {
         box->startDurationRectPosTransform();
+    }
 }
 
-void Canvas::finishDurationRectPosTransformForAllSelected() {
-    for(const auto& box : mSelectedBoxes)
+void Canvas::finishDurationRectPosTransformForAllSelected()
+{
+    for (const auto &box : mSelectedBoxes) {
         box->finishDurationRectPosTransform();
+    }
 }
 
-void Canvas::cancelDurationRectPosTransformForAllSelected() {
-    for(const auto& box : mSelectedBoxes)
+void Canvas::cancelDurationRectPosTransformForAllSelected()
+{
+    for (const auto &box : mSelectedBoxes) {
         box->cancelDurationRectPosTransform();
+    }
 }
 
-void Canvas::moveDurationRectForAllSelected(const int dFrame) {
-    for(const auto& box : mSelectedBoxes)
+void Canvas::moveDurationRectForAllSelected(const int dFrame)
+{
+    for (const auto& box : mSelectedBoxes) {
         box->moveDurationRect(dFrame);
+    }
 }
 
-void Canvas::startMinFramePosTransformForAllSelected() {
-    for(const auto& box : mSelectedBoxes)
+void Canvas::startMinFramePosTransformForAllSelected()
+{
+    for (const auto& box : mSelectedBoxes) {
         box->startMinFramePosTransform();
+    }
 }
 
-void Canvas::finishMinFramePosTransformForAllSelected() {
-    for(const auto& box : mSelectedBoxes)
+void Canvas::finishMinFramePosTransformForAllSelected()
+{
+    for (const auto& box : mSelectedBoxes) {
         box->finishMinFramePosTransform();
+    }
 }
 
-void Canvas::cancelMinFramePosTransformForAllSelected() {
-    for(const auto& box : mSelectedBoxes)
+void Canvas::cancelMinFramePosTransformForAllSelected()
+{
+    for (const auto& box : mSelectedBoxes) {
         box->cancelMinFramePosTransform();
+    }
 }
 
-void Canvas::moveMinFrameForAllSelected(const int dFrame) {
-    for(const auto& box : mSelectedBoxes)
+void Canvas::moveMinFrameForAllSelected(const int dFrame)
+{
+    for (const auto& box : mSelectedBoxes) {
         box->moveMinFrame(dFrame);
+    }
 }
 
-void Canvas::startMaxFramePosTransformForAllSelected() {
-    for(const auto& box : mSelectedBoxes)
+void Canvas::startMaxFramePosTransformForAllSelected()
+{
+    for (const auto& box : mSelectedBoxes) {
         box->startMaxFramePosTransform();
+    }
 }
 
-void Canvas::finishMaxFramePosTransformForAllSelected() {
-    for(const auto& box : mSelectedBoxes)
+void Canvas::finishMaxFramePosTransformForAllSelected()
+{
+    for (const auto& box : mSelectedBoxes) {
         box->finishMaxFramePosTransform();
+    }
 }
 
 
-void Canvas::cancelMaxFramePosTransformForAllSelected() {
-    for(const auto& box : mSelectedBoxes)
+void Canvas::cancelMaxFramePosTransformForAllSelected()
+{
+    for (const auto& box : mSelectedBoxes) {
         box->cancelMaxFramePosTransform();
+    }
 }
 
-void Canvas::moveMaxFrameForAllSelected(const int dFrame) {
-    for(const auto& box : mSelectedBoxes)
+void Canvas::moveMaxFrameForAllSelected(const int dFrame)
+{
+    for (const auto& box : mSelectedBoxes) {
         box->moveMaxFrame(dFrame);
+    }
 }
 
-bool Canvas::newUndoRedoSet() {
+bool Canvas::newUndoRedoSet()
+{
     return mUndoRedoStack->newCollection();
 }
 
-void Canvas::undo() {
+void Canvas::undo()
+{
     mUndoRedoStack->undo();
 }
 
-void Canvas::redo() {
+void Canvas::redo()
+{
     mUndoRedoStack->redo();
 }
 
-UndoRedoStack::StackBlock Canvas::blockUndoRedo() {
+UndoRedoStack::StackBlock Canvas::blockUndoRedo()
+{
     return mUndoRedoStack->blockUndoRedo();
 }
 
 void Canvas::addUndoRedo(const QString& name,
                          const stdfunc<void()>& undo,
-                         const stdfunc<void()>& redo) {
+                         const stdfunc<void()>& redo)
+{
     mUndoRedoStack->addUndoRedo(name, undo, redo);
 }
 
-void Canvas::pushUndoRedoName(const QString& name) const {
+void Canvas::pushUndoRedoName(const QString& name) const
+{
     mUndoRedoStack->pushName(name);
 }
 
-SoundComposition *Canvas::getSoundComposition() {
+SoundComposition *Canvas::getSoundComposition()
+{
     return mSoundComposition.get();
 }
 
-void Canvas::writeSettings(eWriteStream& dst) const {
+void Canvas::writeSettings(eWriteStream& dst) const
+{
     dst << getCurrentFrame();
     dst << mClipToCanvasSize;
     dst << mWidth;
@@ -969,7 +1069,8 @@ void Canvas::writeSettings(eWriteStream& dst) const {
     dst << mRange;
 }
 
-void Canvas::readSettings(eReadStream& src) {
+void Canvas::readSettings(eReadStream& src)
+{
     int currFrame; src >> currFrame;
     src >> mClipToCanvasSize;
     src >> mWidth;
@@ -980,16 +1081,18 @@ void Canvas::readSettings(eReadStream& src) {
     anim_setAbsFrame(currFrame);
 }
 
-void Canvas::writeBoundingBox(eWriteStream& dst) const {
+void Canvas::writeBoundingBox(eWriteStream& dst) const
+{
     writeGradients(dst);
     ContainerBox::writeBoundingBox(dst);
     clearGradientRWIds();
 }
 
-void Canvas::readBoundingBox(eReadStream& src) {
-    if(src.evFileVersion() > 5) readGradients(src);
+void Canvas::readBoundingBox(eReadStream& src)
+{
+    if (src.evFileVersion() > 5) { readGradients(src); }
     ContainerBox::readBoundingBox(src);
-    if(src.evFileVersion() < EvFormat::readSceneSettingsBeforeContent) {
+    if (src.evFileVersion() < EvFormat::readSceneSettingsBeforeContent) {
         readSettings(src);
     }
     clearGradientRWIds();
@@ -997,7 +1100,8 @@ void Canvas::readBoundingBox(eReadStream& src) {
 
 void Canvas::writeBoxOrSoundXEV(const stdsptr<XevZipFileSaver>& xevFileSaver,
                                 const RuntimeIdToWriteId& objListIdConv,
-                                const QString& path) const {
+                                const QString& path) const
+{
     ContainerBox::writeBoxOrSoundXEV(xevFileSaver, objListIdConv, path);
     auto& fileSaver = xevFileSaver->fileSaver();
     fileSaver.processText(path + "gradients.xml",
@@ -1007,7 +1111,7 @@ void Canvas::writeBoxOrSoundXEV(const stdsptr<XevZipFileSaver>& xevFileSaver,
         int id = 0;
         const auto exp = enve::make_shared<XevExporter>(
                     doc, xevFileSaver, objListIdConv, path);
-        for(const auto &grad : mGradients) {
+        for (const auto &grad : mGradients) {
             auto gradient = grad->prp_writePropertyXEV(*exp);
             gradient.setAttribute("id", id++);
             gradients.appendChild(gradient);
@@ -1019,8 +1123,10 @@ void Canvas::writeBoxOrSoundXEV(const stdsptr<XevZipFileSaver>& xevFileSaver,
 }
 
 void Canvas::readBoxOrSoundXEV(XevReadBoxesHandler& boxReadHandler,
-                               ZipFileLoader &fileLoader, const QString &path,
-                               const RuntimeIdToWriteId& objListIdConv) {
+                               ZipFileLoader &fileLoader,
+                               const QString &path,
+                               const RuntimeIdToWriteId& objListIdConv)
+{
     ContainerBox::readBoxOrSoundXEV(boxReadHandler, fileLoader, path, objListIdConv);
     fileLoader.process(path + "gradients.xml",
                        [&](QIODevice* const src) {
@@ -1028,7 +1134,7 @@ void Canvas::readBoxOrSoundXEV(XevReadBoxesHandler& boxReadHandler,
         doc.setContent(src);
         const auto root = doc.firstChildElement("Gradients");
         const auto gradients = root.elementsByTagName("Gradient");
-        for(int i = 0; i < gradients.count(); i++) {
+        for (int i = 0; i < gradients.count(); i++) {
             const auto node = gradients.at(i);
             const auto ele = node.toElement();
             const XevImporter imp(boxReadHandler, fileLoader, objListIdConv, path);
@@ -1037,33 +1143,38 @@ void Canvas::readBoxOrSoundXEV(XevReadBoxesHandler& boxReadHandler,
     });
 }
 
-int Canvas::getByteCountPerFrame() {
+int Canvas::getByteCountPerFrame()
+{
     return qCeil(mWidth*mResolution)*qCeil(mHeight*mResolution)*4;
 }
 
-void Canvas::readGradients(eReadStream& src) {
+void Canvas::readGradients(eReadStream& src)
+{
     int nGrads; src >> nGrads;
-    for(int i = 0; i < nGrads; i++) {
+    for (int i = 0; i < nGrads; i++) {
         createNewGradient()->read(src);
     }
 }
 
-void Canvas::writeGradients(eWriteStream &dst) const {
+void Canvas::writeGradients(eWriteStream &dst) const
+{
     dst << mGradients.count();
     int id = 0;
-    for(const auto &grad : mGradients) {
+    for (const auto &grad : mGradients) {
         grad->write(id++, dst);
     }
 }
 
-SceneBoundGradient *Canvas::createNewGradient() {
+SceneBoundGradient *Canvas::createNewGradient()
+{
     prp_pushUndoRedoName("Create Gradient");
     const auto grad = enve::make_shared<SceneBoundGradient>(this);
     addGradient(grad);
     return grad.get();
 }
 
-void Canvas::addGradient(const qsptr<SceneBoundGradient>& grad) {
+void Canvas::addGradient(const qsptr<SceneBoundGradient>& grad)
+{
     prp_pushUndoRedoName("Add Gradient");
     mGradients.append(grad);
     emit gradientCreated(grad.get());
@@ -1079,9 +1190,10 @@ void Canvas::addGradient(const qsptr<SceneBoundGradient>& grad) {
     }
 }
 
-bool Canvas::removeGradient(const qsptr<SceneBoundGradient> &gradient) {
+bool Canvas::removeGradient(const qsptr<SceneBoundGradient> &gradient)
+{
     const auto guard = gradient;
-    if(mGradients.removeOne(gradient)) {
+    if (mGradients.removeOne(gradient)) {
         prp_pushUndoRedoName("Remove Gradient");
         {
             UndoRedo ur;
@@ -1100,32 +1212,37 @@ bool Canvas::removeGradient(const qsptr<SceneBoundGradient> &gradient) {
     return false;
 }
 
-SceneBoundGradient *Canvas::getGradientWithRWId(const int rwId) const {
-    for(const auto &grad : mGradients) {
-        if(grad->getReadWriteId() == rwId) return grad.get();
+SceneBoundGradient *Canvas::getGradientWithRWId(const int rwId) const
+{
+    for (const auto &grad : mGradients) {
+        if (grad->getReadWriteId() == rwId) { return grad.get(); }
     }
     return nullptr;
 }
 
-SceneBoundGradient *Canvas::getGradientWithDocumentId(const int id) const {
-    for(const auto &grad : mGradients) {
-        if(grad->getDocumentId() == id) return grad.get();
+SceneBoundGradient *Canvas::getGradientWithDocumentId(const int id) const
+{
+    for (const auto &grad : mGradients) {
+        if (grad->getDocumentId() == id) { return grad.get(); }
     }
     return nullptr;
 }
 
-void Canvas::addNullObject(NullObject* const obj) {
+void Canvas::addNullObject(NullObject* const obj)
+{
     mNullObjects.append(obj);
 }
 
-void Canvas::removeNullObject(NullObject* const obj) {
+void Canvas::removeNullObject(NullObject* const obj)
+{
     mNullObjects.removeOne(obj);
 }
 
-#include "simpletask.h"
-void Canvas::clearGradientRWIds() const {
+void Canvas::clearGradientRWIds() const
+{
     SimpleTask::sScheduleContexted(this, [this]() {
-        for(const auto &grad : mGradients)
+        for (const auto &grad : mGradients) {
             grad->clearReadWriteId();
+        }
     });
 }
