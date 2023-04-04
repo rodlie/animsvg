@@ -139,6 +139,10 @@ public:
 
     void toggleFillStrokeSettingsDockVisible()
     { mFillAndStrokeDockAct->toggle(); }
+
+    void readSettings();
+    void writeSettings();
+
 public:
     //void saveOutput(QString renderDest);
     //void renderOutput();

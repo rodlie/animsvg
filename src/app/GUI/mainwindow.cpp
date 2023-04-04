@@ -27,6 +27,7 @@
 #include <QMessageBox>
 #include <QAudioOutput>
 #include <QSpacerItem>
+#include <QSettings>
 
 #include "usagewidget.h"
 #include "GUI/ColorWidgets/colorsettingswidget.h"
@@ -169,6 +170,7 @@ MainWindow::MainWindow(Document& document,
 
     mFillStrokeSettingsDock = new CloseSignalingDockWidget(
                 tr("Fill and Stroke", "Dock"), this);
+    mFillStrokeSettingsDock->setObjectName(QString::fromUtf8("fillStrokeDockWidget"));
     //const auto fillStrokeSettingsScroll = new ScrollArea(this);
     mFillStrokeSettings = new FillStrokeSettingsWidget(mDocument, this);
     //fillStrokeSettingsScroll->setWidget(mFillStrokeSettings);
@@ -187,7 +189,8 @@ MainWindow::MainWindow(Document& document,
             mPaintColorWidget, &PaintColorWidget::setDisplayedColor);
 
     mTimelineDock = new CloseSignalingDockWidget(tr("Timeline", "Dock"), this);
-    //mTimelineDock->setTitleBarWidget(new QWidget());
+    mTimelineDock->setObjectName(QString::fromUtf8("timelineDockWidget"));
+    mTimelineDock->setTitleBarWidget(new QWidget());
     addDockWidget(Qt::BottomDockWidgetArea, mTimelineDock);
 
     mLayoutHandler = new LayoutHandler(mDocument, mAudioHandler, this);
@@ -196,6 +199,7 @@ MainWindow::MainWindow(Document& document,
 
     mBrushSettingsDock = new CloseSignalingDockWidget(
                 tr("Brush Settings", "Dock"), this);
+    mBrushSettingsDock->setObjectName(QString::fromUtf8("brushSettingsDockWidget"));
     /*eSizesUI::widget.add(mBrushSettingsDock, [this](const int size) {
         mBrushSettingsDock->setMinimumWidth(size*10);
         mBrushSettingsDock->setMaximumWidth(size*20);
@@ -215,8 +219,8 @@ MainWindow::MainWindow(Document& document,
     addDockWidget(Qt::LeftDockWidgetArea, mBrushSettingsDock);
     mBrushSettingsDock->hide();
 
-    mAlignDock = new CloseSignalingDockWidget(
-                tr("Align", "Dock"), this);
+    mAlignDock = new CloseSignalingDockWidget(tr("Align", "Dock"), this);
+    mAlignDock->setObjectName(QString::fromUtf8("alignDockWidget"));
 
     const auto alignWidget = new AlignWidget(this);
     connect(alignWidget, &AlignWidget::alignTriggered,
@@ -235,6 +239,7 @@ MainWindow::MainWindow(Document& document,
 
     mSelectedObjectDock = new CloseSignalingDockWidget(
                 tr("Selected Objects", "Dock"), this);
+    mSelectedObjectDock->setObjectName(QString::fromUtf8("selectedObjectDockWidget"));
     /*eSizesUI::widget.add(mSelectedObjectDock, [this](const int size) {
         mSelectedObjectDock->setMinimumWidth(size*10);
         mSelectedObjectDock->setMaximumWidth(size*20);
@@ -264,6 +269,7 @@ MainWindow::MainWindow(Document& document,
     addDockWidget(Qt::LeftDockWidgetArea, mSelectedObjectDock);
 
     mFilesDock = new CloseSignalingDockWidget(tr("Files", "Dock"), this);
+    mFilesDock->setObjectName(QString::fromUtf8("filesDockWidget"));
     /*eSizesUI::widget.add(mFilesDock, [this](const int size) {
         mFilesDock->setMinimumWidth(size*10);
         mFilesDock->setMaximumWidth(size*20);
@@ -303,11 +309,13 @@ MainWindow::MainWindow(Document& document,
     installEventFilter(this);
 
     openWelcomeDialog();
-    //showMaximized();
+
+    readSettings();
 }
 
 MainWindow::~MainWindow()
 {
+    writeSettings();
     sInstance = nullptr;
 //    mtaskExecutorThread->terminate();
 //    mtaskExecutorThread->quit();
@@ -928,6 +936,7 @@ void MainWindow::setupToolBar()
     mToolBar = new QToolBar(tr("Toolbar"), this);
     mToolBar->setIconSize(iconSize);
     mToolBar->setMovable(false);
+    mToolBar->setObjectName(QString::fromUtf8("toolbarWidget"));
 
     mToolbarActGroup = new QActionGroup(this);
 
@@ -1548,6 +1557,27 @@ bool MainWindow::processKeyEvent(QKeyEvent *event)
         return returnBool;
     }
     return false;
+}
+
+void MainWindow::readSettings()
+{
+    QSettings settings;
+    settings.beginGroup("ui");
+    restoreState(settings.value("state").toByteArray());
+    restoreGeometry(settings.value("geo").toByteArray());
+    bool isMax = settings.value("max", false).toBool();
+    settings.endGroup();
+    if (isMax) { showMaximized(); }
+}
+
+void MainWindow::writeSettings()
+{
+    QSettings settings;
+    settings.beginGroup("ui");
+    settings.setValue("state", saveState());
+    settings.setValue("geo", saveGeometry());
+    settings.setValue("max", isMaximized());
+    settings.endGroup();
 }
 
 bool MainWindow::isEnabled()
