@@ -6,9 +6,13 @@
 CentralWidget::CentralWidget(BookmarkedWidget *left,
                              QWidget *central,
                              BookmarkedWidget *right,
-                             QWidget *parent) :
-    QWidget(parent),
-    mLeft(left), mCentral(central), mRight(right) {
+                             QWidget *parent)
+    : QWidget(parent)
+    , mLeft(left)
+    , mCentral(central)
+    , mRight(right)
+{
+    setMinimumWidth(600);
     setContentsMargins(0, 0, 0, 0);
     central->setParent(this);
     left->setParent(this);
