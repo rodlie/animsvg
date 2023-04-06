@@ -20,6 +20,7 @@
 
 set -e -x
 
+CI=${CI:-0}
 APT=${APT:-0}
 PYSYM=${PYSYM:-0}
 
@@ -56,29 +57,41 @@ qtmultimedia5-dev \
 qttools5-dev-tools
 fi
 
-git submodule update -i --recursive
-
-CWD=`pwd`
+if [ "${CI}" = 1 ]; then
+    git submodule update -i --recursive
+fi
 
 if [ "${PYSYM}" = 1 ]; then
     sudo ln -sf /usr/bin/python2 /usr/bin/python
 fi
 
-cd ${CWD}/src/gperftools
-./autogen.sh
-./configure --disable-shared
-make -j2
+CWD=`pwd`
+MKJOBS=${MKJOBS:-4}
+COMMIT=`git rev-parse --short HEAD`
 
-cd ${CWD}/src/skia
-python tools/git-sync-deps || true
-bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=["-Wno-error"] target_os="linux" target_cpu="x64" skia_use_system_expat=false skia_use_system_freetype2=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_icu=false skia_use_system_harfbuzz=false'
-ninja -C out/build -j2 skia
+if [ ! -f "${CWD}/src/gperftools/.libs/libtcmalloc.a" ]; then
+    cd ${CWD}/src/gperftools
+    ./autogen.sh
+    ./configure --disable-shared
+    make -j${MKJOBS}
+fi
+
+if [ ! -f "${CWD}/src/skia/out/build/libskia.a" ]; then
+    cd ${CWD}/src/skia
+    python tools/git-sync-deps || true
+    bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=["-Wno-error"] target_os="linux" target_cpu="x64" skia_use_system_expat=false skia_use_system_freetype2=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_icu=false skia_use_system_harfbuzz=false'
+    ninja -C out/build -j${MKJOBS} skia
+fi
 
 cd ${CWD}
+rm -rf build || true
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr ..
-make -j2
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DENVE2D_GIT=${COMMIT} ..
+make -j${MKJOBS}
 make package
-make DESTDIR=`pwd`/enve2d install
-tree enve2d
+
+if [ "${CI}" = 1 ]; then
+    make DESTDIR=`pwd`/enve2d install
+    tree enve2d
+fi

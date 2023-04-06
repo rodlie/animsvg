@@ -24,6 +24,7 @@ CI=${CI:-0}
 CWD=`pwd`
 SDK=${SDK:-"/opt/enve2d"}
 MKJOBS=${MKJOBS:-2}
+COMMIT=`git rev-parse --short HEAD`
 
 QT=${QT:-"${SDK}/qt/5.12.12/clang_64"}
 
@@ -103,6 +104,7 @@ mkdir build
 cd build
 
 cmake \
+-DENVE2D_GIT=${COMMIT} \
 -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 \
 -DCMAKE_BUILD_TYPE=Release \
 -DCMAKE_PREFIX_PATH=${QT} \

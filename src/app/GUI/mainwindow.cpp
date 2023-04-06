@@ -869,6 +869,10 @@ void MainWindow::setupMenuBar()
         QMessageBox about;
         QString version = ENVE2D_VERSION;
         if (version.isEmpty()) { version = tr("N/A"); }
+        QString git = ENVE2D_GIT;
+        if (!git.isEmpty()) {
+            version.append(QString::fromUtf8(" <a href=\"https://github.com/enve2d/enve2d/commit/%1\">%1</a>").arg(git));
+        }
         about.setIconPixmap(QIcon::fromTheme("enve2d").pixmap(QSize(128, 128)));
         about.setWindowTitle(tr("About enve2d"));
         about.setTextFormat(Qt::RichText);
