@@ -863,24 +863,40 @@ void MainWindow::setupMenuBar()
     connect(mBrushColorBookmarksAction, &QAction::toggled,
             mCentralWidget, &CentralWidget::setSidesVisibilitySetting);
 
-    //const auto help = mMenuBar->addMenu(tr("Help", "MenuBar"));
+    const auto help = mMenuBar->addMenu(tr("Help", "MenuBar"));
 
-    /*help->addAction(tr("License", "MenuBar_Help"), this, [this]() {
-        if(EnveLicense::sInstance) {
-            delete EnveLicense::sInstance;
-        } else {
-            const auto license = new EnveLicense(this);
-            license->show();
-        }
-    });*/
-
-    mMenuBar->addSeparator();
-    /*mMenuBar->addAction(tr("Support enve", "MenuBar"), this, []() {
-        QDesktopServices::openUrl(QUrl("https://maurycyliebner.github.io/"));
-    });*/
+    help->addAction(tr("About enve2d", "MenuBar_Help"), this, []() {
+        QMessageBox about;
+        QString version = ENVE2D_VERSION;
+        if (version.isEmpty()) { version = tr("N/A"); }
+        about.setIconPixmap(QIcon::fromTheme("enve2d").pixmap(QSize(128, 128)));
+        about.setWindowTitle(tr("About enve2d"));
+        about.setTextFormat(Qt::RichText);
+        about.setText(QString::fromUtf8("<h1>enve2d</h1><h3>%2 %1</h3><h4>%3</h4>")
+                      .arg(version,
+                           tr("version"),
+                           tr("2D animation software for macOS and Linux.")));
+        about.setInformativeText(QString::fromUtf8("<p>"
+                                                   "&copy; enve2d <a href=\"https://github.com/enve2d/enve2d/graphs/contributors\">%1</a><br>"
+                                                   "&copy; 2016-2022 Maurycy Liebner"
+                                                   "</p>"
+                                                   "<p>%2</p><p>%3</p>")
+                                 .arg(tr("developers"),
+                                      tr("This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version."),
+                                      tr("This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.")));
+        about.exec();
+    });
+    help->addAction(tr("About Qt", "MenuBar_Help"), this, [this]() {
+        QMessageBox::aboutQt(this, tr("About Qt"));
+    });
+    help->addAction(tr("Support", "MenuBar_Help"), this, []() {
+        QDesktopServices::openUrl(QUrl::fromUserInput("https://github.com/enve2d/enve2d/issues"));
+    });
+    help->addAction(tr("Check for updates", "MenuBar_Help"), this, []() {
+        QDesktopServices::openUrl(QUrl::fromUserInput("https://github.com/enve2d/enve2d/releases/latest"));
+    });
 
     setMenuBar(mMenuBar);
-    //mMenuBar->setStyleSheet("QMenuBar { padding-top: 1px; }");
 }
 
 /*void MainWindow::openWelcomeDialog()
