@@ -44,6 +44,5 @@ QToolBar#animationDockWidget QAction:checked
 
 QToolBar#animationDockWidget
 {
-    border-radius: .25em;
     background-color: rgb(33, 33, 38);
 }

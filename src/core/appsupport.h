@@ -38,10 +38,11 @@ public:
     static void setupTheme();
     static QVariant getSettings(const QString &group,
                                 const QString &key,
-                                const QVariant &fallback);
+                                const QVariant &fallback = QVariant());
     static void setSettings(const QString &group,
                             const QString &key,
-                            const QVariant &value);
+                            const QVariant &value,
+                            bool append = false);
 };
 
 #endif // APPSUPPORT_H

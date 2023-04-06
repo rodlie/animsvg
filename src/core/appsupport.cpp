@@ -71,10 +71,25 @@ QVariant AppSupport::getSettings(const QString &group,
 
 void AppSupport::setSettings(const QString &group,
                              const QString &key,
-                             const QVariant &value)
+                             const QVariant &value,
+                             bool append)
 {
     QSettings settings;
     settings.beginGroup(group);
-    settings.setValue(key, value);
+    QVariant result;
+    if (append) {
+        QVariant orig = getSettings(group, key);
+        QMetaType::Type type = static_cast<QMetaType::Type>(orig.type());
+        if (!orig.isNull() && type == QMetaType::QStringList) {
+            QStringList list = orig.toStringList();
+            list.append(value.toString());
+            result = list;
+        } else if (!orig.isNull() && type == QMetaType::QString) {
+            QString text = orig.toString();
+            text.append(value.toString());
+            result = text;
+        } else { append = false; }
+    }
+    settings.setValue(key, append ? result : value);
     settings.endGroup();
 }

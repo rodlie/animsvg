@@ -1,18 +1,23 @@
-// enve - 2D animations software
-// Copyright (C) 2016-2020 Maurycy Liebner
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+# enve2d - https://github.com/enve2d
+#
+# Copyright (c) enve2d developers
+# Copyright (C) 2016-2020 Maurycy Liebner
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+*/
 
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
@@ -162,16 +167,18 @@ public:
     void importImageSequence();
     void importFile();
     void revert();
+
 protected:
     void lockFinished();
-    void resizeEvent(QResizeEvent* e);
-    void showEvent(QShowEvent* e);
-private:    
-    QWidget * mWelcomeDialog = nullptr;
+    void resizeEvent(QResizeEvent *e);
+    void showEvent(QShowEvent *e);
+
+private:
+    //QWidget * mWelcomeDialog = nullptr;
     CentralWidget * mCentralWidget = nullptr;
 
-    void openWelcomeDialog();
-    void closeWelcomeDialog();
+    //void openWelcomeDialog();
+    //void closeWelcomeDialog();
 
     eKeyFilter* mNumericFilter = eKeyFilter::sCreateNumberFilter(this);
     eKeyFilter* mLineFilter = eKeyFilter::sCreateLineFilter(this);
@@ -191,39 +198,9 @@ private:
 
     void updateRecentMenu();
 
-    void addRecentFile(const QString& recent) {
-        if(mRecentFiles.contains(recent))
-            mRecentFiles.removeOne(recent);
-        while(mRecentFiles.count() >= 11)
-            mRecentFiles.removeLast();
-        mRecentFiles.prepend(recent);
-        updateRecentMenu();
-        writeRecentFiles();
-    }
-
-    void readRecentFiles() {
-        QFile file(eSettings::sSettingsDir() + "/recent");
-        if(file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            QTextStream stream(&file);
-            while(!stream.atEnd()) {
-                const QString path = stream.readLine();
-                if(path.isEmpty()) continue;
-                //if(QFile(path).exists())
-                mRecentFiles.append(path);
-            }
-        }
-    }
-
-    void writeRecentFiles() {
-        QFile file(eSettings::sSettingsDir() + "/recent");
-        if(file.open(QIODevice::WriteOnly | QIODevice::Text |
-                     QIODevice::Truncate)) {
-            QTextStream stream(&file);
-            for(const auto& recent : mRecentFiles) {
-                stream << recent << endl;
-            }
-        }
-    }
+    void addRecentFile(const QString &recent);
+    void readRecentFiles();
+    void writeRecentFiles();
 
     QStringList mRecentFiles;
 

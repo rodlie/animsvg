@@ -1,18 +1,23 @@
-// enve - 2D animations software
-// Copyright (C) 2016-2020 Maurycy Liebner
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+# enve2d - https://github.com/enve2d
+#
+# Copyright (c) enve2d developers
+# Copyright (C) 2016-2020 Maurycy Liebner
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+*/
 
 #include "mainwindow.h"
 #include "canvas.h"
@@ -70,7 +75,7 @@
 #include "ColorWidgets/paintcolorwidget.h"
 #include "Dialogs/exportsvgdialog.h"
 #include "alignwidget.h"
-#include "welcomedialog.h"
+//#include "welcomedialog.h"
 #include "Boxes/textbox.h"
 #include "noshortcutaction.h"
 #include "efiltersettings.h"
@@ -116,8 +121,8 @@ MainWindow::MainWindow(Document& document,
             this, &MainWindow::setCurrentBox);
     connect(&mDocument, &Document::canvasModeSet,
             this, &MainWindow::updateCanvasModeButtonsChecked);
-    connect(&mDocument, &Document::sceneCreated,
-            this, &MainWindow::closeWelcomeDialog);
+    //connect(&mDocument, &Document::sceneCreated,
+            //this, &MainWindow::closeWelcomeDialog);
 
 
 
@@ -308,7 +313,8 @@ MainWindow::MainWindow(Document& document,
 
     installEventFilter(this);
 
-    openWelcomeDialog();
+    //openWelcomeDialog();
+    setCentralWidget(mCentralWidget);
 
     readSettings();
 }
@@ -875,7 +881,7 @@ void MainWindow::setupMenuBar()
     //mMenuBar->setStyleSheet("QMenuBar { padding-top: 1px; }");
 }
 
-void MainWindow::openWelcomeDialog()
+/*void MainWindow::openWelcomeDialog()
 {
     if (mWelcomeDialog) { return; }
     mWelcomeDialog = new WelcomeDialog(getRecentFiles(),
@@ -894,7 +900,7 @@ void MainWindow::closeWelcomeDialog()
         mWelcomeDialog = nullptr;
         setCentralWidget(mCentralWidget);
     });
-}
+}*/
 
 void MainWindow::addCanvasToRenderQue()
 {
@@ -1561,23 +1567,21 @@ bool MainWindow::processKeyEvent(QKeyEvent *event)
 
 void MainWindow::readSettings()
 {
-    QSettings settings;
-    settings.beginGroup("ui");
-    restoreState(settings.value("state").toByteArray());
-    restoreGeometry(settings.value("geo").toByteArray());
-    bool isMax = settings.value("max", false).toBool();
-    settings.endGroup();
+    restoreState(AppSupport::getSettings("ui",
+                                         "MainWindowState").toByteArray());
+    restoreGeometry(AppSupport::getSettings("ui",
+                                            "MainWindowGeometry").toByteArray());
+    bool isMax = AppSupport::getSettings("ui",
+                                         "MainWindowIsMaximized",
+                                         false).toBool();
     if (isMax) { showMaximized(); }
 }
 
 void MainWindow::writeSettings()
 {
-    QSettings settings;
-    settings.beginGroup("ui");
-    settings.setValue("state", saveState());
-    settings.setValue("geo", saveGeometry());
-    settings.setValue("max", isMaximized());
-    settings.endGroup();
+    AppSupport::setSettings("ui", "MainWindowState", saveState());
+    AppSupport::setSettings("ui", "MainWindowGeometry", saveGeometry());
+    AppSupport::setSettings("ui", "MainWindowIsMaximized", isMaximized());
 }
 
 bool MainWindow::isEnabled()
@@ -1601,14 +1605,16 @@ void MainWindow::clearAll()
 //    mClipboardContainers.clear();
     FilesHandler::sInstance->clear();
     //mBoxListWidget->clearAll();
-    openWelcomeDialog();
+    //openWelcomeDialog();
 }
 
 void MainWindow::updateTitle()
 {
     QString unsaved = mChangedSinceSaving ? " *" : "";
     QFileInfo info(mDocument.fEvFile);
-    setWindowTitle(QString("%1%2").arg(info.baseName(), unsaved));
+    QString file = info.baseName();
+    if (file.isEmpty()) { file = tr("Untitled"); }
+    setWindowTitle(QString("%1%2").arg(file, unsaved));
 }
 
 void MainWindow::openFile()
@@ -1827,14 +1833,37 @@ void MainWindow::showEvent(QShowEvent *e)
 void MainWindow::updateRecentMenu()
 {
     mRecentMenu->clear();
-    const auto homePath = QDir::homePath();
-    for (const auto& path : mRecentFiles) {
-        QString ttPath = path;
-        if (ttPath.left(homePath.count()) == homePath) {
-            ttPath = "~" + ttPath.mid(homePath.count());
-        }
-        mRecentMenu->addAction(path, [path, this]() {
+    for (const auto &path : mRecentFiles) {
+        QFileInfo info(path);
+        mRecentMenu->addAction(info.baseName(), [path, this]() {
             openFile(path);
         });
     }
+}
+
+void MainWindow::addRecentFile(const QString &recent)
+{
+    if (mRecentFiles.contains(recent)) {
+        mRecentFiles.removeOne(recent);
+    }
+    while (mRecentFiles.count() >= 11) {
+        mRecentFiles.removeLast();
+    }
+    mRecentFiles.prepend(recent);
+    updateRecentMenu();
+    writeRecentFiles();
+}
+
+void MainWindow::readRecentFiles()
+{
+    QStringList files = AppSupport::getSettings("files",
+                                                "recentSaved").toStringList();
+    for (const auto &file : files) { mRecentFiles.append(file); }
+}
+
+void MainWindow::writeRecentFiles()
+{
+    QStringList files;
+    for (const auto &file : mRecentFiles) { files.append(file); }
+    AppSupport::setSettings("files", "recentSaved", files);
 }

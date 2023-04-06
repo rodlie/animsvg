@@ -196,7 +196,7 @@ set(
     GUI/timelinewrappernode.cpp
     GUI/triggerlabel.cpp
     GUI/twocolumnlayout.cpp
-    GUI/welcomedialog.cpp
+    #GUI/welcomedialog.cpp
     GUI/widgetstack.cpp
     GUI/ColorWidgets/colorlabel.cpp
     GUI/ColorWidgets/colorsettingswidget.cpp
@@ -323,7 +323,7 @@ set(
     GUI/timelinewrappernode.h
     GUI/triggerlabel.h
     GUI/twocolumnlayout.h
-    GUI/welcomedialog.h
+    #GUI/welcomedialog.h
     GUI/widgetstack.h
     GUI/ColorWidgets/colorlabel.h
     GUI/ColorWidgets/colorsettingswidget.h
