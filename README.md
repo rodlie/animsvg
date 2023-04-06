@@ -8,10 +8,6 @@ See our issue [tracker](https://github.com/enve2d/enve2d/issues) or [forum](http
 
 * Minimum screen resolution of 1280 x 800 
 * OpenGL 3.3 compatible graphics card and driver
-* macOS High Sierra *(10.13)* or newer
-  * *Only Intel Mac's running macOS 10.13 to 12 are tested.*
-* Ubuntu 22.04 *(Jammy)* and compatible
-  * *Will build on other distros, but is not tested*
 
 ## Downloads
 
@@ -23,7 +19,7 @@ No releases are currently available.
 
 Snapshots are available for push or pull request on the main branch.
 
-* [Snapshots](https://github.com/enve2d/enve2d/actions/workflows/macos.yml) for macOS High Sierra *(10.13)* or newer
+* ~~[Snapshots](https://github.com/enve2d/enve2d/actions/workflows/macos.yml) for macOS High Sierra *(10.13)* or newer~~
 * [Snapshots](https://github.com/enve2d/enve2d/actions/workflows/ubuntu.yml) for Ubuntu 22.04 *(Jammy)* and compatible
 
 Select commit and scroll to end of page to download asset.
@@ -37,8 +33,6 @@ Select commit and scroll to end of page to download asset.
 Yes, this is a fork of [enve](https://github.com/MaurycyLiebner/enve). The upstream project has stalled and is not responding to issues and/or requests.
 
 We will continue the development under the name ``enve2d`` for the foreseeable future.
-
-This project is currently lead by [Ole-André Rodlie](https://github.com/rodlie) on behalf of NettStudio AS.
 
 # License
 

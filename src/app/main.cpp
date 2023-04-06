@@ -1,18 +1,23 @@
-// enve - 2D animations software
-// Copyright (C) 2016-2020 Maurycy Liebner
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+# enve2d - https://github.com/enve2d
+#
+# Copyright (c) enve2d developers
+# Copyright (c) 2016-2020 Maurycy Liebner
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+*/
 
 #include "GUI/mainwindow.h"
 #include <iostream>
@@ -90,15 +95,15 @@ void generateAlphaMesh(QPixmap& alphaMesh,
 
 int main(int argc, char *argv[]) {
     std::cout << "Entered main()" << std::endl;
-#ifdef Q_OS_WIN
-    SetProcessDPIAware(); // call before the main event loop
-#endif // Q_OS_WIN
+//#ifdef Q_OS_WIN
+//    SetProcessDPIAware(); // call before the main event loop
+//#endif // Q_OS_WIN
 
     QApplication::setApplicationDisplayName(QString::fromUtf8("enve2d"));
     QApplication::setApplicationName(QString::fromUtf8("enve2d"));
     QApplication::setOrganizationName(QString::fromUtf8("enve2d"));
-    QApplication::setOrganizationDomain(QString::fromUtf8("enve2d.github.io"));
-    QApplication::setApplicationVersion(ENVE_VERSION);
+    QApplication::setOrganizationDomain(QString::fromUtf8("enve2d.org"));
+    QApplication::setApplicationVersion(ENVE2D_VERSION);
 
     //QApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);

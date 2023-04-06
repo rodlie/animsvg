@@ -23,7 +23,7 @@ if(NOT PROJECT_VERSION_TWEAK)
     set(PROJECT_VERSION_TWEAK 0)
 endif()
 
-add_definitions(-DENVE_VERSION="${PROJECT_VERSION}")
+add_definitions(-DENVE2D_VERSION="${PROJECT_VERSION}")
 
 add_compile_options(-Wall -Wextra)
 if(CMAKE_BUILD_TYPE MATCHES "^(release|Release|RELEASE)$")

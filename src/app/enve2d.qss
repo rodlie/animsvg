@@ -18,6 +18,12 @@
 #
 */
 
+QStatusBar::item,
+QToolBar
+{
+    border: 0;
+}
+
 QWidget#welcomeDialog QPushButton#topButton,
 QWidget#welcomeDialog QPushButton#bottomButton,
 QWidget#welcomeDialog QPushButton#vmiddleButton
