@@ -162,7 +162,7 @@ MainWindow::MainWindow(Document& document,
         stylesheet.close();
     }
 
-    BoxSingleWidget::loadStaticPixmaps();
+    BoxSingleWidget::loadStaticPixmaps(); // TODO: remove
 
     BrushSelectionWidget::sPaintContext = BrushSelectionWidget::sCreateNewContext();
     BrushSelectionWidget::sOutlineContext = BrushSelectionWidget::sCreateNewContext();
@@ -368,10 +368,12 @@ void MainWindow::setupMenuBar()
                           this, &MainWindow::exportSVG);
     mFileMenu->addSeparator();
     mFileMenu->addAction(tr("Close", "MenuBar_File"),
-                         this, &MainWindow::closeProject);
+                         this, &MainWindow::closeProject,
+                         QKeySequence(tr("Ctrl+W")));
     mFileMenu->addSeparator();
     mFileMenu->addAction(tr("Exit", "MenuBar_File"),
-                         this, &MainWindow::close);
+                         this, &MainWindow::close,
+                         QKeySequence(tr("Ctrl+Q")));
 
     mEditMenu = mMenuBar->addMenu(tr("Edit", "MenuBar"));
 
@@ -451,6 +453,8 @@ void MainWindow::setupMenuBar()
 //    mSelectSameMenu->addAction("Stroke Color");
 //    mSelectSameMenu->addAction("Stroke Style");
 //    mSelectSameMenu->addAction("Object Type");
+
+    mViewMenu = mMenuBar->addMenu(tr("View", "MenuBar"));
 
     auto mToolsMenu = mMenuBar->addMenu(tr("Tools", "MenuBar"));
     mToolsMenu->addActions(mToolbarActGroup->actions());
@@ -641,8 +645,6 @@ void MainWindow::setupMenuBar()
                     tr("Scene Properties", "MenuBar_Scene"));
         mActions.sceneSettingsAction->connect(qAct);
     }
-
-    mViewMenu = mMenuBar->addMenu(tr("View", "MenuBar"));
 
     const auto zoomMenu = mViewMenu->addMenu(
                 tr("Zoom","MenuBar_View"));

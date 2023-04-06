@@ -112,7 +112,6 @@ int main(int argc, char *argv[]) {
     setDefaultFormat();
     std::cout << "Setup Default QSurfaceFormat" << std::endl;
     QApplication app(argc, argv);
-    app.setStyleSheet("QStatusBar::item, QToolBar { border: 0; }"); // TODO: move to qss
     setlocale(LC_NUMERIC, "C");
 
     AppSupport::setupTheme();
@@ -138,15 +137,15 @@ int main(int argc, char *argv[]) {
                        HardwareInfo::sGpuVendor());
 
     OS_FONT = QApplication::font();
-    eSizesUI::font.setEvaluator([&settings]() {
+    eSizesUI::font.setEvaluator([/*&settings*/]() {
         const auto fm = QFontMetrics(OS_FONT);
-        const qreal scaling = qBound(0.5, settings.fInterfaceScaling, 1.5);
+        const qreal scaling = qBound(0.5, /*settings.fInterfaceScaling*/1.0, 1.5);
         return qRound(fm.height()*scaling);
     });
     eSizesUI::widget.setEvaluator([]() {
         return eSizesUI::font.size()*4/3;
     });
-    QObject::connect(&eSizesUI::font, &SizeSetter::sizeChanged,
+    /*QObject::connect(&eSizesUI::font, &SizeSetter::sizeChanged,
                      &eSizesUI::widget, &SizeSetter::updateSize);
     eSizesUI::font.add(&app, [&app](const int size) {
         const auto fm = QFontMetrics(OS_FONT);
@@ -158,7 +157,7 @@ int main(int argc, char *argv[]) {
             font.setPixelSize(qRound(mult*OS_FONT.pixelSize()));
         }
         app.setFont(font);
-    });
+    });*/
 
     eSizesUI::widget.add(&eSizesUI::button, [](const int size) {
         eSizesUI::button.set(qRound(size*1.1));
