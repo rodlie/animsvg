@@ -75,12 +75,15 @@
 #include "ColorWidgets/paintcolorwidget.h"
 #include "Dialogs/exportsvgdialog.h"
 #include "alignwidget.h"
-//#include "welcomedialog.h"
+#include "welcomedialog.h"
 #include "Boxes/textbox.h"
 #include "noshortcutaction.h"
 #include "efiltersettings.h"
 #include "Settings/settingsdialog.h"
 #include "appsupport.h"
+
+#define ENVE2D_STACK_PROJECT 0
+#define ENVE2D_STACK_WELCOME 1
 
 MainWindow *MainWindow::sInstance = nullptr;
 
@@ -95,10 +98,13 @@ MainWindow::MainWindow(Document& document,
                        RenderHandler& renderHandler,
                        QWidget * const parent)
     : QMainWindow(parent)
-      , mDocument(document)
-      , mActions(actions)
-      , mAudioHandler(audioHandler)
-      , mRenderHandler(renderHandler)
+    , mWelcomeDialog(nullptr)
+    , mCentralWidget(nullptr)
+    , mStackWidget(nullptr)
+    , mDocument(document)
+    , mActions(actions)
+    , mAudioHandler(audioHandler)
+    , mRenderHandler(renderHandler)
 {
     Q_ASSERT(!sInstance);
     sInstance = this;
@@ -121,8 +127,8 @@ MainWindow::MainWindow(Document& document,
             this, &MainWindow::setCurrentBox);
     connect(&mDocument, &Document::canvasModeSet,
             this, &MainWindow::updateCanvasModeButtonsChecked);
-    //connect(&mDocument, &Document::sceneCreated,
-            //this, &MainWindow::closeWelcomeDialog);
+    connect(&mDocument, &Document::sceneCreated,
+            this, &MainWindow::closeWelcomeDialog);
 
 
 
@@ -313,8 +319,16 @@ MainWindow::MainWindow(Document& document,
 
     installEventFilter(this);
 
-    //openWelcomeDialog();
-    setCentralWidget(mCentralWidget);
+    mWelcomeDialog = new WelcomeDialog(getRecentFiles(),
+       [this]() { SceneSettingsDialog::sNewSceneDialog(mDocument, this); },
+       []() { MainWindow::sGetInstance()->openFile(); },
+       [](QString path) { MainWindow::sGetInstance()->openFile(path); },
+       this);
+
+    mStackWidget = new QStackedWidget(this);
+    mStackWidget->addWidget(mCentralWidget);
+    mStackWidget->addWidget(mWelcomeDialog);
+    setCentralWidget(mStackWidget);
 
     readSettings();
 }
@@ -866,17 +880,11 @@ void MainWindow::setupMenuBar()
     const auto help = mMenuBar->addMenu(tr("Help", "MenuBar"));
 
     help->addAction(tr("About enve2d", "MenuBar_Help"), this, [this]() {
-        QString version = ENVE2D_VERSION;
-        if (version.isEmpty()) { version = tr("N/A"); }
-        QString git = ENVE2D_GIT;
-        if (!git.isEmpty()) {
-            version.append(QString::fromUtf8(" <a href=\"https://github.com/enve2d/enve2d/commit/%1\">%1</a>").arg(git));
-        }
         QString aboutText = QString("<h1 style=\"font-weight: normal;\">enve2d</h1>"
                                     "<h3 style=\"font-weight: normal;\">%2 %1</h3>"
                                     "<p>%3 &copy; enve2d <a href=\"https://github.com/enve2d/enve2d/graphs/contributors\">%4</a>. %5.</p>"
                                     "<p style=\"font-size: small;\">%6</p>")
-                            .arg(version,
+                            .arg(AppSupport::getAppVersion(true),
                                  tr("version"),
                                  tr("Copyright"),
                                  tr("developers"),
@@ -897,26 +905,15 @@ void MainWindow::setupMenuBar()
     setMenuBar(mMenuBar);
 }
 
-/*void MainWindow::openWelcomeDialog()
+void MainWindow::openWelcomeDialog()
 {
-    if (mWelcomeDialog) { return; }
-    mWelcomeDialog = new WelcomeDialog(getRecentFiles(),
-       [this]() { SceneSettingsDialog::sNewSceneDialog(mDocument, this); },
-       []() { MainWindow::sGetInstance()->openFile(); },
-       [](QString path) { MainWindow::sGetInstance()->openFile(path); },
-       this);
-    takeCentralWidget();
-    setCentralWidget(mWelcomeDialog);
+    mStackWidget->setCurrentIndex(ENVE2D_STACK_WELCOME);
 }
 
 void MainWindow::closeWelcomeDialog()
 {
-    SimpleTask::sScheduleContexted(this, [this]() {
-        if (!mWelcomeDialog) { return; }
-        mWelcomeDialog = nullptr;
-        setCentralWidget(mCentralWidget);
-    });
-}*/
+    mStackWidget->setCurrentIndex(ENVE2D_STACK_PROJECT);
+}
 
 void MainWindow::addCanvasToRenderQue()
 {
@@ -1591,6 +1588,8 @@ void MainWindow::readSettings()
                                          "MainWindowIsMaximized",
                                          false).toBool();
     if (isMax) { showMaximized(); }
+
+    openWelcomeDialog();
 }
 
 void MainWindow::writeSettings()
@@ -1621,7 +1620,7 @@ void MainWindow::clearAll()
 //    mClipboardContainers.clear();
     FilesHandler::sInstance->clear();
     //mBoxListWidget->clearAll();
-    //openWelcomeDialog();
+    openWelcomeDialog();
 }
 
 void MainWindow::updateTitle()

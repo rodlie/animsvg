@@ -25,9 +25,6 @@ endif()
 
 add_definitions(-DENVE2D_VERSION="${PROJECT_VERSION}")
 
-set(ENVE2D_GIT "" CACHE STRING "enve2d git commit")
-add_definitions(-DENVE2D_GIT="${ENVE2D_GIT}")
-
 add_compile_options(-Wall -Wextra)
 if(CMAKE_BUILD_TYPE MATCHES "^(release|Release|RELEASE)$")
     add_definitions(-DQT_NO_DEBUG_OUTPUT)
@@ -199,7 +196,7 @@ set(
     GUI/timelinewrappernode.cpp
     GUI/triggerlabel.cpp
     GUI/twocolumnlayout.cpp
-    #GUI/welcomedialog.cpp
+    GUI/welcomedialog.cpp
     GUI/widgetstack.cpp
     GUI/ColorWidgets/colorlabel.cpp
     GUI/ColorWidgets/colorsettingswidget.cpp
@@ -326,7 +323,7 @@ set(
     GUI/timelinewrappernode.h
     GUI/triggerlabel.h
     GUI/twocolumnlayout.h
-    #GUI/welcomedialog.h
+    GUI/welcomedialog.h
     GUI/widgetstack.h
     GUI/ColorWidgets/colorlabel.h
     GUI/ColorWidgets/colorsettingswidget.h

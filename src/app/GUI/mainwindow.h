@@ -27,6 +27,8 @@
 #include <QComboBox>
 #include <QPushButton>
 #include <QActionGroup>
+#include <QStackedWidget>
+
 #include "undoredo.h"
 #include "Private/Tasks/taskscheduler.h"
 #include "effectsloader.h"
@@ -174,11 +176,12 @@ protected:
     void showEvent(QShowEvent *e);
 
 private:
-    //QWidget * mWelcomeDialog = nullptr;
-    CentralWidget * mCentralWidget = nullptr;
+    QWidget *mWelcomeDialog;
+    CentralWidget *mCentralWidget;
+    QStackedWidget *mStackWidget;
 
-    //void openWelcomeDialog();
-    //void closeWelcomeDialog();
+    void openWelcomeDialog();
+    void closeWelcomeDialog();
 
     eKeyFilter* mNumericFilter = eKeyFilter::sCreateNumberFilter(this);
     eKeyFilter* mLineFilter = eKeyFilter::sCreateLineFilter(this);

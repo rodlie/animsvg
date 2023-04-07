@@ -93,3 +93,17 @@ void AppSupport::setSettings(const QString &group,
     settings.setValue(key, append ? result : value);
     settings.endGroup();
 }
+
+const QString AppSupport::getAppVersion(bool html)
+{
+    QString version = ENVE2D_VERSION;
+    if (version.isEmpty()) { version = tr("N/A"); }
+    QString git;
+#ifdef ENVE2D_GIT
+    git = ENVE2D_GIT;
+#endif
+    if (!git.isEmpty()) {
+        version.append(html ? QString::fromUtf8(" <a href=\"https://github.com/enve2d/enve2d/commit/%1\">%1</a>").arg(git) : QString::fromUtf8(" %1").arg(git));
+    }
+    return version;
+}

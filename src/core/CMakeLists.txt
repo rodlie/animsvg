@@ -25,6 +25,9 @@ endif()
 
 add_definitions(-DENVE2D_VERSION="${PROJECT_VERSION}")
 
+set(ENVE2D_GIT "" CACHE STRING "enve2d git commit")
+add_definitions(-DENVE2D_GIT="${ENVE2D_GIT}")
+
 add_compile_options(-Wall -Wextra)
 if(CMAKE_BUILD_TYPE MATCHES "^(release|Release|RELEASE)$")
     add_definitions(-DQT_NO_DEBUG_OUTPUT)

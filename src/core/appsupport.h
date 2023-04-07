@@ -43,6 +43,7 @@ public:
                             const QString &key,
                             const QVariant &value,
                             bool append = false);
+    static const QString getAppVersion(bool html = false);
 };
 
 #endif // APPSUPPORT_H
