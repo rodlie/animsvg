@@ -21,10 +21,14 @@
 set -e -x
 
 CI=${CI:-0}
+SNAP=${SNAP:-0}
+REL=${REL:-0}
 CWD=`pwd`
 SDK=${SDK:-"/opt/enve2d"}
-MKJOBS=${MKJOBS:-2}
+MKJOBS=${MKJOBS:-4}
 COMMIT=`git rev-parse --short HEAD`
+VERSION=`cat ${CWD}/CMakeLists.txt | sed '/enve2dproject VERSION/!d;s/)//' | awk '{print $3}'`
+TIMESTAMP=${TIMESTAMP:-`date +%Y%m%d%H%M`}
 
 QT=${QT:-"${SDK}/qt/5.12.12/clang_64"}
 
@@ -120,4 +124,16 @@ make -j${MKJOBS}
 ${QT}/bin/macdeployqt src/app/enve2d.app
 mkdir dmg
 mv src/app/enve2d.app dmg/
-hdiutil create -volname "enve2d" -srcfolder dmg -ov -format UDBZ enve2d.dmg
+cp ${CWD}/LICENSE.md ${CWD}/README.md dmg/
+
+VOLNAME="enve2d"
+DMG="enve2d"
+if [ "${REL}" = 1 ]; then
+    VOLNAME="${VOLNAME} ${VERSION}"
+    DMG="${DMG}-${VERSION}-macOS"
+elif [ "${SNAP}" = 1 ]; then
+    VOLNAME="${VOLNAME} ${VERSION}-${COMMIT}"
+    DMG="${DMG}-${TIMESTAMP}-${VERSION}-${COMMIT}-macOS"
+fi
+
+hdiutil create -volname "${VOLNAME}" -srcfolder dmg -ov -format UDBZ ${DMG}.dmg

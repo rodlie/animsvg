@@ -14,4 +14,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build
-      run: CI=1 ./src/scripts/build_macos.sh
+      run: CI=1 MKJOBS=2 ./src/scripts/build_macos.sh
