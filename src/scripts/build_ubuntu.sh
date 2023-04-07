@@ -25,11 +25,13 @@ APT=${APT:-0}
 PYSYM=${PYSYM:-0}
 SNAP=${SNAP:-0}
 REL=${REL:-0}
+SKIA_SYNC=${SKIA_SYNC:-1}
 
 if [ "${APT}" = 1 ]; then
 sudo apt update -y
 sudo apt install -y \
 build-essential \
+libtool \
 autoconf \
 automake \
 cmake \
@@ -84,7 +86,9 @@ fi
 
 if [ ! -f "${CWD}/src/skia/out/build/libskia.a" ]; then
     cd ${CWD}/src/skia
-    python tools/git-sync-deps || true
+    if [ "${SKIA_SYNC}" = 1 ]; then
+        python tools/git-sync-deps || true
+    fi
     bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=["-Wno-error"] target_os="linux" target_cpu="x64" skia_use_system_expat=false skia_use_system_freetype2=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_icu=false skia_use_system_harfbuzz=false'
     ninja -C out/build -j${MKJOBS} skia
 fi

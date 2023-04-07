@@ -79,6 +79,7 @@ General instructions for building enve2d on Linux *(tested on Ubuntu Jammy)*.
 ```
 sudo apt install -y \
 build-essential \
+libtool \
 autoconf \
 automake \
 cmake \
