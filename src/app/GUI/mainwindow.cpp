@@ -865,35 +865,29 @@ void MainWindow::setupMenuBar()
 
     const auto help = mMenuBar->addMenu(tr("Help", "MenuBar"));
 
-    help->addAction(tr("About enve2d", "MenuBar_Help"), this, []() {
-        QMessageBox about;
+    help->addAction(tr("About enve2d", "MenuBar_Help"), this, [this]() {
         QString version = ENVE2D_VERSION;
         if (version.isEmpty()) { version = tr("N/A"); }
         QString git = ENVE2D_GIT;
         if (!git.isEmpty()) {
             version.append(QString::fromUtf8(" <a href=\"https://github.com/enve2d/enve2d/commit/%1\">%1</a>").arg(git));
         }
-        about.setIconPixmap(QIcon::fromTheme("enve2d").pixmap(QSize(128, 128)));
-        about.setWindowTitle(tr("About enve2d"));
-        about.setTextFormat(Qt::RichText);
-        about.setText(QString::fromUtf8("<h1>enve2d</h1><h3>%2 %1</h3><h4>%3</h4>")
-                      .arg(version,
-                           tr("version"),
-                           tr("2D animation software for macOS and Linux.")));
-        about.setInformativeText(QString::fromUtf8("<p>"
-                                                   "&copy; enve2d <a href=\"https://github.com/enve2d/enve2d/graphs/contributors\">%1</a><br>"
-                                                   "&copy; 2016-2022 Maurycy Liebner"
-                                                   "</p>"
-                                                   "<p>%2</p><p>%3</p>")
-                                 .arg(tr("developers"),
-                                      tr("This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version."),
-                                      tr("This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.")));
-        about.exec();
+        QString aboutText = QString("<h1 style=\"font-weight: normal;\">enve2d</h1>"
+                                    "<h3 style=\"font-weight: normal;\">%2 %1</h3>"
+                                    "<p>%3 &copy; enve2d <a href=\"https://github.com/enve2d/enve2d/graphs/contributors\">%4</a>. %5.</p>"
+                                    "<p style=\"font-size: small;\">%6</p>")
+                            .arg(version,
+                                 tr("version"),
+                                 tr("Copyright"),
+                                 tr("developers"),
+                                 tr("All rights reserved"),
+                                 tr("This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version."));
+        QMessageBox::about(this, tr("About"), aboutText);
     });
     help->addAction(tr("About Qt", "MenuBar_Help"), this, [this]() {
         QMessageBox::aboutQt(this, tr("About Qt"));
     });
-    help->addAction(tr("Support", "MenuBar_Help"), this, []() {
+    help->addAction(tr("Report issue", "MenuBar_Help"), this, []() {
         QDesktopServices::openUrl(QUrl::fromUserInput("https://github.com/enve2d/enve2d/issues"));
     });
     help->addAction(tr("Check for updates", "MenuBar_Help"), this, []() {
