@@ -17,14 +17,7 @@ No releases are currently available.
 
 ### Snapshots
 
-Snapshots are available for push or pull request on the main branch.
-
-* ~~[Snapshots](https://github.com/enve2d/enve2d/actions/workflows/macos.yml) for macOS High Sierra *(10.13)* or newer~~
-* [Snapshots](https://github.com/enve2d/enve2d/actions/workflows/ubuntu.yml) for Ubuntu 22.04 *(Jammy)* and compatible
-
-Select commit and scroll to end of page to download asset.
-
-*Only available if you are logged in (on GitHub), snapshots will expire within 90 days after commit that triggered the build.*
+Snapshots for selected platforms will soon be available.
 
 ## FAQ
 
@@ -50,6 +43,7 @@ Generic build instructions for macOS and Linux.
 
 ## Requirements
 
+* pkg-config
 * automake
 * autoconf
 * python *(v2)*

@@ -1,4 +1,4 @@
-name: Ubuntu Jammy
+name: Ubuntu
 
 on:
   push:
@@ -15,9 +15,3 @@ jobs:
     - uses: actions/checkout@v3
     - name: build
       run: APT=1 PYSYM=1 CI=1 MKJOBS=2 ./src/scripts/build_ubuntu.sh
-    - name: Artifact
-      run: sudo cp build/enve2d.deb /opt/
-    - uses: actions/upload-artifact@v2
-      with:
-        name: enve2d-${{github.sha}}-Ubuntu
-        path: /opt/enve2d.deb

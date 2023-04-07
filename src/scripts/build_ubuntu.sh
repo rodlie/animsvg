@@ -23,6 +23,8 @@ set -e -x
 CI=${CI:-0}
 APT=${APT:-0}
 PYSYM=${PYSYM:-0}
+SNAP=${SNAP:-0}
+REL=${REL:-0}
 
 if [ "${APT}" = 1 ]; then
 sudo apt update -y
@@ -68,6 +70,10 @@ fi
 CWD=`pwd`
 MKJOBS=${MKJOBS:-4}
 COMMIT=`git rev-parse --short HEAD`
+VERSION=`cat ${CWD}/CMakeLists.txt | sed '/enve2dproject VERSION/!d;s/)//' | awk '{print $3}'`
+TIMESTAMP=${TIMESTAMP:-`date +%Y%m%d%H%M`}
+DISTRO_ID=`cat /etc/os-release | sed '/^ID=/!d;s/ID=//;s/"//g'`
+DISTRO_VERSION=`cat /etc/os-release | sed '/^VERSION_ID=/!d;s/VERSION_ID=//;s/"//g'`
 
 if [ ! -f "${CWD}/src/gperftools/.libs/libtcmalloc.a" ]; then
     cd ${CWD}/src/gperftools
@@ -90,6 +96,12 @@ cd build
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DENVE2D_GIT=${COMMIT} ..
 make -j${MKJOBS}
 make package
+
+if [ "${REL}" = 1 ]; then
+    mv enve2d.deb enve2d-${VERSION}-${DISTRO_ID}-${DISTRO_VERSION}.deb
+elif [ "${SNAP}" = 1 ]; then
+    mv enve2d.deb enve2d-${TIMESTAMP}-${VERSION}-${COMMIT}-${DISTRO_ID}-${DISTRO_VERSION}.deb
+fi
 
 if [ "${CI}" = 1 ]; then
     make DESTDIR=`pwd`/enve2d install
