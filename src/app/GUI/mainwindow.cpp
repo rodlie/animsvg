@@ -879,22 +879,21 @@ void MainWindow::setupMenuBar()
 
     const auto help = mMenuBar->addMenu(tr("Help", "MenuBar"));
 
-    help->addAction(tr("About enve2d", "MenuBar_Help"), this, [this]() {
+    help->addAction(tr("About", "MenuBar_Help"), this, [this]() {
         QString aboutText = QString("<h1 style=\"font-weight: normal;\">enve2d</h1>"
                                     "<h3 style=\"font-weight: normal;\">%2 %1</h3>"
-                                    "<p>%3 &copy; enve2d <a href=\"https://github.com/enve2d/enve2d/graphs/contributors\">%4</a>. %5.</p>"
-                                    "<p style=\"font-size: small;\">%6</p>")
+                                    "<p>%3 &copy; enve2d <a href=\"https://github.com/enve2d/enve2d/graphs/contributors\">%4</a>.</p>"
+                                    "<p style=\"font-size: small;\">%5</p>")
                             .arg(AppSupport::getAppVersion(true),
                                  tr("version"),
                                  tr("Copyright"),
                                  tr("developers"),
-                                 tr("All rights reserved"),
                                  tr("This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version."));
         QMessageBox::about(this, tr("About"), aboutText);
     });
-    help->addAction(tr("About Qt", "MenuBar_Help"), this, [this]() {
+    /*help->addAction(tr("About Qt", "MenuBar_Help"), this, [this]() {
         QMessageBox::aboutQt(this, tr("About Qt"));
-    });
+    });*/
     help->addAction(tr("Report issue", "MenuBar_Help"), this, []() {
         QDesktopServices::openUrl(QUrl::fromUserInput("https://github.com/enve2d/enve2d/issues"));
     });

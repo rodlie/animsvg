@@ -1,6 +1,6 @@
 # enve2d
 
-2D animation software for macOS and Linux.
+2D animation software for Linux and macOS *(experimental)*.
 
 See our issue [tracker](https://github.com/enve2d/enve2d/issues) or [forum](https://github.com/enve2d/enve2d/discussions) for more information.
 

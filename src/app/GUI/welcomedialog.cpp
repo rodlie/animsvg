@@ -56,15 +56,15 @@ WelcomeDialog::WelcomeDialog(const QStringList &recentPaths,
     const auto sceneLay = new QVBoxLayout;
 
     const auto logoLabel = new QLabel(this);
-    int logoSize = 128;
-    logoLabel->setOpenExternalLinks(true);
+    int logoSize = 96;
+    logoLabel->setOpenExternalLinks(false);
     logoLabel->setMinimumWidth(logoSize*2);
     logoLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
     logoLabel->setText(QString::fromUtf8("<div style=\"margin: 0; padding: 0; text-align: center; font-weight: normal;\">"
                                          "<p style=\"margin: 0; padding: 0;\"><img src=\":/icons/hicolor/%2x%2/apps/enve2d.png\" width=\"%2\" height=\"%2\"></p>"
                                          "<h1 style=\"font-weight: normal; margin-top: 0; padding-top: 0;\">enve2d<br><span style=\"font-size: large;\">version %1</span></h1>"
                                          "</div>")
-                                        .arg(AppSupport::getAppVersion(true)).arg(logoSize));
+                                        .arg(AppSupport::getAppVersion(false)).arg(logoSize));
     sceneLay->addWidget(logoLabel);
 
     const auto buttonLay = new QHBoxLayout;

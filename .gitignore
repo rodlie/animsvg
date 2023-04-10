@@ -5,3 +5,10 @@ qscintilla
 quazip
 3rdparty
 .DS_Store
+*.tar
+*.zip
+*.tar.*
+*.dmg
+*.deb
+*.rpm
+*.exe
