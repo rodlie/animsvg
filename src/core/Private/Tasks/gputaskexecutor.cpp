@@ -60,7 +60,7 @@ void GpuTaskExecutor::initializeContext() {
     mInterface = GrGLMakeNativeInterface();
     if(!mInterface) RuntimeThrow("Failed to make native interface.");
     std::cout << "Created GrGLInterface" << std::endl;
-    const auto grContext = GrContext::MakeGL(mInterface);
+    const auto grContext = GrDirectContext::MakeGL(mInterface);
     if(!grContext) RuntimeThrow("Failed to make GrContext.");
     std::cout << "Created GrContext" << std::endl;
     GLuint textureSquareVAO;

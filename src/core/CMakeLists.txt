@@ -43,6 +43,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(PkgConfig)
 find_package(OpenMP)
+find_package(OpenGL REQUIRED)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
 find_package(
     Qt${QT_VERSION_MAJOR}
@@ -73,6 +74,10 @@ pkg_check_modules(AVCODEC REQUIRED libavcodec)
 pkg_check_modules(AVUTIL REQUIRED libavutil)
 pkg_check_modules(SWSCALE REQUIRED libswscale)
 pkg_check_modules(SWRESAMPLE REQUIRED libswresample)
+
+if(UNIX AND NOT APPLE)
+    pkg_check_modules(FC REQUIRED fontconfig)
+endif()
 
 add_definitions(-DCORE_LIBRARY)
 
@@ -813,6 +818,7 @@ target_link_libraries(
     Qt${QT_VERSION_MAJOR}::Qml
     Qt${QT_VERSION_MAJOR}::Xml
     Qt${QT_VERSION_MAJOR}::Svg
+    ${OPENGL_LIBRARIES}
     ${MYPAINT_LIBRARIES}
     ${QUAZIP_LIBRARIES}
     ${AVFORMAT_LIBRARIES}
@@ -823,6 +829,14 @@ target_link_libraries(
     skia
     fontconfig
 )
+
+if(UNIX AND NOT APPLE)
+    target_link_libraries(
+        ${PROJECT_NAME}
+        PRIVATE
+        ${FC_LIBRARIES}
+    )
+endif()
 
 if(OpenMP_CXX_FOUND)
     target_link_libraries(

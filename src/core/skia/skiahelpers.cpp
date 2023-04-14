@@ -169,7 +169,7 @@ void SkiaHelpers::forceLink() {
 
     FORCE_UNDEFINED_SYMBOL(SkOpBuilder::add, 0)
 
-    GrContext::MakeGL();
+    GrDirectContext::MakeGL();
     GrGLMakeNativeInterface()->validate();
 }
 

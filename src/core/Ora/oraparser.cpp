@@ -182,7 +182,7 @@ void loadLayerSourcePNG(OraLayerPNG_Sk& layer, ZipFileLoader& fileProcessor) {
     fileProcessor.process(layer.fSource, [&](QIODevice* const src) {
         const QByteArray qData = src->readAll();
         const auto data = SkData::MakeWithoutCopy(qData.data(), qData.size());
-        layer.fImage = SkImage::DecodeToRaster(data);
+        layer.fImage = SkImage::MakeFromEncoded(data);
     });
 }
 
@@ -245,7 +245,7 @@ sk_sp<SkImage> ImportORA::loadContainedMerged(const QString &filename) {
     fileProcessor.process("mergedimage.png", [&](QIODevice* const src) {
         const QByteArray qData = src->readAll();
         const auto data = SkData::MakeWithoutCopy(qData.data(), qData.size());
-        result = SkImage::DecodeToRaster(data);
+        result = SkImage::MakeFromEncoded(data);
     });
     return result;
 }

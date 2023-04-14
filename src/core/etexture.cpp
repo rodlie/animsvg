@@ -20,7 +20,7 @@ void eTexture::bind(QGL33 * const gl) const {
     gl->glBindTexture(GL_TEXTURE_2D, fId);
 }
 
-void eTexture::clear(GrContext* const context) {
+void eTexture::clear(GrDirectContext* const context) {
     if(fGrTex.isValid()) {
         context->deleteBackendTexture(fGrTex);
         fGrTex = GrBackendTexture();
@@ -30,7 +30,7 @@ void eTexture::clear(GrContext* const context) {
     fHeight = 0;
 }
 
-void eTexture::gen(GrContext* const context,
+void eTexture::gen(GrDirectContext* const context,
                   const int width, const int height) {
     fGrTex = context->createBackendTexture(width, height,
                                            kRGBA_8888_SkColorType,

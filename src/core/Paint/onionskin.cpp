@@ -45,7 +45,7 @@ SkIRect OnionSkin::SkinsSide::boundingRect() const {
 
 void OnionSkin::SkinsSide::draw(SkCanvas * const canvas) {
     if(fSkins.isEmpty()) return;
-    if(!fImage) setupImage(canvas->getGrContext());
+    if(!fImage) setupImage(canvas->recordingContext()->asDirectContext());
     SkPaint paint;
     paint.setAlphaf(0.5f);
     canvas->drawImage(fImage, fImageXY.x(), fImageXY.y(), &paint);
@@ -56,7 +56,7 @@ void OnionSkin::SkinsSide::clear() {
     fImage.reset();
 }
 
-void OnionSkin::SkinsSide::setupImage(GrContext * const grContext) {
+void OnionSkin::SkinsSide::setupImage(GrDirectContext * const grContext) {
     const auto bRect = boundingRect();
     if(bRect.width() <= 0 || bRect.height() <= 0) return;
     fImageXY = bRect.topLeft();

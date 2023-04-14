@@ -22,8 +22,8 @@ class CORE_EXPORT SwitchableContext {
     friend class GpuTaskExecutor;
     enum class Mode { OpenGL, Skia };
 public:
-    //! @brief Returns the handled GrContext,
-    GrContext* grContext() const {
+    //! @brief Returns the handled GrDirectContext,
+    GrDirectContext* grContext() const {
         return mContext.get();
     }
 
@@ -35,10 +35,10 @@ public:
 
     GLuint textureSquareVAO() const { return mTexturedSquareVAO; }
 private:
-    void setContext(const sk_sp<GrContext>& context,
+    void setContext(const sk_sp<GrDirectContext>& context,
                     const GLuint textureSquareVAO);
 
-    sk_sp<GrContext> mContext;
+    sk_sp<GrDirectContext> mContext;
     Mode mMode = Mode::Skia;
     GLuint mTexturedSquareVAO;
 };

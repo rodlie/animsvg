@@ -35,7 +35,7 @@ struct CORE_EXPORT OnionSkin {
         SkIRect boundingRect() const;
         void draw(SkCanvas * const canvas);
         void clear();
-        void setupImage(GrContext* const grContext);
+        void setupImage(GrDirectContext* const grContext);
     };
 
     SkinsSide fPrev{{1, 0, 0, 1}, QList<Skin>(), nullptr, {0, 0}};

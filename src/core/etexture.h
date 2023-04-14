@@ -26,10 +26,10 @@ struct CORE_EXPORT eTexture {
 
     void bind(QGL33 * const gl) const;
 
-    void clear(GrContext* const context);
+    void clear(GrDirectContext* const context);
 
     //! @brief Generates, binds texture and sets data.
-    void gen(GrContext* const context,
+    void gen(GrDirectContext* const context,
              const int width, const int height);
 
     void swap(eTexture& otherTexture);

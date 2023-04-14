@@ -40,7 +40,7 @@ void GLWindow::bindSkia(const int w, const int h) {
     // To use distance field text, use commented out SkSurfaceProps instead
     // SkSurfaceProps props(SkSurfaceProps::kUseDeviceIndependentFonts_Flag,
     //                      SkSurfaceProps::kLegacyFontHost_InitType);
-    SkSurfaceProps props(SkSurfaceProps::kLegacyFontHost_InitType);
+    SkSurfaceProps props;
 
 //    sk_sp<SkColorSpace> colorSpace = SkColorSpace::MakeSRGB();
     mSurface = SkSurface::MakeFromBackendRenderTarget(
@@ -89,7 +89,7 @@ void GLWindow::initialize() {
 
     const auto intrface = GrGLMakeNativeInterface();
     if(!intrface) RuntimeThrow("Failed to make native intrface.");
-    mGrContext = GrContext::MakeGL(intrface);
+    mGrContext = GrDirectContext::MakeGL(intrface);
     if(!mGrContext) RuntimeThrow("Failed to make GrContext.");
 
     try {

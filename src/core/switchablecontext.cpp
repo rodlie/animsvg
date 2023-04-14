@@ -29,7 +29,7 @@ void SwitchableContext::switchToOpenGL(QGL33 * const gl) {
     gl->glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void SwitchableContext::setContext(const sk_sp<GrContext> &context,
+void SwitchableContext::setContext(const sk_sp<GrDirectContext> &context,
                                    const GLuint textureSquareVAO) {
     mContext = context;
     mTexturedSquareVAO = textureSquareVAO;

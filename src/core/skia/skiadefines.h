@@ -30,4 +30,8 @@
     #undef SK_DEBUG
 #endif
 
+#ifndef SK_GL
+#define SK_GL
+#endif
+
 #endif // SKIADEFINES_H

@@ -25,7 +25,7 @@ void eTextureFrameBuffer::swapTexture(QGL33 * const gl, eTexture &otherTexture) 
                                GL_TEXTURE_2D, fTexture.fId, 0);
 }
 
-void eTextureFrameBuffer::clear(QGL33 * const gl, GrContext* const context) {
+void eTextureFrameBuffer::clear(QGL33 * const gl, GrDirectContext* const context) {
     if(fFBOId) gl->glDeleteFramebuffers(1, &fFBOId);
     fFBOId = 0;
     fWidth = 0;
@@ -49,7 +49,7 @@ void eTextureFrameBuffer::bindTexture(QGL33 * const gl) {
     fTexture.bind(gl);
 }
 
-void eTextureFrameBuffer::gen(QGL33 * const gl, GrContext* const context,
+void eTextureFrameBuffer::gen(QGL33 * const gl, GrDirectContext* const context,
                              const int width, const int height) {
     fWidth = width;
     fHeight = height;

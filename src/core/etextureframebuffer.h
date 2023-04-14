@@ -29,7 +29,7 @@ struct CORE_EXPORT eTextureFrameBuffer {
     //! @brief Swaps underlying texture and bind FBO
     void swapTexture(QGL33 * const gl, eTexture& otherTexture);
 
-    void clear(QGL33 * const gl, GrContext* const context);
+    void clear(QGL33 * const gl, GrDirectContext* const context);
 
     void bind(QGL33 * const gl);
     void unbind();
@@ -37,7 +37,7 @@ struct CORE_EXPORT eTextureFrameBuffer {
     void bindTexture(QGL33 * const gl);
 
     //! @brief Generates and binds framebuffer and associated texture.
-    void gen(QGL33 * const gl, GrContext * const context,
+    void gen(QGL33 * const gl, GrDirectContext * const context,
              const int width, const int height);
 
     sk_sp<SkImage> toImage(QGL33 * const gl) const {

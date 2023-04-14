@@ -58,6 +58,7 @@ endif()
 
 find_package(PkgConfig)
 find_package(OpenMP)
+find_package(OpenGL REQUIRED)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
 find_package(
     Qt${QT_VERSION_MAJOR}
@@ -94,6 +95,10 @@ if(UNIX AND NOT ${SHARED_TCMALLOC})
     if(NOT APPLE)
         pkg_check_modules(UNWIND REQUIRED libunwind)
     endif()
+endif()
+
+if(UNIX AND NOT APPLE)
+    pkg_check_modules(FC REQUIRED fontconfig)
 endif()
 
 include_directories(
@@ -460,6 +465,7 @@ target_link_libraries(
     Qt${QT_VERSION_MAJOR}::Qml
     Qt${QT_VERSION_MAJOR}::Xml
     Qt${QT_VERSION_MAJOR}::Svg
+    ${OPENGL_LIBRARIES}
     ${MYPAINT_LIBRARIES}
     ${QUAZIP_LIBRARIES}
     ${QSCINTILLA_LIBRARIES}
@@ -470,6 +476,14 @@ target_link_libraries(
     ${SWRESAMPLE_LIBRARIES}
     skia
 )
+
+if(UNIX AND NOT APPLE)
+    target_link_libraries(
+        ${PROJECT_NAME}
+        PRIVATE
+        ${FC_LIBRARIES}
+    )
+endif()
 
 if(OpenMP_CXX_FOUND)
     target_link_libraries(
