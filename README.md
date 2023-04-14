@@ -4,6 +4,8 @@
 
 See our issue [tracker](https://github.com/enve2d/enve2d/issues) or [forum](https://github.com/enve2d/enve2d/discussions) for more information.
 
+We are working on our first release (0.9.0), see progress [here](https://github.com/enve2d/enve2d/milestone/1).
+
 ## System requirements
 
 * Minimum screen resolution of 1280 x 800 
