@@ -22,7 +22,6 @@ set -e -x
 
 CI=${CI:-0}
 APT=${APT:-0}
-PYSYM=${PYSYM:-0}
 SNAP=${SNAP:-0}
 REL=${REL:-0}
 SKIA_SYNC=${SKIA_SYNC:-1}
@@ -35,7 +34,7 @@ libtool \
 autoconf \
 automake \
 cmake \
-python2 \
+python3 \
 ninja-build \
 tree \
 libfontconfig1-dev \
@@ -65,10 +64,6 @@ if [ "${CI}" = 1 ]; then
     git submodule update -i --recursive
 fi
 
-if [ "${PYSYM}" = 1 ]; then
-    sudo ln -sf /usr/bin/python2 /usr/bin/python
-fi
-
 CWD=`pwd`
 MKJOBS=${MKJOBS:-4}
 COMMIT=`git rev-parse --short HEAD`
@@ -87,7 +82,7 @@ fi
 if [ ! -f "${CWD}/src/skia/out/build/libskia.a" ]; then
     cd ${CWD}/src/skia
     if [ "${SKIA_SYNC}" = 1 ]; then
-        python tools/git-sync-deps || true
+        python3 tools/git-sync-deps || true
     fi
     bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=["-Wno-error"] target_os="linux" target_cpu="x64" skia_use_system_expat=false skia_use_system_freetype2=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_icu=false skia_use_system_harfbuzz=false'
     ninja -C out/build -j${MKJOBS} skia
