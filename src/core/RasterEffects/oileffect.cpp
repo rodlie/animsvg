@@ -4,10 +4,12 @@
 #include "OilImpl/oilsimulator.h"
 #include "ReadWrite/evformat.h"
 
+#include "appsupport.h"
+
 #define TIME_BEGIN const auto t1 = std::chrono::high_resolution_clock::now();
 #define TIME_END(name) const auto t2 = std::chrono::high_resolution_clock::now(); \
                        const auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count(); \
-                       qDebug() << name << duration << "ms" << endl;
+                       qDebug() << name << duration << "ms" << QT_ENDL;
 
 //#define OilEffect_TIMING
 

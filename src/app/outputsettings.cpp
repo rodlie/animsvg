@@ -16,6 +16,8 @@
 
 #include "outputsettings.h"
 
+#include "appsupport.h"
+
 QList<qsptr<OutputSettingsProfile>> OutputSettingsProfile::sOutputProfiles;
 bool OutputSettingsProfile::sOutputProfilesLoaded = false;
 
@@ -151,48 +153,48 @@ void OutputSettingsProfile::save() {
     if(file.open(QIODevice::WriteOnly | QIODevice::Text |
                  QIODevice::Truncate)) {
         QTextStream stream(&file);
-        stream << "Name: " << mName << endl;
+        stream << "Name: " << mName << QT_ENDL;
 
         stream << "Format: ";
         const QString formatName = mSettings.fOutputFormat ?
                     mSettings.fOutputFormat->name : "null";
-        stream << formatName << endl;
+        stream << formatName << QT_ENDL;
 
         stream << "Video enabled: ";
-        stream << (mSettings.fVideoEnabled ? "true" : "false") << endl;
+        stream << (mSettings.fVideoEnabled ? "true" : "false") << QT_ENDL;
         if(mSettings.fVideoEnabled) {
             stream << "Video codec: ";
             const QString codecName = mSettings.fVideoCodec ?
                         mSettings.fVideoCodec->name : "null";
-            stream << codecName << endl;
+            stream << codecName << QT_ENDL;
 
             stream << "Pixel format: ";
-            stream << av_get_pix_fmt_name(mSettings.fVideoPixelFormat) << endl;
+            stream << av_get_pix_fmt_name(mSettings.fVideoPixelFormat) << QT_ENDL;
 
             stream << "Video bitrate: ";
-            stream << QString::number(mSettings.fVideoBitrate) << endl;
+            stream << QString::number(mSettings.fVideoBitrate) << QT_ENDL;
         }
 
         stream << "Audio enabled: ";
-        stream << (mSettings.fAudioEnabled ? "true" : "false") << endl;
+        stream << (mSettings.fAudioEnabled ? "true" : "false") << QT_ENDL;
         if(mSettings.fAudioEnabled) {
             stream << "Audio codec: ";
             const QString codecName = mSettings.fAudioCodec ?
                         mSettings.fAudioCodec->name : "null";
-            stream << codecName << endl;
+            stream << codecName << QT_ENDL;
 
             stream << "Sample format: ";
-            stream << av_get_sample_fmt_name(mSettings.fAudioSampleFormat) << endl;
+            stream << av_get_sample_fmt_name(mSettings.fAudioSampleFormat) << QT_ENDL;
 
             stream << "Channel layout: ";
             stream << OutputSettings::sGetChannelsLayoutName(
-                          mSettings.fAudioChannelsLayout) << endl;
+                          mSettings.fAudioChannelsLayout) << QT_ENDL;
 
             stream << "Audio sample-rate: ";
-            stream << QString::number(mSettings.fAudioSampleRate) << endl;
+            stream << QString::number(mSettings.fAudioSampleRate) << QT_ENDL;
 
             stream << "Audio bitrate: ";
-            stream << QString::number(mSettings.fAudioBitrate) << endl;
+            stream << QString::number(mSettings.fAudioBitrate) << QT_ENDL;
         }
     } else RuntimeThrow("Could not save OutputProfile " + mName + ".\n" +
                         "Failed to open file: '" + path + "'.");

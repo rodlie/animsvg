@@ -22,6 +22,8 @@
 #include "svgexporter.h"
 #include "canvas.h"
 
+#include "appsupport.h"
+
 SvgExporter::SvgExporter(const QString& path,
                          Canvas* const scene,
                          const FrameRange& frameRange,
@@ -52,18 +54,18 @@ void SvgExporter::nextStep()
         if (mFile.open(QIODevice::WriteOnly)) {
             mStream.setDevice(&mFile);
             if (mHtml) {
-                mStream << QString::fromUtf8("<!DOCTYPE html>") << endl;
-                mStream << QString::fromUtf8("<html>") << endl;
-                mStream << QString::fromUtf8("<head>") << endl;
-                mStream << QString::fromUtf8("<meta charset=\"utf-8\" />") << endl;
-                mStream << QString::fromUtf8("<title>Preview</title>") << endl;
-                mStream << QString::fromUtf8("<style>html { background: repeating-conic-gradient(#b0b0b0 0% 25%, transparent 0% 50%) 50% / 40px 40px; }</style>") << endl;
-                mStream << QString::fromUtf8("</head>") << endl;
-                mStream << QString::fromUtf8("<body>") << endl;
+                mStream << QString::fromUtf8("<!DOCTYPE html>") << QT_ENDL;
+                mStream << QString::fromUtf8("<html>") << QT_ENDL;
+                mStream << QString::fromUtf8("<head>") << QT_ENDL;
+                mStream << QString::fromUtf8("<meta charset=\"utf-8\" />") << QT_ENDL;
+                mStream << QString::fromUtf8("<title>Preview</title>") << QT_ENDL;
+                mStream << QString::fromUtf8("<style>html { background: repeating-conic-gradient(#b0b0b0 0% 25%, transparent 0% 50%) 50% / 40px 40px; }</style>") << QT_ENDL;
+                mStream << QString::fromUtf8("</head>") << QT_ENDL;
+                mStream << QString::fromUtf8("<body>") << QT_ENDL;
             } else {
-                mStream << QString::fromUtf8("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>") << endl;
+                mStream << QString::fromUtf8("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>") << QT_ENDL;
             }
-            mStream << QString::fromUtf8("<!-- Created with enve2d https://enve2d.org -->") << endl << endl;
+            mStream << QString::fromUtf8("<!-- Created with enve2d https://enve2d.org -->") << QT_ENDL << QT_ENDL;
             fScene->saveSceneSVG(*this);
         } else {
             RuntimeThrow("Could not open:\n\"" + mFile.fileName() + "\"");
@@ -87,8 +89,8 @@ void SvgExporter::finish()
         mDoc.appendChild(mSvg);
         mStream << mDoc.toString();
         if (mHtml) {
-            mStream << QString::fromUtf8("</body>") << endl;
-            mStream << QString::fromUtf8("</html>") << endl;
+            mStream << QString::fromUtf8("</body>") << QT_ENDL;
+            mStream << QString::fromUtf8("</html>") << QT_ENDL;
         }
         mStream.flush();
         mFile.close();

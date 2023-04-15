@@ -27,7 +27,11 @@
 #include <QObject>
 #include <QVariant>
 
-#define ICON_THEME_ENVE2D "enve2d"
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+#define QT_ENDL Qt::endl
+#else
+#define QT_ENDL endl
+#endif
 
 class CORE_EXPORT AppSupport : public QObject
 {

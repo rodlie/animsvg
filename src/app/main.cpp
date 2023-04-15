@@ -46,7 +46,7 @@ extern "C" {
 #define TIME_BEGIN const auto t1 = std::chrono::high_resolution_clock::now();
 #define TIME_END(name) const auto t2 = std::chrono::high_resolution_clock::now(); \
                        const auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count(); \
-                       qDebug() << name << duration << "us" << endl;
+                       qDebug() << name << duration << "us" << QT_ENDL;
 
 #define GPU_NOT_COMPATIBLE gPrintException("Your GPU drivers do not seem to be compatible.")
 

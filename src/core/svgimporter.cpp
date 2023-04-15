@@ -629,7 +629,7 @@ QMatrix getMatrixFromString(const QString &str) {
                        extractScale(str, matrix) ||
                        extractRotate(str, matrix);
     if(!found) qDebug() << "getMatrixFromString - could not extract "
-                           "values from string:" << endl << str;
+                           "values from string:" << str;
     return matrix;
 }
 
@@ -916,8 +916,7 @@ void BoxSvgAttributes::setFillAttribute(const QString &value) {
     } else if(getFlatColorFromString(value, &mFillAttributes)) {
     } else if(getGradientFromString(value, &mFillAttributes)) {
     } else {
-        qDebug() << "setFillAttribute - format not recognised:" <<
-                    endl << value;
+        qDebug() << "setFillAttribute - format not recognised:" << value;
     }
 }
 
@@ -927,8 +926,7 @@ void BoxSvgAttributes::setStrokeAttribute(const QString &value) {
     } else if(getFlatColorFromString(value, &mStrokeAttributes)) {
     } else if(getGradientFromString(value, &mStrokeAttributes)) {
     } else {
-        qDebug() << "setStrokeAttribute - format not recognised:" <<
-                    endl << value;
+        qDebug() << "setStrokeAttribute - format not recognised:" << value;
     }
 }
 

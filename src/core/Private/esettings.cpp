@@ -16,6 +16,8 @@
 
 #include "esettings.h"
 
+#include "appsupport.h"
+
 #include "GUI/global.h"
 #include "exceptions.h"
 
@@ -31,7 +33,7 @@ struct eSetting {
     void write(QTextStream &textStream) const {
         textStream << fName + ": ";
         writeValue(textStream);
-        textStream << endl;
+        textStream << QT_ENDL;
     }
 
     const QString fName;
