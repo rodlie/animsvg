@@ -57,6 +57,7 @@ void SvgExporter::nextStep()
                 mStream << QString::fromUtf8("<head>") << endl;
                 mStream << QString::fromUtf8("<meta charset=\"utf-8\" />") << endl;
                 mStream << QString::fromUtf8("<title>Preview</title>") << endl;
+                mStream << QString::fromUtf8("<style>html { background: repeating-conic-gradient(#b0b0b0 0% 25%, transparent 0% 50%) 50% / 40px 40px; }</style>") << endl;
                 mStream << QString::fromUtf8("</head>") << endl;
                 mStream << QString::fromUtf8("<body>") << endl;
             } else {
