@@ -85,7 +85,7 @@ libtool \
 autoconf \
 automake \
 cmake \
-python \
+python3 \
 ninja-build \
 libfontconfig1-dev \
 libfreetype-dev \
