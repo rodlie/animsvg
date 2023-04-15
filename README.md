@@ -48,7 +48,7 @@ Generic build instructions for macOS and Linux.
 * pkg-config
 * automake
 * autoconf
-* python *(v2)*
+* python3
 * ninja
 * cmake
 * Qt5 *(5.12+)*
@@ -85,7 +85,7 @@ libtool \
 autoconf \
 automake \
 cmake \
-python2 \
+python \
 ninja-build \
 libfontconfig1-dev \
 libfreetype-dev \
@@ -131,19 +131,9 @@ make -j4
 
 ### Build skia
 
-Note that python2 is required. ``/usr/bin/python`` should be a symlink to the python2 binary on your system.
-
-On Ubuntu run:
-
-```
-sudo ln -sf /usr/bin/python2 /usr/bin/python
-```
-
-Now build ``skia`` (might take a while):
-
 ```
 cd enve2d/src/skia
-python tools/git-sync-deps
+python3 tools/git-sync-deps
 bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=["-Wno-error"] target_os="linux" target_cpu="x64" skia_use_system_expat=false skia_use_system_freetype2=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_icu=false skia_use_system_harfbuzz=false'
 ninja -C out/build -j4 skia
 ```
@@ -238,13 +228,9 @@ make -j4
 
 ### Build skia
 
-First make sure that ``python`` in ``PATH`` points to a Python 2 binary.
-
-Now we need to build ``skia`` (might take a while).
-
 ```
 cd enve2d/src/skia
-python tools/git-sync-deps
+python3 tools/git-sync-deps
 bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=["-Wno-error"] skia_use_system_expat=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_icu=false skia_use_system_harfbuzz=false'
 ninja -C out/build -j4 skia
 ```
