@@ -24,6 +24,8 @@
 #include "Private/esettings.h"
 #include "GUI/edialogs.h"
 
+#include "appsupport.h"
+
 RenderInstanceWidget::RenderInstanceWidget(
         Canvas *canvas, QWidget *parent) :
     ClosableContainer(parent), mSettings(canvas) {
@@ -45,8 +47,7 @@ RenderInstanceWidget::RenderInstanceWidget(const RenderInstanceSettings& sett,
 void RenderInstanceWidget::iniGUI() {
     if(!OutputSettingsProfile::sOutputProfilesLoaded) {
         OutputSettingsProfile::sOutputProfilesLoaded = true;
-        QDir(eSettings::sSettingsDir()).mkdir("OutputProfiles");
-        const QString dirPath = eSettings::sSettingsDir() + "/OutputProfiles";
+        const QString dirPath = AppSupport::getAppOutputProfilesPath();
         QDirIterator dirIt(dirPath, QDirIterator::NoIteratorFlags);
         while(dirIt.hasNext()) {
             const auto path = dirIt.next();

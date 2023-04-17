@@ -26,6 +26,8 @@
 #include <QIcon>
 #include <QPalette>
 #include <QSettings>
+#include <QStandardPaths>
+#include <QDir>
 
 AppSupport::AppSupport(QObject *parent)
     : QObject{parent}
@@ -106,4 +108,45 @@ const QString AppSupport::getAppVersion(bool html)
         version.append(html ? QString::fromUtf8(" <a href=\"https://github.com/enve2d/enve2d/commit/%1\">%1</a>").arg(git) : QString::fromUtf8(" %1").arg(git));
     }
     return version;
+}
+
+const QString AppSupport::getAppConfigPath()
+{
+    QString path = QString::fromUtf8("%1/enve2d")
+                   .arg(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation));
+    QDir dir(path);
+    if (!dir.exists()) { dir.mkpath(path); }
+    return path;
+}
+
+const QString AppSupport::getAppOutputProfilesPath()
+{
+    QString path = QString::fromUtf8("%1/OutputProfiles").arg(getAppConfigPath());
+    QDir dir(path);
+    if (!dir.exists()) { dir.mkpath(path); }
+    return path;
+}
+
+const QString AppSupport::getAppPathEffectsPath()
+{
+    QString path = QString::fromUtf8("%1/PathEffects").arg(getAppConfigPath());
+    QDir dir(path);
+    if (!dir.exists()) { dir.mkpath(path); }
+    return path;
+}
+
+const QString AppSupport::getAppRasterEffectsPath()
+{
+    QString path = QString::fromUtf8("%1/RasterEffects").arg(getAppConfigPath());
+    QDir dir(path);
+    if (!dir.exists()) { dir.mkpath(path); }
+    return path;
+}
+
+const QString AppSupport::getAppShaderEffectsPath()
+{
+    QString path = QString::fromUtf8("%1/ShaderEffects").arg(getAppConfigPath());
+    QDir dir(path);
+    if (!dir.exists()) { dir.mkpath(path); }
+    return path;
 }

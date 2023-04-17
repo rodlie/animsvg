@@ -147,8 +147,8 @@ void OutputSettingsProfile::setSettings(const OutputSettings &settings) {
 }
 
 void OutputSettingsProfile::save() {
-    const QString path = eSettings::sSettingsDir() +
-            "/OutputProfiles/" + mName + ".eProf";
+    const QString path = QString::fromUtf8("%1/%2.eProf")
+                         .arg(AppSupport::getAppOutputProfilesPath(), mName);
     QFile file(path);
     if(file.open(QIODevice::WriteOnly | QIODevice::Text |
                  QIODevice::Truncate)) {

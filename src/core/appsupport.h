@@ -48,6 +48,11 @@ public:
                             const QVariant &value,
                             bool append = false);
     static const QString getAppVersion(bool html = false);
+    static const QString getAppConfigPath();
+    static const QString getAppOutputProfilesPath();
+    static const QString getAppPathEffectsPath();
+    static const QString getAppRasterEffectsPath();
+    static const QString getAppShaderEffectsPath();
 };
 
 #endif // APPSUPPORT_H
