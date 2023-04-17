@@ -1,21 +1,28 @@
-// enve - 2D animations software
-// Copyright (C) 2016-2020 Maurycy Liebner
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+#
+# enve2d - https://github.com/enve2d
+#
+# Copyright (c) enve2d developers
+# Copyright (C) 2016-2020 Maurycy Liebner
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+*/
 
 #ifndef OUTPUTSETTINGS_H
 #define OUTPUTSETTINGS_H
+
 #include <QString>
 #include "Private/esettings.h"
 #include "smartPointers/ememory.h"
@@ -31,7 +38,8 @@ extern "C" {
     #include <libavutil/opt.h>
 }
 
-struct OutputSettings {
+struct OutputSettings
+{
     static const std::map<int, QString> sSampleFormatNames;
     static QString sGetChannelsLayoutName(const uint64_t &layout);
     static uint64_t sGetChannelsLayout(const QString &name);
@@ -54,9 +62,11 @@ struct OutputSettings {
     int fAudioBitrate = 0;
 };
 
-class OutputSettingsProfile : public SelfRef {
+class OutputSettingsProfile : public SelfRef
+{
     Q_OBJECT
     e_OBJECT
+
 public:
     OutputSettingsProfile();
 
@@ -67,17 +77,19 @@ public:
     void setSettings(const OutputSettings &settings);
 
     void save();
-    void load(const QString& path);
+    void load(const QString &path);
 
     bool wasSaved() const { return !mPath.isEmpty(); }
     void removeFile();
-    const QString& path() const { return mPath; }
+    const QString &path() const { return mPath; }
 
-    static OutputSettingsProfile* sGetByName(const QString& name);
+    static OutputSettingsProfile* sGetByName(const QString &name);
     static QList<qsptr<OutputSettingsProfile>> sOutputProfiles;
     static bool sOutputProfilesLoaded;
+
 signals:
     void changed();
+
 private:
     QString mPath;
     QString mName = "Untitled";
