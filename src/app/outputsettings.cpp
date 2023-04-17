@@ -1,21 +1,26 @@
-// enve - 2D animations software
-// Copyright (C) 2016-2020 Maurycy Liebner
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+#
+# enve2d - https://github.com/enve2d
+#
+# Copyright (c) enve2d developers
+# Copyright (C) 2016-2020 Maurycy Liebner
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+*/
 
 #include "outputsettings.h"
-
 #include "appsupport.h"
 
 QList<qsptr<OutputSettingsProfile>> OutputSettingsProfile::sOutputProfiles;
@@ -88,20 +93,23 @@ const std::map<uint64_t, QString> gChannelLayouts = {
     {AV_CH_LAYOUT_NATIVE, "Native"}
 };
 
-QString OutputSettings::sGetChannelsLayoutName(const uint64_t &layout) {
+QString OutputSettings::sGetChannelsLayoutName(const uint64_t &layout)
+{
     const auto it = gChannelLayouts.find(layout);
-    if(it == gChannelLayouts.end()) return "Unrecognized";
+    if (it == gChannelLayouts.end()) { return "Unrecognized"; }
     return it->second;
 }
 
-uint64_t OutputSettings::sGetChannelsLayout(const QString &name) {
-    for(const auto& it : gChannelLayouts) {
-        if(it.second == name) return it.first;
+uint64_t OutputSettings::sGetChannelsLayout(const QString &name)
+{
+    for (const auto& it : gChannelLayouts) {
+        if (it.second == name) { return it.first; }
     }
     return AV_CH_LAYOUT_STEREO;
 }
 
-void OutputSettings::write(eWriteStream &dst) const {
+void OutputSettings::write(eWriteStream &dst) const
+{
     dst << (fOutputFormat ? QString(fOutputFormat->name) : "");
 
     dst << fVideoEnabled;
@@ -117,7 +125,8 @@ void OutputSettings::write(eWriteStream &dst) const {
     dst << fAudioBitrate;
 }
 
-void OutputSettings::read(eReadStream &src) {
+void OutputSettings::read(eReadStream &src)
+{
     QString formatName; src >> formatName;
     fOutputFormat = av_guess_format(formatName.toUtf8().data(),
                                    nullptr, nullptr);
@@ -141,16 +150,18 @@ void OutputSettings::read(eReadStream &src) {
 
 OutputSettingsProfile::OutputSettingsProfile() {}
 
-void OutputSettingsProfile::setSettings(const OutputSettings &settings) {
+void OutputSettingsProfile::setSettings(const OutputSettings &settings)
+{
     mSettings = settings;
     emit changed();
 }
 
-void OutputSettingsProfile::save() {
+void OutputSettingsProfile::save()
+{
     const QString path = QString::fromUtf8("%1/%2.eProf")
                          .arg(AppSupport::getAppOutputProfilesPath(), mName);
     QFile file(path);
-    if(file.open(QIODevice::WriteOnly | QIODevice::Text |
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text |
                  QIODevice::Truncate)) {
         QTextStream stream(&file);
         stream << "Name: " << mName << QT_ENDL;
@@ -162,7 +173,7 @@ void OutputSettingsProfile::save() {
 
         stream << "Video enabled: ";
         stream << (mSettings.fVideoEnabled ? "true" : "false") << QT_ENDL;
-        if(mSettings.fVideoEnabled) {
+        if (mSettings.fVideoEnabled) {
             stream << "Video codec: ";
             const QString codecName = mSettings.fVideoCodec ?
                         mSettings.fVideoCodec->name : "null";
@@ -177,7 +188,7 @@ void OutputSettingsProfile::save() {
 
         stream << "Audio enabled: ";
         stream << (mSettings.fAudioEnabled ? "true" : "false") << QT_ENDL;
-        if(mSettings.fAudioEnabled) {
+        if (mSettings.fAudioEnabled) {
             stream << "Audio codec: ";
             const QString codecName = mSettings.fAudioCodec ?
                         mSettings.fAudioCodec->name : "null";
@@ -196,71 +207,75 @@ void OutputSettingsProfile::save() {
             stream << "Audio bitrate: ";
             stream << QString::number(mSettings.fAudioBitrate) << QT_ENDL;
         }
-    } else RuntimeThrow("Could not save OutputProfile " + mName + ".\n" +
-                        "Failed to open file: '" + path + "'.");
+    } else { RuntimeThrow("Could not save OutputProfile " + mName + ".\n" +
+                          "Failed to open file: '" + path + "'."); }
     mPath = path;
 }
 
-void OutputSettingsProfile::load(const QString &path) {
+void OutputSettingsProfile::load(const QString &path)
+{
     QFile file(path);
     mPath = path;
-    if(file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream stream(&file);
         while(!stream.atEnd()) {
             const QString line = stream.readLine();
-            if(line.isEmpty()) continue;
+            if (line.isEmpty()) { continue; }
             const auto varVal = line.split(":");
-            if(varVal.count() != 2)
+            if (varVal.count() != 2) {
                 RuntimeThrow("Unrecognized line '" + line +
                              "' in '" + path + "'");
+            }
             const auto var = varVal.at(0).trimmed();
             const auto val = varVal.at(1).trimmed();
-            if(var == "Name") {
+            if (var == "Name") {
                 mName = val;
-            } else if(var == "Format") {
+            } else if (var == "Format") {
                 mSettings.fOutputFormat = av_guess_format(
                             val.toUtf8().data(), nullptr, nullptr);
-            } else if(var == "Video enabled") {
+            } else if (var == "Video enabled") {
                 mSettings.fVideoEnabled = (val == "true");
-            } else if(var == "Video codec") {
+            } else if (var == "Video codec") {
                 mSettings.fVideoCodec = avcodec_find_encoder_by_name(
                             val.toUtf8().data());
-            } else if(var == "Pixel format") {
+            } else if (var == "Pixel format") {
                 mSettings.fVideoPixelFormat = av_get_pix_fmt(
                             val.toUtf8().data());
-            } else if(var == "Video bitrate") {
+            } else if (var == "Video bitrate") {
                 mSettings.fVideoBitrate = val.toInt();
-            } else if(var == "Audio enabled") {
+            } else if (var == "Audio enabled") {
                 mSettings.fAudioEnabled = (val == "true");
-            } else if(var == "Audio codec") {
+            } else if (var == "Audio codec") {
                 mSettings.fAudioCodec = avcodec_find_encoder_by_name(
                             val.toUtf8().data());
-            } else if(var == "Sample format") {
+            } else if (var == "Sample format") {
                 mSettings.fAudioSampleFormat = av_get_sample_fmt(
                             val.toUtf8().data());
-            } else if(var == "Channel layout") {
+            } else if (var == "Channel layout") {
                 mSettings.fAudioChannelsLayout =
                         OutputSettings::sGetChannelsLayout(val);
-            } else if(var == "Audio sample-rate") {
+            } else if (var == "Audio sample-rate") {
                 mSettings.fAudioSampleRate = val.toInt();
-            } else if(var == "Audio bitrate") {
+            } else if (var == "Audio bitrate") {
                 mSettings.fAudioBitrate = val.toInt();
-            } else RuntimeThrow("Unrecognized line '" + line +
-                                "' in '" + path + "'");
+            } else { RuntimeThrow("Unrecognized line '" + line +
+                                  "' in '" + path + "'"); }
         }
-    } else RuntimeThrow("Could not load OutputProfile.\n" +
-                        "Failed to open file: '" + path + "'.");
+    } else { RuntimeThrow("Could not load OutputProfile.\n" +
+                          "Failed to open file: '" + path + "'."); }
     emit changed();
 }
 
-void OutputSettingsProfile::removeFile() {
-    if(!wasSaved()) return;
+void OutputSettingsProfile::removeFile()
+{
+    if (!wasSaved()) { return; }
     QFile(mPath).remove();
 }
 
-OutputSettingsProfile *OutputSettingsProfile::sGetByName(const QString &name) {
-    for(const auto& profile : sOutputProfiles) {
-        if(profile->getName() == name) return profile.get();
+OutputSettingsProfile *OutputSettingsProfile::sGetByName(const QString &name)
+{
+    for (const auto& profile : sOutputProfiles) {
+        if (profile->getName() == name) { return profile.get(); }
     }
     return nullptr;
 }
