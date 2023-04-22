@@ -158,111 +158,118 @@ void OutputSettingsProfile::setSettings(const OutputSettings &settings)
 
 void OutputSettingsProfile::save()
 {
-    const QString path = QString::fromUtf8("%1/%2.eProf")
-                         .arg(AppSupport::getAppOutputProfilesPath(), mName);
-    QFile file(path);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text |
-                 QIODevice::Truncate)) {
-        QTextStream stream(&file);
-        stream << "Name: " << mName << QT_ENDL;
+    const QString path = QString::fromUtf8("%1/%2.eprof")
+                         .arg(AppSupport::getAppOutputProfilesPath(),
+                              mName);
+    qDebug() << "save output profile" << path;
 
-        stream << "Format: ";
-        const QString formatName = mSettings.fOutputFormat ?
-                    mSettings.fOutputFormat->name : "null";
-        stream << formatName << QT_ENDL;
+    QSettings profile(path, QSettings::IniFormat);
+    profile.beginGroup(QString::fromUtf8("output_profile_v1"));
+    profile.setValue(QString::fromUtf8("name"),
+                     mName);
+    profile.setValue(QString::fromUtf8("format"),
+                     mSettings.fOutputFormat ? mSettings.fOutputFormat->name : QString::fromUtf8("null"));
+    profile.setValue(QString::fromUtf8("video_enabled"),
+                     mSettings.fVideoEnabled);
+    if (mSettings.fVideoEnabled) {
+        profile.setValue(QString::fromUtf8("video_codec"),
+                         mSettings.fVideoCodec ? mSettings.fVideoCodec->name : QString::fromUtf8("null"));
+        profile.setValue(QString::fromUtf8("video_pixel_format"),
+                         av_get_pix_fmt_name(mSettings.fVideoPixelFormat));
+        profile.setValue(QString::fromUtf8("video_bitrate"),
+                         mSettings.fVideoBitrate);
+    }
+    profile.setValue(QString::fromUtf8("audio_enabled"),
+                     mSettings.fAudioEnabled);
+    if (mSettings.fAudioEnabled) {
+        profile.setValue(QString::fromUtf8("audio_codec"),
+                         mSettings.fAudioCodec ?  mSettings.fAudioCodec->name : QString::fromUtf8("null"));
+        profile.setValue(QString::fromUtf8("audio_sample_format"),
+                         av_get_sample_fmt_name(mSettings.fAudioSampleFormat));
+        profile.setValue(QString::fromUtf8("audio_channel_layout"),
+                         OutputSettings::sGetChannelsLayoutName(mSettings.fAudioChannelsLayout));
+        profile.setValue(QString::fromUtf8("audio_sample_rate"),
+                         mSettings.fAudioSampleRate);
+        profile.setValue(QString::fromUtf8("audio_bitrate"),
+                         mSettings.fAudioBitrate);
+    }
+    profile.endGroup();
 
-        stream << "Video enabled: ";
-        stream << (mSettings.fVideoEnabled ? "true" : "false") << QT_ENDL;
-        if (mSettings.fVideoEnabled) {
-            stream << "Video codec: ";
-            const QString codecName = mSettings.fVideoCodec ?
-                        mSettings.fVideoCodec->name : "null";
-            stream << codecName << QT_ENDL;
-
-            stream << "Pixel format: ";
-            stream << av_get_pix_fmt_name(mSettings.fVideoPixelFormat) << QT_ENDL;
-
-            stream << "Video bitrate: ";
-            stream << QString::number(mSettings.fVideoBitrate) << QT_ENDL;
-        }
-
-        stream << "Audio enabled: ";
-        stream << (mSettings.fAudioEnabled ? "true" : "false") << QT_ENDL;
-        if (mSettings.fAudioEnabled) {
-            stream << "Audio codec: ";
-            const QString codecName = mSettings.fAudioCodec ?
-                        mSettings.fAudioCodec->name : "null";
-            stream << codecName << QT_ENDL;
-
-            stream << "Sample format: ";
-            stream << av_get_sample_fmt_name(mSettings.fAudioSampleFormat) << QT_ENDL;
-
-            stream << "Channel layout: ";
-            stream << OutputSettings::sGetChannelsLayoutName(
-                          mSettings.fAudioChannelsLayout) << QT_ENDL;
-
-            stream << "Audio sample-rate: ";
-            stream << QString::number(mSettings.fAudioSampleRate) << QT_ENDL;
-
-            stream << "Audio bitrate: ";
-            stream << QString::number(mSettings.fAudioBitrate) << QT_ENDL;
-        }
-    } else { RuntimeThrow("Could not save OutputProfile " + mName + ".\n" +
-                          "Failed to open file: '" + path + "'."); }
     mPath = path;
 }
 
 void OutputSettingsProfile::load(const QString &path)
 {
-    QFile file(path);
-    mPath = path;
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QTextStream stream(&file);
-        while(!stream.atEnd()) {
-            const QString line = stream.readLine();
-            if (line.isEmpty()) { continue; }
-            const auto varVal = line.split(":");
-            if (varVal.count() != 2) {
-                RuntimeThrow("Unrecognized line '" + line +
-                             "' in '" + path + "'");
-            }
-            const auto var = varVal.at(0).trimmed();
-            const auto val = varVal.at(1).trimmed();
-            if (var == "Name") {
-                mName = val;
-            } else if (var == "Format") {
-                mSettings.fOutputFormat = av_guess_format(
-                            val.toUtf8().data(), nullptr, nullptr);
-            } else if (var == "Video enabled") {
-                mSettings.fVideoEnabled = (val == "true");
-            } else if (var == "Video codec") {
-                mSettings.fVideoCodec = avcodec_find_encoder_by_name(
-                            val.toUtf8().data());
-            } else if (var == "Pixel format") {
-                mSettings.fVideoPixelFormat = av_get_pix_fmt(
-                            val.toUtf8().data());
-            } else if (var == "Video bitrate") {
-                mSettings.fVideoBitrate = val.toInt();
-            } else if (var == "Audio enabled") {
-                mSettings.fAudioEnabled = (val == "true");
-            } else if (var == "Audio codec") {
-                mSettings.fAudioCodec = avcodec_find_encoder_by_name(
-                            val.toUtf8().data());
-            } else if (var == "Sample format") {
-                mSettings.fAudioSampleFormat = av_get_sample_fmt(
-                            val.toUtf8().data());
-            } else if (var == "Channel layout") {
-                mSettings.fAudioChannelsLayout =
-                        OutputSettings::sGetChannelsLayout(val);
-            } else if (var == "Audio sample-rate") {
-                mSettings.fAudioSampleRate = val.toInt();
-            } else if (var == "Audio bitrate") {
-                mSettings.fAudioBitrate = val.toInt();
-            } else { RuntimeThrow("Unrecognized line '" + line +
-                                  "' in '" + path + "'"); }
+    qDebug() << "load output profile" << path;
+    if (!QFile::exists(path)) { RuntimeThrow(tr("Failed to load profile: %1").arg(path)); }
+
+    bool validProfile = false;
+
+    QString profileName;
+    QString profileFormat;
+
+    bool profileVideoEnabled = false;
+    bool profileAudioEnabled = false;
+
+    QSettings profile(path, QSettings::IniFormat);
+    profile.beginGroup(QString::fromUtf8("output_profile_v1"));
+
+    profileName = profile.value(QString::fromUtf8("name")).toString();
+    profileFormat = profile.value(QString::fromUtf8("format")).toString();
+    profileVideoEnabled = profile.value(QString::fromUtf8("video_enabled"), false).toBool();
+    profileAudioEnabled = profile.value(QString::fromUtf8("audio_enabled"), false).toBool();
+
+    validProfile = ((!profileName.isEmpty() && !profileFormat.isEmpty()) &&
+                    (profileVideoEnabled || profileAudioEnabled));
+
+    if (!validProfile) {
+        profile.endGroup();
+        RuntimeThrow(tr("Failed to load profile: %1").arg(path));
+    }
+
+    if (validProfile) {
+        mPath = path;
+        mName = profileName;
+        mSettings.fOutputFormat = av_guess_format(profileFormat.toUtf8().data(),
+                                                  nullptr,
+                                                  nullptr);
+        mSettings.fVideoEnabled = profileVideoEnabled;
+        if (mSettings.fVideoEnabled) {
+            mSettings.fVideoCodec = avcodec_find_encoder_by_name(profile
+                                                                 .value(QString::fromUtf8("video_codec"))
+                                                                 .toString()
+                                                                 .toUtf8()
+                                                                 .data());
+            mSettings.fVideoPixelFormat = av_get_pix_fmt(profile
+                                                         .value(QString::fromUtf8("video_pixel_format"))
+                                                         .toString()
+                                                         .toUtf8()
+                                                         .data());
+            mSettings.fVideoBitrate = profile.value(QString::fromUtf8("video_bitrate")).toInt();
         }
-    } else { RuntimeThrow("Could not load OutputProfile.\n" +
-                          "Failed to open file: '" + path + "'."); }
+        mSettings.fAudioEnabled = profileAudioEnabled;
+        if (mSettings.fAudioEnabled) {
+            mSettings.fAudioCodec = avcodec_find_encoder_by_name(profile
+                                                                 .value(QString::fromUtf8("audio_codec"))
+                                                                 .toString()
+                                                                 .toUtf8()
+                                                                 .data());
+            mSettings.fAudioSampleFormat = av_get_sample_fmt(profile
+                                                             .value(QString::fromUtf8("audio_sample_format"))
+                                                             .toString()
+                                                             .toUtf8()
+                                                             .data());
+            mSettings.fAudioChannelsLayout = OutputSettings::sGetChannelsLayout(profile
+                                                                                .value(QString::fromUtf8("audio_channel_layout"))
+                                                                                .toString());
+            mSettings.fAudioSampleRate = profile.value(QString::fromUtf8("audio_sample_rate")).toInt();
+            mSettings.fAudioBitrate = profile.value(QString::fromUtf8("audio_bitrate")).toInt();
+        }
+    } else {
+        profile.endGroup();
+        RuntimeThrow(tr("Failed to load profile: %1").arg(path));
+    }
+    profile.endGroup();
     emit changed();
 }
 

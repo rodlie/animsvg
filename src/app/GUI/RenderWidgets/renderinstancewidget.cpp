@@ -53,7 +53,7 @@ void RenderInstanceWidget::iniGUI() {
             const auto path = dirIt.next();
             const QFileInfo fileInfo(path);
             if(!fileInfo.isFile()) continue;
-            if(!fileInfo.completeSuffix().contains("eProf")) continue;
+            if(!fileInfo.completeSuffix().contains("eprof")) continue;
             const auto profile = enve::make_shared<OutputSettingsProfile>();
             try {
                 profile->load(path);
