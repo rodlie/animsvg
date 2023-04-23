@@ -270,7 +270,7 @@ void OutputSettingsDialog::addVideoCodec(const AVCodec* const codec,
 void OutputSettingsDialog::addAudioCodec(const AVCodecID &codecId,
                                          const AVOutputFormat *outputFormat,
                                          const QString &currentCodecName) {
-    AVCodec * const currentCodec = avcodec_find_encoder(codecId);
+    const AVCodec* currentCodec = avcodec_find_encoder(codecId);
     if(!currentCodec) return;
     if(currentCodec->type != AVMEDIA_TYPE_AUDIO) return;
     if(currentCodec->capabilities & AV_CODEC_CAP_EXPERIMENTAL) return;
@@ -317,7 +317,7 @@ void OutputSettingsDialog::updateAvailableVideoCodecs() {
         const FormatCodecs currFormatT =
                 mSupportedFormats.at(outputFormatId);
         for(const AVCodecID &codecId : currFormatT.mVidCodecs) {
-            AVCodec * const iCodec = avcodec_find_encoder(codecId);
+            const AVCodec* iCodec = avcodec_find_encoder(codecId);
             if(!iCodec) break;
             if(iCodec->type != AVMEDIA_TYPE_VIDEO) continue;
             if(iCodec->capabilities & AV_CODEC_CAP_EXPERIMENTAL) {
@@ -362,7 +362,7 @@ void OutputSettingsDialog::updateAvailableAudioCodecs() {
         const FormatCodecs currFormatT =
                 mSupportedFormats.at(outputFormatId);
         for(const AVCodecID &codecId : currFormatT.mAudioCodecs) {
-            AVCodec * const currentCodec = avcodec_find_encoder(codecId);
+            const AVCodec* currentCodec = avcodec_find_encoder(codecId);
             if(!currentCodec) break;
             if(currentCodec->type != AVMEDIA_TYPE_AUDIO) continue;
             if(currentCodec->capabilities & AV_CODEC_CAP_EXPERIMENTAL) {
@@ -451,7 +451,7 @@ void OutputSettingsDialog::updateAvailableSampleFormats() {
     const QString lastSet = mSampleFormatsComboBox->currentText();
     mSampleFormatsComboBox->clear();
     mSampleFormatsList.clear();
-    AVCodec *currentCodec = nullptr;
+    const AVCodec *currentCodec = nullptr;
     if(mAudioCodecsComboBox->count() > 0) {
         const int codecId = mAudioCodecsComboBox->currentIndex();
         currentCodec = mAudioCodecsList.at(codecId);
@@ -480,7 +480,7 @@ void OutputSettingsDialog::updateAvailableSampleFormats() {
 void OutputSettingsDialog::updateAvailableAudioBitrates() {
     const auto lastSet = mAudioBitrateComboBox->currentData();
     mAudioBitrateComboBox->clear();
-    AVCodec *currentCodec = nullptr;
+    const AVCodec *currentCodec = nullptr;
     if(mAudioCodecsComboBox->count() > 0) {
         int codecId = mAudioCodecsComboBox->currentIndex();
         currentCodec = mAudioCodecsList.at(codecId);
@@ -510,7 +510,7 @@ void OutputSettingsDialog::updateAvailableAudioBitrates() {
 
 void OutputSettingsDialog::updateAvailableSampleRates() {
     const auto lastSet = mSampleRateComboBox->currentData();
-    AVCodec *currentCodec = nullptr;
+    const AVCodec *currentCodec = nullptr;
     if(mAudioCodecsComboBox->count() > 0) {
         int codecId = mAudioCodecsComboBox->currentIndex();
         currentCodec = mAudioCodecsList.at(codecId);
@@ -548,7 +548,7 @@ void OutputSettingsDialog::updateAvailableAudioChannelLayouts() {
     const auto lastSet = mAudioChannelLayoutsComboBox->currentText();
     mAudioChannelLayoutsComboBox->clear();
     mAudioChannelLayoutsList.clear();
-    AVCodec *currentCodec = nullptr;
+    const AVCodec *currentCodec = nullptr;
     if(mAudioCodecsComboBox->count() > 0) {
         int codecId = mAudioCodecsComboBox->currentIndex();
         currentCodec = mAudioCodecsList.at(codecId);

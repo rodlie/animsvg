@@ -71,7 +71,7 @@ protected:
     QList<AVPixelFormat> mPixelFormatsList;
     QList<const AVCodec*> mVideoCodecsList;
     QList<const AVOutputFormat*> mOutputFormatsList;
-    QList<AVCodec*> mAudioCodecsList;
+    QList<const AVCodec*> mAudioCodecsList;
     QList<AVSampleFormat> mSampleFormatsList;
     QList<uint64_t> mAudioChannelLayoutsList;
 
