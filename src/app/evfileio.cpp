@@ -104,19 +104,30 @@ void MainWindow::loadEVFile(const QString &path) {
     addRecentFile(path);
 }
 
-void MainWindow::saveToFile(const QString &path) {
+void MainWindow::saveToFile(const QString &path)
+{
     QFile file(path);
-    if(file.exists()) file.remove();
+    if (file.exists()) { file.remove(); }
 
-    if(!file.open(QIODevice::WriteOnly))
+    // check if folder exists first
+    QFileInfo info(path);
+    QDir dir = info.absoluteDir();
+    if (!dir.exists()) {
+        if (!dir.mkpath(dir.absolutePath())) {
+            RuntimeThrow(tr("Unable to create directory: %1").arg(dir.absolutePath()));
+        }
+    }
+
+    if (!file.open(QIODevice::WriteOnly)) {
         RuntimeThrow("Could not open file for writing " + path + ".");
+    }
     eWriteStream writeStream(&file);
     writeStream.setPath(path);
     try {
         writeStream.writeCheckpoint();
         const auto& scenes = mDocument.fScenes;
         writeStream << scenes.count();
-        for(const auto& scene : scenes) {
+        for (const auto& scene : scenes) {
             scene->writeSettings(writeStream);
         }
         mLayoutHandler->write(writeStream);
