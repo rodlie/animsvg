@@ -25,6 +25,7 @@ APT=${APT:-0}
 SNAP=${SNAP:-0}
 REL=${REL:-0}
 SKIA_SYNC=${SKIA_SYNC:-1}
+PC=${PC:-""}
 
 if [ "${APT}" = 1 ]; then
 sudo apt update -y
@@ -62,6 +63,10 @@ fi
 
 if [ "${CI}" = 1 ]; then
     git submodule update -i --recursive
+fi
+
+if [ "${PC}" != "" ]; then
+    export PKG_CONFIG_PATH="${PC}:${PKG_CONFIG_PATH}"
 fi
 
 CWD=`pwd`
