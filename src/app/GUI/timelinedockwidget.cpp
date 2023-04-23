@@ -285,8 +285,8 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
 //    mGoToPreviousKeyButton->setFocusPolicy(Qt::NoFocus);
 //    mControlButtonsLayout->addWidget(mGoToNextKeyButton);
 //    mGoToNextKeyButton->setFocusPolicy(Qt::NoFocus);
-    QAction *resA = mToolBar->addAction("Resolution:");
-    resA->setToolTip(gSingleLineTooltip("Preview resolution"));
+    QAction *resA = mToolBar->addAction(tr("Resolution:"));
+    resA->setToolTip(tr("Preview resolution"));
     mToolBar->widgetForAction(resA)->setObjectName("inactiveToolButton");
 
     mToolBar->addWidget(mResolutionComboBox);
@@ -299,7 +299,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mToolBar->addSeparator();
     mToolBar->addAction(mLoopButton);
 
-    addSpaceToToolbar()->setText("     ");
+    //addSpaceToToolbar()->setText("     ");
 
     mLocalPivotAct = mToolBar->addWidget(mLocalPivot);
     mNodeVisibilityAct = mToolBar->addWidget(mNodeVisibility);
@@ -313,16 +313,16 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     brushColorWidget->layout()->addWidget(mColorLabel);
 
     mBrushColorWidgetAct = mToolBar->addWidget(brushColorWidget);
-    addSpaceToToolbar();
+    //addSpaceToToolbar();
     mDecBrushSizeAct = mToolBar->addWidget(mDecBrushSize);
     mBrushSizeLabelAct = mToolBar->addWidget(mBrushSizeLabel);
     mIncBrushSizeAct = mToolBar->addWidget(mIncBrushSize);
 
-    addSpaceToToolbar();
+    //addSpaceToToolbar();
 
     mOnionAct = mToolBar->addWidget(mOnion);
 
-    mPaintModeSpace = addSpaceToToolbar();
+    //mPaintModeSpace = addSpaceToToolbar();
 
     mPaintNormalModeAct = mToolBar->addWidget(mPaintNormalMode);
     mPaintEraseModeAct = mToolBar->addWidget(mPaintEraseMode);
@@ -577,7 +577,7 @@ void TimelineDockWidget::updateButtonsVisibility(const CanvasMode mode)
     mBrushSizeLabelAct->setVisible(paintMode);
     mIncBrushSizeAct->setVisible(paintMode);
     mOnionAct->setVisible(paintMode);
-    mPaintModeSpace->setVisible(paintMode);
+    //mPaintModeSpace->setVisible(paintMode);
 
     mPaintNormalModeAct->setVisible(paintMode);
     mPaintEraseModeAct->setVisible(paintMode);
