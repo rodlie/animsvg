@@ -72,18 +72,43 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent)
     mLastFrame->setRange(minFrame, 99999);
     mLastFrame->setValue(maxFrame);
 
-    mBackground = new QCheckBox("Background", this);
+    mBackground = new QCheckBox(tr("Background"), this);
     mBackground->setChecked(true);
-    mFixedSize = new QCheckBox("Fixed Size", this);
+    mFixedSize = new QCheckBox(tr("Fixed Size"), this);
     mFixedSize->setChecked(false);
-    mLoop = new QCheckBox("Loop", this);
+    mLoop = new QCheckBox(tr("Loop"), this);
     mLoop->setChecked(true);
 
-    twoColLayout->addPair(new QLabel("Scene:"), sceneButton);
-    twoColLayout->addPair(new QLabel("First Frame:"), mFirstFrame);
-    twoColLayout->addPair(new QLabel("Last Frame:"), mLastFrame);
+    twoColLayout->addPair(new QLabel(tr("Scene:")), sceneButton);
+    twoColLayout->addPair(new QLabel(tr("First Frame:")), mFirstFrame);
+    twoColLayout->addPair(new QLabel(tr("Last Frame:")), mLastFrame);
 
+    // image options
+    QLabel *mImageFormatLabel = new QLabel(tr("Raster Format:"), this);
+    mImageFormatLabel->setToolTip(tr("Image format for raster elements contained in the scene"));
+    mImageFormat = new QComboBox(this);
+    mImageFormat->setToolTip(mImageFormatLabel->toolTip());
+    mImageFormat->addItem(tr("PNG"));
+    mImageFormat->addItem(tr("JPEG"));
+
+    mImageQuality = new QSpinBox(this);
+    mImageQuality->setToolTip(tr("Image format quality"));
+    mImageQuality->setRange(1, 100);
+    mImageQuality->setValue(100);
+    mImageQuality->setSuffix("%");
+
+    QWidget *mImageOptions = new QWidget(this);
+    mImageOptions->setContentsMargins(0, 0, 0, 0);
+    QHBoxLayout *mImageOptionsLayout = new QHBoxLayout(mImageOptions);
+    mImageOptionsLayout->setContentsMargins(0, 0, 0, 0);
+
+    mImageOptionsLayout->addWidget(mImageFormatLabel);
+    mImageOptionsLayout->addWidget(mImageFormat);
+    mImageOptionsLayout->addWidget(mImageQuality);
+
+    // settings layout
     settingsLayout->addLayout(twoColLayout);
+    settingsLayout->addWidget(mImageOptions);
     settingsLayout->addWidget(mBackground);
     settingsLayout->addWidget(mFixedSize);
     settingsLayout->addWidget(mLoop);
@@ -93,12 +118,12 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent)
     connect(mLastFrame, qOverload<int>(&QSpinBox::valueChanged),
             mFirstFrame, &QSpinBox::setMaximum);
 
-    const auto buttons = new QDialogButtonBox(QDialogButtonBox::Ok |
-                                              QDialogButtonBox::Cancel);
+    const auto buttons = new QDialogButtonBox(QDialogButtonBox::Save |
+                                              QDialogButtonBox::Close);
 
     connect(mScene, &SceneChooser::currentChanged,
             this, [this, buttons, sceneButton](Canvas* const scene) {
-        buttons->button(QDialogButtonBox::Ok)->setEnabled(scene);
+        buttons->button(QDialogButtonBox::Save)->setEnabled(scene);
         sceneButton->setText(mScene->title());
     });
 
@@ -118,6 +143,7 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent)
     settingsLayout->addWidget(buttons, 0, Qt::AlignBottom);
 
     mPreviewButton = new QPushButton(tr("Preview"), this);
+    mPreviewButton->setObjectName("SVGPreviewButton");
     buttons->addButton(mPreviewButton, QDialogButtonBox::ActionRole);
     connect(mPreviewButton, &QPushButton::released, this, [this]() {
         if (!mPreviewFile) {
@@ -161,11 +187,22 @@ ComplexTask* ExportSvgDialog::exportTo(const QString& file,
         const bool fixedSize = mFixedSize->isChecked();
         const bool loop = mLoop->isChecked();
 
+        int imageQuality = mImageQuality->value();
+        SkEncodedImageFormat imageFormat;
+        switch(mImageFormat->currentIndex()) {
+        case 1:
+            imageFormat = SkEncodedImageFormat::kJPEG;
+            break;
+        default:
+            imageFormat = SkEncodedImageFormat::kPNG;
+        }
+
         const FrameRange frameRange{firstFrame, lastFrame};
         const qreal fps = scene->getFps();
 
         const auto task = new SvgExporter(file, scene, frameRange, fps,
-                                          background, fixedSize, loop, preview);
+                                          background, fixedSize, loop,
+                                          imageFormat, imageQuality, preview);
         const auto taskSPtr = qsptr<SvgExporter>(task, &QObject::deleteLater);
         task->nextStep();
         TaskScheduler::instance()->addComplexTask(taskSPtr);

@@ -39,6 +39,8 @@ public:
                 const bool background,
                 const bool fixedSize,
                 const bool loop,
+                const SkEncodedImageFormat imageFormat = SkEncodedImageFormat::kPNG,
+                const int imageQuality = 100,
                 bool html = false);
 
     void nextStep() override;
@@ -51,6 +53,8 @@ public:
     const bool fBackground;
     const bool fFixedSize;
     const bool fLoop;
+    const SkEncodedImageFormat fImageFormat;
+    const int fImageQuality;
 
     QDomElement createElement(const QString& tagName)
     {

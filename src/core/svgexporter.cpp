@@ -31,6 +31,8 @@ SvgExporter::SvgExporter(const QString& path,
                          const bool background,
                          const bool fixedSize,
                          const bool loop,
+                         const SkEncodedImageFormat imageFormat,
+                         const int imageQuality,
                          bool html)
     : ComplexTask(INT_MAX, tr("SVG Export"))
     , fScene(scene)
@@ -39,6 +41,8 @@ SvgExporter::SvgExporter(const QString& path,
     , fBackground(background)
     , fFixedSize(fixedSize)
     , fLoop(loop)
+    , fImageFormat(imageFormat)
+    , fImageQuality(imageQuality)
     , mHtml(html)
     , mOpen(false)
     , mFile(path)

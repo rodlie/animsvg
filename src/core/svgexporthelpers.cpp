@@ -28,29 +28,44 @@ void SvgExportHelpers::assignLoop(QDomElement& ele, const bool loop) {
     else ele.setAttribute("fill", "freeze");
 }
 
-sk_sp<SkData> asDataUri(SkImage* image) {
-    sk_sp<SkData> imageData = image->encodeToData(SkEncodedImageFormat::kPNG, 100);
+sk_sp<SkData> asDataUri(SkImage* image,
+                        SkEncodedImageFormat format = SkEncodedImageFormat::kPNG,
+                        int quality = 100)
+{
+    switch(format) {
+    case SkEncodedImageFormat::kBMP:
+    case SkEncodedImageFormat::kGIF:
+    case SkEncodedImageFormat::kICO:
+    case SkEncodedImageFormat::kWBMP:
+    case SkEncodedImageFormat::kWEBP:
+    case SkEncodedImageFormat::kPKM:
+    case SkEncodedImageFormat::kKTX:
+    case SkEncodedImageFormat::kASTC:
+    case SkEncodedImageFormat::kDNG:
+    case SkEncodedImageFormat::kHEIF:
+        format = SkEncodedImageFormat::kPNG;
+        quality = 100;
+    default:;
+    }
+
+    sk_sp<SkData> imageData = image->encodeToData(format, quality);
     if (!imageData) {
         return nullptr;
     }
 
-//    const char* src = (char*)imageData->data();
     const char* selectedPrefix = nullptr;
     size_t selectedPrefixLength = 0;
 
     const static char pngDataPrefix[] = "data:image/png;base64,";
-//    const static char jpgDataPrefix[] = "data:image/jpeg;base64,";
+    const static char jpgDataPrefix[] = "data:image/jpeg;base64,";
 
-//    if (SkJpegCodec::IsJpeg(src, imageData->size())) {
-//        selectedPrefix = jpgDataPrefix;
-//        selectedPrefixLength = sizeof(jpgDataPrefix);
-//    } else {
-//      if (!SkPngCodec::IsPng(src, imageData->size())) {
-//        imageData = image->encodeToData(SkEncodedImageFormat::kPNG, 100);
-//      }
-      selectedPrefix = pngDataPrefix;
-      selectedPrefixLength = sizeof(pngDataPrefix);
-//    }
+    if (format == SkEncodedImageFormat::kJPEG) {
+        selectedPrefix = jpgDataPrefix;
+        selectedPrefixLength = sizeof(jpgDataPrefix);
+    } else {
+        selectedPrefix = pngDataPrefix;
+        selectedPrefixLength = sizeof(pngDataPrefix);
+    }
 
     size_t b64Size = SkBase64::Encode(imageData->data(), imageData->size(), nullptr);
     sk_sp<SkData> dataUri = SkData::MakeUninitialized(selectedPrefixLength + b64Size);
@@ -63,14 +78,17 @@ sk_sp<SkData> asDataUri(SkImage* image) {
 
 void SvgExportHelpers::defImage(SvgExporter& exp,
                                 const sk_sp<SkImage>& image,
-                                const QString id) {
+                                const QString id)
+{
     auto def = exp.createElement("image");
     def.setAttribute("id", id);
     def.setAttribute("x", 0);
     def.setAttribute("y", 0);
     def.setAttribute("width", image->width());
     def.setAttribute("height", image->height());
-    const auto dataUri = asDataUri(image.get());
+    const auto dataUri = asDataUri(image.get(),
+                                   exp.fImageFormat,
+                                   exp.fImageQuality);
     def.setAttribute("xlink:href", static_cast<const char*>(dataUri->data()));
     exp.addToDefs(def);
 }

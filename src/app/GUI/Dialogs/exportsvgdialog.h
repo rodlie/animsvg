@@ -26,6 +26,7 @@
 #include <QSpinBox>
 #include <QCheckBox>
 #include <QTemporaryFile>
+#include <QComboBox>
 
 class SceneChooser;
 class ComplexTask;
@@ -40,16 +41,19 @@ private:
                           bool preview = false);
 
     QSharedPointer<QTemporaryFile> mPreviewFile;
-    QPushButton* mPreviewButton;
+    QPushButton *mPreviewButton;
 
-    SceneChooser* mScene;
+    SceneChooser *mScene;
 
-    QSpinBox* mFirstFrame;
-    QSpinBox* mLastFrame;
+    QSpinBox *mFirstFrame;
+    QSpinBox *mLastFrame;
 
-    QCheckBox* mBackground;
-    QCheckBox* mFixedSize;
-    QCheckBox* mLoop;
+    QCheckBox *mBackground;
+    QCheckBox *mFixedSize;
+    QCheckBox *mLoop;
+
+    QComboBox *mImageFormat;
+    QSpinBox *mImageQuality;
 };
 
 #endif // EXPORTSVGDIALOG_H
