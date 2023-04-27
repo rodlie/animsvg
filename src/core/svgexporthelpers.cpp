@@ -32,12 +32,11 @@ sk_sp<SkData> asDataUri(SkImage* image,
                         SkEncodedImageFormat format = SkEncodedImageFormat::kPNG,
                         int quality = 100)
 {
-    switch(format) {
+    switch (format) {
     case SkEncodedImageFormat::kBMP:
     case SkEncodedImageFormat::kGIF:
     case SkEncodedImageFormat::kICO:
     case SkEncodedImageFormat::kWBMP:
-    case SkEncodedImageFormat::kWEBP:
     case SkEncodedImageFormat::kPKM:
     case SkEncodedImageFormat::kKTX:
     case SkEncodedImageFormat::kASTC:
@@ -58,11 +57,18 @@ sk_sp<SkData> asDataUri(SkImage* image,
 
     const static char pngDataPrefix[] = "data:image/png;base64,";
     const static char jpgDataPrefix[] = "data:image/jpeg;base64,";
+    const static char webpDataPrefix[] = "data:image/webp;base64,";
 
-    if (format == SkEncodedImageFormat::kJPEG) {
+    switch (format) {
+    case SkEncodedImageFormat::kJPEG:
         selectedPrefix = jpgDataPrefix;
         selectedPrefixLength = sizeof(jpgDataPrefix);
-    } else {
+        break;
+    case SkEncodedImageFormat::kWEBP:
+        selectedPrefix = webpDataPrefix;
+        selectedPrefixLength = sizeof(webpDataPrefix);
+        break;
+    default:
         selectedPrefix = pngDataPrefix;
         selectedPrefixLength = sizeof(pngDataPrefix);
     }

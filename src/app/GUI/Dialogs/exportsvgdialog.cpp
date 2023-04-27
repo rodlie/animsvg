@@ -90,12 +90,13 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent)
     mImageFormat->setToolTip(mImageFormatLabel->toolTip());
     mImageFormat->addItem(tr("PNG"));
     mImageFormat->addItem(tr("JPEG"));
+    mImageFormat->addItem(tr("WEBP"));
 
     mImageQuality = new QSpinBox(this);
     mImageQuality->setToolTip(tr("Image format quality"));
     mImageQuality->setRange(1, 100);
     mImageQuality->setValue(100);
-    mImageQuality->setSuffix("%");
+    mImageQuality->setSuffix(tr("%"));
 
     QWidget *mImageOptions = new QWidget(this);
     mImageOptions->setContentsMargins(0, 0, 0, 0);
@@ -192,6 +193,9 @@ ComplexTask* ExportSvgDialog::exportTo(const QString& file,
         switch(mImageFormat->currentIndex()) {
         case 1:
             imageFormat = SkEncodedImageFormat::kJPEG;
+            break;
+        case 2:
+            imageFormat = SkEncodedImageFormat::kWEBP;
             break;
         default:
             imageFormat = SkEncodedImageFormat::kPNG;
