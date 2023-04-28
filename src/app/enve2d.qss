@@ -52,3 +52,16 @@ QToolBar#animationDockWidget
 {
     background-color: rgb(33, 33, 38);
 }
+
+QComboBox#blendModeCombo,
+QWidget#menuBarWidget QPushButton,
+QLineEdit#SearchLine {
+    background-color: rgb(23, 23, 28);
+}
+
+QPushButton::menu-indicator { width: 0px; }
+
+QLineEdit#SearchLine {
+    border-radius: 0;
+    border: 0;
+}

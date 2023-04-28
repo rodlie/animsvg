@@ -26,12 +26,12 @@ class QActionButton : public QPushButton {
 public:
     explicit QActionButton(QWidget *parent = nullptr) :
         QPushButton(parent) {
-        eSizesUI::widget.add(this, [this](const int size) {
+        /*eSizesUI::widget.add(this, [this](const int size) {
             setFixedHeight(size - 1);
-        });
-        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        });*/
+        //setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         setObjectName("QActionButton");
-        setStyleSheet("QPushButton::menu-indicator { width:0px; }");
+        //setStyleSheet("QPushButton::menu-indicator { width:0px; }");
     }
 
     void setAction(QAction *action) {
@@ -82,9 +82,9 @@ FakeMenuBar::FakeMenuBar(QWidget* const parent) :
 
     setLayout(mainLayout);
 
-    eSizesUI::widget.add(this, [this](const int size) {
+    /*eSizesUI::widget.add(this, [this](const int size) {
         setFixedHeight(size);
-    });
+    });*/
 }
 
 void FakeMenuBar::addSeparator() {

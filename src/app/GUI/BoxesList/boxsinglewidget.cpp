@@ -94,7 +94,7 @@ BoxSingleWidget::BoxSingleWidget(BoxScroller * const parent) :
     mMainLayout = new QHBoxLayout(this);
     setLayout(mMainLayout);
     mMainLayout->setSpacing(0);
-    setContentsMargins(0, 0, 0, 0);
+    //setContentsMargins(0, 0, 0, 0);
     mMainLayout->setContentsMargins(0, 0, 0, 0);
     mMainLayout->setMargin(0);
     mMainLayout->setAlignment(Qt::AlignLeft);
@@ -290,7 +290,7 @@ BoxSingleWidget::BoxSingleWidget(BoxScroller * const parent) :
     mCheckBox = new BoolPropertyWidget(this);
     mMainLayout->addWidget(mCheckBox);
 
-    eSizesUI::widget.addHalfSpacing(mMainLayout);
+    //eSizesUI::widget.addHalfSpacing(mMainLayout);
 
     hide();
     connectAppFont(this);

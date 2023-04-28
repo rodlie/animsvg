@@ -152,7 +152,7 @@ void KeysView::graphPaint(QPainter *p) {
             yL -= incY;
             currValue += mValueInc;
         }
-        p->setPen(QColor(200, 200, 200));
+        p->setPen(QColor(44, 44, 49));
         p->drawLines(lines, nLines);
         delete[] lines;
     }

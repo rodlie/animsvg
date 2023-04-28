@@ -454,8 +454,8 @@ void KeysView::drawKeys(QPainter * const p,
 void KeysView::paintEvent(QPaintEvent *) {
     QPainter p(this);
 
-    if(mGraphViewed) p.fillRect(rect(), QColor(60, 60, 60));
-    else p.fillRect(rect(), QColor(60, 60, 60));
+    if(mGraphViewed) p.fillRect(rect(), QColor(33, 33, 38));
+    else p.fillRect(rect(), QColor(33, 33, 38));
 
     if(mPixelsPerFrame < 0.001) return;
     if(!mGraphViewed) {
@@ -468,7 +468,7 @@ void KeysView::paintEvent(QPaintEvent *) {
     }
     p.translate(eSizesUI::widget/2, 0);
 
-    p.setPen(QPen(QColor(75, 75, 75), 1));
+    p.setPen(QPen(QColor(44, 44, 49), 1));
     qreal xT = mPixelsPerFrame*0.5;
     int iInc = 1;
     bool mult5 = true;

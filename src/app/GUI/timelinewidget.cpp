@@ -170,15 +170,16 @@ TimelineWidget::TimelineWidget(Document &document,
     connect(mGraphAct, &QAction::toggled,
             this, &TimelineWidget::setGraphEnabled);
 
-    mCornerMenuBar->setContentsMargins(0, 0, 1, 0);
+    //mCornerMenuBar->setContentsMargins(0, 0, 1, 0);
 
     mSearchLine = new QLineEdit("", mBoxesListMenuBar);
+    mSearchLine->setObjectName("SearchLine");
     mSearchLine->setMinimumHeight(0);
-    mSearchLine->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
+    mSearchLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     MainWindow::sGetInstance()->installLineFilter(mSearchLine);
-    mSearchLine->setStyleSheet("border-radius: 0;"
-                               "border: 0;");
-    mSearchLine->setPlaceholderText("search");
+//    mSearchLine->setStyleSheet("border-radius: 0;"
+//                               "border: 0;");
+    mSearchLine->setPlaceholderText(tr("Search"));
     connect(mSearchLine, &QLineEdit::textChanged,
             this, &TimelineWidget::setSearchText);
     mSearchLine->setFocusPolicy(Qt::ClickFocus);
