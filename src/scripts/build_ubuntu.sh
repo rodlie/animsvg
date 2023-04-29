@@ -36,6 +36,7 @@ autoconf \
 automake \
 cmake \
 python3 \
+python-is-python3 \
 ninja-build \
 tree \
 libfontconfig1-dev \

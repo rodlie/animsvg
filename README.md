@@ -86,6 +86,7 @@ autoconf \
 automake \
 cmake \
 python3 \
+python-is-python3 \
 ninja-build \
 libfontconfig1-dev \
 libfreetype-dev \
