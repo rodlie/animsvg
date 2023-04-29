@@ -59,7 +59,7 @@ void HddCachableCacheHandler::drawCacheOnTimeline(QPainter * const p,
         const bool storesInMemory = cont->storesDataInMemory();
         //if(storesInMemory != lastStoresInMemory) {
             if(storesInMemory) {
-                if(cont->inUse()) p->setBrush(QColor(255, 0, 0, 75));
+                if(cont->inUse()) p->setBrush(QColor(255, 0, 0));
                 else p->setBrush(QColor(0, 255, 0, 75));
             } else {
                 p->setBrush(QColor(0, 0, 255, 75));
@@ -67,7 +67,7 @@ void HddCachableCacheHandler::drawCacheOnTimeline(QPainter * const p,
             //lastStoresInMemory = storesInMemory;
         //}
         p->drawRect(x, qRound(drawRect.top()),
-                    qMin(maxX, x + width) - x, qRound(drawRect.height()));
+                    qMin(maxX, x + width) - x, /*qRound(drawRect.height())*/4);
         lastDrawnFrame = afterMaxFrame;
         lastDrawX = x + width;
     }

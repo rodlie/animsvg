@@ -24,12 +24,14 @@ FrameScrollBar::FrameScrollBar(const int minSpan,
                                const int maxSpan,
                                const bool range,
                                const bool clamp,
+                               const bool bottom,
                                QWidget *parent) :
     QWidget(parent) {
     mMinSpan = minSpan;
     mMaxSpan = maxSpan;
     mRange = range;
     mClamp = clamp;
+    mBottom = bottom;
     setFramesSpan(0);
 
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
@@ -69,9 +71,9 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     QRect handleRect;
     const int hLeftFrames = mFirstViewedFrame - minFrame;
     handleRect.setLeft(qRound(hLeftFrames*pixPerFrame + x0));
-    handleRect.setTop(0);
+    handleRect.setTop(mBottom ? 0 : 5);
     handleRect.setWidth(qRound(mViewedFramesSpan*pixPerFrame));
-    handleRect.setBottom(height());
+    handleRect.setBottom(mBottom ? 4 : height());
     p.fillRect(handleRect, col);
 
     if(mCurrentCanvas) {

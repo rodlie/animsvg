@@ -23,7 +23,7 @@ ScrollArea::ScrollArea(QWidget * const parent) : QScrollArea(parent) {
     //verticalScrollBar()->setSingleStep(20);
 
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    //setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setBackgroundRole(QPalette::Window);
     setFrameShadow(QFrame::Plain);
     setFrameShape(QFrame::NoFrame);

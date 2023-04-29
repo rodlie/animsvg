@@ -62,13 +62,13 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
     connect(mFitToHeightButton, &QAction::triggered,
             keysView, &KeysView::graphResetValueScaleAndMinShownAction);
 
-    const auto valueLines = SwitchButton::sCreate2Switch(
+    /*const auto valueLines = SwitchButton::sCreate2Switch(
                                 "toolbarButtons/horizontalLinesChecked.png",
                                 "toolbarButtons/horizontalLinesUnchecked.png",
                                 gSingleLineTooltip("Show/Hide Value Lines"),
                                 this);
     connect(valueLines, &SwitchButton::toggled,
-            keysView, &KeysView::graphSetValueLinesDisabled);
+            keysView, &KeysView::graphSetValueLinesDisabled);*/
 
     const auto selectedVisible = SwitchButton::sCreate2Switch(
                                      "toolbarButtons/onlySelectedVisibleUnchecked.png",
@@ -86,7 +86,7 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
     addAction(mCornerButton);
     addSeparator();
     addAction(mFitToHeightButton);
-    addWidget(valueLines);
+    //addWidget(valueLines);
     addSeparator();
     addWidget(selectedVisible);
 }

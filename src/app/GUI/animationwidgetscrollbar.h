@@ -29,6 +29,7 @@ public:
                             const int maxSpan,
                             const bool range,
                             const bool clamp,
+                            const bool bottom = false,
                             QWidget *parent = nullptr);
     bool setFirstViewedFrame(const int firstFrame);
     void setFramesSpan(int newSpan);
@@ -67,6 +68,7 @@ private:
     bool mDisplayTime = false;
     bool mRange;
     bool mPressed = false;
+    bool mBottom;
 
     int mSavedFirstFrame;
 

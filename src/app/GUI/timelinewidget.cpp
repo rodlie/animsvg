@@ -223,8 +223,8 @@ TimelineWidget::TimelineWidget(Document &document,
     keysViewScrollbarLayout->addLayout(layoutT);
     mKeysView->setLayout(keysViewScrollbarLayout);
     keysViewScrollbarLayout->setAlignment(Qt::AlignRight);
-    keysViewScrollbarLayout->addWidget(
-                mBoxesListScrollArea->verticalScrollBar());
+    /*keysViewScrollbarLayout->addWidget(
+                mBoxesListScrollArea->verticalScrollBar());*/
     mBoxesListScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     keysViewScrollbarLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -253,7 +253,7 @@ TimelineWidget::TimelineWidget(Document &document,
 
     setLayout(mMainLayout);
 
-    mFrameScrollBar = new FrameScrollBar(1, 1, false, false, this);
+    mFrameScrollBar = new FrameScrollBar(1, 1, false, false, false, this);
     mFrameScrollBar->setSizePolicy(QSizePolicy::Minimum,
                                    QSizePolicy::Preferred);
 //    connect(MemoryHandler::sGetInstance(), &MemoryHandler::memoryFreed,
@@ -267,9 +267,9 @@ TimelineWidget::TimelineWidget(Document &document,
     });
     mMainLayout->addWidget(mFrameScrollBar, 0, 1);
 
-    mFrameRangeScrollBar = new FrameScrollBar(20, 200, true, true, this);
+    mFrameRangeScrollBar = new FrameScrollBar(20, 200, true, true, true, this);
     eSizesUI::widget.add(mFrameRangeScrollBar, [this](const int size) {
-        mFrameRangeScrollBar->setMinimumHeight(size*2/3);
+        mFrameRangeScrollBar->setMinimumHeight(size+5/**2/3*/);
     });
 
     connect(mFrameRangeScrollBar, &FrameScrollBar::triggeredFrameRangeChange,
