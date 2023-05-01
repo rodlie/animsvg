@@ -1,3 +1,0 @@
-Alpha Mask
-To create a simple alpha mask you need at least two objects, one of which will act as the mask.
-You have to put both objects into a separate layer so that the mask does not influence objects outside the layer.

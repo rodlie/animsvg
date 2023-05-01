@@ -1,8 +1,8 @@
 #!/bin/sh
 #
-# enve2d - https://github.com/enve2d
+# Friction - https://github.com/friction2d/friction
 #
-# Copyright (c) enve2d developers
+# Copyright (c) Friction developers
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

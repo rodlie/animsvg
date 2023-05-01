@@ -1,3 +1,0 @@
-Transform Accept/Cancel
-To apply the transformation, press the left mouse button or <b>Enter</b>.
-To cancel the transformation, press the right mouse button or <b>Esc</b>.

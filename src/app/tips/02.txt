@@ -1,3 +1,0 @@
-Adding Keyframes
-To enable value recording press on the record button, next to the property name.
-Keyframes are added automatically for properties with enabled value recording every time you change their value.

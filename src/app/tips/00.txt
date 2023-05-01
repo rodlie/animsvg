@@ -1,3 +1,0 @@
-Scrolling Timeline
-There are two scrollbars to help you navigate the timeline. The top one lets you change the current frame. The bottom one lets you change a visible timeline frame range.
-Use the mouse wheel while hovering over the bottom scrollbar to scale the timeline.

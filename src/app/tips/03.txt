@@ -1,5 +1,0 @@
-Transform Shortcuts
-Shortcuts are a very convenient way of transforming selected objects.
-Press <b>R</b> to rotate selected objects.
-Press <b>G</b> to move selected objects.
-Press <b>S</b> to scale selected objects.

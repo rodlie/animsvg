@@ -1,8 +1,8 @@
 /*
 #
-# enve2d - https://github.com/enve2d
+# Friction - https://github.com/friction2d/friction
 #
-# Copyright (c) enve2d developers
+# Copyright (c) Friction developers
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -98,58 +98,43 @@ void AppSupport::setSettings(const QString &group,
 
 const QString AppSupport::getAppName()
 {
-    QString val = QString::fromUtf8("enve2d");
-#ifdef APP2D_NAME
-    val = QString::fromUtf8(APP2D_NAME);
-#endif
+    QString val = QString::fromUtf8("friction");
     return val;
 }
 
 const QString AppSupport::getAppDisplayName()
 {
-    QString val = QString::fromUtf8("enve2d");
-#ifdef APP2D_DISPLAY_NAME
-    val = QString::fromUtf8(APP2D_DISPLAY_NAME);
-#endif
+    QString val = QString::fromUtf8("Friction");
     return val;
 }
 
 const QString AppSupport::getAppDomain()
 {
-    QString val = QString::fromUtf8("enve2d.org");
-#ifdef APP2D_DOMAIN
-    val = QString::fromUtf8(APP2D_DOMAIN);
-#endif
+    QString val = QString::fromUtf8("friction2d.com");
     return val;
 }
 
 const QString AppSupport::getAppID()
 {
-    QString val = QString::fromUtf8("io.github.enve2d");
-#ifdef APP2D_ID
-    val = QString::fromUtf8(APP2D_URL);
-#endif
+    QString val = QString::fromUtf8("com.friction2d");
     return val;
 }
 
 const QString AppSupport::getAppUrl()
 {
-    QString val = QString::fromUtf8("https://enve2d.org");
-#ifdef APP2D_URL
-    val = QString::fromUtf8(APP2D_URL);
-#endif
+    QString val = QString::fromUtf8("https://friction2d.com");
     return val;
 }
 
 const QString AppSupport::getAppVersion(bool html)
 {
     QString version = QString::fromUtf8("0.9.0");
-#ifdef APP2D_VERSION
-    version = QString::fromUtf8(APP2D_VERSION);
+#ifdef PROJECT_VERSION
+    version = QString::fromUtf8(PROJECT_VERSION);
 #endif
     QString git;
-#ifdef APP2D_GIT
-    git = QString::fromUtf8(APP2D_GIT);
+#ifdef PROJECT_GIT
+    git = QString::fromUtf8(PROJECT_GIT);
 #endif
     if (!git.isEmpty()) {
         version.append(html ? QString::fromUtf8(" <a href=\"%2/%1\">%1</a>").arg(git,
@@ -161,54 +146,36 @@ const QString AppSupport::getAppVersion(bool html)
 const QString AppSupport::getAppDesc()
 {
     QString val = QString::fromUtf8("2D Animation Software");
-#ifdef APP2D_DESC
-    val = QString::fromUtf8(APP2D_DESC);
-#endif
     return val;
 }
 
 const QString AppSupport::getAppCompany()
 {
-    QString val = QString::fromUtf8("enve2d");
-#ifdef APP2D_COMPANY
-    val = QString::fromUtf8(APP2D_COMPANY);
-#endif
+    QString val = QString::fromUtf8("friction");
     return val;
 }
 
 const QString AppSupport::getAppContributorsUrl()
 {
-    QString val = QString::fromUtf8("https://github.com/enve2d/enve2d/graphs/contributors");
-#ifdef APP2D_CONTRIB_URL
-    val = QString::fromUtf8(APP2D_CONTRIB_URL);
-#endif
+    QString val = QString::fromUtf8("https://github.com/friction2d/friction/graphs/contributors");
     return val;
 }
 
 const QString AppSupport::getAppIssuesUrl()
 {
-    QString val = QString::fromUtf8("https://github.com/enve2d/enve2d/issues");
-#ifdef APP2D_ISSUES_URL
-    val = QString::fromUtf8(APP2D_ISSUES_URL);
-#endif
+    QString val = QString::fromUtf8("https://github.com/friction2d/friction/issues");
     return val;
 }
 
 const QString AppSupport::getAppLatestReleaseUrl()
 {
-    QString val = QString::fromUtf8("https://github.com/enve2d/enve2d/releases/latest");
-#ifdef APP2D_RELEASE_URL
-    val = QString::fromUtf8(APP2D_RELEASE_URL);
-#endif
+    QString val = QString::fromUtf8("https://github.com/friction2d/friction/releases/latest");
     return val;
 }
 
 const QString AppSupport::getAppCommitUrl()
 {
-    QString val = QString::fromUtf8("https://github.com/enve2d/enve2d/commit");
-#ifdef APP2D_COMMIT_URL
-    val = QString::fromUtf8(APP2D_COMMIT_URL);
-#endif
+    QString val = QString::fromUtf8("https://github.com/friction2d/friction/commit");
     return val;
 }
 

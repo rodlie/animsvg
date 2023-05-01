@@ -1,2 +1,0 @@
-Visibility Range
-You can use a visibility range to control visibility of an object.

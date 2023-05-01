@@ -1,2 +1,0 @@
-Blend Modes and Layers
-Remember that objects are drawn onto their first parenting layer, meaning non-layer groups do not influence the way objects are being drawn.

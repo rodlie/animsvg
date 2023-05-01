@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/styles">
-        <file alias="stylesheet.qss">stylesheet.qss</file>
-        <file>enve2d.qss</file>
+        <file>friction.qss</file>
     </qresource>
     <qresource prefix="/cursors">
         <file alias="cursor-node.xpm">pixmaps/cursor-node.xpm</file>
@@ -28,9 +27,6 @@
         <file alias="plain.frag">GUI/ColorWidgets/colorwidgetshaders/plain.frag</file>
         <file alias="red.frag">GUI/ColorWidgets/colorwidgetshaders/red.frag</file>
         <file alias="value.frag">GUI/ColorWidgets/colorwidgetshaders/value.frag</file>
-    </qresource>
-    <qresource prefix="/pixmaps">
-        <file>splash.svg</file>
     </qresource>
     <qresource prefix="/other"/>
     <qresource prefix="/checkbox">

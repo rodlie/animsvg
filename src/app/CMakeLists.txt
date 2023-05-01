@@ -1,6 +1,7 @@
-# enve2d - https://github.com/enve2d
 #
-# Copyright (c) enve2d developers
+# Friction - https://github.com/friction2d/friction
+#
+# Copyright (c) Friction developers
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,13 +18,13 @@
 #
 
 cmake_minimum_required(VERSION 3.9)
-project(enve2d VERSION 0.9.0 LANGUAGES CXX)
+project(friction VERSION 0.9.0 LANGUAGES CXX)
 
 if(NOT PROJECT_VERSION_TWEAK)
     set(PROJECT_VERSION_TWEAK 0)
 endif()
 
-add_definitions(-DAPP2D_VERSION="${PROJECT_VERSION}")
+add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 
 add_compile_options(-Wall -Wextra)
 if(CMAKE_BUILD_TYPE MATCHES "^(release|Release|RELEASE)$")
@@ -38,10 +39,11 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(COMPANY "enve2d")
-set(COPYRIGHT "Copyright enve2d developers. All rights reserved.")
-set(IDENTIFIER "io.github.enve2d")
-set(PROJECT_DESCRIPTION "2D Animation Software")
+set(PROJECT_DISPLAY_NAME "Friction")
+set(COMPANY "Friction developers")
+set(COPYRIGHT "Copyright Friction developers. All rights reserved.")
+set(IDENTIFIER "com.friction2d")
+set(PROJECT_DESCRIPTION "2D Animation")
 
 if(APPLE)
     set(ICON_FILE ${CMAKE_CURRENT_SOURCE_DIR}/icons/${PROJECT_NAME}.icns)

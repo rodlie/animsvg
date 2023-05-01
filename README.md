@@ -1,10 +1,10 @@
-# enve2d
+# Friction
 
 2D animation software for Linux.
 
-See our issue [tracker](https://github.com/enve2d/enve2d/issues) or [forum](https://github.com/enve2d/enve2d/discussions) for more information.
+See our issue [tracker](https://github.com/friction2d/friction/issues) or [forum](https://github.com/friction2d/friction/discussions) for more information.
 
-We are working on our first release (0.9.0), see progress [here](https://github.com/enve2d/enve2d/milestone/1).
+We are working on our first release (0.9.0), see progress [here](https://github.com/friction2d/friction/milestone/1).
 
 ## System requirements
 
@@ -27,11 +27,9 @@ Snapshots for selected platforms will soon be available.
 
 Yes, this is a fork of [enve](https://github.com/MaurycyLiebner/enve).
 
-We are developing the application under the name ``enve2d``, but will change the name before our first release.
-
 # License
 
-enve2d is copyright &copy; enve2d [developers](https://github.com/enve2d/enve2d/graphs/contributors)
+Friction is copyright &copy; Friction [developers](https://github.com/friction2d/friction/graphs/contributors)
 
 [enve](https://github.com/MaurycyLiebner/enve) is copyright &copy; 2016-2022 Maurycy Liebner
 
@@ -74,13 +72,14 @@ Generic build instructions for supported platforms.
 
 ## Linux
 
-General instructions for building enve2d on Linux *(tested on Ubuntu Jammy)*.
+General instructions for building on Linux *(tested on Ubuntu Jammy)*.
 
 ### Ubuntu
 
 ```
 sudo apt install -y \
 build-essential \
+git \
 libtool \
 autoconf \
 automake \
@@ -116,7 +115,7 @@ qttools5-dev-tools
 Clone the repository, this might take a while.
 
 ```
-git clone --recurse-submodules https://github.com/enve2d/enve2d
+git clone --recurse-submodules https://github.com/friction2d/friction
 ```
 
 ### Build libtcmalloc
@@ -124,7 +123,7 @@ git clone --recurse-submodules https://github.com/enve2d/enve2d
 Build a custom version of ``libtcmalloc``:
 
 ```
-cd enve2d/src/gperftools
+cd friction/src/gperftools
 ./autogen.sh
 ./configure --disable-shared
 make -j4
@@ -135,18 +134,16 @@ make -j4
 Build a custom version of ``skia``:
 
 ```
-cd enve2d/src/skia
+cd friction/src/skia
 python3 tools/git-sync-deps
 bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=["-Wno-error"] target_os="linux" target_cpu="x64" skia_use_system_expat=false skia_use_system_freetype2=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_icu=false skia_use_system_harfbuzz=false'
 ninja -C out/build -j4 skia
 ```
 
-### Build enve2d
-
-Now you are ready to build ``enve2d``.
+### Build Friction
 
 ```
-cd enve2d
+cd friction
 mkdir build
 cd build
 ```
@@ -181,9 +178,9 @@ make -j4
 Run:
 
 ```
-cp src/app/enve2d .
-cp src/core/libenve2dcore.so.0 .
-./enve2d
+cp src/app/friction .
+cp src/core/libfrictioncore.so.0 .
+./friction
 ```
 
 Install:
@@ -217,7 +214,7 @@ sudo port install libmypaint ffmpeg ninja cmake automake autoconf libtool pkgcon
 Clone this repository, this might take a while.
 
 ```
-git clone --recurse-submodules https://github.com/enve2d/enve2d
+git clone --recurse-submodules https://github.com/friction2d/friction
 ```
 
 ### Build libtcmalloc
@@ -225,7 +222,7 @@ git clone --recurse-submodules https://github.com/enve2d/enve2d
 We need to build a custom version of ``libtcmalloc``:
 
 ```
-cd enve2d/src/gperftools
+cd friction/src/gperftools
 ./autogen.sh
 ./configure --disable-shared
 make -j4
@@ -233,12 +230,10 @@ make -j4
 
 ### Build skia
 
-First make sure that ``python`` in ``PATH`` points to a Python 2 binary.
-
 Now we need to build ``skia`` (might take a while).
 
 ```
-cd enve2d/src/skia
+cd friction/src/skia
 python3 tools/git-sync-deps
 bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=["-Wno-error"] skia_use_system_expat=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_icu=false skia_use_system_harfbuzz=false'
 ninja -C out/build -j4 skia
@@ -246,27 +241,27 @@ ninja -C out/build -j4 skia
 
 ### Build quazip
 
-Download [quazip](https://github.com/stachenov/quazip/archive/refs/tags/v1.4.tar.gz), then extract and move to ``enve2d/quazip``.
+Download [quazip](https://github.com/stachenov/quazip/archive/refs/tags/v1.4.tar.gz), then extract and move to ``friction/quazip``.
 
 ```
-cd enve2d/quazip
+cd friction/quazip
 mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$HOME/Qt/5.12.12/clang_64 .. && make
 ```
 
 ### Build qscintilla
 
-Download [qscintilla](https://www.riverbankcomputing.com/static/Downloads/QScintilla/2.13.4/QScintilla_src-2.13.4.tar.gz), then extract and move to ``enve2d/qscintilla``.
+Download [qscintilla](https://www.riverbankcomputing.com/static/Downloads/QScintilla/2.13.4/QScintilla_src-2.13.4.tar.gz), then extract and move to ``friction/qscintilla``.
 
 ```
-cd enve2d/qscintilla/src
+cd friction/qscintilla/src
 $HOME/Qt/5.12.12/clang_64/bin/qmake && make
 ```
 
-### Build enve2d
+### Build Friction
 
 ```
-cd enve2d
+cd friction
 mkdir build && cd build
 cmake \
 -DCMAKE_BUILD_TYPE=Release \
@@ -279,5 +274,5 @@ cmake \
 -DQSCINTILLA_LIBRARIES=qscintilla2_qt5 \
 ..
 make -j4
-$HOME/Qt/5.12.12/clang_64/bin/macdeployqt src/app/enve2d.app
+$HOME/Qt/5.12.12/clang_64/bin/macdeployqt src/app/friction.app
 ```
