@@ -28,6 +28,7 @@
 #include "svgexporter.h"
 #include "GUI/edialogs.h"
 #include "GUI/twocolumnlayout.h"
+#include "appsupport.h"
 
 #include <QVBoxLayout>
 #include <QLabel>
@@ -148,7 +149,8 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent)
     buttons->addButton(mPreviewButton, QDialogButtonBox::ActionRole);
     connect(mPreviewButton, &QPushButton::released, this, [this]() {
         if (!mPreviewFile) {
-            const QString templ =  QString::fromUtf8("%1/enve2d_svg_preview_XXXXXX.html").arg(QDir::tempPath());
+            const QString templ =  QString::fromUtf8("%1/%2_svg_preview_XXXXXX.html").arg(QDir::tempPath(),
+                                                                                          AppSupport::getAppName());
             mPreviewFile = qsptr<QTemporaryFile>::create(templ);
             mPreviewFile->open();
             mPreviewFile->close();

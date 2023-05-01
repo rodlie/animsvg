@@ -96,24 +96,127 @@ void AppSupport::setSettings(const QString &group,
     settings.endGroup();
 }
 
+const QString AppSupport::getAppName()
+{
+    QString val = QString::fromUtf8("enve2d");
+#ifdef APP2D_NAME
+    val = QString::fromUtf8(APP2D_NAME);
+#endif
+    return val;
+}
+
+const QString AppSupport::getAppDisplayName()
+{
+    QString val = QString::fromUtf8("enve2d");
+#ifdef APP2D_DISPLAY_NAME
+    val = QString::fromUtf8(APP2D_DISPLAY_NAME);
+#endif
+    return val;
+}
+
+const QString AppSupport::getAppDomain()
+{
+    QString val = QString::fromUtf8("enve2d.org");
+#ifdef APP2D_DOMAIN
+    val = QString::fromUtf8(APP2D_DOMAIN);
+#endif
+    return val;
+}
+
+const QString AppSupport::getAppID()
+{
+    QString val = QString::fromUtf8("io.github.enve2d");
+#ifdef APP2D_ID
+    val = QString::fromUtf8(APP2D_URL);
+#endif
+    return val;
+}
+
+const QString AppSupport::getAppUrl()
+{
+    QString val = QString::fromUtf8("https://enve2d.org");
+#ifdef APP2D_URL
+    val = QString::fromUtf8(APP2D_URL);
+#endif
+    return val;
+}
+
 const QString AppSupport::getAppVersion(bool html)
 {
-    QString version = ENVE2D_VERSION;
-    if (version.isEmpty()) { version = tr("N/A"); }
+    QString version = QString::fromUtf8("0.9.0");
+#ifdef APP2D_VERSION
+    version = QString::fromUtf8(APP2D_VERSION);
+#endif
     QString git;
-#ifdef ENVE2D_GIT
-    git = ENVE2D_GIT;
+#ifdef APP2D_GIT
+    git = QString::fromUtf8(APP2D_GIT);
 #endif
     if (!git.isEmpty()) {
-        version.append(html ? QString::fromUtf8(" <a href=\"https://github.com/enve2d/enve2d/commit/%1\">%1</a>").arg(git) : QString::fromUtf8(" %1").arg(git));
+        version.append(html ? QString::fromUtf8(" <a href=\"%2/%1\">%1</a>").arg(git,
+                                                                                 getAppCommitUrl()) : QString::fromUtf8(" %1").arg(git));
     }
     return version;
 }
 
+const QString AppSupport::getAppDesc()
+{
+    QString val = QString::fromUtf8("2D Animation Software");
+#ifdef APP2D_DESC
+    val = QString::fromUtf8(APP2D_DESC);
+#endif
+    return val;
+}
+
+const QString AppSupport::getAppCompany()
+{
+    QString val = QString::fromUtf8("enve2d");
+#ifdef APP2D_COMPANY
+    val = QString::fromUtf8(APP2D_COMPANY);
+#endif
+    return val;
+}
+
+const QString AppSupport::getAppContributorsUrl()
+{
+    QString val = QString::fromUtf8("https://github.com/enve2d/enve2d/graphs/contributors");
+#ifdef APP2D_CONTRIB_URL
+    val = QString::fromUtf8(APP2D_CONTRIB_URL);
+#endif
+    return val;
+}
+
+const QString AppSupport::getAppIssuesUrl()
+{
+    QString val = QString::fromUtf8("https://github.com/enve2d/enve2d/issues");
+#ifdef APP2D_ISSUES_URL
+    val = QString::fromUtf8(APP2D_ISSUES_URL);
+#endif
+    return val;
+}
+
+const QString AppSupport::getAppLatestReleaseUrl()
+{
+    QString val = QString::fromUtf8("https://github.com/enve2d/enve2d/releases/latest");
+#ifdef APP2D_RELEASE_URL
+    val = QString::fromUtf8(APP2D_RELEASE_URL);
+#endif
+    return val;
+}
+
+const QString AppSupport::getAppCommitUrl()
+{
+    QString val = QString::fromUtf8("https://github.com/enve2d/enve2d/commit");
+#ifdef APP2D_COMMIT_URL
+    val = QString::fromUtf8(APP2D_COMMIT_URL);
+#endif
+    return val;
+}
+
 const QString AppSupport::getAppConfigPath()
 {
-    QString path = QString::fromUtf8("%1/enve2d")
-                   .arg(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation));
+    QString path = QString::fromUtf8("%1/%2")
+                   .arg(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation),
+                        getAppName());
     QDir dir(path);
     if (!dir.exists()) { dir.mkpath(path); }
     return path;

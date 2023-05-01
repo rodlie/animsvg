@@ -133,7 +133,7 @@ MainWindow::MainWindow(Document& document,
 
 
     //const auto iconDir = eSettings::sIconsDir();
-    setWindowIcon(QIcon::fromTheme("enve2d"));
+    setWindowIcon(QIcon::fromTheme(AppSupport::getAppName()));
     /*const auto downArr = iconDir + "/down-arrow.png";
     const auto upArr = iconDir + "/up-arrow.png";
     const auto dockClose = iconDir + "/dockClose.png";
@@ -162,7 +162,7 @@ MainWindow::MainWindow(Document& document,
         }
     }*/
 
-    QFile stylesheet(QString::fromUtf8(":/styles/enve2d.qss"));
+    QFile stylesheet(QString::fromUtf8(":/styles/%1.qss").arg(AppSupport::getAppName()));
     if (stylesheet.open(QIODevice::ReadOnly | QIODevice::Text)) {
         setStyleSheet(stylesheet.readAll());
         stylesheet.close();
@@ -880,11 +880,13 @@ void MainWindow::setupMenuBar()
     const auto help = mMenuBar->addMenu(tr("Help", "MenuBar"));
 
     help->addAction(tr("About", "MenuBar_Help"), this, [this]() {
-        QString aboutText = QString("<h1 style=\"font-weight: normal;\">enve2d</h1>"
-                                    "<h3 style=\"font-weight: normal;\">%2 %1</h3>"
-                                    "<p>%3 &copy; enve2d <a href=\"https://github.com/enve2d/enve2d/graphs/contributors\">%4</a>.</p>"
-                                    "<p style=\"font-size: small;\">%5</p>")
-                            .arg(AppSupport::getAppVersion(true),
+        QString aboutText = QString("<h1 style=\"font-weight: normal;\">%1</h1>"
+                                    "<h3 style=\"font-weight: normal;\">%4 %3</h3>"
+                                    "<p>%5 &copy; %1 <a href=\"%2\">%6</a>.</p>"
+                                    "<p style=\"font-size: small;\">%7</p>")
+                            .arg(AppSupport::getAppDisplayName(),
+                                 AppSupport::getAppContributorsUrl(),
+                                 AppSupport::getAppVersion(true),
                                  tr("version"),
                                  tr("Copyright"),
                                  tr("developers"),
@@ -895,10 +897,10 @@ void MainWindow::setupMenuBar()
         QMessageBox::aboutQt(this, tr("About Qt"));
     });*/
     help->addAction(tr("Report issue", "MenuBar_Help"), this, []() {
-        QDesktopServices::openUrl(QUrl::fromUserInput("https://github.com/enve2d/enve2d/issues"));
+        QDesktopServices::openUrl(QUrl::fromUserInput(AppSupport::getAppIssuesUrl()));
     });
     help->addAction(tr("Check for updates", "MenuBar_Help"), this, []() {
-        QDesktopServices::openUrl(QUrl::fromUserInput("https://github.com/enve2d/enve2d/releases/latest"));
+        QDesktopServices::openUrl(QUrl::fromUserInput(AppSupport::getAppLatestReleaseUrl()));
     });
 
     setMenuBar(mMenuBar);

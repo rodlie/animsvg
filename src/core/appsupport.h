@@ -47,7 +47,18 @@ public:
                             const QString &key,
                             const QVariant &value,
                             bool append = false);
+    static const QString getAppName();
+    static const QString getAppDisplayName();
+    static const QString getAppDomain();
+    static const QString getAppID();
+    static const QString getAppUrl();
     static const QString getAppVersion(bool html = false);
+    static const QString getAppDesc();
+    static const QString getAppCompany();
+    static const QString getAppContributorsUrl();
+    static const QString getAppIssuesUrl();
+    static const QString getAppLatestReleaseUrl();
+    static const QString getAppCommitUrl();
     static const QString getAppConfigPath();
     static const QString getAppOutputProfilesPath();
     static const QString getAppPathEffectsPath();

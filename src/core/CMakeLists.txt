@@ -23,10 +23,10 @@ if(NOT PROJECT_VERSION_TWEAK)
     set(PROJECT_VERSION_TWEAK 0)
 endif()
 
-add_definitions(-DENVE2D_VERSION="${PROJECT_VERSION}")
+add_definitions(-DAPP2D_VERSION="${PROJECT_VERSION}")
 
-set(ENVE2D_GIT "" CACHE STRING "enve2d git commit")
-add_definitions(-DENVE2D_GIT="${ENVE2D_GIT}")
+set(GIT_COMMIT "" CACHE STRING "git commit")
+add_definitions(-DAPP2D_GIT="${GIT_COMMIT}")
 
 add_compile_options(-Wall -Wextra)
 if(CMAKE_BUILD_TYPE MATCHES "^(release|Release|RELEASE)$")

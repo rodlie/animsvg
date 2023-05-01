@@ -98,7 +98,7 @@ cd ${CWD}
 rm -rf build || true
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DENVE2D_GIT=${COMMIT} ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DGIT_COMMIT=${COMMIT} ..
 make -j${MKJOBS}
 make package
 

@@ -62,14 +62,15 @@ void SvgExporter::nextStep()
                 mStream << QString::fromUtf8("<html>") << QT_ENDL;
                 mStream << QString::fromUtf8("<head>") << QT_ENDL;
                 mStream << QString::fromUtf8("<meta charset=\"utf-8\" />") << QT_ENDL;
-                mStream << QString::fromUtf8("<title>Preview</title>") << QT_ENDL;
+                mStream << QString::fromUtf8("<title>%1</title>").arg(tr("Preview")) << QT_ENDL;
                 mStream << QString::fromUtf8("<style>html { background: repeating-conic-gradient(#b0b0b0 0% 25%, transparent 0% 50%) 50% / 40px 40px; }</style>") << QT_ENDL;
                 mStream << QString::fromUtf8("</head>") << QT_ENDL;
                 mStream << QString::fromUtf8("<body>") << QT_ENDL;
             } else {
                 mStream << QString::fromUtf8("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>") << QT_ENDL;
             }
-            mStream << QString::fromUtf8("<!-- Created with enve2d https://enve2d.org -->") << QT_ENDL << QT_ENDL;
+            mStream << QString::fromUtf8("<!-- Created with %1 - %2 -->").arg(AppSupport::getAppDisplayName(),
+                                                                              AppSupport::getAppUrl()) << QT_ENDL << QT_ENDL;
             fScene->saveSceneSVG(*this);
         } else {
             RuntimeThrow("Could not open:\n\"" + mFile.fileName() + "\"");

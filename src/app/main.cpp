@@ -99,11 +99,11 @@ int main(int argc, char *argv[]) {
 //    SetProcessDPIAware(); // call before the main event loop
 //#endif // Q_OS_WIN
 
-    QApplication::setApplicationDisplayName(QString::fromUtf8("enve2d"));
-    QApplication::setApplicationName(QString::fromUtf8("enve2d"));
-    QApplication::setOrganizationName(QString::fromUtf8("enve2d"));
-    QApplication::setOrganizationDomain(QString::fromUtf8("enve2d.org"));
-    QApplication::setApplicationVersion(ENVE2D_VERSION);
+    QApplication::setApplicationDisplayName(AppSupport::getAppDisplayName());
+    QApplication::setApplicationName(AppSupport::getAppName());
+    QApplication::setOrganizationName(AppSupport::getAppCompany());
+    QApplication::setOrganizationDomain(AppSupport::getAppDomain());
+    QApplication::setApplicationVersion(AppSupport::getAppVersion());
 
     //QApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
