@@ -404,8 +404,12 @@ private:
         }
     }
 
-    void saveSurfaceValues(const int relFrame, const sk_sp<SkImage>& image,
-                           const QString& imageId, const QPoint& pos) {
+    void saveSurfaceValues(const int relFrame,
+                           const sk_sp<SkImage> &image,
+                           const QString &imageId,
+                           const QPoint &pos)
+    {
+        if (!image) { return; }
         const qreal t = (relFrame - mRelRange.fMin)/mDiv;
         mKeyTimes << QString::number(t);
 

@@ -86,6 +86,7 @@ void SvgExportHelpers::defImage(SvgExporter& exp,
                                 const sk_sp<SkImage>& image,
                                 const QString id)
 {
+    if (!image) { return; }
     auto def = exp.createElement("image");
     def.setAttribute("id", id);
     def.setAttribute("x", 0);
