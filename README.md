@@ -1,6 +1,6 @@
 # enve2d
 
-2D animation software for Linux and macOS *(experimental)*.
+2D animation software for Linux.
 
 See our issue [tracker](https://github.com/enve2d/enve2d/issues) or [forum](https://github.com/enve2d/enve2d/discussions) for more information.
 
@@ -25,15 +25,15 @@ Snapshots for selected platforms will soon be available.
 
 ### is this a fork?
 
-Yes, this is a fork of [enve](https://github.com/MaurycyLiebner/enve). The upstream project has stalled and is not responding to issues and/or requests.
+Yes, this is a fork of [enve](https://github.com/MaurycyLiebner/enve).
 
-We will continue the development under the name ``enve2d`` for the foreseeable future.
+We are developing the application under the name ``enve2d``, but will change the name before our first release.
 
 # License
 
-Copyright &copy; enve2d [developers](https://github.com/enve2d/enve2d/graphs/contributors)
+enve2d is copyright &copy; enve2d [developers](https://github.com/enve2d/enve2d/graphs/contributors)
 
-Copyright &copy; 2016-2022 Maurycy Liebner
+[enve](https://github.com/MaurycyLiebner/enve) is copyright &copy; 2016-2022 Maurycy Liebner
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
@@ -41,7 +41,7 @@ This program is free software: you can redistribute it and/or modify it under th
 
 # Build
 
-Generic build instructions for macOS and Linux.
+Generic build instructions for supported platforms.
 
 ## Requirements
 
@@ -199,6 +199,8 @@ make package
 ```
 
 ## macOS
+
+**macOS is currently unsupported until issue #16 has been fixed.**
 
 These instructions assume you have macOS High Sierra (10.13) or greater with Qt 5.12.12 *(through the official online installer)* and macports installed running on an Intel CPU.
 
