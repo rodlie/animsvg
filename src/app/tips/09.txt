@@ -1,2 +1,0 @@
-Layers
-Layers are a special type of group. You should use them whenever you want the group to be rasterized before it's drawn.

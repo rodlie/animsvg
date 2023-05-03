@@ -1,2 +1,0 @@
-Pivot
-A pivot is the point relative to which objects are being rotated.

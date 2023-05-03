@@ -3,7 +3,6 @@
   <mime-type type="application/vnd.@PROJECT_NAME@-project">
     <comment>@PROJECT_NAME@ project</comment>
     <glob pattern="*.ev"/>
-    <glob pattern="*.xev"/>
     <icon name="@PROJECT_NAME@"/>
   </mime-type>
 </mime-info>

@@ -1,2 +1,0 @@
-Transform Axis
-You can limit scale/move transformation to a single axis by pressing <b>X</b> or <b>Y</b> on the keyboard.

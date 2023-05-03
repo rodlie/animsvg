@@ -59,11 +59,7 @@ public:
     void saveToFile();
 
     // general
-#ifdef QT_DEBUG
-    QString fUserSettingsDir = QDir::homePath() + "/.enveD";
-#else
-    QString fUserSettingsDir = QDir::homePath() + "/.enve";
-#endif
+    QString fUserSettingsDir;
 
     // performance settings
     const int fCpuThreads;

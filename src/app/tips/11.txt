@@ -1,2 +1,0 @@
-Duplicate Keyframes
-You can duplicate keyframes using <b>Shift + D</b>, to duplicate and move keyframes, or <b>Ctrl + D</b> to copy and paste them into a current frame.

@@ -1,2 +1,0 @@
-Graph Editor
-You can use the graph editor to control interpolation of keyframes.

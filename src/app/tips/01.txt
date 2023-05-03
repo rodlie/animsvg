@@ -1,2 +1,0 @@
-Changing Values
-You can change values by pressing on the value spin-box and moving the cursor sideways, or by pressing on the spin-box and using the keyboard to input values.

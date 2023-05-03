@@ -12,8 +12,8 @@ jobs:
     - name: Build
       run: APT=1 CI=1 MKJOBS=2 ./src/scripts/build_ubuntu.sh
     - name: Artifact
-      run: sudo cp build/enve2d.deb /opt/
+      run: sudo cp build/friction.deb /opt/
     - uses: actions/upload-artifact@v2
       with:
-        name: enve2d-${{github.sha}}-ubuntu-22.04
-        path: /opt/enve2d.deb
+        name: friction-${{github.sha}}-ubuntu-22.04
+        path: /opt/friction.deb

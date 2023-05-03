@@ -1,2 +1,0 @@
-Group
-You can group objects together from the context menu or using <b>Ctrl + G</b>.

@@ -1,2 +1,0 @@
-Transform Input
-You can input numerical values while transforming objects.

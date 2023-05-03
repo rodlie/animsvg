@@ -1,2 +1,0 @@
-Adding Nodes
-You can add nodes to existing paths by clicking on them while holding <b>CTRL</b>.

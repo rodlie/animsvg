@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-# enve2d - https://github.com/enve2d
+# Friction - https://github.com/friction2d/friction
 #
-# Copyright (c) enve2d developers
+# Copyright (c) Friction developers
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,8 +20,8 @@
 
 set -e -x
 
-ICON=`pwd`/src/app/icons/enve2d.png
-ICONSET=`pwd`/enve2d.iconset
+ICON=`pwd`/src/app/icons/friction.png
+ICONSET=`pwd`/friction.iconset
 
 if [ -d "$ICONSET" ]; then
   rm -rf $ICONSET

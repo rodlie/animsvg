@@ -1,6 +1,7 @@
-# enve2d - https://github.com/enve2d
 #
-# Copyright (c) enve2d developers
+# Friction - https://github.com/friction2d/friction
+#
+# Copyright (c) Friction developers
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,16 +18,16 @@
 #
 
 cmake_minimum_required(VERSION 3.9)
-project(enve2dcore VERSION 0.9.0 LANGUAGES CXX)
+project(frictioncore VERSION 0.9.0 LANGUAGES CXX)
 
 if(NOT PROJECT_VERSION_TWEAK)
     set(PROJECT_VERSION_TWEAK 0)
 endif()
 
-add_definitions(-DAPP2D_VERSION="${PROJECT_VERSION}")
+add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 
 set(GIT_COMMIT "" CACHE STRING "git commit")
-add_definitions(-DAPP2D_GIT="${GIT_COMMIT}")
+add_definitions(-DPROJECT_GIT="${GIT_COMMIT}")
 
 add_compile_options(-Wall -Wextra)
 if(CMAKE_BUILD_TYPE MATCHES "^(release|Release|RELEASE)$")

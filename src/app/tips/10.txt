@@ -1,2 +1,0 @@
-Duplicate Object
-You can duplicate objects from the context menu or by triggering <b>Ctrl + D</b>
