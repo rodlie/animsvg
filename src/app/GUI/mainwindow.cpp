@@ -101,6 +101,12 @@ MainWindow::MainWindow(Document& document,
     , mWelcomeDialog(nullptr)
     , mCentralWidget(nullptr)
     , mStackWidget(nullptr)
+    , mFillStrokeSettingsDockBar(nullptr)
+    , mTimelineDockBar(nullptr)
+    , mSelectedObjectDockBar(nullptr)
+    , mFilesDockBar(nullptr)
+    , mBrushSettingsDockBar(nullptr)
+    , mAlignDockBar(nullptr)
     , mDocument(document)
     , mActions(actions)
     , mAudioHandler(audioHandler)
@@ -129,8 +135,6 @@ MainWindow::MainWindow(Document& document,
             this, &MainWindow::updateCanvasModeButtonsChecked);
     connect(&mDocument, &Document::sceneCreated,
             this, &MainWindow::closeWelcomeDialog);
-
-
 
     //const auto iconDir = eSettings::sIconsDir();
     setWindowIcon(QIcon::fromTheme(AppSupport::getAppName()));
@@ -201,7 +205,6 @@ MainWindow::MainWindow(Document& document,
 
     mTimelineDock = new CloseSignalingDockWidget(tr("Timeline", "Dock"), this);
     mTimelineDock->setObjectName(QString::fromUtf8("timelineDockWidget"));
-    mTimelineDock->setTitleBarWidget(new QWidget());
     addDockWidget(Qt::BottomDockWidgetArea, mTimelineDock);
 
     mLayoutHandler = new LayoutHandler(mDocument, mAudioHandler, this);
@@ -868,6 +871,12 @@ void MainWindow::setupMenuBar()
     connect(mAlignDockAction, &QAction::toggled,
             mAlignDock, &QDockWidget::setVisible);
 
+    mLockDocksAction = mPanelsMenu->addAction(tr("Lock widgets"));
+    mLockDocksAction->setCheckable(true);
+    mLockDocksAction->setChecked(false);
+    connect(mLockDocksAction, &QAction::toggled,
+            this, &MainWindow::checkLockDocks);
+
     mBrushColorBookmarksAction = mPanelsMenu->addAction(
                 tr("Brush/Color Bookmarks", "MenuBar_View_Docks"));
     mBrushColorBookmarksAction->setCheckable(true);
@@ -904,6 +913,39 @@ void MainWindow::setupMenuBar()
     });
 
     setMenuBar(mMenuBar);
+}
+
+void MainWindow::checkLockDocks()
+{
+    bool lockDocks = mLockDocksAction->isChecked();
+    bool lastLock = AppSupport::getSettings("ui",
+                                            "lockDocks",
+                                            false).toBool();
+    qDebug() << "checkLockDocks" << lockDocks << lastLock;
+
+    if (lockDocks && !mFillStrokeSettingsDockBar) { mFillStrokeSettingsDockBar = new QWidget(this); }
+    mFillStrokeSettingsDock->setTitleBarWidget(lockDocks ? mFillStrokeSettingsDockBar : nullptr);
+
+    if (lockDocks && !mTimelineDockBar) { mTimelineDockBar = new QWidget(this); }
+    mTimelineDock->setTitleBarWidget(lockDocks ? mTimelineDockBar : nullptr);
+
+    if (lockDocks && !mSelectedObjectDockBar) { mSelectedObjectDockBar = new QWidget(this); }
+    mSelectedObjectDock->setTitleBarWidget(lockDocks ? mSelectedObjectDockBar : nullptr);
+
+    if (lockDocks && !mFilesDockBar) { mFilesDockBar = new QWidget(this); }
+    mFilesDock->setTitleBarWidget(lockDocks ? mFilesDockBar : nullptr);
+
+    if (lockDocks && !mBrushSettingsDockBar) { mBrushSettingsDockBar = new QWidget(this); }
+    mBrushSettingsDock->setTitleBarWidget(lockDocks ? mBrushSettingsDockBar : nullptr);
+
+    if (lockDocks && !mAlignDockBar) { mAlignDockBar = new QWidget(this); }
+    mAlignDock->setTitleBarWidget(lockDocks ? mAlignDockBar : nullptr);
+
+    if (lockDocks != lastLock) {
+        AppSupport::setSettings("ui",
+                                "lockDocks",
+                                lockDocks);
+    }
 }
 
 void MainWindow::openWelcomeDialog()
@@ -1581,6 +1623,10 @@ bool MainWindow::processKeyEvent(QKeyEvent *event)
 
 void MainWindow::readSettings()
 {
+    mLockDocksAction->setChecked(AppSupport::getSettings("ui",
+                                                         "lockDocks",
+                                                         false).toBool());
+    checkLockDocks();
     restoreState(AppSupport::getSettings("ui",
                                          "MainWindowState").toByteArray());
     restoreGeometry(AppSupport::getSettings("ui",

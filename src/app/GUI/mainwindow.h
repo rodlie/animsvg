@@ -221,6 +221,13 @@ private:
     CloseSignalingDockWidget *mBrushSettingsDock;
     CloseSignalingDockWidget *mAlignDock;
 
+    QWidget *mFillStrokeSettingsDockBar;
+    QWidget *mTimelineDockBar;
+    QWidget *mSelectedObjectDockBar;
+    QWidget *mFilesDockBar;
+    QWidget *mBrushSettingsDockBar;
+    QWidget *mAlignDockBar;
+
     TimelineDockWidget *mTimeline = nullptr;
     BrushSelectionWidget *mBrushSelectionWidget = nullptr;
 
@@ -268,6 +275,7 @@ private:
     QAction *mFillAndStrokeDockAct;
     QAction *mBrushDockAction;
     QAction *mAlignDockAction;
+    QAction *mLockDocksAction;
 
     QAction *mBrushColorBookmarksAction;
 
@@ -313,6 +321,9 @@ private:
     void setupMenuBar();
 
     QList<SceneBoundGradient*> mLoadedGradientsList;
+
+    void checkLockDocks();
+
 protected:
     void keyPressEvent(QKeyEvent *event);
     bool eventFilter(QObject *obj, QEvent *e);
