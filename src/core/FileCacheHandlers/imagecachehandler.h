@@ -23,66 +23,70 @@
 #include "CacheHandlers/imagecachecontainer.h"
 class ImageFileDataHandler;
 
-class CORE_EXPORT ImageLoader : public eHddTask {
+class CORE_EXPORT ImageLoader : public eHddTask
+{
     e_OBJECT
+
 protected:
     ImageLoader(const QString &filePath,
                 ImageFileDataHandler * const handler);
+
 public:
     void process();
     void afterProcessing();
     void afterCanceled();
+
 protected:
     const qptr<ImageFileDataHandler> mTargetHandler;
     const QString mFilePath;
     sk_sp<SkImage> mImage;
 };
 
-class CORE_EXPORT OraLoader : public ImageLoader {
+class CORE_EXPORT OraLoader : public ImageLoader
+{
     e_OBJECT
+
 protected:
     using ImageLoader::ImageLoader;
+
 public:
     void process();
 };
 
-class CORE_EXPORT KraLoader : public ImageLoader {
-    e_OBJECT
-protected:
-    using ImageLoader::ImageLoader;
-public:
-    void process();
-};
-
-class CORE_EXPORT ImageFileDataHandler : public FileDataCacheHandler {
+class CORE_EXPORT ImageFileDataHandler : public FileDataCacheHandler
+{
     e_OBJECT
     friend class ImageLoader;
 
     enum class Type {
-        image, kra, ora, none
+        image, ora, none
     };
 
-    class ImageCacheContainerX : public ImageCacheContainer {
+    class ImageCacheContainerX : public ImageCacheContainer
+    {
         e_OBJECT
     protected:
-        ImageCacheContainerX(const sk_sp<SkImage>& img,
-                             ImageFileDataHandler* const handler) :
-            ImageCacheContainer(img, FrameRange::EMINMAX, nullptr),
-            mHandler(handler) {}
+        ImageCacheContainerX(const sk_sp<SkImage> &img,
+                             ImageFileDataHandler* const handler)
+        : ImageCacheContainer(img, FrameRange::EMINMAX, nullptr)
+        , mHandler(handler) {}
 
-        void noDataLeft_k() {
+        void noDataLeft_k()
+        {
             ImageCacheContainer::noDataLeft_k();
-            if(!mHandler) return;
+            if (!mHandler) { return; }
             mHandler->mImage.reset();
         }
+
     private:
         const qptr<ImageFileDataHandler> mHandler;
     };
+
 protected:
     ImageFileDataHandler();
+
 public:
     void afterSourceChanged();
-
     void clearCache();
 
     eTask *scheduleLoad();
@@ -90,6 +94,7 @@ public:
     bool hasImage() const;
     sk_sp<SkImage> getImage() const;
     ImageCacheContainer* getImageContainer() { return mImage.get(); }
+
 private:
     void replaceImage(const sk_sp<SkImage> &img);
 
@@ -98,38 +103,47 @@ private:
     stdsptr<ImageLoader> mImageLoader;
 };
 
-class CORE_EXPORT ImageFileHandler : public FileCacheHandler {
+class CORE_EXPORT ImageFileHandler : public FileCacheHandler
+{
     e_OBJECT
+
 protected:
     ImageFileHandler() {}
 
-    void reload() {
-        if(fileMissing()) return mDataHandler.reset();
+    void reload()
+    {
+        if (fileMissing()) { return mDataHandler.reset(); }
         mDataHandler = ImageFileDataHandler::sGetCreateDataHandler<ImageFileDataHandler>(path());
         mDataHandler->clearCache();
     }
+
 public:
     void replace();
 
-    eTask * scheduleLoad() {
-        if(!mDataHandler) return nullptr;
+    eTask * scheduleLoad()
+    {
+        if (!mDataHandler) { return nullptr; }
         return mDataHandler->scheduleLoad();
     }
 
-    bool hasImage() const {
-        if(!mDataHandler) return false;
+    bool hasImage() const
+    {
+        if (!mDataHandler) { return false; }
         return mDataHandler->hasImage();
     }
 
-    sk_sp<SkImage> getImage() const {
-        if(!mDataHandler) return nullptr;
+    sk_sp<SkImage> getImage() const
+    {
+        if (!mDataHandler) { return nullptr; }
         return mDataHandler->getImage();
     }
 
-    ImageCacheContainer* getImageContainer() const {
-        if(!mDataHandler) return nullptr;
+    ImageCacheContainer* getImageContainer() const
+    {
+        if (!mDataHandler) { return nullptr; }
         return mDataHandler->getImageContainer();
     }
+
 private:
     qsptr<ImageFileDataHandler> mDataHandler;
 };

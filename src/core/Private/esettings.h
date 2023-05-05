@@ -121,12 +121,9 @@ public:
     QColor fSelectedVisibilityRangeColor;
     QColor fAnimationRangeColor;
 
-    // external applications
-    QString fGimp = "gimp";
-    QString fMyPaint = "mypaint";
-    QString fKrita = "krita";
 signals:
     void settingsChanged();
+
 private:
     QString mIconsDir;
 };

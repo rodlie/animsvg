@@ -8,7 +8,6 @@
 #include "interfacesettingswidget.h"
 #include "canvassettingswidget.h"
 #include "timelinesettingswidget.h"
-#include "externalappssettingswidget.h"
 
 #include <QVBoxLayout>
 #include <QPushButton>

@@ -119,7 +119,6 @@ MainWindow::MainWindow(Document& document,
     ImportHandler::sInstance->addImporter<evImporter>();
     ImportHandler::sInstance->addImporter<eSvgImporter>();
     ImportHandler::sInstance->addImporter<eOraImporter>();
-    ImportHandler::sInstance->addImporter<eKraImporter>();
 
     connect(&mDocument, &Document::evFilePathChanged,
             this, &MainWindow::updateTitle);
@@ -1828,7 +1827,7 @@ void MainWindow::linkFile()
     const QString title = tr("Link File", "LinkDialog_Title");
     const QString fileType = tr("Files %1", "LinkDialog_FileType");
     const auto importPaths = eDialogs::openFiles(
-                title, defPath, fileType.arg("(*.svg *.ora *.kra)"));
+                title, defPath, fileType.arg("(*.svg *.ora)"));
     enableEventFilter();
     if (!importPaths.isEmpty()) {
         for (const QString &path : importPaths) {

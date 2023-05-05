@@ -204,7 +204,6 @@ set(
     Paint/brushstrokeset.cpp
     Paint/colorconversions.cpp
     Paint/drawableautotiledsurface.cpp
-    Paint/externalpaintapphandler.cpp
     Paint/onionskin.cpp
     Paint/painttarget.cpp
     Paint/simplebrushwrapper.cpp
@@ -323,7 +322,6 @@ set(
     filesourcescache.cpp
     gpurendertools.cpp
     importhandler.cpp
-    kraimporter.cpp
     matrixdecomposition.cpp
     memorydatahandler.cpp
     namefixer.cpp
@@ -535,7 +533,6 @@ set(
     Paint/brushstrokeset.h
     Paint/colorconversions.h
     Paint/drawableautotiledsurface.h
-    Paint/externalpaintapphandler.h
     Paint/onionskin.h
     Paint/painttarget.h
     Paint/simplebrushwrapper.h
@@ -670,7 +667,6 @@ set(
     gpurendertools.h
     hardwareenums.h
     importhandler.h
-    kraimporter.h
     libmypaintincludes.h
     matrixdecomposition.h
     memorydatahandler.h

@@ -48,23 +48,3 @@ qsptr<BoundingBox> eOraImporter::import(const QFileInfo &fileInfo, Canvas * cons
     return ImportORA::loadORAFile(fileInfo.absoluteFilePath(),
                                   gradientCreator);
 }
-
-qsptr<BoundingBox> eKraImporter::import(const QFileInfo &fileInfo, Canvas * const scene) const {
-    QProcess oraConv;
-    oraConv.setProcessChannelMode(QProcess::ForwardedChannels);
-    const QString kritaPath = eSettings::sInstance->fKrita;
-    const QString oraPath = eSettings::sSettingsDir() + "/e_kra_to_ora.ora";
-    if(kritaPath.isEmpty()) RuntimeThrow("Invalid path to Krita executable.");
-    const QString command = QString("%1 %2 --export --export-filename %3").
-            arg(kritaPath).arg(fileInfo.absoluteFilePath()).arg(oraPath);
-    oraConv.start(command);
-    const bool success = oraConv.waitForFinished(10000);
-    if(!success) gPrintException(false, "Could not use Krita to convert the kra file to ora.\n"
-                                        "Please make sure you defined a proper path to Krita executable.");
-    const auto gradientCreator = [scene]() {
-        return scene->createNewGradient();
-    };
-    const auto result = ImportORA::loadORAFile(oraPath, gradientCreator);
-    QFile::remove(oraPath);
-    return result;
-}

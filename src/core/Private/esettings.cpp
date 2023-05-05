@@ -266,9 +266,9 @@ eSettings::eSettings(const int cpuThreads,
                      "animationRangeColor",
                      QColor(255, 255, 255, 180));
 
-    gSettings << std::make_shared<eStringSetting>(fGimp, "gimp", "gimp");
-    gSettings << std::make_shared<eStringSetting>(fMyPaint, "mypaint", "mypaint");
-    gSettings << std::make_shared<eStringSetting>(fKrita, "krita", "krita");
+    //gSettings << std::make_shared<eStringSetting>(fGimp, "gimp", "gimp");
+    //gSettings << std::make_shared<eStringSetting>(fMyPaint, "mypaint", "mypaint");
+    //gSettings << std::make_shared<eStringSetting>(fKrita, "krita", "krita");
 
     loadDefaults();
 

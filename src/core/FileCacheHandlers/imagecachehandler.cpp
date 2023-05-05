@@ -18,17 +18,18 @@
 
 #include "filecachehandler.h"
 #include "Ora/oraimporter.h"
-#include "kraimporter.h"
+
+#include "GUI/edialogs.h"
+#include "filesourcescache.h"
 
 ImageFileDataHandler::ImageFileDataHandler() {}
 
-void ImageFileDataHandler::afterSourceChanged() {
+void ImageFileDataHandler::afterSourceChanged()
+{
     const QFileInfo info(getFilePath());
     const auto suffix = info.suffix();
-    if(suffix == "ora") {
+    if (suffix == "ora") {
         mType = Type::ora;
-    } else if(suffix == "kra") {
-        mType = Type::kra;
     } else {
         mType = Type::image;
     }
@@ -39,78 +40,79 @@ void ImageFileDataHandler::clearCache() {
     mImageLoader.reset();
 }
 
-eTask *ImageFileDataHandler::scheduleLoad() {
-    if(mImage) {
+eTask *ImageFileDataHandler::scheduleLoad()
+{
+    if (mImage) {
         const auto task = mImage->scheduleLoadFromTmpFile();
-        if(task) return task;
+        if (task) { return task; }
     }
-    if(mImageLoader) return mImageLoader.get();
-    switch(mType) {
+    if (mImageLoader) { return mImageLoader.get(); }
+    switch (mType) {
     case Type::ora:
         mImageLoader = enve::make_shared<OraLoader>(mFilePath, this);
-        break;
-    case Type::kra:
-        mImageLoader = enve::make_shared<KraLoader>(mFilePath, this);
         break;
     case Type::image:
         mImageLoader = enve::make_shared<ImageLoader>(mFilePath, this);
         break;
-    case Type::none: return nullptr;
+    default:
+        return nullptr;
     }
-    if(mImageLoader) mImageLoader->queTask();
+    if (mImageLoader) { mImageLoader->queTask(); }
     return mImageLoader.get();
 }
 
-bool ImageFileDataHandler::hasImage() const {
-    if(!mImage) return false;
+bool ImageFileDataHandler::hasImage() const
+{
+    if (!mImage) { return false; }
     return mImage->hasImage();
 }
 
-sk_sp<SkImage> ImageFileDataHandler::getImage() const {
-    if(!mImage) return nullptr;
+sk_sp<SkImage> ImageFileDataHandler::getImage() const
+{
+    if (!mImage) { return nullptr; }
     return mImage->getImage();
 }
 
-void ImageFileDataHandler::replaceImage(const sk_sp<SkImage> &img) {
-    if(img) {
+void ImageFileDataHandler::replaceImage(const sk_sp<SkImage> &img)
+{
+    if (img) {
         mImage = enve::make_shared<ImageCacheContainerX>(img, this);
-    } else mImage.reset();
+    } else { mImage.reset(); }
     mImageLoader.reset();
 }
 
 ImageLoader::ImageLoader(const QString &filePath,
-                         ImageFileDataHandler * const handler) :
-    mTargetHandler(handler), mFilePath(filePath) {}
+                         ImageFileDataHandler * const handler)
+    : mTargetHandler(handler)
+    , mFilePath(filePath) {}
 
-void ImageLoader::process() {
-    const sk_sp<SkData> data = SkData::MakeFromFileName(
-                mFilePath.toUtf8().data());
+void ImageLoader::process()
+{
+    const sk_sp<SkData> data = SkData::MakeFromFileName(mFilePath.toUtf8().data());
     mImage = SkImage::MakeFromEncoded(data);
 }
 
-void ImageLoader::afterProcessing() {
-    if(mTargetHandler) mTargetHandler->replaceImage(mImage);
+void ImageLoader::afterProcessing()
+{
+    if (mTargetHandler) { mTargetHandler->replaceImage(mImage); }
 }
 
-void ImageLoader::afterCanceled() {
-    if(mTargetHandler) mTargetHandler->replaceImage(mImage);
+void ImageLoader::afterCanceled()
+{
+    if (mTargetHandler) { mTargetHandler->replaceImage(mImage); }
 }
 
-void OraLoader::process() {
+void OraLoader::process()
+{
     mImage = ImportORA::loadMergedORAFile(mFilePath, true);
 }
 
-void KraLoader::process() {
-    mImage = ImportKRA::loadMergedKRAFile(mFilePath, true);
-}
-
-#include "GUI/edialogs.h"
-#include "filesourcescache.h"
-void ImageFileHandler::replace() {
+void ImageFileHandler::replace()
+{
     const QString filters = FileExtensions::imageFilters() +
                             FileExtensions::layersFilters();
     const auto importPath = eDialogs::openFile(
-                "Change Source", path(),
+                tr("Change Source"), path(),
                 "Image Files (" + filters + ")");
-    if(!importPath.isEmpty()) setPath(importPath);
+    if(!importPath.isEmpty()) { setPath(importPath); }
 }

@@ -27,7 +27,7 @@ QStringList FileExtensions::video{"avi", "mp4", "mov",
                                   "3gp", "rmvb", "gif",
                                   "mpeg", "mpg", "mp2",
                                   "mpv"};
-QStringList FileExtensions::layers{"ora", "kra"};
+QStringList FileExtensions::layers{"ora"};
 
 bool isVideoExt(const QString &extension) {
     return FileExtensions::video.contains(extension.toLower());

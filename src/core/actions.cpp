@@ -745,23 +745,20 @@ eBoxOrSound *Actions::importFile(const QString &path,
 #include "Boxes/internallinkbox.h"
 #include "Boxes/svglinkbox.h"
 
-eBoxOrSound* Actions::linkFile(const QString &path) {
+eBoxOrSound* Actions::linkFile(const QString &path)
+{
     qsptr<eBoxOrSound> result;
     const QFileInfo info(path);
     const QString suffix = info.suffix();
-    if(suffix == "svg") {
+    if (suffix == "svg") {
         const auto svg = enve::make_shared<SvgLinkBox>();
         svg->setFilePath(path);
         result = svg;
-    } else if(suffix == "ora") {
+    } else if (suffix == "ora") {
         const auto ora = enve::make_shared<ImageBox>();
         ora->setFilePath(path);
         result = ora;
-    } else if(suffix == "kra") {
-        const auto kra = enve::make_shared<ImageBox>();
-        kra->setFilePath(path);
-        result = kra;
-    } else RuntimeThrow("Cannot link file format " + path);
+    } else { RuntimeThrow(tr("Cannot link file format %1").arg(path)); }
     mActiveScene->getCurrentGroup()->addContained(result);
     mDocument.actionFinished();
     return result.get();

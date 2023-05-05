@@ -22,26 +22,34 @@
 #include "Private/document.h"
 #include "Ora/oracreator.h"
 #include "Ora/oraparser.h"
-#include "Paint/externalpaintapphandler.h"
 #include "svgexporter.h"
 
-PaintBox::PaintBox() : BoundingBox("Paint Box", eBoxType::paint) {
+#include "GUI/edialogs.h"
+#include "typemenu.h"
+#include "filesourcescache.h"
+
+PaintBox::PaintBox() : BoundingBox("Paint Box", eBoxType::paint)
+{
     mSurface = enve::make_shared<AnimatedSurface>();
     ca_addChild(mSurface);
 }
 
-struct PaintBoxRenderData : public ImageRenderData {
+struct PaintBoxRenderData : public ImageRenderData
+{
     e_OBJECT
+
 public:
     PaintBoxRenderData(BoundingBox * const parentBoxT) :
         ImageRenderData(parentBoxT) {}
 
-    void loadImageFromHandler() {
-        if(fImage) return;
-        if(fASurface) fASurface->getFrameImage(qFloor(fRelFrame), fImage);
+    void loadImageFromHandler()
+    {
+        if (fImage) { return; }
+        if (fASurface) { fASurface->getFrameImage(qFloor(fRelFrame), fImage); }
     }
 
-    void updateRelBoundingRect() final {
+    void updateRelBoundingRect() final
+    {
         Q_ASSERT(fSurface);
         fRelBoundingRect = fSurface->surface().pixelBoundingRect();
     }
@@ -52,83 +60,35 @@ public:
 
 void PaintBox::setupRenderData(const qreal relFrame, const QMatrix& parentM,
                                BoxRenderData * const data,
-                               Canvas* const scene) {
+                               Canvas* const scene)
+{
     BoundingBox::setupRenderData(relFrame, parentM, data, scene);
     const auto paintData = static_cast<PaintBoxRenderData*>(data);
     const int imgFrame = qFloor(relFrame);
     const auto imgTask = mSurface->getFrameImage(imgFrame, paintData->fImage);
-    if(imgTask) imgTask->addDependent(data);
+    if (imgTask) { imgTask->addDependent(data); }
 
     paintData->fASurface = mSurface.get();
     paintData->fSurface = enve::shared(mSurface->getSurface(imgFrame));
 }
 
-stdsptr<BoxRenderData> PaintBox::createRenderData() {
+stdsptr<BoxRenderData> PaintBox::createRenderData()
+{
     return enve::make_shared<PaintBoxRenderData>(this);
 }
 
-#include "GUI/edialogs.h"
-#include "typemenu.h"
-#include "filesourcescache.h"
-void PaintBox::setupCanvasMenu(PropertyMenu * const menu) {
-    if(menu->hasActionsForType<PaintBox>()) return;
+void PaintBox::setupCanvasMenu(PropertyMenu * const menu)
+{
+    if (menu->hasActionsForType<PaintBox>()) { return; }
     menu->addedActionsForType<PaintBox>();
-
-    PropertyMenu::PlainSelectedOp<PaintBox> loadOp = [](PaintBox * box) {
-        const QString filters = FileExtensions::imageFilters();
-        const QString importPath = eDialogs::openFile(
-                                        "Load From Image", QDir::homePath(),
-                                        "Image Files (" + filters + ")");
-        if(!importPath.isEmpty()) {
-            QImage img;
-            if(img.load(importPath)) {
-                box->mSurface->loadPixmap(img);
-            }
-        }
-    };
-    menu->addPlainAction("Load From Image", loadOp);
-
-    const auto editMenu = menu->addMenu("Edit");
-
-    const auto editOp = [](PaintBox * box, const ExternalPaintAppHandler::App app) {
-        if(!box) return;
-        const auto handler = new ExternalPaintAppHandler(app);
-        const auto aSurface = box->getSurface();
-        QString layerName = box->prp_getName();
-        layerName.replace(' ', '_');
-        handler->setupFor(aSurface, layerName);
-    };
-
-    const auto settings = eSettings::sInstance;
-    if(!settings->fGimp.isEmpty()) {
-        PropertyMenu::PlainSelectedOp<PaintBox> gimpOp = [editOp](PaintBox * box) {
-            editOp(box, ExternalPaintAppHandler::gimp);
-        };
-        editMenu->addPlainAction("Gimp", gimpOp);
-    }
-
-    if(!settings->fMyPaint.isEmpty()) {
-        PropertyMenu::PlainSelectedOp<PaintBox> mypaintOp = [editOp](PaintBox * box) {
-            editOp(box, ExternalPaintAppHandler::mypaint);
-        };
-        editMenu->addPlainAction("MyPaint", mypaintOp);
-    }
-
-    if(!settings->fKrita.isEmpty()) {
-        PropertyMenu::PlainSelectedOp<PaintBox> kritaOp = [editOp](PaintBox * box) {
-            editOp(box, ExternalPaintAppHandler::krita);
-        };
-        editMenu->addPlainAction("Krita", kritaOp);
-    }
-
-    if(editMenu->isEmpty()) editMenu->setVisible(false);
 
     BoundingBox::setupCanvasMenu(menu);
 }
 
-void PaintBox::saveSVG(SvgExporter& exp, DomEleTask* const task) const {
+void PaintBox::saveSVG(SvgExporter& exp, DomEleTask* const task) const
+{
     auto& ele = task->initialize("use");
     const auto visRelRange = prp_absRangeToRelRange(task->visRange());
     const auto pTask = mSurface->savePaintSVG(exp, ele, visRelRange);
-    if(pTask) pTask->addDependent(task);
+    if (pTask) { pTask->addDependent(task); }
 }

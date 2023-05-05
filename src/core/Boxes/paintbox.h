@@ -23,13 +23,17 @@ class QPointFAnimator;
 class AnimatedPoint;
 class SimpleBrushWrapper;
 
-class CORE_EXPORT PaintBox : public BoundingBox {
+class CORE_EXPORT PaintBox : public BoundingBox
+{
     e_OBJECT
     e_DECLARE_TYPE(PaintBox)
+
 protected:
     PaintBox();
+
 public:
-    void setupRenderData(const qreal relFrame, const QMatrix& parentM,
+    void setupRenderData(const qreal relFrame,
+                         const QMatrix& parentM,
                          BoxRenderData * const data,
                          Canvas * const scene);
     stdsptr<BoxRenderData> createRenderData();
@@ -40,6 +44,7 @@ public:
 
     AnimatedSurface * getSurface() const
     { return mSurface.get(); }
+
 private:
     qsptr<AnimatedSurface> mSurface;
 };
