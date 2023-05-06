@@ -1,116 +1,118 @@
-// enve - 2D animations software
-// Copyright (C) 2016-2020 Maurycy Liebner
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+# Friction - https://friction2d.com
+# Copyright (c) Friction developers
+#
+# Fork of enve
+# Copyright (c) 2016-2020 Maurycy Liebner
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+*/
 
 #include "alignwidget.h"
 
 #include <QLabel>
+#include <QHBoxLayout>
+#include <QPushButton>
 
-#include "actionbutton.h"
-#include "GUI/global.h"
-
-AlignWidget::AlignWidget(QWidget* const parent) :
-    QWidget(parent) {
+AlignWidget::AlignWidget(QWidget* const parent)
+    : QWidget(parent)
+    , mAlignPivot(nullptr)
+    , mRelativeTo(nullptr)
+{
     const auto mainLayout = new QVBoxLayout(this);
     setLayout(mainLayout);
 
     const auto combosLay = new QHBoxLayout;
-    eSizesUI::widget.addHalfSpacing(mainLayout);
     mainLayout->addLayout(combosLay);
 
-    combosLay->addWidget(new QLabel("Align: "));
+    combosLay->addWidget(new QLabel(tr("Align")));
     mAlignPivot = new QComboBox(this);
-    mAlignPivot->addItem("Geometry");
-    mAlignPivot->addItem("Pivot");
+    mAlignPivot->addItem(tr("Geometry"));
+    mAlignPivot->addItem(tr("Pivot"));
     combosLay->addWidget(mAlignPivot);
 
-    combosLay->addWidget(new QLabel(" Relative to: "));
+    combosLay->addWidget(new QLabel(tr("Relative to")));
     mRelativeTo = new QComboBox(this);
-    mRelativeTo->addItem("Scene");
-    mRelativeTo->addItem("Last Selected");
+    mRelativeTo->addItem(tr("Scene"));
+    mRelativeTo->addItem(tr("Last Selected"));
     combosLay->addWidget(mRelativeTo);
 
     const auto buttonsLay = new QHBoxLayout;
-    eSizesUI::widget.addHalfSpacing(mainLayout);
     mainLayout->addLayout(buttonsLay);
-    eSizesUI::widget.addHalfSpacing(mainLayout);
+    mainLayout->addStretch();
 
-    const auto leftButton = new ActionButton(
-                                "toolbarButtons/pivot-align-left.png",
-                                gSingleLineTooltip("Align Left"),
-                                this);
-    connect(leftButton, &ActionButton::pressed, this, [this]() {
+    int buttonSize = 24;
+
+    const auto leftButton = new QPushButton(this);
+    leftButton->setIcon(QIcon::fromTheme("pivot-align-left"));
+    leftButton->setIconSize(QSize(buttonSize, buttonSize));
+    leftButton->setToolTip(tr("Align Left"));
+    connect(leftButton, &QPushButton::pressed, this, [this]() {
         triggerAlign(Qt::AlignLeft);
     });
     buttonsLay->addWidget(leftButton);
 
-    const auto hCenterButton = new ActionButton(
-                                   "toolbarButtons/pivot-align-hcenter.png",
-                                   gSingleLineTooltip("Align Horizontal Center"),
-                                   this);
-    connect(hCenterButton, &ActionButton::pressed, this, [this]() {
+    const auto hCenterButton = new QPushButton(this);
+    hCenterButton->setIcon(QIcon::fromTheme("pivot-align-hcenter"));
+    hCenterButton->setIconSize(QSize(buttonSize, buttonSize));
+    hCenterButton->setToolTip(tr("Align Horzontal Center"));
+    connect(hCenterButton, &QPushButton::pressed, this, [this]() {
         triggerAlign(Qt::AlignHCenter);
     });
     buttonsLay->addWidget(hCenterButton);
 
-    const auto rightButton = new ActionButton(
-                                 "toolbarButtons/pivot-align-right.png",
-                                 gSingleLineTooltip("Align Right"),
-                                 this);
-    connect(rightButton, &ActionButton::pressed, this, [this]() {
+    const auto rightButton = new QPushButton(this);
+    rightButton->setIcon(QIcon::fromTheme("pivot-align-right"));
+    rightButton->setIconSize(QSize(buttonSize, buttonSize));
+    rightButton->setToolTip(tr("Align Right"));
+    connect(rightButton, &QPushButton::pressed, this, [this]() {
         triggerAlign(Qt::AlignRight);
     });
     buttonsLay->addWidget(rightButton);
 
-    const auto line0 = new QFrame;
-    line0->setFrameShape(QFrame::VLine);
-    line0->setFrameShadow(QFrame::Sunken);
-    buttonsLay->addWidget(line0);
-
-    const auto topButton = new ActionButton(
-                                "toolbarButtons/pivot-align-top.png",
-                                gSingleLineTooltip("Align Top"),
-                                this);
-    connect(topButton, &ActionButton::pressed, this, [this]() {
+    const auto topButton = new QPushButton(this);
+    topButton->setIcon(QIcon::fromTheme("pivot-align-top"));
+    topButton->setIconSize(QSize(buttonSize, buttonSize));
+    topButton->setToolTip(tr("Align Top"));
+    connect(topButton, &QPushButton::pressed, this, [this]() {
         triggerAlign(Qt::AlignTop);
     });
     buttonsLay->addWidget(topButton);
 
-    const auto vCenterButton = new ActionButton(
-                                   "toolbarButtons/pivot-align-vcenter.png",
-                                   gSingleLineTooltip("Align Vertical Center"),
-                                   this);
-    connect(vCenterButton, &ActionButton::pressed, this, [this]() {
+    const auto vCenterButton = new QPushButton(this);
+    vCenterButton->setIcon(QIcon::fromTheme("pivot-align-vcenter"));
+    vCenterButton->setIconSize(QSize(buttonSize, buttonSize));
+    vCenterButton->setToolTip(tr("Align Vertical Center"));
+    connect(vCenterButton, &QPushButton::pressed, this, [this]() {
         triggerAlign(Qt::AlignVCenter);
     });
     buttonsLay->addWidget(vCenterButton);
 
-    const auto bottomButton = new ActionButton(
-                                  "toolbarButtons/pivot-align-bottom.png",
-                                  gSingleLineTooltip("Align Bottom"),
-                                  this);
-    connect(bottomButton, &ActionButton::pressed, this, [this]() {
+    const auto bottomButton = new QPushButton(this);
+    bottomButton->setIcon(QIcon::fromTheme("pivot-align-bottom"));
+    bottomButton->setIconSize(QSize(buttonSize, buttonSize));
+    bottomButton->setToolTip(tr("Align Bottom"));
+    connect(bottomButton, &QPushButton::pressed, this, [this]() {
         triggerAlign(Qt::AlignBottom);
     });
     buttonsLay->addWidget(bottomButton);
 }
 
-void AlignWidget::triggerAlign(const Qt::Alignment align) {
-    const auto alignPivot = static_cast<AlignPivot>(
-                                mAlignPivot->currentIndex());
-    const auto relativeTo = static_cast<AlignRelativeTo>(
-                                mRelativeTo->currentIndex());
+void AlignWidget::triggerAlign(const Qt::Alignment align)
+{
+    const auto alignPivot = static_cast<AlignPivot>(mAlignPivot->currentIndex());
+    const auto relativeTo = static_cast<AlignRelativeTo>(mRelativeTo->currentIndex());
     emit alignTriggered(align, alignPivot, relativeTo);
 }

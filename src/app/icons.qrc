@@ -28,12 +28,6 @@
         <file>icons/toolbarButtons/plain/normalNodesOnly.svg</file>
         <file>icons/toolbarButtons/plain/onionDisabled.svg</file>
         <file>icons/toolbarButtons/plain/onionEnabled.svg</file>
-        <file>icons/toolbarButtons/plain/pivot-align-bottom.svg</file>
-        <file>icons/toolbarButtons/plain/pivot-align-hcenter.svg</file>
-        <file>icons/toolbarButtons/plain/pivot-align-left.svg</file>
-        <file>icons/toolbarButtons/plain/pivot-align-right.svg</file>
-        <file>icons/toolbarButtons/plain/pivot-align-top.svg</file>
-        <file>icons/toolbarButtons/plain/pivot-align-vcenter.svg</file>
         <file>icons/toolbarButtons/plain/pivotGlobal.svg</file>
         <file>icons/toolbarButtons/plain/pivotLocal.svg</file>
         <file>icons/toolbarButtons/plain/zoom.svg</file>
