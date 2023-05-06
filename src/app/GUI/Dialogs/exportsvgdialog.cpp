@@ -92,12 +92,32 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent)
     mImageFormat->addItem(tr("PNG"));
     mImageFormat->addItem(tr("JPEG"));
     mImageFormat->addItem(tr("WEBP"));
+    mImageFormat->setCurrentIndex(AppSupport::getSettings("exportSVG",
+                                                          "imageFormat",
+                                                          0).toInt());
+    connect(mImageFormat,
+            QOverload<int>::of(&QComboBox::currentIndexChanged),
+            [=](int i) {
+        AppSupport::setSettings("exportSVG",
+                                "imageFormat",
+                                i);
+    });
 
     mImageQuality = new QSpinBox(this);
     mImageQuality->setToolTip(tr("Image format quality"));
     mImageQuality->setRange(1, 100);
-    mImageQuality->setValue(100);
+    mImageQuality->setValue(AppSupport::getSettings("exportSVG",
+                                                    "imageQuality",
+                                                    100).toInt());
     mImageQuality->setSuffix(tr("%"));
+
+    connect(mImageQuality,
+            QOverload<int>::of(&QSpinBox::valueChanged),
+            [=](int i) {
+        AppSupport::setSettings("exportSVG",
+                                "imageQuality",
+                                i);
+    });
 
     QWidget *mImageOptions = new QWidget(this);
     mImageOptions->setContentsMargins(0, 0, 0, 0);
