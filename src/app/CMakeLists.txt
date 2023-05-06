@@ -293,7 +293,7 @@ set(
     GUI/RenderWidgets/rendersettingsdialog.h
     GUI/RenderWidgets/rendersettingsdisplaywidget.h
     GUI/Settings/canvassettingswidget.h
-    GUI/Settings/externalappssettingswidget.h
+    GUI/Settings/interfacesettingswidget.h
     GUI/Settings/performancesettingswidget.h
     GUI/Settings/settingsdialog.h
     GUI/Settings/settingswidget.h
