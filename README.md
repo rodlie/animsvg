@@ -7,6 +7,12 @@
 * [Build instructions](docs/Linux-build.md)
 * [Latest release](https://github.com/friction2d/friction/releases/latest)
 
+## Contributors
+
+<a href = "https://github.com/friction2d/friction/graphs/contributors">
+  <img src = "https://contrib.rocks/image?repo=friction2d/friction"/>
+</a>
+
 ## License
 
 Copyright &copy; Friction [developers](https://github.com/friction2d/friction/graphs/contributors)
