@@ -150,12 +150,18 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent)
     });
 
     connect(buttons, &QDialogButtonBox::accepted, this, [this]() {
-        const QString dir = Document::sInstance->projectDirectory();
         const QString fileType = tr("SVG Files %1", "ExportDialog_FileType");
-        QString saveAs = eDialogs::saveFile("Export SVG", dir,
+        QString saveAs = eDialogs::saveFile(tr("Export SVG"),
+                                            AppSupport::getSettings("files",
+                                                                    "recentExported",
+                                                                    QDir::homePath()).toString(),
                                             fileType.arg("(*.svg)"));
         if (saveAs.isEmpty()) { return; }
         if (!saveAs.endsWith(".svg")) { saveAs.append(".svg"); }
+        QFileInfo saveInfo(saveAs);
+        AppSupport::setSettings("files",
+                                "recentExported",
+                                saveInfo.absoluteDir().absolutePath());
         const bool success = exportTo(saveAs);
         if (success) { accept(); }
     });
