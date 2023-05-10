@@ -97,7 +97,7 @@ if [ ! -f "${CWD}/src/gperftools/.libs/libtcmalloc.a" ]; then
         rm -rf ${CWD}/src/gperftools || true
         curl -k -L "${SF_NET_SRC}/gperftools-${GPERF_GIT}.tar.xz/download" --output ${CWD}/gperftools.tar.xz
         tar xf ${CWD}/gperftools.tar.xz
-        mv gperftools-${GPERF_GIT} ${CWD}/gperftools
+        mv gperftools-${GPERF_GIT} ${CWD}/src/gperftools
     fi
     cd ${CWD}/src/gperftools
     ./autogen.sh
@@ -110,7 +110,7 @@ if [ ! -f "${CWD}/src/skia/out/build/libskia.a" ]; then
         rm -rf ${CWD}/src/skia || true
         curl -k -L "${SF_NET_SRC}/skia-${SKIA_GIT}.tar.xz/download" --output ${CWD}/skia.tar.xz
         tar xf ${CWD}/skia.tar.xz
-        mv skia-${SKIA_GIT} ${CWD}/skia
+        mv skia-${SKIA_GIT} ${CWD}/src/skia
     fi
     cd ${CWD}/src/skia
     if [ "${SKIA_SYNC}" = 1 ]; then
