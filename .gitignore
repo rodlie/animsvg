@@ -12,3 +12,6 @@ quazip
 *.deb
 *.rpm
 *.exe
+snapshots
+.vscode
+

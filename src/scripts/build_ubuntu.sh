@@ -23,13 +23,27 @@ set -e -x
 CI=${CI:-0}
 APT=${APT:-0}
 SNAP=${SNAP:-0}
+DOCKER=${DOCKER:-0}
 REL=${REL:-0}
 SKIA_SYNC=${SKIA_SYNC:-1}
 PC=${PC:-""}
+SF_NET_SRC="https://sourceforge.net/projects/friction/files/source/"
+
+SKIA_GIT="4fcb5c225a"
+GPERF_GIT="e590eba"
+
+SKIA_TAR=${SKIA_TAR:-0}
+GPERF_TAR=${GPERF_TAR:-0}
+
+if [ "${SKIA_TAR}" = 1 ]; then
+    SKIA_SYNC=0
+fi
 
 if [ "${APT}" = 1 ]; then
 sudo apt update -y
 sudo apt install -y \
+curl \
+git \
 build-essential \
 libtool \
 autoconf \
@@ -74,11 +88,17 @@ CWD=`pwd`
 MKJOBS=${MKJOBS:-4}
 COMMIT=`git rev-parse --short HEAD`
 VERSION=`cat ${CWD}/CMakeLists.txt | sed '/friction2d VERSION/!d;s/)//' | awk '{print $3}'`
-TIMESTAMP=${TIMESTAMP:-`date +%Y%m%d%H%M`}
+TIMESTAMP=${TIMESTAMP:-`date +%Y%m%d`}
 DISTRO_ID=`cat /etc/os-release | sed '/^ID=/!d;s/ID=//;s/"//g'`
 DISTRO_VERSION=`cat /etc/os-release | sed '/^VERSION_ID=/!d;s/VERSION_ID=//;s/"//g'`
 
 if [ ! -f "${CWD}/src/gperftools/.libs/libtcmalloc.a" ]; then
+    if [ "${GPERF_TAR}" = 1 ]; then
+        rm -rf ${CWD}/src/gperftools || true
+        curl -k -L "${SF_NET_SRC}/gperftools-${GPERF_GIT}.tar.xz/download" --output ${CWD}/gperftools.tar.xz
+        tar xf ${CWD}/gperftools.tar.xz
+        mv gperftools-${GPERF_GIT} ${CWD}/gperftools
+    fi
     cd ${CWD}/src/gperftools
     ./autogen.sh
     ./configure --disable-shared
@@ -111,4 +131,8 @@ fi
 if [ "${CI}" = 1 ]; then
     make DESTDIR=`pwd`/friction install
     tree friction
+fi
+
+if [ "${DOCKER}" = 1 ]; then
+    cp *.deb /snapshots/
 fi
