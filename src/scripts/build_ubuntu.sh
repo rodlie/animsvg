@@ -89,6 +89,8 @@ MKJOBS=${MKJOBS:-4}
 COMMIT=`git rev-parse --short HEAD`
 VERSION=`cat ${CWD}/CMakeLists.txt | sed '/friction2d VERSION/!d;s/)//' | awk '{print $3}'`
 TIMESTAMP=${TIMESTAMP:-`date +%Y%m%d`}
+YEAR=${YEAR:-`date +%Y`}
+MONTH=${MONTH:-`date +%m`}
 DISTRO_ID=`cat /etc/os-release | sed '/^ID=/!d;s/ID=//;s/"//g'`
 DISTRO_VERSION=`cat /etc/os-release | sed '/^VERSION_ID=/!d;s/VERSION_ID=//;s/"//g'`
 
@@ -128,17 +130,23 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DGIT_COMMIT=${COMM
 make -j${MKJOBS}
 make package
 
-if [ "${REL}" = 1 ]; then
-    mv friction.deb friction-${VERSION}-${DISTRO_ID}-${DISTRO_VERSION}.deb
-elif [ "${SNAP}" = 1 ]; then
-    mv friction.deb friction-${TIMESTAMP}-${VERSION}-${COMMIT}-${DISTRO_ID}-${DISTRO_VERSION}.deb
-fi
-
 if [ "${CI}" = 1 ]; then
     make DESTDIR=`pwd`/friction install
     tree friction
 fi
 
+PKG="friction-${DISTRO_ID}-${DISTRO_VERSION}.deb"
+if [ "${REL}" = 1 ]; then
+    PKG="friction-${VERSION}-${DISTRO_ID}-${DISTRO_VERSION}.deb"
+elif [ "${SNAP}" = 1 ]; then
+    PKG="friction-${TIMESTAMP}-${VERSION}-${COMMIT}-${DISTRO_ID}-${DISTRO_VERSION}.deb"
+fi
+mv friction.deb ${PKG}
+
 if [ "${DOCKER}" = 1 ]; then
-    cp *.deb /snapshots/
+    if [ ! -d "/snapshots/${YEAR}/${MONTH}" ]; then
+        mkdir -p /snapshots/${YEAR}/${MONTH}
+    fi
+    cp ${PKG} /snapshots/${YEAR}/${MONTH}/
+    (cd /snapshots ; ln -sf ${YEAR}/${MONTH}/${PKG} friction-latest-${DISTRO_ID}-${DISTRO_VERSION}.deb)
 fi
