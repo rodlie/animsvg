@@ -5,7 +5,10 @@
 * [Issues](https://github.com/friction2d/friction/issues)
 * [Discussions](https://github.com/friction2d/friction/discussions)
 * [Build instructions](docs/Linux-build.md)
-* [Latest release](https://github.com/friction2d/friction/releases/latest)
+
+## Downloads
+
+* [Snapshots](https://sourceforge.net/projects/friction/files/snapshots/)
 
 ## Contributors
 
