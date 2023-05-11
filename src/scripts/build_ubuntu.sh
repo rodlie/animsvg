@@ -27,7 +27,9 @@ DOCKER=${DOCKER:-0}
 REL=${REL:-0}
 SKIA_SYNC=${SKIA_SYNC:-1}
 PC=${PC:-""}
-SF_NET_SRC="https://sourceforge.net/projects/friction/files/source/"
+
+SF_NET_SRC="https://sourceforge.net/projects/friction/files/source"
+SF_NET_SNAP="https://sourceforge.net/projects/friction/files/snapshots"
 
 SKIA_GIT="4fcb5c225a"
 GPERF_GIT="e590eba"
@@ -93,6 +95,7 @@ YEAR=${YEAR:-`date +%Y`}
 MONTH=${MONTH:-`date +%m`}
 DISTRO_ID=`cat /etc/os-release | sed '/^ID=/!d;s/ID=//;s/"//g'`
 DISTRO_VERSION=`cat /etc/os-release | sed '/^VERSION_ID=/!d;s/VERSION_ID=//;s/"//g'`
+DISTRO_PRETTY=`cat /etc/os-release | sed '/^PRETTY_NAME=/!d;s/PRETTY_NAME=//;s/"//g'`
 
 if [ ! -f "${CWD}/src/gperftools/.libs/libtcmalloc.a" ]; then
     if [ "${GPERF_TAR}" = 1 ]; then
@@ -148,5 +151,8 @@ if [ "${DOCKER}" = 1 ]; then
         mkdir -p /snapshots/${YEAR}/${MONTH}
     fi
     cp ${PKG} /snapshots/${YEAR}/${MONTH}/
-    (cd /snapshots ; ln -sf ${YEAR}/${MONTH}/${PKG} friction-latest-${DISTRO_ID}-${DISTRO_VERSION}.deb)
+    (cd /snapshots ;
+        ln -sf ${YEAR}/${MONTH}/${PKG} friction-latest-${DISTRO_ID}-${DISTRO_VERSION}.deb
+        echo "* [Latest snapshot for ${DISTRO_PRETTY}](https://sourceforge.net/projects/friction/files/snapshots/${YEAR}/${MONTH}/${PKG}/download)" > friction-latest-${DISTRO_ID}-${DISTRO_VERSION}.md
+    )
 fi
