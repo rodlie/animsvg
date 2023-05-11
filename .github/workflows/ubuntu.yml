@@ -11,9 +11,3 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build
       run: APT=1 CI=1 MKJOBS=2 ./src/scripts/build_ubuntu.sh
-    - name: Artifact
-      run: sudo cp build/friction.deb /opt/
-    - uses: actions/upload-artifact@v2
-      with:
-        name: friction-${{github.sha}}-ubuntu-22.04
-        path: /opt/friction.deb
