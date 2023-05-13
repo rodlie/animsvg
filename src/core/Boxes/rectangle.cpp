@@ -171,6 +171,9 @@ void RectangleBox::saveSVG(SvgExporter& exp, DomEleTask* const task) const {
     const auto rightAnim = copy->mBottomRightAnimator->getXAnimator();
     const auto bottomAnim = copy->mBottomRightAnimator->getYAnimator();
 
+    const auto rX = copy->mRadiusAnimator->getXAnimator();
+    const auto rY = copy->mRadiusAnimator->getYAnimator();
+
     xAnim->anim_coordinateKeysWith(rightAnim);
     yAnim->anim_coordinateKeysWith(bottomAnim);
 
@@ -178,6 +181,8 @@ void RectangleBox::saveSVG(SvgExporter& exp, DomEleTask* const task) const {
     cY->saveQrealSVG(exp, ele, task->visRange(), "y");
     cW->saveQrealSVG(exp, ele, task->visRange(), "width");
     cH->saveQrealSVG(exp, ele, task->visRange(), "height");
+    rX->saveQrealSVG(exp, ele, task->visRange(), "rx");
+    rY->saveQrealSVG(exp, ele, task->visRange(), "ry");
 
     savePathBoxSVG(exp, ele, task->visRange());
 
