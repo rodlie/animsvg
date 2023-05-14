@@ -2,6 +2,8 @@
 
 2D animation software for Linux.
 
+![Screenshot](https://friction2d.com/assets/friction-screenshot-01.jpg)
+
 * [Issues](https://github.com/friction2d/friction/issues)
 * [Discussions](https://github.com/friction2d/friction/discussions)
 * [Build instructions](docs/Linux-build.md)
