@@ -82,10 +82,12 @@ public:
         return mAlphaAnimator.get();
     }
 
-    void saveColorSVG(SvgExporter& exp,
-                      QDomElement& parent,
-                      const FrameRange& visRange,
-                      const QString& name) const;
+    void saveColorSVG(SvgExporter &exp,
+                      QDomElement &parent,
+                      const FrameRange &visRange,
+                      const QString &name,
+                      bool rgba = true,
+                      bool a = false) const;
 private:
     ColorMode mColorMode = ColorMode::rgb;
 

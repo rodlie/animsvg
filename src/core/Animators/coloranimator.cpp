@@ -254,12 +254,21 @@ void ColorAnimator::setCurrentAlphaValue(const qreal alpha) {
     mAlphaAnimator->setCurrentBaseValue(alpha);
 }
 
-void ColorAnimator::saveColorSVG(SvgExporter& exp,
-                                 QDomElement& parent,
-                                 const FrameRange& visRange,
-                                 const QString& name) const {
-    Animator::saveSVG(exp, parent, visRange, name, [this](const int relFrame) {
-        return getColor(relFrame).name();
+void ColorAnimator::saveColorSVG(SvgExporter &exp,
+                                 QDomElement &parent,
+                                 const FrameRange &visRange,
+                                 const QString &name,
+                                 bool rgba,
+                                 bool a) const
+{
+    Animator::saveSVG(exp, parent, visRange, name, [this, &rgba, &a](const int relFrame) {
+        const auto color = getColor(relFrame);
+        if (a) { return QString::number(color.alphaF()); }
+        if (!rgba) { return color.name(); }
+        return QString("rgba(%1, %2, %3, %4)").arg(QString::number(color.red()),
+                                                   QString::number(color.green()),
+                                                   QString::number(color.blue()),
+                                                   QString::number(color.alphaF()));
     });
 }
 
