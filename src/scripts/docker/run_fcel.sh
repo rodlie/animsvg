@@ -46,7 +46,7 @@ if [ "${DISTRO_ID}" = "fc" ]; then
     DISTRO_VERSION="${DISTRO_VERSION_ID}"
     DISTRO_PRETTY="Fedora Linux ${DISTRO_VERSION}"
 else
-    DISTRO_VERSION="9"
+    DISTRO_VERSION="${DISTRO_VERSION_ID:0:1}"
     DISTRO_PRETTY="Enterprise Linux ${DISTRO_VERSION}"
 fi
 

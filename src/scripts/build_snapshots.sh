@@ -66,4 +66,5 @@ if [ "${EL}" = 1 ]; then
 fi
 if [ "${FC}" = 1 ]; then
     $DOCKER friction-fc38
+    $DOCKER friction-fc37
 fi
