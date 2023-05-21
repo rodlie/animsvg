@@ -2,8 +2,6 @@
 
 Generic build instructions for GNU/Linux.
 
-***Note**: We only officially support Ubuntu 22.04/23.04 and Red Hat Enterprise Linux 9.*
-
 ## Requirements
 
 * pkg-config

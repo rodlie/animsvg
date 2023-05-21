@@ -430,14 +430,14 @@ if(APPLE)
     )
 endif()
 
-if(UNIX AND NOT APPLE)
-    set_target_properties(
-        ${PROJECT_NAME}
-        PROPERTIES
-        BUILD_WITH_INSTALL_RPATH FALSE
-        LINK_FLAGS "-Wl,-rpath,$ORIGIN/"
-    )
-endif()
+#if(UNIX AND NOT APPLE)
+#    set_target_properties(
+#        ${PROJECT_NAME}
+#        PROPERTIES
+#        BUILD_WITH_INSTALL_RPATH FALSE
+#        LINK_FLAGS "-Wl,-rpath,$ORIGIN/"
+#    )
+#endif()
 
 if(UNIX)
     target_link_directories(

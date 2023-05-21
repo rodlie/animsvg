@@ -41,7 +41,12 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-Bsymbolic")
+
+option(STATIC_FFMPEG "Link against static ffmpeg" OFF)
+
+if(${STATIC_FFMPEG})
+    set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-Bsymbolic")
+endif()
 
 find_package(PkgConfig)
 find_package(OpenMP)

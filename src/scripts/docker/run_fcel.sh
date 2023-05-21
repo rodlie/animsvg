@@ -24,12 +24,33 @@ cmake --version
 python --version
 qmake-qt5 --version || qmake --version
 env
-uname -a
 cat /etc/os-release
 
 SNAP=${SNAP:-1}
 REL=${REL:-0}
 MKJOBS=${MKJOBS:-4}
+
+TIMESTAMP=${TIMESTAMP:-`date +%Y%m%d`}
+YEAR=${YEAR:-`date +%Y`}
+MONTH=${MONTH:-`date +%m`}
+
+DISTRO_ID=`cat /etc/os-release | sed '/^ID=/!d;s/ID=//;s/"//g'`
+if [ "${DISTRO_ID}" = "fedora" ]; then
+    DISTRO_ID="fc"
+else
+    DISTRO_ID="el"
+fi
+
+DISTRO_VERSION_ID=`cat /etc/os-release | sed '/^VERSION_ID=/!d;s/VERSION_ID=//;s/"//g'`
+if [ "${DISTRO_ID}" = "fc" ]; then
+    DISTRO_VERSION="${DISTRO_VERSION_ID}"
+    DISTRO_PRETTY="Fedora Linux ${DISTRO_VERSION}"
+else
+    DISTRO_VERSION="9"
+    DISTRO_PRETTY="Enterprise Linux ${DISTRO_VERSION}"
+fi
+
+DID="${DISTRO_ID}${DISTRO_VERSION}"
 
 FRICTION_ROOT="/friction2d"
 FRICTION_DIR="${FRICTION_ROOT}/friction"
@@ -72,8 +93,14 @@ if [ ! -f "${FRICTION_SRC_DIR}/quazip-${QUAZIP_V}/build/quazip/libquazip1-qt5.a"
     cd ${FRICTION_SRC_DIR}
     tar xf ${FRICTION_DIST}/quazip.tar.gz
     cd quazip-${QUAZIP_V}
-    mkdir build && cd build
-    cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF .. && make
+    if [ -f "${FRICTION_DIST}/quazip-build-${DID}.tar.xz" ]; then
+        tar xf ${FRICTION_DIST}/quazip-build-${DID}.tar.xz
+    else
+        mkdir build && cd build
+        cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF .. && make
+        cd ..
+        tar cvvfJ ${FRICTION_DIST}/quazip-build-${DID}.tar.xz build
+    fi
 fi
 
 if [ ! -f "${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}/src/libqscintilla2_qt5.a" ]; then
@@ -85,8 +112,21 @@ if [ ! -f "${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}/src/libqscintilla2
     fi
     cd ${FRICTION_SRC_DIR}
     tar xf ${FRICTION_DIST}/qscintilla.tar.gz
-    cd QScintilla_src-${QSCINTILLA_V}/src
-    qmake-qt5 CONFIG+=staticlib && make
+    cd QScintilla_src-${QSCINTILLA_V}
+    if [ -f "${FRICTION_DIST}/qscintilla-build-${DID}.tar.xz" ]; then
+        tar xf ${FRICTION_DIST}/qscintilla-build-${DID}.tar.xz
+    else
+        cd src
+        qmake-qt5 CONFIG+=staticlib && make
+        cd ..
+        tar cvvfJ ${FRICTION_DIST}/qscintilla-build-${DID}.tar.xz src
+    fi
+fi
+
+HAS_LOCAL_CACHE=0
+if [ -f "${FRICTION_DIST}/local-build-${DID}.tar.xz" ]; then
+    HAS_LOCAL_CACHE=1
+    tar xf ${FRICTION_DIST}/local-build-${DID}.tar.xz -C /usr/
 fi
 
 if [ ! -f "/usr/local/lib/pkgconfig/libavcodec.pc" ]; then
@@ -119,6 +159,10 @@ if [ ! -f "/usr/local/lib/pkgconfig/libunwind.pc" ]; then
     make install
 fi
 
+if [ "${HAS_LOCAL_CACHE}" = 0 ]; then
+    (cd /usr ; tar cvvfJ ${FRICTION_DIST}/local-build-${DID}.tar.xz local)
+fi
+
 if [ ! -f "${FRICTION_SRC_DIR}/gperftools/.libs/libtcmalloc.a" ]; then
     if [ ! -f "${FRICTION_DIST}/gperftools.tar.xz" ]; then
         curl -k -L "${SF_NET_SRC}/gperftools-${GPERF_V}.tar.xz/download" --output ${FRICTION_DIST}/gperftools.tar.xz
@@ -133,9 +177,17 @@ if [ ! -f "${FRICTION_SRC_DIR}/gperftools/.libs/libtcmalloc.a" ]; then
     tar xf ${FRICTION_DIST}/gperftools.tar.xz
     mv gperftools-${GPERF_V} gperftools
     cd gperftools
-    ./autogen.sh
-    ./configure --disable-shared
-    make -j${MKJOBS}
+    if [ -f "${FRICTION_DIST}/gperftools-build-${DID}.tar.xz" ]; then
+        tar xf ${FRICTION_DIST}/gperftools-build-${DID}.tar.xz
+    else
+        if [ "${DISTRO_ID}" = "fc" ]; then
+            autoupdate
+        fi
+        ./autogen.sh
+        ./configure --disable-shared
+        make -j${MKJOBS}
+        tar cvvfJ ${FRICTION_DIST}/gperftools-build-${DID}.tar.xz .
+    fi
 fi
 
 if [ ! -f "${FRICTION_SRC_DIR}/skia/out/build/libskia.a" ]; then
@@ -152,20 +204,19 @@ if [ ! -f "${FRICTION_SRC_DIR}/skia/out/build/libskia.a" ]; then
     tar xf ${FRICTION_DIST}/skia.tar.xz
     mv skia-${SKIA_V} skia
     cd skia
-    bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=["-Wno-error"] target_os="linux" target_cpu="x64" skia_use_system_expat=false skia_use_system_freetype2=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_icu=false skia_use_system_harfbuzz=false'
-    ninja -C out/build -j${MKJOBS} skia
+    if [ -f "${FRICTION_DIST}/skia-build-${DID}.tar.xz" ]; then
+        tar xf ${FRICTION_DIST}/skia-build-${DID}.tar.xz
+    else
+        bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=["-Wno-error"] target_os="linux" target_cpu="x64" skia_use_system_expat=false skia_use_system_freetype2=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_icu=false skia_use_system_harfbuzz=false'
+        ninja -C out/build -j${MKJOBS} skia
+        tar cvvfJ ${FRICTION_DIST}/skia-build-${DID}.tar.xz out
+    fi
 fi
 
 cd ${FRICTION_DIR}
 
 COMMIT=`git rev-parse --short HEAD`
 VERSION=`cat ${FRICTION_DIR}/CMakeLists.txt | sed '/friction2d VERSION/!d;s/)//' | awk '{print $3}'`
-TIMESTAMP=${TIMESTAMP:-`date +%Y%m%d`}
-YEAR=${YEAR:-`date +%Y`}
-MONTH=${MONTH:-`date +%m`}
-DISTRO_ID="el" #`cat /etc/os-release | sed '/^ID=/!d;s/ID=//;s/"//g'`
-DISTRO_VERSION="9" #`cat /etc/os-release | sed '/^VERSION_ID=/!d;s/VERSION_ID=//;s/"//g'`
-DISTRO_PRETTY="Enterprise Linux 9" #`cat /etc/os-release | sed '/^PRETTY_NAME=/!d;s/PRETTY_NAME=//;s/"//g'`
 
 if [ -d "${FRICTION_DIR}/build" ]; then
     rm -rf ${FRICTION_DIR}/build
@@ -176,6 +227,7 @@ cd build
 
 cmake -G Ninja \
 -DCMAKE_BUILD_TYPE=Release \
+-DSTATIC_FFMPEG=ON \
 -DQUAZIP_INCLUDE_DIRS=${FRICTION_SRC_DIR}/quazip-${QUAZIP_V}/quazip \
 -DQUAZIP_LIBRARIES_DIRS=${FRICTION_SRC_DIR}/quazip-${QUAZIP_V}/build/quazip \
 -DQUAZIP_LIBRARIES=quazip1-qt5 \
@@ -187,11 +239,11 @@ strip -s src/app/friction
 strip -s src/core/libfrictioncore.so.${VERSION}
 cpack -G RPM
 
-PKG="friction-${DISTRO_ID}-${DISTRO_VERSION}.rpm"
+PKG="friction-${DID}.rpm"
 if [ "${REL}" = 1 ]; then
-    PKG="friction-${VERSION}-${DISTRO_ID}${DISTRO_VERSION}.rpm"
+    PKG="friction-${VERSION}-${DID}.rpm"
 elif [ "${SNAP}" = 1 ]; then
-    PKG="friction-${TIMESTAMP}-${VERSION}-${COMMIT}-${DISTRO_ID}${DISTRO_VERSION}.rpm"
+    PKG="friction-${TIMESTAMP}-${VERSION}-${COMMIT}-${DID}.rpm"
 fi
 mv friction.rpm ${PKG}
 
@@ -202,6 +254,5 @@ fi
 cp ${PKG} ${FRICTION_SNAP}/${YEAR}/${MONTH}/
 
 (cd ${FRICTION_SNAP} ;
-    #ln -sf ${YEAR}/${MONTH}/${PKG} friction-latest-${DISTRO_ID}${DISTRO_VERSION}.rpm
-    echo "* [Latest download for ${DISTRO_PRETTY}](https://sourceforge.net/projects/friction/files/snapshots/${YEAR}/${MONTH}/${PKG}/download)" > friction-latest-${DISTRO_ID}${DISTRO_VERSION}.md
+    echo "* [Latest download for ${DISTRO_PRETTY}](https://sourceforge.net/projects/friction/files/snapshots/${YEAR}/${MONTH}/${PKG}/download)" > friction-latest-${DID}.md
 )

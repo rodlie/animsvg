@@ -8,5 +8,5 @@ RUN dnf -y group install "Development Tools"
 RUN dnf -y install git cmake python3 yasm rpmdevtools ninja-build qt5-devel libmypaint-devel zlib-devel
 RUN ln -sf /usr/bin/python3 /usr/bin/python
 
-COPY run.sh /
-CMD [ "bash", "./run.sh" ]
+COPY run_fcel.sh /
+CMD [ "bash", "./run_fcel.sh" ]

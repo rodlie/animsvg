@@ -37,6 +37,8 @@ GPERF_GIT="e590eba"
 SKIA_TAR=${SKIA_TAR:-0}
 GPERF_TAR=${GPERF_TAR:-0}
 
+FRICTION_DIST=/snapshots/distfiles
+
 if [ "${SKIA_TAR}" = 1 ]; then
     SKIA_SYNC=0
 fi
@@ -100,8 +102,12 @@ DISTRO_PRETTY=`cat /etc/os-release | sed '/^PRETTY_NAME=/!d;s/PRETTY_NAME=//;s/"
 if [ ! -f "${CWD}/src/gperftools/.libs/libtcmalloc.a" ]; then
     if [ "${GPERF_TAR}" = 1 ]; then
         rm -rf ${CWD}/src/gperftools || true
-        curl -k -L "${SF_NET_SRC}/gperftools-${GPERF_GIT}.tar.xz/download" --output ${CWD}/gperftools.tar.xz
-        tar xf ${CWD}/gperftools.tar.xz
+        if [ -f "${FRICTION_DIST}/gperftools.tar.xz" ]; then
+            tar xf ${FRICTION_DIST}/gperftools.tar.xz
+        else
+            curl -k -L "${SF_NET_SRC}/gperftools-${GPERF_GIT}.tar.xz/download" --output ${CWD}/gperftools.tar.xz
+            tar xf ${CWD}/gperftools.tar.xz
+        fi
         mv gperftools-${GPERF_GIT} ${CWD}/src/gperftools
     fi
     cd ${CWD}/src/gperftools
@@ -113,8 +119,12 @@ fi
 if [ ! -f "${CWD}/src/skia/out/build/libskia.a" ]; then
     if [ "${SKIA_TAR}" = 1 ]; then
         rm -rf ${CWD}/src/skia || true
-        curl -k -L "${SF_NET_SRC}/skia-${SKIA_GIT}-minimal.tar.xz/download" --output ${CWD}/skia.tar.xz
-        tar xf ${CWD}/skia.tar.xz
+        if [ -f "${FRICTION_DIST}/skia.tar.xz" ]; then
+            tar xf ${FRICTION_DIST}/skia.tar.xz
+        else
+            curl -k -L "${SF_NET_SRC}/skia-${SKIA_GIT}-minimal.tar.xz/download" --output ${CWD}/skia.tar.xz
+            tar xf ${CWD}/skia.tar.xz
+        fi
         mv skia-${SKIA_GIT} ${CWD}/src/skia
     fi
     cd ${CWD}/src/skia

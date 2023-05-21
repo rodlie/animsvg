@@ -1,20 +1,40 @@
 #!/bin/bash
+#
+# Friction - https://github.com/friction2d/friction
+#
+# Copyright (c) Friction developers
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
 set -e -x
 
 JAMMY=${JAMMY:-1}
 LUNAR=${LUNAR:-1}
-EL9=${EL9:-1}
+EL=${EL:-1}
+FC=${FC:-1}
 
 CWD=`pwd`
 DOCKER="docker run -t --mount type=bind,source=${CWD}/snapshots,target=/snapshots"
-FRICTION_DIST=${CWD}/snapshots/distfiles
+FRICTION_DIST="${CWD}/snapshots/distfiles"
 SF_NET_SRC="https://sourceforge.net/projects/friction/files/source"
 
 if [ ! -d "${FRICTION_DIST}" ]; then
     mkdir -p ${FRICTION_DIST}
 fi
 
-if [ "${EL9}" = 1 ]; then
+if [ "${EL}" = 1 ] || [ "${FC}" = 1 ]; then
     if [ ! -f "${FRICTION_DIST}/quazip.tar.gz" ]; then
         curl -L -k "${SF_NET_SRC}/quazip-${QUAZIP_V}.tar.gz" --output ${FRICTION_DIST}/quazip.tar.gz
     fi
@@ -41,6 +61,9 @@ fi
 if [ "${LUNAR}" = 1 ]; then
     $DOCKER friction-lunar
 fi
-if [ "${EL9}" = 1 ]; then
+if [ "${EL}" = 1 ]; then
     $DOCKER friction-el9
+fi
+if [ "${FC}" = 1 ]; then
+    $DOCKER friction-fc38
 fi
