@@ -152,7 +152,7 @@ if [ "${DOCKER}" = 1 ]; then
     fi
     cp ${PKG} /snapshots/${YEAR}/${MONTH}/
     (cd /snapshots ;
-        ln -sf ${YEAR}/${MONTH}/${PKG} friction-latest-${DISTRO_ID}-${DISTRO_VERSION}.deb
+        #ln -sf ${YEAR}/${MONTH}/${PKG} friction-latest-${DISTRO_ID}-${DISTRO_VERSION}.deb
         echo "* [Latest download for ${DISTRO_PRETTY}](https://sourceforge.net/projects/friction/files/snapshots/${YEAR}/${MONTH}/${PKG}/download)" > friction-latest-${DISTRO_ID}-${DISTRO_VERSION}.md
     )
 fi
