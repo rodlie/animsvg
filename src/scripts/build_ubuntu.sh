@@ -131,7 +131,7 @@ mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DGIT_COMMIT=${COMMIT} ..
 make -j${MKJOBS}
-make package
+cpack -G DEB
 
 if [ "${CI}" = 1 ]; then
     make DESTDIR=`pwd`/friction install
@@ -153,6 +153,6 @@ if [ "${DOCKER}" = 1 ]; then
     cp ${PKG} /snapshots/${YEAR}/${MONTH}/
     (cd /snapshots ;
         ln -sf ${YEAR}/${MONTH}/${PKG} friction-latest-${DISTRO_ID}-${DISTRO_VERSION}.deb
-        echo "* [Latest snapshot for ${DISTRO_PRETTY}](https://sourceforge.net/projects/friction/files/snapshots/${YEAR}/${MONTH}/${PKG}/download)" > friction-latest-${DISTRO_ID}-${DISTRO_VERSION}.md
+        echo "* [Latest download for ${DISTRO_PRETTY}](https://sourceforge.net/projects/friction/files/snapshots/${YEAR}/${MONTH}/${PKG}/download)" > friction-latest-${DISTRO_ID}-${DISTRO_VERSION}.md
     )
 fi

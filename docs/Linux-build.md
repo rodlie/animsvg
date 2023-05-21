@@ -1,6 +1,8 @@
-# Linux
+# Build Friction on GNU/Linux
 
-Generic build instructions for supported platforms.
+Generic build instructions for GNU/Linux.
+
+***Note**: We only officially support Ubuntu 22.04/23.04 and Red Hat Enterprise Linux 9.*
 
 ## Requirements
 
@@ -28,9 +30,9 @@ Generic build instructions for supported platforms.
     * libavutil
     * libswscale
     * libswresample
-* libunwind *(Linux)*
+* libunwind
 
-### Ubuntu
+### Ubuntu *(as an example)*
 
 ```
 sudo apt install -y \
@@ -68,18 +70,16 @@ qttools5-dev-tools
 
 ## Get the source
 
-Clone the repository, this might take a while.
-
 ```
 git clone --recurse-submodules https://github.com/friction2d/friction
 ```
 
+*You may drop the use of ``--recurse-submodules`` and replace ``src/gperftools`` and ``src/skia`` with tarballs available on [SourceForge](https://sourceforge.net/projects/friction/files/source/).*
+
 ## Build libtcmalloc
 
-Build a custom version of ``libtcmalloc``:
-
 ```
-cd friction/src/gperftools
+cd src/gperftools
 ./autogen.sh
 ./configure --disable-shared
 make -j4
@@ -87,11 +87,22 @@ make -j4
 
 ## Build skia
 
-Build a custom version of ``skia``:
 
 ```
-cd friction/src/skia
+cd src/skia
+```
+
+### Sync
+
+Skia requires several third-party git modules (4GB+), syncing them will take a while. We have skia minimal tarballs available on [SourceForge](https://sourceforge.net/projects/friction/files/source/) if you want to save disk space and bandwidth. Else:
+
+```
 python3 tools/git-sync-deps
+```
+
+### Build
+
+```
 bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=["-Wno-error"] target_os="linux" target_cpu="x64" skia_use_system_expat=false skia_use_system_freetype2=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_icu=false skia_use_system_harfbuzz=false'
 ninja -C out/build -j4 skia
 ```
@@ -107,7 +118,7 @@ cd build
 Note that if you are not using Ubuntu you will need to set paths for ``qscintilla`` and ``quazip``:
 
 ```
-cmake \
+cmake -G Ninja \
 -DCMAKE_BUILD_TYPE=Release \
 -DCMAKE_INSTALL_PREFIX=/usr \
 -DQUAZIP_INCLUDE_DIRS=<PATH_TO_QUAZIP_INCLUDE_FILES> \
@@ -122,31 +133,39 @@ cmake \
 else just use:
 
 ```
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr ..
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr ..
 ```
 
 Now build:
 
 ```
-make -j4
+cmake --build .
 ```
 
-Run:
+## Install Friction
 
 ```
-cp src/app/friction .
-cp src/core/libfrictioncore.so.0 .
-./friction
+make install
 ```
 
-Install:
+Add ``DESTDIR=<SOME_TEMP_DIR>`` if you want to install to a different/temporarily folder, else it will install to ``DCMAKE_INSTALL_PREFIX``.
+
+*It's not recommended that you install Friction this way as an end user.*
+
+## Package Friction
+
+The recommended way to install Friction is to package it after build, depending on your distribution select either `DEB` or `RPM`.
+
+### DEB
 
 ```
-make DESTDIR=<SOME_TEMP_DIR> install 
+cpack -G DEB
 ```
 
-or make a DEB package:
+### RPM
 
 ```
-make package
+cpack -G RPM
 ```
+
+You can now install and maintain Friction with the system package manager.

@@ -10,7 +10,8 @@
 
 ## Downloads
 
-* [Snapshots](https://sourceforge.net/projects/friction/files/snapshots/)
+* [Snapshots (Ubuntu/RHEL)](https://sourceforge.net/projects/friction/files/snapshots/)
+* [Sources](https://sourceforge.net/projects/friction/files/source/)
 
 ## Contributors
 
