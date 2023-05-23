@@ -456,6 +456,12 @@ void MainWindow::setupMenuBar()
                              &mActions, &Actions::clearSelectionAction,
                              Qt::ALT + Qt::Key_A, mEditMenu));
     mEditMenu->addSeparator();
+    mEditMenu->addAction(tr("Clear Cache", "MenuBar_Edit"), [this]() {
+        const auto m = MemoryHandler::sInstance;
+        m->clearMemory();
+        mTimeline->update();
+    }, QKeySequence(tr("Ctrl+R")));
+    mEditMenu->addSeparator();
     mEditMenu->addAction(tr("Settings", "MenuBar_Edit"), [this]() {
         const auto settDial = new SettingsDialog(this);
         settDial->setAttribute(Qt::WA_DeleteOnClose);
