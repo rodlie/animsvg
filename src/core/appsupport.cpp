@@ -41,15 +41,15 @@ void AppSupport::setupTheme()
     qApp->setStyle(QString::fromUtf8("fusion"));
 
     QPalette palette;
-    palette.setColor(QPalette::Window, QColor(44, 44, 49));
+    palette.setColor(QPalette::Window, QColor(40, 40, 47));
     palette.setColor(QPalette::WindowText, Qt::white);
     palette.setColor(QPalette::Base, QColor(33, 33, 38));
-    palette.setColor(QPalette::AlternateBase, QColor(44, 44, 49));
+    palette.setColor(QPalette::AlternateBase, QColor(40, 40, 47));
     palette.setColor(QPalette::Link, Qt::white);
     palette.setColor(QPalette::LinkVisited, Qt::white);
     palette.setColor(QPalette::ToolTipText, Qt::black);
     palette.setColor(QPalette::Text, Qt::white);
-    palette.setColor(QPalette::Button, QColor(44, 44, 49));
+    palette.setColor(QPalette::Button, QColor(40, 40, 47));
     palette.setColor(QPalette::ButtonText, Qt::white);
     palette.setColor(QPalette::BrightText, Qt::red);
     palette.setColor(QPalette::Highlight, QColor(177, 16, 20));
