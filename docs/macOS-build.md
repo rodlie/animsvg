@@ -1,7 +1,5 @@
 # macOS
 
-**macOS is currently unsupported until issue #16 has been fixed.**
-
 These instructions assume you have macOS High Sierra (10.13) or greater with Qt 5.12.12 *(through the official online installer)* and macports installed running on an Intel CPU.
 
 ## Dependencies
