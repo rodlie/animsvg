@@ -47,7 +47,8 @@ void AppSupport::setupTheme()
     palette.setColor(QPalette::AlternateBase, QColor(40, 40, 47));
     palette.setColor(QPalette::Link, Qt::white);
     palette.setColor(QPalette::LinkVisited, Qt::white);
-    palette.setColor(QPalette::ToolTipText, Qt::black);
+    palette.setColor(QPalette::ToolTipText, Qt::white);
+    palette.setColor(QPalette::ToolTipBase, Qt::black);
     palette.setColor(QPalette::Text, Qt::white);
     palette.setColor(QPalette::Button, QColor(40, 40, 47));
     palette.setColor(QPalette::ButtonText, Qt::white);

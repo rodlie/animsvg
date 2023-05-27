@@ -1508,7 +1508,7 @@ void MainWindow::disable()
     mGrayOutWidget = new QWidget(this);
     mGrayOutWidget->setFixedSize(size());
     mGrayOutWidget->setStyleSheet(
-                "QWidget { background-color: rgb(0, 0, 0, 125) }");
+                "QWidget { background-color: rgba(0, 0, 0, 125) }");
     mGrayOutWidget->show();
     mGrayOutWidget->update();
 }
