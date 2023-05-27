@@ -70,9 +70,14 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     }
     QRect handleRect;
     const int hLeftFrames = mFirstViewedFrame - minFrame;
-    handleRect.setLeft(qRound(hLeftFrames*pixPerFrame + x0));
+
+    const int handleFixedWidth = 16;
+    const int handleWidth = qRound(mViewedFramesSpan*pixPerFrame);
+    const int handleLeft = mBottom ? qRound(hLeftFrames*pixPerFrame + x0) : qRound((hLeftFrames*pixPerFrame + x0)+(handleWidth/2)-(handleFixedWidth/2));
+
+    handleRect.setLeft(handleLeft);
     handleRect.setTop(mBottom ? 0 : 5);
-    handleRect.setWidth(qRound(mViewedFramesSpan*pixPerFrame));
+    handleRect.setWidth(mBottom ? handleWidth : handleFixedWidth);
     handleRect.setBottom(mBottom ? 4 : height());
     p.fillRect(handleRect, col);
 
