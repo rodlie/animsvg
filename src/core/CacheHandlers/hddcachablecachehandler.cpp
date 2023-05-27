@@ -59,7 +59,7 @@ void HddCachableCacheHandler::drawCacheOnTimeline(QPainter * const p,
         const bool storesInMemory = cont->storesDataInMemory();
         //if(storesInMemory != lastStoresInMemory) {
             if(storesInMemory) {
-                if(cont->inUse()) p->setBrush(QColor(255, 0, 0));
+                if(cont->inUse()) p->setBrush(QColor(255, 0, 0, 75));
                 else p->setBrush(QColor(0, 255, 0, 75));
             } else {
                 p->setBrush(QColor(0, 0, 255, 75));
