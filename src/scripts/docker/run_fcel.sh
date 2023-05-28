@@ -33,6 +33,7 @@ MKJOBS=${MKJOBS:-4}
 TIMESTAMP=${TIMESTAMP:-`date +%Y%m%d`}
 YEAR=${YEAR:-`date +%Y`}
 MONTH=${MONTH:-`date +%m`}
+DAY=${DAY:-`date +%d`}
 
 DISTRO_ID=`cat /etc/os-release | sed '/^ID=/!d;s/ID=//;s/"//g'`
 if [ "${DISTRO_ID}" = "fedora" ]; then
@@ -218,6 +219,12 @@ cd ${FRICTION_DIR}
 COMMIT=`git rev-parse --short HEAD`
 VERSION=`cat ${FRICTION_DIR}/CMakeLists.txt | sed '/friction2d VERSION/!d;s/)//' | awk '{print $3}'`
 
+IS_SNAP="OFF"
+if [ "${SNAP}" = 1 ]; then
+    VERSION="${YEAR}.${MONTH}.${DAY}"
+    IS_SNAP="ON"
+fi
+
 if [ -d "${FRICTION_DIR}/build" ]; then
     rm -rf ${FRICTION_DIR}/build
 fi
@@ -226,6 +233,10 @@ mkdir build
 cd build
 
 cmake -G Ninja \
+-DSNAPSHOT=${IS_SNAP} \
+-DSNAPSHOT_VERSION_MAJOR=${YEAR} \
+-DSNAPSHOT_VERSION_MINOR=${MONTH} \
+-DSNAPSHOT_VERSION_PATCH=${DAY} \
 -DCMAKE_BUILD_TYPE=Release \
 -DSTATIC_FFMPEG=ON \
 -DQUAZIP_INCLUDE_DIRS=${FRICTION_SRC_DIR}/quazip-${QUAZIP_V}/quazip \
@@ -243,7 +254,7 @@ PKG="friction-${DID}.rpm"
 if [ "${REL}" = 1 ]; then
     PKG="friction-${VERSION}-${DID}.rpm"
 elif [ "${SNAP}" = 1 ]; then
-    PKG="friction-${TIMESTAMP}-${VERSION}-${COMMIT}-${DID}.rpm"
+    PKG="friction-${TIMESTAMP}-${COMMIT}-${DID}.rpm"
 fi
 mv friction.rpm ${PKG}
 

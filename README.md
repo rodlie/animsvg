@@ -2,9 +2,9 @@
 
 ![Screenshot](https://friction2d.com/assets/friction-screenshot-01.jpg)
 
-### 2D motion graphics and animation software for GNU/Linux.
+### 2D motion graphics and animation software for macOS and Linux.
 
-* Very flexible user interface
+* Flexible user interface
 * Import images, videos and SVG
 * Supports expressions using Javascript
 * Supports vector and raster effects
@@ -25,6 +25,8 @@
   * *Ubuntu 22.04 / 23.04*
   * *Fedora 37 / 38*
   * *Enterprise Linux 9*
+  * *Enterprise Linux 8 (N/A)*
+  * *macOS 10.13+ (N/A)*
 * **[Sources (Third-party)](https://sourceforge.net/projects/friction/files/source/)**
 
 ## Contributors

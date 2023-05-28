@@ -5,7 +5,7 @@
 
 char FileFooter::sEVFormat[15] = "enve ev";
 char FileFooter::sAppName[15] = "enve";
-char FileFooter::sAppVersion[15] = PROJECT_VERSION;
+char FileFooter::sAppVersion[15] = "0.9.0";
 
 void FileFooter::sWrite(eWriteStream& dst) {
     dst << EvFormat::version;

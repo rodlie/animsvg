@@ -95,9 +95,16 @@ VERSION=`cat ${CWD}/CMakeLists.txt | sed '/friction2d VERSION/!d;s/)//' | awk '{
 TIMESTAMP=${TIMESTAMP:-`date +%Y%m%d`}
 YEAR=${YEAR:-`date +%Y`}
 MONTH=${MONTH:-`date +%m`}
+DAY=${DAY:-`date +%d`}
 DISTRO_ID=`cat /etc/os-release | sed '/^ID=/!d;s/ID=//;s/"//g'`
 DISTRO_VERSION=`cat /etc/os-release | sed '/^VERSION_ID=/!d;s/VERSION_ID=//;s/"//g'`
 DISTRO_PRETTY=`cat /etc/os-release | sed '/^PRETTY_NAME=/!d;s/PRETTY_NAME=//;s/"//g'`
+
+IS_SNAP="OFF"
+if [ "${SNAP}" = 1 ]; then
+    VERSION="${YEAR}.${MONTH}.${DAY}"
+    IS_SNAP="ON"
+fi
 
 if [ ! -f "${CWD}/src/gperftools/.libs/libtcmalloc.a" ]; then
     if [ "${GPERF_TAR}" = 1 ]; then
@@ -139,7 +146,17 @@ cd ${CWD}
 rm -rf build || true
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DGIT_COMMIT=${COMMIT} ..
+
+cmake \
+-DCMAKE_BUILD_TYPE=Release \
+-DCMAKE_INSTALL_PREFIX=/usr \
+-DGIT_COMMIT=${COMMIT} \
+-DSNAPSHOT=${IS_SNAP} \
+-DSNAPSHOT_VERSION_MAJOR=${YEAR} \
+-DSNAPSHOT_VERSION_MINOR=${MONTH} \
+-DSNAPSHOT_VERSION_PATCH=${DAY} \
+..
+
 make -j${MKJOBS}
 cpack -G DEB
 
@@ -152,7 +169,7 @@ PKG="friction-${DISTRO_ID}-${DISTRO_VERSION}.deb"
 if [ "${REL}" = 1 ]; then
     PKG="friction-${VERSION}-${DISTRO_ID}-${DISTRO_VERSION}.deb"
 elif [ "${SNAP}" = 1 ]; then
-    PKG="friction-${TIMESTAMP}-${VERSION}-${COMMIT}-${DISTRO_ID}-${DISTRO_VERSION}.deb"
+    PKG="friction-${TIMESTAMP}-${COMMIT}-${DISTRO_ID}-${DISTRO_VERSION}.deb"
 fi
 mv friction.deb ${PKG}
 
@@ -162,7 +179,6 @@ if [ "${DOCKER}" = 1 ]; then
     fi
     cp ${PKG} /snapshots/${YEAR}/${MONTH}/
     (cd /snapshots ;
-        #ln -sf ${YEAR}/${MONTH}/${PKG} friction-latest-${DISTRO_ID}-${DISTRO_VERSION}.deb
         echo "* [Latest download for ${DISTRO_PRETTY}](https://sourceforge.net/projects/friction/files/snapshots/${YEAR}/${MONTH}/${PKG}/download)" > friction-latest-${DISTRO_ID}-${DISTRO_VERSION}.md
     )
 fi

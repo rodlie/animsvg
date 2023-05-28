@@ -68,3 +68,18 @@ if [ "${FC}" = 1 ]; then
     $DOCKER friction-fc38
     $DOCKER friction-fc37
 fi
+
+cd ${CWD}
+
+echo "# Friction Snapshots" > snapshots/README.md
+echo "" >> snapshots/README.md
+echo "Snapshots of [Friction](https://github.com/friction2d/friction) for supported platforms." >> snapshots/README.md
+echo "" >> snapshots/README.md
+
+for md in snapshots/friction-latest-*.md; do
+    cat ${md} >> snapshots/README.md
+done
+
+echo "" >> snapshots/README.md
+echo "***Friction is beta quality, expect missing and/or broken features.***" >> snapshots/README.md
+echo "" >> snapshots/README.md
