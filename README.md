@@ -25,8 +25,7 @@
   * *Ubuntu 22.04 / 23.04*
   * *Fedora 37 / 38*
   * *Enterprise Linux 9*
-  * *Enterprise Linux 8 (N/A)*
-  * *macOS 10.13+ (N/A)*
+  * *macOS 10.13+ (Intel)*
 * **[Sources (Third-party)](https://sourceforge.net/projects/friction/files/source/)**
 
 ## Contributors
