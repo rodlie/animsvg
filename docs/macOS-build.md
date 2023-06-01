@@ -2,6 +2,8 @@
 
 These instructions assume you have macOS High Sierra (10.13) or greater with Qt 5.12.12 *(through the official online installer)* and macports installed running on an Intel CPU.
 
+**NOTE! macOS is not supported anymore**
+
 ## Dependencies
 
 * pkg-config
