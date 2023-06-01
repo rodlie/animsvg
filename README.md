@@ -1,6 +1,6 @@
 # Friction
 
-[![GitHub](https://img.shields.io/github/license/friction2d/friction)](https://github.com/friction2d/friction/blob/main/LICENSE.md)
+[![GitHub License](https://img.shields.io/github/license/friction2d/friction)](https://github.com/friction2d/friction/blob/main/LICENSE.md)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/friction2d/friction/ubuntu.yml)](https://github.com/friction2d/friction/actions)
 [![GitHub issues](https://img.shields.io/github/issues/friction2d/friction)](https://github.com/friction2d/friction/issues)
 [![GitHub Discussions](https://img.shields.io/github/discussions/friction2d/friction)](https://github.com/orgs/friction2d/discussions)
@@ -20,12 +20,6 @@
 
 ***This application is beta quality, expect missing and/or broken features.***
 
-## Resources
-
-* **[Issues](https://github.com/friction2d/friction/issues)**
-* **[Discussions](https://github.com/friction2d/friction/discussions)**
-* **[Build instructions](docs/Linux-build.md)**
-
 ## Downloads
 
 Snapshot packages *(x86_64)* are available for supported distributions:
@@ -33,6 +27,8 @@ Snapshot packages *(x86_64)* are available for supported distributions:
 [![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)](https://sourceforge.net/projects/friction/files/snapshots/)
 [![Fedora](https://img.shields.io/badge/Fedora-294172?style=for-the-badge&logo=fedora&logoColor=white)](https://sourceforge.net/projects/friction/files/snapshots/)
 [![Red Hat](https://img.shields.io/badge/Red%20Hat-EE0000?style=for-the-badge&logo=redhat&logoColor=white)](https://sourceforge.net/projects/friction/files/snapshots/)
+
+You can also build Friction from [source](docs/Linux-build.md).
 
 ## Contributors
 
@@ -42,7 +38,7 @@ Snapshot packages *(x86_64)* are available for supported distributions:
 
 ## License
 
-Copyright &copy; Friction [developers](https://github.com/friction2d/friction/graphs/contributors)
+Copyright &copy; Friction [contributors](https://github.com/friction2d/friction/graphs/contributors).
 
 Friction is fork of [enve](https://github.com/MaurycyLiebner/enve). Copyright &copy; [Maurycy Liebner](https://github.com/MaurycyLiebner).
 
