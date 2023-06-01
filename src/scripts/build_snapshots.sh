@@ -30,6 +30,13 @@ DOCKER="docker run -t --mount type=bind,source=${CWD}/snapshots,target=/snapshot
 FRICTION_DIST="${CWD}/snapshots/distfiles"
 SF_NET_SRC="https://sourceforge.net/projects/friction/files/source"
 
+QUAZIP_V="1.4"
+QSCINTILLA_V="2.13.4"
+FFMPEG_V="4.4.4"
+UNWIND_V="1.6.2"
+GPERF_V="e590eba"
+SKIA_V="4fcb5c225a"
+
 if [ ! -d "${FRICTION_DIST}" ]; then
     mkdir -p ${FRICTION_DIST}
 fi
