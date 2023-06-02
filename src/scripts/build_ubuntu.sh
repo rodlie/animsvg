@@ -32,7 +32,7 @@ SF_NET_SRC="https://sourceforge.net/projects/friction/files/source"
 SF_NET_SNAP="https://sourceforge.net/projects/friction/files/snapshots"
 
 SKIA_GIT="4fcb5c225a"
-GPERF_GIT="e590eba"
+GPERF_GIT="4df0b85"
 
 SKIA_TAR=${SKIA_TAR:-0}
 GPERF_TAR=${GPERF_TAR:-0}

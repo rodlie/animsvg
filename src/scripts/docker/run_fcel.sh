@@ -63,7 +63,7 @@ QUAZIP_V="1.4"
 QSCINTILLA_V="2.13.4"
 FFMPEG_V="4.4.4"
 UNWIND_V="1.6.2"
-GPERF_V="e590eba"
+GPERF_V="4df0b85"
 SKIA_V="4fcb5c225a"
 
 SF_NET_SRC="https://sourceforge.net/projects/friction/files/source"
