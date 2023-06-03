@@ -29,8 +29,8 @@ WidgetWrapperNode::WidgetWrapperNode(const WrapperNode::WidgetCreator &creator) 
     mMenuLayout->addWidget(mCornerMenu);
     mLayout->addLayout(mMenuLayout);
     setLayout(mLayout);
-    //mLayout->setSpacing(0);
-    //mLayout->setMargin(0);
+    mLayout->setSpacing(0);
+    mLayout->setMargin(0);
 }
 
 void WidgetWrapperNode::setMenuBar(StackWrapperMenu * const menu) {
