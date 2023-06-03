@@ -32,8 +32,6 @@
         #include <windows.h>
         #undef NOMINMAX
         #define BREAKPOINT DebugBreak();
-    #elif defined(Q_OS_LINUX)
-        #define BREAKPOINT std::raise(SIGTRAP);
     #else
         #define BREAKPOINT
     #endif
