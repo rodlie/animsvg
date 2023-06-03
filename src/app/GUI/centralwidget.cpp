@@ -12,7 +12,6 @@ CentralWidget::CentralWidget(BookmarkedWidget *left,
     , mCentral(central)
     , mRight(right)
 {
-    setMinimumWidth(600);
     setContentsMargins(0, 0, 0, 0);
     central->setParent(this);
     left->setParent(this);
