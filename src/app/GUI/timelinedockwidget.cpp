@@ -410,10 +410,12 @@ QAction* addSlider(const QString& name,
                    QToolBar* const toolBar)
 {
     const auto widget = new QWidget;
+    widget->setContentsMargins(5, 0, 5, 0);
     widget->setObjectName("transparentWidget");
     const auto layout = new QHBoxLayout;
+    layout->setContentsMargins(0, 0, 0, 0);
     widget->setLayout(layout);
-    const auto label = new QLabel(name + ": ");
+    const auto label = new QLabel(name/* + ": "*/);
 
     layout->addWidget(label);
     layout->addWidget(slider);
@@ -435,13 +437,14 @@ void TimelineDockWidget::setupDrawPathSpins()
     mDrawPathAutoAct = mToolBar->addWidget(mDrawPathAuto);
 
     mDrawPathMaxError = new QDoubleSlider(1, 200, 1, this);
+    mDrawPathMaxError->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     mDrawPathMaxError->setNumberDecimals(0);
     mDrawPathMaxError->setDisplayedValue(mDocument.fDrawPathMaxError);
     connect(mDrawPathMaxError, &QDoubleSlider::valueEdited,
             this, [this](const qreal value) {
         mDocument.fDrawPathMaxError = qFloor(value);
     });
-    mDrawPathMaxErrorAct = addSlider("max error", mDrawPathMaxError, mToolBar);
+    mDrawPathMaxErrorAct = addSlider(tr("Max Error"), mDrawPathMaxError, mToolBar);
 
     mDrawPathSmooth = new QDoubleSlider(1, 200, 1, this);
     mDrawPathSmooth->setNumberDecimals(0);
@@ -450,7 +453,7 @@ void TimelineDockWidget::setupDrawPathSpins()
             this, [this](const qreal value) {
         mDocument.fDrawPathSmooth = qFloor(value);
     });
-    mDrawPathSmoothAct = addSlider("smooth", mDrawPathSmooth, mToolBar);
+    mDrawPathSmoothAct = addSlider(tr("Smooth"), mDrawPathSmooth, mToolBar);
 }
 
 void TimelineDockWidget::setResolutionText(QString text)
