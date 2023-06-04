@@ -121,7 +121,7 @@ void FileSourceWidget::mouseReleaseEvent(QMouseEvent *event) {
 
 FileSourceListScrollWidget::FileSourceListScrollWidget(ScrollArea *parent) :
     MinimalScrollWidget(new FileSourceListVisibleWidget(this), parent) {
-    updateHeight();
+    //updateHeight();
 }
 
 void FileSourceListScrollWidget::updateHeight() {
