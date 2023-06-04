@@ -50,7 +50,7 @@ void AppSupport::setupTheme()
     palette.setColor(QPalette::ToolTipText, Qt::white);
     palette.setColor(QPalette::ToolTipBase, Qt::black);
     palette.setColor(QPalette::Text, Qt::white);
-    palette.setColor(QPalette::Button, QColor(40, 40, 47));
+    palette.setColor(QPalette::Button, QColor(33, 33, 38));
     palette.setColor(QPalette::ButtonText, Qt::white);
     palette.setColor(QPalette::BrightText, Qt::red);
     palette.setColor(QPalette::Highlight, QColor(177, 16, 20));
