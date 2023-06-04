@@ -7,22 +7,13 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/friction2d/friction)](https://github.com/friction2d/friction/commits/main)
 [![GitHub contributors](https://img.shields.io/github/contributors/friction2d/friction)](https://github.com/friction2d/friction/graphs/contributors)
 
-![Screenshot](https://friction2d.com/assets/friction-screenshot-01.jpg)
-
-### 2D motion graphics and animation software for Linux.
-
-* Flexible user interface
-* Import images, videos and SVG
-* Supports expressions using Javascript
-* Supports vector and raster effects
-* Export to web (SVG animation)
-* Export to image(s) and video (through ffmpeg)
+### 2D motion graphics and animation software.
 
 ***This application is beta quality, expect missing and/or broken features.***
 
 ## Downloads
 
-Snapshot packages *(x86_64)* are available for supported distributions:
+Snapshot packages *(x86_64)* are available for supported platforms:
 
 [![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)](https://sourceforge.net/projects/friction/files/snapshots/)
 [![Fedora](https://img.shields.io/badge/Fedora-294172?style=for-the-badge&logo=fedora&logoColor=white)](https://sourceforge.net/projects/friction/files/snapshots/)
