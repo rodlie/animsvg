@@ -65,3 +65,8 @@ QLineEdit#SearchLine {
     border-radius: 0;
     border: 0;
 }
+
+BoxScrollWidget,
+BoxScroller {
+    background-color: transparent;
+}
