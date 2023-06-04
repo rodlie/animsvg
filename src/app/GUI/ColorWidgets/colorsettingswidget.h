@@ -125,8 +125,8 @@ private:
 
     ConnContextQPtr<ColorAnimator> mTarget;
 
-    QHBoxLayout *mColorModeLayout = new QHBoxLayout();
-    QLabel *mColorModeLabel = new QLabel("Color model:", this);
+    QHBoxLayout *mColorModeLayout;// = new QHBoxLayout();
+    QLabel *mColorModeLabel = new QLabel(tr("Model"), this);
     QComboBox *mColorModeCombo;
     SavedColorsWidget* mBookmarkedColors;
 
@@ -198,7 +198,7 @@ private:
     QLineEdit *mHexEdit;
 
     QHBoxLayout *mColorLabelLayout = new QHBoxLayout();
-    ActionButton *mPickingButton;
+    QPushButton *mPickingButton;
 
     ColorLabel *mColorLabel = nullptr;
 

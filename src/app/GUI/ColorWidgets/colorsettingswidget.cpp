@@ -263,6 +263,8 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
     setLayout(mWidgetsLayout);
 
     mColorLabel = new ColorLabel(this);
+    mColorLabel->setSizePolicy(QSizePolicy::Expanding,
+                               QSizePolicy::Expanding);
 
 //    mWheelWidget->setLayout(mWheelLayout);
 //    mWheelLayout->setAlignment(Qt::AlignTop);
@@ -325,13 +327,15 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
     aLayout->addWidget(aRect);
     aLayout->addWidget(aSpin);
 
-    mPickingButton = new ActionButton("toolbarButtons/pickUnchecked.png", "", this);
-    connect(mPickingButton, &ActionButton::released,
+    mPickingButton = new QPushButton(QIcon::fromTheme("pick"), QString(), this);
+    mPickingButton->setToolTip(tr("Pick Color"));
+    connect(mPickingButton, &QPushButton::released,
             this, &ColorSettingsWidget::startColorPicking);
     mColorLabelLayout->addWidget(mColorLabel);
     mColorLabelLayout->addWidget(mPickingButton);
     mWidgetsLayout->addLayout(mColorLabelLayout);
 
+    mTabWidget->setTabPosition(QTabWidget::South);
     mTabWidget->addTab(mRGBWidget, "RGB");
     mTabWidget->addTab(mHSVWidget, "HSV");
     mTabWidget->addTab(mHSLWidget, "HSL");
@@ -345,6 +349,12 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
     hexLayout->addWidget(mHexEdit);
     mRGBLayout->addLayout(hexLayout);
 
+    QWidget *mColorModeWidget = new QWidget(this);
+    mColorModeWidget->setSizePolicy(QSizePolicy::Expanding,
+                                    QSizePolicy::Expanding);
+    mColorModeWidget->setContentsMargins(0, 0, 0, 0);
+    mColorModeLayout = new QHBoxLayout(mColorModeWidget);
+    mColorModeLayout->setContentsMargins(0, 0, 0, 0);
     mColorModeLayout->addWidget(mColorModeLabel);
     mColorModeLayout->addWidget(mColorModeCombo);
     mColorModeCombo->addItem("RGB");
@@ -353,7 +363,8 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
     connect(mColorModeCombo, qOverload<int>(&QComboBox::activated),
             this, &ColorSettingsWidget::setColorMode);
 
-    mWidgetsLayout->addLayout(mColorModeLayout);
+    mTabWidget->setCornerWidget(mColorModeWidget);
+    //mWidgetsLayout->addLayout(mColorModeLayout);
 
     mBookmarkedColors = new SavedColorsWidget(this);
     mWidgetsLayout->addWidget(mBookmarkedColors);
