@@ -57,9 +57,9 @@ class WidgetWrapperCornerMenu : public FakeMenuBar {
 public:
     WidgetWrapperCornerMenu(WidgetWrapperNode* const target)
     {
-        mSplitV = addAction(QIcon::fromTheme("split_v"),
+        mSplitV = addAction(QIcon::fromTheme("split_h"),
                             tr("Split Vertically"));
-        mSplitH = addAction(QIcon::fromTheme("split_h"),
+        mSplitH = addAction(QIcon::fromTheme("split_v"),
                             tr("Split Horizontally"));
         mClose = addAction(QIcon::fromTheme("close"),
                            tr("Close"));
