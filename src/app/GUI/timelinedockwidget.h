@@ -38,6 +38,7 @@
 #include "triggerlabel.h"
 #include "BrushWidgets/bookmarkedbrushes.h"
 #include "qdoubleslider.h"
+#include "fontswidget.h"
 
 class FrameScrollBar;
 class TimelineWidget;
@@ -52,6 +53,7 @@ class LayoutHandler;
 class SwitchButton;
 class BrushLabel;
 class BrushContexedWrapper;
+class FontsWidget;
 
 enum class CanvasMode : short;
 
@@ -59,7 +61,8 @@ class TimelineDockWidget : public QWidget {
 public:
     explicit TimelineDockWidget(Document &document,
                                 LayoutHandler* const layoutH,
-                                MainWindow * const parent);
+                                MainWindow * const parent,
+                                FontsWidget *fontwidget = nullptr);
     bool processKeyPress(QKeyEvent *event);
     void previewFinished();
     void previewBeingPlayed();
@@ -157,6 +160,8 @@ private:
     QList<TimelineWidget*> mTimelineWidgets;
     RenderWidget *mRenderWidget;
     AnimationDockWidget *mAnimationDockWidget;
+
+    FontsWidget *mFontWidget;
 };
 
 #endif // BOXESLISTANIMATIONDOCKWIDGET_H

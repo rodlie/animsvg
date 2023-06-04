@@ -40,11 +40,13 @@
 
 TimelineDockWidget::TimelineDockWidget(Document& document,
                                        LayoutHandler * const layoutH,
-                                       MainWindow * const parent)
+                                       MainWindow * const parent,
+                                       FontsWidget *fontwidget)
     : QWidget(parent)
     , mDocument(document)
     , mMainWindow(parent)
     , mTimelineLayout(layoutH->timelineLayout())
+    , mFontWidget(fontwidget)
 {
     connect(RenderHandler::sInstance, &RenderHandler::previewFinished,
             this, &TimelineDockWidget::previewFinished);
@@ -149,18 +151,18 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
             }
         }
     });
-    connect(mColorLabel, &TriggerLabel::triggered, this, [this]() {
+    /*connect(mColorLabel, &TriggerLabel::triggered, this, [this]() {
         mMainWindow->toggleFillStrokeSettingsDockVisible();
-    });
+    });*/
 
     connect(&mDocument, &Document::brushColorChanged,
             this, &TimelineDockWidget::setBrushColor);
     mBrushLabel = new BrushLabel(BrushSelectionWidget::sPaintContext.get());
     mBrushLabel->setToolTip(gSingleLineTooltip("Current Brush", "B"));
 
-    connect(mBrushLabel, &TriggerLabel::triggered, this, [this]() {
+    /*connect(mBrushLabel, &TriggerLabel::triggered, this, [this]() {
         mMainWindow->togglePaintBrushDockVisible();
-    });
+    });*/
 
     connect(&mDocument, &Document::brushChanged,
             this, &TimelineDockWidget::setBrush);
@@ -338,13 +340,20 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
 
     mColorLabel->setObjectName("colorLabel");
 
-    QWidget * const spacerWidget = new QWidget(this);
+    QWidget *spacerWidget = new QWidget(this);
     spacerWidget->setSizePolicy(QSizePolicy::Expanding,
-                                QSizePolicy::Minimum);
-    spacerWidget->setObjectName("transparentWidget");
+                                 QSizePolicy::Minimum);
     mToolBar->addWidget(spacerWidget);
 
-    mToolBar->addSeparator();
+    if (mFontWidget) {
+        QLabel *fontLabel = new QLabel(tr("Font"), this);
+        mToolBar->addWidget(fontLabel);
+        mToolBar->addWidget(mFontWidget);
+        QWidget *spacerFontWidget = new QWidget(this);
+        spacerFontWidget->setSizePolicy(QSizePolicy::Expanding,
+                                        QSizePolicy::Minimum);
+        mToolBar->addWidget(spacerFontWidget);
+    }
 
     mTimelineAction = mToolBar->addAction("Timeline", this,
                                           &TimelineDockWidget::setTimelineMode);
