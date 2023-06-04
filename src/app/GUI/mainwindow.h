@@ -1,8 +1,8 @@
 /*
-# enve2d - https://github.com/enve2d
 #
-# Copyright (c) enve2d developers
-# Copyright (C) 2016-2020 Maurycy Liebner
+# Friction - https://friction2d.com
+#
+# Copyright (c) Friction contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+# See 'README.md' for more information.
+#
 */
 
 #ifndef MAINWINDOW_H
@@ -28,6 +30,8 @@
 #include <QPushButton>
 #include <QActionGroup>
 #include <QStackedWidget>
+#include <QToolBox>
+#include <QSplitter>
 
 #include "undoredo.h"
 #include "Private/Tasks/taskscheduler.h"
@@ -61,8 +65,8 @@ class BoxScrollWidget;
 class ScrollArea;
 class UsageWidget;
 class CentralWidget;
-class CloseSignalingDockWidget;
-class PaintColorWidget;
+//class CloseSignalingDockWidget;
+//class PaintColorWidget;
 //class SoundComposition;
 
 class MainWindow : public QMainWindow
@@ -141,11 +145,11 @@ public:
         object->installEventFilter(mLineFilter);
     }
 
-    void togglePaintBrushDockVisible()
-    { mBrushDockAction->toggle(); }
+    //void togglePaintBrushDockVisible()
+    //{ mBrushDockAction->toggle(); }
 
-    void toggleFillStrokeSettingsDockVisible()
-    { mFillAndStrokeDockAct->toggle(); }
+    //void toggleFillStrokeSettingsDockVisible()
+    //{ mFillAndStrokeDockAct->toggle(); }
 
     void readSettings();
     void writeSettings();
@@ -214,46 +218,51 @@ private:
 //    QList<BoundingBox*> mBoxesAwaitingUpdate;
 //    bool mNoBoxesAwaitUpdate = true;
 
-    CloseSignalingDockWidget *mFillStrokeSettingsDock;
+    /*CloseSignalingDockWidget *mFillStrokeSettingsDock;
     CloseSignalingDockWidget *mTimelineDock;
     CloseSignalingDockWidget *mSelectedObjectDock;
     CloseSignalingDockWidget *mFilesDock;
     CloseSignalingDockWidget *mBrushSettingsDock;
-    CloseSignalingDockWidget *mAlignDock;
+    CloseSignalingDockWidget *mAlignDock;*/
 
-    QWidget *mFillStrokeSettingsDockBar;
+    /*QWidget *mFillStrokeSettingsDockBar;
     QWidget *mTimelineDockBar;
     QWidget *mSelectedObjectDockBar;
     QWidget *mFilesDockBar;
     QWidget *mBrushSettingsDockBar;
-    QWidget *mAlignDockBar;
+    QWidget *mAlignDockBar;*/
 
     TimelineDockWidget *mTimeline = nullptr;
     BrushSelectionWidget *mBrushSelectionWidget = nullptr;
 
     //QStatusBar* mStatusBar;
     //UsageWidget* mUsageWidget = nullptr;
-    QToolBar *mToolBar;
+    //QToolBar *mToolBar;
 
     QActionGroup *mToolbarActGroup;
+    QActionGroup *mToolBarNodeGroup;
+
+    QToolBar *mViewerNodeBar;
+
+    QSplitter *mSplitterMain;
+    QSplitter *mSplitterTop;
+    QSplitter *mSplitterBottom;
 
     QAction *mActionConnectPointsAct;
     QAction *mActionDisconnectPointsAct;
     QAction *mActionMergePointsAct;
     QAction* mActionNewNodeAct;
 
-    QAction* mSeparator1;
 
     QAction *mActionSymmetricPointCtrlsAct;
     QAction *mActionSmoothPointCtrlsAct;
     QAction *mActionCornerPointCtrlsAct;
 
-    QAction* mSeparator2;
 
     QAction *mActionLineAct;
     QAction *mActionCurveAct;
 
-    QAction *mActionNewEmptyPaintFrameAct;
+    //QAction *mActionNewEmptyPaintFrameAct;
 
     QAction *mResetZoomAction;
     QAction *mZoomInAction;
@@ -269,15 +278,15 @@ private:
     QAction *mClipViewToCanvas;
     QAction *mRasterEffectsVisible;
     QAction *mPathEffectsVisible;
-    QAction *mSelectedObjectDockAct;
+    /*QAction *mSelectedObjectDockAct;
     QAction *mFilesDockAct;
     QAction *mTimelineDockAct;
     QAction *mFillAndStrokeDockAct;
     QAction *mBrushDockAction;
     QAction *mAlignDockAction;
-    QAction *mLockDocksAction;
+    QAction *mLockDocksAction;*/
 
-    QAction *mBrushColorBookmarksAction;
+    //QAction *mBrushColorBookmarksAction;
 
     FontsWidget *mFontWidget = nullptr;
     QAction* mFontWidgetAct = nullptr;
@@ -304,7 +313,7 @@ private:
     LayoutHandler *mLayoutHandler = nullptr;
 
     FillStrokeSettingsWidget *mFillStrokeSettings;
-    PaintColorWidget* mPaintColorWidget;
+    //PaintColorWidget* mPaintColorWidget;
 
     bool mChangedSinceSaving = false;
     bool mEventFilterDisabled = true;
@@ -315,14 +324,13 @@ private:
     BoxScrollWidget *mObjectSettingsWidget = nullptr;
     ScrollArea *mObjectSettingsScrollArea;
 
-    void setupStatusBar();
     void setupToolBar();
     void connectToolBarActions();
     void setupMenuBar();
 
     QList<SceneBoundGradient*> mLoadedGradientsList;
 
-    void checkLockDocks();
+   // void checkLockDocks();
 
 protected:
     void keyPressEvent(QKeyEvent *event);
