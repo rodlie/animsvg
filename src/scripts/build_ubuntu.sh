@@ -91,6 +91,7 @@ fi
 CWD=`pwd`
 MKJOBS=${MKJOBS:-4}
 COMMIT=`git rev-parse --short HEAD`
+BRANCH=`git rev-parse --abbrev-ref HEAD`
 VERSION=`cat ${CWD}/CMakeLists.txt | sed '/friction2d VERSION/!d;s/)//' | awk '{print $3}'`
 TIMESTAMP=${TIMESTAMP:-`date +%Y%m%d`}
 YEAR=${YEAR:-`date +%Y`}
@@ -147,17 +148,16 @@ rm -rf build || true
 mkdir build
 cd build
 
-cmake \
+cmake -G Ninja \
 -DCMAKE_BUILD_TYPE=Release \
 -DCMAKE_INSTALL_PREFIX=/usr \
 -DGIT_COMMIT=${COMMIT} \
+-DGIT_BRANCH=${BRANCH} \
 -DSNAPSHOT=${IS_SNAP} \
 -DSNAPSHOT_VERSION_MAJOR=${YEAR} \
 -DSNAPSHOT_VERSION_MINOR=${MONTH} \
--DSNAPSHOT_VERSION_PATCH=${DAY} \
-..
-
-make -j${MKJOBS}
+-DSNAPSHOT_VERSION_PATCH=${DAY} ..
+cmake --build .
 cpack -G DEB
 
 if [ "${CI}" = 1 ]; then
@@ -169,7 +169,7 @@ PKG="friction-${DISTRO_ID}-${DISTRO_VERSION}.deb"
 if [ "${REL}" = 1 ]; then
     PKG="friction-${VERSION}-${DISTRO_ID}-${DISTRO_VERSION}.deb"
 elif [ "${SNAP}" = 1 ]; then
-    PKG="friction-${TIMESTAMP}-${COMMIT}-${DISTRO_ID}-${DISTRO_VERSION}.deb"
+    PKG="friction-${TIMESTAMP}-${BRANCH}-${COMMIT}-${DISTRO_ID}-${DISTRO_VERSION}.deb"
 fi
 mv friction.deb ${PKG}
 

@@ -217,6 +217,7 @@ fi
 cd ${FRICTION_DIR}
 
 COMMIT=`git rev-parse --short HEAD`
+BRANCH=`git rev-parse --abbrev-ref HEAD`
 VERSION=`cat ${FRICTION_DIR}/CMakeLists.txt | sed '/friction2d VERSION/!d;s/)//' | awk '{print $3}'`
 
 IS_SNAP="OFF"
@@ -233,6 +234,8 @@ mkdir build
 cd build
 
 cmake -G Ninja \
+-DGIT_COMMIT=${COMMIT} \
+-DGIT_BRANCH=${BRANCH} \
 -DSNAPSHOT=${IS_SNAP} \
 -DSNAPSHOT_VERSION_MAJOR=${YEAR} \
 -DSNAPSHOT_VERSION_MINOR=${MONTH} \
@@ -254,7 +257,7 @@ PKG="friction-${DID}.rpm"
 if [ "${REL}" = 1 ]; then
     PKG="friction-${VERSION}-${DID}.rpm"
 elif [ "${SNAP}" = 1 ]; then
-    PKG="friction-${TIMESTAMP}-${COMMIT}-${DID}.rpm"
+    PKG="friction-${TIMESTAMP}-${BRANCH}-${COMMIT}-${DID}.rpm"
 fi
 mv friction.rpm ${PKG}
 

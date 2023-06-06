@@ -41,6 +41,9 @@ add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 set(GIT_COMMIT "" CACHE STRING "git commit")
 add_definitions(-DPROJECT_GIT="${GIT_COMMIT}")
 
+set(GIT_BRANCH "" CACHE STRING "git branch")
+add_definitions(-DPROJECT_BRANCH="${GIT_BRANCH}")
+
 add_compile_options(-Wall -Wextra)
 if(CMAKE_BUILD_TYPE MATCHES "^(release|Release|RELEASE)$")
     add_definitions(-DQT_NO_DEBUG_OUTPUT)

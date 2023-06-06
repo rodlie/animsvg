@@ -137,16 +137,24 @@ const QString AppSupport::getAppVersion(bool html)
 #ifdef PROJECT_GIT
     git = QString::fromUtf8(PROJECT_GIT);
 #endif
+    QString branch;
+#ifdef PROJECT_BRANCH
+    branch = QString::fromUtf8(PROJECT_BRANCH);
+#endif
+    if (!branch.isEmpty()) {
+        version.append(QString::fromUtf8(" %1/").arg(branch));
+    }
     if (!git.isEmpty()) {
-        version.append(html ? QString::fromUtf8(" <a href=\"%2/%1\">%1</a>").arg(git,
-                                                                                 getAppCommitUrl()) : QString::fromUtf8(" %1").arg(git));
+        if (branch.isEmpty()) { version.append(" "); }
+        version.append(html ? QString::fromUtf8("<a href=\"%2/%1\">%1</a>").arg(git,
+                                                                                 getAppCommitUrl()) : git);
     }
     return version;
 }
 
 const QString AppSupport::getAppDesc()
 {
-    QString val = QString::fromUtf8("2D Animation Software");
+    QString val = QString::fromUtf8("2D Motion Graphics and Animation");
     return val;
 }
 
