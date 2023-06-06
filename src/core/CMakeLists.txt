@@ -213,9 +213,6 @@ set(
     GUI/valueinput.cpp
     MovablePoints/gradientpoint.cpp
     MovablePoints/pathpivot.cpp
-    #Ora/oracreator.cpp
-    #Ora/oraimporter.cpp
-    #Ora/oraparser.cpp
     #Paint/animatedsurface.cpp
     #Paint/autotiledsurface.cpp
     Paint/autotilesdata.cpp
@@ -541,10 +538,6 @@ set(
     GUI/valueinput.h
     MovablePoints/gradientpoint.h
     MovablePoints/pathpivot.h
-    #Ora/oracreator.h
-    #Ora/oraimporter.h
-    #Ora/oraparser.h
-    #Ora/orastructure.h
     #Paint/animatedsurface.h
     #Paint/autotiledsurface.h
     #Paint/autotilesdata.h
