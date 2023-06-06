@@ -257,7 +257,7 @@ void AnimationBox::setupCanvasMenu(PropertyMenu * const menu) {
 void AnimationBox::createPaintObject(const int firstAbsFrame,
                                      const int lastAbsFrame,
                                      const int increment) {
-    const qptr<ContainerBox> parent = getParentGroup();
+    /*const qptr<ContainerBox> parent = getParentGroup();
     if(!parent) return;
     const auto paintObj = enve::make_shared<PaintBox>();
     copyBoundingBoxDataTo(paintObj.get());
@@ -289,7 +289,7 @@ void AnimationBox::createPaintObject(const int firstAbsFrame,
     } else {
         connect(task, &ComplexTask::finishedAll, paintObj.get(), adder);
         TaskScheduler::instance()->addComplexTask(taskSPtr);
-    }
+    }*/
 }
 
 void AnimationBox::setupRenderData(const qreal relFrame,

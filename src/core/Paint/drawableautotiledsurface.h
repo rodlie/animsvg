@@ -16,7 +16,7 @@
 
 #ifndef DRAWABLEAUTOTILEDSURFACE_H
 #define DRAWABLEAUTOTILEDSURFACE_H
-#include "autotiledsurface.h"
+//#include "autotiledsurface.h"
 #include "skia/skiahelpers.h"
 #include "CacheHandlers/hddcachablecont.h"
 #include "tilebitmaps.h"
@@ -58,8 +58,8 @@ public:
         drawOnCanvas(canvas, dst, nullptr, paint);
     }
 
-    UndoableAutoTiledSurface &surface()
-    { return mSurface; }
+    /*UndoableAutoTiledSurface &surface()
+    { return mSurface; }*/
 
     void pixelRectChanged(const QRect& pixRect);
 
@@ -99,7 +99,7 @@ public:
     { return QPoint(mZeroTileCol, mZeroTileRow); }
 
     QPoint zeroTilePos() const
-    { return zeroTile()*TILE_SIZE; }
+    { return zeroTile()*/*TILE_SIZE*/64; }
 private:
     void removeFirstColumn();
     void removeLastColumn();
@@ -138,7 +138,7 @@ private:
     QRect tileRectToPixRect(const QRect& tileRect) const;
     QRect pixRectToTileRect(const QRect& pixRect) const;
 
-    UndoableAutoTiledSurface mSurface;
+    //UndoableAutoTiledSurface mSurface;
     TileBitmaps mTileBitmaps;
     int &mRowCount;
     int &mColumnCount;

@@ -18,18 +18,18 @@
 
 SimpleBrushWrapper::SimpleBrushWrapper(const QString &collName,
                                        const QString &brushName,
-                                       MyPaintBrush * const brush,
+                                       /*MyPaintBrush * const brush,*/
                                        const QByteArray& wholeFile) :
-    mBrush(brush), mWholeFile(wholeFile),
+    /*mBrush(brush),*/ mWholeFile(wholeFile),
     mCollectionName(collName), mBrushName(brushName) {
 }
 
 SimpleBrushWrapper::~SimpleBrushWrapper() {
-    mypaint_brush_unref(mBrush);
+    //mypaint_brush_unref(mBrush);
 }
 
 stdsptr<SimpleBrushWrapper> SimpleBrushWrapper::createDuplicate() {
-    auto brush = mypaint_brush_new_with_buckets(256);
+    /*auto brush = mypaint_brush_new_with_buckets(256);
     const char *data = mWholeFile.constData();
 
     if(!mypaint_brush_from_string(brush, data)) {
@@ -38,5 +38,6 @@ stdsptr<SimpleBrushWrapper> SimpleBrushWrapper::createDuplicate() {
     }
     return enve::make_shared<SimpleBrushWrapper>(
                 mCollectionName, mBrushName,
-                brush, mWholeFile);
+                brush, mWholeFile);*/
+    return nullptr;
 }

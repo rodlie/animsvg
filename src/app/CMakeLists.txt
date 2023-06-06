@@ -100,7 +100,7 @@ set(QUAZIP_LIBRARIES_DIRS "/usr/lib" CACHE STRING "quazip library path")
 set(QUAZIP_LIBRARIES "quazip5" CACHE STRING "quazip library")
 set(QUAZIP_INCLUDE_DIRS "/usr/include/quazip5" CACHE STRING "quazip includes path")
 
-pkg_search_module(MYPAINT REQUIRED libmypaint)
+#pkg_search_module(MYPAINT REQUIRED libmypaint)
 pkg_check_modules(AVFORMAT REQUIRED libavformat)
 pkg_check_modules(AVCODEC REQUIRED libavcodec)
 pkg_check_modules(AVUTIL REQUIRED libavutil)
@@ -113,7 +113,7 @@ if(UNIX AND NOT ${SHARED_TCMALLOC})
 endif()
 
 include_directories(
-    ${MYPAINT_INCLUDE_DIRS}
+    #${MYPAINT_INCLUDE_DIRS}
     ${QUAZIP_INCLUDE_DIRS}
     ${QSCINTILLA_INCLUDE_DIRS}
     ${AVFORMAT_INCLUDE_DIRS}
@@ -193,7 +193,7 @@ set(
     GUI/canvasbasewrappernode.cpp
     GUI/canvaswindowevents.cpp
     GUI/canvaswrappernode.cpp
-    GUI/centralwidget.cpp
+    #GUI/centralwidget.cpp
     GUI/changewidthwidget.cpp
     GUI/closesignalingdockwidget.cpp
     GUI/ecombobox.cpp
@@ -319,7 +319,7 @@ set(
     GUI/buttonslist.h
     GUI/canvasbasewrappernode.h
     GUI/canvaswrappernode.h
-    GUI/centralwidget.h
+    #GUI/centralwidget.h
     GUI/changewidthwidget.h
     GUI/closesignalingdockwidget.h
     GUI/ecombobox.h
@@ -419,7 +419,7 @@ add_executable(
     ${HEADERS}
     ${SOURCES}
     resources.qrc
-    brushes.qrc
+    #brushes.qrc
     icons.qrc
     hicolor.qrc
 )
@@ -474,7 +474,7 @@ target_link_libraries(
     Qt${QT_VERSION_MAJOR}::Qml
     Qt${QT_VERSION_MAJOR}::Xml
     Qt${QT_VERSION_MAJOR}::Svg
-    ${MYPAINT_LIBRARIES}
+    #${MYPAINT_LIBRARIES}
     ${QUAZIP_LIBRARIES}
     ${QSCINTILLA_LIBRARIES}
     ${AVFORMAT_LIBRARIES}

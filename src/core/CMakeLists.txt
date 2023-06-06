@@ -89,7 +89,7 @@ set(QUAZIP_LIBRARIES_DIRS "/usr/lib" CACHE STRING "quazip library path")
 set(QUAZIP_LIBRARIES "quazip5" CACHE STRING "quazip library")
 set(QUAZIP_INCLUDE_DIRS "/usr/include/quazip5" CACHE STRING "quazip includes path")
 
-pkg_search_module(MYPAINT REQUIRED libmypaint)
+#pkg_search_module(MYPAINT REQUIRED libmypaint)
 pkg_check_modules(AVFORMAT REQUIRED libavformat)
 pkg_check_modules(AVCODEC REQUIRED libavcodec)
 pkg_check_modules(AVUTIL REQUIRED libavutil)
@@ -99,7 +99,7 @@ pkg_check_modules(SWRESAMPLE REQUIRED libswresample)
 add_definitions(-DCORE_LIBRARY)
 
 include_directories(
-    ${MYPAINT_INCLUDE_DIRS}
+    #${MYPAINT_INCLUDE_DIRS}
     ${QUAZIP_INCLUDE_DIRS}
     ${AVFORMAT_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia
@@ -213,19 +213,19 @@ set(
     GUI/valueinput.cpp
     MovablePoints/gradientpoint.cpp
     MovablePoints/pathpivot.cpp
-    Ora/oracreator.cpp
-    Ora/oraimporter.cpp
-    Ora/oraparser.cpp
-    Paint/animatedsurface.cpp
-    Paint/autotiledsurface.cpp
+    #Ora/oracreator.cpp
+    #Ora/oraimporter.cpp
+    #Ora/oraparser.cpp
+    #Paint/animatedsurface.cpp
+    #Paint/autotiledsurface.cpp
     Paint/autotilesdata.cpp
     Paint/brushcontexedwrapper.cpp
     Paint/brushescontext.cpp
-    Paint/brushstroke.cpp
-    Paint/brushstrokeset.cpp
+    #Paint/brushstroke.cpp
+    #Paint/brushstrokeset.cpp
     Paint/colorconversions.cpp
-    Paint/drawableautotiledsurface.cpp
-    Paint/onionskin.cpp
+    #Paint/drawableautotiledsurface.cpp
+    #Paint/onionskin.cpp
     Paint/painttarget.cpp
     Paint/simplebrushwrapper.cpp
     Paint/tile.cpp
@@ -541,20 +541,20 @@ set(
     GUI/valueinput.h
     MovablePoints/gradientpoint.h
     MovablePoints/pathpivot.h
-    Ora/oracreator.h
-    Ora/oraimporter.h
-    Ora/oraparser.h
-    Ora/orastructure.h
-    Paint/animatedsurface.h
-    Paint/autotiledsurface.h
-    Paint/autotilesdata.h
+    #Ora/oracreator.h
+    #Ora/oraimporter.h
+    #Ora/oraparser.h
+    #Ora/orastructure.h
+    #Paint/animatedsurface.h
+    #Paint/autotiledsurface.h
+    #Paint/autotilesdata.h
     Paint/brushcontexedwrapper.h
     Paint/brushescontext.h
-    Paint/brushstroke.h
-    Paint/brushstrokeset.h
+    #Paint/brushstroke.h
+    #Paint/brushstrokeset.h
     Paint/colorconversions.h
-    Paint/drawableautotiledsurface.h
-    Paint/onionskin.h
+    #Paint/drawableautotiledsurface.h
+    #Paint/onionskin.h
     Paint/painttarget.h
     Paint/simplebrushwrapper.h
     Paint/tile.h
@@ -688,7 +688,7 @@ set(
     gpurendertools.h
     hardwareenums.h
     importhandler.h
-    libmypaintincludes.h
+    #libmypaintincludes.h
     matrixdecomposition.h
     memorydatahandler.h
     namefixer.h
@@ -831,7 +831,7 @@ target_link_libraries(
     Qt${QT_VERSION_MAJOR}::Qml
     Qt${QT_VERSION_MAJOR}::Xml
     Qt${QT_VERSION_MAJOR}::Svg
-    ${MYPAINT_LIBRARIES}
+    #${MYPAINT_LIBRARIES}
     ${QUAZIP_LIBRARIES}
     ${AVFORMAT_LIBRARIES}
     ${AVCODEC_LIBRARIES}

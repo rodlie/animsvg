@@ -17,7 +17,7 @@
 #include "imagecachehandler.h"
 
 #include "filecachehandler.h"
-#include "Ora/oraimporter.h"
+//#include "Ora/oraimporter.h"
 
 #include "GUI/edialogs.h"
 #include "filesourcescache.h"
@@ -48,9 +48,9 @@ eTask *ImageFileDataHandler::scheduleLoad()
     }
     if (mImageLoader) { return mImageLoader.get(); }
     switch (mType) {
-    case Type::ora:
+    /*case Type::ora:
         mImageLoader = enve::make_shared<OraLoader>(mFilePath, this);
-        break;
+        break;*/
     case Type::image:
         mImageLoader = enve::make_shared<ImageLoader>(mFilePath, this);
         break;
@@ -102,15 +102,14 @@ void ImageLoader::afterCanceled()
     if (mTargetHandler) { mTargetHandler->replaceImage(mImage); }
 }
 
-void OraLoader::process()
+/*void OraLoader::process()
 {
     mImage = ImportORA::loadMergedORAFile(mFilePath, true);
-}
+}*/
 
 void ImageFileHandler::replace()
 {
-    const QString filters = FileExtensions::imageFilters() +
-                            FileExtensions::layersFilters();
+    const QString filters = FileExtensions::imageFilters();
     const auto importPath = eDialogs::openFile(
                 tr("Change Source"), path(),
                 "Image Files (" + filters + ")");

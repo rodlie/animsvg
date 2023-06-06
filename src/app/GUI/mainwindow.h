@@ -56,7 +56,7 @@ class AnimationDockWidget;
 class ColorSettingsWidget;
 class FillStrokeSettingsWidget;
 class TimelineDockWidget;
-class BrushSelectionWidget;
+//class BrushSelectionWidget;
 class CanvasWindow;
 class MemoryHandler;
 
@@ -181,7 +181,7 @@ protected:
 
 private:
     QWidget *mWelcomeDialog;
-    CentralWidget *mCentralWidget;
+    //CentralWidget *mCentralWidget;
     QStackedWidget *mStackWidget;
 
     void openWelcomeDialog();
@@ -233,7 +233,7 @@ private:
     QWidget *mAlignDockBar;*/
 
     TimelineDockWidget *mTimeline = nullptr;
-    BrushSelectionWidget *mBrushSelectionWidget = nullptr;
+    //BrushSelectionWidget *mBrushSelectionWidget = nullptr;
 
     //QStatusBar* mStatusBar;
     //UsageWidget* mUsageWidget = nullptr;

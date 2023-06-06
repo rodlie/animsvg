@@ -17,7 +17,7 @@
 #ifndef PAINTBOX_H
 #define PAINTBOX_H
 #include "boundingbox.h"
-#include "Paint/animatedsurface.h"
+//#include "Paint/animatedsurface.h"
 #include "imagebox.h"
 class QPointFAnimator;
 class AnimatedPoint;
@@ -42,11 +42,11 @@ public:
 
     void saveSVG(SvgExporter& exp, DomEleTask* const task) const;
 
-    AnimatedSurface * getSurface() const
-    { return mSurface.get(); }
+    //AnimatedSurface * getSurface() const
+    //{ return mSurface.get(); }
 
-private:
-    qsptr<AnimatedSurface> mSurface;
+//private:
+    //qsptr<AnimatedSurface> mSurface;
 };
 
 #endif // PAINTBOX_H

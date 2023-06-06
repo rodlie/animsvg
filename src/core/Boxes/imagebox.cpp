@@ -115,7 +115,7 @@ void ImageBox::setupCanvasMenu(PropertyMenu * const menu) {
 
     menu->addSeparator();
 
-    const PropertyMenu::PlainSelectedOp<ImageBox> createPaintObj =
+    /*const PropertyMenu::PlainSelectedOp<ImageBox> createPaintObj =
     [](ImageBox * box) {
         const qptr<ImageBox> boxPtr = box;
         const auto loader = [boxPtr]() {
@@ -136,7 +136,7 @@ void ImageBox::setupCanvasMenu(PropertyMenu * const menu) {
             if(task) task->addDependent({loader, nullptr});
         }
     };
-    menu->addPlainAction("Create Paint Object", createPaintObj);
+    menu->addPlainAction("Create Paint Object", createPaintObj);*/
 
     BoundingBox::setupCanvasMenu(menu);
 }

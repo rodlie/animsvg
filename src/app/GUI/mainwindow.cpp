@@ -67,7 +67,7 @@
 #include "ShaderEffects/shadereffectprogram.h"
 #include "importhandler.h"
 #include "switchbutton.h"
-#include "centralwidget.h"
+//#include "centralwidget.h"
 #include "ColorWidgets/bookmarkedcolors.h"
 #include "GUI/edialogs.h"
 #include "GUI/dialogsinterface.h"
@@ -100,7 +100,7 @@ MainWindow::MainWindow(Document& document,
                        QWidget * const parent)
     : QMainWindow(parent)
     , mWelcomeDialog(nullptr)
-    , mCentralWidget(nullptr)
+    //, mCentralWidget(nullptr)
     , mStackWidget(nullptr)
     //, mFillStrokeSettingsDockBar(nullptr)
     //, mTimelineDockBar(nullptr)
@@ -118,7 +118,7 @@ MainWindow::MainWindow(Document& document,
     ImportHandler::sInstance->addImporter<eXevImporter>();
     ImportHandler::sInstance->addImporter<evImporter>();
     ImportHandler::sInstance->addImporter<eSvgImporter>();
-    ImportHandler::sInstance->addImporter<eOraImporter>();
+    //ImportHandler::sInstance->addImporter<eOraImporter>();
 
     connect(&mDocument, &Document::evFilePathChanged,
             this, &MainWindow::updateTitle);
@@ -217,9 +217,9 @@ MainWindow::MainWindow(Document& document,
     });*/
 
     const auto pCtxt = BrushSelectionWidget::sPaintContext;
-    mBrushSelectionWidget = new BrushSelectionWidget(*pCtxt.get(), this);
-    connect(mBrushSelectionWidget, &BrushSelectionWidget::currentBrushChanged,
-            &mDocument, &Document::setBrush);
+    //mBrushSelectionWidget = new BrushSelectionWidget(*pCtxt.get(), this);
+    //connect(mBrushSelectionWidget, &BrushSelectionWidget::currentBrushChanged,
+      //      &mDocument, &Document::setBrush);
 //    connect(mBrushSettingsWidget,
 //            SIGNAL(brushReplaced(const Brush*,const Brush*)),
 //            mCanvasWindow,
@@ -262,19 +262,19 @@ MainWindow::MainWindow(Document& document,
     const auto fsl = new FileSourceList(this);
     connect(fsl, &FileSourceList::doubleClicked,
             this, &MainWindow::importFile);
-    {
+    /*{
         const auto brush = BrushCollectionData::sGetBrush("Deevad", "2B_pencil");
         const auto paintCtxt = BrushSelectionWidget::sPaintContext;
         const auto paintBrush = paintCtxt->brushWrapper(brush);
         mDocument.setBrush(paintBrush);
         mDocument.fOutlineBrush = brush;
-    }
-    const auto bBrush = new BookmarkedBrushes(true, 64, pCtxt.get(), this);
+    }*/
+    //const auto bBrush = new BookmarkedBrushes(true, 64, pCtxt.get(), this);
     const auto bColor = new BookmarkedColors(true, 64, this);
 
-    mCentralWidget = new CentralWidget(bBrush,
-                                       mLayoutHandler->sceneLayout(),
-                                       bColor);
+    //mCentralWidget = new CentralWidget(bBrush,
+      //                                 mLayoutHandler->sceneLayout(),
+        //                               bColor);
 
     QToolBar *viewerToolBar = new QToolBar(this);
     viewerToolBar->setOrientation(Qt::Vertical);
@@ -301,7 +301,7 @@ MainWindow::MainWindow(Document& document,
        this);
 
     mStackWidget = new QStackedWidget(this);
-    mStackWidget->addWidget(mCentralWidget);
+    mStackWidget->addWidget(mLayoutHandler->sceneLayout());
     mStackWidget->addWidget(mWelcomeDialog);
 
     //
@@ -771,7 +771,7 @@ void MainWindow::setupMenuBar()
     mNoneQuality = filteringMenu->addAction(
                 tr("None", "MenuBar_View_Filtering"), [this]() {
         eFilterSettings::sSetDisplayFilter(kNone_SkFilterQuality);
-        centralWidget()->update();
+        mStackWidget->currentWidget()->update();
 
         mLowQuality->setChecked(false);
         mMediumQuality->setChecked(false);
@@ -1386,7 +1386,7 @@ MainWindow *MainWindow::sGetInstance()
 void MainWindow::updateCanvasModeButtonsChecked()
 {
     const CanvasMode mode = mDocument.fCanvasMode;
-    mCentralWidget->setCanvasMode(mode);
+    //mCentralWidget->setCanvasMode(mode);
 
     //const bool boxMode = mode == CanvasMode::boxTransform;
     //mFontWidgetAct->setVisible(boxMode);
@@ -1438,7 +1438,7 @@ void MainWindow::setFileChangedSinceSaving(const bool changed)
 
 SimpleBrushWrapper *MainWindow::getCurrentBrush() const
 {
-    return mBrushSelectionWidget->getCurrentBrush();
+    return nullptr; //mBrushSelectionWidget->getCurrentBrush();
 }
 
 void MainWindow::setCurrentBox(BoundingBox *box)
@@ -1807,7 +1807,6 @@ void MainWindow::importFile()
     const QString fileTypes = "(*.ev *.xev *.svg " +
             FileExtensions::videoFilters() +
             FileExtensions::imageFilters() +
-            FileExtensions::layersFilters() +
             FileExtensions::soundFilters() + ")";
     const auto importPaths = eDialogs::openFiles(
                 title, defPath, fileType.arg(fileTypes));

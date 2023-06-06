@@ -14,4 +14,4 @@ quazip
 *.exe
 snapshots
 .vscode
-
+build-*

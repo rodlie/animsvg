@@ -16,7 +16,7 @@
 
 #ifndef ONIONSKIN_H
 #define ONIONSKIN_H
-#include "drawableautotiledsurface.h"
+//#include "drawableautotiledsurface.h"
 
 struct CORE_EXPORT OnionSkin {
     struct Skin {

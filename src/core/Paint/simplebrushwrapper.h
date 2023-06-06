@@ -20,7 +20,7 @@
 #include <QColor>
 #include "pointhelpers.h"
 #include "smartPointers/ememory.h"
-#include "libmypaintincludes.h"
+//#include "libmypaintincludes.h"
 
 class CORE_EXPORT SimpleBrushWrapper : public StdSelfRef {
     e_OBJECT
@@ -29,24 +29,27 @@ public:
 
     stdsptr<SimpleBrushWrapper> createDuplicate();
 
-    MyPaintBrush * getBrush() const { return mBrush; }
+    //MyPaintBrush * getBrush() const { return mBrush; }
 
     QColor getColor() const {
-        const float h = getBaseValue(MYPAINT_BRUSH_SETTING_COLOR_H);
+        /*const float h = getBaseValue(MYPAINT_BRUSH_SETTING_COLOR_H);
         const float s = getBaseValue(MYPAINT_BRUSH_SETTING_COLOR_S);
         const float v = getBaseValue(MYPAINT_BRUSH_SETTING_COLOR_V);
         const float o = getBaseValue(MYPAINT_BRUSH_SETTING_OPAQUE);
         QColor col;
         col.setHsvF(qreal(h), qreal(s), qreal(v), qreal(o));
-        return col;
+        return col;*/ return QColor(Qt::black);
     }
 
     void setColor(const float hue,
                   const float saturation,
                   const float value) const {
-        setBaseValue(MYPAINT_BRUSH_SETTING_COLOR_H, clamp(hue, 0, 1));
+        Q_UNUSED(hue)
+        Q_UNUSED(saturation)
+        Q_UNUSED(value)
+        /*setBaseValue(MYPAINT_BRUSH_SETTING_COLOR_H, clamp(hue, 0, 1));
         setBaseValue(MYPAINT_BRUSH_SETTING_COLOR_S, clamp(saturation, 0, 1));
-        setBaseValue(MYPAINT_BRUSH_SETTING_COLOR_V, clamp(value, 0, 1));
+        setBaseValue(MYPAINT_BRUSH_SETTING_COLOR_V, clamp(value, 0, 1));*/
     }
 
     void setColor(const float hue,
@@ -63,34 +66,38 @@ public:
     }
 
     void setOpactiy(const float opacity) const {
-        setBaseValue(MYPAINT_BRUSH_SETTING_OPAQUE, clamp(opacity, 0, 1));
+        Q_UNUSED(opacity)
+        //setBaseValue(MYPAINT_BRUSH_SETTING_OPAQUE, clamp(opacity, 0, 1));
     }
 
     void incOpacity(const qreal inc) {
-        const float opacity = getBaseValue(MYPAINT_BRUSH_SETTING_OPAQUE);
-        setOpactiy(opacity + float(inc));
+        Q_UNUSED(inc)
+        //const float opacity = getBaseValue(MYPAINT_BRUSH_SETTING_OPAQUE);
+        //setOpactiy(opacity + float(inc));
     }
 
     void decOpacity(const qreal dec) {
         incOpacity(-dec);
     }
 
-    float getBaseValue(const MyPaintBrushSetting& id) const {
+    /*float getBaseValue(const MyPaintBrushSetting& id) const {
         return mypaint_brush_get_base_value(mBrush, id);
-    }
+    }*/
 
-    void setBaseValue(const MyPaintBrushSetting& id, const float val) const {
+    /*void setBaseValue(const MyPaintBrushSetting& id, const float val) const {
         mypaint_brush_set_base_value(mBrush, id, val);
-    }
+    }*/
 
     void setPaintBrushSize(const qreal size) const {
-        const float brushSize = static_cast<float>(size);
-        setBaseValue(MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, brushSize);
+        Q_UNUSED(size)
+        /*const float brushSize = static_cast<float>(size);
+        setBaseValue(MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, brushSize);*/
     }
 
     void incPaintBrushSize(const qreal inc) const {
-        const float sizeF = getBaseValue(MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC);
-        setPaintBrushSize(static_cast<qreal>(sizeF) + inc);
+        Q_UNUSED(inc)
+        /*const float sizeF = getBaseValue(MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC);
+        setPaintBrushSize(static_cast<qreal>(sizeF) + inc);*/
     }
 
     void decPaintBrushSize(const qreal dec) const {
@@ -105,29 +112,29 @@ public:
 
     void startEraseMode() const {
         setNormalMode();
-        setBaseValue(MYPAINT_BRUSH_SETTING_ERASER, 1);
+        //setBaseValue(MYPAINT_BRUSH_SETTING_ERASER, 1);
     }
 
     void finishEraseMode() const {
-        setBaseValue(MYPAINT_BRUSH_SETTING_ERASER, 0);
+        //setBaseValue(MYPAINT_BRUSH_SETTING_ERASER, 0);
     }
 
     void startAlphaLockMode() const {
         setNormalMode();
-        setBaseValue(MYPAINT_BRUSH_SETTING_LOCK_ALPHA, 1);
+        //setBaseValue(MYPAINT_BRUSH_SETTING_LOCK_ALPHA, 1);
     }
 
     void finishAlphaLockMode() const {
-        setBaseValue(MYPAINT_BRUSH_SETTING_LOCK_ALPHA, 0);
+        //setBaseValue(MYPAINT_BRUSH_SETTING_LOCK_ALPHA, 0);
     }
 
     void startColorizeMode() const {
         setNormalMode();
-        setBaseValue(MYPAINT_BRUSH_SETTING_COLORIZE, 1);
+        //setBaseValue(MYPAINT_BRUSH_SETTING_COLORIZE, 1);
     }
 
     void finishColorizeMode() const {
-        setBaseValue(MYPAINT_BRUSH_SETTING_COLORIZE, 0);
+        //setBaseValue(MYPAINT_BRUSH_SETTING_COLORIZE, 0);
     }
 
     const QString& getBrushName() const {
@@ -139,15 +146,16 @@ public:
     }
 
     float getBrushSize() const {
-        return getBaseValue(MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC);
+        //return getBaseValue(MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC);
+        return 0.0;
     }
 protected:
     SimpleBrushWrapper(const QString& collName,
                        const QString& brushName,
-                       MyPaintBrush * const brush,
+                       /*MyPaintBrush * const brush,*/
                        const QByteArray& wholeFile);
 private:
-    MyPaintBrush * const mBrush;
+    //MyPaintBrush * const mBrush;
     const QByteArray mWholeFile;
     const QString mCollectionName;
     const QString mBrushName;

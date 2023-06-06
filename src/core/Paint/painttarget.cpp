@@ -24,7 +24,8 @@ void PaintTarget::draw(SkCanvas * const canvas,
                        const QRect& drawRect,
                        const SkFilterQuality filter,
                        const bool drawOnion) {
-    if(!isValid()) return;
+
+    /*if(!isValid()) return;
     const auto canvasRect = viewTrans.inverted().mapRect(drawRect);
     const auto pDrawTrans = mPaintDrawableBox->getTotalTransform();
     const auto relDRect = pDrawTrans.inverted().mapRect(canvasRect);
@@ -44,12 +45,12 @@ void PaintTarget::draw(SkCanvas * const canvas,
         paint.setColor(SK_ColorWHITE);
         paint.setStrokeWidth(0.75f*invScale);
         canvas->drawRect(toSkRect(mCropRect), paint);
-    }
+    }*/
 }
 
-void PaintTarget::setPaintDrawable(DrawableAutoTiledSurface * const surf,
-                                   const int frame) {
-    if(mPaintDrawable) {
+//void PaintTarget::setPaintDrawable(DrawableAutoTiledSurface * const surf,
+  //                                 const int frame) {
+    /*if(mPaintDrawable) {
         if(mChanged) {
             mPaintDrawable->drawingDoneForNow();
             if(mPaintAnimSurface) {
@@ -68,11 +69,11 @@ void PaintTarget::setPaintDrawable(DrawableAutoTiledSurface * const surf,
         } else mPaintDrawable->scheduleLoadFromTmpFile();
     }
     mChanged = false;
-    setupOnionSkin();
-}
+    setupOnionSkin();*/
+//}
 
 void PaintTarget::setPaintBox(PaintBox * const box) {
-    if(box == mPaintDrawableBox) return;
+    /*if(box == mPaintDrawableBox) return;
     if(mPaintDrawableBox) {
         mPaintDrawableBox->setVisibleForScene(true);
     }
@@ -91,38 +92,38 @@ void PaintTarget::setPaintBox(PaintBox * const box) {
     } else {
         setPaintDrawable(nullptr);
         mPaintAnimSurface = nullptr;
-    }
+    }*/
 }
 
 QPointF PaintTarget::absPosToRelPos(const QPointF& absPos) const {
-    if(mPaintDrawable) {
+    /*if(mPaintDrawable) {
         const auto pDrawTrans = mPaintDrawableBox->getTotalTransform();
         return pDrawTrans.inverted().map(absPos);
-    }
+    }*/
     return absPos;
 }
 
 void PaintTarget::startTransform() {
-    if(mPaintAnimSurface) {
+    /*if(mPaintAnimSurface) {
         if(mPaintAnimSurface->anim_isRecording() &&
            !mPaintAnimSurface->anim_getKeyOnCurrentFrame())
             mPaintAnimSurface->anim_saveCurrentValueAsKey();
-    }
+    }*/
 }
 
 
 void PaintTarget::cropPress(const QPointF &pos) {
-    const auto relPos = absPosToRelPos(pos);
-    mCropRect = QRect(relPos.toPoint(), relPos.toPoint());
+    //const auto relPos = absPosToRelPos(pos);
+    //mCropRect = QRect(relPos.toPoint(), relPos.toPoint());
 }
 
 void PaintTarget::cropMove(const QPointF &pos) {
-    const auto relPos = absPosToRelPos(pos);
-    mCropRect.setBottomRight(relPos.toPoint());
+    //const auto relPos = absPosToRelPos(pos);
+    //mCropRect.setBottomRight(relPos.toPoint());
 }
 
 void PaintTarget::cropRelease(const QPointF &pos) {
-    cropMove(pos);
+    /*cropMove(pos);
     startTransform();
     mChanged = true;
 
@@ -133,24 +134,24 @@ void PaintTarget::cropRelease(const QPointF &pos) {
         mPaintDrawable->crop(mCropRect);
         addUndoRedo("Crop", roi);
     }
-    mCropRect = QRect();
+    mCropRect = QRect();*/
 }
 
 void PaintTarget::cropCancel() {
-    mCropRect = QRect();
+    //mCropRect = QRect();
 }
 
 void PaintTarget::movePress(const QPointF &pos) {
-    mMovePress = absPosToRelPos(pos);
+    //mMovePress = absPosToRelPos(pos);
 }
 
 void PaintTarget::moveMove(const QPointF &pos) {
-    startTransform();
-    mRelDrawPos = toSkPoint(absPosToRelPos(pos) - mMovePress);
+    //startTransform();
+    //mRelDrawPos = toSkPoint(absPosToRelPos(pos) - mMovePress);
 }
 
 void PaintTarget::moveRelease(const QPointF &pos) {
-    moveMove(pos);
+    /*moveMove(pos);
     const int dx = qRound(mRelDrawPos.x());
     const int dy = qRound(mRelDrawPos.y());
     mChanged = true;
@@ -177,20 +178,20 @@ void PaintTarget::moveRelease(const QPointF &pos) {
         }
         Document::sInstance->actionFinished();
     }
-    mRelDrawPos = {0, 0};
+    mRelDrawPos = {0, 0};*/
 }
 
 void PaintTarget::moveCancel() {
-    mRelDrawPos = {0, 0};
+    //mRelDrawPos = {0, 0};
 }
 
 void PaintTarget::paintPress(const QPointF& pos,
                              const ulong ts, const qreal pressure,
                              const qreal xTilt, const qreal yTilt,
                              const SimpleBrushWrapper * const brush) {
-    startTransform();
+    //startTransform();
 
-    if(mPaintDrawable && brush) {
+    /*if(mPaintDrawable && brush) {
         const auto& target = mPaintDrawable->surface();
         const auto pDrawTrans = mPaintDrawableBox->getTotalTransform();
         const auto drawPos = pDrawTrans.inverted().map(pos);
@@ -202,14 +203,14 @@ void PaintTarget::paintPress(const QPointF& pos,
         mPaintDrawable->pixelRectChanged(qRoi);
         mLastTs = ts;
         mChanged = true;
-    }
+    }*/
 }
 
 void PaintTarget::paintMove(const QPointF& pos,
                             const ulong ts, const qreal pressure,
                             const qreal xTilt, const qreal yTilt,
                             const SimpleBrushWrapper * const brush) {
-    if(mPaintDrawable && brush) {
+    /*if(mPaintDrawable && brush) {
         const auto& target = mPaintDrawable->surface();
         const double dt = (ts - mLastTs);
         const auto pDrawTrans = mPaintDrawableBox->getTotalTransform();
@@ -225,17 +226,17 @@ void PaintTarget::paintMove(const QPointF& pos,
         } else {
             mTotalRoi = mTotalRoi.united(qRoi);
         }
-    }
-    mLastTs = ts;
+    }*/
+    //mLastTs = ts;
 }
 
 void PaintTarget::addUndoRedo(const QString& name, const QRect& roi) {
-    if(mPaintAnimSurface && mPaintDrawable) {
+    /*if(mPaintAnimSurface && mPaintDrawable) {
         mPaintAnimSurface->addUndoRedo(name, roi);
         Document::sInstance->actionFinished();
-    }
+    }*/
 }
 
 void PaintTarget::paintRelease() {
-    addUndoRedo("Paint", mTotalRoi);
+    //addUndoRedo("Paint", mTotalRoi);
 }

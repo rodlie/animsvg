@@ -32,7 +32,7 @@
 #include "MovablePoints/segment.h"
 #include "MovablePoints/movablepoint.h"
 #include "Boxes/canvasrenderdata.h"
-#include "Paint/drawableautotiledsurface.h"
+//#include "Paint/drawableautotiledsurface.h"
 #include "canvasbase.h"
 #include "Paint/animatedsurface.h"
 #include <QAction>

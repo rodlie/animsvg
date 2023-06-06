@@ -19,9 +19,9 @@
 class Canvas;
 #include "skia/skiaincludes.h"
 #include "simplebrushwrapper.h"
-#include "animatedsurface.h"
+//#include "animatedsurface.h"
 #include "Boxes/paintbox.h"
-#include "onionskin.h"
+//#include "onionskin.h"
 #include "CacheHandlers/usepointer.h"
 
 struct CORE_EXPORT PaintTarget {
@@ -47,32 +47,34 @@ struct CORE_EXPORT PaintTarget {
     void paintRelease();
 
     void newEmptyFrame() {
-        if(!isValid()) return;
-        mPaintAnimSurface->newEmptyFrame();
+        //if(!isValid()) return;
+        //mPaintAnimSurface->newEmptyFrame();
     }
 
     void setupOnionSkin() {
-        if(!isValid()) return;
+        /*if(!isValid()) return;
         qptr<Canvas> canvasP = mCanvas;
         stdsptr<bool> counter = std::make_shared<bool>(true);
         const auto missingLoaded = [canvasP, counter, this]() {
             if(!counter.unique() || !canvasP) return;
             setupOnionSkin();
         };
-        mPaintAnimSurface->setupOnionSkinFor(20, mPaintOnion, missingLoaded);
+        mPaintAnimSurface->setupOnionSkinFor(20, mPaintOnion, missingLoaded);*/
     }
 
-    void setPaintDrawable(DrawableAutoTiledSurface * const surf,
-                          const int frame = 0);
+    //void setPaintDrawable(DrawableAutoTiledSurface * const surf,
+      //                    const int frame = 0);
     void setPaintBox(PaintBox * const box);
 
     bool isValid() const {
-        return mPaintAnimSurface;
+        //return mPaintAnimSurface;
+        return false;
     }
 
     QRect pixelBoundingRect() const {
-        if(!isValid()) return QRect();
-        return mPaintDrawable->pixelBoundingRect();
+        //if(!isValid()) return QRect();
+        //return mPaintDrawable->pixelBoundingRect();
+        return QRect();
     }
 
     void movePress(const QPointF& pos);
@@ -98,10 +100,10 @@ private:
     ulong mLastTs;
     int mLastFrame = 0;
     ConnContextQPtr<PaintBox> mPaintDrawableBox;
-    qptr<AnimatedSurface> mPaintAnimSurface;
-    OnionSkin mPaintOnion;
+    //qptr<AnimatedSurface> mPaintAnimSurface;
+    //OnionSkin mPaintOnion;
     bool mPaintPressedSinceUpdate = false;
-    UsePointer<DrawableAutoTiledSurface> mPaintDrawable;
+    //UsePointer<DrawableAutoTiledSurface> mPaintDrawable;
     bool mChanged = false;
     Canvas * const mCanvas;
 };

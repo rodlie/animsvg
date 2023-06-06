@@ -46,7 +46,8 @@ bool isImageExt(const QString &extension) {
 }
 
 bool isLayersExt(const QString &ext) {
-    return FileExtensions::layers.contains(ext.toLower());
+    Q_UNUSED(ext)
+    return false; //FileExtensions::layers.contains(ext.toLower());
 }
 
 bool isEvExt(const QString &extension) {
@@ -87,4 +88,4 @@ QString FileExtensions::soundFilters() { return filters(sound); }
 
 QString FileExtensions::videoFilters() { return filters(video); }
 
-QString FileExtensions::layersFilters() { return filters(layers); }
+QString FileExtensions::layersFilters() { return QString(); /*filters(layers);*/ }

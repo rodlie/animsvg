@@ -21,7 +21,7 @@
 
 #include "Segments/qcubicsegment1d.h"
 #include "Segments/qcubicsegment2d.h"
-#include "libmypaintincludes.h"
+//#include "libmypaintincludes.h"
 #include "pointhelpers.h"
 #include "pathoperations.h"
 

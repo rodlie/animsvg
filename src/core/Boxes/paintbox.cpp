@@ -20,8 +20,8 @@
 #include "Animators/transformanimator.h"
 #include "Private/esettings.h"
 #include "Private/document.h"
-#include "Ora/oracreator.h"
-#include "Ora/oraparser.h"
+//#include "Ora/oracreator.h"
+//#include "Ora/oraparser.h"
 #include "svgexporter.h"
 
 #include "GUI/edialogs.h"
@@ -30,8 +30,8 @@
 
 PaintBox::PaintBox() : BoundingBox("Paint Box", eBoxType::paint)
 {
-    mSurface = enve::make_shared<AnimatedSurface>();
-    ca_addChild(mSurface);
+    //mSurface = enve::make_shared<AnimatedSurface>();
+    //ca_addChild(mSurface);
 }
 
 struct PaintBoxRenderData : public ImageRenderData
@@ -44,14 +44,14 @@ public:
 
     void loadImageFromHandler()
     {
-        if (fImage) { return; }
-        if (fASurface) { fASurface->getFrameImage(qFloor(fRelFrame), fImage); }
+        //if (fImage) { return; }
+        //if (fASurface) { fASurface->getFrameImage(qFloor(fRelFrame), fImage); }
     }
 
     void updateRelBoundingRect() final
     {
-        Q_ASSERT(fSurface);
-        fRelBoundingRect = fSurface->surface().pixelBoundingRect();
+        //Q_ASSERT(fSurface);
+        //fRelBoundingRect = fSurface->surface().pixelBoundingRect();
     }
 
     qptr<AnimatedSurface> fASurface;
@@ -62,33 +62,34 @@ void PaintBox::setupRenderData(const qreal relFrame, const QMatrix& parentM,
                                BoxRenderData * const data,
                                Canvas* const scene)
 {
-    BoundingBox::setupRenderData(relFrame, parentM, data, scene);
+    /*BoundingBox::setupRenderData(relFrame, parentM, data, scene);
     const auto paintData = static_cast<PaintBoxRenderData*>(data);
     const int imgFrame = qFloor(relFrame);
     const auto imgTask = mSurface->getFrameImage(imgFrame, paintData->fImage);
     if (imgTask) { imgTask->addDependent(data); }
 
     paintData->fASurface = mSurface.get();
-    paintData->fSurface = enve::shared(mSurface->getSurface(imgFrame));
+    paintData->fSurface = enve::shared(mSurface->getSurface(imgFrame));*/
 }
 
 stdsptr<BoxRenderData> PaintBox::createRenderData()
 {
-    return enve::make_shared<PaintBoxRenderData>(this);
+    //return enve::make_shared<PaintBoxRenderData>(this);
+    return nullptr;
 }
 
 void PaintBox::setupCanvasMenu(PropertyMenu * const menu)
 {
-    if (menu->hasActionsForType<PaintBox>()) { return; }
+    /*if (menu->hasActionsForType<PaintBox>()) { return; }
     menu->addedActionsForType<PaintBox>();
 
-    BoundingBox::setupCanvasMenu(menu);
+    BoundingBox::setupCanvasMenu(menu);*/
 }
 
 void PaintBox::saveSVG(SvgExporter& exp, DomEleTask* const task) const
 {
-    auto& ele = task->initialize("use");
+    /*auto& ele = task->initialize("use");
     const auto visRelRange = prp_absRangeToRelRange(task->visRange());
     const auto pTask = mSurface->savePaintSVG(exp, ele, visRelRange);
-    if (pTask) { pTask->addDependent(task); }
+    if (pTask) { pTask->addDependent(task); }*/
 }

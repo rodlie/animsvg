@@ -33,12 +33,12 @@ BrushSelectionWidget::BrushSelectionWidget(BrushesContext& context,
     QTabWidget(parent), mContext(context) {
     setSizePolicy(QSizePolicy::Preferred, sizePolicy().verticalPolicy());
 
-    setupBookmarksTab();
-    updateBrushes();
+    //setupBookmarksTab();
+    //updateBrushes();
 }
 
 void BrushSelectionWidget::setupBookmarksTab() {
-    mBookmarksScroll = new ScrollArea(this);
+    /*mBookmarksScroll = new ScrollArea(this);
     const auto tabWidget = new QWidget(this);
     const auto tabWidgetLay = new FlowLayout(tabWidget, 0, 0, 0);
     connect(&mContext, &BrushesContext::bookmarkAdded,
@@ -60,11 +60,12 @@ void BrushSelectionWidget::setupBookmarksTab() {
 
     tabWidget->setLayout(tabWidgetLay);
     mBookmarksScroll->setWidget(tabWidget);
-    mBookmarksScroll->hide();
+    mBookmarksScroll->hide();*/
 }
 
 void BrushSelectionWidget::setNumberBookmarked(const int bookmarked) {
-    if(mNumberBookmarked == bookmarked) return;
+    Q_UNUSED(bookmarked)
+    /*if(mNumberBookmarked == bookmarked) return;
     if(mNumberBookmarked == 0 && bookmarked > 0) {
         insertTab(0, mBookmarksScroll, "Bookmarks");
         mBookmarksScroll->show();
@@ -72,11 +73,11 @@ void BrushSelectionWidget::setNumberBookmarked(const int bookmarked) {
         removeTab(0);
         mBookmarksScroll->hide();
     }
-    mNumberBookmarked = bookmarked;
+    mNumberBookmarked = bookmarked;*/
 }
 
 void BrushSelectionWidget::updateBrushes() {
-    for(const auto& coll : mContext.fCollections) {
+    /*for(const auto& coll : mContext.fCollections) {
         const auto tabScroll = new ScrollArea(this);
         const auto tabWidget = new QWidget(this);
         const auto tabWidgetLay = new FlowLayout(tabWidget, 0, 0, 0);
@@ -91,39 +92,44 @@ void BrushSelectionWidget::updateBrushes() {
         tabWidget->setLayout(tabWidgetLay);
         tabScroll->setWidget(tabWidget);
         addTab(tabScroll, coll.fName);
-    }
+    }*/
 }
 
 qsptr<BrushesContext> BrushSelectionWidget::sCreateNewContext() {
-    if(!sLoaded) {
+    /*if(!sLoaded) {
         const QString brushesDir = eSettings::sSettingsDir() + "/brushes";
         sLoadCollectionsFromDir(brushesDir);
         sLoadCollectionsFromDir(":/brushes");
         sLoaded = true;
     }
-    return enve::make_shared<BrushesContext>(BrushCollectionData::sData);
+    return enve::make_shared<BrushesContext>(BrushCollectionData::sData);*/
+    return nullptr;
 }
 
 void BrushSelectionWidget::setCurrentBrush(SimpleBrushWrapper * const wrapper) {
-    if(mSelected && mSelected->getSimpleBrush() == wrapper) return;
-    mContext.setSelectedWrapper(wrapper);
+    Q_UNUSED(wrapper)
+    //if(mSelected && mSelected->getSimpleBrush() == wrapper) return;
+    //mContext.setSelectedWrapper(wrapper);
 }
 
 SimpleBrushWrapper *BrushSelectionWidget::getCurrentBrush() {
-    if(mSelected)
-        return mSelected->getSimpleBrush();
+    //if(mSelected)
+        //return mSelected->getSimpleBrush();
     return nullptr;
 }
 
 void BrushSelectionWidget::brushCWrapperSelected(BrushContexedWrapper *wrapper) {
-    if(mSelected && mSelected != wrapper)
+    Q_UNUSED(wrapper)
+    /*if(mSelected && mSelected != wrapper)
         mSelected->setSelected(false);
     mSelected = wrapper;
-    emit currentBrushChanged(wrapper);
+    emit currentBrushChanged(wrapper);*/
 }
 
 void loadBrushFromFile(const QString &path, BrushCollectionData& coll) {
-    QFile dataFile(path);
+    Q_UNUSED(path)
+    Q_UNUSED(coll)
+    /*QFile dataFile(path);
     if(!dataFile.exists()) return;
     if(!dataFile.open(QIODevice::ReadOnly)) return;
     const QByteArray wholeFile = dataFile.readAll();
@@ -150,12 +156,14 @@ void loadBrushFromFile(const QString &path, BrushCollectionData& coll) {
                 coll.fName, brushName,
                 brush, wholeFile);
     coll.fBrushes.append({ brushName, brushWrapper,
-                           icon, wholeFile });
+                           icon, wholeFile });*/
 }
 
 void loadCollectionFromDir(const QString &mainDirPath,
                            QList<BrushCollectionData> &data) {
-    BrushCollectionData collection;
+    Q_UNUSED(mainDirPath)
+    Q_UNUSED(data)
+    /*BrushCollectionData collection;
     const QDir brushesDir(mainDirPath);
     collection.fName = brushesDir.dirName();
     const QDir::Filters filter = QDir::NoDotAndDotDot | QDir::AllEntries;
@@ -168,11 +176,12 @@ void loadCollectionFromDir(const QString &mainDirPath,
             loadBrushFromFile(fileInfo.absoluteFilePath(), collection);
         }
     }
-    data << collection;
+    data << collection;*/
 }
 
 void BrushSelectionWidget::sLoadCollectionsFromDir(const QString &mainDirPath) {
-    const QDir brushesDir(mainDirPath);
+    Q_UNUSED(mainDirPath)
+    /*const QDir brushesDir(mainDirPath);
     if(!brushesDir.exists()) brushesDir.mkpath(mainDirPath);
     const QDir::Filters filter = QDir::NoDotAndDotDot | QDir::AllEntries;
     const QFileInfoList entryList = brushesDir.entryInfoList(filter);
@@ -182,5 +191,5 @@ void BrushSelectionWidget::sLoadCollectionsFromDir(const QString &mainDirPath) {
             const QString collDirPath = fileInfo.absoluteFilePath();
             loadCollectionFromDir(collDirPath, BrushCollectionData::sData);
         }
-    }
+    }*/
 }

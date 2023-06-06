@@ -89,7 +89,7 @@ void PathBoxRenderData::drawSk(SkCanvas * const canvas) {
     }
     if(!fOutlinePath.isEmpty()) {
         paint.setShader(nullptr);
-        if(fStrokeSettings.fPaintType == PaintType::BRUSHPAINT) {
+        /*if(fStrokeSettings.fPaintType == PaintType::BRUSHPAINT) {
             if(!fStrokeSettings.fStrokeBrush) return;
             AutoTiledSurface surf;
             surf.setPixelClamp(fMaxBoundsRect.translated(-fGlobalRect.topLeft()));
@@ -112,8 +112,8 @@ void PathBoxRenderData::drawSk(SkCanvas * const canvas) {
         //                for(auto& set : fillBrushSet)
         //                    surf.execute(fillBrush, set);
 
-            const auto strokeBrush = fStrokeSettings.fStrokeBrush->getBrush();
-            auto strokeWidthCurve = fStrokeSettings.fWidthCurve*fResolution;
+            //const auto strokeBrush = fStrokeSettings.fStrokeBrush->getBrush();
+            //auto strokeWidthCurve = fStrokeSettings.fWidthCurve*fResolution;
             const auto strokeBrushSet = BrushStrokeSet::sOutlineStrokesForSkPath(
                         pathT,
                         fStrokeSettings.fTimeCurve,
@@ -140,9 +140,9 @@ void PathBoxRenderData::drawSk(SkCanvas * const canvas) {
                                     fGlobalRect.right() - baseRect.right(),
                                     fGlobalRect.bottom() - baseRect.bottom());
             mBitmap = surf.toBitmap(iMargins);
-        } else {
+        } else {*/
             fStrokeSettings.applyPainterSettingsSk(paint);
             canvas->drawPath(fOutlinePath, paint);
-        }
+        //}
     }
 }
