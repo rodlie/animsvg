@@ -83,9 +83,6 @@
 #include "Settings/settingsdialog.h"
 #include "appsupport.h"
 
-#define FRICTION_VIEWER_STACK_PROJECT 0
-#define FRICTION_VIEWER_STACK_WELCOME 1
-
 MainWindow *MainWindow::sInstance = nullptr;
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -111,6 +108,8 @@ MainWindow::MainWindow(Document& document,
     , mActions(actions)
     , mAudioHandler(audioHandler)
     , mRenderHandler(renderHandler)
+    , mStackIndexScene(0)
+    , mStackIndexWelcome(0)
 {
     Q_ASSERT(!sInstance);
     sInstance = this;
@@ -270,7 +269,7 @@ MainWindow::MainWindow(Document& document,
         mDocument.fOutlineBrush = brush;
     }*/
     //const auto bBrush = new BookmarkedBrushes(true, 64, pCtxt.get(), this);
-    const auto bColor = new BookmarkedColors(true, 64, this);
+    //const auto bColor = new BookmarkedColors(true, 64, this);
 
     //mCentralWidget = new CentralWidget(bBrush,
       //                                 mLayoutHandler->sceneLayout(),
@@ -301,8 +300,8 @@ MainWindow::MainWindow(Document& document,
        this);
 
     mStackWidget = new QStackedWidget(this);
-    mStackWidget->addWidget(mLayoutHandler->sceneLayout());
-    mStackWidget->addWidget(mWelcomeDialog);
+    mStackIndexScene = mStackWidget->addWidget(mLayoutHandler->sceneLayout());
+    mStackIndexWelcome = mStackWidget->addWidget(mWelcomeDialog);
 
     //
 
@@ -771,7 +770,7 @@ void MainWindow::setupMenuBar()
     mNoneQuality = filteringMenu->addAction(
                 tr("None", "MenuBar_View_Filtering"), [this]() {
         eFilterSettings::sSetDisplayFilter(kNone_SkFilterQuality);
-        mStackWidget->currentWidget()->update();
+        mStackWidget->widget(mStackIndexScene)->update();
 
         mLowQuality->setChecked(false);
         mMediumQuality->setChecked(false);
@@ -974,12 +973,12 @@ void MainWindow::setupMenuBar()
 
 void MainWindow::openWelcomeDialog()
 {
-    mStackWidget->setCurrentIndex(FRICTION_VIEWER_STACK_WELCOME);
+    mStackWidget->setCurrentIndex(mStackIndexWelcome);
 }
 
 void MainWindow::closeWelcomeDialog()
 {
-    mStackWidget->setCurrentIndex(FRICTION_VIEWER_STACK_PROJECT);
+    mStackWidget->setCurrentIndex(mStackIndexScene);
 }
 
 void MainWindow::addCanvasToRenderQue()

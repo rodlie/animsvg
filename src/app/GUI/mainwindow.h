@@ -332,6 +332,9 @@ private:
 
    // void checkLockDocks();
 
+    int mStackIndexScene;
+    int mStackIndexWelcome;
+
 protected:
     void keyPressEvent(QKeyEvent *event);
     bool eventFilter(QObject *obj, QEvent *e);
