@@ -44,9 +44,10 @@
 #include "renderhandler.h"
 #include "fileshandler.h"
 #include "ekeyfilter.h"
+#include "GUI/RenderWidgets/renderwidget.h"
 
 class VideoEncoder;
-
+class RenderWidget;
 class SwitchButton;
 class ActionButton;
 class BoxesList;
@@ -64,7 +65,7 @@ class ObjectSettingsWidget;
 class BoxScrollWidget;
 class ScrollArea;
 class UsageWidget;
-class CentralWidget;
+//class CentralWidget;
 //class CloseSignalingDockWidget;
 //class PaintColorWidget;
 //class SoundComposition;
@@ -232,7 +233,8 @@ private:
     QWidget *mBrushSettingsDockBar;
     QWidget *mAlignDockBar;*/
 
-    TimelineDockWidget *mTimeline = nullptr;
+    TimelineDockWidget *mTimeline;
+    RenderWidget *mRenderWidget;
     //BrushSelectionWidget *mBrushSelectionWidget = nullptr;
 
     //QStatusBar* mStatusBar;

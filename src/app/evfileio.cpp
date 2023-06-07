@@ -92,8 +92,8 @@ void MainWindow::loadEVFile(const QString &path) {
         mDocument.readScenes(readStream);
         readStream.readCheckpoint("Error reading Document");
         if(evVersion >= EvFormat::betterSWTAbsReadWrite) {
-            const auto renderWidget = mTimeline->getRenderWidget();
-            renderWidget->read(readStream);
+            //const auto renderWidget = mTimeline->getRenderWidget();
+            mRenderWidget->read(readStream);
             readStream.readCheckpoint("Error reading Render Widget");
         }
     } catch(...) {
@@ -134,8 +134,8 @@ void MainWindow::saveToFile(const QString &path)
         writeStream.writeCheckpoint();
         mDocument.writeScenes(writeStream);
         writeStream.writeCheckpoint();
-        const auto renderWidget = mTimeline->getRenderWidget();
-        renderWidget->write(writeStream);
+        //const auto renderWidget = mTimeline->getRenderWidget();
+        mRenderWidget->write(writeStream);
         writeStream.writeCheckpoint();
 
         writeStream.writeFutureTable();

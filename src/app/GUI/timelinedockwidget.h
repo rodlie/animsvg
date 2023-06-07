@@ -32,17 +32,17 @@
 #include <QWidgetAction>
 #include <QToolBar>
 #include <QStackedWidget>
+
 #include "smartPointers/ememory.h"
 #include "framerange.h"
 #include "timelinebasewrappernode.h"
 #include "triggerlabel.h"
-//#include "BrushWidgets/bookmarkedbrushes.h"
 #include "qdoubleslider.h"
 #include "fontswidget.h"
 
 class FrameScrollBar;
 class TimelineWidget;
-class RenderWidget;
+//class RenderWidget;
 class MainWindow;
 class AnimationDockWidget;
 class RenderWidget;
@@ -70,9 +70,9 @@ public:
     void previewPaused();
 
     void updateSettingsForCurrentCanvas(Canvas * const canvas);
-    void clearAll();
+    //void clearAll();
 
-    RenderWidget *getRenderWidget();
+    //RenderWidget *getRenderWidget();
 private:
     void setResolutionText(QString text);
 
@@ -81,8 +81,8 @@ private:
 
     void setLocalPivot(const bool local);
 
-    void setTimelineMode();
-    void setRenderMode();
+    //void setTimelineMode();
+    //void setRenderMode();
     void playPreview();
     void renderPreview();
     void pausePreview();
@@ -129,7 +129,7 @@ private:
     QAction* mOnionAct;
     SwitchButton *mOnion;*/
 
-    QAction* mPaintModeSpace;
+    /*QAction* mPaintModeSpace;
 
     QAction* mPaintNormalModeAct;
     SwitchButton *mPaintNormalMode;
@@ -145,7 +145,7 @@ private:
     QAction* mPaintMoveModeAct;
     SwitchButton *mPaintMoveMode;
     QAction* mPaintCropModeAct;
-    SwitchButton *mPaintCropMode;
+    SwitchButton *mPaintCropMode;*/
     //
     SwitchButton* mDrawPathAuto;
     QAction* mDrawPathAutoAct;
@@ -154,11 +154,11 @@ private:
     QDoubleSlider* mDrawPathMaxError;
     QAction* mDrawPathMaxErrorAct;
     //
-    QAction *mTimelineAction;
-    QAction *mRenderAction;
+    //QAction *mTimelineAction;
+    //QAction *mRenderAction;
 
     QList<TimelineWidget*> mTimelineWidgets;
-    RenderWidget *mRenderWidget;
+    //RenderWidget *mRenderWidget;
     AnimationDockWidget *mAnimationDockWidget;
 
     FontsWidget *mFontWidget;

@@ -97,6 +97,8 @@ MainWindow::MainWindow(Document& document,
     , mWelcomeDialog(nullptr)
     //, mCentralWidget(nullptr)
     , mStackWidget(nullptr)
+    , mTimeline(nullptr)
+    , mRenderWidget(nullptr)
     //, mFillStrokeSettingsDockBar(nullptr)
     //, mTimelineDockBar(nullptr)
     //, mSelectedObjectDockBar(nullptr)
@@ -203,6 +205,8 @@ MainWindow::MainWindow(Document& document,
                                        mLayoutHandler,
                                        this,
                                        mFontWidget);
+    mRenderWidget = new RenderWidget(this);
+
     //mTimelineDock->setWidget(mTimeline);
 
     //mBrushSettingsDock = new CloseSignalingDockWidget(
@@ -353,6 +357,7 @@ MainWindow::MainWindow(Document& document,
     frictionSelectedTabWidget->addTab(frictionSelectedWidget,
                                       tr("Properties"));
     frictionSelectedTabWidget->addTab(fsl, tr("Assets"));
+    frictionSelectedTabWidget->addTab(mRenderWidget, tr("Queue"));
 
     frictionTopLayout->addWidget(viewerToolBar);
     frictionTopLayout->addWidget(mViewerNodeBar);
@@ -982,8 +987,7 @@ void MainWindow::closeWelcomeDialog()
 void MainWindow::addCanvasToRenderQue()
 {
     if (!mDocument.fActiveScene) { return; }
-    mTimeline->getRenderWidget()->
-    createNewRenderInstanceWidgetForCanvas(mDocument.fActiveScene);
+    mRenderWidget->createNewRenderInstanceWidgetForCanvas(mDocument.fActiveScene);
 }
 
 void MainWindow::updateSettingsForCurrentCanvas(Canvas* const scene)
@@ -1658,7 +1662,8 @@ void MainWindow::clearAll()
     setFileChangedSinceSaving(false);
     mObjectSettingsWidget->setMainTarget(nullptr);
 
-    mTimeline->clearAll();
+    //mTimeline->clearAll();
+    mRenderWidget->clearRenderQueue();
     mFillStrokeSettings->clearAll();
     mDocument.clear();
     mLayoutHandler->clear();

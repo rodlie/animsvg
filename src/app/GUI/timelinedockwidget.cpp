@@ -25,7 +25,7 @@
 #include "GUI/BoxesList/boxsinglewidget.h"
 #include "widgetstack.h"
 #include "actionbutton.h"
-#include "GUI/RenderWidgets/renderwidget.h"
+//#include "GUI/RenderWidgets/renderwidget.h"
 #include "timelinewidget.h"
 #include "animationwidgetscrollbar.h"
 #include "GUI/global.h"
@@ -196,7 +196,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
             &mDocument, &Document::setOnionDisabled);*/
 
 
-    mPaintNormalMode = SwitchButton::sCreate2Switch(
+    /*mPaintNormalMode = SwitchButton::sCreate2Switch(
                 "toolbarButtons/paintChecked.png",
                 "toolbarButtons/paintUnchecked.png",
                 gSingleLineTooltip("Paint", "B"), this);
@@ -275,13 +275,13 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
         mPaintColorizeMode->setState(mode != PaintMode::colorize);
         mPaintMoveMode->setState(mode != PaintMode::move);
         mPaintCropMode->setState(mode != PaintMode::crop);
-    });
+    });*/
 
     mToolBar = new QToolBar(this);
     mToolBar->setMovable(false);
 
     mToolBar->setIconSize(iconSize);
-    mToolBar->addSeparator();
+    //mToolBar->addSeparator();
 
 //    mControlButtonsLayout->addWidget(mGoToPreviousKeyButton);
 //    mGoToPreviousKeyButton->setFocusPolicy(Qt::NoFocus);
@@ -292,13 +292,13 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mToolBar->widgetForAction(resA)->setObjectName("inactiveToolButton");
 
     mToolBar->addWidget(mResolutionComboBox);
-    mToolBar->addSeparator();
+    //mToolBar->addSeparator();
     //mResolutionComboBox->setFocusPolicy(Qt::NoFocus);
 
     mToolBar->addAction(mPlayFromBeginningButton);
     mToolBar->addAction(mPlayButton);
     mToolBar->addAction(mStopButton);
-    mToolBar->addSeparator();
+    //mToolBar->addSeparator();
     mToolBar->addAction(mLoopButton);
 
     //addSpaceToToolbar()->setText("     ");
@@ -326,7 +326,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
 
     //mPaintModeSpace = addSpaceToToolbar();
 
-    mPaintNormalModeAct = mToolBar->addWidget(mPaintNormalMode);
+    /*mPaintNormalModeAct = mToolBar->addWidget(mPaintNormalMode);
     mPaintEraseModeAct = mToolBar->addWidget(mPaintEraseMode);
     mPaintLockAlphaModeAct = mToolBar->addWidget(mPaintLockAlphaMode);
     mPaintColorizeModeAct = mToolBar->addWidget(mPaintColorizeMode);
@@ -334,7 +334,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mPaintModesSeparator = mToolBar->addSeparator();
 
     mPaintMoveModeAct = mToolBar->addWidget(mPaintMoveMode);
-    mPaintCropModeAct = mToolBar->addWidget(mPaintCropMode);
+    mPaintCropModeAct = mToolBar->addWidget(mPaintCropMode);*/
 
     setupDrawPathSpins();
 
@@ -349,13 +349,14 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
         QLabel *fontLabel = new QLabel(tr("Font"), this);
         mToolBar->addWidget(fontLabel);
         mToolBar->addWidget(mFontWidget);
-        QWidget *spacerFontWidget = new QWidget(this);
+        mToolBar->addSeparator();
+        /*QWidget *spacerFontWidget = new QWidget(this);
         spacerFontWidget->setSizePolicy(QSizePolicy::Expanding,
                                         QSizePolicy::Minimum);
-        mToolBar->addWidget(spacerFontWidget);
+        mToolBar->addWidget(spacerFontWidget);*/
     }
 
-    mTimelineAction = mToolBar->addAction("Timeline", this,
+    /*mTimelineAction = mToolBar->addAction("Timeline", this,
                                           &TimelineDockWidget::setTimelineMode);
     mTimelineAction->setObjectName("customToolButton");
     mTimelineAction->setCheckable(true);
@@ -365,7 +366,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mRenderAction->setObjectName("customToolButton");
     mRenderAction->setCheckable(true);
 
-    mToolBar->addSeparator();
+    mToolBar->addSeparator();*/
 
     mMainLayout->addWidget(mToolBar);
 
@@ -373,7 +374,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mPlayButton->setEnabled(false);
     mStopButton->setEnabled(false);
 
-    mRenderWidget = new RenderWidget(this);
+    //mRenderWidget = new RenderWidget(this);
 
     connect(&mDocument, &Document::activeSceneSet,
             this, [this](Canvas* const scene) {
@@ -383,8 +384,8 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     });
 
     mMainLayout->addWidget(mTimelineLayout);
-    mMainLayout->addWidget(mRenderWidget);
-    mRenderWidget->hide();
+    //mMainLayout->addWidget(mRenderWidget);
+    //mRenderWidget->hide();
 
     previewFinished();
     //addNewBoxesListKeysViewWidget(1);
@@ -468,15 +469,15 @@ void TimelineDockWidget::setLoop(const bool loop)
     RenderHandler::sInstance->setLoop(loop);
 }
 
-void TimelineDockWidget::clearAll()
+/*void TimelineDockWidget::clearAll()
 {
     mRenderWidget->clearRenderQueue();
-}
+}*/
 
-RenderWidget *TimelineDockWidget::getRenderWidget()
+/*RenderWidget *TimelineDockWidget::getRenderWidget()
 {
     return mRenderWidget;
-}
+}*/
 
 bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
 {
@@ -591,7 +592,7 @@ void TimelineDockWidget::updateButtonsVisibility(const CanvasMode mode)
     mOnionAct->setVisible(paintMode);*/
     //mPaintModeSpace->setVisible(paintMode);
 
-    mPaintNormalModeAct->setVisible(paintMode);
+    /*mPaintNormalModeAct->setVisible(paintMode);
     mPaintEraseModeAct->setVisible(paintMode);
     mPaintLockAlphaModeAct->setVisible(paintMode);
     mPaintColorizeModeAct->setVisible(paintMode);
@@ -599,7 +600,7 @@ void TimelineDockWidget::updateButtonsVisibility(const CanvasMode mode)
     mPaintModesSeparator->setVisible(paintMode);
 
     mPaintMoveModeAct->setVisible(paintMode);
-    mPaintCropModeAct->setVisible(paintMode);
+    mPaintCropModeAct->setVisible(paintMode);*/
 
     const bool drawPathMode = mode == CanvasMode::drawPath;
     mDrawPathAutoAct->setVisible(drawPathMode);
@@ -671,13 +672,13 @@ void TimelineDockWidget::setLocalPivot(const bool local)
     Document::sInstance->actionFinished();
 }
 
-void TimelineDockWidget::setTimelineMode()
+/*void TimelineDockWidget::setTimelineMode()
 {
     mTimelineAction->setDisabled(true);
     mRenderAction->setDisabled(false);
 
     mRenderAction->setChecked(false);
-    mRenderWidget->hide();
+    //mRenderWidget->hide();
     mTimelineLayout->show();
 }
 
@@ -688,8 +689,8 @@ void TimelineDockWidget::setRenderMode()
 
     mTimelineAction->setChecked(false);
     mTimelineLayout->hide();
-    mRenderWidget->show();
-}
+    //mRenderWidget->show();
+}*/
 
 void TimelineDockWidget::updateSettingsForCurrentCanvas(Canvas* const canvas)
 {
