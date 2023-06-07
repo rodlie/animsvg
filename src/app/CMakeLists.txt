@@ -273,7 +273,7 @@ set(
     GUI/customfpsdialog.cpp
     GUI/fillstrokesettings.cpp
     #GUI/BrushWidgets/brushselectionwidget.cpp
-    GUI/BrushWidgets/flowlayout.cpp
+    GUI/flowlayout.cpp
     GUI/ColorWidgets/colorwidgetshaders.cpp
     GUI/namedcontainer.cpp
     #GUI/BrushWidgets/brushwidget.cpp
@@ -394,7 +394,7 @@ set(
     GUI/qrealpointvaluedialog.h
     GUI/renderoutputwidget.h
     #GUI/BrushWidgets/brushselectionwidget.h
-    GUI/BrushWidgets/flowlayout.h
+    GUI/flowlayout.h
     GUI/ColorWidgets/colorwidgetshaders.h
     GUI/namedcontainer.h
     #GUI/BrushWidgets/brushwidget.h
