@@ -62,7 +62,6 @@ libfreetype-dev \
 libavcodec-dev \
 libavformat-dev \
 libavutil-dev \
-libmypaint-dev \
 libqscintilla2-qt5-dev \
 libqt5opengl5-dev \
 libqt5svg5-dev \

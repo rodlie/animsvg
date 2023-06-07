@@ -2,7 +2,7 @@
 
 These instructions assume you have macOS High Sierra (10.13) or greater with Qt 5.12.12 *(through the official online installer)* and macports installed running on an Intel CPU.
 
-**NOTE! macOS is not supported anymore**
+**NOTE! macOS is not supported at the moment.**
 
 ## Dependencies
 
@@ -21,7 +21,6 @@ These instructions assume you have macOS High Sierra (10.13) or greater with Qt 
     * Qml
     * Xml
     * Svg
-* libmypaint
 * quazip
 * qscintilla
 * ffmpeg
@@ -34,7 +33,7 @@ These instructions assume you have macOS High Sierra (10.13) or greater with Qt 
 Install the following packages if not already installed:
 
 ```
-sudo port install libmypaint ffmpeg ninja cmake automake autoconf libtool pkgconfig
+sudo port install ffmpeg ninja cmake automake autoconf libtool pkgconfig
 ```
 
 ## Get the source

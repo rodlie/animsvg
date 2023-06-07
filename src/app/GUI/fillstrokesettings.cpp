@@ -23,7 +23,7 @@
 #include "GUI/canvaswindow.h"
 #include "actionbutton.h"
 #include "qdoubleslider.h"
-#include "segment1deditor.h"
+//#include "segment1deditor.h"
 #include "namedcontainer.h"
 #include <QDockWidget>
 #include "paintsettingsapplier.h"

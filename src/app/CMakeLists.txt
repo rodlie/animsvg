@@ -275,7 +275,6 @@ set(
     GUI/BrushWidgets/brushselectionwidget.cpp
     GUI/BrushWidgets/flowlayout.cpp
     GUI/ColorWidgets/colorwidgetshaders.cpp
-    GUI/segment1deditor.cpp
     GUI/namedcontainer.cpp
     GUI/BrushWidgets/brushwidget.cpp
     GUI/Settings/labeledslider.cpp
@@ -397,7 +396,6 @@ set(
     GUI/BrushWidgets/brushselectionwidget.h
     GUI/BrushWidgets/flowlayout.h
     GUI/ColorWidgets/colorwidgetshaders.h
-    GUI/segment1deditor.h
     GUI/namedcontainer.h
     GUI/BrushWidgets/brushwidget.h
     boxtypemenu.h
