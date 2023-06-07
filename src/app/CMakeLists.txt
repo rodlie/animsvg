@@ -161,7 +161,7 @@ set(
     main.cpp
     GUI/BoxesList/OptimalScrollArea/scrollvisiblepartbase.cpp
     GUI/BoxesList/boxscroller.cpp
-    GUI/BrushWidgets/bookmarkedbrushes.cpp
+    #GUI/BrushWidgets/bookmarkedbrushes.cpp
     #GUI/BrushWidgets/brushlabel.cpp
     GUI/ColorWidgets/bookmarkedcolors.cpp
     GUI/ColorWidgets/paintcolorwidget.cpp
@@ -276,7 +276,7 @@ set(
     GUI/BrushWidgets/flowlayout.cpp
     GUI/ColorWidgets/colorwidgetshaders.cpp
     GUI/namedcontainer.cpp
-    GUI/BrushWidgets/brushwidget.cpp
+    #GUI/BrushWidgets/brushwidget.cpp
     GUI/Settings/labeledslider.cpp
 )
 
@@ -284,7 +284,7 @@ set(
     HEADERS
     GUI/BoxesList/OptimalScrollArea/scrollvisiblepartbase.h
     GUI/BoxesList/boxscroller.h
-    GUI/BrushWidgets/bookmarkedbrushes.h
+    #GUI/BrushWidgets/bookmarkedbrushes.h
     #GUI/BrushWidgets/brushlabel.h
     GUI/ColorWidgets/bookmarkedcolors.h
     GUI/ColorWidgets/paintcolorwidget.h
@@ -397,7 +397,7 @@ set(
     GUI/BrushWidgets/flowlayout.h
     GUI/ColorWidgets/colorwidgetshaders.h
     GUI/namedcontainer.h
-    GUI/BrushWidgets/brushwidget.h
+    #GUI/BrushWidgets/brushwidget.h
     boxtypemenu.h
     windowsincludes.h
     GUI/Settings/labeledslider.h
