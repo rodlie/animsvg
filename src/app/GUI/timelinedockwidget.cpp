@@ -34,7 +34,7 @@
 #include "layouthandler.h"
 #include "memoryhandler.h"
 #include "switchbutton.h"
-#include "GUI/BrushWidgets/brushlabel.h"
+//#include "GUI/BrushWidgets/brushlabel.h"
 #include "editablecombobox.h"
 #include "appsupport.h"
 
@@ -136,7 +136,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
         Document::sInstance->actionFinished();
     });
 
-    mColorLabel = new TriggerLabel("");
+    /*mColorLabel = new TriggerLabel("");
     mColorLabel->setToolTip(gSingleLineTooltip("Current Color", "E"));
     mColorLabel->setMinimumWidth(32);
     connect(mColorLabel, &TriggerLabel::requestContextMenu,
@@ -150,24 +150,24 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
                 Document::sInstance->addBookmarkColor(col);
             }
         }
-    });
+    });*/
     /*connect(mColorLabel, &TriggerLabel::triggered, this, [this]() {
         mMainWindow->toggleFillStrokeSettingsDockVisible();
     });*/
 
-    connect(&mDocument, &Document::brushColorChanged,
+    /*connect(&mDocument, &Document::brushColorChanged,
             this, &TimelineDockWidget::setBrushColor);
     mBrushLabel = new BrushLabel(BrushSelectionWidget::sPaintContext.get());
-    mBrushLabel->setToolTip(gSingleLineTooltip("Current Brush", "B"));
+    mBrushLabel->setToolTip(gSingleLineTooltip("Current Brush", "B"));*/
 
     /*connect(mBrushLabel, &TriggerLabel::triggered, this, [this]() {
         mMainWindow->togglePaintBrushDockVisible();
     });*/
 
-    connect(&mDocument, &Document::brushChanged,
-            this, &TimelineDockWidget::setBrush);
+    //connect(&mDocument, &Document::brushChanged,
+            //this, &TimelineDockWidget::setBrush);
 
-    mDecBrushSize = new ActionButton(
+    /*mDecBrushSize = new ActionButton(
                 "toolbarButtons/brush-.png",
                 gSingleLineTooltip("Decrease Brush Size", "Q"), this);
     connect(mDecBrushSize, &ActionButton::pressed,
@@ -177,11 +177,11 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     connect(&mDocument, &Document::brushSizeChanged,
             this, [this](const float size) {
         mBrushSizeLabel->setText(QString("%1").arg(exp(qreal(size)), 0, 'f', 2));
-    });
+    });*/
     /*eSizesUI::widget.add(mBrushSizeLabel, [this](const int size) {
         mBrushSizeLabel->setFixedWidth(2*size);
     });*/
-    mIncBrushSize = new ActionButton(
+    /*mIncBrushSize = new ActionButton(
                 "toolbarButtons/brush+.png",
                 gSingleLineTooltip("Increase Brush Size", "W"), this);
     connect(mIncBrushSize, &ActionButton::pressed,
@@ -193,7 +193,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
                 gSingleLineTooltip("Onion Skin"), this);
     mOnion->setState(mDocument.fOnionVisible ? 0 : 1);
     connect(mOnion, &SwitchButton::toggled,
-            &mDocument, &Document::setOnionDisabled);
+            &mDocument, &Document::setOnionDisabled);*/
 
 
     mPaintNormalMode = SwitchButton::sCreate2Switch(
@@ -306,7 +306,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mLocalPivotAct = mToolBar->addWidget(mLocalPivot);
     mNodeVisibilityAct = mToolBar->addWidget(mNodeVisibility);
 
-    const auto brushColorWidget = new QWidget(this);
+    /*const auto brushColorWidget = new QWidget(this);
     brushColorWidget->setContentsMargins(0, 0, 0, 0);
     brushColorWidget->setLayout(new QHBoxLayout);
     brushColorWidget->layout()->setSpacing(0);
@@ -322,7 +322,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
 
     //addSpaceToToolbar();
 
-    mOnionAct = mToolBar->addWidget(mOnion);
+    mOnionAct = mToolBar->addWidget(mOnion);*/
 
     //mPaintModeSpace = addSpaceToToolbar();
 
@@ -338,7 +338,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
 
     setupDrawPathSpins();
 
-    mColorLabel->setObjectName("colorLabel");
+    //mColorLabel->setObjectName("colorLabel");
 
     QWidget *spacerWidget = new QWidget(this);
     spacerWidget->setSizePolicy(QSizePolicy::Expanding,
@@ -393,17 +393,17 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     connect(&mDocument, &Document::activeSceneSet,
             this, &TimelineDockWidget::updateSettingsForCurrentCanvas);
 
-    setBrush(nullptr);
-    setBrushColor(Qt::black);
+    //setBrush(nullptr);
+    //setBrushColor(Qt::black);
 }
 
-QAction* TimelineDockWidget::addSpaceToToolbar()
+/*QAction* TimelineDockWidget::addSpaceToToolbar()
 {
     const auto spaceAct = mToolBar->addAction("");
     const auto spaceWidget = mToolBar->widgetForAction(spaceAct);
     spaceWidget->setObjectName("emptyToolButton");
     return spaceAct;
-}
+}*/
 
 QAction* addSlider(const QString& name,
                    QDoubleSlider* const slider,
@@ -584,11 +584,11 @@ void TimelineDockWidget::updateButtonsVisibility(const CanvasMode mode)
     mNodeVisibilityAct->setVisible(mode == CanvasMode::pointTransform);
 
     const bool paintMode = mode == CanvasMode::paint;
-    mBrushColorWidgetAct->setVisible(paintMode);
+    /*mBrushColorWidgetAct->setVisible(paintMode);
     mDecBrushSizeAct->setVisible(paintMode);
     mBrushSizeLabelAct->setVisible(paintMode);
     mIncBrushSizeAct->setVisible(paintMode);
-    mOnionAct->setVisible(paintMode);
+    mOnionAct->setVisible(paintMode);*/
     //mPaintModeSpace->setVisible(paintMode);
 
     mPaintNormalModeAct->setVisible(paintMode);
@@ -612,6 +612,9 @@ void setSomeBrushColor(const int height,
                        const QColor &color)
 {
     Q_UNUSED(height)
+    Q_UNUSED(label)
+    Q_UNUSED(color)
+    qWarning() << "TimelineDockWidget::setSomeBrushColor !!!";
     /*const int dim = height - 2;
     QPixmap pix(dim, dim);
     if (color.alpha() == 255) {
@@ -624,21 +627,21 @@ void setSomeBrushColor(const int height,
     }*/
 
     //label->setPixmap(pix);
-    label->setStyleSheet(QString::fromUtf8("background-color: %1;")
-                         .arg(color.name()));
+   // label->setStyleSheet(QString::fromUtf8("background-color: %1;")
+     //                    .arg(color.name()));
 }
 
 void TimelineDockWidget::setBrushColor(const QColor &color)
 {
-    setSomeBrushColor(mToolBar->height(), mColorLabel, color);
+    Q_UNUSED(color)
+    qWarning() << "TimelineDockWidget::setBrushColor !!!";
+    //setSomeBrushColor(mToolBar->height(), mColorLabel, color);
 }
 
 void TimelineDockWidget::setBrush(BrushContexedWrapper* const brush)
 {
-    mBrushLabel->setContentsMargins(1, 1, 1, 0);
-    const int dim = mToolBar->height() - 1;
-    mBrushLabel->setFixedSize(dim, dim);
-    mBrushLabel->setBrush(brush);
+    Q_UNUSED(brush)
+    qWarning() << "TimelineDockWidget::setBrush !!!";
 }
 
 void TimelineDockWidget::pausePreview()

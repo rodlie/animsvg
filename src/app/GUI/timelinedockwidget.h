@@ -36,7 +36,7 @@
 #include "framerange.h"
 #include "timelinebasewrappernode.h"
 #include "triggerlabel.h"
-#include "BrushWidgets/bookmarkedbrushes.h"
+//#include "BrushWidgets/bookmarkedbrushes.h"
 #include "qdoubleslider.h"
 #include "fontswidget.h"
 
@@ -51,7 +51,7 @@ class Canvas;
 class Document;
 class LayoutHandler;
 class SwitchButton;
-class BrushLabel;
+//class BrushLabel;
 class BrushContexedWrapper;
 class FontsWidget;
 
@@ -90,7 +90,7 @@ private:
 
     void updateButtonsVisibility(const CanvasMode mode);
 private:
-    QAction *addSpaceToToolbar();
+    //QAction *addSpaceToToolbar();
 
     void setupDrawPathSpins();
 
@@ -116,7 +116,7 @@ private:
     QAction* mNodeVisibilityAct;
     SwitchButton *mNodeVisibility;
 
-    QAction* mBrushColorWidgetAct;
+    /*QAction* mBrushColorWidgetAct;
     TriggerLabel* mColorLabel;
     BrushLabel* mBrushLabel;
     QAction* mDecBrushSizeAct;
@@ -127,7 +127,7 @@ private:
     ActionButton *mIncBrushSize;
 
     QAction* mOnionAct;
-    SwitchButton *mOnion;
+    SwitchButton *mOnion;*/
 
     QAction* mPaintModeSpace;
 
