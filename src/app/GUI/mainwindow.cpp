@@ -69,7 +69,7 @@
 #include "ColorWidgets/bookmarkedcolors.h"
 #include "GUI/edialogs.h"
 #include "GUI/dialogsinterface.h"
-#include "closesignalingdockwidget.h"
+//#include "closesignalingdockwidget.h"
 #include "eimporters.h"
 //#include "ColorWidgets/paintcolorwidget.h"
 #include "Dialogs/exportsvgdialog.h"

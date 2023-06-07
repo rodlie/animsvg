@@ -192,7 +192,7 @@ set(
     GUI/canvaswindowevents.cpp
     GUI/canvaswrappernode.cpp
     GUI/changewidthwidget.cpp
-    GUI/closesignalingdockwidget.cpp
+    #GUI/closesignalingdockwidget.cpp
     GUI/ecombobox.cpp
     GUI/editablecombobox.cpp
     GUI/ekeyfilter.cpp
@@ -314,7 +314,7 @@ set(
     GUI/canvasbasewrappernode.h
     GUI/canvaswrappernode.h
     GUI/changewidthwidget.h
-    GUI/closesignalingdockwidget.h
+    #GUI/closesignalingdockwidget.h
     GUI/ecombobox.h
     GUI/editablecombobox.h
     GUI/ekeyfilter.h
