@@ -158,7 +158,6 @@ set(
     Boxes/internallinkgroupbox.cpp
     Boxes/layerboxrenderdata.cpp
     Boxes/linkcanvasrenderdata.cpp
-    #Boxes/paintbox.cpp
     Boxes/pathbox.cpp
     Boxes/pathboxrenderdata.cpp
     Boxes/patheffectsmenu.cpp
@@ -482,7 +481,6 @@ set(
     Boxes/internallinkgroupbox.h
     Boxes/layerboxrenderdata.h
     Boxes/linkcanvasrenderdata.h
-    #Boxes/paintbox.h
     Boxes/pathbox.h
     Boxes/pathboxrenderdata.h
     Boxes/patheffectsmenu.h
