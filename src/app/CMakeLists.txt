@@ -54,10 +54,10 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(PROJECT_DISPLAY_NAME "Friction")
-set(COMPANY "Friction developers")
-set(COPYRIGHT "Copyright Friction developers. All rights reserved.")
+set(COMPANY "Friction contributors")
+set(COPYRIGHT "Friction contributors.")
 set(IDENTIFIER "com.friction2d")
-set(PROJECT_DESCRIPTION "2D Animation")
+set(PROJECT_DESCRIPTION "2D Motion Graphics and Animation")
 
 if(APPLE)
     set(ICON_FILE ${CMAKE_CURRENT_SOURCE_DIR}/icons/${PROJECT_NAME}.icns)
@@ -100,7 +100,6 @@ set(QUAZIP_LIBRARIES_DIRS "/usr/lib" CACHE STRING "quazip library path")
 set(QUAZIP_LIBRARIES "quazip5" CACHE STRING "quazip library")
 set(QUAZIP_INCLUDE_DIRS "/usr/include/quazip5" CACHE STRING "quazip includes path")
 
-#pkg_search_module(MYPAINT REQUIRED libmypaint)
 pkg_check_modules(AVFORMAT REQUIRED libavformat)
 pkg_check_modules(AVCODEC REQUIRED libavcodec)
 pkg_check_modules(AVUTIL REQUIRED libavutil)
@@ -113,7 +112,6 @@ if(UNIX AND NOT ${SHARED_TCMALLOC})
 endif()
 
 include_directories(
-    #${MYPAINT_INCLUDE_DIRS}
     ${QUAZIP_INCLUDE_DIRS}
     ${QSCINTILLA_INCLUDE_DIRS}
     ${AVFORMAT_INCLUDE_DIRS}
@@ -193,7 +191,6 @@ set(
     GUI/canvasbasewrappernode.cpp
     GUI/canvaswindowevents.cpp
     GUI/canvaswrappernode.cpp
-    #GUI/centralwidget.cpp
     GUI/changewidthwidget.cpp
     GUI/closesignalingdockwidget.cpp
     GUI/ecombobox.cpp
@@ -275,7 +272,6 @@ set(
     GUI/filesourcelist.cpp
     GUI/customfpsdialog.cpp
     GUI/fillstrokesettings.cpp
-    GUI/BrushWidgets/arraywidget.cpp
     GUI/BrushWidgets/brushselectionwidget.cpp
     GUI/BrushWidgets/flowlayout.cpp
     GUI/ColorWidgets/colorwidgetshaders.cpp
@@ -318,7 +314,6 @@ set(
     GUI/buttonslist.h
     GUI/canvasbasewrappernode.h
     GUI/canvaswrappernode.h
-    #GUI/centralwidget.h
     GUI/changewidthwidget.h
     GUI/closesignalingdockwidget.h
     GUI/ecombobox.h
@@ -399,7 +394,6 @@ set(
     GUI/noshortcutaction.h
     GUI/qrealpointvaluedialog.h
     GUI/renderoutputwidget.h
-    GUI/BrushWidgets/arraywidget.h
     GUI/BrushWidgets/brushselectionwidget.h
     GUI/BrushWidgets/flowlayout.h
     GUI/ColorWidgets/colorwidgetshaders.h
@@ -417,7 +411,6 @@ add_executable(
     ${HEADERS}
     ${SOURCES}
     resources.qrc
-    #brushes.qrc
     icons.qrc
     hicolor.qrc
 )
@@ -433,23 +426,6 @@ target_link_directories(
     ${QUAZIP_LIBRARIES_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia/out/build
 )
-
-if(APPLE)
-    target_link_directories(
-        ${PROJECT_NAME}
-        PRIVATE
-        /opt/local/lib
-    )
-endif()
-
-#if(UNIX AND NOT APPLE)
-#    set_target_properties(
-#        ${PROJECT_NAME}
-#        PROPERTIES
-#        BUILD_WITH_INSTALL_RPATH FALSE
-#        LINK_FLAGS "-Wl,-rpath,$ORIGIN/"
-#    )
-#endif()
 
 if(UNIX)
     target_link_directories(
@@ -472,7 +448,6 @@ target_link_libraries(
     Qt${QT_VERSION_MAJOR}::Qml
     Qt${QT_VERSION_MAJOR}::Xml
     Qt${QT_VERSION_MAJOR}::Svg
-    #${MYPAINT_LIBRARIES}
     ${QUAZIP_LIBRARIES}
     ${QSCINTILLA_LIBRARIES}
     ${AVFORMAT_LIBRARIES}
@@ -482,14 +457,6 @@ target_link_libraries(
     ${SWRESAMPLE_LIBRARIES}
     skia
 )
-
-if(OpenMP_CXX_FOUND)
-    target_link_libraries(
-        ${PROJECT_NAME}
-        PRIVATE
-        OpenMP::OpenMP_CXX
-    )
-endif()
 
 if(APPLE)
     target_link_libraries(

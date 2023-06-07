@@ -89,7 +89,6 @@ set(QUAZIP_LIBRARIES_DIRS "/usr/lib" CACHE STRING "quazip library path")
 set(QUAZIP_LIBRARIES "quazip5" CACHE STRING "quazip library")
 set(QUAZIP_INCLUDE_DIRS "/usr/include/quazip5" CACHE STRING "quazip includes path")
 
-#pkg_search_module(MYPAINT REQUIRED libmypaint)
 pkg_check_modules(AVFORMAT REQUIRED libavformat)
 pkg_check_modules(AVCODEC REQUIRED libavcodec)
 pkg_check_modules(AVUTIL REQUIRED libavutil)
@@ -99,7 +98,6 @@ pkg_check_modules(SWRESAMPLE REQUIRED libswresample)
 add_definitions(-DCORE_LIBRARY)
 
 include_directories(
-    #${MYPAINT_INCLUDE_DIRS}
     ${QUAZIP_INCLUDE_DIRS}
     ${AVFORMAT_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia
@@ -804,14 +802,6 @@ target_link_directories(
     ${QUAZIP_LIBRARIES_DIRS}
 )
 
-if(APPLE)
-    target_link_directories(
-        ${PROJECT_NAME}
-        PRIVATE
-        /opt/local/lib
-    )
-endif()
-
 target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
@@ -824,7 +814,6 @@ target_link_libraries(
     Qt${QT_VERSION_MAJOR}::Qml
     Qt${QT_VERSION_MAJOR}::Xml
     Qt${QT_VERSION_MAJOR}::Svg
-    #${MYPAINT_LIBRARIES}
     ${QUAZIP_LIBRARIES}
     ${AVFORMAT_LIBRARIES}
     ${AVCODEC_LIBRARIES}
@@ -834,14 +823,6 @@ target_link_libraries(
     skia
     fontconfig
 )
-
-if(OpenMP_CXX_FOUND)
-    target_link_libraries(
-        ${PROJECT_NAME}
-        PRIVATE
-        OpenMP::OpenMP_CXX
-    )
-endif()
 
 if(APPLE)
     target_link_libraries(
