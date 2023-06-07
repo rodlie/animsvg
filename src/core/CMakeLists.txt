@@ -81,10 +81,6 @@ find_package(
     REQUIRED
 )
 
-set(QSCINTILLA_LIBRARIES_DIRS "/usr/lib" CACHE STRING "qscintilla library path")
-set(QSCINTILLA_LIBRARIES "qscintilla2_qt5" CACHE STRING "qscintilla library")
-set(QSCINTILLA_INCLUDE_DIRS "/usr/include/x86_64-linux-gnu/qt5" CACHE STRING "qscintilla includes path")
-
 set(QUAZIP_LIBRARIES_DIRS "/usr/lib" CACHE STRING "quazip library path")
 set(QUAZIP_LIBRARIES "quazip5" CACHE STRING "quazip library")
 set(QUAZIP_INCLUDE_DIRS "/usr/include/quazip5" CACHE STRING "quazip includes path")
@@ -210,21 +206,9 @@ set(
     GUI/valueinput.cpp
     MovablePoints/gradientpoint.cpp
     MovablePoints/pathpivot.cpp
-    #Paint/animatedsurface.cpp
-    #Paint/autotiledsurface.cpp
-    #Paint/autotilesdata.cpp
     Paint/brushcontexedwrapper.cpp
     Paint/brushescontext.cpp
-    #Paint/brushstroke.cpp
-    #Paint/brushstrokeset.cpp
-    #Paint/colorconversions.cpp
-    #Paint/drawableautotiledsurface.cpp
-    #Paint/onionskin.cpp
-    #Paint/painttarget.cpp
     Paint/simplebrushwrapper.cpp
-    #Paint/tile.cpp
-    #Paint/tilebitmaps.cpp
-    #Paint/undoabletile.cpp
     PathEffects/custompatheffect.cpp
     PathEffects/dashpatheffect.cpp
     PathEffects/displacepatheffect.cpp
@@ -534,21 +518,9 @@ set(
     GUI/valueinput.h
     MovablePoints/gradientpoint.h
     MovablePoints/pathpivot.h
-    #Paint/animatedsurface.h
-    #Paint/autotiledsurface.h
-    #Paint/autotilesdata.h
     Paint/brushcontexedwrapper.h
     Paint/brushescontext.h
-    #Paint/brushstroke.h
-    #Paint/brushstrokeset.h
-    #Paint/colorconversions.h
-    #Paint/drawableautotiledsurface.h
-    #Paint/onionskin.h
-    #Paint/painttarget.h
     Paint/simplebrushwrapper.h
-    #Paint/tile.h
-    #Paint/tilebitmaps.h
-    #Paint/undoabletile.h
     PathEffects/custompatheffect.h
     PathEffects/custompatheffectcreator.h
     PathEffects/dashpatheffect.h
@@ -677,7 +649,6 @@ set(
     gpurendertools.h
     hardwareenums.h
     importhandler.h
-    #libmypaintincludes.h
     matrixdecomposition.h
     memorydatahandler.h
     namefixer.h
