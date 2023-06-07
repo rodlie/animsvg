@@ -162,7 +162,7 @@ set(
     GUI/BoxesList/OptimalScrollArea/scrollvisiblepartbase.cpp
     GUI/BoxesList/boxscroller.cpp
     GUI/BrushWidgets/bookmarkedbrushes.cpp
-    GUI/BrushWidgets/brushlabel.cpp
+    #GUI/BrushWidgets/brushlabel.cpp
     GUI/ColorWidgets/bookmarkedcolors.cpp
     GUI/ColorWidgets/paintcolorwidget.cpp
     GUI/Dialogs/animationtopaintdialog.cpp
@@ -272,7 +272,7 @@ set(
     GUI/filesourcelist.cpp
     GUI/customfpsdialog.cpp
     GUI/fillstrokesettings.cpp
-    GUI/BrushWidgets/brushselectionwidget.cpp
+    #GUI/BrushWidgets/brushselectionwidget.cpp
     GUI/BrushWidgets/flowlayout.cpp
     GUI/ColorWidgets/colorwidgetshaders.cpp
     GUI/namedcontainer.cpp
@@ -285,7 +285,7 @@ set(
     GUI/BoxesList/OptimalScrollArea/scrollvisiblepartbase.h
     GUI/BoxesList/boxscroller.h
     GUI/BrushWidgets/bookmarkedbrushes.h
-    GUI/BrushWidgets/brushlabel.h
+    #GUI/BrushWidgets/brushlabel.h
     GUI/ColorWidgets/bookmarkedcolors.h
     GUI/ColorWidgets/paintcolorwidget.h
     GUI/Dialogs/animationtopaintdialog.h
@@ -393,7 +393,7 @@ set(
     GUI/noshortcutaction.h
     GUI/qrealpointvaluedialog.h
     GUI/renderoutputwidget.h
-    GUI/BrushWidgets/brushselectionwidget.h
+    #GUI/BrushWidgets/brushselectionwidget.h
     GUI/BrushWidgets/flowlayout.h
     GUI/ColorWidgets/colorwidgetshaders.h
     GUI/namedcontainer.h

@@ -60,14 +60,12 @@
 #include "Sound/soundcomposition.h"
 #include "GUI/BoxesList/boxsinglewidget.h"
 #include "memoryhandler.h"
-#include "GUI/BrushWidgets/brushselectionwidget.h"
 #include "Animators/gradient.h"
 #include "GUI/GradientWidgets/gradientwidget.h"
 #include "GUI/Dialogs/scenesettingsdialog.h"
 #include "ShaderEffects/shadereffectprogram.h"
 #include "importhandler.h"
 #include "switchbutton.h"
-//#include "centralwidget.h"
 #include "ColorWidgets/bookmarkedcolors.h"
 #include "GUI/edialogs.h"
 #include "GUI/dialogsinterface.h"
@@ -172,8 +170,8 @@ MainWindow::MainWindow(Document& document,
 
     BoxSingleWidget::loadStaticPixmaps(); // TODO: remove
 
-    BrushSelectionWidget::sPaintContext = BrushSelectionWidget::sCreateNewContext();
-    BrushSelectionWidget::sOutlineContext = BrushSelectionWidget::sCreateNewContext();
+    //BrushSelectionWidget::sPaintContext = BrushSelectionWidget::sCreateNewContext();
+    //BrushSelectionWidget::sOutlineContext = BrushSelectionWidget::sCreateNewContext();
 
 //    for(int i = 0; i < ClipboardContainerType::CCT_COUNT; i++) {
 //        mClipboardContainers << nullptr;
@@ -215,7 +213,7 @@ MainWindow::MainWindow(Document& document,
         mBrushSettingsDock->setMaximumWidth(size*20);
     });*/
 
-    const auto pCtxt = BrushSelectionWidget::sPaintContext;
+    //const auto pCtxt = BrushSelectionWidget::sPaintContext;
     //mBrushSelectionWidget = new BrushSelectionWidget(*pCtxt.get(), this);
     //connect(mBrushSelectionWidget, &BrushSelectionWidget::currentBrushChanged,
       //      &mDocument, &Document::setBrush);

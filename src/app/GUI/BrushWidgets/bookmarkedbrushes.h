@@ -1,6 +1,7 @@
 #ifndef BOOKMARKEDBRUSHES_H
 #define BOOKMARKEDBRUSHES_H
-#include "brushselectionwidget.h"
+
+#include "Paint/brushescontext.h"
 #include "brushwidget.h"
 
 #include "../bookmarkedwidget.h"

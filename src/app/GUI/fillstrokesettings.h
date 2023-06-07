@@ -32,7 +32,7 @@
 #include "Animators/paintsettingsanimator.h"
 #include "paintsettingsapplier.h"
 #include "Animators/brushsettingsanimator.h"
-#include "GUI/BrushWidgets/brushselectionwidget.h"
+#include "Paint/brushcontexedwrapper.h"
 
 class GradientWidget;
 class MainWindow;
@@ -44,7 +44,7 @@ class Segment1DEditor;
 class QDockWidget;
 class ColorSetting;
 class Document;
-class BrushLabel;
+//class BrushLabel;
 
 class FillStrokeSettingsWidget : public QTabWidget {
     Q_OBJECT
