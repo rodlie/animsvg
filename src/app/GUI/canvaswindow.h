@@ -117,7 +117,7 @@ private:
     QMatrix mViewTransform;
     QPointF mPrevMousePos;
     QPointF mPrevPressPos;
-    bool mValidPaintTarget = false;
+    //bool mValidPaintTarget = false;
 
     bool mBlockInput = false;
     bool mMouseGrabber = false;

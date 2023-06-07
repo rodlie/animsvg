@@ -36,7 +36,7 @@
 #include "Boxes/textbox.h"
 #include "Boxes/imagesequencebox.h"
 #include "Boxes/internallinkbox.h"
-#include "Boxes/paintbox.h"
+//#include "Boxes/paintbox.h"
 //#include "GUI/BrushWidgets/brushsettingswidget.h"
 #include "canvas.h"
 #include "Timeline/durationrectangle.h"

@@ -238,7 +238,7 @@ void AnimationBox::setupCanvasMenu(PropertyMenu * const menu) {
     };
     menu->addPlainAction("Stretch...", stretchOp);
 
-    menu->addSeparator();
+    /*menu->addSeparator();
     const PropertyMenu::PlainSelectedOp<AnimationBox> createPaintObj =
     [](AnimationBox * box) {
         int firstAbsFrame;
@@ -249,14 +249,14 @@ void AnimationBox::setupCanvasMenu(PropertyMenu * const menu) {
                     box, firstAbsFrame, lastAbsFrame, increment);
         if(ok) box->createPaintObject(firstAbsFrame, lastAbsFrame, increment);
     };
-    menu->addPlainAction("Create Paint Object...", createPaintObj);
+    menu->addPlainAction("Create Paint Object...", createPaintObj);*/
 
     BoundingBox::setupCanvasMenu(menu);
 }
 
-void AnimationBox::createPaintObject(const int firstAbsFrame,
-                                     const int lastAbsFrame,
-                                     const int increment) {
+//void AnimationBox::createPaintObject(const int firstAbsFrame,
+  //                                   const int lastAbsFrame,
+    //                                 const int increment) {
     /*const qptr<ContainerBox> parent = getParentGroup();
     if(!parent) return;
     const auto paintObj = enve::make_shared<PaintBox>();
@@ -290,7 +290,7 @@ void AnimationBox::createPaintObject(const int firstAbsFrame,
         connect(task, &ComplexTask::finishedAll, paintObj.get(), adder);
         TaskScheduler::instance()->addComplexTask(taskSPtr);
     }*/
-}
+//}
 
 void AnimationBox::setupRenderData(const qreal relFrame,
                                    const QMatrix& parentM,

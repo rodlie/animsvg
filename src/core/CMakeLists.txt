@@ -160,7 +160,7 @@ set(
     Boxes/internallinkgroupbox.cpp
     Boxes/layerboxrenderdata.cpp
     Boxes/linkcanvasrenderdata.cpp
-    Boxes/paintbox.cpp
+    #Boxes/paintbox.cpp
     Boxes/pathbox.cpp
     Boxes/pathboxrenderdata.cpp
     Boxes/patheffectsmenu.cpp
@@ -215,19 +215,19 @@ set(
     MovablePoints/pathpivot.cpp
     #Paint/animatedsurface.cpp
     #Paint/autotiledsurface.cpp
-    Paint/autotilesdata.cpp
+    #Paint/autotilesdata.cpp
     Paint/brushcontexedwrapper.cpp
     Paint/brushescontext.cpp
     #Paint/brushstroke.cpp
     #Paint/brushstrokeset.cpp
-    Paint/colorconversions.cpp
+    #Paint/colorconversions.cpp
     #Paint/drawableautotiledsurface.cpp
     #Paint/onionskin.cpp
-    Paint/painttarget.cpp
+    #Paint/painttarget.cpp
     Paint/simplebrushwrapper.cpp
-    Paint/tile.cpp
-    Paint/tilebitmaps.cpp
-    Paint/undoabletile.cpp
+    #Paint/tile.cpp
+    #Paint/tilebitmaps.cpp
+    #Paint/undoabletile.cpp
     PathEffects/custompatheffect.cpp
     PathEffects/dashpatheffect.cpp
     PathEffects/displacepatheffect.cpp
@@ -484,7 +484,7 @@ set(
     Boxes/internallinkgroupbox.h
     Boxes/layerboxrenderdata.h
     Boxes/linkcanvasrenderdata.h
-    Boxes/paintbox.h
+    #Boxes/paintbox.h
     Boxes/pathbox.h
     Boxes/pathboxrenderdata.h
     Boxes/patheffectsmenu.h
@@ -545,14 +545,14 @@ set(
     Paint/brushescontext.h
     #Paint/brushstroke.h
     #Paint/brushstrokeset.h
-    Paint/colorconversions.h
+    #Paint/colorconversions.h
     #Paint/drawableautotiledsurface.h
     #Paint/onionskin.h
-    Paint/painttarget.h
+    #Paint/painttarget.h
     Paint/simplebrushwrapper.h
-    Paint/tile.h
-    Paint/tilebitmaps.h
-    Paint/undoabletile.h
+    #Paint/tile.h
+    #Paint/tilebitmaps.h
+    #Paint/undoabletile.h
     PathEffects/custompatheffect.h
     PathEffects/custompatheffectcreator.h
     PathEffects/dashpatheffect.h

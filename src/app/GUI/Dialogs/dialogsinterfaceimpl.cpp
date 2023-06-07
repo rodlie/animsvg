@@ -103,14 +103,14 @@ void DialogsInterfaceImpl::showDurationSettingsDialog(
     dialog->show();
 }
 
-bool DialogsInterfaceImpl::execAnimationToPaint(
+/*bool DialogsInterfaceImpl::execAnimationToPaint(
         const AnimationBox* const src,
         int& firstAbsFrame, int& lastAbsFrame,
         int& increment) const {
     const auto parent = MainWindow::sGetInstance();
     return AnimationToPaintDialog::sExec(src, firstAbsFrame, lastAbsFrame,
                                          increment, parent);
-}
+}*/
 
 void DialogsInterfaceImpl::showSceneSettingsDialog(Canvas* const scene) const {
     const auto parent = MainWindow::sGetInstance();

@@ -23,7 +23,7 @@
 #include "filesourcescache.h"
 #include "GUI/edialogs.h"
 #include "typemenu.h"
-#include "paintbox.h"
+//#include "paintbox.h"
 #include "svgexporter.h"
 #include "svgexporthelpers.h"
 

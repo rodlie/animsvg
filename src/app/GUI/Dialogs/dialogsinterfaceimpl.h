@@ -27,9 +27,9 @@ public:
     void showExpressionDialog(QrealAnimator* const target) const;
     void showApplyExpressionDialog(QrealAnimator* const target) const;
     void showDurationSettingsDialog(DurationRectangle* const target) const;
-    bool execAnimationToPaint(const AnimationBox* const src,
+    /*bool execAnimationToPaint(const AnimationBox* const src,
                               int& firstAbsFrame, int& lastAbsFrame,
-                              int& increment) const;
+                              int& increment) const;*/
     void showSceneSettingsDialog(Canvas* const scene) const;
     void displayMessageToUser(const QString& message, const int ms) const;
     void showStatusMessage(const QString& message, const int ms) const;

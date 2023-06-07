@@ -67,9 +67,9 @@ public:
 protected:
     void setAnimationFramesHandler(const qsptr<AnimationFrameHandler>& src);
 private:
-    void createPaintObject(const int firstAbsFrame,
-                           const int lastAbsFrame,
-                           const int increment);
+    //void createPaintObject(const int firstAbsFrame,
+      //                     const int lastAbsFrame,
+        //                   const int increment);
 
     qreal mStretch = 1;
     qsptr<AnimationFrameHandler> mSrcFramesCache;
