@@ -115,6 +115,7 @@ private:
     void setHSLLightness(const qreal value);
 
     void setColorMode();
+    void setColorModeFromCombo(int index);
     void updateWidgetTargets();
 
     qreal mLastNonZeroHue = 0;

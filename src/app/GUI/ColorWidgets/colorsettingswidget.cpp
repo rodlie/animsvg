@@ -361,7 +361,7 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
     mColorModeCombo->addItem("HSV");
     mColorModeCombo->addItem("HSL");
     connect(mColorModeCombo, qOverload<int>(&QComboBox::activated),
-            this, &ColorSettingsWidget::setColorMode);
+            this, &ColorSettingsWidget::setColorModeFromCombo);
 
     mTabWidget->setCornerWidget(mColorModeWidget);
     //mWidgetsLayout->addLayout(mColorModeLayout);
@@ -744,6 +744,25 @@ void ColorSettingsWidget::updateAlphaFromSpin() {
 void ColorSettingsWidget::setColorMode() {
     const auto colorSetting = getColorSetting(ColorSettingType::apply,
                                               ColorParameter::colorMode);
+    emit colorSettingSignal(colorSetting);
+    Document::sInstance->actionFinished();
+}
+
+void ColorSettingsWidget::setColorModeFromCombo(int index)
+{
+    qDebug() << "setColorModeFromCombo" << index;
+    auto colorSetting = getColorSetting(ColorSettingType::apply,
+                                        ColorParameter::colorMode);
+    switch(index) {
+    case 1:
+        colorSetting.fSettingMode = ColorMode::hsv;
+        break;
+    case 2:
+        colorSetting.fSettingMode = ColorMode::hsl;
+        break;
+    default:
+        colorSetting.fSettingMode = ColorMode::rgb;
+    }
     emit colorSettingSignal(colorSetting);
     Document::sInstance->actionFinished();
 }

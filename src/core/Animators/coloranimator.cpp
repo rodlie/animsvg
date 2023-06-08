@@ -153,41 +153,42 @@ void ColorAnimator::setColor(const QColor &col) {
     mAlphaAnimator->setCurrentBaseValue(alpha);
 }
 
-void ColorAnimator::setColorMode(const ColorMode colorMode) {
-    if(colorMode == ColorMode::rgb) {
+void ColorAnimator::setColorMode(const ColorMode colorMode)
+{
+    if (colorMode == ColorMode::rgb) {
         mVal1Animator->prp_setName("red");
         mVal2Animator->prp_setName("green");
         mVal3Animator->prp_setName("blue");
-    } else if(colorMode == ColorMode::hsv) {
+    } else if (colorMode == ColorMode::hsv) {
         mVal1Animator->prp_setName("hue");
         mVal2Animator->prp_setName("saturation");
         mVal3Animator->prp_setName("value");
-    } else { // HSLMODE
+    } else { // HSL
         mVal1Animator->prp_setName("hue");
         mVal2Animator->prp_setName("saturation");
         mVal3Animator->prp_setName("lightness");
     }
-    if(mColorMode == colorMode) return;
+    if (mColorMode == colorMode) { return; }
 
     void (*foo)(qreal&, qreal&, qreal&);
-    if(mColorMode == ColorMode::rgb && colorMode == ColorMode::hsv) {
+    if (mColorMode == ColorMode::rgb && colorMode == ColorMode::hsv) {
         foo = &qrgb_to_hsv;
-    } else if(mColorMode == ColorMode::rgb && colorMode == ColorMode::hsl) {
+    } else if (mColorMode == ColorMode::rgb && colorMode == ColorMode::hsl) {
         foo = &qrgb_to_hsl;
-    } else if(mColorMode == ColorMode::hsv && colorMode == ColorMode::rgb) {
+    } else if (mColorMode == ColorMode::hsv && colorMode == ColorMode::rgb) {
         foo = &qhsv_to_rgb;
-    } else if(mColorMode == ColorMode::hsv && colorMode == ColorMode::hsl) {
+    } else if (mColorMode == ColorMode::hsv && colorMode == ColorMode::hsl) {
         foo = &qhsv_to_hsl;
-    } else if(mColorMode == ColorMode::hsl && colorMode == ColorMode::rgb) {
+    } else if (mColorMode == ColorMode::hsl && colorMode == ColorMode::rgb) {
         foo = &qhsl_to_rgb;
-    } else if(mColorMode == ColorMode::hsl && colorMode == ColorMode::hsv) {
+    } else if (mColorMode == ColorMode::hsl && colorMode == ColorMode::hsv) {
         foo = &qhsl_to_hsv;
     } else {
         return;
     }
 
     const auto& keys = anim_getKeys();
-    for(const auto &key : keys) {
+    for (const auto &key : keys) {
         const int frame = key->getAbsFrame();
 
         qreal rF = mVal1Animator->getBaseValueAtAbsFrame(frame);
@@ -201,7 +202,7 @@ void ColorAnimator::setColorMode(const ColorMode colorMode) {
         mVal3Animator->saveValueToKey(frame, bF);
     }
 
-    if(!keys.isEmpty()) {
+    if (!keys.isEmpty()) {
         mVal1Animator->anim_setRecordingWithoutChangingKeys(true);
         mVal2Animator->anim_setRecordingWithoutChangingKeys(true);
         mVal3Animator->anim_setRecordingWithoutChangingKeys(true);
@@ -285,14 +286,14 @@ void ColorAnimator::prp_setupTreeViewMenu(PropertyMenu * const menu) {
     const PropertyMenu::CheckSelectedOp<ColorAnimator> hsvOp =
     [](ColorAnimator * anim, bool checked) {
         Q_UNUSED(checked)
-        anim->setColorMode(ColorMode::rgb);
+        anim->setColorMode(ColorMode::hsv);
     };
     colorModeMenu->addCheckableAction("HSV", mColorMode == ColorMode::hsv, hsvOp);
 
     const PropertyMenu::CheckSelectedOp<ColorAnimator> hslOp =
     [](ColorAnimator * anim, bool checked) {
         Q_UNUSED(checked)
-        anim->setColorMode(ColorMode::rgb);
+        anim->setColorMode(ColorMode::hsl);
     };
     colorModeMenu->addCheckableAction("HSL", mColorMode == ColorMode::hsl, hslOp);
 }
