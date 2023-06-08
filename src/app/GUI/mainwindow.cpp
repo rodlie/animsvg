@@ -170,31 +170,14 @@ MainWindow::MainWindow(Document& document,
         stylesheet.close();
     }
 
-    BoxSingleWidget::loadStaticPixmaps(); // TODO: remove
-
-    //BrushSelectionWidget::sPaintContext = BrushSelectionWidget::sCreateNewContext();
-    //BrushSelectionWidget::sOutlineContext = BrushSelectionWidget::sCreateNewContext();
-
-//    for(int i = 0; i < ClipboardContainerType::CCT_COUNT; i++) {
-//        mClipboardContainers << nullptr;
-//    }
+    BoxSingleWidget::loadStaticPixmaps(); // TODO: remove when everything is QIcon
 
     mDocument.setPath("");
 
+    int sideBarMax = 400;
+
     mFillStrokeSettings = new FillStrokeSettingsWidget(mDocument, this);
-    mFillStrokeSettings->setMaximumWidth(400);
-
-
-    /*mPaintColorWidget = new PaintColorWidget(this);
-    mPaintColorWidget->hide();
-    connect(mPaintColorWidget, &PaintColorWidget::colorChanged,
-            &mDocument, &Document::setBrushColor);
-    connect(&mDocument, &Document::brushColorChanged,
-            mPaintColorWidget, &PaintColorWidget::setDisplayedColor);*/
-
-    //mTimelineDock = new CloseSignalingDockWidget(tr("Timeline", "Dock"), this);
-    //mTimelineDock->setObjectName(QString::fromUtf8("timelineDockWidget"));
-    //addDockWidget(Qt::BottomDockWidgetArea, mTimelineDock);
+    mFillStrokeSettings->setMaximumWidth(sideBarMax);
 
     mFontWidget = new FontsWidget(this);
 
@@ -206,30 +189,6 @@ MainWindow::MainWindow(Document& document,
                                        this,
                                        mFontWidget);
     mRenderWidget = new RenderWidget(this);
-
-    //mTimelineDock->setWidget(mTimeline);
-
-    //mBrushSettingsDock = new CloseSignalingDockWidget(
-      //          tr("Brush Settings", "Dock"), this);
-    //mBrushSettingsDock->setObjectName(QString::fromUtf8("brushSettingsDockWidget"));
-    /*eSizesUI::widget.add(mBrushSettingsDock, [this](const int size) {
-        mBrushSettingsDock->setMinimumWidth(size*10);
-        mBrushSettingsDock->setMaximumWidth(size*20);
-    });*/
-
-    //const auto pCtxt = BrushSelectionWidget::sPaintContext;
-    //mBrushSelectionWidget = new BrushSelectionWidget(*pCtxt.get(), this);
-    //connect(mBrushSelectionWidget, &BrushSelectionWidget::currentBrushChanged,
-      //      &mDocument, &Document::setBrush);
-//    connect(mBrushSettingsWidget,
-//            SIGNAL(brushReplaced(const Brush*,const Brush*)),
-//            mCanvasWindow,
-//            SLOT(replaceBrush(const Brush*,const Brush*)));
-
-    //mBrushSettingsDock->setWidget(mBrushSelectionWidget);
-
-    //addDockWidget(Qt::LeftDockWidgetArea, mBrushSettingsDock);
-    //mBrushSettingsDock->hide();
 
     const auto alignWidget = new AlignWidget(this);
     alignWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -263,24 +222,12 @@ MainWindow::MainWindow(Document& document,
     const auto fsl = new FileSourceList(this);
     connect(fsl, &FileSourceList::doubleClicked,
             this, &MainWindow::importFile);
-    /*{
-        const auto brush = BrushCollectionData::sGetBrush("Deevad", "2B_pencil");
-        const auto paintCtxt = BrushSelectionWidget::sPaintContext;
-        const auto paintBrush = paintCtxt->brushWrapper(brush);
-        mDocument.setBrush(paintBrush);
-        mDocument.fOutlineBrush = brush;
-    }*/
-    //const auto bBrush = new BookmarkedBrushes(true, 64, pCtxt.get(), this);
-    //const auto bColor = new BookmarkedColors(true, 64, this);
-
-    //mCentralWidget = new CentralWidget(bBrush,
-      //                                 mLayoutHandler->sceneLayout(),
-        //                               bColor);
 
     QToolBar *viewerToolBar = new QToolBar(this);
     viewerToolBar->setOrientation(Qt::Vertical);
 
     mViewerNodeBar = new QToolBar(this);
+    mViewerNodeBar->setObjectName(QString::fromUtf8("ViewerNodeBar"));
     mViewerNodeBar->setOrientation(Qt::Vertical);
 
     setupToolBar();
@@ -321,12 +268,31 @@ MainWindow::MainWindow(Document& document,
     QMargins frictionMargins(0, 0, 0, 0);
     int frictionSpacing = 0;
 
+    QPalette darkPal= QPalette();
+    darkPal.setColor(QPalette::Window, QColor(33, 33, 38));
+    darkPal.setColor(QPalette::Base, QColor(33, 33, 38));
+    darkPal.setColor(QPalette::Button, QColor(33, 33, 38));
+    mObjectSettingsScrollArea->setAutoFillBackground(true);
+    mObjectSettingsScrollArea->setPalette(darkPal);
+
     QWidget *frictionTopWidget = new QWidget(this);
     frictionTopWidget->setContentsMargins(frictionMargins);
 
     QHBoxLayout *frictionTopLayout = new QHBoxLayout(frictionTopWidget);
     frictionTopLayout->setContentsMargins(frictionMargins);
     frictionTopLayout->setSpacing(frictionSpacing);
+
+    QWidget *frictionTopSideBarWidget = new QWidget(this);
+    frictionTopSideBarWidget->setContentsMargins(frictionMargins);
+
+    QVBoxLayout *frictionTopSideBarLayout = new QVBoxLayout(frictionTopSideBarWidget);
+    frictionTopSideBarLayout->setContentsMargins(frictionMargins);
+    frictionTopSideBarLayout->setSpacing(frictionSpacing);
+
+    frictionTopLayout->addWidget(viewerToolBar);
+    frictionTopLayout->addWidget(mViewerNodeBar);
+    frictionTopLayout->addWidget(mStackWidget);
+    frictionTopLayout->addWidget(mFillStrokeSettings);
 
     QWidget *frictionBottomWidget = new QWidget(this);
     frictionBottomWidget->setContentsMargins(frictionMargins);
@@ -335,40 +301,21 @@ MainWindow::MainWindow(Document& document,
     frictionBottomLayout->setContentsMargins(frictionMargins);
     frictionBottomLayout->setSpacing(frictionSpacing);
 
-    QTabWidget *frictionSelectedTabWidget = new QTabWidget(this);
-    frictionSelectedTabWidget->setContentsMargins(frictionMargins);
-    frictionSelectedTabWidget->setMaximumWidth(400);
-    frictionSelectedTabWidget->setTabPosition(QTabWidget::South);
+    QTabWidget *frictionBottomSideBarWidget = new QTabWidget(this);
+    frictionBottomSideBarWidget->setContentsMargins(frictionMargins);
+    frictionBottomSideBarWidget->setMaximumWidth(sideBarMax);
+    frictionBottomSideBarWidget->setTabPosition(QTabWidget::South);
 
-    QWidget *frictionSelectedWidget = new QWidget(this);
-    frictionSelectedTabWidget->setContentsMargins(frictionMargins);
-
-    QPalette darkPal= QPalette();
-    darkPal.setColor(QPalette::Window, QColor(33, 33, 38));
-    darkPal.setColor(QPalette::Base, QColor(33, 33, 38));
-    darkPal.setColor(QPalette::Button, QColor(33, 33, 38));
-    mObjectSettingsScrollArea->setAutoFillBackground(true);
-    mObjectSettingsScrollArea->setPalette(darkPal);
-
-    QVBoxLayout *frictionSelectedLayout = new QVBoxLayout(frictionSelectedWidget);
-    frictionSelectedLayout->setContentsMargins(frictionMargins);
-    frictionSelectedLayout->setSpacing(frictionSpacing);
-
-    frictionSelectedTabWidget->addTab(frictionSelectedWidget,
+    frictionBottomSideBarWidget->addTab(frictionTopSideBarWidget,
                                       tr("Properties"));
-    frictionSelectedTabWidget->addTab(fsl, tr("Assets"));
-    frictionSelectedTabWidget->addTab(mRenderWidget, tr("Queue"));
+    frictionBottomSideBarWidget->addTab(fsl, tr("Assets"));
+    frictionBottomSideBarWidget->addTab(mRenderWidget, tr("Queue"));
 
-    frictionTopLayout->addWidget(viewerToolBar);
-    frictionTopLayout->addWidget(mViewerNodeBar);
-    frictionTopLayout->addWidget(mStackWidget);
-    frictionTopLayout->addWidget(mFillStrokeSettings);
+    frictionTopSideBarLayout->addWidget(mObjectSettingsScrollArea);
+    frictionTopSideBarLayout->addWidget(alignWidget);
 
     frictionBottomLayout->addWidget(mTimeline);
-    frictionBottomLayout->addWidget(frictionSelectedTabWidget);
-
-    frictionSelectedLayout->addWidget(mObjectSettingsScrollArea);
-    frictionSelectedLayout->addWidget(alignWidget);
+    frictionBottomLayout->addWidget(frictionBottomSideBarWidget);
 
     mSplitterMain = new QSplitter(this);
     mSplitterTop = new QSplitter(this);
