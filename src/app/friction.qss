@@ -48,7 +48,8 @@ QToolBar#animationDockWidget QAction:checked
     background-color: rgb(112, 8, 10);
 }
 
-QToolBar#animationDockWidget
+QToolBar#animationDockWidget,
+QToolBar#ViewerNodeBar
 {
     background-color: rgb(33, 33, 38);
 }
