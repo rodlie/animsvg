@@ -159,10 +159,10 @@ cmake -G Ninja \
 cmake --build .
 cpack -G DEB
 
-if [ "${CI}" = 1 ]; then
-    make DESTDIR=`pwd`/friction install
-    tree friction
-fi
+#if [ "${CI}" = 1 ]; then
+#    make DESTDIR=`pwd`/friction install
+#    tree friction
+#fi
 
 PKG="friction-${DISTRO_ID}-${DISTRO_VERSION}.deb"
 if [ "${REL}" = 1 ]; then
