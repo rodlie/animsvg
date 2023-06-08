@@ -273,6 +273,17 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
 //    mWheelLayout->setAlignment(wheel_triangle_widget, Qt::AlignHCenter);
 
 
+    int spinWidth = 50;
+    rSpin->setFixedWidth(spinWidth);
+    gSpin->setFixedWidth(spinWidth);
+    bSpin->setFixedWidth(spinWidth);
+    hSpin->setFixedWidth(spinWidth);
+    hsvSSpin->setFixedWidth(spinWidth);
+    vSpin->setFixedWidth(spinWidth);
+    hslSSpin->setFixedWidth(spinWidth);
+    lSpin->setFixedWidth(spinWidth);
+    aSpin->setFixedWidth(spinWidth);
+
     rRect = new ColorValueRect(RED_PROGRAM, this);
     rLayout->addWidget(rLabel);
     rLayout->addWidget(rRect);
