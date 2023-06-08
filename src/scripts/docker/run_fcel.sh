@@ -58,6 +58,7 @@ FRICTION_DIR="${FRICTION_ROOT}/friction"
 FRICTION_SRC_DIR="${FRICTION_DIR}/src"
 FRICTION_SNAP="/snapshots"
 FRICTION_DIST="${FRICTION_SNAP}/distfiles"
+FRICTION_BRANCH=${FRICTION_BRANCH:-"main"}
 
 QUAZIP_V="1.4"
 QSCINTILLA_V="2.13.4"
@@ -82,6 +83,9 @@ fi
 if [ ! -d "${FRICTION_SRC_DIR}" ]; then
     cd ${FRICTION_ROOT}
     git clone https://github.com/friction2d/friction
+    if [ "${FRICTION_BRANCH}" != "main" ]; then
+        (cd friction; git checkout ${FRICTION_BRANCH})
+    fi
 fi
 
 if [ ! -f "${FRICTION_SRC_DIR}/quazip-${QUAZIP_V}/build/quazip/libquazip1-qt5.a" ]; then

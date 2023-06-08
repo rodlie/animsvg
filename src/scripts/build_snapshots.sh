@@ -70,6 +70,7 @@ if [ "${LUNAR}" = 1 ]; then
 fi
 if [ "${EL}" = 1 ]; then
     $DOCKER friction-el9
+    $DOCKER friction-el8
 fi
 if [ "${FC}" = 1 ]; then
     $DOCKER friction-fc38
