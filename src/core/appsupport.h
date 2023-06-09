@@ -1,6 +1,6 @@
 /*
 #
-# Friction - https://github.com/friction2d/friction
+# Friction - https://friction.graphics
 #
 # Copyright (c) Friction developers
 #

@@ -1,6 +1,6 @@
 /*
 #
-# Friction - https://github.com/friction2d/friction
+# Friction - https://friction.graphics
 #
 # Copyright (c) Friction developers
 #
@@ -111,19 +111,19 @@ const QString AppSupport::getAppDisplayName()
 
 const QString AppSupport::getAppDomain()
 {
-    QString val = QString::fromUtf8("friction2d.com");
+    QString val = QString::fromUtf8("friction.graphics");
     return val;
 }
 
 const QString AppSupport::getAppID()
 {
-    QString val = QString::fromUtf8("com.friction2d");
+    QString val = QString::fromUtf8("graphics.friction");
     return val;
 }
 
 const QString AppSupport::getAppUrl()
 {
-    QString val = QString::fromUtf8("https://friction2d.com");
+    QString val = QString::fromUtf8("https://friction.graphics");
     return val;
 }
 
@@ -154,7 +154,7 @@ const QString AppSupport::getAppVersion(bool html)
 
 const QString AppSupport::getAppDesc()
 {
-    QString val = QString::fromUtf8("2D Motion Graphics and Animation");
+    QString val = QString::fromUtf8("Motion Graphics");
     return val;
 }
 

@@ -1,5 +1,5 @@
 #
-# Friction - https://friction2d.com
+# Friction - https://friction.graphics
 #
 # Copyright (c) Friction contributors
 #
@@ -54,10 +54,10 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(PROJECT_DISPLAY_NAME "Friction")
-set(COMPANY "Friction contributors")
-set(COPYRIGHT "Friction contributors.")
-set(IDENTIFIER "com.friction2d")
-set(PROJECT_DESCRIPTION "2D Motion Graphics and Animation")
+set(COMPANY "Friction")
+set(COPYRIGHT "Friction contributors")
+set(IDENTIFIER "graphics.friction")
+set(PROJECT_DESCRIPTION "Motion Graphics")
 
 if(APPLE)
     set(ICON_FILE ${CMAKE_CURRENT_SOURCE_DIR}/icons/${PROJECT_NAME}.icns)

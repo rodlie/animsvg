@@ -1,5 +1,5 @@
 /*
-# Friction - https://friction2d.com
+# Friction - https://friction.graphics
 # Copyright (c) Friction developers
 #
 # Fork of enve

@@ -1,5 +1,5 @@
 #
-# Friction - https://github.com/friction2d/friction
+# Friction - https://friction.graphics
 #
 # Copyright (c) Friction developers
 #
@@ -37,19 +37,19 @@ if(UNIX AND NOT APPLE)
     set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
     set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
     set(CPACK_PACKAGE_NAME "friction")
-    set(CPACK_PACKAGE_DESCRIPTION "2D Animation")
-    set(CPACK_PACKAGE_VENDOR "Friction developers")
+    set(CPACK_PACKAGE_DESCRIPTION "Motion Graphics")
+    set(CPACK_PACKAGE_VENDOR "Friction contributors")
 
     set(CPACK_RPM_SPEC_MORE_DEFINE "%define _build_id_links none")
     set(CPACK_RPM_PACKAGE_LICENSE "GPL3")
-    set(CPACK_RPM_PACKAGE_SUMMARY "2D Animation")
-    set(CPACK_RPM_PACKAGE_DESCRIPTION "2D Animation")
+    set(CPACK_RPM_PACKAGE_SUMMARY "Motion Graphics")
+    set(CPACK_RPM_PACKAGE_DESCRIPTION "Motion Graphics")
     set(CPACK_RPM_PACKAGE_URL "https://github.com/friction2d/friction")
     set(CPACK_RPM_FILE_NAME "friction.rpm")
 
     set(CPACK_DEBIAN_PACKAGE_DEPENDS "qt5-image-formats-plugins, libqt5multimedia5-plugins")
     set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
-    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Friction developers")
+    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Friction contributors")
     set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/friction2d/friction")
     set(CPACK_DEBIAN_FILE_NAME "friction.deb")
 
