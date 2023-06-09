@@ -18,44 +18,20 @@
 #
 
 cmake_minimum_required(VERSION 3.9)
-project(frictioncore VERSION 0.9.0 LANGUAGES CXX)
+project(frictioncore LANGUAGES CXX)
 
-if(NOT PROJECT_VERSION_TWEAK)
-    set(PROJECT_VERSION_TWEAK 0)
-endif()
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake")
 
-option(SNAPSHOT "Snapshot build" OFF)
-set(SNAPSHOT_VERSION_MAJOR "" CACHE STRING "Snapshot major version")
-set(SNAPSHOT_VERSION_MINOR "" CACHE STRING "Snapshot minor version")
-set(SNAPSHOT_VERSION_PATCH "" CACHE STRING "Snapshot patch version")
-if(${SNAPSHOT})
-    set(PROJECT_VERSION_MAJOR ${SNAPSHOT_VERSION_MAJOR})
-    set(PROJECT_VERSION_MINOR ${SNAPSHOT_VERSION_MINOR})
-    set(PROJECT_VERSION_PATCH ${SNAPSHOT_VERSION_PATCH})
-    set(PROJECT_VERSION ${SNAPSHOT_VERSION_MAJOR}.${SNAPSHOT_VERSION_MINOR}.${SNAPSHOT_VERSION_PATCH})
-endif()
-message("Core build version ${PROJECT_VERSION}")
+include(friction-version)
+include(friction-meta)
+include(friction-common)
+#include(friction-quazip)
+include(friction-ffmpeg)
 
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
-
-set(GIT_COMMIT "" CACHE STRING "git commit")
 add_definitions(-DPROJECT_GIT="${GIT_COMMIT}")
-
-set(GIT_BRANCH "" CACHE STRING "git branch")
 add_definitions(-DPROJECT_BRANCH="${GIT_BRANCH}")
-
-add_compile_options(-Wall -Wextra)
-if(CMAKE_BUILD_TYPE MATCHES "^(release|Release|RELEASE)$")
-    add_definitions(-DQT_NO_DEBUG_OUTPUT)
-else()
-    add_definitions(-DQT_MESSAGELOGCONTEXT)
-endif()
-
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_definitions(-DPROJECT_TAG="${GIT_TAG}")
 
 option(STATIC_FFMPEG "Link against static ffmpeg" OFF)
 
@@ -63,39 +39,11 @@ if(${STATIC_FFMPEG})
     set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-Bsymbolic")
 endif()
 
-find_package(PkgConfig)
-find_package(OpenMP)
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
-find_package(
-    Qt${QT_VERSION_MAJOR}
-    5.12
-    COMPONENTS
-    Gui
-    Concurrent
-    Widgets
-    OpenGL
-    Multimedia
-    Qml
-    Xml
-    Svg
-    REQUIRED
-)
-
-set(QUAZIP_LIBRARIES_DIRS "/usr/lib" CACHE STRING "quazip library path")
-set(QUAZIP_LIBRARIES "quazip5" CACHE STRING "quazip library")
-set(QUAZIP_INCLUDE_DIRS "/usr/include/quazip5" CACHE STRING "quazip includes path")
-
-pkg_check_modules(AVFORMAT REQUIRED libavformat)
-pkg_check_modules(AVCODEC REQUIRED libavcodec)
-pkg_check_modules(AVUTIL REQUIRED libavutil)
-pkg_check_modules(SWSCALE REQUIRED libswscale)
-pkg_check_modules(SWRESAMPLE REQUIRED libswresample)
-
 add_definitions(-DCORE_LIBRARY)
 
 include_directories(
-    ${QUAZIP_INCLUDE_DIRS}
-    ${AVFORMAT_INCLUDE_DIRS}
+    #${QUAZIP_INCLUDE_DIRS}
+    ${FFMPEG_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia
 )
 
@@ -768,29 +716,16 @@ target_link_directories(
     ${PROJECT_NAME}
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia/out/build
-    ${QUAZIP_LIBRARIES_DIRS}
+    #${QUAZIP_LIBRARIES_DIRS}
 )
 
 target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
-    Qt${QT_VERSION_MAJOR}::Core
-    Qt${QT_VERSION_MAJOR}::Gui
-    Qt${QT_VERSION_MAJOR}::Concurrent
-    Qt${QT_VERSION_MAJOR}::Widgets
-    Qt${QT_VERSION_MAJOR}::OpenGL
-    Qt${QT_VERSION_MAJOR}::Multimedia
-    Qt${QT_VERSION_MAJOR}::Qml
-    Qt${QT_VERSION_MAJOR}::Xml
-    Qt${QT_VERSION_MAJOR}::Svg
-    ${QUAZIP_LIBRARIES}
-    ${AVFORMAT_LIBRARIES}
-    ${AVCODEC_LIBRARIES}
-    ${AVUTIL_LIBRARIES}
-    ${SWSCALE_LIBRARIES}
-    ${SWRESAMPLE_LIBRARIES}
-    skia
-    fontconfig
+    ${QT_LIBRARIES}
+    #${QUAZIP_LIBRARIES}
+    ${FFMPEG_LIBRARIES}
+    ${SKIA_LIBRARIES}
 )
 
 if(APPLE)

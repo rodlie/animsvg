@@ -18,7 +18,8 @@
 #include <QStringList>
 
 QStringList FileExtensions::image{"png", "jpg", "tiff",
-                                  "tif", "jpeg", "bmp"};
+                                  "tif", "jpeg", "bmp"
+                                  "webp"};
 QStringList FileExtensions::sound{"mp3", "wav", "aiff",
                                   "flac", "m4a", "oga"};
 QStringList FileExtensions::video{"avi", "mp4", "mov",
@@ -27,7 +28,7 @@ QStringList FileExtensions::video{"avi", "mp4", "mov",
                                   "3gp", "rmvb", "gif",
                                   "mpeg", "mpg", "mp2",
                                   "mpv"};
-QStringList FileExtensions::layers{"ora"};
+//QStringList FileExtensions::layers{};
 
 bool isVideoExt(const QString &extension) {
     return FileExtensions::video.contains(extension.toLower());
@@ -51,7 +52,7 @@ bool isLayersExt(const QString &ext) {
 }
 
 bool isEvExt(const QString &extension) {
-    return extension.toLower() == "ev";
+    return (extension.toLower() == "friction" || extension.toLower() == "ev");
 }
 
 bool hasVideoExt(const QString &filename) {

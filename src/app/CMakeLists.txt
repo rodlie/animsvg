@@ -20,44 +20,17 @@
 #
 
 cmake_minimum_required(VERSION 3.9)
-project(friction VERSION 0.9.0 LANGUAGES CXX)
+project(friction LANGUAGES CXX)
 
-if(NOT PROJECT_VERSION_TWEAK)
-    set(PROJECT_VERSION_TWEAK 0)
-endif()
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake")
 
-option(SNAPSHOT "Snapshot build" OFF)
-set(SNAPSHOT_VERSION_MAJOR "" CACHE STRING "Snapshot major version")
-set(SNAPSHOT_VERSION_MINOR "" CACHE STRING "Snapshot minor version")
-set(SNAPSHOT_VERSION_PATCH "" CACHE STRING "Snapshot patch version")
-if(${SNAPSHOT})
-    set(PROJECT_VERSION_MAJOR ${SNAPSHOT_VERSION_MAJOR})
-    set(PROJECT_VERSION_MINOR ${SNAPSHOT_VERSION_MINOR})
-    set(PROJECT_VERSION_PATCH ${SNAPSHOT_VERSION_PATCH})
-    set(PROJECT_VERSION ${SNAPSHOT_VERSION_MAJOR}.${SNAPSHOT_VERSION_MINOR}.${SNAPSHOT_VERSION_PATCH})
-endif()
-message("App build version ${PROJECT_VERSION}")
+include(friction-version)
+include(friction-meta)
+include(friction-common)
+#include(friction-quazip)
+include(friction-ffmpeg)
 
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
-
-add_compile_options(-Wall -Wextra)
-if(CMAKE_BUILD_TYPE MATCHES "^(release|Release|RELEASE)$")
-    add_definitions(-DQT_NO_DEBUG_OUTPUT)
-else()
-    add_definitions(-DQT_MESSAGELOGCONTEXT)
-endif()
-
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-set(PROJECT_DISPLAY_NAME "Friction")
-set(COMPANY "Friction")
-set(COPYRIGHT "Friction contributors")
-set(IDENTIFIER "graphics.friction")
-set(PROJECT_DESCRIPTION "Motion Graphics")
 
 if(APPLE)
     set(ICON_FILE ${CMAKE_CURRENT_SOURCE_DIR}/icons/${PROJECT_NAME}.icns)
@@ -65,30 +38,12 @@ if(APPLE)
     set(MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION})
     set(MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION})
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
-    set(MACOSX_BUNDLE_COPYRIGHT ${COPYRIGHT})
-    set(MACOSX_BUNDLE_GUI_IDENTIFIER ${IDENTIFIER})
+    set(MACOSX_BUNDLE_COPYRIGHT ${PROJECT_COPYRIGHT})
+    set(MACOSX_BUNDLE_GUI_IDENTIFIER ${PROJECT_IDENTIFIER})
     set(MACOSX_BUNDLE_ICON_FILE ${PROJECT_NAME})
     set_source_files_properties(${ICON_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
     set(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks")
 endif()
-
-find_package(PkgConfig)
-find_package(OpenMP)
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
-find_package(
-    Qt${QT_VERSION_MAJOR}
-    5.12
-    COMPONENTS
-    Gui
-    Concurrent
-    Widgets
-    OpenGL
-    Multimedia
-    Qml
-    Xml
-    Svg
-    REQUIRED
-)
 
 option(SHARED_TCMALLOC "Use shared libtcmalloc.so" OFF)
 
@@ -96,15 +51,6 @@ set(QSCINTILLA_LIBRARIES_DIRS "/usr/lib" CACHE STRING "qscintilla library path")
 set(QSCINTILLA_LIBRARIES "qscintilla2_qt5" CACHE STRING "qscintilla library")
 set(QSCINTILLA_INCLUDE_DIRS "/usr/include/x86_64-linux-gnu/qt5" CACHE STRING "qscintilla includes path")
 
-set(QUAZIP_LIBRARIES_DIRS "/usr/lib" CACHE STRING "quazip library path")
-set(QUAZIP_LIBRARIES "quazip5" CACHE STRING "quazip library")
-set(QUAZIP_INCLUDE_DIRS "/usr/include/quazip5" CACHE STRING "quazip includes path")
-
-pkg_check_modules(AVFORMAT REQUIRED libavformat)
-pkg_check_modules(AVCODEC REQUIRED libavcodec)
-pkg_check_modules(AVUTIL REQUIRED libavutil)
-pkg_check_modules(SWSCALE REQUIRED libswscale)
-pkg_check_modules(SWRESAMPLE REQUIRED libswresample)
 if(UNIX AND NOT ${SHARED_TCMALLOC})
     if(NOT APPLE)
         pkg_check_modules(UNWIND REQUIRED libunwind)
@@ -112,10 +58,9 @@ if(UNIX AND NOT ${SHARED_TCMALLOC})
 endif()
 
 include_directories(
-    ${QUAZIP_INCLUDE_DIRS}
+    #${QUAZIP_INCLUDE_DIRS}
     ${QSCINTILLA_INCLUDE_DIRS}
-    ${AVFORMAT_INCLUDE_DIRS}
-    ${QSCINTILLA_INCLUDES}
+    ${FFMPEG_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/../core
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia
 )
@@ -421,7 +366,7 @@ target_link_directories(
     ${PROJECT_NAME}
     PRIVATE
     ${QSCINTILLA_LIBRARIES_DIRS}
-    ${QUAZIP_LIBRARIES_DIRS}
+    #${QUAZIP_LIBRARIES_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia/out/build
 )
 
@@ -437,23 +382,11 @@ target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
     ${PROJECT_NAME}core
-    Qt${QT_VERSION_MAJOR}::Core
-    Qt${QT_VERSION_MAJOR}::Gui
-    Qt${QT_VERSION_MAJOR}::Concurrent
-    Qt${QT_VERSION_MAJOR}::Widgets
-    Qt${QT_VERSION_MAJOR}::OpenGL
-    Qt${QT_VERSION_MAJOR}::Multimedia
-    Qt${QT_VERSION_MAJOR}::Qml
-    Qt${QT_VERSION_MAJOR}::Xml
-    Qt${QT_VERSION_MAJOR}::Svg
-    ${QUAZIP_LIBRARIES}
+    ${QT_LIBRARIES}
+    #${QUAZIP_LIBRARIES}
     ${QSCINTILLA_LIBRARIES}
-    ${AVFORMAT_LIBRARIES}
-    ${AVCODEC_LIBRARIES}
-    ${AVUTIL_LIBRARIES}
-    ${SWSCALE_LIBRARIES}
-    ${SWRESAMPLE_LIBRARIES}
-    skia
+    ${FFMPEG_LIBRARIES}
+    ${SKIA_LIBRARIES}
 )
 
 if(APPLE)

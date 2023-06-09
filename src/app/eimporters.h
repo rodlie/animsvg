@@ -23,7 +23,8 @@
 class eXevImporter : public eImporter {
 public:
     bool supports(const QFileInfo& fileInfo) const {
-        return fileInfo.suffix() == "xev";
+        Q_UNUSED(fileInfo)
+        return false; //fileInfo.suffix() == "xev";
     }
 
     qsptr<BoundingBox> import(const QFileInfo& fileInfo,
@@ -33,7 +34,7 @@ public:
 class evImporter : public eImporter {
 public:
     bool supports(const QFileInfo& fileInfo) const {
-        return fileInfo.suffix() == "ev";
+        return (fileInfo.suffix() == "friction" || fileInfo.suffix() == "ev");
     }
 
     qsptr<BoundingBox> import(const QFileInfo& fileInfo,

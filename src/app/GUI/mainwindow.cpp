@@ -114,10 +114,10 @@ MainWindow::MainWindow(Document& document,
     Q_ASSERT(!sInstance);
     sInstance = this;
 
-    ImportHandler::sInstance->addImporter<eXevImporter>();
+    //ImportHandler::sInstance->addImporter<eXevImporter>(); // not supported yet
     ImportHandler::sInstance->addImporter<evImporter>();
     ImportHandler::sInstance->addImporter<eSvgImporter>();
-    //ImportHandler::sInstance->addImporter<eOraImporter>();
+    //ImportHandler::sInstance->addImporter<eOraImporter>(); // removed
 
     connect(&mDocument, &Document::evFilePathChanged,
             this, &MainWindow::updateTitle);
@@ -1640,9 +1640,9 @@ void MainWindow::openFile()
                     QDir::homePath() : mDocument.fEvFile;
 
         const QString title = tr("Open File", "OpenDialog_Title");
-        const QString files = tr("enve Files %1", "OpenDialog_FileType");
+        const QString files = tr("Friction Files %1", "OpenDialog_FileType");
         const QString openPath = eDialogs::openFile(title, defPath,
-                                                    files.arg("(*.ev *.xev)"));
+                                                    files.arg("(*.friction *.ev)"));
         if (!openPath.isEmpty()) { openFile(openPath); }
         enable();
     }
@@ -1654,11 +1654,11 @@ void MainWindow::openFile(const QString& openPath)
     try {
         QFileInfo fi(openPath);
         const QString suffix = fi.suffix();
-        if (suffix == "ev") {
+        if (suffix == "friction" || suffix == "ev") {
             loadEVFile(openPath);
-        } else if (suffix == "xev") {
+        } /*else if (suffix == "xev") {
             loadXevFile(openPath);
-        } else { RuntimeThrow("Unrecognized file extension " + suffix); }
+        }*/ else { RuntimeThrow("Unrecognized file extension " + suffix); }
         mDocument.setPath(openPath);
         setFileChangedSinceSaving(false);
     } catch(const std::exception& e) {
@@ -1679,13 +1679,13 @@ void MainWindow::saveFile(const QString& path,
     try {
         QFileInfo fi(path);
         const QString suffix = fi.suffix();
-        if (suffix == "ev") {
+        if (suffix == "friction" || suffix == "ev") {
             saveToFile(path);
-        } else if (suffix == "xev") {
+        } /*else if (suffix == "xev") {
             saveToFileXEV(path);
             const auto& inst = DialogsInterface::instance();
             inst.displayMessageToUser("Please note that the XEV format is still in the testing phase.");
-        } else { RuntimeThrow("Unrecognized file extension " + suffix); }
+        }*/ else { RuntimeThrow("Unrecognized file extension " + suffix); }
         if (setPath) mDocument.setPath(path);
         setFileChangedSinceSaving(false);
     } catch(const std::exception& e) {
@@ -1700,13 +1700,16 @@ void MainWindow::saveFileAs(const bool setPath)
                 QDir::homePath() : mDocument.fEvFile;
 
     const QString title = tr("Save File", "SaveDialog_Title");
-    const QString fileType = tr("enve Files %1", "SaveDialog_FileType");
-    QString saveAs = eDialogs::saveFile(title, defPath, fileType.arg("(*.ev *.xev)"));
+    const QString fileType = tr("Friction Files %1", "SaveDialog_FileType");
+    QString saveAs = eDialogs::saveFile(title, defPath, fileType.arg("(*.friction *.ev)"));
     enableEventFilter();
     if (!saveAs.isEmpty()) {
-        const bool isXEV = saveAs.right(4) == ".xev";
-        if (!isXEV && saveAs.right(3) != ".ev") { saveAs += ".ev"; }
-
+        //const bool isXEV = saveAs.right(4) == ".xev";
+        //if (!isXEV && saveAs.right(3) != ".ev") { saveAs += ".ev"; }
+        QString fsuffix = QString::fromUtf8(".friction");
+        QString esuffix = QString::fromUtf8(".ev");
+        if (!saveAs.endsWith(fsuffix) &&
+            !saveAs.endsWith(esuffix)) { saveAs.append(fsuffix); }
         saveFile(saveAs, setPath);
     }
 }
@@ -1715,7 +1718,7 @@ void MainWindow::saveBackup()
 {
     const QString defPath = mDocument.fEvFile.isEmpty() ?
                 QDir::homePath() : mDocument.fEvFile;
-    const QString backupPath = defPath + "backup/backup_%1.ev";
+    const QString backupPath = defPath + "backup/backup_%1.friction";
     int id = 1;
     QFile backupFile(backupPath.arg(id));
     while (backupFile.exists()) {
@@ -1753,7 +1756,7 @@ void MainWindow::importFile()
 
     const QString title = tr("Import File(s)", "ImportDialog_Title");
     const QString fileType = tr("Files %1", "ImportDialog_FileTypes");
-    const QString fileTypes = "(*.ev *.xev *.svg " +
+    const QString fileTypes = "(*.friction *.ev *.svg " +
             FileExtensions::videoFilters() +
             FileExtensions::imageFilters() +
             FileExtensions::soundFilters() + ")";

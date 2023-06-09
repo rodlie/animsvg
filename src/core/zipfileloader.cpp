@@ -19,15 +19,20 @@
 ZipFileLoader::ZipFileLoader() {}
 
 void ZipFileLoader::setZipPath(const QString &path) {
-    mDir.setPath(QFileInfo(path).path());
+    Q_UNUSED(path)
+    RuntimeThrow("XEV not supported");
+    /*mDir.setPath(QFileInfo(path).path());
     mZip.setZipName(path);
     if(!mZip.open(QuaZip::mdUnzip))
         RuntimeThrow("Could not open " + path);
-    mFile.setZip(&mZip);
+    mFile.setZip(&mZip);*/
 }
 
 void ZipFileLoader::process(const QString &file, const Processor &func) {
-    if(!mZip.setCurrentFile(file))
+    Q_UNUSED(file)
+    Q_UNUSED(func)
+    RuntimeThrow("XEV not supported");
+    /*if(!mZip.setCurrentFile(file))
         RuntimeThrow("No " + file + " found in " + mZip.getZipName());
     if(!mFile.open(QIODevice::ReadOnly))
         RuntimeThrow("Could not open " + file + " from " + mZip.getZipName());
@@ -37,14 +42,17 @@ void ZipFileLoader::process(const QString &file, const Processor &func) {
         mFile.close();
         RuntimeThrow("Could not parse " + file + " from " + mZip.getZipName());
     }
-    mFile.close();
+    mFile.close();*/
 }
 
 void ZipFileLoader::processText(const QString& file, const TextProcessor& func) {
-    process(file, [&](QIODevice* const src) {
+    Q_UNUSED(file)
+    Q_UNUSED(func)
+    RuntimeThrow("XEV not supported");
+    /*process(file, [&](QIODevice* const src) {
         QTextStream stream(src);
         func(stream);
-    });
+    });*/
 }
 
 QString ZipFileLoader::relPathToAbsPath(const QString& relPath) const {
