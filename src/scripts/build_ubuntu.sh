@@ -28,6 +28,10 @@ REL=${REL:-0}
 SKIA_SYNC=${SKIA_SYNC:-1}
 PC=${PC:-""}
 
+if [ "${SNAP}" = 0 ]; then
+    REL=1
+fi
+
 SF_NET_SRC="https://sourceforge.net/projects/friction/files/source"
 SF_NET_SNAP="https://sourceforge.net/projects/friction/files/snapshots"
 
@@ -65,7 +69,6 @@ libavutil-dev \
 libqscintilla2-qt5-dev \
 libqt5opengl5-dev \
 libqt5svg5-dev \
-libquazip5-dev \
 libswresample-dev \
 libswscale-dev \
 libunwind-dev \
@@ -91,8 +94,8 @@ CWD=`pwd`
 MKJOBS=${MKJOBS:-4}
 COMMIT=`git rev-parse --short HEAD`
 BRANCH=`git rev-parse --abbrev-ref HEAD`
-VERSION=`cat ${CWD}/CMakeLists.txt | sed '/friction2d VERSION/!d;s/)//' | awk '{print $3}'`
 TIMESTAMP=${TIMESTAMP:-`date +%Y%m%d`}
+VERSION="dev"
 YEAR=${YEAR:-`date +%Y`}
 MONTH=${MONTH:-`date +%m`}
 DAY=${DAY:-`date +%d`}
@@ -156,6 +159,9 @@ cmake -G Ninja \
 -DSNAPSHOT_VERSION_MAJOR=${YEAR} \
 -DSNAPSHOT_VERSION_MINOR=${MONTH} \
 -DSNAPSHOT_VERSION_PATCH=${DAY} ..
+if [ "${SNAP}" != 1 ]; then
+    VERSION=`cat version.txt`
+fi
 cmake --build .
 cpack -G DEB
 

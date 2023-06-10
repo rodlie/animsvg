@@ -27,7 +27,7 @@ REL=0 #${REL:-0}
 MKJOBS=${MKJOBS:-4}
 
 COMMIT=`git rev-parse --short HEAD`
-VERSION=`cat ${CWD}/CMakeLists.txt | sed '/friction2d VERSION/!d;s/)//' | awk '{print $3}'`
+VERSION="dev"
 
 TIMESTAMP=${TIMESTAMP:-`date +%Y%m%d`}
 YEAR=${YEAR:-`date +%Y`}
@@ -119,6 +119,9 @@ cmake -G Ninja \
 -DQSCINTILLA_LIBRARIES_DIRS=${QSCINTILLA}/src \
 -DQSCINTILLA_LIBRARIES=${QSCINTILLA_LIB} \
 ..
+if [ "${SNAP}" != 1 ]; then
+    VERSION=`cat version.txt`
+fi
 cmake --build .
 
 ${QT}/bin/macdeployqt src/app/friction.app
