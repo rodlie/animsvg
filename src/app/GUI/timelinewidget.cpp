@@ -164,7 +164,7 @@ TimelineWidget::TimelineWidget(Document &document,
     }
 
     //QMenu *viewMenu = mBoxesListMenuBar->addMenu("View");
-    mGraphAct = mCornerMenuBar->addAction(QIcon(iconsDir + "/graphDisabled.png"),
+    mGraphAct = mCornerMenuBar->addAction(QIcon::fromTheme("graph"),
                                           "Graph");
     mGraphAct->setCheckable(true);
     connect(mGraphAct, &QAction::toggled,
@@ -335,9 +335,9 @@ void TimelineWidget::setCurrentScene(Canvas * const scene) {
 void TimelineWidget::setGraphEnabled(const bool enabled) {
     mKeysView->setGraphViewed(enabled);
     mAnimationDockWidget->setVisible(enabled);
-    const auto iconsDir = eSettings::sIconsDir();
-    if(enabled) mGraphAct->setIcon(QIcon(iconsDir + "/graphEnabled.png"));
-    else mGraphAct->setIcon(QIcon(iconsDir + "/graphDisabled.png"));
+    //const auto iconsDir = eSettings::sIconsDir();
+    //if(enabled) mGraphAct->setIcon(QIcon(iconsDir + "/graphEnabled.png"));
+    //else mGraphAct->setIcon(QIcon(iconsDir + "/graphDisabled.png"));
 }
 
 void TimelineWidget::writeState(eWriteStream &dst) const {
