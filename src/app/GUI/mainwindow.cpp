@@ -242,10 +242,9 @@ MainWindow::MainWindow(Document& document,
 
     installEventFilter(this);
 
-    mWelcomeDialog = new WelcomeDialog(getRecentFiles(),
+    mWelcomeDialog = new WelcomeDialog(mRecentMenu,
        [this]() { SceneSettingsDialog::sNewSceneDialog(mDocument, this); },
        []() { MainWindow::sGetInstance()->openFile(); },
-       [](QString path) { MainWindow::sGetInstance()->openFile(path); },
        this);
 
     mStackWidget = new QStackedWidget(this);
@@ -1852,7 +1851,7 @@ void MainWindow::updateRecentMenu()
     mRecentMenu->clear();
     for (const auto &path : mRecentFiles) {
         QFileInfo info(path);
-        mRecentMenu->addAction(info.baseName(), [path, this]() {
+        mRecentMenu->addAction(QIcon::fromTheme("friction"), info.baseName(), [path, this]() {
             openFile(path);
         });
     }
