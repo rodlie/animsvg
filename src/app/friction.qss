@@ -24,24 +24,8 @@ QToolBar
     border: 0;
 }
 
-QWidget#welcomeDialog QPushButton#topButton,
-QWidget#welcomeDialog QPushButton#bottomButton,
-QWidget#welcomeDialog QPushButton#vmiddleButton
-{
-    border: 0;
-    background-color: rgb(33, 33, 38);
-    border-radius: .25em;
-    padding: .3em;
-}
-
-QWidget#welcomeDialog QPushButton#topButton:hover,
-QWidget#welcomeDialog QPushButton#bottomButton:hover,
-QWidget#welcomeDialog QPushButton#vmiddleButton:hover
-{
-    background-color: rgb(177, 16, 20);
-}
-
 QWidget#welcomeDialog QPushButton:hover,
+QWidget#welcomeDialog QToolButton:hover,
 QToolButton:checked,
 QToolBar#animationDockWidget QAction:checked
 {
