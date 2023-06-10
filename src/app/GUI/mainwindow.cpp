@@ -1406,11 +1406,13 @@ FillStrokeSettingsWidget *MainWindow::getFillStrokeSettings()
 bool MainWindow::askForSaving() {
     if (mChangedSinceSaving) {
         const QString title = tr("Save", "AskSaveDialog_Title");
-        const QString fileName = mDocument.fEvFile.split("/").last();
+        QFileInfo info(mDocument.fEvFile);
+        QString file = info.baseName();
+        if (file.isEmpty()) { file = tr("Untitled"); }
 
         const QString question = tr("Save changes to document \"%1\"?",
                                     "AskSaveDialog_Question");
-        const QString questionWithTarget = question.arg(fileName);
+        const QString questionWithTarget = question.arg(file);
         const QString closeNoSave =  tr("Close without saving",
                                         "AskSaveDialog_Button");
         const QString cancel = tr("Cancel", "AskSaveDialog_Button");
