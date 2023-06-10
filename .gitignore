@@ -15,3 +15,7 @@ quazip
 snapshots
 .vscode
 build-*
+*.diff
+*.patch
+ffmpeg
+
