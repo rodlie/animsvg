@@ -28,6 +28,8 @@
 #include <QDir>
 #include <QLabel>
 #include <QFileInfo>
+#include <QToolButton>
+#include <QAction>
 
 #include "GUI/global.h"
 #include "BoxesList/OptimalScrollArea/scrollarea.h"
@@ -74,32 +76,38 @@ WelcomeDialog::WelcomeDialog(const QStringList &recentPaths,
     sceneLay->addLayout(buttonLay);
 
     const auto newButton = new QPushButton(tr("New"), this);
-    newButton->setObjectName(QString::fromUtf8("welcomeDialogNew"));
     connect(newButton, &QPushButton::released, newFunc);
     buttonLay->addWidget(newButton);
 
-    const auto openButton = new QPushButton(tr("Open"), this);
-    openButton->setObjectName(QString::fromUtf8("welcomeDialogOpen"));
+    const auto openButton = new QToolButton(this);
+    openButton->setText(tr("Open"));
+    openButton->setSizePolicy(QSizePolicy::Preferred,
+                              QSizePolicy::Expanding);
+    openButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
+    openButton->setPopupMode(QToolButton::MenuButtonPopup);
     connect(openButton, &QPushButton::released, openFunc);
+
+    for(int i = 0; i < recentPaths.size(); ++i) {
+        const QString path = recentPaths.at(i);
+        if (!QFile::exists(path)) { continue; }
+        QAction *action = new QAction(QIcon::fromTheme("friction"),
+                                      path,
+                                      this);
+        connect(action,
+                &QAction::triggered,
+                this,
+                [openRecentFunc, action]() {
+            openRecentFunc(action->text());
+        });
+        openButton->addAction(action);
+    }
+
     buttonLay->addWidget(openButton);
-
-    const auto textTriggerGetter = [&](const int id) {
-        const auto& path = recentPaths.at(id);
-        QFileInfo fileInfo(path);
-        return ButtonsList::TextTrigger {
-            fileInfo.baseName(), [path, openRecentFunc]() {
-            openRecentFunc(path);
-        }};
-    };
-    const int count = qMin(recentPaths.count(), 5);
-    const auto recentWidget = new ButtonsList(textTriggerGetter, count, this);
-
-    sceneLay->addWidget(recentWidget);
-
     mainLay->addLayout(sceneLay);
 }
 
-void WelcomeDialog::paintEvent(QPaintEvent *) {
+void WelcomeDialog::paintEvent(QPaintEvent *)
+{
     QPainter p(this);
     p.fillRect(0, 0, width(), height(), Qt::black);
     p.end();
