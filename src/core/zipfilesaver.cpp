@@ -61,8 +61,8 @@ void ZipFileSaver::processText(const QString& file, const TextProcessor& func,
     Q_UNUSED(func)
     Q_UNUSED(compress)
     RuntimeThrow("XEV not supported");
-    process(file, [&func](QIODevice* const dst) {
+    /*process(file, [&func](QIODevice* const dst) {
         QTextStream stream(dst);
         func(stream);
-    }, compress);
+    }, compress);*/
 }
