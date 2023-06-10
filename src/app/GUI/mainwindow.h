@@ -169,6 +169,10 @@ public:
     void saveFileAs(const bool setPath = true);
     void saveBackup();
     void exportSVG();
+    void updateLastOpenDir(const QString &path);
+    void updateLastSaveDir(const QString &path);
+    const QString getLastOpenDir();
+    const QString getLastSaveDir();
     bool closeProject();
     void linkFile();
     void importImageSequence();

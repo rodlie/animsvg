@@ -1637,9 +1637,7 @@ void MainWindow::openFile()
 {
     if (askForSaving()) {
         disable();
-        const QString defPath = mDocument.fEvFile.isEmpty() ?
-                    QDir::homePath() : mDocument.fEvFile;
-
+        const QString defPath = mDocument.fEvFile.isEmpty() ? getLastOpenDir() : mDocument.fEvFile;
         const QString title = tr("Open File", "OpenDialog_Title");
         const QString files = tr("Friction Files %1", "OpenDialog_FileType");
         const QString openPath = eDialogs::openFile(title, defPath,
@@ -1662,6 +1660,7 @@ void MainWindow::openFile(const QString& openPath)
         }*/ else { RuntimeThrow("Unrecognized file extension " + suffix); }
         mDocument.setPath(openPath);
         setFileChangedSinceSaving(false);
+        updateLastOpenDir(openPath);
     } catch(const std::exception& e) {
         gPrintExceptionCritical(e);
     }
@@ -1689,6 +1688,7 @@ void MainWindow::saveFile(const QString& path,
         }*/ else { RuntimeThrow("Unrecognized file extension " + suffix); }
         if (setPath) mDocument.setPath(path);
         setFileChangedSinceSaving(false);
+        updateLastSaveDir(path);
     } catch(const std::exception& e) {
         gPrintExceptionCritical(e);
     }
@@ -1697,8 +1697,7 @@ void MainWindow::saveFile(const QString& path,
 void MainWindow::saveFileAs(const bool setPath)
 {
     disableEventFilter();
-    const QString defPath = mDocument.fEvFile.isEmpty() ?
-                QDir::homePath() : mDocument.fEvFile;
+    const QString defPath = mDocument.fEvFile.isEmpty() ? getLastSaveDir() : mDocument.fEvFile;
 
     const QString title = tr("Save File", "SaveDialog_Title");
     const QString fileType = tr("Friction Files %1", "SaveDialog_FileType");
@@ -1737,6 +1736,38 @@ void MainWindow::exportSVG()
     const auto dialog = new ExportSvgDialog(this);
     dialog->show();
     dialog->setAttribute(Qt::WA_DeleteOnClose);
+}
+
+void MainWindow::updateLastOpenDir(const QString &path)
+{
+    if (path.isEmpty()) { return; }
+    QFileInfo i(path);
+    AppSupport::setSettings("files",
+                            "lastOpenDir",
+                            i.absoluteDir().absolutePath());
+}
+
+void MainWindow::updateLastSaveDir(const QString &path)
+{
+    if (path.isEmpty()) { return; }
+    QFileInfo i(path);
+    AppSupport::setSettings("files",
+                            "lastSaveDir",
+                            i.absoluteDir().absolutePath());
+}
+
+const QString MainWindow::getLastOpenDir()
+{
+    return AppSupport::getSettings("files",
+                                   "lastOpenDir",
+                                   QDir::homePath()).toString();
+}
+
+const QString MainWindow::getLastSaveDir()
+{
+    return AppSupport::getSettings("files",
+                                   "lastSaveDir",
+                                   QDir::homePath()).toString();
 }
 
 bool MainWindow::closeProject()
