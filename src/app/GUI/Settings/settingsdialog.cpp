@@ -47,9 +47,9 @@ SettingsDialog::SettingsDialog(QWidget * const parent) :
 
     const auto buttonsLayout = new QHBoxLayout;
 
-    const auto restoreButton = new QPushButton("Restore Defaults", this);
-    const auto cancelButton = new QPushButton("Cancel", this);
-    const auto applyButton = new QPushButton("Apply", this);
+    const auto restoreButton = new QPushButton(tr("Restore Defaults"), this);
+    const auto cancelButton = new QPushButton(tr("Close"), this);
+    const auto applyButton = new QPushButton(tr("Save"), this);
     buttonsLayout->addWidget(restoreButton);
     eSizesUI::widget.addSpacing(buttonsLayout);
     buttonsLayout->addStretch();
@@ -83,7 +83,7 @@ SettingsDialog::SettingsDialog(QWidget * const parent) :
         } catch(const std::exception& e) {
             gPrintExceptionCritical(e);
         }
-        statusBar->showMessage("Settings Applied, you might have to restart", 1500);
+        statusBar->showMessage(tr("Settings saved, you might have to restart"), 1500);
     });
 
     updateSettings();
