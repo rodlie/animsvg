@@ -1718,7 +1718,7 @@ void MainWindow::saveBackup()
 {
     const QString defPath = mDocument.fEvFile.isEmpty() ?
                 QDir::homePath() : mDocument.fEvFile;
-    const QString backupPath = defPath + "backup/backup_%1.friction";
+    const QString backupPath = defPath + "_backup/backup_%1.friction";
     int id = 1;
     QFile backupFile(backupPath.arg(id));
     while (backupFile.exists()) {
