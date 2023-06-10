@@ -1702,15 +1702,13 @@ void MainWindow::saveFileAs(const bool setPath)
 
     const QString title = tr("Save File", "SaveDialog_Title");
     const QString fileType = tr("Friction Files %1", "SaveDialog_FileType");
-    QString saveAs = eDialogs::saveFile(title, defPath, fileType.arg("(*.friction *.ev)"));
+    QString saveAs = eDialogs::saveFile(title, defPath, fileType.arg("(*.friction)"));
     enableEventFilter();
     if (!saveAs.isEmpty()) {
         //const bool isXEV = saveAs.right(4) == ".xev";
         //if (!isXEV && saveAs.right(3) != ".ev") { saveAs += ".ev"; }
-        QString fsuffix = QString::fromUtf8(".friction");
-        QString esuffix = QString::fromUtf8(".ev");
-        if (!saveAs.endsWith(fsuffix) &&
-            !saveAs.endsWith(esuffix)) { saveAs.append(fsuffix); }
+        QString suffix = QString::fromUtf8(".friction");
+        if (!saveAs.endsWith(suffix)) { saveAs.append(suffix); }
         saveFile(saveAs, setPath);
     }
 }
