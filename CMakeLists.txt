@@ -24,6 +24,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/src/cmake")
 include(friction-version)
 include(friction-meta)
 
+write_file(version.txt ${PROJECT_VERSION})
+
 if(UNIX AND NOT APPLE)
     set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
     set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
