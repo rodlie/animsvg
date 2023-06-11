@@ -145,6 +145,7 @@ bool CanvasWindow::hasNoCanvas() {
 #include "glhelpers.h"
 
 void CanvasWindow::renderSk(SkCanvas * const canvas) {
+    qreal pixelRatio = this->devicePixelRatioF();
     if(mCurrentCanvas) {
         canvas->save();
         mCurrentCanvas->renderSk(canvas, rect(),
@@ -155,9 +156,9 @@ void CanvasWindow::renderSk(SkCanvas * const canvas) {
     if(KFT_hasFocus()) {
         SkPaint paint;
         paint.setColor(SK_ColorRED);
-        paint.setStrokeWidth(4);
+        paint.setStrokeWidth(pixelRatio*4);
         paint.setStyle(SkPaint::kStroke_Style);
-        canvas->drawRect(SkRect::MakeWH(width(), height()), paint);
+        canvas->drawRect(SkRect::MakeWH(width()*pixelRatio, height()*pixelRatio), paint);
     }
 }
 

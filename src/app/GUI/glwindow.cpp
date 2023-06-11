@@ -26,11 +26,14 @@ GLWindow::GLWindow(QWidget * const parent)
 }
 
 void GLWindow::bindSkia(const int w, const int h) {
+    qreal pixelRatio = devicePixelRatioF();
+    int scaledWidth = pixelRatio*w;
+    int scaledHeight = pixelRatio*h;
     GrGLFramebufferInfo fbInfo;
     fbInfo.fFBOID = context()->defaultFramebufferObject();//buffer;
     fbInfo.fFormat = GR_GL_RGBA8;//buffer;
     GrBackendRenderTarget backendRT = GrBackendRenderTarget(
-                                        w, h,
+                                        scaledWidth, scaledHeight,
                                         0, 8, // (optional) 4, 8,
                                         fbInfo
                                         /*kRGBA_half_GrPixelConfig*/
