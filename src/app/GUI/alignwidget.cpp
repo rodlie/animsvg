@@ -58,7 +58,7 @@ AlignWidget::AlignWidget(QWidget* const parent)
     mainLayout->addLayout(buttonsLay);
     mainLayout->addStretch();
 
-    int buttonSize = 22;
+    int buttonSize = 20;
 
     const auto leftButton = new QPushButton(this);
     leftButton->setIcon(QIcon::fromTheme("pivot-align-left"));
