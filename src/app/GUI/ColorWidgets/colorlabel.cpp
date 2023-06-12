@@ -49,6 +49,7 @@ void ColorLabel::setAlpha(const qreal alpha_t) {
 }
 
 void ColorLabel::paintGL() {
+    qreal pixelRatio = devicePixelRatioF();
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(PLAIN_PROGRAM.fID);
     float r = mHue;
@@ -56,16 +57,18 @@ void ColorLabel::paintGL() {
     float b = mValue;
     hsv_to_rgb_float(r, g, b);
 
-    int halfWidth = width()/2;
-    glViewport(0, 0, halfWidth, height());
+    qreal scaledWidth = pixelRatio*width();
+    qreal scaledHeight = pixelRatio*height();
+    int halfScaledWidth = scaledWidth/2;
+    glViewport(0, 0, halfScaledWidth, scaledHeight);
     glUniform4f(PLAIN_PROGRAM.fRGBAColorLoc, r, g, b,
                 static_cast<float>(mAlpha));
-    glUniform2f(PLAIN_PROGRAM.fMeshSizeLoc, height()/(1.5f*width()), 1.f/3);
+    glUniform2f(PLAIN_PROGRAM.fMeshSizeLoc, scaledHeight/(1.5f*scaledWidth), 1.f/3);
     glBindVertexArray(mPlainSquareVAO);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 
-    glViewport(halfWidth, 0, width() - halfWidth, height());
+    glViewport(halfScaledWidth, 0, scaledWidth - halfScaledWidth, scaledHeight);
     glUniform4f(PLAIN_PROGRAM.fRGBAColorLoc, r, g, b, 1.f);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }

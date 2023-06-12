@@ -486,7 +486,7 @@ void OutputSettingsDialog::updateAvailableAudioBitrates() {
         currentCodec = mAudioCodecsList.at(codecId);
     }
     if(!currentCodec) return;
-    if(currentCodec->capabilities & AV_CODEC_CAP_LOSSLESS) {
+    if(currentCodec->capabilities & AV_CODEC_PROP_LOSSLESS) {
         mAudioBitrateComboBox->addItem("Loseless", QVariant(384000));
     } else {
         QList<int> rates = { 24, 32, 48, 64, 128, 160, 192, 320, 384 };

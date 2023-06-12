@@ -20,7 +20,8 @@
 #include "Private/document.h"
 
 QPointF CanvasWindow::mapToCanvasCoord(const QPointF& windowCoord) {
-    return mViewTransform.inverted().map(windowCoord);
+    qreal pixelRatio = devicePixelRatioF();
+    return mViewTransform.inverted().scale(pixelRatio, pixelRatio).map(windowCoord);
 }
 
 void CanvasWindow::translateView(const QPointF &trans) {
@@ -59,9 +60,10 @@ void CanvasWindow::fitCanvasToSize() {
     }
     if(!mCurrentCanvas) return;
     mViewTransform.reset();
+    qreal pixelRatio = devicePixelRatioF();
     const auto canvasSize = mCurrentCanvas->getCanvasSize();
-    const qreal widWidth = width();
-    const qreal widHeight = height();
+    const qreal widWidth = width()*pixelRatio;
+    const qreal widHeight = height()*pixelRatio;
     const qreal widthScale = (widWidth - eSizesUI::widget)/canvasSize.width();
     const qreal heightScale = (widHeight - eSizesUI::widget)/canvasSize.height();
     const qreal minScale = qMin(widthScale, heightScale);
