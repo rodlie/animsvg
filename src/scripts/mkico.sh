@@ -22,5 +22,5 @@ set -e -x
 
 PNG=`pwd`/src/app/icons/friction.png
 ICO=`pwd`/src/app/icons/friction.ico
-convert ${PNG} -define icon:auto-resize="256,128,96,64,48,32,16" ${ICO}
+convert -background transparent ${PNG} -define icon:auto-resize="256,128,96,64,48,32,16" ${ICO}
 
