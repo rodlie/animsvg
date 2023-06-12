@@ -27,7 +27,8 @@ ColorValueRect::ColorValueRect(const ColorProgram& program,
     ColorWidget(parent), mGLProgram(program) {}
 
 void ColorValueRect::paintGL() {
-    glViewport(0, 0, width(), height());
+    qreal pixelRatio = devicePixelRatioF();
+    glViewport(0, 0, width()*pixelRatio, height()*pixelRatio);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(mGLProgram.fID);
