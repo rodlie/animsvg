@@ -174,10 +174,10 @@ MainWindow::MainWindow(Document& document,
 
     mDocument.setPath("");
 
-    int sideBarMax = 400;
+    int sideBarMin = 400;
 
     mFillStrokeSettings = new FillStrokeSettingsWidget(mDocument, this);
-    mFillStrokeSettings->setMaximumWidth(sideBarMax);
+    mFillStrokeSettings->setMinimumWidth(sideBarMin);
 
     mFontWidget = new FontsWidget(this);
 
@@ -254,9 +254,6 @@ MainWindow::MainWindow(Document& document,
     //
 
     if (statusBar()) {
-//        QLabel *fontLabel = new QLabel(tr("Font"), this);
-  //      statusBar()->addWidget(fontLabel);
-    //    statusBar()->addWidget(mFontWidget);
         QLabel *layoutComboLabel = new QLabel(tr("Layout"), this);
         statusBar()->addPermanentWidget(layoutComboLabel);
         statusBar()->addPermanentWidget(mLayoutHandler->comboWidget());
@@ -291,18 +288,10 @@ MainWindow::MainWindow(Document& document,
     frictionTopLayout->addWidget(viewerToolBar);
     frictionTopLayout->addWidget(mViewerNodeBar);
     frictionTopLayout->addWidget(mStackWidget);
-    frictionTopLayout->addWidget(mFillStrokeSettings);
-
-    QWidget *frictionBottomWidget = new QWidget(this);
-    frictionBottomWidget->setContentsMargins(frictionMargins);
-
-    QHBoxLayout *frictionBottomLayout = new QHBoxLayout(frictionBottomWidget);
-    frictionBottomLayout->setContentsMargins(frictionMargins);
-    frictionBottomLayout->setSpacing(frictionSpacing);
 
     QTabWidget *frictionBottomSideBarWidget = new QTabWidget(this);
     frictionBottomSideBarWidget->setContentsMargins(frictionMargins);
-    frictionBottomSideBarWidget->setMaximumWidth(sideBarMax);
+    frictionBottomSideBarWidget->setMinimumWidth(sideBarMin);
     frictionBottomSideBarWidget->setTabPosition(QTabWidget::South);
 
     frictionBottomSideBarWidget->addTab(frictionTopSideBarWidget,
@@ -313,22 +302,42 @@ MainWindow::MainWindow(Document& document,
     frictionTopSideBarLayout->addWidget(mObjectSettingsScrollArea);
     frictionTopSideBarLayout->addWidget(alignWidget);
 
-    frictionBottomLayout->addWidget(mTimeline);
-    frictionBottomLayout->addWidget(frictionBottomSideBarWidget);
-
     mSplitterMain = new QSplitter(this);
-    mSplitterTop = new QSplitter(this);
-    mSplitterBottom = new QSplitter(this);
 
-    mSplitterMain->setOrientation(Qt::Vertical);
-    mSplitterTop->setOrientation(Qt::Horizontal);
-    mSplitterBottom->setOrientation(Qt::Horizontal);
+    mSplitterLeft = new QSplitter(this);
+    mSplitterRight = new QSplitter(this);
 
-    mSplitterMain->addWidget(mSplitterTop);
-    mSplitterMain->addWidget(mSplitterBottom);
+    mSplitterLeftTop = new QSplitter(this);
+    mSplitterLeftBottom = new QSplitter(this);
 
-    mSplitterTop->addWidget(frictionTopWidget);
-    mSplitterBottom->addWidget(frictionBottomWidget);
+    mSplitterRightTop = new QSplitter(this);
+    mSplitterRightBottom = new QSplitter(this);
+
+    mSplitterMain->setOrientation(Qt::Horizontal);
+
+    mSplitterLeft->setOrientation(Qt::Vertical);
+    mSplitterRight->setOrientation(Qt::Vertical);
+
+    mSplitterLeftTop->setOrientation(Qt::Horizontal);
+    mSplitterLeftBottom->setOrientation(Qt::Horizontal);
+
+    mSplitterRightTop->setOrientation(Qt::Horizontal);
+    mSplitterRightBottom->setOrientation(Qt::Horizontal);
+
+    mSplitterMain->addWidget(mSplitterLeft);
+    mSplitterMain->addWidget(mSplitterRight);
+
+    mSplitterLeft->addWidget(mSplitterLeftTop);
+    mSplitterLeft->addWidget(mSplitterLeftBottom);
+
+    mSplitterRight->addWidget(mSplitterRightTop);
+    mSplitterRight->addWidget(mSplitterRightBottom);
+
+    mSplitterLeftTop->addWidget(frictionTopWidget);
+    mSplitterLeftBottom->addWidget(mTimeline);
+
+    mSplitterRightTop->addWidget(mFillStrokeSettings);
+    mSplitterRightBottom->addWidget(frictionBottomSideBarWidget);
 
     setCentralWidget(mSplitterMain);
 
@@ -1572,17 +1581,25 @@ bool MainWindow::processKeyEvent(QKeyEvent *event)
 void MainWindow::readSettings()
 {
     restoreState(AppSupport::getSettings("ui",
-                                         "MainWindowState").toByteArray());
+                                         "state").toByteArray());
     restoreGeometry(AppSupport::getSettings("ui",
-                                            "MainWindowGeometry").toByteArray());
+                                            "geometry").toByteArray());
     mSplitterMain->restoreState(AppSupport::getSettings("ui",
-                                                        "MainWindowSplitterMain").toByteArray());
-    mSplitterTop->restoreState(AppSupport::getSettings("ui",
-                                                       "MainWindowSplitterTop").toByteArray());
-    mSplitterBottom->restoreState(AppSupport::getSettings("ui",
-                                                          "MainWindowSplitterBottom").toByteArray());
+                                                        "SplitterMain").toByteArray());
+    mSplitterLeft->restoreState(AppSupport::getSettings("ui",
+                                                        "SplitterLeft").toByteArray());
+    mSplitterRight->restoreState(AppSupport::getSettings("ui",
+                                                        "SplitterRight").toByteArray());
+    mSplitterLeftTop->restoreState(AppSupport::getSettings("ui",
+                                                        "SplitterLeftTop").toByteArray());
+    mSplitterLeftBottom->restoreState(AppSupport::getSettings("ui",
+                                                        "SplitterLeftBottom").toByteArray());
+    mSplitterRightTop->restoreState(AppSupport::getSettings("ui",
+                                                        "SplitterRightTop").toByteArray());
+    mSplitterRightBottom->restoreState(AppSupport::getSettings("ui",
+                                                        "SplitterRightBottom").toByteArray());
     bool isMax = AppSupport::getSettings("ui",
-                                         "MainWindowIsMaximized",
+                                         "maximized",
                                          false).toBool();
     if (isMax) { showMaximized(); }
 
@@ -1591,12 +1608,16 @@ void MainWindow::readSettings()
 
 void MainWindow::writeSettings()
 {
-    AppSupport::setSettings("ui", "MainWindowState", saveState());
-    AppSupport::setSettings("ui", "MainWindowGeometry", saveGeometry());
-    AppSupport::setSettings("ui", "MainWindowSplitterMain", mSplitterMain->saveState());
-    AppSupport::setSettings("ui", "MainWindowSplitterTop", mSplitterTop->saveState());
-    AppSupport::setSettings("ui", "MainWindowSplitterBottom", mSplitterBottom->saveState());
-    AppSupport::setSettings("ui", "MainWindowIsMaximized", isMaximized());
+    AppSupport::setSettings("ui", "state", saveState());
+    AppSupport::setSettings("ui", "geometry", saveGeometry());
+    AppSupport::setSettings("ui", "SplitterMain", mSplitterMain->saveState());
+    AppSupport::setSettings("ui", "SplitterLeft", mSplitterLeft->saveState());
+    AppSupport::setSettings("ui", "SplitterRight", mSplitterRight->saveState());
+    AppSupport::setSettings("ui", "SplitterLeftTop", mSplitterLeftTop->saveState());
+    AppSupport::setSettings("ui", "SplitterLeftBottom", mSplitterLeftBottom->saveState());
+    AppSupport::setSettings("ui", "SplitterRightTop", mSplitterRightTop->saveState());
+    AppSupport::setSettings("ui", "SplitterRightBottom", mSplitterRightBottom->saveState());
+    AppSupport::setSettings("ui", "maximized", isMaximized());
 }
 
 bool MainWindow::isEnabled()

@@ -251,8 +251,12 @@ private:
     QToolBar *mViewerNodeBar;
 
     QSplitter *mSplitterMain;
-    QSplitter *mSplitterTop;
-    QSplitter *mSplitterBottom;
+    QSplitter *mSplitterLeft;
+    QSplitter *mSplitterRight;
+    QSplitter *mSplitterLeftTop;
+    QSplitter *mSplitterLeftBottom;
+    QSplitter *mSplitterRightTop;
+    QSplitter *mSplitterRightBottom;
 
     QAction *mActionConnectPointsAct;
     QAction *mActionDisconnectPointsAct;
