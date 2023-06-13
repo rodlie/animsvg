@@ -4,6 +4,7 @@
 #include "../core_global.h"
 #include "efuturepos.h"
 #include "../XML/runtimewriteid.h"
+#include <functional>
 
 #include <QIODevice>
 #include <QDir>

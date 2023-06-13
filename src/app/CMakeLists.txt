@@ -22,7 +22,7 @@
 cmake_minimum_required(VERSION 3.9)
 project(friction LANGUAGES CXX)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../cmake")
 
 include(friction-version)
 include(friction-meta)
@@ -47,9 +47,39 @@ endif()
 
 option(SHARED_TCMALLOC "Use shared libtcmalloc.so" OFF)
 
-set(QSCINTILLA_LIBRARIES_DIRS "/usr/lib" CACHE STRING "qscintilla library path")
-set(QSCINTILLA_LIBRARIES "qscintilla2_qt5" CACHE STRING "qscintilla library")
-set(QSCINTILLA_INCLUDE_DIRS "/usr/include/x86_64-linux-gnu/qt5" CACHE STRING "qscintilla includes path")
+if(WIN32)
+    set(QSCINTILLA_LIBRARIES_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../qscintilla/src/release)
+    set(QSCINTILLA_LIBRARIES qscintilla2_qt5)
+    set(QSCINTILLA_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../qscintilla/src)
+    add_definitions(-DQSCINTILLA_DLL)
+else()
+    set(QSCINTILLA_LIBRARIES_DIRS "/usr/lib" CACHE STRING "qscintilla library path")
+    set(QSCINTILLA_LIBRARIES "qscintilla2_qt5" CACHE STRING "qscintilla library")
+    set(QSCINTILLA_INCLUDE_DIRS "/usr/include/x86_64-linux-gnu/qt5" CACHE STRING "qscintilla includes path")
+endif()
+
+if(WIN32)
+    set(WINDOWS_ICON_FILE ${FRICTION_NAME}.ico)
+    set(ICON_FILE ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${FRICTION_NAME}.ico)
+    set(GUI_TYPE WIN32)
+    set(PRODUCT_COMMENTS "${FRICTION_DISPLAY_NAME} ${PROJECT_DESCRIPTION}")
+    set(PRODUCT_COMPANY_NAME ${FRICTION_DISPLAY_NAME})
+    set(PRODUCT_FILE_DESCRIPTION "${FRICTION_DISPLAY_NAME} ${PROJECT_DESCRIPTION}")
+    set(PRODUCT_VERSION "${PROJECT_VERSION}")
+    set(PRODUCT_INTERNAL_NAME ${FRICTION_DISPLAY_NAME})
+    set(PRODUCT_COMPANY_COPYRIGHT ${PROJECT_COPYRIGHT})
+    set(PRODUCT_ORIGINAL_FILENAME "${FRICTION_NAME}.exe")
+    set(PRODUCT_BUNDLE ${FRICTION_DISPLAY_NAME})
+    set(WINDOWS_RESOURCE_FILE ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${FRICTION_NAME}.rc)
+    configure_file(${FRICTION_NAME}.rc.in
+        ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${FRICTION_NAME}.rc
+        @ONLY
+    )
+    configure_file(icons/${FRICTION_NAME}.ico
+        ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${FRICTION_NAME}.ico
+        COPYONLY
+    )
+endif()
 
 if(UNIX AND NOT ${SHARED_TCMALLOC})
     if(NOT APPLE)
@@ -356,15 +386,21 @@ add_executable(
     resources.qrc
     icons.qrc
     hicolor.qrc
+    ${WINDOWS_RESOURCE_FILE}
 )
 
 if(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE TRUE)
 endif()
 
+#if(WIN32)
+#    set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
+#endif()
+
 target_link_directories(
     ${PROJECT_NAME}
     PRIVATE
+    ${FFMPEG_LIBRARIES_DIRS}
     ${QSCINTILLA_LIBRARIES_DIRS}
     #${QUAZIP_LIBRARIES_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia/out/build

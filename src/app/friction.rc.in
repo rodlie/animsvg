@@ -1,0 +1,23 @@
+IDI_ICON1   ICON  DISCARDABLE  "@WINDOWS_ICON_FILE@"
+1 VERSIONINFO
+FILEVERSION @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,0,0
+PRODUCTVERSION @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,0,0
+FILEOS 0x4
+FILETYPE 0x1
+{
+    BLOCK "StringFileInfo"
+    {
+        BLOCK "040904b0"
+        {
+            VALUE "Comments", "@PRODUCT_COMMENTS@"
+            VALUE "CompanyName", "@PRODUCT_COMPANY_NAME@"
+            VALUE "FileDescription", "@PRODUCT_FILE_DESCRIPTION@"
+            VALUE "FileVersion", "@PRODUCT_VERSION@"
+            VALUE "InternalName", "@PRODUCT_INTERNAL_NAME@"
+            VALUE "LegalCopyright", "@PRODUCT_COMPANY_COPYRIGHT@"
+            VALUE "OriginalFilename", "@PRODUCT_ORIGINAL_FILENAME@"
+            VALUE "ProductName", "@PRODUCT_BUNDLE@"
+            VALUE "ProductVersion", "@PRODUCT_VERSION@"
+        }
+    }
+}

@@ -25,7 +25,9 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_compile_options(-Wall -Wextra)
+if(UNIX)
+    add_compile_options(-Wall -Wextra)
+endif()
 if(CMAKE_BUILD_TYPE MATCHES "^(release|Release|RELEASE)$")
     add_definitions(-DQT_NO_DEBUG_OUTPUT)
 else()
@@ -59,6 +61,10 @@ set(QT_LIBRARIES
     Qt${QT_VERSION_MAJOR}::Xml
     Qt${QT_VERSION_MAJOR}::Svg)
 
-set(SKIA_LIBRARIES
-    skia
-    fontconfig)
+if(WIN32)
+    set(SKIA_LIBRARIES skia user32 opengl32)
+else()
+    set(SKIA_LIBRARIES
+        skia
+        fontconfig)
+endif()

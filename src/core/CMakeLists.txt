@@ -20,7 +20,7 @@
 cmake_minimum_required(VERSION 3.9)
 project(frictioncore LANGUAGES CXX)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../cmake")
 
 include(friction-version)
 include(friction-meta)
@@ -715,6 +715,7 @@ set_target_properties(
 target_link_directories(
     ${PROJECT_NAME}
     PRIVATE
+    ${FFMPEG_LIBRARIES_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia/out/build
     #${QUAZIP_LIBRARIES_DIRS}
 )

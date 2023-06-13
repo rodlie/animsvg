@@ -19,15 +19,27 @@
 # See 'README.md' for more information.
 #
 
-pkg_check_modules(AVFORMAT REQUIRED libavformat)
-pkg_check_modules(AVCODEC REQUIRED libavcodec)
-pkg_check_modules(AVUTIL REQUIRED libavutil)
-pkg_check_modules(SWSCALE REQUIRED libswscale)
-pkg_check_modules(SWRESAMPLE REQUIRED libswresample)
-set(FFMPEG_INCLUDE_DIRS ${AVFORMAT_INCLUDE_DIRS})
-set(FFMPEG_LIBRARIES
-    ${AVFORMAT_LIBRARIES}
-    ${AVCODEC_LIBRARIES}
-    ${AVUTIL_LIBRARIES}
-    ${SWSCALE_LIBRARIES}
-    ${SWRESAMPLE_LIBRARIES})
+if(WIN32)
+    set(FFMPEG_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/src/ffmpeg/include)
+    set(FFMPEG_LIBRARIES
+        avformat
+        avcodec
+        avutil
+        swscale
+        swresample)
+    set(FFMPEG_LIBRARIES_DIRS ${CMAKE_SOURCE_DIR}/src/ffmpeg/lib)
+else()
+    pkg_check_modules(AVFORMAT REQUIRED libavformat)
+    pkg_check_modules(AVCODEC REQUIRED libavcodec)
+    pkg_check_modules(AVUTIL REQUIRED libavutil)
+    pkg_check_modules(SWSCALE REQUIRED libswscale)
+    pkg_check_modules(SWRESAMPLE REQUIRED libswresample)
+    set(FFMPEG_INCLUDE_DIRS ${AVFORMAT_INCLUDE_DIRS})
+    set(FFMPEG_LIBRARIES
+        ${AVFORMAT_LIBRARIES}
+        ${AVCODEC_LIBRARIES}
+        ${AVUTIL_LIBRARIES}
+        ${SWSCALE_LIBRARIES}
+        ${SWRESAMPLE_LIBRARIES})
+    set(FFMPEG_LIBRARIES_DIRS ${AVFORMAT_LIBRARIES_DIRS})
+endif()
