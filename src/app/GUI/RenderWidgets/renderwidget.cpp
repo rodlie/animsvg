@@ -27,21 +27,20 @@ RenderWidget::RenderWidget(QWidget *parent) : QWidget(parent) {
     mMainLayout->setMargin(0);
     setLayout(mMainLayout);
     mRenderProgressBar = new QProgressBar(this);
-    mRenderProgressBar->setStyleSheet("border-top: 0;"
+    /*mRenderProgressBar->setStyleSheet("border-top: 0;"
                                       "border-right: 0;"
-                                      "border-left: 0;");
-    mRenderProgressBar->setFixedHeight(8);
+                                      "border-left: 0;");*/
+    //mRenderProgressBar->setFixedHeight(8);
     mRenderProgressBar->setValue(0);
-    mMainLayout->addWidget(mRenderProgressBar);
 
     mButtonsLayout = new QHBoxLayout();
-    mButtonsLayout->setMargin(eSizesUI::widget/2);
-    eSizesUI::widget.addHalfSpacing(mButtonsLayout);
-    mCurrentRenderLabel = new QLabel("Current Render", this);
+    //mButtonsLayout->setMargin(eSizesUI::widget/2);
+    //eSizesUI::widget.addHalfSpacing(mButtonsLayout);
+    /*mCurrentRenderLabel = new QLabel("Current Render", this);
     mCurrentRenderLabel->setStyleSheet("background: rgb(30, 30, 30);"
                                        "font-weight: bold;"
                                        "padding-left: 10px;");
-    mButtonsLayout->addWidget(mCurrentRenderLabel);
+    mButtonsLayout->addWidget(mCurrentRenderLabel);*/
 
     mStartRenderButton = new QPushButton("Render", this);
     mButtonsLayout->addWidget(mStartRenderButton, Qt::AlignRight);
@@ -56,7 +55,7 @@ RenderWidget::RenderWidget(QWidget *parent) : QWidget(parent) {
     mStopRenderButton = new QPushButton("Stop", this);
     mStopRenderButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     mButtonsLayout->addWidget(mStopRenderButton, Qt::AlignRight);
-    eSizesUI::widget.addHalfSpacing(mButtonsLayout);
+    //eSizesUI::widget.addHalfSpacing(mButtonsLayout);
     connect(mStopRenderButton, &QPushButton::pressed,
             this, &RenderWidget::stopRendering);
 
@@ -74,6 +73,7 @@ RenderWidget::RenderWidget(QWidget *parent) : QWidget(parent) {
     mScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     mMainLayout->addWidget(mScrollArea);
+    mMainLayout->addWidget(mRenderProgressBar);
 
     const auto vidEmitter = VideoEncoder::sInstance->getEmitter();
     connect(vidEmitter, &VideoEncoderEmitter::encodingStarted,

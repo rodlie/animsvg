@@ -50,7 +50,7 @@ private:
     QVBoxLayout *mMainLayout;
     QProgressBar *mRenderProgressBar;
     QHBoxLayout *mButtonsLayout;
-    QLabel *mCurrentRenderLabel;
+    //QLabel *mCurrentRenderLabel;
     QPushButton *mStartRenderButton;
     QPushButton *mPauseRenderButton;
     QPushButton *mStopRenderButton;
