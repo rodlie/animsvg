@@ -36,6 +36,7 @@
 #include <QSpacerItem>
 #include <QSettings>
 #include <QMargins>
+#include <iostream>
 
 #include "usagewidget.h"
 #include "GUI/ColorWidgets/colorsettingswidget.h"
@@ -346,6 +347,7 @@ MainWindow::MainWindow(Document& document,
 
 MainWindow::~MainWindow()
 {
+    std::cout << "Closing Friction, please wait ... " << std::endl;
     writeSettings();
     sInstance = nullptr;
 //    mtaskExecutorThread->terminate();
@@ -905,26 +907,28 @@ void MainWindow::setupMenuBar()
     help->addAction(tr("About", "MenuBar_Help"), this, [this]() {
         QString aboutText = QString("<h1 style=\"font-weight: normal;\">%1</h1>"
                                     "<h3 style=\"font-weight: normal;\">%4 %3</h3>"
-                                    "<p>%5 &copy; %1 <a href=\"%2\">%6</a>.</p>"
-                                    "<p style=\"font-size: small;\">%7</p>")
+                                    "<p>%5 &copy; %1 <a style=\"text-decoration: none;\" href=\"%2\">%6</a>.</p>"
+                                    "<p>%7</p>"
+                                    "<p style=\"font-size: small;\">%8</p>")
                             .arg(AppSupport::getAppDisplayName(),
                                  AppSupport::getAppContributorsUrl(),
                                  AppSupport::getAppVersion(true),
                                  tr("version"),
                                  tr("Copyright"),
                                  tr("contributors"),
+                                 tr("Visit <a href=\"%1\">%1</a> for more information.").arg(AppSupport::getAppUrl()),
                                  tr("This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version."));
         QMessageBox::about(this, tr("About"), aboutText);
     });
     /*help->addAction(tr("About Qt", "MenuBar_Help"), this, [this]() {
         QMessageBox::aboutQt(this, tr("About Qt"));
-    });*/
+    });
     help->addAction(tr("Report issue", "MenuBar_Help"), this, []() {
         QDesktopServices::openUrl(QUrl::fromUserInput(AppSupport::getAppIssuesUrl()));
     });
     help->addAction(tr("Check for updates", "MenuBar_Help"), this, []() {
         QDesktopServices::openUrl(QUrl::fromUserInput(AppSupport::getAppLatestReleaseUrl()));
-    });
+    });*/
 
     setMenuBar(mMenuBar);
 }

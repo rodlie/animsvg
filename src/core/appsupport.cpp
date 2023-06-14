@@ -99,37 +99,32 @@ void AppSupport::setSettings(const QString &group,
 
 const QString AppSupport::getAppName()
 {
-    QString val = QString::fromUtf8("friction");
-    return val;
+    return QString::fromUtf8("friction");
 }
 
 const QString AppSupport::getAppDisplayName()
 {
-    QString val = QString::fromUtf8("Friction");
-    return val;
+    return QString::fromUtf8("Friction");
 }
 
 const QString AppSupport::getAppDomain()
 {
-    QString val = QString::fromUtf8("friction.graphics");
-    return val;
+    return QString::fromUtf8("friction.graphics");
 }
 
 const QString AppSupport::getAppID()
 {
-    QString val = QString::fromUtf8("graphics.friction");
-    return val;
+    return QString::fromUtf8("graphics.friction");
 }
 
 const QString AppSupport::getAppUrl()
 {
-    QString val = QString::fromUtf8("https://friction.graphics");
-    return val;
+    return QString::fromUtf8("https://friction.graphics");
 }
 
 const QString AppSupport::getAppVersion(bool html)
 {
-    QString version = QString::fromUtf8("0.9.0");
+    QString version = QString::fromUtf8("0.9.0"); // fallback, should not happen
 #ifdef PROJECT_VERSION
     version = QString::fromUtf8(PROJECT_VERSION);
 #endif
@@ -142,50 +137,45 @@ const QString AppSupport::getAppVersion(bool html)
     branch = QString::fromUtf8(PROJECT_BRANCH);
 #endif
     if (!branch.isEmpty()) {
-        version.append(QString::fromUtf8(" %1/").arg(branch));
+        version.append(QString::fromUtf8(" %1").arg(branch));
     }
     if (!git.isEmpty()) {
-        if (branch.isEmpty()) { version.append(" "); }
+        if (branch.isEmpty()) { version.append(QString::fromUtf8(" ")); }
+        else { version.append(QString::fromUtf8("/")); }
         version.append(html ? QString::fromUtf8("<a href=\"%2/%1\">%1</a>").arg(git,
-                                                                                 getAppCommitUrl()) : git);
+                                                                                getAppCommitUrl()) : git);
     }
     return version;
 }
 
 const QString AppSupport::getAppDesc()
 {
-    QString val = QString::fromUtf8("Motion Graphics");
-    return val;
+    return QString::fromUtf8("Motion Graphics");
 }
 
 const QString AppSupport::getAppCompany()
 {
-    QString val = QString::fromUtf8("friction");
-    return val;
+    return getAppName();
 }
 
 const QString AppSupport::getAppContributorsUrl()
 {
-    QString val = QString::fromUtf8("https://github.com/friction2d/friction/graphs/contributors");
-    return val;
+    return QString::fromUtf8("https://github.com/friction2d/friction/graphs/contributors");
 }
 
 const QString AppSupport::getAppIssuesUrl()
 {
-    QString val = QString::fromUtf8("https://github.com/friction2d/friction/issues");
-    return val;
+    return QString::fromUtf8("https://github.com/friction2d/friction/issues");
 }
 
 const QString AppSupport::getAppLatestReleaseUrl()
 {
-    QString val = QString::fromUtf8("https://github.com/friction2d/friction/releases/latest");
-    return val;
+    return QString::fromUtf8("https://github.com/friction2d/friction/releases/latest");
 }
 
 const QString AppSupport::getAppCommitUrl()
 {
-    QString val = QString::fromUtf8("https://github.com/friction2d/friction/commit");
-    return val;
+    return QString::fromUtf8("https://github.com/friction2d/friction/commit");
 }
 
 const QString AppSupport::getAppConfigPath()

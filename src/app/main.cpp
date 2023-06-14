@@ -93,11 +93,11 @@ void generateAlphaMesh(QPixmap& alphaMesh,
     p.end();
 }
 
-int main(int argc, char *argv[]) {
-    std::cout << "Entered main()" << std::endl;
-//#ifdef Q_OS_WIN
-//    SetProcessDPIAware(); // call before the main event loop
-//#endif // Q_OS_WIN
+int main(int argc, char *argv[])
+{
+    std::cout << QString("%1 %2 - %3").arg(AppSupport::getAppDisplayName(),
+                                           AppSupport::getAppVersion(),
+                                           AppSupport::getAppUrl()).toStdString() << std::endl << "---" << std::endl;
 
     QApplication::setApplicationDisplayName(AppSupport::getAppDisplayName());
     QApplication::setApplicationName(AppSupport::getAppName());
