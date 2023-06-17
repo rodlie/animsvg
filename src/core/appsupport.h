@@ -64,6 +64,7 @@ public:
     static const QString getAppPathEffectsPath();
     static const QString getAppRasterEffectsPath();
     static const QString getAppShaderEffectsPath();
+    static const QString getAppExPresetsPath();
 };
 
 #endif // APPSUPPORT_H

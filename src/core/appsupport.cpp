@@ -219,3 +219,11 @@ const QString AppSupport::getAppShaderEffectsPath()
     if (!dir.exists()) { dir.mkpath(path); }
     return path;
 }
+
+const QString AppSupport::getAppExPresetsPath()
+{
+    QString path = QString::fromUtf8("%1/ExPresets").arg(getAppConfigPath());
+    QDir dir(path);
+    if (!dir.exists()) { dir.mkpath(path); }
+    return path;
+}
