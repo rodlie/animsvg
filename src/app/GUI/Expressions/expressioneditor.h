@@ -28,8 +28,10 @@
 
 class ExpressionHighlighter;
 
-class ExpressionEditor : public QTextEdit {
+class ExpressionEditor : public QTextEdit
+{
     Q_OBJECT
+
 public:
     ExpressionEditor(QrealAnimator* const target,
                      QWidget* const parent);
@@ -40,12 +42,17 @@ public:
     void setCompleterList(const QStringList& values);
 
     QString text() const;
+    void setFillerText();
+    void clearFillerText();
+
 signals:
     void focusLost();
+
 protected:
     void keyPressEvent(QKeyEvent *e) override;
     void focusInEvent(QFocusEvent *e) override;
     void focusOutEvent(QFocusEvent *e) override;
+
 private:
     using QTextEdit::toHtml;
     using QTextEdit::toPlainText;
@@ -53,9 +60,6 @@ private:
     void showCompleter();
     void insertCompletion(const QString &completion);
     QString textUnderCursor() const;
-    void setFillerText();
-    void clearFillerText();
-
     bool mFillerText = false;
     ExpressionHighlighter* mHighlighter;
     QCompleter* mCompleter;
