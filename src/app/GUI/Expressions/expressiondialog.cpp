@@ -420,7 +420,7 @@ ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
     presetLayout->addWidget(presetButtonWidget);
 
     if (populatePresets()) {
-        mTabPreset = mTab->addTab(presetWidget, tr("Presets"));
+        mTabPreset = mTab->addTab(presetWidget, tr("Easing"));
     } else {
         presetWidget->setVisible(false);
     }
@@ -606,8 +606,8 @@ void ExpressionDialog::setCurrentTabId(const int id) {
 
 const QStringList ExpressionDialog::generatePresets()
 {
-    QDir userDir(AppSupport::getAppUserExPresetsPath());
-    QDir appDir(AppSupport::getAppExPresetsPath());
+    QDir userDir(QString::fromUtf8("%1/easing").arg(AppSupport::getAppUserExPresetsPath()));
+    QDir appDir(QString::fromUtf8("%1/easing").arg(AppSupport::getAppExPresetsPath()));
     const auto userPresets = userDir.entryInfoList(QStringList() << "*.js", QDir::Files);
     const auto appPresets = appDir.entryInfoList(QStringList() << "*.js", QDir::Files);
     QFileInfoList presets;

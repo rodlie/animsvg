@@ -531,7 +531,7 @@ if(UNIX AND NOT APPLE)
         ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutQuint.js
         ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutSine.js
         DESTINATION
-        ${CMAKE_INSTALL_DATAROOTDIR}/friction/presets/expressions/
+        ${CMAKE_INSTALL_DATAROOTDIR}/friction/presets/expressions/easing/
     )
     install(
         FILES
