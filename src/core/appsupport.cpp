@@ -222,6 +222,17 @@ const QString AppSupport::getAppShaderEffectsPath()
 
 const QString AppSupport::getAppExPresetsPath()
 {
+    QString path1 = QApplication::applicationDirPath();
+    QString path2 = path1;
+    path1.append(QString::fromUtf8("/presets/expressions"));
+    path2.append(QString::fromUtf8("/../share/friction/presets/expressions"));
+    if (QFile::exists(path1)) { return path1; }
+    if (QFile::exists(path2)) { return path2; }
+    return QString();
+}
+
+const QString AppSupport::getAppUserExPresetsPath()
+{
     QString path = QString::fromUtf8("%1/ExPresets").arg(getAppConfigPath());
     QDir dir(path);
     if (!dir.exists()) { dir.mkpath(path); }
