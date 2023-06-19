@@ -1,18 +1,27 @@
-// enve - 2D animations software
-// Copyright (C) 2016-2020 Maurycy Liebner
+/*
+#
+# Friction - https://friction.graphics
+#
+# Copyright (c) Friction contributors
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# See 'README.md' for more information.
+#
+*/
 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "renderwidget.h"
 #include "canvas.h"
@@ -21,45 +30,49 @@
 #include "GUI/BoxesList/OptimalScrollArea/scrollarea.h"
 #include "videoencoder.h"
 #include "ReadWrite/basicreadwrite.h"
+#include "renderhandler.h"
+#include "videoencoder.h"
+#include "appsupport.h"
 
-RenderWidget::RenderWidget(QWidget *parent) : QWidget(parent) {
+RenderWidget::RenderWidget(QWidget *parent)
+    : QWidget(parent)
+    , mMainLayout(nullptr)
+    , mRenderProgressBar(nullptr)
+    , mStartRenderButton(nullptr)
+    , mStopRenderButton(nullptr)
+    , mContWidget(nullptr)
+    , mContLayout(nullptr)
+    , mScrollArea(nullptr)
+    , mCurrentRenderedSettings(nullptr)
+{
     mMainLayout = new QVBoxLayout(this);
     mMainLayout->setMargin(0);
     setLayout(mMainLayout);
+
+    QWidget *bottomWidget = new QWidget(this);
+    bottomWidget->setContentsMargins(0, 0, 0, 0);
+    const auto bottomLayout = new QHBoxLayout(bottomWidget);
+
+    const auto darkPal= AppSupport::getDarkPalette();
+    bottomWidget->setAutoFillBackground(true);
+    bottomWidget->setPalette(darkPal);
+
     mRenderProgressBar = new QProgressBar(this);
-    /*mRenderProgressBar->setStyleSheet("border-top: 0;"
-                                      "border-right: 0;"
-                                      "border-left: 0;");*/
-    //mRenderProgressBar->setFixedHeight(8);
     mRenderProgressBar->setValue(0);
 
-    mButtonsLayout = new QHBoxLayout();
-    //mButtonsLayout->setMargin(eSizesUI::widget/2);
-    //eSizesUI::widget.addHalfSpacing(mButtonsLayout);
-    /*mCurrentRenderLabel = new QLabel("Current Render", this);
-    mCurrentRenderLabel->setStyleSheet("background: rgb(30, 30, 30);"
-                                       "font-weight: bold;"
-                                       "padding-left: 10px;");
-    mButtonsLayout->addWidget(mCurrentRenderLabel);*/
-
-    mStartRenderButton = new QPushButton("Render", this);
-    mButtonsLayout->addWidget(mStartRenderButton, Qt::AlignRight);
-    mStartRenderButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    mStartRenderButton = new QPushButton(tr("Render"), this);
+    mStartRenderButton->setDisabled(true);
+    mStartRenderButton->setSizePolicy(QSizePolicy::Preferred,
+                                      QSizePolicy::Preferred);
     connect(mStartRenderButton, &QPushButton::pressed,
             this, qOverload<>(&RenderWidget::render));
 
-    mPauseRenderButton = new QPushButton("Pause", this);
-    mButtonsLayout->addWidget(mPauseRenderButton, Qt::AlignRight);
-    mPauseRenderButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-
-    mStopRenderButton = new QPushButton("Stop", this);
-    mStopRenderButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    mButtonsLayout->addWidget(mStopRenderButton, Qt::AlignRight);
-    //eSizesUI::widget.addHalfSpacing(mButtonsLayout);
+    mStopRenderButton = new QPushButton(tr("Stop"), this);
+    mStopRenderButton->setDisabled(true);
+    mStopRenderButton->setSizePolicy(QSizePolicy::Preferred,
+                                     QSizePolicy::Preferred);
     connect(mStopRenderButton, &QPushButton::pressed,
             this, &RenderWidget::stopRendering);
-
-    mMainLayout->addLayout(mButtonsLayout);
 
     mContWidget = new QWidget(this);
     mContLayout = new QVBoxLayout(mContWidget);
@@ -72,8 +85,12 @@ RenderWidget::RenderWidget(QWidget *parent) : QWidget(parent) {
     mScrollArea->setWidgetResizable(true);
     mScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    bottomLayout->addWidget(mRenderProgressBar);
+    bottomLayout->addWidget(mStartRenderButton);
+    bottomLayout->addWidget(mStopRenderButton);
+
     mMainLayout->addWidget(mScrollArea);
-    mMainLayout->addWidget(mRenderProgressBar);
+    mMainLayout->addWidget(bottomWidget);
 
     const auto vidEmitter = VideoEncoder::sInstance->getEmitter();
     connect(vidEmitter, &VideoEncoderEmitter::encodingStarted,
@@ -100,12 +117,14 @@ RenderWidget::RenderWidget(QWidget *parent) : QWidget(parent) {
             this, &RenderWidget::sendNextForRender);
 }
 
-void RenderWidget::createNewRenderInstanceWidgetForCanvas(Canvas *canvas) {
+void RenderWidget::createNewRenderInstanceWidgetForCanvas(Canvas *canvas)
+{
     const auto wid = new RenderInstanceWidget(canvas, this);
     addRenderInstanceWidget(wid);
 }
 
-void RenderWidget::addRenderInstanceWidget(RenderInstanceWidget *wid) {
+void RenderWidget::addRenderInstanceWidget(RenderInstanceWidget *wid)
+{
     mContLayout->addWidget(wid);
     connect(wid, &RenderInstanceWidget::destroyed,
             this, [this, wid]() {
@@ -119,37 +138,41 @@ void RenderWidget::addRenderInstanceWidget(RenderInstanceWidget *wid) {
     mRenderInstanceWidgets << wid;
 }
 
-void RenderWidget::setRenderedFrame(const int frame) {
-    if(!mCurrentRenderedSettings) return;
+void RenderWidget::setRenderedFrame(const int frame)
+{
+    if (!mCurrentRenderedSettings) { return; }
     mRenderProgressBar->setValue(frame);
 }
 
-void RenderWidget::clearRenderQueue() {
-    if(mStopRenderButton->isEnabled()) stopRendering();
-    for(int i = mRenderInstanceWidgets.count() - 1; i >= 0; i--) {
+void RenderWidget::clearRenderQueue()
+{
+    if (mStopRenderButton->isEnabled()) { stopRendering(); }
+    for (int i = mRenderInstanceWidgets.count() - 1; i >= 0; i--) {
         delete mRenderInstanceWidgets.at(i);
     }
     leaveOnlyStartRenderButtonEnabled();
 }
 
-void RenderWidget::write(eWriteStream &dst) const {
+void RenderWidget::write(eWriteStream &dst) const
+{
     dst << mRenderInstanceWidgets.count();
-    for(const auto widget : mRenderInstanceWidgets) {
+    for (const auto widget : mRenderInstanceWidgets) {
         widget->write(dst);
     }
 }
 
-void RenderWidget::read(eReadStream &src) {
+void RenderWidget::read(eReadStream &src)
+{
     int nWidgets; src >> nWidgets;
-    for(int i = 0; i < nWidgets; i++) {
+    for (int i = 0; i < nWidgets; i++) {
         const auto wid = new RenderInstanceWidget(nullptr, this);
         wid->read(src);
         addRenderInstanceWidget(wid);
     }
 }
 
-#include "renderhandler.h"
-void RenderWidget::render(RenderInstanceSettings &settings) {
+void RenderWidget::render(RenderInstanceSettings &settings)
+{
     const RenderSettings &renderSettings = settings.getRenderSettings();
     mRenderProgressBar->setRange(renderSettings.fMinFrame,
                                  renderSettings.fMaxFrame);
@@ -160,69 +183,72 @@ void RenderWidget::render(RenderInstanceSettings &settings) {
             this, &RenderWidget::setRenderedFrame);
     connect(&settings, &RenderInstanceSettings::stateChanged,
             this, [this](const RenderState state) {
-        if(state == RenderState::finished) {
+        if (state == RenderState::finished) {
             mRenderProgressBar->setValue(mRenderProgressBar->maximum());
         }
     });
 }
 
-void RenderWidget::leaveOnlyInterruptionButtonsEnabled() {
+void RenderWidget::leaveOnlyInterruptionButtonsEnabled()
+{
     mStartRenderButton->setDisabled(true);
-    mPauseRenderButton->setEnabled(true);
     mStopRenderButton->setEnabled(true);
 }
 
-void RenderWidget::leaveOnlyStartRenderButtonEnabled() {
+void RenderWidget::leaveOnlyStartRenderButtonEnabled()
+{
     mStartRenderButton->setEnabled(true);
-    mPauseRenderButton->setDisabled(true);
     mStopRenderButton->setDisabled(true);
 }
 
-void RenderWidget::disableButtons() {
+void RenderWidget::disableButtons()
+{
     mStartRenderButton->setDisabled(true);
-    mPauseRenderButton->setDisabled(true);
     mStopRenderButton->setDisabled(true);
 }
 
-void RenderWidget::enableButtons() {
+void RenderWidget::enableButtons()
+{
     mStartRenderButton->setEnabled(true);
-    mPauseRenderButton->setEnabled(true);
     mStopRenderButton->setEnabled(true);
 }
 
-void RenderWidget::render() {
-    for(RenderInstanceWidget *wid : mRenderInstanceWidgets) {
-        if(!wid->isChecked()) continue;
+void RenderWidget::render()
+{
+    for (RenderInstanceWidget *wid : mRenderInstanceWidgets) {
+        if (!wid->isChecked()) { continue; }
         mAwaitingSettings << wid;
         wid->getSettings().setCurrentState(RenderState::waiting);
     }
     sendNextForRender();
 }
 
-#include "videoencoder.h"
-void RenderWidget::stopRendering() {
+void RenderWidget::stopRendering()
+{
     disableButtons();
     clearAwaitingRender();
     VideoEncoder::sInterruptEncoding();
-    if(mCurrentRenderedSettings) {
+    if (mCurrentRenderedSettings) {
         disconnect(mCurrentRenderedSettings, nullptr, this, nullptr);
         mCurrentRenderedSettings = nullptr;
     }
 }
 
-void RenderWidget::clearAwaitingRender() {
-    for(RenderInstanceWidget *wid : mAwaitingSettings) {
+void RenderWidget::clearAwaitingRender()
+{
+    for (RenderInstanceWidget *wid : mAwaitingSettings) {
         wid->getSettings().setCurrentState(RenderState::none);
     }
     mAwaitingSettings.clear();
 }
 
-void RenderWidget::sendNextForRender() {
-    if(mAwaitingSettings.isEmpty()) return;
+void RenderWidget::sendNextForRender()
+{
+    if (mAwaitingSettings.isEmpty()) { return; }
     const auto wid = mAwaitingSettings.takeFirst();
-    if(wid->isChecked() && wid->getSettings().getTargetCanvas()) {
+    if (wid->isChecked() && wid->getSettings().getTargetCanvas()) {
         disableButtons();
         wid->setDisabled(true);
         render(wid->getSettings());
-    } else sendNextForRender();
+    } else { sendNextForRender(); }
 }
