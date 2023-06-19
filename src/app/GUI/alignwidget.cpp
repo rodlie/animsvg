@@ -1,9 +1,8 @@
 /*
-# Friction - https://friction.graphics
-# Copyright (c) Friction developers
 #
-# Fork of enve
-# Copyright (c) 2016-2020 Maurycy Liebner
+# Friction - https://friction.graphics
+#
+# Copyright (c) Friction contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +17,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+# See 'README.md' for more information.
+#
 */
+
+// Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "alignwidget.h"
 
