@@ -14,6 +14,7 @@
  <file>icons/hicolor/16x16/actions/close.png</file>
  <file>icons/hicolor/16x16/actions/dots.png</file>
  <file>icons/hicolor/16x16/actions/drawPath.png</file>
+ <file>icons/hicolor/16x16/actions/graph.png</file>
  <file>icons/hicolor/16x16/actions/loop.png</file>
  <file>icons/hicolor/16x16/actions/minus.png</file>
  <file>icons/hicolor/16x16/actions/newEmpty.png</file>
@@ -61,6 +62,7 @@
  <file>icons/hicolor/22x22/actions/close.png</file>
  <file>icons/hicolor/22x22/actions/dots.png</file>
  <file>icons/hicolor/22x22/actions/drawPath.png</file>
+ <file>icons/hicolor/22x22/actions/graph.png</file>
  <file>icons/hicolor/22x22/actions/loop.png</file>
  <file>icons/hicolor/22x22/actions/minus.png</file>
  <file>icons/hicolor/22x22/actions/newEmpty.png</file>
@@ -108,6 +110,7 @@
  <file>icons/hicolor/32x32/actions/close.png</file>
  <file>icons/hicolor/32x32/actions/dots.png</file>
  <file>icons/hicolor/32x32/actions/drawPath.png</file>
+ <file>icons/hicolor/32x32/actions/graph.png</file>
  <file>icons/hicolor/32x32/actions/loop.png</file>
  <file>icons/hicolor/32x32/actions/minus.png</file>
  <file>icons/hicolor/32x32/actions/newEmpty.png</file>
@@ -155,6 +158,7 @@
  <file>icons/hicolor/48x48/actions/close.png</file>
  <file>icons/hicolor/48x48/actions/dots.png</file>
  <file>icons/hicolor/48x48/actions/drawPath.png</file>
+ <file>icons/hicolor/48x48/actions/graph.png</file>
  <file>icons/hicolor/48x48/actions/loop.png</file>
  <file>icons/hicolor/48x48/actions/minus.png</file>
  <file>icons/hicolor/48x48/actions/newEmpty.png</file>
@@ -202,6 +206,7 @@
  <file>icons/hicolor/64x64/actions/close.png</file>
  <file>icons/hicolor/64x64/actions/dots.png</file>
  <file>icons/hicolor/64x64/actions/drawPath.png</file>
+ <file>icons/hicolor/64x64/actions/graph.png</file>
  <file>icons/hicolor/64x64/actions/loop.png</file>
  <file>icons/hicolor/64x64/actions/minus.png</file>
  <file>icons/hicolor/64x64/actions/newEmpty.png</file>
@@ -249,6 +254,7 @@
  <file>icons/hicolor/96x96/actions/close.png</file>
  <file>icons/hicolor/96x96/actions/dots.png</file>
  <file>icons/hicolor/96x96/actions/drawPath.png</file>
+ <file>icons/hicolor/96x96/actions/graph.png</file>
  <file>icons/hicolor/96x96/actions/loop.png</file>
  <file>icons/hicolor/96x96/actions/minus.png</file>
  <file>icons/hicolor/96x96/actions/newEmpty.png</file>
@@ -296,6 +302,7 @@
  <file>icons/hicolor/128x128/actions/close.png</file>
  <file>icons/hicolor/128x128/actions/dots.png</file>
  <file>icons/hicolor/128x128/actions/drawPath.png</file>
+ <file>icons/hicolor/128x128/actions/graph.png</file>
  <file>icons/hicolor/128x128/actions/loop.png</file>
  <file>icons/hicolor/128x128/actions/minus.png</file>
  <file>icons/hicolor/128x128/actions/newEmpty.png</file>
@@ -343,6 +350,7 @@
  <file>icons/hicolor/192x192/actions/close.png</file>
  <file>icons/hicolor/192x192/actions/dots.png</file>
  <file>icons/hicolor/192x192/actions/drawPath.png</file>
+ <file>icons/hicolor/192x192/actions/graph.png</file>
  <file>icons/hicolor/192x192/actions/loop.png</file>
  <file>icons/hicolor/192x192/actions/minus.png</file>
  <file>icons/hicolor/192x192/actions/newEmpty.png</file>
@@ -390,6 +398,7 @@
  <file>icons/hicolor/256x256/actions/close.png</file>
  <file>icons/hicolor/256x256/actions/dots.png</file>
  <file>icons/hicolor/256x256/actions/drawPath.png</file>
+ <file>icons/hicolor/256x256/actions/graph.png</file>
  <file>icons/hicolor/256x256/actions/loop.png</file>
  <file>icons/hicolor/256x256/actions/minus.png</file>
  <file>icons/hicolor/256x256/actions/newEmpty.png</file>

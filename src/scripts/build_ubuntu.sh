@@ -28,6 +28,10 @@ REL=${REL:-0}
 SKIA_SYNC=${SKIA_SYNC:-1}
 PC=${PC:-""}
 
+if [ "${SNAP}" = 0 ]; then
+    REL=1
+fi
+
 SF_NET_SRC="https://sourceforge.net/projects/friction/files/source"
 SF_NET_SNAP="https://sourceforge.net/projects/friction/files/snapshots"
 
@@ -62,11 +66,9 @@ libfreetype-dev \
 libavcodec-dev \
 libavformat-dev \
 libavutil-dev \
-libmypaint-dev \
 libqscintilla2-qt5-dev \
 libqt5opengl5-dev \
 libqt5svg5-dev \
-libquazip5-dev \
 libswresample-dev \
 libswscale-dev \
 libunwind-dev \
@@ -91,8 +93,9 @@ fi
 CWD=`pwd`
 MKJOBS=${MKJOBS:-4}
 COMMIT=`git rev-parse --short HEAD`
-VERSION=`cat ${CWD}/CMakeLists.txt | sed '/friction2d VERSION/!d;s/)//' | awk '{print $3}'`
+BRANCH=`git rev-parse --abbrev-ref HEAD`
 TIMESTAMP=${TIMESTAMP:-`date +%Y%m%d`}
+VERSION="dev"
 YEAR=${YEAR:-`date +%Y`}
 MONTH=${MONTH:-`date +%m`}
 DAY=${DAY:-`date +%d`}
@@ -147,29 +150,31 @@ rm -rf build || true
 mkdir build
 cd build
 
-cmake \
+cmake -G Ninja \
 -DCMAKE_BUILD_TYPE=Release \
 -DCMAKE_INSTALL_PREFIX=/usr \
 -DGIT_COMMIT=${COMMIT} \
+-DGIT_BRANCH=${BRANCH} \
 -DSNAPSHOT=${IS_SNAP} \
 -DSNAPSHOT_VERSION_MAJOR=${YEAR} \
 -DSNAPSHOT_VERSION_MINOR=${MONTH} \
--DSNAPSHOT_VERSION_PATCH=${DAY} \
-..
-
-make -j${MKJOBS}
+-DSNAPSHOT_VERSION_PATCH=${DAY} ..
+if [ "${SNAP}" != 1 ]; then
+    VERSION=`cat version.txt`
+fi
+cmake --build .
 cpack -G DEB
 
-if [ "${CI}" = 1 ]; then
-    make DESTDIR=`pwd`/friction install
-    tree friction
-fi
+#if [ "${CI}" = 1 ]; then
+#    make DESTDIR=`pwd`/friction install
+#    tree friction
+#fi
 
 PKG="friction-${DISTRO_ID}-${DISTRO_VERSION}.deb"
 if [ "${REL}" = 1 ]; then
     PKG="friction-${VERSION}-${DISTRO_ID}-${DISTRO_VERSION}.deb"
 elif [ "${SNAP}" = 1 ]; then
-    PKG="friction-${TIMESTAMP}-${COMMIT}-${DISTRO_ID}-${DISTRO_VERSION}.deb"
+    PKG="friction-${TIMESTAMP}-${BRANCH}-${COMMIT}-${DISTRO_ID}-${DISTRO_VERSION}.deb"
 fi
 mv friction.deb ${PKG}
 

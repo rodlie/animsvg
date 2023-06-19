@@ -26,14 +26,13 @@
 class evIconProvider : public QFileIconProvider {
 public:
     evIconProvider() {
-        const auto iconDir = eSettings::sIconsDir();
-        mEvIcon = QIcon(iconDir + "/enve.png");
+        mEvIcon = QIcon::fromTheme("friction");
     }
 
     QIcon icon(const QFileInfo & info) const {
         const QString name = info.fileName();
-        if(name.endsWith(".ev") ||
-           name.endsWith(".xev")) return mEvIcon;
+        if(name.endsWith(".friction") ||
+           name.endsWith(".ev")) return mEvIcon;
         return QFileIconProvider::icon(info);
     }
 private:

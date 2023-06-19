@@ -19,22 +19,30 @@
 ZipFileSaver::ZipFileSaver() {}
 
 void ZipFileSaver::setZipPath(const QString &path) {
-    mZip.setZipName(path);
+    Q_UNUSED(path)
+    RuntimeThrow("XEV not supported");
+    /*mZip.setZipName(path);
     if(!mZip.open(QuaZip::mdCreate))
         RuntimeThrow("Could not create " + path);
-    mFile.setZip(&mZip);
+    mFile.setZip(&mZip);*/
 }
 
 void ZipFileSaver::setIoDevice(QIODevice * const src) {
-    mZip.setIoDevice(src);
+    Q_UNUSED(src)
+    RuntimeThrow("XEV not supported");
+    /*mZip.setIoDevice(src);
     if(!mZip.open(QuaZip::mdCreate))
         RuntimeThrow("Could not open QIODevice");
-    mFile.setZip(&mZip);
+    mFile.setZip(&mZip);*/
 }
 
 void ZipFileSaver::process(const QString &file, const Processor &func,
                            const bool compress) {
-    if(!mFile.open(QIODevice::WriteOnly, QuaZipNewInfo(file),
+    Q_UNUSED(file)
+    Q_UNUSED(func)
+    Q_UNUSED(compress)
+    RuntimeThrow("XEV not supported");
+    /*if(!mFile.open(QIODevice::WriteOnly, QuaZipNewInfo(file),
                    NULL, compress ? Z_DEFLATED : 0)) {
         RuntimeThrow("Could not open " + file + " in " + mZip.getZipName());
     }
@@ -44,13 +52,17 @@ void ZipFileSaver::process(const QString &file, const Processor &func,
         mFile.close();
         RuntimeThrow("Could not write " + file + " to " + mZip.getZipName());
     }
-    mFile.close();
+    mFile.close();*/
 }
 
 void ZipFileSaver::processText(const QString& file, const TextProcessor& func,
                                const bool compress) {
-    process(file, [&func](QIODevice* const dst) {
+    Q_UNUSED(file)
+    Q_UNUSED(func)
+    Q_UNUSED(compress)
+    RuntimeThrow("XEV not supported");
+    /*process(file, [&func](QIODevice* const dst) {
         QTextStream stream(dst);
         func(stream);
-    }, compress);
+    }, compress);*/
 }

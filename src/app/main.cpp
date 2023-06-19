@@ -93,11 +93,11 @@ void generateAlphaMesh(QPixmap& alphaMesh,
     p.end();
 }
 
-int main(int argc, char *argv[]) {
-    std::cout << "Entered main()" << std::endl;
-//#ifdef Q_OS_WIN
-//    SetProcessDPIAware(); // call before the main event loop
-//#endif // Q_OS_WIN
+int main(int argc, char *argv[])
+{
+    std::cout << QString("%1 %2 - %3").arg(AppSupport::getAppDisplayName(),
+                                           AppSupport::getAppVersion(),
+                                           AppSupport::getAppUrl()).toStdString() << std::endl << "---" << std::endl;
 
     QApplication::setApplicationDisplayName(AppSupport::getAppDisplayName());
     QApplication::setApplicationName(AppSupport::getAppName());
@@ -105,7 +105,7 @@ int main(int argc, char *argv[]) {
     QApplication::setOrganizationDomain(AppSupport::getAppDomain());
     QApplication::setApplicationVersion(AppSupport::getAppVersion());
 
-    //QApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     QApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
 

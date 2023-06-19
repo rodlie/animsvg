@@ -1,5 +1,5 @@
 #
-# Friction - https://github.com/friction2d/friction
+# Friction - https://friction.graphics
 #
 # Copyright (c) Friction developers
 #
@@ -18,41 +18,20 @@
 #
 
 cmake_minimum_required(VERSION 3.9)
-project(frictioncore VERSION 0.9.0 LANGUAGES CXX)
+project(frictioncore LANGUAGES CXX)
 
-if(NOT PROJECT_VERSION_TWEAK)
-    set(PROJECT_VERSION_TWEAK 0)
-endif()
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../cmake")
 
-option(SNAPSHOT "Snapshot build" OFF)
-set(SNAPSHOT_VERSION_MAJOR "" CACHE STRING "Snapshot major version")
-set(SNAPSHOT_VERSION_MINOR "" CACHE STRING "Snapshot minor version")
-set(SNAPSHOT_VERSION_PATCH "" CACHE STRING "Snapshot patch version")
-if(${SNAPSHOT})
-    set(PROJECT_VERSION_MAJOR ${SNAPSHOT_VERSION_MAJOR})
-    set(PROJECT_VERSION_MINOR ${SNAPSHOT_VERSION_MINOR})
-    set(PROJECT_VERSION_PATCH ${SNAPSHOT_VERSION_PATCH})
-    set(PROJECT_VERSION ${SNAPSHOT_VERSION_MAJOR}.${SNAPSHOT_VERSION_MINOR}.${SNAPSHOT_VERSION_PATCH})
-endif()
-message("Core build version ${PROJECT_VERSION}")
+include(friction-version)
+include(friction-meta)
+include(friction-common)
+#include(friction-quazip)
+include(friction-ffmpeg)
 
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
-
-set(GIT_COMMIT "" CACHE STRING "git commit")
 add_definitions(-DPROJECT_GIT="${GIT_COMMIT}")
-
-add_compile_options(-Wall -Wextra)
-if(CMAKE_BUILD_TYPE MATCHES "^(release|Release|RELEASE)$")
-    add_definitions(-DQT_NO_DEBUG_OUTPUT)
-else()
-    add_definitions(-DQT_MESSAGELOGCONTEXT)
-endif()
-
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_definitions(-DPROJECT_BRANCH="${GIT_BRANCH}")
+add_definitions(-DPROJECT_TAG="${GIT_TAG}")
 
 option(STATIC_FFMPEG "Link against static ffmpeg" OFF)
 
@@ -60,45 +39,11 @@ if(${STATIC_FFMPEG})
     set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-Bsymbolic")
 endif()
 
-find_package(PkgConfig)
-find_package(OpenMP)
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
-find_package(
-    Qt${QT_VERSION_MAJOR}
-    5.12
-    COMPONENTS
-    Gui
-    Concurrent
-    Widgets
-    OpenGL
-    Multimedia
-    Qml
-    Xml
-    Svg
-    REQUIRED
-)
-
-set(QSCINTILLA_LIBRARIES_DIRS "/usr/lib" CACHE STRING "qscintilla library path")
-set(QSCINTILLA_LIBRARIES "qscintilla2_qt5" CACHE STRING "qscintilla library")
-set(QSCINTILLA_INCLUDE_DIRS "/usr/include/x86_64-linux-gnu/qt5" CACHE STRING "qscintilla includes path")
-
-set(QUAZIP_LIBRARIES_DIRS "/usr/lib" CACHE STRING "quazip library path")
-set(QUAZIP_LIBRARIES "quazip5" CACHE STRING "quazip library")
-set(QUAZIP_INCLUDE_DIRS "/usr/include/quazip5" CACHE STRING "quazip includes path")
-
-pkg_search_module(MYPAINT REQUIRED libmypaint)
-pkg_check_modules(AVFORMAT REQUIRED libavformat)
-pkg_check_modules(AVCODEC REQUIRED libavcodec)
-pkg_check_modules(AVUTIL REQUIRED libavutil)
-pkg_check_modules(SWSCALE REQUIRED libswscale)
-pkg_check_modules(SWRESAMPLE REQUIRED libswresample)
-
 add_definitions(-DCORE_LIBRARY)
 
 include_directories(
-    ${MYPAINT_INCLUDE_DIRS}
-    ${QUAZIP_INCLUDE_DIRS}
-    ${AVFORMAT_INCLUDE_DIRS}
+    #${QUAZIP_INCLUDE_DIRS}
+    ${FFMPEG_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia
 )
 
@@ -157,7 +102,6 @@ set(
     Boxes/internallinkgroupbox.cpp
     Boxes/layerboxrenderdata.cpp
     Boxes/linkcanvasrenderdata.cpp
-    Boxes/paintbox.cpp
     Boxes/pathbox.cpp
     Boxes/pathboxrenderdata.cpp
     Boxes/patheffectsmenu.cpp
@@ -210,24 +154,9 @@ set(
     GUI/valueinput.cpp
     MovablePoints/gradientpoint.cpp
     MovablePoints/pathpivot.cpp
-    Ora/oracreator.cpp
-    Ora/oraimporter.cpp
-    Ora/oraparser.cpp
-    Paint/animatedsurface.cpp
-    Paint/autotiledsurface.cpp
-    Paint/autotilesdata.cpp
     Paint/brushcontexedwrapper.cpp
     Paint/brushescontext.cpp
-    Paint/brushstroke.cpp
-    Paint/brushstrokeset.cpp
-    Paint/colorconversions.cpp
-    Paint/drawableautotiledsurface.cpp
-    Paint/onionskin.cpp
-    Paint/painttarget.cpp
     Paint/simplebrushwrapper.cpp
-    Paint/tile.cpp
-    Paint/tilebitmaps.cpp
-    Paint/undoabletile.cpp
     PathEffects/custompatheffect.cpp
     PathEffects/dashpatheffect.cpp
     PathEffects/displacepatheffect.cpp
@@ -484,7 +413,6 @@ set(
     Boxes/internallinkgroupbox.h
     Boxes/layerboxrenderdata.h
     Boxes/linkcanvasrenderdata.h
-    Boxes/paintbox.h
     Boxes/pathbox.h
     Boxes/pathboxrenderdata.h
     Boxes/patheffectsmenu.h
@@ -538,25 +466,9 @@ set(
     GUI/valueinput.h
     MovablePoints/gradientpoint.h
     MovablePoints/pathpivot.h
-    Ora/oracreator.h
-    Ora/oraimporter.h
-    Ora/oraparser.h
-    Ora/orastructure.h
-    Paint/animatedsurface.h
-    Paint/autotiledsurface.h
-    Paint/autotilesdata.h
     Paint/brushcontexedwrapper.h
     Paint/brushescontext.h
-    Paint/brushstroke.h
-    Paint/brushstrokeset.h
-    Paint/colorconversions.h
-    Paint/drawableautotiledsurface.h
-    Paint/onionskin.h
-    Paint/painttarget.h
     Paint/simplebrushwrapper.h
-    Paint/tile.h
-    Paint/tilebitmaps.h
-    Paint/undoabletile.h
     PathEffects/custompatheffect.h
     PathEffects/custompatheffectcreator.h
     PathEffects/dashpatheffect.h
@@ -685,7 +597,6 @@ set(
     gpurendertools.h
     hardwareenums.h
     importhandler.h
-    libmypaintincludes.h
     matrixdecomposition.h
     memorydatahandler.h
     namefixer.h
@@ -804,48 +715,19 @@ set_target_properties(
 target_link_directories(
     ${PROJECT_NAME}
     PRIVATE
+    ${FFMPEG_LIBRARIES_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia/out/build
-    ${QUAZIP_LIBRARIES_DIRS}
+    #${QUAZIP_LIBRARIES_DIRS}
 )
-
-if(APPLE)
-    target_link_directories(
-        ${PROJECT_NAME}
-        PRIVATE
-        /opt/local/lib
-    )
-endif()
 
 target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
-    Qt${QT_VERSION_MAJOR}::Core
-    Qt${QT_VERSION_MAJOR}::Gui
-    Qt${QT_VERSION_MAJOR}::Concurrent
-    Qt${QT_VERSION_MAJOR}::Widgets
-    Qt${QT_VERSION_MAJOR}::OpenGL
-    Qt${QT_VERSION_MAJOR}::Multimedia
-    Qt${QT_VERSION_MAJOR}::Qml
-    Qt${QT_VERSION_MAJOR}::Xml
-    Qt${QT_VERSION_MAJOR}::Svg
-    ${MYPAINT_LIBRARIES}
-    ${QUAZIP_LIBRARIES}
-    ${AVFORMAT_LIBRARIES}
-    ${AVCODEC_LIBRARIES}
-    ${AVUTIL_LIBRARIES}
-    ${SWSCALE_LIBRARIES}
-    ${SWRESAMPLE_LIBRARIES}
-    skia
-    fontconfig
+    ${QT_LIBRARIES}
+    #${QUAZIP_LIBRARIES}
+    ${FFMPEG_LIBRARIES}
+    ${SKIA_LIBRARIES}
 )
-
-if(OpenMP_CXX_FOUND)
-    target_link_libraries(
-        ${PROJECT_NAME}
-        PRIVATE
-        OpenMP::OpenMP_CXX
-    )
-endif()
 
 if(APPLE)
     target_link_libraries(

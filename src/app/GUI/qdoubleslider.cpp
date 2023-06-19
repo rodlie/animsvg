@@ -28,9 +28,9 @@ SliderEdit::SliderEdit(QWidget* const parent) :
     setAttribute(Qt::WA_TranslucentBackground);
     setStyleSheet("background-color: rgba(0, 0, 0, 0);"
                   "color: black;");
-    eSizesUI::widget.add(this, [this](const int size) {
+    /*eSizesUI::widget.add(this, [this](const int size) {
         setFixedHeight(size);
-    });
+    });*/
 
     connect(this, &QLineEdit::editingFinished,
             this, &SliderEdit::lineEditingFinished);
@@ -103,10 +103,10 @@ QDoubleSlider::QDoubleSlider(const qreal minVal, const qreal maxVal,
     });
 
     setContentsMargins(0, 0, 0, 0);
-    eSizesUI::widget.add(this, [this](const int size) {
+    /*eSizesUI::widget.add(this, [this](const int size) {
         setFixedHeight(size);
         fitWidthToContent();
-    });
+    });*/
 }
 
 QDoubleSlider::QDoubleSlider(const QString &name,

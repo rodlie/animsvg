@@ -88,12 +88,12 @@ void CanvasWindow::setCurrentCanvas(Canvas * const canvas) {
 }
 
 void CanvasWindow::updatePaintModeCursor() {
-    mValidPaintTarget = mCurrentCanvas && mCurrentCanvas->hasValidPaintTarget();
+    /*mValidPaintTarget = mCurrentCanvas && mCurrentCanvas->hasValidPaintTarget();
     if(mValidPaintTarget) {
         setCursor(QCursor(QPixmap(":/cursors/cursor_crosshair_precise_open.png")));
     } else {
         setCursor(QCursor(QPixmap(":/cursors/cursor_crosshair_open.png")));
-    }
+    }*/
 }
 
 void CanvasWindow::setCanvasMode(const CanvasMode mode) {
@@ -145,6 +145,7 @@ bool CanvasWindow::hasNoCanvas() {
 #include "glhelpers.h"
 
 void CanvasWindow::renderSk(SkCanvas * const canvas) {
+    qreal pixelRatio = this->devicePixelRatioF();
     if(mCurrentCanvas) {
         canvas->save();
         mCurrentCanvas->renderSk(canvas, rect(),
@@ -155,14 +156,15 @@ void CanvasWindow::renderSk(SkCanvas * const canvas) {
     if(KFT_hasFocus()) {
         SkPaint paint;
         paint.setColor(SK_ColorRED);
-        paint.setStrokeWidth(4);
+        paint.setStrokeWidth(pixelRatio*4);
         paint.setStyle(SkPaint::kStroke_Style);
-        canvas->drawRect(SkRect::MakeWH(width(), height()), paint);
+        canvas->drawRect(SkRect::MakeWH(width()*pixelRatio, height()*pixelRatio), paint);
     }
 }
 
 void CanvasWindow::tabletEvent(QTabletEvent *e) {
-    if(!mCurrentCanvas) return;
+    Q_UNUSED(e)
+    /*if(!mCurrentCanvas) return;
     const auto canvasMode = mDocument.fCanvasMode;
     const QPoint globalPos = mapToGlobal(QPoint(0, 0));
     const qreal x = e->hiResGlobalX() - globalPos.x();
@@ -171,7 +173,7 @@ void CanvasWindow::tabletEvent(QTabletEvent *e) {
     if(canvasMode == CanvasMode::paint) {
         if(!mValidPaintTarget) updatePaintModeCursor();
         update();
-    }
+    }*/
 }
 
 void CanvasWindow::mousePressEvent(QMouseEvent *event) {
@@ -196,10 +198,10 @@ void CanvasWindow::mousePressEvent(QMouseEvent *event) {
     mPrevMousePos = pos;
     if(button == Qt::LeftButton) {
         mPrevPressPos = pos;
-        const auto mode = mDocument.fCanvasMode;
-        if(mode == CanvasMode::paint && !mValidPaintTarget) {
+        //const auto mode = mDocument.fCanvasMode;
+        /*if(mode == CanvasMode::paint && !mValidPaintTarget) {
             updatePaintModeCursor();
-        }
+        }*/
     }
 }
 
@@ -515,7 +517,7 @@ bool CanvasWindow::KFT_keyPressEvent(QKeyEvent *event) {
         if(mCurrentCanvas->handleModifierChange(e)) return false;
         if(mCurrentCanvas->handleTransormationInputKeyEvent(e)) return true;
     }
-    if(mCurrentCanvas->handlePaintModeKeyPress(e)) return true;
+    //if(mCurrentCanvas->handlePaintModeKeyPress(e)) return true;
     if(handleCutCopyPasteKeyPress(event)) return true;
     if(handleTransformationKeyPress(event)) return true;
     if(handleZValueKeyPress(event)) return true;

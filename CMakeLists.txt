@@ -1,5 +1,5 @@
 #
-# Friction - https://github.com/friction2d/friction
+# Friction - https://friction.graphics
 #
 # Copyright (c) Friction developers
 #
@@ -18,40 +18,34 @@
 #
 
 cmake_minimum_required(VERSION 3.9)
-project(friction2d VERSION 0.9.0)
+project(friction.graphics)
 
-option(SNAPSHOT "Snapshot build" OFF)
-set(SNAPSHOT_VERSION_MAJOR "" CACHE STRING "Snapshot major version")
-set(SNAPSHOT_VERSION_MINOR "" CACHE STRING "Snapshot minor version")
-set(SNAPSHOT_VERSION_PATCH "" CACHE STRING "Snapshot patch version")
-if(${SNAPSHOT})
-    set(PROJECT_VERSION_MAJOR ${SNAPSHOT_VERSION_MAJOR})
-    set(PROJECT_VERSION_MINOR ${SNAPSHOT_VERSION_MINOR})
-    set(PROJECT_VERSION_PATCH ${SNAPSHOT_VERSION_PATCH})
-    set(PROJECT_VERSION ${SNAPSHOT_VERSION_MAJOR}.${SNAPSHOT_VERSION_MINOR}.${SNAPSHOT_VERSION_PATCH})
-endif()
-message("Project build version ${PROJECT_VERSION}")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/src/cmake")
+include(friction-version)
+include(friction-meta)
+
+write_file(version.txt ${PROJECT_VERSION})
 
 if(UNIX AND NOT APPLE)
     set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
     set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
     set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
-    set(CPACK_PACKAGE_NAME "friction")
-    set(CPACK_PACKAGE_DESCRIPTION "2D Animation")
-    set(CPACK_PACKAGE_VENDOR "Friction developers")
+    set(CPACK_PACKAGE_NAME ${FRICTION_NAME})
+    set(CPACK_PACKAGE_DESCRIPTION ${PROJECT_DESCRIPTION})
+    set(CPACK_PACKAGE_VENDOR ${PROJECT_COPYRIGHT})
 
     set(CPACK_RPM_SPEC_MORE_DEFINE "%define _build_id_links none")
-    set(CPACK_RPM_PACKAGE_LICENSE "GPL3")
-    set(CPACK_RPM_PACKAGE_SUMMARY "2D Animation")
-    set(CPACK_RPM_PACKAGE_DESCRIPTION "2D Animation")
-    set(CPACK_RPM_PACKAGE_URL "https://github.com/friction2d/friction")
-    set(CPACK_RPM_FILE_NAME "friction.rpm")
+    set(CPACK_RPM_PACKAGE_LICENSE ${PROJECT_LICENSE})
+    set(CPACK_RPM_PACKAGE_SUMMARY ${PROJECT_DESCRIPTION})
+    set(CPACK_RPM_PACKAGE_DESCRIPTION ${PROJECT_DESCRIPTION})
+    set(CPACK_RPM_PACKAGE_URL ${PROJECT_HOMEPAGE_URL})
+    set(CPACK_RPM_FILE_NAME "${FRICTION_NAME}.rpm")
 
     set(CPACK_DEBIAN_PACKAGE_DEPENDS "qt5-image-formats-plugins, libqt5multimedia5-plugins")
     set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
-    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Friction developers")
-    set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/friction2d/friction")
-    set(CPACK_DEBIAN_FILE_NAME "friction.deb")
+    set(CPACK_DEBIAN_PACKAGE_MAINTAINER ${PROJECT_COPYRIGHT})
+    set(CPACK_DEBIAN_PACKAGE_HOMEPAGE ${PROJECT_HOMEPAGE_URL})
+    set(CPACK_DEBIAN_FILE_NAME "${FRICTION_NAME}.deb")
 
     include(CPack)
 endif()

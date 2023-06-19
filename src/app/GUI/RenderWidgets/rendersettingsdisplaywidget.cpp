@@ -12,12 +12,12 @@ RenderSettingsDisplayWidget::RenderSettingsDisplayWidget(QWidget * const parent)
     mResolutionLabel = new QLabel("<b>Resolution:</b>");
     mFpsLabel = new QLabel("<b>Fps:</b>");
 
-    eSizesUI::widget.add(this, [this](const int size) {
+    /*eSizesUI::widget.add(this, [this](const int size) {
         mSceneLabel->setFixedHeight(size);
         mFrameRangeLabel->setFixedHeight(size);
         mResolutionLabel->setFixedHeight(size);
         mFpsLabel->setFixedHeight(size);
-    });
+    });*/
 
     mMainLayout->addWidget(mSceneLabel);
     mMainLayout->addWidget(mFrameRangeLabel);
@@ -25,7 +25,7 @@ RenderSettingsDisplayWidget::RenderSettingsDisplayWidget(QWidget * const parent)
     mMainLayout->addWidget(mFpsLabel);
 
     mMainLayout->setSpacing(0);
-    mMainLayout->setAlignment(Qt::AlignTop);
+    //mMainLayout->setAlignment(Qt::AlignTop);
 }
 
 void RenderSettingsDisplayWidget::setRenderSettings(
@@ -39,5 +39,5 @@ void RenderSettingsDisplayWidget::setRenderSettings(
                               arg(settings.fResolution*100, 0, 'f', 2).
                               arg(settings.fVideoWidth).
                               arg(settings.fVideoHeight));
-    mFpsLabel->setText(QString("<b>Fps:</b> %1fps").arg(settings.fFps, 0, 'f', 2));
+    mFpsLabel->setText(QString("<b>Fps:</b> %1").arg(settings.fFps, 0, 'f', 2));
 }

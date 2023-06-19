@@ -32,7 +32,7 @@
 #include "pointhelpers.h"
 #include "Boxes/internallinkbox.h"
 #include "clipboardcontainer.h"
-#include "Boxes/paintbox.h"
+//#include "Boxes/paintbox.h"
 #include <QFile>
 #include "MovablePoints/smartnodepoint.h"
 #include "Boxes/internallinkcanvas.h"
@@ -52,7 +52,7 @@ Canvas::Canvas(Document &document,
                const int frameCount,
                const qreal fps)
     : mDocument(document)
-    , mPaintTarget(this)
+    //, mPaintTarget(this)
 {
     SceneParentSelfAssign(this);
     connect(&mDocument, &Document::canvasModeSet,
@@ -295,9 +295,10 @@ void Canvas::renderSk(SkCanvas* const canvas,
 
     canvas->restore();
 
-    if(!enve_cast<Canvas*>(mCurrentContainer))
+    if (!enve_cast<Canvas*>(mCurrentContainer)) {
         mCurrentContainer->drawBoundingRect(canvas, invZoom);
-    if(!mPaintTarget.isValid()) {
+    }
+    //if(!mPaintTarget.isValid()) {
         const auto mods = QApplication::queryKeyboardModifiers();
         const bool ctrlPressed = mods & Qt::CTRL && mods & Qt::SHIFT;
         for(int i = mSelectedBoxes.count() - 1; i >= 0; i--) {
@@ -312,7 +313,7 @@ void Canvas::renderSk(SkCanvas* const canvas,
             obj->drawNullObject(canvas, mCurrentMode, invZoom, ctrlPressed);
             canvas->restore();
         }
-    }
+    //}
 
     if(mCurrentMode == CanvasMode::boxTransform ||
        mCurrentMode == CanvasMode::pointTransform) {
@@ -372,7 +373,7 @@ void Canvas::renderSk(SkCanvas* const canvas,
         }
     }
 
-    if(mPaintTarget.isValid()) {
+    /*if(mPaintTarget.isValid()) {
         canvas->save();
         mPaintTarget.draw(canvas, viewTrans, invZoom, drawRect,
                           filter, mDocument.fOnionVisible);
@@ -383,7 +384,7 @@ void Canvas::renderSk(SkCanvas* const canvas,
         canvas->drawIRect(bRect, paint);
         paint.setPathEffect(nullptr);
         canvas->restore();
-    } else {
+    } else {*/
         if(mSelecting) {
             paint.setStyle(SkPaint::kStroke_Style);
             paint.setPathEffect(dashPathEffect);
@@ -405,7 +406,7 @@ void Canvas::renderSk(SkCanvas* const canvas,
                 mHoveredBox->drawHoveredSk(canvas, invZoom);
             }
         }
-    }
+    //}
 
     paint.setStyle(SkPaint::kStroke_Style);
     paint.setStrokeWidth(invZoom);
@@ -595,7 +596,7 @@ void Canvas::makePointCtrlsCorner()
 
 void Canvas::newEmptyPaintFrameAction()
 {
-    if(mPaintTarget.isValid()) mPaintTarget.newEmptyFrame();
+    //if(mPaintTarget.isValid()) mPaintTarget.newEmptyFrame();
 }
 
 void Canvas::moveSecondSelectionPoint(const QPointF &pos)
@@ -628,10 +629,10 @@ void Canvas::setCanvasMode(const CanvasMode mode)
     clearCurrentSmartEndPoint();
     clearLastPressedPoint();
     updatePivot();
-    updatePaintBox();
+    //updatePaintBox();
 }
 
-void Canvas::updatePaintBox()
+/*void Canvas::updatePaintBox()
 {
     mPaintTarget.setPaintBox(nullptr);
     if (mCurrentMode != CanvasMode::paint) { return; }
@@ -642,16 +643,16 @@ void Canvas::updatePaintBox()
             break;
         }
     }
-}
+}*/
 
-bool Canvas::handlePaintModeKeyPress(const eKeyEvent &e)
+/*bool Canvas::handlePaintModeKeyPress(const eKeyEvent &e)
 {
     if (mCurrentMode != CanvasMode::paint) { return false; }
     if (e.fKey == Qt::Key_N && mPaintTarget.isValid()) {
         newEmptyPaintFrameAction();
     } else { return false; }
     return true;
-}
+}*/
 
 bool Canvas::handleModifierChange(const eKeyEvent &e)
 {
@@ -771,7 +772,7 @@ void Canvas::anim_setAbsFrame(const int frame)
 
     mUndoRedoStack->setFrame(frame);
 
-    if (mCurrentMode == CanvasMode::paint) { mPaintTarget.setupOnionSkin(); }
+    //if (mCurrentMode == CanvasMode::paint) { mPaintTarget.setupOnionSkin(); }
     emit currentFrameChanged(frame);
 
     schedulePivotUpdate();

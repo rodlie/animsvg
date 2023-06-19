@@ -39,10 +39,10 @@ public:
             QrealAnimator* const target) const = 0;
     virtual void showDurationSettingsDialog(
             DurationRectangle* const target) const = 0;
-    virtual bool execAnimationToPaint(
+    /*virtual bool execAnimationToPaint(
             const AnimationBox* const src,
             int& firstAbsFrame, int& lastAbsFrame,
-            int& increment) const = 0;
+            int& increment) const = 0;*/
     virtual void showSceneSettingsDialog(
             Canvas* const scene) const = 0;
     virtual void displayMessageToUser(

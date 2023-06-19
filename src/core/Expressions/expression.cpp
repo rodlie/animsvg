@@ -149,12 +149,20 @@ QJSValue Expression::evaluate() {
     return mEEvaluate.call(values);
 }
 
-QJSValue Expression::evaluate(const qreal relFrame) {
+QJSValue Expression::evaluate(const qreal relFrame)
+{
+    qDebug() << "evaluate frame" << relFrame;
     QJSValueList values;
-    for(const auto& binding : mBindings) {
-        values << binding.second->getJSValue(*mEngine, relFrame);
+    for (const auto& binding : mBindings) {
+        QString path = binding.second->path();
+        QJSValue val = binding.second->getJSValue(*mEngine, relFrame);
+        qDebug() << "evaluate binding" << binding.first << path << val.toNumber();
+        if (path == "$frame") { values << QJSValue(relFrame); }
+        else { values << val; }
     }
-    return mEEvaluate.call(values);
+    QJSValue res = mEEvaluate.call(values);
+    qDebug() << "evaluate result" << res.toNumber();
+    return res;
 }
 
 FrameRange Expression::identicalRelRange(const int absFrame) const {

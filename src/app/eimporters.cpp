@@ -19,7 +19,7 @@
 #include "GUI/mainwindow.h"
 #include "eimporters.h"
 #include "svgimporter.h"
-#include "Ora/oraimporter.h"
+//#include "Ora/oraimporter.h"
 
 qsptr<BoundingBox> eXevImporter::import(const QFileInfo &fileInfo, Canvas * const scene) const {
     Q_UNUSED(scene);
@@ -41,10 +41,10 @@ qsptr<BoundingBox> eSvgImporter::import(const QFileInfo &fileInfo, Canvas * cons
                                   gradientCreator);
 }
 
-qsptr<BoundingBox> eOraImporter::import(const QFileInfo &fileInfo, Canvas * const scene) const {
+/*qsptr<BoundingBox> eOraImporter::import(const QFileInfo &fileInfo, Canvas * const scene) const {
     const auto gradientCreator = [scene]() {
         return scene->createNewGradient();
     };
     return ImportORA::loadORAFile(fileInfo.absoluteFilePath(),
                                   gradientCreator);
-}
+}*/

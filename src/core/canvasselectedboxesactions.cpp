@@ -393,7 +393,7 @@ void Canvas::setCurrentBox(BoundingBox* const box) {
     emit currentBoxChanged(box);
 }
 
-#include "Boxes/paintbox.h"
+//#include "Boxes/paintbox.h"
 void Canvas::addBoxToSelection(BoundingBox * const box) {
     if(box->isSelected()) return;
     auto& connCtx = mSelectedBoxes.addObj(box);
@@ -418,11 +418,11 @@ void Canvas::addBoxToSelection(BoundingBox * const box) {
     //setCurrentFillStrokeSettingsFromBox(box);
     setCurrentBox(box);
 
-    if(mCurrentMode == CanvasMode::paint) {
+    /*if(mCurrentMode == CanvasMode::paint) {
         if(const auto pBox = enve_cast<PaintBox*>(box)) {
             mPaintTarget.setPaintBox(pBox);
         }
-    }
+    }*/
     emit selectedPaintSettingsChanged();
     emit objectSelectionChanged();
 }
@@ -432,9 +432,9 @@ void Canvas::removeBoxFromSelection(BoundingBox * const box) {
     mSelectedBoxes.removeObj(box);
     box->setSelected(false);
     schedulePivotUpdate();
-    if(mCurrentMode == CanvasMode::paint) updatePaintBox();
-    if(mSelectedBoxes.isEmpty()) setCurrentBox(nullptr);
-    else setCurrentBox(mSelectedBoxes.last());
+    //if(mCurrentMode == CanvasMode::paint) updatePaintBox();
+    if (mSelectedBoxes.isEmpty()) { setCurrentBox(nullptr); }
+    else { setCurrentBox(mSelectedBoxes.last()); }
     emit selectedPaintSettingsChanged();
     emit objectSelectionChanged();
 }
@@ -451,8 +451,8 @@ void Canvas::clearBoxesSelection() {
 }
 
 void Canvas::clearBoxesSelectionList() {
-    if(mCurrentMode == CanvasMode::paint)
-        mPaintTarget.setPaintBox(nullptr);
+    //if(mCurrentMode == CanvasMode::paint)
+        //mPaintTarget.setPaintBox(nullptr);
     mSelectedBoxes.clear();
     emit selectedPaintSettingsChanged();
     emit objectSelectionChanged();

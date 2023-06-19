@@ -230,7 +230,7 @@ eSettings::eSettings(const int cpuThreads,
                      QColor(0, 0, 0, 25));
     gSettings << std::make_shared<eBoolSetting>(
                      fTimelineHighlightRow,
-                     "timelineHighlightRow", false);
+                     "timelineHighlightRow", true);
     gSettings << std::make_shared<eColorSetting>(
                      fTimelineHighlightRowColor,
                      "timelineHighlightRowColor",

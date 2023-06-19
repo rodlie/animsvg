@@ -21,9 +21,9 @@
 #include <QLabel>
 #include "Boxes/boxwithpatheffects.h"
 #include "Animators/paintsettingsanimator.h"
-#include "Paint/autotiledsurface.h"
+//#include "Paint/autotiledsurface.h"
 #include "pathboxrenderdata.h"
-#include "libmypaintincludes.h"
+//#include "libmypaintincludes.h"
 #include "Animators/qcubicsegment1danimator.h"
 class SmartVectorPath;
 class GradientPoints;

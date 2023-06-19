@@ -18,7 +18,7 @@
 #define SAVEDCOLORSWIDGET_H
 
 #include <QWidget>
-#include "GUI/BrushWidgets/flowlayout.h"
+#include "GUI/flowlayout.h"
 #include "colorhelpers.h"
 
 class SavedColorButton;

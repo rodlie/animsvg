@@ -10,7 +10,7 @@ Generic build instructions for GNU/Linux.
 * python3
 * ninja
 * cmake
-* Qt5 *(5.12+)*
+* Qt5 *(5.12/5.15)*
     * Gui
     * Concurrent
     * Widgets
@@ -19,8 +19,6 @@ Generic build instructions for GNU/Linux.
     * Qml
     * Xml
     * Svg
-* libmypaint
-* quazip
 * qscintilla
 * ffmpeg
     * libavformat
@@ -48,11 +46,9 @@ libfreetype-dev \
 libavcodec-dev \
 libavformat-dev \
 libavutil-dev \
-libmypaint-dev \
 libqscintilla2-qt5-dev \
 libqt5opengl5-dev \
 libqt5svg5-dev \
-libquazip5-dev \
 libswresample-dev \
 libswscale-dev \
 libunwind-dev \
@@ -113,15 +109,12 @@ mkdir build
 cd build
 ```
 
-Note that if you are not using Ubuntu you will need to set paths for ``qscintilla`` and ``quazip``:
+Note that if you are not using Ubuntu you will need to set paths for ``qscintilla``:
 
 ```
 cmake -G Ninja \
 -DCMAKE_BUILD_TYPE=Release \
 -DCMAKE_INSTALL_PREFIX=/usr \
--DQUAZIP_INCLUDE_DIRS=<PATH_TO_QUAZIP_INCLUDE_FILES> \
--DQUAZIP_LIBRARIES_DIRS=<PATH_TO_LIBS> \
--DQUAZIP_LIBRARIES=<QUAZIP_LIBRARY_NAME> \
 -DQSCINTILLA_INCLUDE_DIRS=<PATH_TO_QSCINTILLA_INCLUDE_DIR> \
 -DQSCINTILLA_LIBRARIES_DIRS=<PATH_TO_LIBS> \
 -DQSCINTILLA_LIBRARIES=<QSCINTILLA_LIBRARY_NAME> \
@@ -139,16 +132,6 @@ Now build:
 ```
 cmake --build .
 ```
-
-## Install Friction
-
-```
-make install
-```
-
-Add ``DESTDIR=<SOME_TEMP_DIR>`` if you want to install to a different/temporarily folder, else it will install to ``DCMAKE_INSTALL_PREFIX``.
-
-*It's not recommended that you install Friction this way as an end user.*
 
 ## Package Friction
 

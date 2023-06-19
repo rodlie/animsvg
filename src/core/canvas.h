@@ -32,12 +32,12 @@
 #include "MovablePoints/segment.h"
 #include "MovablePoints/movablepoint.h"
 #include "Boxes/canvasrenderdata.h"
-#include "Paint/drawableautotiledsurface.h"
+//#include "Paint/drawableautotiledsurface.h"
 #include "canvasbase.h"
-#include "Paint/animatedsurface.h"
+//#include "Paint/animatedsurface.h"
 #include <QAction>
 #include "Animators/outlinesettingsanimator.h"
-#include "Paint/painttarget.h"
+//#include "Paint/painttarget.h"
 #include "CacheHandlers/usepointer.h"
 #include "CacheHandlers/sceneframecontainer.h"
 #include "undoredo.h"
@@ -46,7 +46,7 @@
 #include <QTabletEvent>
 
 class AnimatedSurface;
-class PaintBox;
+//class PaintBox;
 class TextBox;
 class Circle;
 class RectangleBox;
@@ -232,7 +232,7 @@ public:
 
     void selectAndAddContainedPointsToSelection(const QRectF &absRect);
 //
-    void newPaintBox(const QPointF &pos);
+    //void newPaintBox(const QPointF &pos);
 
     void mousePressEvent(const eMouseEvent &e);
     void mouseReleaseEvent(const eMouseEvent &e);
@@ -594,16 +594,16 @@ public:
     void deselectAllBoxesAction();
     void selectAllBoxesAction();
     void selectAllPointsAction();
-    bool handlePaintModeKeyPress(const eKeyEvent &e);
+    //bool handlePaintModeKeyPress(const eKeyEvent &e);
     bool handleModifierChange(const eKeyEvent &e);
     bool handleTransormationInputKeyEvent(const eKeyEvent &e);
 
     void setCurrentGroupParentAsCurrentGroup();
 
-    bool hasValidPaintTarget() const
+    /*bool hasValidPaintTarget() const
     {
         return mPaintTarget.isValid();
-    }
+    }*/
 
     void queTasks();
 
@@ -688,9 +688,9 @@ protected:
 
     qsptr<UndoRedoStack> mUndoRedoStack;
 
-    void updatePaintBox();
+    //void updatePaintBox();
 
-    PaintTarget mPaintTarget;
+    //PaintTarget mPaintTarget;
     bool mStylusDrawing = false;
 
     uint mLastStateId = 0;

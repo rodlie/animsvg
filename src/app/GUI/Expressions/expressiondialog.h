@@ -16,10 +16,15 @@
 
 #ifndef EXPRESSIONDIALOG_H
 #define EXPRESSIONDIALOG_H
+
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QLabel>
+#include <QTabWidget>
+#include <QComboBox>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
 
 #include "conncontext.h"
 
@@ -32,21 +37,42 @@ class JSEditor;
 
 class QsciAPIs;
 
-class ExpressionDialog : public QDialog {
+class ExpressionDialog : public QDialog
+{
 public:
     ExpressionDialog(QrealAnimator* const target,
                      QWidget * const parent = nullptr);
+
 private:
+    struct ExPreset
+    {
+        bool valid = false;
+        QString definitions;
+        QString bindings;
+        QString script;
+    };
     using PropertyBindingMap = std::map<QString, QSharedPointer<PropertyBindingBase>>;
     bool getBindings(PropertyBindingMap& bindings);
     void updateScriptBindings();
     void updateScriptDefinitions();
     void updateAllScript();
     void setCurrentTabId(const int id);
-
+    const QStringList generateEasingPresets();
+    bool populateEasingPresets();
     bool apply(const bool action);
+    const ExPreset readEasingPreset(const QString &filename);
 
     QrealAnimator* const mTarget;
+
+    QTabWidget *mTab;
+    int mTabEasingPreset;
+    int mTabEditor;
+
+    QComboBox *mEasingPresetsBox;
+    QDoubleSpinBox *mEasingPresetStartValueSpin;
+    QDoubleSpinBox *mEasingPresetEndValueSpin;
+    QSpinBox *mEasingPresetStartFrameSpin;
+    QSpinBox *mEasingPresetEndFrameSpin;
 
     QIcon mRedDotIcon;
 

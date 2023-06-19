@@ -263,6 +263,8 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
     setLayout(mWidgetsLayout);
 
     mColorLabel = new ColorLabel(this);
+    mColorLabel->setSizePolicy(QSizePolicy::Expanding,
+                               QSizePolicy::Expanding);
 
 //    mWheelWidget->setLayout(mWheelLayout);
 //    mWheelLayout->setAlignment(Qt::AlignTop);
@@ -270,6 +272,17 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
 //    mWheelLayout->addWidget(wheel_triangle_widget, Qt::AlignHCenter);
 //    mWheelLayout->setAlignment(wheel_triangle_widget, Qt::AlignHCenter);
 
+
+    int spinWidth = 50;
+    rSpin->setFixedWidth(spinWidth);
+    gSpin->setFixedWidth(spinWidth);
+    bSpin->setFixedWidth(spinWidth);
+    hSpin->setFixedWidth(spinWidth);
+    hsvSSpin->setFixedWidth(spinWidth);
+    vSpin->setFixedWidth(spinWidth);
+    hslSSpin->setFixedWidth(spinWidth);
+    lSpin->setFixedWidth(spinWidth);
+    aSpin->setFixedWidth(spinWidth);
 
     rRect = new ColorValueRect(RED_PROGRAM, this);
     rLayout->addWidget(rLabel);
@@ -325,13 +338,15 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
     aLayout->addWidget(aRect);
     aLayout->addWidget(aSpin);
 
-    mPickingButton = new ActionButton("toolbarButtons/pickUnchecked.png", "", this);
-    connect(mPickingButton, &ActionButton::released,
+    mPickingButton = new QPushButton(QIcon::fromTheme("pick"), QString(), this);
+    mPickingButton->setToolTip(tr("Pick Color"));
+    connect(mPickingButton, &QPushButton::released,
             this, &ColorSettingsWidget::startColorPicking);
     mColorLabelLayout->addWidget(mColorLabel);
     mColorLabelLayout->addWidget(mPickingButton);
     mWidgetsLayout->addLayout(mColorLabelLayout);
 
+    mTabWidget->setTabPosition(QTabWidget::South);
     mTabWidget->addTab(mRGBWidget, "RGB");
     mTabWidget->addTab(mHSVWidget, "HSV");
     mTabWidget->addTab(mHSLWidget, "HSL");
@@ -345,15 +360,22 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
     hexLayout->addWidget(mHexEdit);
     mRGBLayout->addLayout(hexLayout);
 
+    QWidget *mColorModeWidget = new QWidget(this);
+    mColorModeWidget->setSizePolicy(QSizePolicy::Expanding,
+                                    QSizePolicy::Expanding);
+    mColorModeWidget->setContentsMargins(0, 0, 0, 0);
+    mColorModeLayout = new QHBoxLayout(mColorModeWidget);
+    mColorModeLayout->setContentsMargins(0, 0, 0, 0);
     mColorModeLayout->addWidget(mColorModeLabel);
     mColorModeLayout->addWidget(mColorModeCombo);
     mColorModeCombo->addItem("RGB");
     mColorModeCombo->addItem("HSV");
     mColorModeCombo->addItem("HSL");
     connect(mColorModeCombo, qOverload<int>(&QComboBox::activated),
-            this, &ColorSettingsWidget::setColorMode);
+            this, &ColorSettingsWidget::setColorModeFromCombo);
 
-    mWidgetsLayout->addLayout(mColorModeLayout);
+    mTabWidget->setCornerWidget(mColorModeWidget);
+    //mWidgetsLayout->addLayout(mColorModeLayout);
 
     mBookmarkedColors = new SavedColorsWidget(this);
     mWidgetsLayout->addWidget(mBookmarkedColors);
@@ -733,6 +755,25 @@ void ColorSettingsWidget::updateAlphaFromSpin() {
 void ColorSettingsWidget::setColorMode() {
     const auto colorSetting = getColorSetting(ColorSettingType::apply,
                                               ColorParameter::colorMode);
+    emit colorSettingSignal(colorSetting);
+    Document::sInstance->actionFinished();
+}
+
+void ColorSettingsWidget::setColorModeFromCombo(int index)
+{
+    qDebug() << "setColorModeFromCombo" << index;
+    auto colorSetting = getColorSetting(ColorSettingType::apply,
+                                        ColorParameter::colorMode);
+    switch(index) {
+    case 1:
+        colorSetting.fSettingMode = ColorMode::hsv;
+        break;
+    case 2:
+        colorSetting.fSettingMode = ColorMode::hsl;
+        break;
+    default:
+        colorSetting.fSettingMode = ColorMode::rgb;
+    }
     emit colorSettingSignal(colorSetting);
     Document::sInstance->actionFinished();
 }

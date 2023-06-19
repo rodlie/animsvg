@@ -42,7 +42,7 @@ protected:
     sk_sp<SkImage> mImage;
 };
 
-class CORE_EXPORT OraLoader : public ImageLoader
+/*class CORE_EXPORT OraLoader : public ImageLoader
 {
     e_OBJECT
 
@@ -51,7 +51,7 @@ protected:
 
 public:
     void process();
-};
+};*/
 
 class CORE_EXPORT ImageFileDataHandler : public FileDataCacheHandler
 {

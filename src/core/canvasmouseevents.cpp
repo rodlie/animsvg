@@ -15,7 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "canvas.h"
-#include "Boxes/paintbox.h"
+//#include "Boxes/paintbox.h"
 #include "Boxes/textbox.h"
 #include "Boxes/rectangle.h"
 #include "Boxes/circle.h"
@@ -24,7 +24,7 @@
 #include "MovablePoints/pathpivot.h"
 #include "eevent.h"
 
-void Canvas::newPaintBox(const QPointF &pos) {
+/*void Canvas::newPaintBox(const QPointF &pos) {
     const auto paintBox = enve::make_shared<PaintBox>();
     paintBox->planCenterPivotPosition();
     mCurrentContainer->addContained(paintBox);
@@ -32,13 +32,13 @@ void Canvas::newPaintBox(const QPointF &pos) {
     clearBoxesSelection();
     clearPointsSelection();
     addBoxToSelection(paintBox.get());
-}
+}*/
 
 void Canvas::mousePressEvent(const eMouseEvent &e) {
     if(mStylusDrawing) return;
     if(isPreviewingOrRendering()) return;
     if(e.fMouseGrabbing && e.fButton == Qt::LeftButton) return;
-    if(mCurrentMode == CanvasMode::paint) {
+    /*if(mCurrentMode == CanvasMode::paint) {
         if(e.fButton == Qt::LeftButton) {
             const auto paintMode = mDocument.fPaintMode;
             if(paintMode <= PaintMode::colorize) {
@@ -54,7 +54,7 @@ void Canvas::mousePressEvent(const eMouseEvent &e) {
                 mPaintTarget.cropPress(e.fPos);
             }
         }
-    } else {
+    }*/ else {
         if(e.fButton == Qt::LeftButton) {
             handleLeftButtonMousePress(e);
         }
@@ -76,7 +76,7 @@ void Canvas::mouseMoveEvent(const eMouseEvent &e) {
         return;
     }
 
-    if(mCurrentMode == CanvasMode::paint && leftPressed) {
+    /*if(mCurrentMode == CanvasMode::paint && leftPressed) {
 #ifdef Q_OS_WIN
         if(e.fSynth) return;
 #endif
@@ -90,7 +90,7 @@ void Canvas::mouseMoveEvent(const eMouseEvent &e) {
             mPaintTarget.cropMove(e.fPos);
         }
         return;
-    } else if(leftPressed || e.fMouseGrabbing) {
+    } else*/ if(leftPressed || e.fMouseGrabbing) {
         if(mMovesToSkip > 0) {
             mMovesToSkip--;
             return;
@@ -156,7 +156,7 @@ void Canvas::mouseReleaseEvent(const eMouseEvent &e) {
     }
     if(e.fButton != Qt::LeftButton) return;
     schedulePivotUpdate();
-    if(mCurrentMode == CanvasMode::paint) {
+    /*if(mCurrentMode == CanvasMode::paint) {
         const auto paintMode = mDocument.fPaintMode;
         if(paintMode <= PaintMode::colorize) {
             mPaintTarget.paintRelease();
@@ -166,7 +166,7 @@ void Canvas::mouseReleaseEvent(const eMouseEvent &e) {
             mPaintTarget.cropRelease(e.fPos);
         }
         return;
-    }
+    }*/
 
     handleLeftMouseRelease(e);
 
@@ -213,7 +213,7 @@ void Canvas::mouseDoubleClickEvent(const eMouseEvent &e) {
 
 void Canvas::tabletEvent(const QTabletEvent * const e,
                          const QPointF &pos) {
-    const auto type = e->type();
+    /*const auto type = e->type();
     if(mCurrentMode == CanvasMode::paint) {
         if(type == QEvent::TabletRelease ||
            e->buttons() & Qt::MiddleButton) {
@@ -233,5 +233,5 @@ void Canvas::tabletEvent(const QTabletEvent * const e,
                                    e->xTilt(), e->yTilt(),
                                    mDocument.fBrush);
         }
-    }
+    }*/
 }

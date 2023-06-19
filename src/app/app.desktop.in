@@ -1,9 +1,9 @@
 [Desktop Entry]
-Name=@PROJECT_DISPLAY_NAME@
-Exec=@PROJECT_NAME@
-Icon=@PROJECT_NAME@
+Name=@FRICTION_DISPLAY_NAME@
+Exec=@FRICTION_NAME@
+Icon=@FRICTION_NAME@
 Comment=@PROJECT_DESCRIPTION@
 Terminal=false
 Type=Application
 Categories=Graphics;Video;
-MimeType=application/vnd.@PROJECT_NAME@-project;
+MimeType=application/vnd.@FRICTION_NAME@-project;

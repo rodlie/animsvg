@@ -1,5 +1,5 @@
 /*
-# Friction - https://friction2d.com
+# Friction - https://friction.graphics
 # Copyright (c) Friction developers
 #
 # Fork of enve
@@ -31,6 +31,11 @@ AlignWidget::AlignWidget(QWidget* const parent)
     , mAlignPivot(nullptr)
     , mRelativeTo(nullptr)
 {
+    QPalette pal = QPalette();
+    pal.setColor(QPalette::Window, QColor(33, 33, 38));
+    setAutoFillBackground(true);
+    setPalette(pal);
+
     const auto mainLayout = new QVBoxLayout(this);
     setLayout(mainLayout);
 
@@ -53,7 +58,7 @@ AlignWidget::AlignWidget(QWidget* const parent)
     mainLayout->addLayout(buttonsLay);
     mainLayout->addStretch();
 
-    int buttonSize = 24;
+    int buttonSize = 20;
 
     const auto leftButton = new QPushButton(this);
     leftButton->setIcon(QIcon::fromTheme("pivot-align-left"));

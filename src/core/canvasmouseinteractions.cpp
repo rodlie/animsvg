@@ -28,7 +28,7 @@
 #include "Boxes/internallinkbox.h"
 #include "Boxes/containerbox.h"
 #include "Boxes/smartvectorpath.h"
-#include "Boxes/paintbox.h"
+//#include "Boxes/paintbox.h"
 #include "Boxes/nullobject.h"
 
 #include "pointtypemenu.h"

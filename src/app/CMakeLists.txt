@@ -1,7 +1,7 @@
 #
-# Friction - https://github.com/friction2d/friction
+# Friction - https://friction.graphics
 #
-# Copyright (c) Friction developers
+# Copyright (c) Friction contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,46 +16,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+# See 'README.md' for more information.
+#
 
 cmake_minimum_required(VERSION 3.9)
-project(friction VERSION 0.9.0 LANGUAGES CXX)
+project(friction LANGUAGES CXX)
 
-if(NOT PROJECT_VERSION_TWEAK)
-    set(PROJECT_VERSION_TWEAK 0)
-endif()
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../cmake")
 
-option(SNAPSHOT "Snapshot build" OFF)
-set(SNAPSHOT_VERSION_MAJOR "" CACHE STRING "Snapshot major version")
-set(SNAPSHOT_VERSION_MINOR "" CACHE STRING "Snapshot minor version")
-set(SNAPSHOT_VERSION_PATCH "" CACHE STRING "Snapshot patch version")
-if(${SNAPSHOT})
-    set(PROJECT_VERSION_MAJOR ${SNAPSHOT_VERSION_MAJOR})
-    set(PROJECT_VERSION_MINOR ${SNAPSHOT_VERSION_MINOR})
-    set(PROJECT_VERSION_PATCH ${SNAPSHOT_VERSION_PATCH})
-    set(PROJECT_VERSION ${SNAPSHOT_VERSION_MAJOR}.${SNAPSHOT_VERSION_MINOR}.${SNAPSHOT_VERSION_PATCH})
-endif()
-message("App build version ${PROJECT_VERSION}")
+include(friction-version)
+include(friction-meta)
+include(friction-common)
+#include(friction-quazip)
+include(friction-ffmpeg)
 
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
-
-add_compile_options(-Wall -Wextra)
-if(CMAKE_BUILD_TYPE MATCHES "^(release|Release|RELEASE)$")
-    add_definitions(-DQT_NO_DEBUG_OUTPUT)
-else()
-    add_definitions(-DQT_MESSAGELOGCONTEXT)
-endif()
-
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-set(PROJECT_DISPLAY_NAME "Friction")
-set(COMPANY "Friction developers")
-set(COPYRIGHT "Copyright Friction developers. All rights reserved.")
-set(IDENTIFIER "com.friction2d")
-set(PROJECT_DESCRIPTION "2D Animation")
 
 if(APPLE)
     set(ICON_FILE ${CMAKE_CURRENT_SOURCE_DIR}/icons/${PROJECT_NAME}.icns)
@@ -63,47 +38,49 @@ if(APPLE)
     set(MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION})
     set(MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION})
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
-    set(MACOSX_BUNDLE_COPYRIGHT ${COPYRIGHT})
-    set(MACOSX_BUNDLE_GUI_IDENTIFIER ${IDENTIFIER})
+    set(MACOSX_BUNDLE_COPYRIGHT ${PROJECT_COPYRIGHT})
+    set(MACOSX_BUNDLE_GUI_IDENTIFIER ${PROJECT_IDENTIFIER})
     set(MACOSX_BUNDLE_ICON_FILE ${PROJECT_NAME})
     set_source_files_properties(${ICON_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
     set(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks")
 endif()
 
-find_package(PkgConfig)
-find_package(OpenMP)
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
-find_package(
-    Qt${QT_VERSION_MAJOR}
-    5.12
-    COMPONENTS
-    Gui
-    Concurrent
-    Widgets
-    OpenGL
-    Multimedia
-    Qml
-    Xml
-    Svg
-    REQUIRED
-)
-
 option(SHARED_TCMALLOC "Use shared libtcmalloc.so" OFF)
 
-set(QSCINTILLA_LIBRARIES_DIRS "/usr/lib" CACHE STRING "qscintilla library path")
-set(QSCINTILLA_LIBRARIES "qscintilla2_qt5" CACHE STRING "qscintilla library")
-set(QSCINTILLA_INCLUDE_DIRS "/usr/include/x86_64-linux-gnu/qt5" CACHE STRING "qscintilla includes path")
+if(WIN32)
+    set(QSCINTILLA_LIBRARIES_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../qscintilla/src/release)
+    set(QSCINTILLA_LIBRARIES qscintilla2_qt5)
+    set(QSCINTILLA_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../qscintilla/src)
+    add_definitions(-DQSCINTILLA_DLL)
+else()
+    set(QSCINTILLA_LIBRARIES_DIRS "/usr/lib" CACHE STRING "qscintilla library path")
+    set(QSCINTILLA_LIBRARIES "qscintilla2_qt5" CACHE STRING "qscintilla library")
+    set(QSCINTILLA_INCLUDE_DIRS "/usr/include/x86_64-linux-gnu/qt5" CACHE STRING "qscintilla includes path")
+endif()
 
-set(QUAZIP_LIBRARIES_DIRS "/usr/lib" CACHE STRING "quazip library path")
-set(QUAZIP_LIBRARIES "quazip5" CACHE STRING "quazip library")
-set(QUAZIP_INCLUDE_DIRS "/usr/include/quazip5" CACHE STRING "quazip includes path")
+if(WIN32)
+    set(WINDOWS_ICON_FILE ${FRICTION_NAME}.ico)
+    set(ICON_FILE ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${FRICTION_NAME}.ico)
+    set(GUI_TYPE WIN32)
+    set(PRODUCT_COMMENTS "${FRICTION_DISPLAY_NAME} ${PROJECT_DESCRIPTION}")
+    set(PRODUCT_COMPANY_NAME ${FRICTION_DISPLAY_NAME})
+    set(PRODUCT_FILE_DESCRIPTION "${FRICTION_DISPLAY_NAME} ${PROJECT_DESCRIPTION}")
+    set(PRODUCT_VERSION "${PROJECT_VERSION}")
+    set(PRODUCT_INTERNAL_NAME ${FRICTION_DISPLAY_NAME})
+    set(PRODUCT_COMPANY_COPYRIGHT ${PROJECT_COPYRIGHT})
+    set(PRODUCT_ORIGINAL_FILENAME "${FRICTION_NAME}.exe")
+    set(PRODUCT_BUNDLE ${FRICTION_DISPLAY_NAME})
+    set(WINDOWS_RESOURCE_FILE ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${FRICTION_NAME}.rc)
+    configure_file(${FRICTION_NAME}.rc.in
+        ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${FRICTION_NAME}.rc
+        @ONLY
+    )
+    configure_file(icons/${FRICTION_NAME}.ico
+        ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${FRICTION_NAME}.ico
+        COPYONLY
+    )
+endif()
 
-pkg_search_module(MYPAINT REQUIRED libmypaint)
-pkg_check_modules(AVFORMAT REQUIRED libavformat)
-pkg_check_modules(AVCODEC REQUIRED libavcodec)
-pkg_check_modules(AVUTIL REQUIRED libavutil)
-pkg_check_modules(SWSCALE REQUIRED libswscale)
-pkg_check_modules(SWRESAMPLE REQUIRED libswresample)
 if(UNIX AND NOT ${SHARED_TCMALLOC})
     if(NOT APPLE)
         pkg_check_modules(UNWIND REQUIRED libunwind)
@@ -111,11 +88,9 @@ if(UNIX AND NOT ${SHARED_TCMALLOC})
 endif()
 
 include_directories(
-    ${MYPAINT_INCLUDE_DIRS}
-    ${QUAZIP_INCLUDE_DIRS}
+    #${QUAZIP_INCLUDE_DIRS}
     ${QSCINTILLA_INCLUDE_DIRS}
-    ${AVFORMAT_INCLUDE_DIRS}
-    ${QSCINTILLA_INCLUDES}
+    ${FFMPEG_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/../core
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia
 )
@@ -154,6 +129,11 @@ if(UNIX)
         ${CMAKE_BINARY_DIR}/LICENSE-skia.md
         COPYONLY
     )
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/README.md
+        ${CMAKE_BINARY_DIR}/README-easing.md
+        COPYONLY
+    )
 endif()
 
 set(
@@ -161,8 +141,8 @@ set(
     main.cpp
     GUI/BoxesList/OptimalScrollArea/scrollvisiblepartbase.cpp
     GUI/BoxesList/boxscroller.cpp
-    GUI/BrushWidgets/bookmarkedbrushes.cpp
-    GUI/BrushWidgets/brushlabel.cpp
+    #GUI/BrushWidgets/bookmarkedbrushes.cpp
+    #GUI/BrushWidgets/brushlabel.cpp
     GUI/ColorWidgets/bookmarkedcolors.cpp
     GUI/ColorWidgets/paintcolorwidget.cpp
     GUI/Dialogs/animationtopaintdialog.cpp
@@ -191,9 +171,8 @@ set(
     GUI/canvasbasewrappernode.cpp
     GUI/canvaswindowevents.cpp
     GUI/canvaswrappernode.cpp
-    GUI/centralwidget.cpp
     GUI/changewidthwidget.cpp
-    GUI/closesignalingdockwidget.cpp
+    #GUI/closesignalingdockwidget.cpp
     GUI/ecombobox.cpp
     GUI/editablecombobox.cpp
     GUI/ekeyfilter.cpp
@@ -249,7 +228,6 @@ set(
     GUI/RenderWidgets/closablecontainer.cpp
     GUI/BoxesList/boxtargetwidget.cpp
     GUI/BoxesList/OptimalScrollArea/minimalscrollwidget.cpp
-    GUI/paintboxsettingsdialog.cpp
     execdelegator.cpp
     GUI/BoxesList/boxscrollarea.cpp
     videoencoder.cpp
@@ -274,13 +252,11 @@ set(
     GUI/filesourcelist.cpp
     GUI/customfpsdialog.cpp
     GUI/fillstrokesettings.cpp
-    GUI/BrushWidgets/arraywidget.cpp
-    GUI/BrushWidgets/brushselectionwidget.cpp
-    GUI/BrushWidgets/flowlayout.cpp
+    #GUI/BrushWidgets/brushselectionwidget.cpp
+    GUI/flowlayout.cpp
     GUI/ColorWidgets/colorwidgetshaders.cpp
-    GUI/segment1deditor.cpp
     GUI/namedcontainer.cpp
-    GUI/BrushWidgets/brushwidget.cpp
+    #GUI/BrushWidgets/brushwidget.cpp
     GUI/Settings/labeledslider.cpp
 )
 
@@ -288,8 +264,8 @@ set(
     HEADERS
     GUI/BoxesList/OptimalScrollArea/scrollvisiblepartbase.h
     GUI/BoxesList/boxscroller.h
-    GUI/BrushWidgets/bookmarkedbrushes.h
-    GUI/BrushWidgets/brushlabel.h
+    #GUI/BrushWidgets/bookmarkedbrushes.h
+    #GUI/BrushWidgets/brushlabel.h
     GUI/ColorWidgets/bookmarkedcolors.h
     GUI/ColorWidgets/paintcolorwidget.h
     GUI/Dialogs/animationtopaintdialog.h
@@ -317,9 +293,8 @@ set(
     GUI/buttonslist.h
     GUI/canvasbasewrappernode.h
     GUI/canvaswrappernode.h
-    GUI/centralwidget.h
     GUI/changewidthwidget.h
-    GUI/closesignalingdockwidget.h
+    #GUI/closesignalingdockwidget.h
     GUI/ecombobox.h
     GUI/editablecombobox.h
     GUI/ekeyfilter.h
@@ -375,7 +350,6 @@ set(
     GUI/RenderWidgets/closablecontainer.h
     GUI/BoxesList/boxtargetwidget.h
     GUI/BoxesList/OptimalScrollArea/minimalscrollwidget.h
-    GUI/paintboxsettingsdialog.h
     execdelegator.h
     GUI/BoxesList/boxscrollarea.h
     videoencoder.h
@@ -399,13 +373,11 @@ set(
     GUI/noshortcutaction.h
     GUI/qrealpointvaluedialog.h
     GUI/renderoutputwidget.h
-    GUI/BrushWidgets/arraywidget.h
-    GUI/BrushWidgets/brushselectionwidget.h
-    GUI/BrushWidgets/flowlayout.h
+    #GUI/BrushWidgets/brushselectionwidget.h
+    GUI/flowlayout.h
     GUI/ColorWidgets/colorwidgetshaders.h
-    GUI/segment1deditor.h
     GUI/namedcontainer.h
-    GUI/BrushWidgets/brushwidget.h
+    #GUI/BrushWidgets/brushwidget.h
     boxtypemenu.h
     windowsincludes.h
     GUI/Settings/labeledslider.h
@@ -417,39 +389,27 @@ add_executable(
     ${HEADERS}
     ${SOURCES}
     resources.qrc
-    brushes.qrc
     icons.qrc
     hicolor.qrc
+    ${WINDOWS_RESOURCE_FILE}
 )
 
 if(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE TRUE)
 endif()
 
+#if(WIN32)
+#    set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
+#endif()
+
 target_link_directories(
     ${PROJECT_NAME}
     PRIVATE
+    ${FFMPEG_LIBRARIES_DIRS}
     ${QSCINTILLA_LIBRARIES_DIRS}
-    ${QUAZIP_LIBRARIES_DIRS}
+    #${QUAZIP_LIBRARIES_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia/out/build
 )
-
-if(APPLE)
-    target_link_directories(
-        ${PROJECT_NAME}
-        PRIVATE
-        /opt/local/lib
-    )
-endif()
-
-#if(UNIX AND NOT APPLE)
-#    set_target_properties(
-#        ${PROJECT_NAME}
-#        PROPERTIES
-#        BUILD_WITH_INSTALL_RPATH FALSE
-#        LINK_FLAGS "-Wl,-rpath,$ORIGIN/"
-#    )
-#endif()
 
 if(UNIX)
     target_link_directories(
@@ -463,33 +423,12 @@ target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
     ${PROJECT_NAME}core
-    Qt${QT_VERSION_MAJOR}::Core
-    Qt${QT_VERSION_MAJOR}::Gui
-    Qt${QT_VERSION_MAJOR}::Concurrent
-    Qt${QT_VERSION_MAJOR}::Widgets
-    Qt${QT_VERSION_MAJOR}::OpenGL
-    Qt${QT_VERSION_MAJOR}::Multimedia
-    Qt${QT_VERSION_MAJOR}::Qml
-    Qt${QT_VERSION_MAJOR}::Xml
-    Qt${QT_VERSION_MAJOR}::Svg
-    ${MYPAINT_LIBRARIES}
-    ${QUAZIP_LIBRARIES}
+    ${QT_LIBRARIES}
+    #${QUAZIP_LIBRARIES}
     ${QSCINTILLA_LIBRARIES}
-    ${AVFORMAT_LIBRARIES}
-    ${AVCODEC_LIBRARIES}
-    ${AVUTIL_LIBRARIES}
-    ${SWSCALE_LIBRARIES}
-    ${SWRESAMPLE_LIBRARIES}
-    skia
+    ${FFMPEG_LIBRARIES}
+    ${SKIA_LIBRARIES}
 )
-
-if(OpenMP_CXX_FOUND)
-    target_link_libraries(
-        ${PROJECT_NAME}
-        PRIVATE
-        OpenMP::OpenMP_CXX
-    )
-endif()
 
 if(APPLE)
     target_link_libraries(
@@ -561,10 +500,46 @@ if(UNIX AND NOT APPLE)
     )
     install(
         FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInBack.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInBounce.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInCirc.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInCubic.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInElastic.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInExpo.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutBack.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutBounce.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutCirc.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutCubic.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutElastic.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutExpo.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutQuad.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutQuart.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutQuint.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutSine.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInQuad.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInQuart.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInQuint.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInSine.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutBack.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutBounce.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutCirc.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutCubic.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutElastic.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutExpo.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutQuad.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutQuart.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutQuint.js
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutSine.js
+        DESTINATION
+        ${CMAKE_INSTALL_DATAROOTDIR}/friction/presets/expressions/easing/
+    )
+    install(
+        FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/../../LICENSE.md
         ${CMAKE_CURRENT_SOURCE_DIR}/../../README.md
         ${CMAKE_BINARY_DIR}/LICENSE-gperftools.md
         ${CMAKE_BINARY_DIR}/LICENSE-skia.md
+        ${CMAKE_BINARY_DIR}/README-easing.md
         DESTINATION
         ${CMAKE_INSTALL_DOCDIR}-${PROJECT_VERSION}
     )

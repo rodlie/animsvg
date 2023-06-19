@@ -94,9 +94,7 @@ BoxSingleWidget::BoxSingleWidget(BoxScroller * const parent) :
     mMainLayout = new QHBoxLayout(this);
     setLayout(mMainLayout);
     mMainLayout->setSpacing(0);
-    //setContentsMargins(0, 0, 0, 0);
     mMainLayout->setContentsMargins(0, 0, 0, 0);
-    mMainLayout->setMargin(0);
     mMainLayout->setAlignment(Qt::AlignLeft);
 
     mRecordButton = new PixmapActionButton(this);
@@ -406,6 +404,7 @@ void BoxSingleWidget::setTargetAbstraction(SWT_Abstraction *abs) {
     const auto rasterEffect = enve_cast<RasterEffect*>(prop);
     const auto boundingBox = enve_cast<BoundingBox*>(prop);
 
+    mMainLayout->setContentsMargins(0, 0, boundingBox ? 0 : 5, 0);
     mContentButton->setVisible(complexAnimator);
     mRecordButton->setVisible(animator && !eboxOrSound);
     mVisibleButton->setVisible(eboxOrSound || eeffect || graphAnimator);

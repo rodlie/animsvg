@@ -32,7 +32,7 @@
 #include "Animators/paintsettingsanimator.h"
 #include "paintsettingsapplier.h"
 #include "Animators/brushsettingsanimator.h"
-#include "GUI/BrushWidgets/brushselectionwidget.h"
+#include "Paint/brushcontexedwrapper.h"
 
 class GradientWidget;
 class MainWindow;
@@ -44,7 +44,7 @@ class Segment1DEditor;
 class QDockWidget;
 class ColorSetting;
 class Document;
-class BrushLabel;
+//class BrushLabel;
 
 class FillStrokeSettingsWidget : public QTabWidget {
     Q_OBJECT
@@ -173,7 +173,7 @@ private:
     QPushButton *mFillNoneButton = nullptr;
     QPushButton *mFillFlatButton = nullptr;
     QPushButton *mFillGradientButton = nullptr;
-    QPushButton *mFillBrushButton = nullptr;
+    //QPushButton *mFillBrushButton = nullptr;
 
     QWidget *mStrokeSettingsWidget;
     QWidget* mStrokeJoinCapWidget;
@@ -189,8 +189,8 @@ private:
     QPushButton *mSquareCapStyleButton;
     QPushButton *mRoundCapStyleButton;
 
-    QHBoxLayout *mLineWidthLayout = new QHBoxLayout();
-    QLabel *mLineWidthLabel = new QLabel("Width:");
+    //QHBoxLayout *mLineWidthLayout = new QHBoxLayout();
+    //QLabel *mLineWidthLabel = new QLabel("Width:");
     QrealAnimatorValueSlider *mLineWidthSpin;
 
     ColorSettingsWidget *mColorsSettingsWidget;
@@ -204,14 +204,14 @@ private:
 
     QWidget *mFillAndStrokeWidget;
 
-    BrushLabel* mBrushLabel;
-    BrushSelectionWidget* mBrushSelectionWidget;
+    //BrushLabel* mBrushLabel;
+    //BrushSelectionWidget* mBrushSelectionWidget;
 
-    QWidget* mBrushSettingsWidget;
+    /*QWidget* mBrushSettingsWidget;
     Segment1DEditor* mBrushWidthCurveEditor;
     Segment1DEditor* mBrushPressureCurveEditor;
     Segment1DEditor* mBrushSpacingCurveEditor;
-    Segment1DEditor* mBrushTimeCurveEditor;
+    Segment1DEditor* mBrushTimeCurveEditor;*/
 
     ConnContextQPtr<BoundingBox> mCurrentBox;
 };

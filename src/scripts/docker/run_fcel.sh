@@ -58,8 +58,9 @@ FRICTION_DIR="${FRICTION_ROOT}/friction"
 FRICTION_SRC_DIR="${FRICTION_DIR}/src"
 FRICTION_SNAP="/snapshots"
 FRICTION_DIST="${FRICTION_SNAP}/distfiles"
+FRICTION_BRANCH=${FRICTION_BRANCH:-"main"}
 
-QUAZIP_V="1.4"
+#QUAZIP_V="1.4"
 QSCINTILLA_V="2.13.4"
 FFMPEG_V="4.4.4"
 UNWIND_V="1.6.2"
@@ -82,27 +83,30 @@ fi
 if [ ! -d "${FRICTION_SRC_DIR}" ]; then
     cd ${FRICTION_ROOT}
     git clone https://github.com/friction2d/friction
+    if [ "${FRICTION_BRANCH}" != "main" ]; then
+        (cd friction; git checkout ${FRICTION_BRANCH})
+    fi
 fi
 
-if [ ! -f "${FRICTION_SRC_DIR}/quazip-${QUAZIP_V}/build/quazip/libquazip1-qt5.a" ]; then
-    if [ -d "${FRICTION_SRC_DIR}/quazip-${QUAZIP_V}" ]; then
-        rm -rf ${FRICTION_SRC_DIR}/quazip-${QUAZIP_V}
-    fi
-    if [ ! -f "${FRICTION_DIST}/quazip.tar.gz" ]; then
-        curl -L -k "https://github.com/stachenov/quazip/archive/refs/tags/v${QUAZIP_V}.tar.gz" --output ${FRICTION_DIST}/quazip.tar.gz
-    fi
-    cd ${FRICTION_SRC_DIR}
-    tar xf ${FRICTION_DIST}/quazip.tar.gz
-    cd quazip-${QUAZIP_V}
-    if [ -f "${FRICTION_DIST}/quazip-build-${DID}.tar.xz" ]; then
-        tar xf ${FRICTION_DIST}/quazip-build-${DID}.tar.xz
-    else
-        mkdir build && cd build
-        cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF .. && make
-        cd ..
-        tar cvvfJ ${FRICTION_DIST}/quazip-build-${DID}.tar.xz build
-    fi
-fi
+#if [ ! -f "${FRICTION_SRC_DIR}/quazip-${QUAZIP_V}/build/quazip/libquazip1-qt5.a" ]; then
+#    if [ -d "${FRICTION_SRC_DIR}/quazip-${QUAZIP_V}" ]; then
+#        rm -rf ${FRICTION_SRC_DIR}/quazip-${QUAZIP_V}
+#    fi
+#    if [ ! -f "${FRICTION_DIST}/quazip.tar.gz" ]; then
+#        curl -L -k "https://github.com/stachenov/quazip/archive/refs/tags/v${QUAZIP_V}.tar.gz" --output ${FRICTION_DIST}/quazip.tar.gz
+#    fi
+#    cd ${FRICTION_SRC_DIR}
+#    tar xf ${FRICTION_DIST}/quazip.tar.gz
+#    cd quazip-${QUAZIP_V}
+#    if [ -f "${FRICTION_DIST}/quazip-build-${DID}.tar.xz" ]; then
+#        tar xf ${FRICTION_DIST}/quazip-build-${DID}.tar.xz
+#    else
+#        mkdir build && cd build
+#        cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF .. && make
+#        cd ..
+#        tar cvvfJ ${FRICTION_DIST}/quazip-build-${DID}.tar.xz build
+#    fi
+#fi
 
 if [ ! -f "${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}/src/libqscintilla2_qt5.a" ]; then
     if [ -d "${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}" ]; then
@@ -217,7 +221,8 @@ fi
 cd ${FRICTION_DIR}
 
 COMMIT=`git rev-parse --short HEAD`
-VERSION=`cat ${FRICTION_DIR}/CMakeLists.txt | sed '/friction2d VERSION/!d;s/)//' | awk '{print $3}'`
+BRANCH=`git rev-parse --abbrev-ref HEAD`
+VERSION="dev"
 
 IS_SNAP="OFF"
 if [ "${SNAP}" = 1 ]; then
@@ -233,18 +238,20 @@ mkdir build
 cd build
 
 cmake -G Ninja \
+-DGIT_COMMIT=${COMMIT} \
+-DGIT_BRANCH=${BRANCH} \
 -DSNAPSHOT=${IS_SNAP} \
 -DSNAPSHOT_VERSION_MAJOR=${YEAR} \
 -DSNAPSHOT_VERSION_MINOR=${MONTH} \
 -DSNAPSHOT_VERSION_PATCH=${DAY} \
 -DCMAKE_BUILD_TYPE=Release \
 -DSTATIC_FFMPEG=ON \
--DQUAZIP_INCLUDE_DIRS=${FRICTION_SRC_DIR}/quazip-${QUAZIP_V}/quazip \
--DQUAZIP_LIBRARIES_DIRS=${FRICTION_SRC_DIR}/quazip-${QUAZIP_V}/build/quazip \
--DQUAZIP_LIBRARIES=quazip1-qt5 \
 -DQSCINTILLA_INCLUDE_DIRS=${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}/src \
 -DQSCINTILLA_LIBRARIES_DIRS=${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}/src \
 -DQSCINTILLA_LIBRARIES=qscintilla2_qt5 ..
+if [ "${SNAP}" != 1 ]; then
+    VERSION=`cat version.txt`
+fi
 cmake --build .
 strip -s src/app/friction
 strip -s src/core/libfrictioncore.so.${VERSION}
@@ -254,7 +261,7 @@ PKG="friction-${DID}.rpm"
 if [ "${REL}" = 1 ]; then
     PKG="friction-${VERSION}-${DID}.rpm"
 elif [ "${SNAP}" = 1 ]; then
-    PKG="friction-${TIMESTAMP}-${COMMIT}-${DID}.rpm"
+    PKG="friction-${TIMESTAMP}-${BRANCH}-${COMMIT}-${DID}.rpm"
 fi
 mv friction.rpm ${PKG}
 

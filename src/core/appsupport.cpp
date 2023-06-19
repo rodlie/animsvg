@@ -1,6 +1,6 @@
 /*
 #
-# Friction - https://github.com/friction2d/friction
+# Friction - https://friction.graphics
 #
 # Copyright (c) Friction developers
 #
@@ -50,7 +50,7 @@ void AppSupport::setupTheme()
     palette.setColor(QPalette::ToolTipText, Qt::white);
     palette.setColor(QPalette::ToolTipBase, Qt::black);
     palette.setColor(QPalette::Text, Qt::white);
-    palette.setColor(QPalette::Button, QColor(40, 40, 47));
+    palette.setColor(QPalette::Button, QColor(33, 33, 38));
     palette.setColor(QPalette::ButtonText, Qt::white);
     palette.setColor(QPalette::BrightText, Qt::red);
     palette.setColor(QPalette::Highlight, QColor(177, 16, 20));
@@ -58,6 +58,15 @@ void AppSupport::setupTheme()
     palette.setColor(QPalette::Disabled, QPalette::Text, Qt::darkGray);
     palette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
     qApp->setPalette(palette);
+}
+
+const QPalette AppSupport::getDarkPalette()
+{
+    QPalette pal = QPalette();
+    pal.setColor(QPalette::Window, QColor(33, 33, 38));
+    pal.setColor(QPalette::Base, QColor(33, 33, 38));
+    pal.setColor(QPalette::Button, QColor(33, 33, 38));
+    return pal;
 }
 
 QVariant AppSupport::getSettings(const QString &group,
@@ -99,37 +108,32 @@ void AppSupport::setSettings(const QString &group,
 
 const QString AppSupport::getAppName()
 {
-    QString val = QString::fromUtf8("friction");
-    return val;
+    return QString::fromUtf8("friction");
 }
 
 const QString AppSupport::getAppDisplayName()
 {
-    QString val = QString::fromUtf8("Friction");
-    return val;
+    return QString::fromUtf8("Friction");
 }
 
 const QString AppSupport::getAppDomain()
 {
-    QString val = QString::fromUtf8("friction2d.com");
-    return val;
+    return QString::fromUtf8("friction.graphics");
 }
 
 const QString AppSupport::getAppID()
 {
-    QString val = QString::fromUtf8("com.friction2d");
-    return val;
+    return QString::fromUtf8("graphics.friction");
 }
 
 const QString AppSupport::getAppUrl()
 {
-    QString val = QString::fromUtf8("https://friction2d.com");
-    return val;
+    return QString::fromUtf8("https://friction.graphics");
 }
 
 const QString AppSupport::getAppVersion(bool html)
 {
-    QString version = QString::fromUtf8("0.9.0");
+    QString version = QString::fromUtf8("0.9.0"); // fallback, should not happen
 #ifdef PROJECT_VERSION
     version = QString::fromUtf8(PROJECT_VERSION);
 #endif
@@ -137,47 +141,50 @@ const QString AppSupport::getAppVersion(bool html)
 #ifdef PROJECT_GIT
     git = QString::fromUtf8(PROJECT_GIT);
 #endif
+    QString branch;
+#ifdef PROJECT_BRANCH
+    branch = QString::fromUtf8(PROJECT_BRANCH);
+#endif
+    if (!branch.isEmpty()) {
+        version.append(QString::fromUtf8(" %1").arg(branch));
+    }
     if (!git.isEmpty()) {
-        version.append(html ? QString::fromUtf8(" <a href=\"%2/%1\">%1</a>").arg(git,
-                                                                                 getAppCommitUrl()) : QString::fromUtf8(" %1").arg(git));
+        if (branch.isEmpty()) { version.append(QString::fromUtf8(" ")); }
+        else { version.append(QString::fromUtf8("/")); }
+        version.append(html ? QString::fromUtf8("<a href=\"%2/%1\">%1</a>").arg(git,
+                                                                                getAppCommitUrl()) : git);
     }
     return version;
 }
 
 const QString AppSupport::getAppDesc()
 {
-    QString val = QString::fromUtf8("2D Animation Software");
-    return val;
+    return QString::fromUtf8("Motion Graphics");
 }
 
 const QString AppSupport::getAppCompany()
 {
-    QString val = QString::fromUtf8("friction");
-    return val;
+    return getAppName();
 }
 
 const QString AppSupport::getAppContributorsUrl()
 {
-    QString val = QString::fromUtf8("https://github.com/friction2d/friction/graphs/contributors");
-    return val;
+    return QString::fromUtf8("https://github.com/friction2d/friction/graphs/contributors");
 }
 
 const QString AppSupport::getAppIssuesUrl()
 {
-    QString val = QString::fromUtf8("https://github.com/friction2d/friction/issues");
-    return val;
+    return QString::fromUtf8("https://github.com/friction2d/friction/issues");
 }
 
 const QString AppSupport::getAppLatestReleaseUrl()
 {
-    QString val = QString::fromUtf8("https://github.com/friction2d/friction/releases/latest");
-    return val;
+    return QString::fromUtf8("https://github.com/friction2d/friction/releases/latest");
 }
 
 const QString AppSupport::getAppCommitUrl()
 {
-    QString val = QString::fromUtf8("https://github.com/friction2d/friction/commit");
-    return val;
+    return QString::fromUtf8("https://github.com/friction2d/friction/commit");
 }
 
 const QString AppSupport::getAppConfigPath()
@@ -217,6 +224,25 @@ const QString AppSupport::getAppRasterEffectsPath()
 const QString AppSupport::getAppShaderEffectsPath()
 {
     QString path = QString::fromUtf8("%1/ShaderEffects").arg(getAppConfigPath());
+    QDir dir(path);
+    if (!dir.exists()) { dir.mkpath(path); }
+    return path;
+}
+
+const QString AppSupport::getAppExPresetsPath()
+{
+    QString path1 = QApplication::applicationDirPath();
+    QString path2 = path1;
+    path1.append(QString::fromUtf8("/presets/expressions"));
+    path2.append(QString::fromUtf8("/../share/friction/presets/expressions"));
+    if (QFile::exists(path1)) { return path1; }
+    if (QFile::exists(path2)) { return path2; }
+    return QString();
+}
+
+const QString AppSupport::getAppUserExPresetsPath()
+{
+    QString path = QString::fromUtf8("%1/ExPresets").arg(getAppConfigPath());
     QDir dir(path);
     if (!dir.exists()) { dir.mkpath(path); }
     return path;

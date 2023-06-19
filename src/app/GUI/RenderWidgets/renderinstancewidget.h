@@ -24,6 +24,8 @@
 #include <QMouseEvent>
 #include <QAction>
 #include <QMenu>
+#include <QLineEdit>
+
 class OutputSettingsDisplayWidget;
 class RenderSettingsDisplayWidget;
 
@@ -59,6 +61,7 @@ private:
     OutputSettingsDisplayWidget *mOutputSettingsDisplayWidget;
 
     QPushButton *mOutputDestinationButton;
+    QLineEdit *mOutputDestinationLineEdit;
 
     QPushButton* mRenderSettingsButton;
 

@@ -17,7 +17,10 @@
 #ifndef ZIPFILESAVER_H
 #define ZIPFILESAVER_H
 
-#include <quazipfile.h>
+// since XEV is experimental we ignore it for now
+// disable enough stuff to avoid quazip depend
+
+//#include <quazipfile.h>
 
 #include "exceptions.h"
 
@@ -35,8 +38,8 @@ public:
     void processText(const QString& file, const TextProcessor& func,
                      const bool compress = true);
 private:
-    QuaZip mZip;
-    QuaZipFile mFile;
+    //QuaZip mZip;
+    //QuaZipFile mFile;
 };
 
 #endif // ZIPFILESAVER_H

@@ -42,9 +42,9 @@ if [ ! -d "${FRICTION_DIST}" ]; then
 fi
 
 if [ "${EL}" = 1 ] || [ "${FC}" = 1 ]; then
-    if [ ! -f "${FRICTION_DIST}/quazip.tar.gz" ]; then
-        curl -L -k "${SF_NET_SRC}/quazip-${QUAZIP_V}.tar.gz" --output ${FRICTION_DIST}/quazip.tar.gz
-    fi
+    #if [ ! -f "${FRICTION_DIST}/quazip.tar.gz" ]; then
+    #    curl -L -k "${SF_NET_SRC}/quazip-${QUAZIP_V}.tar.gz" --output ${FRICTION_DIST}/quazip.tar.gz
+    #fi
     if [ ! -f "${FRICTION_DIST}/qscintilla.tar.gz" ]; then
         curl -L -k "${SF_NET_SRC}/QScintilla_src-${QSCINTILLA_V}.tar.gz/download" --output ${FRICTION_DIST}/qscintilla.tar.gz
     fi
@@ -70,6 +70,7 @@ if [ "${LUNAR}" = 1 ]; then
 fi
 if [ "${EL}" = 1 ]; then
     $DOCKER friction-el9
+    $DOCKER friction-el8
 fi
 if [ "${FC}" = 1 ]; then
     $DOCKER friction-fc38

@@ -24,31 +24,19 @@ QToolBar
     border: 0;
 }
 
-QWidget#welcomeDialog QPushButton#topButton,
-QWidget#welcomeDialog QPushButton#bottomButton,
-QWidget#welcomeDialog QPushButton#vmiddleButton
-{
-    border: 0;
-    background-color: rgb(33, 33, 38);
-    border-radius: .25em;
-    padding: .3em;
-}
-
-QWidget#welcomeDialog QPushButton#topButton:hover,
-QWidget#welcomeDialog QPushButton#bottomButton:hover,
-QWidget#welcomeDialog QPushButton#vmiddleButton:hover
-{
-    background-color: rgb(177, 16, 20);
-}
-
-QWidget#welcomeDialog QPushButton:hover,
+QPushButton:hover,
+QToolButton:hover,
 QToolButton:checked,
-QToolBar#animationDockWidget QAction:checked
+QAction:checked,
+QComboBox:hover,
+QPushButton#QActionButton:checked
 {
     background-color: rgb(112, 8, 10);
 }
 
-QToolBar#animationDockWidget
+QToolBar#animationDockWidget,
+QToolBar#ViewerNodeBar,
+#darkWidget
 {
     background-color: rgb(33, 33, 38);
 }
@@ -64,4 +52,18 @@ QPushButton::menu-indicator { width: 0px; }
 QLineEdit#SearchLine {
     border-radius: 0;
     border: 0;
+}
+
+BoxScrollWidget,
+BoxScroller {
+    background-color: transparent;
+}
+
+QProgressBar#RenderProgressBar {
+    border: 0;
+}
+
+QLineEdit#OutputDestinationLineEdit {
+    border: 0;
+    background-color: rgb(40, 40, 47);
 }

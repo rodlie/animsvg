@@ -18,7 +18,8 @@
 #include <QStringList>
 
 QStringList FileExtensions::image{"png", "jpg", "tiff",
-                                  "tif", "jpeg", "bmp"};
+                                  "tif", "jpeg", "bmp"
+                                  "webp"};
 QStringList FileExtensions::sound{"mp3", "wav", "aiff",
                                   "flac", "m4a", "oga"};
 QStringList FileExtensions::video{"avi", "mp4", "mov",
@@ -27,7 +28,7 @@ QStringList FileExtensions::video{"avi", "mp4", "mov",
                                   "3gp", "rmvb", "gif",
                                   "mpeg", "mpg", "mp2",
                                   "mpv"};
-QStringList FileExtensions::layers{"ora"};
+//QStringList FileExtensions::layers{};
 
 bool isVideoExt(const QString &extension) {
     return FileExtensions::video.contains(extension.toLower());
@@ -46,11 +47,12 @@ bool isImageExt(const QString &extension) {
 }
 
 bool isLayersExt(const QString &ext) {
-    return FileExtensions::layers.contains(ext.toLower());
+    Q_UNUSED(ext)
+    return false; //FileExtensions::layers.contains(ext.toLower());
 }
 
 bool isEvExt(const QString &extension) {
-    return extension.toLower() == "ev";
+    return (extension.toLower() == "friction" || extension.toLower() == "ev");
 }
 
 bool hasVideoExt(const QString &filename) {
@@ -87,4 +89,4 @@ QString FileExtensions::soundFilters() { return filters(sound); }
 
 QString FileExtensions::videoFilters() { return filters(video); }
 
-QString FileExtensions::layersFilters() { return filters(layers); }
+QString FileExtensions::layersFilters() { return QString(); /*filters(layers);*/ }
