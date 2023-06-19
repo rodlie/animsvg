@@ -89,7 +89,7 @@ private:
 
     QLabel *mOutputFormatLabel;
 
-    QHBoxLayout *mAudioVideoLayout;
+    QVBoxLayout *mAudioVideoLayout;
 
     //QGroupBox *mVideoGroupBox;
     QVBoxLayout *mVideoLayout;

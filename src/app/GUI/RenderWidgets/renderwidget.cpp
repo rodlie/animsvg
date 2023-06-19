@@ -47,6 +47,7 @@ RenderWidget::RenderWidget(QWidget *parent)
 {
     mMainLayout = new QVBoxLayout(this);
     mMainLayout->setMargin(0);
+    mMainLayout->setSpacing(0);
     setLayout(mMainLayout);
 
     QWidget *bottomWidget = new QWidget(this);
@@ -58,16 +59,22 @@ RenderWidget::RenderWidget(QWidget *parent)
     bottomWidget->setPalette(darkPal);
 
     mRenderProgressBar = new QProgressBar(this);
+    mRenderProgressBar->setObjectName(QString::fromUtf8("RenderProgressBar"));
+    mRenderProgressBar->setFormat(QString());
     mRenderProgressBar->setValue(0);
 
-    mStartRenderButton = new QPushButton(tr("Render"), this);
+    mStartRenderButton = new QPushButton(QIcon::fromTheme("play"),
+                                         tr("Render"),
+                                         this);
     mStartRenderButton->setDisabled(true);
     mStartRenderButton->setSizePolicy(QSizePolicy::Preferred,
                                       QSizePolicy::Preferred);
     connect(mStartRenderButton, &QPushButton::pressed,
             this, qOverload<>(&RenderWidget::render));
 
-    mStopRenderButton = new QPushButton(tr("Stop"), this);
+    mStopRenderButton = new QPushButton(QIcon::fromTheme("stop"),
+                                        tr("Stop"),
+                                        this);
     mStopRenderButton->setDisabled(true);
     mStopRenderButton->setSizePolicy(QSizePolicy::Preferred,
                                      QSizePolicy::Preferred);
@@ -75,6 +82,7 @@ RenderWidget::RenderWidget(QWidget *parent)
             this, &RenderWidget::stopRendering);
 
     mContWidget = new QWidget(this);
+    mContWidget->setContentsMargins(0, 0, 0, 0);
     mContLayout = new QVBoxLayout(mContWidget);
     mContLayout->setAlignment(Qt::AlignTop);
     mContLayout->setMargin(0);
@@ -199,6 +207,7 @@ void RenderWidget::leaveOnlyStartRenderButtonEnabled()
 {
     mStartRenderButton->setEnabled(true);
     mStopRenderButton->setDisabled(true);
+    mRenderProgressBar->setValue(0);
 }
 
 void RenderWidget::disableButtons()

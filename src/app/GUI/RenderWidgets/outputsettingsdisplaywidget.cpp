@@ -17,12 +17,12 @@
 #include "outputsettingsdisplaywidget.h"
 #include "GUI/global.h"
 
-OutputSettingsDisplayWidget::OutputSettingsDisplayWidget(QWidget *parent) :
-    QWidget(parent) {
-//    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+OutputSettingsDisplayWidget::OutputSettingsDisplayWidget(QWidget *parent)
+    : QWidget(parent)
+{
     mMainLayout = new QVBoxLayout(this);
     setLayout(mMainLayout);
-    mAudioVideoLayout = new QHBoxLayout();
+    mAudioVideoLayout = new QVBoxLayout();
     mOutputFormatLabel = new QLabel("<b>Format:</b>", this);
     mVideoCodecLabel = new QLabel("<b>Video codec:</b>", this);
     mVideoPixelFormatLabel = new QLabel("<b>Pixel format:</b>", this);
@@ -32,16 +32,6 @@ OutputSettingsDisplayWidget::OutputSettingsDisplayWidget(QWidget *parent) :
     mAudioSampleFormatLabel = new QLabel("<b>Audio sample format:</b>", this);
     mAudioBitrateLabel = new QLabel("<b>Audio bitrate:</b>", this);
     mAudioChannelLayoutLabel = new QLabel("<b>Audio channel layout:</b>", this);
-
-    mOutputFormatLabel->setFixedHeight(eSizesUI::widget);
-    mVideoCodecLabel->setFixedHeight(eSizesUI::widget);
-    mVideoPixelFormatLabel->setFixedHeight(eSizesUI::widget);
-    mVideoBitrateLabel->setFixedHeight(eSizesUI::widget);
-    mAudioCodecLabel->setFixedHeight(eSizesUI::widget);
-    mAudioSampleRateLabel->setFixedHeight(eSizesUI::widget);
-    mAudioSampleFormatLabel->setFixedHeight(eSizesUI::widget);
-    mAudioBitrateLabel->setFixedHeight(eSizesUI::widget);
-    mAudioChannelLayoutLabel->setFixedHeight(eSizesUI::widget);
 
     mVideoLayout = new QVBoxLayout();
     mVideoLayout->addWidget(mVideoCodecLabel);
@@ -57,13 +47,9 @@ OutputSettingsDisplayWidget::OutputSettingsDisplayWidget(QWidget *parent) :
 
     mAudioVideoLayout->addLayout(mVideoLayout);
     mAudioVideoLayout->addLayout(mAudioLayout);
-    mAudioVideoLayout->setAlignment(mVideoLayout, Qt::AlignLeft);
-    mAudioVideoLayout->setAlignment(mAudioLayout, Qt::AlignLeft);
-    mAudioVideoLayout->setAlignment(Qt::AlignLeft);
-    mAudioVideoLayout->setSpacing(eSizesUI::widget);
+
     mAudioLayout->setSpacing(0);
     mVideoLayout->setSpacing(0);
-    mVideoLayout->setAlignment(Qt::AlignTop);
 
     mMainLayout->addWidget(mOutputFormatLabel);
     mMainLayout->addLayout(mAudioVideoLayout);
@@ -73,7 +59,7 @@ void OutputSettingsDisplayWidget::setOutputSettings(const OutputSettings &settin
     if(!settings.fOutputFormat) {
         setOutputFormatText("-");
     } else {
-        setOutputFormatText(QString(settings.fOutputFormat->long_name));
+        setOutputFormatText(QString(settings.fOutputFormat->name));
     }
     if(!mAlwaysShowAll) {
         setVideoLabelsVisible(settings.fVideoEnabled);
@@ -81,7 +67,7 @@ void OutputSettingsDisplayWidget::setOutputSettings(const OutputSettings &settin
     if(!settings.fVideoCodec) {
         setVideoCodecText("-");
     } else {
-        setVideoCodecText(QString(settings.fVideoCodec->long_name));
+        setVideoCodecText(QString(settings.fVideoCodec->name));
     }
     const char *pixelFormat = av_get_pix_fmt_name(settings.fVideoPixelFormat);
     if(!pixelFormat) {
@@ -96,7 +82,7 @@ void OutputSettingsDisplayWidget::setOutputSettings(const OutputSettings &settin
     if(!settings.fAudioCodec) {
         setAudioCodecText("-");
     } else {
-        setAudioCodecText(QString(settings.fAudioCodec->long_name));
+        setAudioCodecText(QString(settings.fAudioCodec->name));
     }
     setAudioSampleRateText(QString::number(settings.fAudioSampleRate) + " Hz");
     int formatId = settings.fAudioSampleFormat;

@@ -74,101 +74,85 @@ void RenderInstanceWidget::iniGUI() {
     setLabelWidget(mNameLabel);
 
     QWidget *contWid = new QWidget(this);
+    contWid->setContentsMargins(0, 0, 0, 0);
     contWid->setLayout(mContentLayout);
-    mContentLayout->setAlignment(Qt::AlignTop);
     contWid->setObjectName("darkWidget");
 
     addContentWidget(contWid);
 
-    const auto renderSettings = new ClosableContainer();
     mRenderSettingsDisplayWidget = new RenderSettingsDisplayWidget(this);
-    renderSettings->addContentWidget(mRenderSettingsDisplayWidget);
 
-    QWidget *renderSettingsLabelWidget = new QWidget();
+    QWidget *renderSettingsLabelWidget = new QWidget(this);
+    renderSettingsLabelWidget->setContentsMargins(0, 0, 0, 0);
     renderSettingsLabelWidget->setObjectName("darkWidget");
-    QHBoxLayout *renderSettingsLayout = new QHBoxLayout();
-    renderSettingsLayout->setSpacing(0);
-    renderSettingsLayout->setMargin(0);
-    renderSettingsLayout->setAlignment(Qt::AlignLeft);
+    QVBoxLayout *renderSettingsLayout = new QVBoxLayout(renderSettingsLabelWidget);
 
-    eSizesUI::widget.addSpacing(renderSettingsLayout);
-    QLabel *renderSettingsLabel = new QLabel("Render Settings:", this);
-    //renderSettingsLabel->setObjectName("darkWidget");
-    renderSettingsLabel->setFixedHeight(eSizesUI::widget);
-    renderSettingsLayout->addWidget(renderSettingsLabel);
-    eSizesUI::widget.addSpacing(renderSettingsLayout);
-
-    mRenderSettingsButton = new QPushButton("Settings");
+    mRenderSettingsButton = new QPushButton(tr("Render Settings ..."));
     mRenderSettingsButton->setObjectName("renderSettings");
-    mRenderSettingsButton->setSizePolicy(QSizePolicy::Maximum,
-                                        QSizePolicy::Maximum);
+    mRenderSettingsButton->setSizePolicy(QSizePolicy::Preferred,
+                                        QSizePolicy::Preferred);
     connect(mRenderSettingsButton, &QPushButton::pressed,
             this, &RenderInstanceWidget::openRenderSettingsDialog);
+
     renderSettingsLayout->addWidget(mRenderSettingsButton);
+    renderSettingsLayout->addWidget(mRenderSettingsDisplayWidget);
 
-    renderSettingsLabelWidget->setLayout(renderSettingsLayout);
-    renderSettings->setLabelWidget(renderSettingsLabelWidget);
+    mContentLayout->addWidget(renderSettingsLabelWidget);
 
-    mContentLayout->addWidget(renderSettings);
-
-    mOutputSettings = new ClosableContainer();
     mOutputSettingsDisplayWidget = new OutputSettingsDisplayWidget(this);
-    mOutputSettings->addContentWidget(mOutputSettingsDisplayWidget);
 
-    QWidget *outputSettingsLabelWidget = new QWidget();
+    QWidget *outputSettingsLabelWidget = new QWidget(this);
+    outputSettingsLabelWidget->setContentsMargins(0, 0, 0, 0);
     outputSettingsLabelWidget->setObjectName("darkWidget");
-    QHBoxLayout *outputSettingsLayout = new QHBoxLayout();
-    outputSettingsLayout->setSpacing(0);
-    outputSettingsLayout->setMargin(0);
-    outputSettingsLayout->setAlignment(Qt::AlignTop);
-
-    eSizesUI::widget.addSpacing(outputSettingsLayout);
-    QLabel *outputSettingsLabel = new QLabel("Output Settings:", this);
-    outputSettingsLabel->setFixedHeight(eSizesUI::widget);
-    outputSettingsLabel->setSizePolicy(QSizePolicy::Maximum,
-                                       QSizePolicy::Maximum);
-    outputSettingsLayout->addWidget(outputSettingsLabel);
-    eSizesUI::widget.addSpacing(outputSettingsLayout);
+    QVBoxLayout *outputSettingsLayout = new QVBoxLayout(outputSettingsLabelWidget);
 
     mOutputSettingsProfilesButton = new OutputProfilesListButton(this);
     connect(mOutputSettingsProfilesButton, &OutputProfilesListButton::profileSelected,
             this, &RenderInstanceWidget::outputSettingsProfileSelected);
-    mOutputSettingsProfilesButton->setObjectName("renderSettings");
-    mOutputSettingsProfilesButton->setFixedSize(eSizesUI::widget, eSizesUI::widget);
-    mOutputSettingsProfilesButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
 
-    mOutputSettingsButton = new QPushButton("Settings");
-    mOutputSettingsButton->setObjectName("renderSettings");
-    mOutputSettingsButton->setSizePolicy(QSizePolicy::Maximum,
-                                         QSizePolicy::Maximum);
+    mOutputSettingsButton = new QPushButton(tr("Output Settings ..."));
+    mOutputSettingsButton->setSizePolicy(QSizePolicy::Expanding,
+                                         QSizePolicy::Preferred);
     connect(mOutputSettingsButton, &QPushButton::pressed,
             this, &RenderInstanceWidget::openOutputSettingsDialog);
-    outputSettingsLayout->addWidget(mOutputSettingsProfilesButton);
-    outputSettingsLayout->addWidget(mOutputSettingsButton);
 
-    outputSettingsLayout->addSpacing(6*eSizesUI::widget);
+    QWidget *outputSettingsOptWidget = new QWidget(this);
+    outputSettingsOptWidget->setContentsMargins(0, 0, 0, 0);
+    const auto outputSettingsOptLayout = new QHBoxLayout(outputSettingsOptWidget);
+    outputSettingsOptLayout->setMargin(0);
+    outputSettingsOptLayout->addWidget(mOutputSettingsProfilesButton);
+    outputSettingsOptLayout->addWidget(mOutputSettingsButton);
 
-    QLabel *outputDestinationLabel = new QLabel("Output Destination:", this);
-    outputDestinationLabel->setFixedHeight(eSizesUI::widget);
-    outputDestinationLabel->setSizePolicy(QSizePolicy::Maximum,
-                                          QSizePolicy::Maximum);
-    outputSettingsLayout->addWidget(outputDestinationLabel);
-    eSizesUI::widget.addSpacing(outputSettingsLayout);
+    outputSettingsLayout->addWidget(outputSettingsOptWidget);
+    outputSettingsLayout->addWidget(mOutputSettingsDisplayWidget);
 
-    mOutputDestinationButton = new QPushButton("Destination");
-    mOutputDestinationButton->setObjectName("renderSettings");
-    mOutputDestinationButton->setSizePolicy(QSizePolicy::Maximum,
-                                            QSizePolicy::Maximum);
+    mOutputDestinationButton = new QPushButton(QIcon::fromTheme("dots"),
+                                               QString(),
+                                               this);
+    mOutputDestinationButton->setToolTip(tr("Select output file"));
+    mOutputDestinationButton->setSizePolicy(QSizePolicy::Preferred,
+                                            QSizePolicy::Preferred);
     connect(mOutputDestinationButton, &QPushButton::pressed,
             this, &RenderInstanceWidget::openOutputDestinationDialog);
-    outputSettingsLayout->addWidget(mOutputDestinationButton);
 
+    mOutputDestinationLineEdit = new QLineEdit(this);
+    mOutputDestinationLineEdit->setSizePolicy(QSizePolicy::Expanding,
+                                              QSizePolicy::Preferred);
+    mOutputDestinationLineEdit->setReadOnly(true);
+    mOutputDestinationLineEdit->setPlaceholderText(tr("Destination ..."));
+    mOutputDestinationLineEdit->setObjectName(QString::fromUtf8("OutputDestinationLineEdit"));
 
-    outputSettingsLabelWidget->setLayout(outputSettingsLayout);
+    QWidget *outputDestinationWidget = new QWidget(this);
+    outputDestinationWidget->setContentsMargins(0, 0, 0, 0);
+    const auto outputDesinationLayout = new QHBoxLayout(outputDestinationWidget);
+    outputDesinationLayout->setMargin(0);
 
-    mOutputSettings->setLabelWidget(outputSettingsLabelWidget);
+    outputDesinationLayout->addWidget(mOutputDestinationButton);
+    outputDesinationLayout->addWidget(mOutputDestinationLineEdit);
 
-    mContentLayout->addWidget(mOutputSettings);
+    outputSettingsLayout->addWidget(outputDestinationWidget);
+
+    mContentLayout->addWidget(outputSettingsLabelWidget);
 
     mContentLayout->setMargin(0);
     mContentLayout->setSpacing(0);
@@ -198,10 +182,7 @@ void RenderInstanceWidget::updateFromSettings() {
     mNameLabel->setText(nameLabelTxt);
 
     QString destinationTxt = mSettings.getOutputDestination();
-    if(destinationTxt.isEmpty()) {
-        destinationTxt = "Destination";
-    }
-    mOutputDestinationButton->setText(destinationTxt);
+    mOutputDestinationLineEdit->setText(destinationTxt);
     const OutputSettings &outputSettings = mSettings.getOutputRenderSettings();
     OutputSettingsProfile *outputProfile = mSettings.getOutputSettingsProfile();
     QString outputTxt;
@@ -210,9 +191,9 @@ void RenderInstanceWidget::updateFromSettings() {
     } else {
         const auto formatT = outputSettings.fOutputFormat;
         if(formatT) {
-            outputTxt = "Custom " + QString(formatT->long_name);
+            outputTxt = tr("Custom: %1").arg(QString(formatT->name));
         } else {
-            outputTxt = "Settings";
+            outputTxt = tr("Output Settings ...");
         }
     }
     mOutputSettingsButton->setText(outputTxt);
@@ -221,14 +202,6 @@ void RenderInstanceWidget::updateFromSettings() {
     const RenderSettings &renderSettings = mSettings.getRenderSettings();
     mRenderSettingsDisplayWidget->setRenderSettings(mSettings.getTargetCanvas(),
                                                     renderSettings);
-    const QString str = QString("%1 - %2,  %3%,  %4 x %5,  %6fps").
-                            arg(renderSettings.fMinFrame).
-                            arg(renderSettings.fMaxFrame).
-                            arg(renderSettings.fResolution*100).
-                            arg(renderSettings.fVideoWidth).
-                            arg(renderSettings.fVideoHeight).
-                            arg(renderSettings.fFps);
-    mRenderSettingsButton->setText(str);
 }
 
 RenderInstanceSettings &RenderInstanceWidget::getSettings() {
@@ -316,7 +289,7 @@ void RenderInstanceWidget::updateOutputDestinationFromCurrentFormat() {
         outputDst = div.join(".");
     }
     mSettings.setOutputDestination(outputDst);
-    mOutputDestinationButton->setText(outputDst);
+    mOutputDestinationLineEdit->setText(outputDst);
 }
 
 void RenderInstanceWidget::outputSettingsProfileSelected(OutputSettingsProfile *profile) {
@@ -346,7 +319,7 @@ void RenderInstanceWidget::openOutputDestinationDialog() {
                                         iniText, supportedExts);
     if(saveAs.isEmpty()) return;
     mSettings.setOutputDestination(saveAs);
-    mOutputDestinationButton->setText(saveAs);
+    mOutputDestinationLineEdit->setText(saveAs);
     updateOutputDestinationFromCurrentFormat();
 }
 
@@ -377,7 +350,8 @@ void RenderInstanceWidget::read(eReadStream &src) {
 OutputProfilesListButton::OutputProfilesListButton(RenderInstanceWidget *parent) :
     QPushButton(parent) {
     mParentWidget = parent;
-    setIcon(QIcon(eSettings::sIconsDir() + "/down-arrow.png"));
+    setIcon(QIcon::fromTheme("dots"));
+    setToolTip(tr("Select output profile"));
 }
 
 void OutputProfilesListButton::mousePressEvent(QMouseEvent *e) {
@@ -392,10 +366,10 @@ void OutputProfilesListButton::mousePressEvent(QMouseEvent *e) {
             i++;
         }
         if(OutputSettingsProfile::sOutputProfiles.isEmpty()) {
-            menu.addAction("No profiles")->setEnabled(false);
+            menu.addAction(tr("No profiles"))->setEnabled(false);
         }
         menu.addSeparator();
-        QAction *actionT = new QAction("Edit...");
+        QAction *actionT = new QAction(tr("Edit..."));
         actionT->setData(QVariant(-1));
         menu.addAction(actionT);
 
