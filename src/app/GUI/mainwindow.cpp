@@ -175,7 +175,7 @@ MainWindow::MainWindow(Document& document,
 
     mDocument.setPath("");
 
-    int sideBarMin = 400;
+    int sideBarMin = 300;
 
     mFillStrokeSettings = new FillStrokeSettingsWidget(mDocument, this);
     mFillStrokeSettings->setMinimumWidth(sideBarMin);
@@ -265,10 +265,7 @@ MainWindow::MainWindow(Document& document,
     QMargins frictionMargins(0, 0, 0, 0);
     int frictionSpacing = 0;
 
-    QPalette darkPal= QPalette();
-    darkPal.setColor(QPalette::Window, QColor(33, 33, 38));
-    darkPal.setColor(QPalette::Base, QColor(33, 33, 38));
-    darkPal.setColor(QPalette::Button, QColor(33, 33, 38));
+    const auto darkPal= AppSupport::getDarkPalette();
     mObjectSettingsScrollArea->setAutoFillBackground(true);
     mObjectSettingsScrollArea->setPalette(darkPal);
 
