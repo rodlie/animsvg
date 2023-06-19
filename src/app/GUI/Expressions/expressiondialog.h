@@ -57,22 +57,22 @@ private:
     void updateScriptDefinitions();
     void updateAllScript();
     void setCurrentTabId(const int id);
-    const QStringList generatePresets();
-    bool populatePresets();
+    const QStringList generateEasingPresets();
+    bool populateEasingPresets();
     bool apply(const bool action);
-    const ExPreset readPreset(const QString &filename);
+    const ExPreset readEasingPreset(const QString &filename);
 
     QrealAnimator* const mTarget;
 
     QTabWidget *mTab;
-    int mTabPreset;
+    int mTabEasingPreset;
     int mTabEditor;
 
-    QComboBox *mPresetsBox;
-    QDoubleSpinBox *mPresetStartValueSpin;
-    QDoubleSpinBox *mPresetEndValueSpin;
-    QSpinBox *mPresetStartFrameSpin;
-    QSpinBox *mPresetEndFrameSpin;
+    QComboBox *mEasingPresetsBox;
+    QDoubleSpinBox *mEasingPresetStartValueSpin;
+    QDoubleSpinBox *mEasingPresetEndValueSpin;
+    QSpinBox *mEasingPresetStartFrameSpin;
+    QSpinBox *mEasingPresetEndFrameSpin;
 
     QIcon mRedDotIcon;
 
