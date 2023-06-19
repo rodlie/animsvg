@@ -808,7 +808,7 @@ const ExpressionDialog::ExPreset ExpressionDialog::readPreset(const QString &fil
     }
     if (js.isEmpty()) { return preset; }
     QStringList parts = js.split("/*_FRICTION_EXPRESSION_PRESET_*/",
-                                 Qt::SkipEmptyParts);
+                                 QT_SKIP_EMPTY);
     if (parts.size() != 3) { return preset; }
     preset.valid = true;
     preset.definitions = parts.at(0).trimmed();
