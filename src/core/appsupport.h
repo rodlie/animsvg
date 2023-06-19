@@ -26,6 +26,7 @@
 
 #include <QObject>
 #include <QVariant>
+#include <QPalette>
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #define QT_ENDL Qt::endl
@@ -42,6 +43,7 @@ class CORE_EXPORT AppSupport : public QObject
 public:
     explicit AppSupport(QObject *parent = nullptr);
     static void setupTheme();
+    static const QPalette getDarkPalette();
     static QVariant getSettings(const QString &group,
                                 const QString &key,
                                 const QVariant &fallback = QVariant());

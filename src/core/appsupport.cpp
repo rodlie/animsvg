@@ -60,6 +60,15 @@ void AppSupport::setupTheme()
     qApp->setPalette(palette);
 }
 
+const QPalette AppSupport::getDarkPalette()
+{
+    QPalette pal = QPalette();
+    pal.setColor(QPalette::Window, QColor(33, 33, 38));
+    pal.setColor(QPalette::Base, QColor(33, 33, 38));
+    pal.setColor(QPalette::Button, QColor(33, 33, 38));
+    return pal;
+}
+
 QVariant AppSupport::getSettings(const QString &group,
                                  const QString &key,
                                  const QVariant &fallback)
