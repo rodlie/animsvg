@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-# Friction - https://github.com/friction2d/friction
+# Friction - https://friction.graphics
 #
-# Copyright (c) Friction developers
+# Copyright (c) Friction contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
