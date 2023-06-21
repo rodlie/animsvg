@@ -25,13 +25,16 @@
 
 #ifndef EFFECTSLOADER_H
 #define EFFECTSLOADER_H
+
 #include "Private/Tasks/offscreenqgl33c.h"
 
 struct ShaderEffectProgram;
 struct ShaderEffectCreator;
 
-class EffectsLoader : public QObject, protected OffscreenQGL33c {
+class EffectsLoader : public QObject, protected OffscreenQGL33c
+{
     Q_OBJECT
+
 public:
     EffectsLoader();
     ~EffectsLoader();
@@ -41,11 +44,13 @@ public:
     void iniCustomRasterEffects();
     void iniShaderEffects();
     void iniCustomBoxes();
+
 signals:
     void programChanged(ShaderEffectProgram*);
+
 private:
     void reloadProgram(ShaderEffectCreator * const loaded,
-                       const QString& fragPath);
+                       const QString &fragPath);
     void iniSingleRasterEffectProgram(const QString &grePath);
     void iniShaderEffectProgramExec(const QString &grePath);
 

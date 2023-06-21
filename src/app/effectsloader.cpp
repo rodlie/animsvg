@@ -24,17 +24,26 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "effectsloader.h"
-#include "GUI/ColorWidgets/colorwidgetshaders.h"
-#include "RasterEffects/rastereffect.h"
+
 #include <QFileSystemWatcher>
 #include <QFileSystemModel>
 #include <iostream>
+
+#include "GUI/ColorWidgets/colorwidgetshaders.h"
 #include "ShaderEffects/shadereffectcreator.h"
-#include "Private/esettings.h"
+#include "PathEffects/custompatheffect.h"
+#include "PathEffects/custompatheffectcreator.h"
+#include "RasterEffects/rastereffect.h"
+#include "RasterEffects/customrastereffect.h"
+#include "RasterEffects/customrastereffectcreator.h"
+#include "Boxes/ecustombox.h"
+#include "Boxes/customboxcreator.h"
+#include "appsupport.h"
 
 EffectsLoader::EffectsLoader() {}
 
-EffectsLoader::~EffectsLoader() {
+EffectsLoader::~EffectsLoader()
+{
     makeCurrent();
     glDeleteBuffers(1, &GL_PLAIN_SQUARE_VBO);
     glDeleteVertexArrays(1, &mPlainSquareVAO);
@@ -63,13 +72,15 @@ EffectsLoader::~EffectsLoader() {
     glDeleteProgram(BORDER_PROGRAM.fID);
     glDeleteProgram(DOUBLE_BORDER_PROGRAM.fID);
 
-    for(const auto& shaderEffect : ShaderEffectCreator::sEffectCreators)
+    for (const auto& shaderEffect : ShaderEffectCreator::sEffectCreators) {
         glDeleteProgram(shaderEffect->fProgram->fId);
+    }
 
     doneCurrent();
 }
 
-void EffectsLoader::initializeGpu() {
+void EffectsLoader::initializeGpu()
+{
     std::cout << "Entered initializeGpu" << std::endl;
 
     OffscreenQGL33c::initialize();
@@ -92,9 +103,8 @@ void EffectsLoader::initializeGpu() {
     std::cout << "Done OffscreenQGL33c current" << std::endl;
 }
 
-#include "Boxes/ecustombox.h"
-#include "Boxes/customboxcreator.h"
-void iniCustomBox(const QString& path) {
+void iniCustomBox(const QString &path)
+{
     try {
         CustomBoxCreator::sLoadCustom(path);
     } catch(...) {
@@ -102,10 +112,10 @@ void iniCustomBox(const QString& path) {
     }
 }
 
-void iniIfCustomBox(const QString& path) {
-    const QFileInfo fileInfo(path);
-    if(!fileInfo.isFile()) return;
-    if(!fileInfo.completeSuffix().contains("so")) return;
+void iniIfCustomBox(const QString &path)
+{
+    if (!QFile::exists(path) ||
+        !QLibrary::isLibrary(path)) { return; }
     try {
         iniCustomBox(path);
     } catch(const std::exception& e) {
@@ -113,8 +123,10 @@ void iniIfCustomBox(const QString& path) {
     }
 }
 
-void EffectsLoader::iniCustomBoxes() {
-    QDir(eSettings::sSettingsDir()).mkdir("Boxes");
+void EffectsLoader::iniCustomBoxes()
+{
+    // ignore for now
+    /*QDir(eSettings::sSettingsDir()).mkdir("Boxes");
     const QString dirPath = eSettings::sSettingsDir() + "/Boxes";
     QDirIterator dirIt(dirPath, QDirIterator::NoIteratorFlags);
     while(dirIt.hasNext()) iniIfCustomBox(dirIt.next());
@@ -134,12 +146,11 @@ void EffectsLoader::iniCustomBoxes() {
                 iniIfCustomBox(path);
             }
         });
-    });
+    });*/
 }
 
-#include "PathEffects/custompatheffect.h"
-#include "PathEffects/custompatheffectcreator.h"
-void iniCustomPathEffect(const QString& path) {
+void iniCustomPathEffect(const QString &path)
+{
     try {
         CustomPathEffectCreator::sLoadCustom(path);
     } catch(...) {
@@ -147,10 +158,10 @@ void iniCustomPathEffect(const QString& path) {
     }
 }
 
-void iniIfCustomPathEffect(const QString& path) {
-    const QFileInfo fileInfo(path);
-    if(!fileInfo.isFile()) return;
-    if(!fileInfo.completeSuffix().contains("so")) return;
+void iniIfCustomPathEffect(const QString &path)
+{
+    if (!QFile::exists(path) ||
+        !QLibrary::isLibrary(path)) { return; }
     try {
         iniCustomPathEffect(path);
     } catch(const std::exception& e) {
@@ -158,8 +169,10 @@ void iniIfCustomPathEffect(const QString& path) {
     }
 }
 
-void EffectsLoader::iniCustomPathEffects() {
-    QDir(eSettings::sSettingsDir()).mkdir("PathEffects");
+void EffectsLoader::iniCustomPathEffects()
+{
+    // ignore for now
+    /*QDir(eSettings::sSettingsDir()).mkdir("PathEffects");
     const QString dirPath = eSettings::sSettingsDir() + "/PathEffects";
     QDirIterator dirIt(dirPath, QDirIterator::NoIteratorFlags);
     while(dirIt.hasNext()) iniIfCustomPathEffect(dirIt.next());
@@ -179,12 +192,11 @@ void EffectsLoader::iniCustomPathEffects() {
                 iniIfCustomPathEffect(path);
             }
         });
-    });
+    });*/
 }
 
-#include "RasterEffects/customrastereffect.h"
-#include "RasterEffects/customrastereffectcreator.h"
-void EffectsLoader::iniCustomRasterEffect(const QString& soPath) {
+void EffectsLoader::iniCustomRasterEffect(const QString &soPath)
+{
     try {
         CustomRasterEffectCreator::sLoadCustom(soPath);
     } catch(...) {
@@ -192,10 +204,10 @@ void EffectsLoader::iniCustomRasterEffect(const QString& soPath) {
     }
 }
 
-void EffectsLoader::iniIfCustomRasterEffect(const QString& path) {
-    const QFileInfo fileInfo(path);
-    if(!fileInfo.isFile()) return;
-    if(!fileInfo.completeSuffix().contains("so")) return;
+void EffectsLoader::iniIfCustomRasterEffect(const QString &path)
+{
+    if (!QFile::exists(path) ||
+        !QLibrary::isLibrary(path)) { return; }
     try {
         iniCustomRasterEffect(path);
     } catch(const std::exception& e) {
@@ -203,8 +215,10 @@ void EffectsLoader::iniIfCustomRasterEffect(const QString& path) {
     }
 }
 
-void EffectsLoader::iniCustomRasterEffects() {
-    QDir(eSettings::sSettingsDir()).mkdir("RasterEffects");
+void EffectsLoader::iniCustomRasterEffects()
+{
+    // ignore for now
+    /*QDir(eSettings::sSettingsDir()).mkdir("RasterEffects");
     const QString dirPath = eSettings::sSettingsDir() + "/RasterEffects";
     QDirIterator dirIt(dirPath, QDirIterator::NoIteratorFlags);
     while(dirIt.hasNext()) iniIfCustomRasterEffect(dirIt.next());
@@ -223,11 +237,12 @@ void EffectsLoader::iniCustomRasterEffects() {
                 iniIfCustomRasterEffect(path);
             }
         });
-    });
+    });*/
 }
 
 void EffectsLoader::reloadProgram(ShaderEffectCreator* const loaded,
-                                  const QString &fragPath) {
+                                  const QString &fragPath)
+{
     try {
         makeCurrent();
         loaded->reloadProgram(this, fragPath);
@@ -239,17 +254,17 @@ void EffectsLoader::reloadProgram(ShaderEffectCreator* const loaded,
     }
 }
 
-void EffectsLoader::iniShaderEffects() {
+void EffectsLoader::iniShaderEffects()
+{
     makeCurrent();
-    QDir(eSettings::sSettingsDir()).mkdir("ShaderEffects");
-    const QString dirPath = eSettings::sSettingsDir() + "/ShaderEffects";
+    const QString dirPath = AppSupport::getAppShaderEffectsPath();
     QDirIterator dirIt(dirPath, QDirIterator::NoIteratorFlags);
 
     while(dirIt.hasNext()) {
         const QString path = dirIt.next();
         const QFileInfo fileInfo(path);
-        if(!fileInfo.isFile()) continue;
-        if(fileInfo.suffix() != "gre") continue;
+        if (!fileInfo.isFile() ||
+            fileInfo.suffix() != "gre") { continue; }
         try {
             iniShaderEffectProgramExec(path);
         } catch(const std::exception& e) {
@@ -266,26 +281,26 @@ void EffectsLoader::iniShaderEffects() {
                    this, nullptr);
         connect(newFileWatcher.get(), &QFileSystemModel::rowsInserted, this,
         [this, newFileWatcher](const QModelIndex &parent, int first, int last) {
-            for(int row = first; row <= last; row++) {
+            for (int row = first; row <= last; row++) {
                 const auto rowIndex = newFileWatcher->index(row, 0, parent);
                 const QString path = newFileWatcher->filePath(rowIndex);
                 const QFileInfo fileInfo(path);
-                if(!fileInfo.isFile()) return;
+                if (!fileInfo.isFile()) { return; }
                 const QString suffix = fileInfo.suffix();
                 QString grePath;
                 QString fragPath;
-                if(suffix == "gre") {
-                    fragPath = fileInfo.path() + "/" +
-                            fileInfo.completeBaseName() + ".frag";
-                    if(!QFile(fragPath).exists()) continue;
+                if (suffix == "gre") {
+                    fragPath = QString("%1/%2.frag").arg(fileInfo.path(),
+                                                         fileInfo.completeBaseName());
+                    if (!QFile::exists(fragPath)) { continue; }
                     grePath = path;
-                } else if(suffix == "frag") {
-                    grePath = fileInfo.path() + "/" +
-                            fileInfo.completeBaseName() + ".gre";
+                } else if (suffix == "frag") {
+                    grePath = QString("%1/%2.gre").arg(fileInfo.path(),
+                                                       fileInfo.completeBaseName());
                     fragPath = path;
-                    if(!QFile(grePath).exists()) continue;
-                } else continue;
-                if(mLoadedGREPaths.contains(grePath)) continue;
+                    if (!QFile::exists(grePath)) { continue; }
+                } else { continue; }
+                if (mLoadedGREPaths.contains(grePath)) { continue; }
                 iniSingleRasterEffectProgram(grePath);
             }
         });
@@ -293,7 +308,8 @@ void EffectsLoader::iniShaderEffects() {
     doneCurrent();
 }
 
-void EffectsLoader::iniSingleRasterEffectProgram(const QString& grePath) {
+void EffectsLoader::iniSingleRasterEffectProgram(const QString &grePath)
+{
     try {
         makeCurrent();
         iniShaderEffectProgramExec(grePath);
@@ -304,12 +320,13 @@ void EffectsLoader::iniSingleRasterEffectProgram(const QString& grePath) {
     }
 }
 
-void EffectsLoader::iniShaderEffectProgramExec(const QString& grePath) {
-    if(!QFile(grePath).exists()) return;
+void EffectsLoader::iniShaderEffectProgramExec(const QString &grePath)
+{
+    if (!QFile::exists(grePath)) { return; }
     const QFileInfo fileInfo(grePath);
-    const QString fragPath = fileInfo.path() + "/" +
-            fileInfo.completeBaseName() + ".frag";
-    if(!QFile(fragPath).exists()) return;
+    const QString fragPath = QString::fromUtf8("%1/%2.frag").arg(fileInfo.path(),
+                                                                 fileInfo.completeBaseName());
+    if (!QFile::exists(fragPath)) { return; }
     try {
         const auto loaded = ShaderEffectCreator::sLoadFromFile(this, grePath).get();
         mLoadedGREPaths << grePath;

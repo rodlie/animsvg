@@ -222,11 +222,13 @@ int main(int argc, char *argv[])
         gPrintExceptionFatal(e);
     }
 
-    effectsLoader.iniCustomPathEffects();
-    std::cout << "Custom path effects initialized" << std::endl;
+    // disabled for now
+    //effectsLoader.iniCustomPathEffects();
+    //std::cout << "Custom path effects initialized" << std::endl;
 
-    effectsLoader.iniCustomRasterEffects();
-    std::cout << "Custom raster effects initialized" << std::endl;
+    // disabled for now
+    //effectsLoader.iniCustomRasterEffects();
+    //std::cout << "Custom raster effects initialized" << std::endl;
 
     try {
         effectsLoader.iniShaderEffects();
@@ -242,8 +244,9 @@ int main(int argc, char *argv[])
     });
     std::cout << "Shader effects initialized" << std::endl;
 
-    effectsLoader.iniCustomBoxes();
-    std::cout << "Custom objects initialized" << std::endl;
+    // disabled for now
+    //effectsLoader.iniCustomBoxes();
+    //std::cout << "Custom objects initialized" << std::endl;
 
     eSoundSettings soundSettings;
     AudioHandler audioHandler;
