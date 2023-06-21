@@ -20,10 +20,12 @@
 */
 
 #include "GUI/mainwindow.h"
+
 #include <iostream>
 #include <QApplication>
 #include <QSurfaceFormat>
 #include <QProcess>
+
 #include "hardwareinfo.h"
 #include "Private/esettings.h"
 #include "GUI/ewidgetsimpl.h"
@@ -34,6 +36,7 @@
 #include "videoencoder.h"
 #include "iconloader.h"
 #include "appsupport.h"
+
 #ifdef Q_OS_WIN
     #include "windowsincludes.h"
 #endif // Q_OS_WIN
@@ -188,8 +191,11 @@ int main(int argc, char *argv[])
     }
 
     eFilterSettings filterSettings;
+
+    // remove when we have moved over to QIcon:
     QDir(eSettings::sSettingsDir()).mkpath(eSettings::sIconsDir());
 
+    // remove when we have moved over to QIcon:
     eSizesUI::button.add([](const int size) {
         IconLoader::generateAll(eSizesUI::widget, size);
     });
