@@ -32,34 +32,35 @@
 
 #include "smartPointers/stdselfref.h"
 
-struct eSetting {
+struct eSetting
+{
     eSetting(const QString& name) : fName(name) {}
 
     virtual bool setValueString(const QString& value) = 0;
-    virtual void writeValue(QTextStream &textStream) const = 0;
+    virtual void writeValue() const = 0;
     virtual void loadDefault() = 0;
-
-    void write(QTextStream &textStream) const {
-        textStream << fName + ": ";
-        writeValue(textStream);
-        textStream << QT_ENDL;
-    }
 
     const QString fName;
 };
 
 template <typename T>
-struct eSettingBase : public eSetting {
-    eSettingBase(T& value, const QString& name, const T& defaultValue) :
-        eSetting(name), fValue(value), fDefault(defaultValue) {}
+struct eSettingBase : public eSetting
+{
+    eSettingBase(T &value,
+                 const QString &name,
+                 const T &defaultValue)
+        : eSetting(name)
+        , fValue(value)
+        , fDefault(defaultValue) {}
 
     void loadDefault() { fValue = fDefault; };
 
-    T& fValue;
+    T &fValue;
     const T fDefault;
 };
 
-struct eBoolSetting : public eSettingBase<bool> {
+struct eBoolSetting : public eSettingBase<bool>
+{
     using eSettingBase<bool>::eSettingBase;
 
     bool setValueString(const QString& valueStr) {
@@ -69,12 +70,13 @@ struct eBoolSetting : public eSettingBase<bool> {
         return ok;
     }
 
-    void writeValue(QTextStream &textStream) const {
-        textStream << (fValue ? "enabled" : "disabled");
+    void writeValue() const {
+        AppSupport::setSettings("settings", fName, fValue ? "enabled" : "disabled");
     }
 };
 
-struct eIntSetting : public eSettingBase<int> {
+struct eIntSetting : public eSettingBase<int>
+{
     using eSettingBase<int>::eSettingBase;
 
     bool setValueString(const QString& valueStr) {
@@ -84,12 +86,13 @@ struct eIntSetting : public eSettingBase<int> {
         return ok;
     }
 
-    void writeValue(QTextStream &textStream) const {
-        textStream << fValue;
+    void writeValue() const {
+        AppSupport::setSettings("settings", fName, fValue);
     }
 };
 
-struct eQrealSetting : public eSettingBase<qreal> {
+struct eQrealSetting : public eSettingBase<qreal>
+{
     using eSettingBase<qreal>::eSettingBase;
 
     bool setValueString(const QString& valueStr) {
@@ -99,12 +102,13 @@ struct eQrealSetting : public eSettingBase<qreal> {
         return ok;
     }
 
-    void writeValue(QTextStream &textStream) const {
-        textStream << fValue;
+    void writeValue() const {
+        AppSupport::setSettings("settings", fName, fValue);
     }
 };
 
-struct eStringSetting : public eSettingBase<QString> {
+struct eStringSetting : public eSettingBase<QString>
+{
     using eSettingBase<QString>::eSettingBase;
 
     bool setValueString(const QString& valueStr) {
@@ -112,12 +116,13 @@ struct eStringSetting : public eSettingBase<QString> {
         return true;
     }
 
-    void writeValue(QTextStream &textStream) const {
-        textStream << fValue;
+    void writeValue() const {
+        AppSupport::setSettings("settings", fName, fValue);
     }
 };
 
-struct eColorSetting : public eSettingBase<QColor> {
+struct eColorSetting : public eSettingBase<QColor>
+{
     using eSettingBase<QColor>::eSettingBase;
 
     bool setValueString(const QString& valueStr) {
@@ -142,12 +147,13 @@ struct eColorSetting : public eSettingBase<QColor> {
         } else return false;
     }
 
-    void writeValue(QTextStream &textStream) const {
-        textStream << QString("rgba(%1, %2, %3, %4)").
-                      arg(fValue.red()).
-                      arg(fValue.green()).
-                      arg(fValue.blue()).
-                      arg(fValue.alpha());
+    void writeValue() const {
+        QString col = QString("rgba(%1, %2, %3, %4)").
+                              arg(fValue.red()).
+                              arg(fValue.green()).
+                              arg(fValue.blue()).
+                              arg(fValue.alpha());
+        AppSupport::setSettings("settings", fName, col);
     }
 };
 
@@ -275,10 +281,6 @@ eSettings::eSettings(const int cpuThreads,
                      "animationRangeColor",
                      QColor(255, 255, 255, 180));
 
-    //gSettings << std::make_shared<eStringSetting>(fGimp, "gimp", "gimp");
-    //gSettings << std::make_shared<eStringSetting>(fMyPaint, "mypaint", "mypaint");
-    //gSettings << std::make_shared<eStringSetting>(fKrita, "krita", "krita");
-
     loadDefaults();
 
     eSizesUI::widget.add(this, [this](const int size) {
@@ -286,87 +288,62 @@ eSettings::eSettings(const int cpuThreads,
     });
 }
 
-int eSettings::sCpuThreadsCapped() {
-    if(sInstance->fCpuThreadsCap > 0)
+int eSettings::sCpuThreadsCapped()
+{
+    if (sInstance->fCpuThreadsCap > 0) {
         return sInstance->fCpuThreadsCap;
+    }
     return sInstance->fCpuThreads;
 }
 
-intMB eSettings::sRamMBCap() {
-    if(sInstance->fRamMBCap.fValue > 0) return sInstance->fRamMBCap;
+intMB eSettings::sRamMBCap()
+{
+    if (sInstance->fRamMBCap.fValue > 0) { return sInstance->fRamMBCap; }
     auto mbTot = intMB(sInstance->fRamKB);
     mbTot.fValue *= 8; mbTot.fValue /= 10;
     return mbTot;
 }
 
-const QString &eSettings::sSettingsDir() {
+const QString &eSettings::sSettingsDir()
+{
     return sInstance->fUserSettingsDir;
 }
 
-const QString& eSettings::sIconsDir() {
+const QString &eSettings::sIconsDir()
+{
     return sInstance->mIconsDir;
 }
 
-const eSettings& eSettings::instance() {
+const eSettings &eSettings::instance()
+{
     return *sInstance;
 }
 
-void eSettings::loadDefaults() {
-    for(auto& setting : gSettings) {
+void eSettings::loadDefaults()
+{
+    for (auto& setting : gSettings) {
         setting->loadDefault();
     }
 }
 
-void eSettings::loadFromFile() {
+void eSettings::loadFromFile()
+{
     loadDefaults();
-    const QString settingsFile = sSettingsDir() + "/settings";
-    QFile file(settingsFile);
-    if(!file.exists()) return;
-    if(!file.open(QIODevice::ReadOnly))
-        RuntimeThrow("Could not open \"" + settingsFile + "\" for reading");
 
-    QTextStream textStream(&file);
-
-    QStringList invalidLines;
-
-    QString line;
-    while(!textStream.atEnd()) {
-        line = textStream.readLine();
-        const QStringList split = line.split(":");
-        if(split.count() != 2) continue;
-        const QString settingName = split.first().trimmed();
-        const QString value = split.last().trimmed();
-        bool ok = false;
-        for(auto& setting : gSettings) {
-            if(settingName != setting->fName) continue;
-            ok = setting->setValueString(value);
-        }
-
-        if(!ok) invalidLines << line;
+    for(auto &setting : gSettings) {
+        QString val = AppSupport::getSettings("settings",
+                                              setting->fName,
+                                              QString()).toString();
+        if (!val.isEmpty()) { setting->setValueString(val); }
     }
-    file.close();
 
     eSizesUI::font.updateSize();
     eSizesUI::widget.updateSize();
-
-    if(!invalidLines.isEmpty()) {
-        RuntimeThrow("Invalid setting(s) \n" +
-                     invalidLines.join("\n") +
-                     "\n in \"" + settingsFile + "\"");
-    }
 }
 
-void eSettings::saveToFile() {
-    const QString settingsFile = sSettingsDir() + "/settings";
-    QFile file(settingsFile);
-    if(!file.open(QIODevice::WriteOnly))
-        RuntimeThrow("Could not open \"" + settingsFile + "\" for writing");
-    QTextStream textStream(&file);
-
-    for(const auto& setting : gSettings) {
-        setting->write(textStream);
+void eSettings::saveToFile()
+{
+    for (const auto& setting : gSettings) {
+        setting->writeValue();
     }
-
-    textStream.flush();
-    file.close();
 }
