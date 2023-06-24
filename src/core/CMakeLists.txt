@@ -28,6 +28,10 @@ include(friction-common)
 #include(friction-quazip)
 include(friction-ffmpeg)
 
+message("-- ffmpeg include: ${FFMPEG_INCLUDE_DIRS}")
+message("-- ffmpeg libraries: ${FFMPEG_LIBRARIES_DIRS} ${FFMPEG_LIBRARIES}")
+message("-- skia libraries: ${SKIA_LIBRARIES}")
+
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 add_definitions(-DPROJECT_GIT="${GIT_COMMIT}")
 add_definitions(-DPROJECT_BRANCH="${GIT_BRANCH}")
@@ -692,7 +696,7 @@ set(
 
 add_library(
     ${PROJECT_NAME}
-    SHARED
+    #SHARED
     ${HEADERS}
     ${SOURCES}
     coreresources.qrc
@@ -740,12 +744,12 @@ if(APPLE)
     )
 endif()
 
-if(UNIX AND NOT APPLE)
-    include(GNUInstallDirs)
-    install(
-        TARGETS
-        ${PROJECT_NAME}
-        DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}
-    )
-endif()
+#if(UNIX AND NOT APPLE)
+#    include(GNUInstallDirs)
+#    install(
+#        TARGETS
+#        ${PROJECT_NAME}
+#        DESTINATION
+#        ${CMAKE_INSTALL_LIBDIR}
+#    )
+#endif()

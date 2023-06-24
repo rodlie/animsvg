@@ -58,6 +58,9 @@ else()
     set(QSCINTILLA_INCLUDE_DIRS "/usr/include/x86_64-linux-gnu/qt5" CACHE STRING "qscintilla includes path")
 endif()
 
+message("-- qscintilla include: ${QSCINTILLA_INCLUDE_DIRS}")
+message("-- qscintilla libraries: ${QSCINTILLA_LIBRARIES_DIRS} ${QSCINTILLA_LIBRARIES}")
+
 if(WIN32)
     set(WINDOWS_ICON_FILE ${FRICTION_NAME}.ico)
     set(ICON_FILE ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${FRICTION_NAME}.ico)
