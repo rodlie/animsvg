@@ -27,7 +27,6 @@
 #include "Boxes/boxrendercontainer.h"
 #include "GUI/mainwindow.h"
 #include <QMetaType>
-#include "GUI/usagewidget.h"
 
 #ifdef Q_OS_MAC
 #include <malloc/malloc.h>

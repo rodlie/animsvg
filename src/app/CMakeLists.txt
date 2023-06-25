@@ -245,7 +245,6 @@ set(
     GUI/mainwindow.cpp
     GUI/noshortcutaction.cpp
     GUI/keyfocustarget.cpp
-    GUI/usagewidget.cpp
     GUI/qrealpointvaluedialog.cpp
     GUI/renderoutputwidget.cpp
     GUI/qdoubleslider.cpp
@@ -371,7 +370,6 @@ set(
     GUI/mainwindow.h
     GUI/qdoubleslider.h
     GUI/qrealanimatorvalueslider.h
-    GUI/usagewidget.h
     GUI/glwindow.h
     GUI/noshortcutaction.h
     GUI/qrealpointvaluedialog.h

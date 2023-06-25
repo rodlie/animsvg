@@ -36,7 +36,6 @@
 #include "svgimporter.h"
 #include "filesourcescache.h"
 #include "videoencoder.h"
-#include "usagewidget.h"
 #include "memorychecker.h"
 #include "memoryhandler.h"
 #include "simpletask.h"
