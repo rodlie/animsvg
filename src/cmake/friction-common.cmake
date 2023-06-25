@@ -34,10 +34,6 @@ else()
     add_definitions(-DQT_MESSAGELOGCONTEXT)
 endif()
 
-if(UNIX AND NOT APPLE)
-    find_package(OpenGL REQUIRED)
-endif()
-
 find_package(PkgConfig QUIET)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
 find_package(
@@ -76,7 +72,6 @@ else()
     else()
         set(SKIA_LIBRARIES
             skia
-            ${OPENGL_gl_LIBRARY}
             fontconfig)
     endif()
 endif()

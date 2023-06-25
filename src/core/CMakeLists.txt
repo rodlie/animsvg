@@ -696,7 +696,7 @@ set(
 
 add_library(
     ${PROJECT_NAME}
-    #SHARED
+    SHARED
     ${HEADERS}
     ${SOURCES}
     coreresources.qrc
@@ -744,12 +744,12 @@ if(APPLE)
     )
 endif()
 
-#if(UNIX AND NOT APPLE)
-#    include(GNUInstallDirs)
-#    install(
-#        TARGETS
-#        ${PROJECT_NAME}
-#        DESTINATION
-#        ${CMAKE_INSTALL_LIBDIR}
-#    )
-#endif()
+if(UNIX AND NOT APPLE)
+    include(GNUInstallDirs)
+    install(
+        TARGETS
+        ${PROJECT_NAME}
+        DESTINATION
+        ${CMAKE_INSTALL_LIBDIR}
+    )
+endif()
