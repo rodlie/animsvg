@@ -6,4 +6,4 @@ Comment=@PROJECT_DESCRIPTION@
 Terminal=false
 Type=Application
 Categories=Graphics;Video;
-MimeType=application/vnd.@FRICTION_NAME@-project;
+MimeType=application/x-@FRICTION_NAME@;

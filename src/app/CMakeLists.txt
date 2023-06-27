@@ -492,12 +492,24 @@ if(UNIX AND NOT APPLE)
             DESTINATION
             ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${HICOLOR_DIR}/apps/
         )
+        install(
+            FILES
+            icons/hicolor/${HICOLOR_DIR}/mimetypes/application-x-${PROJECT_NAME}.png
+            DESTINATION
+            ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${HICOLOR_DIR}/mimetypes/
+        )
     endforeach()
     install(
         FILES
         icons/hicolor/scalable/apps/${PROJECT_NAME}.svg
         DESTINATION
         ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps/
+    )
+    install(
+        FILES
+        icons/hicolor/scalable/mimetypes/application-x-${PROJECT_NAME}.svg
+        DESTINATION
+        ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/mimetypes/
     )
     install(
         FILES
