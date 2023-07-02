@@ -92,6 +92,7 @@ MainWindow::MainWindow(Document& document,
                        Actions& actions,
                        AudioHandler& audioHandler,
                        RenderHandler& renderHandler,
+                       const QString &openProject,
                        QWidget * const parent)
     : QMainWindow(parent)
     , mWelcomeDialog(nullptr)
@@ -338,7 +339,7 @@ MainWindow::MainWindow(Document& document,
 
     setCentralWidget(mSplitterMain);
 
-    readSettings();
+    readSettings(openProject);
 }
 
 MainWindow::~MainWindow()
@@ -916,15 +917,12 @@ void MainWindow::setupMenuBar()
                                  tr("This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version."));
         QMessageBox::about(this, tr("About"), aboutText);
     });
-    /*help->addAction(tr("About Qt", "MenuBar_Help"), this, [this]() {
+    help->addAction(tr("About Qt", "MenuBar_Help"), this, [this]() {
         QMessageBox::aboutQt(this, tr("About Qt"));
-    });
-    help->addAction(tr("Report issue", "MenuBar_Help"), this, []() {
-        QDesktopServices::openUrl(QUrl::fromUserInput(AppSupport::getAppIssuesUrl()));
     });
     help->addAction(tr("Check for updates", "MenuBar_Help"), this, []() {
         QDesktopServices::openUrl(QUrl::fromUserInput(AppSupport::getAppLatestReleaseUrl()));
-    });*/
+    });
 
     setMenuBar(mMenuBar);
 }
@@ -1578,7 +1576,7 @@ bool MainWindow::processKeyEvent(QKeyEvent *event)
     return false;
 }
 
-void MainWindow::readSettings()
+void MainWindow::readSettings(const QString &openProject)
 {
     restoreState(AppSupport::getSettings("ui",
                                          "state").toByteArray());
@@ -1603,7 +1601,12 @@ void MainWindow::readSettings()
                                          false).toBool();
     if (isMax) { showMaximized(); }
 
-    openWelcomeDialog();
+    if (!openProject.isEmpty()) {
+        QTimer::singleShot(10,
+                           this,
+                           [this,
+                           openProject]() { openFile(openProject); });
+    } else { openWelcomeDialog(); }
 }
 
 void MainWindow::writeSettings()

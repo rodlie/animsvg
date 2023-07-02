@@ -74,9 +74,11 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    MainWindow(Document &document, Actions &actions,
+    MainWindow(Document &document,
+               Actions &actions,
                AudioHandler &audioHandler,
                RenderHandler &renderHandler,
+               const QString &openProject = QString(),
                QWidget * const parent = nullptr);
     ~MainWindow();
 
@@ -152,7 +154,7 @@ public:
     //void toggleFillStrokeSettingsDockVisible()
     //{ mFillAndStrokeDockAct->toggle(); }
 
-    void readSettings();
+    void readSettings(const QString &openProject = QString());
     void writeSettings();
 
 public:

@@ -263,15 +263,12 @@ int main(int argc, char *argv[])
                                 *videoEncoder, memoryHandler);
     std::cout << "Render handler initialized" << std::endl;
 
-    MainWindow w(document, actions, audioHandler, renderHandler);
-    if(argc > 1) {
-        try {
-            w.openFile(argv[1]);
-        } catch(const std::exception& e) {
-            gPrintExceptionCritical(e);
-        }
-    }
-
+    const QString openProject = argc > 1 ? argv[1] : QString();
+    MainWindow w(document,
+                 actions,
+                 audioHandler,
+                 renderHandler,
+                 openProject);
     w.show();
 
     try {
