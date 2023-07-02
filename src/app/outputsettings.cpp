@@ -158,7 +158,7 @@ void OutputSettingsProfile::setSettings(const OutputSettings &settings)
 
 void OutputSettingsProfile::save()
 {
-    const QString path = QString::fromUtf8("%1/%2.eprof")
+    const QString path = QString::fromUtf8("%1/%2.conf")
                          .arg(AppSupport::getAppOutputProfilesPath(),
                               mName);
     qDebug() << "save output profile" << path;

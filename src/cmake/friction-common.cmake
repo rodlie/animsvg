@@ -34,7 +34,7 @@ else()
     add_definitions(-DQT_MESSAGELOGCONTEXT)
 endif()
 
-find_package(PkgConfig)
+find_package(PkgConfig QUIET)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
 find_package(
     Qt${QT_VERSION_MAJOR}
@@ -62,9 +62,16 @@ set(QT_LIBRARIES
     Qt${QT_VERSION_MAJOR}::Svg)
 
 if(WIN32)
-    set(SKIA_LIBRARIES skia user32 opengl32)
-else()
     set(SKIA_LIBRARIES
         skia
-        fontconfig)
+        user32
+        opengl32)
+else()
+    if(APPLE)
+        set(SKIA_LIBRARIES skia)
+    else()
+        set(SKIA_LIBRARIES
+            skia
+            fontconfig)
+    endif()
 endif()

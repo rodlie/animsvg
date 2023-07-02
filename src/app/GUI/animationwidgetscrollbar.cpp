@@ -206,23 +206,23 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event) {
 
         menu.addSeparator();
 
-        QAction *timeAction = new QAction("Display Time", this);
+        /*QAction *timeAction = new QAction("Display Time", this);
         timeAction->setChecked(mDisplayTime);
         menu.addAction(timeAction);
 
         QAction *framesAction = new QAction("Display Frames", this);
         framesAction->setChecked(!mDisplayTime);
-        menu.addAction(framesAction);
+        menu.addAction(framesAction);*/
 
         QAction* selectedAction = menu.exec(event->globalPos());
         if(selectedAction) {
             if(selectedAction == clampAction) {
                 mClamp = !mClamp;
-            } else if(selectedAction == framesAction) {
+            }/* else if(selectedAction == framesAction) {
                 mDisplayTime = false;
             } else if(selectedAction == timeAction) {
                 mDisplayTime = true;
-            }
+            }*/
         }
         return;
     }

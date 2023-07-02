@@ -1,9 +1,7 @@
 <?xml version="1.0"?>
 <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
-  <mime-type type="application/vnd.@FRICTION_NAME@-project">
-    <comment>@FRICTION_DISPLAY_NAME@ project</comment>
+  <mime-type type="application/x-@FRICTION_NAME@">
+    <comment>@FRICTION_DISPLAY_NAME@</comment>
     <glob pattern="*.friction"/>
-    <glob pattern="*.ev"/>
-    <icon name="@FRICTION_NAME@"/>
   </mime-type>
 </mime-info>

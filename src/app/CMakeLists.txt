@@ -58,6 +58,9 @@ else()
     set(QSCINTILLA_INCLUDE_DIRS "/usr/include/x86_64-linux-gnu/qt5" CACHE STRING "qscintilla includes path")
 endif()
 
+message("-- qscintilla include: ${QSCINTILLA_INCLUDE_DIRS}")
+message("-- qscintilla libraries: ${QSCINTILLA_LIBRARIES_DIRS} ${QSCINTILLA_LIBRARIES}")
+
 if(WIN32)
     set(WINDOWS_ICON_FILE ${FRICTION_NAME}.ico)
     set(ICON_FILE ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${FRICTION_NAME}.ico)
@@ -242,7 +245,6 @@ set(
     GUI/mainwindow.cpp
     GUI/noshortcutaction.cpp
     GUI/keyfocustarget.cpp
-    GUI/usagewidget.cpp
     GUI/qrealpointvaluedialog.cpp
     GUI/renderoutputwidget.cpp
     GUI/qdoubleslider.cpp
@@ -368,7 +370,6 @@ set(
     GUI/mainwindow.h
     GUI/qdoubleslider.h
     GUI/qrealanimatorvalueslider.h
-    GUI/usagewidget.h
     GUI/glwindow.h
     GUI/noshortcutaction.h
     GUI/qrealpointvaluedialog.h
@@ -491,12 +492,24 @@ if(UNIX AND NOT APPLE)
             DESTINATION
             ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${HICOLOR_DIR}/apps/
         )
+        install(
+            FILES
+            icons/hicolor/${HICOLOR_DIR}/mimetypes/application-x-${PROJECT_NAME}.png
+            DESTINATION
+            ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${HICOLOR_DIR}/mimetypes/
+        )
     endforeach()
     install(
         FILES
         icons/hicolor/scalable/apps/${PROJECT_NAME}.svg
         DESTINATION
         ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps/
+    )
+    install(
+        FILES
+        icons/hicolor/scalable/mimetypes/application-x-${PROJECT_NAME}.svg
+        DESTINATION
+        ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/mimetypes/
     )
     install(
         FILES

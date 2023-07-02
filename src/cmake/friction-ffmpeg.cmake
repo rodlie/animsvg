@@ -27,7 +27,7 @@ if(WIN32)
         avutil
         swscale
         swresample)
-    set(FFMPEG_LIBRARIES_DIRS ${CMAKE_SOURCE_DIR}/src/ffmpeg/lib)
+    set(FFMPEG_LIBRARIES_DIRS ${CMAKE_SOURCE_DIR}/src/ffmpeg/bin)
 else()
     pkg_check_modules(AVFORMAT REQUIRED libavformat)
     pkg_check_modules(AVCODEC REQUIRED libavcodec)
@@ -41,5 +41,5 @@ else()
         ${AVUTIL_LIBRARIES}
         ${SWSCALE_LIBRARIES}
         ${SWRESAMPLE_LIBRARIES})
-    set(FFMPEG_LIBRARIES_DIRS ${AVFORMAT_LIBRARIES_DIRS})
+    set(FFMPEG_LIBRARIES_DIRS ${AVFORMAT_LIBRARY_DIRS})
 endif()

@@ -38,7 +38,6 @@
 #include <QMargins>
 #include <iostream>
 
-#include "usagewidget.h"
 #include "GUI/ColorWidgets/colorsettingswidget.h"
 #include "GUI/edialogs.h"
 #include "timelinedockwidget.h"

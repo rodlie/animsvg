@@ -48,10 +48,13 @@ enum class AccPreference : int {
     gpuStrongPreference
 };
 
-class CORE_EXPORT eSettings : public QObject {
+class CORE_EXPORT eSettings : public QObject
+{
     Q_OBJECT
+
 public:
-    eSettings(const int cpuThreads, const intKB ramKB,
+    eSettings(const int cpuThreads,
+              const intKB ramKB,
               const GpuVendor gpuVendor);
 
     // accessors
@@ -60,7 +63,7 @@ public:
     static const QString& sSettingsDir();
     static const QString& sIconsDir();
 
-    static const eSettings& instance();
+    static const eSettings &instance();
     static eSettings* sInstance;
 
     void loadDefaults();

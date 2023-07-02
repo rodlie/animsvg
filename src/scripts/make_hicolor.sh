@@ -40,6 +40,7 @@ HICOLOR_SIZES="
 HICOLOR_CATS="
 actions
 apps
+mimetypes
 "
 INDEX_THEME="${HICOLOR_DIR}/index.theme"
 INDEX_THEME_HEADER="

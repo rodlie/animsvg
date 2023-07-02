@@ -20,10 +20,12 @@
 */
 
 #include "GUI/mainwindow.h"
+
 #include <iostream>
 #include <QApplication>
 #include <QSurfaceFormat>
 #include <QProcess>
+
 #include "hardwareinfo.h"
 #include "Private/esettings.h"
 #include "GUI/ewidgetsimpl.h"
@@ -34,6 +36,7 @@
 #include "videoencoder.h"
 #include "iconloader.h"
 #include "appsupport.h"
+
 #ifdef Q_OS_WIN
     #include "windowsincludes.h"
 #endif // Q_OS_WIN
@@ -188,8 +191,11 @@ int main(int argc, char *argv[])
     }
 
     eFilterSettings filterSettings;
+
+    // remove when we have moved over to QIcon:
     QDir(eSettings::sSettingsDir()).mkpath(eSettings::sIconsDir());
 
+    // remove when we have moved over to QIcon:
     eSizesUI::button.add([](const int size) {
         IconLoader::generateAll(eSizesUI::widget, size);
     });
@@ -216,11 +222,13 @@ int main(int argc, char *argv[])
         gPrintExceptionFatal(e);
     }
 
-    effectsLoader.iniCustomPathEffects();
-    std::cout << "Custom path effects initialized" << std::endl;
+    // disabled for now
+    //effectsLoader.iniCustomPathEffects();
+    //std::cout << "Custom path effects initialized" << std::endl;
 
-    effectsLoader.iniCustomRasterEffects();
-    std::cout << "Custom raster effects initialized" << std::endl;
+    // disabled for now
+    //effectsLoader.iniCustomRasterEffects();
+    //std::cout << "Custom raster effects initialized" << std::endl;
 
     try {
         effectsLoader.iniShaderEffects();
@@ -236,8 +244,9 @@ int main(int argc, char *argv[])
     });
     std::cout << "Shader effects initialized" << std::endl;
 
-    effectsLoader.iniCustomBoxes();
-    std::cout << "Custom objects initialized" << std::endl;
+    // disabled for now
+    //effectsLoader.iniCustomBoxes();
+    //std::cout << "Custom objects initialized" << std::endl;
 
     eSoundSettings soundSettings;
     AudioHandler audioHandler;
