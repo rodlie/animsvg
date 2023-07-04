@@ -101,6 +101,7 @@ QColor ColorPickingWidget::colorFromPoint(const int x, const int y) {
 void ColorPickingWidget::updateBox(const QPoint& pos) {
     mCursorX = pos.x();
     mCursorY = pos.y();
-    mCurrentColor = colorFromPoint(pos.x(), pos.y());
+    qreal pixelRatio = devicePixelRatioF();
+    mCurrentColor = colorFromPoint(pos.x() * pixelRatio, pos.y() * pixelRatio);
     update();
 }
