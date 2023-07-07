@@ -35,9 +35,24 @@
 #include "GUI/actionbutton.h"
 #include "GUI/ColorWidgets/savedcolorswidget.h"
 
-void ColorSettingsWidget::updateWidgetTargets() {
+void ColorSettingsWidget::updateWidgetTargets()
+{
     mUpdateConnections.clear();
-    if(mTarget) {
+
+    rSpin->setTarget(nullptr);
+    gSpin->setTarget(nullptr);
+    bSpin->setTarget(nullptr);
+
+    hSpin->setTarget(nullptr);
+    hsvSSpin->setTarget(nullptr);
+    vSpin->setTarget(nullptr);
+
+    hslSSpin->setTarget(nullptr);
+    lSpin->setTarget(nullptr);
+
+    aSpin->setTarget(nullptr);
+
+    if (mTarget) {
         auto& conn = mUpdateConnections;
 
         const auto anim1 = mTarget->getVal1Animator();
@@ -46,22 +61,22 @@ void ColorSettingsWidget::updateWidgetTargets() {
 
         const auto colorMode = mTarget->getColorMode();
         mColorModeCombo->setCurrentIndex(static_cast<int>(colorMode));
-        if(!mAlphaHidden) aSpin->setTarget(mTarget->getAlphaAnimator());
-        if(mTarget->getColorMode() == ColorMode::rgb) {
+        if (!mAlphaHidden) { aSpin->setTarget(mTarget->getAlphaAnimator()); }
+        if (mTarget->getColorMode() == ColorMode::rgb) {
             rSpin->setTarget(anim1);
             gSpin->setTarget(anim2);
             bSpin->setTarget(anim3);
             updateValuesFromRGBSpins();
             conn << connect(mTarget, &ColorAnimator::colorChanged,
                             this, &ColorSettingsWidget::updateValuesFromRGBSpins);
-        } else if(mTarget->getColorMode() == ColorMode::hsv) {
+        } else if (mTarget->getColorMode() == ColorMode::hsv) {
             hSpin->setTarget(anim1);
             hsvSSpin->setTarget(anim2);
             vSpin->setTarget(anim3);
             updateValuesFromHSVSpins();
             conn << connect(mTarget, &ColorAnimator::colorChanged,
                             this, &ColorSettingsWidget::updateValuesFromHSVSpins);
-        } else if(mTarget->getColorMode() == ColorMode::hsl) {
+        } else if (mTarget->getColorMode() == ColorMode::hsl) {
             hSpin->setTarget(anim1);
             hslSSpin->setTarget(anim2);
             lSpin->setTarget(anim3);
@@ -69,24 +84,9 @@ void ColorSettingsWidget::updateWidgetTargets() {
             conn << connect(mTarget, &ColorAnimator::colorChanged,
                             this, &ColorSettingsWidget::updateValuesFromHSLSpins);
         }
-
         updateAlphaFromSpin();
         const auto currColor = getCurrentQColor();
         mHexEdit->setText(currColor.name(QColor::HexArgb));
-
-    } else {
-        rSpin->setTarget(nullptr);
-        gSpin->setTarget(nullptr);
-        bSpin->setTarget(nullptr);
-
-        hSpin->setTarget(nullptr);
-        hsvSSpin->setTarget(nullptr);
-        vSpin->setTarget(nullptr);
-
-        hslSSpin->setTarget(nullptr);
-        lSpin->setTarget(nullptr);
-
-        aSpin->setTarget(nullptr);
     }
 }
 
