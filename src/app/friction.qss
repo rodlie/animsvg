@@ -47,7 +47,8 @@ QLineEdit#SearchLine {
     background-color: rgb(23, 23, 28);
 }
 
-QPushButton::menu-indicator { width: 0px; }
+QPushButton::menu-indicator,
+QToolButton#ToolButton::menu-indicator{ width: 0px; }
 
 QLineEdit#SearchLine {
     border-radius: 0;
