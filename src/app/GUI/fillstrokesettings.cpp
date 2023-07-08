@@ -722,6 +722,8 @@ void FillStrokeSettingsWidget::setStrokeValuesFromStrokeSettings(
         mLineWidthSpin->setTarget(settings->getLineWidthAnimator());
         mCurrentCapStyle = settings->getCapStyle();
         mCurrentJoinStyle = settings->getJoinStyle();
+        setCapStyle(mCurrentCapStyle);
+        setJoinStyle(mCurrentJoinStyle);
     } else {
         setCurrentBrushSettings(nullptr);
         mCurrentStrokeColorAnimator = nullptr;
