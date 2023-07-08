@@ -28,8 +28,6 @@
         <file>icons/toolbarButtons/plain/normalNodesOnly.svg</file>
         <file>icons/toolbarButtons/plain/onionDisabled.svg</file>
         <file>icons/toolbarButtons/plain/onionEnabled.svg</file>
-        <file>icons/toolbarButtons/plain/pivotGlobal.svg</file>
-        <file>icons/toolbarButtons/plain/pivotLocal.svg</file>
         <file>icons/toolbarButtons/plain/zoom.svg</file>
         <file>icons/toolbarButtons/checkedBg.svg</file>
         <file>icons/toolbarButtons/uncheckedBg.svg</file>

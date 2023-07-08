@@ -2,18 +2,53 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="48mm"
-   height="48mm"
-   viewBox="0 0 48 48"
+   width="10"
+   height="10"
+   viewBox="0 0 2.6458334 2.6458334"
    version="1.1"
-   id="svg5"
+   id="svg1500"
+   sodipodi:docname="split_h.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     id="namedview1335"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="68.943101"
+     inkscape:cx="4.7357893"
+     inkscape:cy="6.1427466"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1500" />
   <defs
-     id="defs2" />
+     id="defs1494" />
+  <metadata
+     id="metadata1497">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
   <path
      id="rect6603"
-     style="color:#000000;fill:#ffffff;stroke-width:3.77953;-inkscape-stroke:none;fill-opacity:1"
-     d="M 16.646484 16.646484 L 16.646484 23.496094 L 16.646484 164.77148 L 164.77148 164.77148 L 164.77148 16.646484 L 16.646484 16.646484 z M 30.353516 30.353516 L 151.0625 30.353516 L 151.0625 83.720703 L 30.353516 83.720703 L 30.353516 30.353516 z M 30.353516 97.697266 L 151.0625 97.697266 L 151.0625 151.0625 L 30.353516 151.0625 L 30.353516 97.697266 z "
-     transform="scale(0.26458333)" />
+     style="color:#000000;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.0405455;stroke-opacity:0.234202;-inkscape-stroke:none"
+     d="M 0.52864992,2.1171835 H 2.1171835 V 0.52864992 H 0.52864992 v 0.0733805 z M 0.67541099,1.9704224 V 1.4417725 H 1.9704224 v 0.5286499 z m 0,-0.7663615 V 0.67541099 H 1.9704224 V 1.2040609 Z" />
 </svg>

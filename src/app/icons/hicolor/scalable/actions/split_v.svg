@@ -2,17 +2,54 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="48mm"
-   height="48mm"
-   viewBox="0 0 48 48"
+   width="10"
+   height="10"
+   viewBox="0 0 2.6458334 2.6458334"
    version="1.1"
-   id="svg5"
+   id="svg1500"
+   sodipodi:docname="split_v.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     id="namedview1335"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="68.943101"
+     inkscape:cx="4.7357893"
+     inkscape:cy="6.1427466"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1500" />
   <defs
-     id="defs2" />
+     id="defs1494" />
+  <metadata
+     id="metadata1497">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
   <path
      id="rect6603"
-     style="color:#000000;fill:#ffffff;fill-opacity:1;stroke-width:1;-inkscape-stroke:none"
-     d="M 43.595787,4.4043822 H 41.783494 4.4043822 V 43.595787 H 43.595787 Z M 39.969135,8.0310343 V 39.968619 H 25.849067 V 8.0310343 Z m -17.818034,0 V 39.968619 H 8.0315497 V 8.0310343 Z" />
+     style="color:#000000;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.153243;stroke-opacity:0.234202;-inkscape-stroke:none"
+     d="M 1.9980469 1.9980469 L 1.9980469 8.0019531 L 8.0019531 8.0019531 L 8.0019531 1.9980469 L 7.7246094 1.9980469 L 1.9980469 1.9980469 z M 2.5527344 2.5527344 L 4.5507812 2.5527344 L 4.5507812 7.4472656 L 2.5527344 7.4472656 L 2.5527344 2.5527344 z M 5.4492188 2.5527344 L 7.4472656 2.5527344 L 7.4472656 7.4472656 L 5.4492188 7.4472656 L 5.4492188 2.5527344 z "
+     transform="scale(0.26458334)" />
 </svg>

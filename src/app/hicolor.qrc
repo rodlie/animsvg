@@ -36,6 +36,8 @@
  <file>icons/hicolor/16x16/actions/pivot-align-right.png</file>
  <file>icons/hicolor/16x16/actions/pivot-align-top.png</file>
  <file>icons/hicolor/16x16/actions/pivot-align-vcenter.png</file>
+ <file>icons/hicolor/16x16/actions/pivotGlobal.png</file>
+ <file>icons/hicolor/16x16/actions/pivotLocal.png</file>
  <file>icons/hicolor/16x16/actions/play.png</file>
  <file>icons/hicolor/16x16/actions/plus.png</file>
  <file>icons/hicolor/16x16/actions/pointTransform.png</file>
@@ -85,6 +87,8 @@
  <file>icons/hicolor/22x22/actions/pivot-align-right.png</file>
  <file>icons/hicolor/22x22/actions/pivot-align-top.png</file>
  <file>icons/hicolor/22x22/actions/pivot-align-vcenter.png</file>
+ <file>icons/hicolor/22x22/actions/pivotGlobal.png</file>
+ <file>icons/hicolor/22x22/actions/pivotLocal.png</file>
  <file>icons/hicolor/22x22/actions/play.png</file>
  <file>icons/hicolor/22x22/actions/plus.png</file>
  <file>icons/hicolor/22x22/actions/pointTransform.png</file>
@@ -134,6 +138,8 @@
  <file>icons/hicolor/32x32/actions/pivot-align-right.png</file>
  <file>icons/hicolor/32x32/actions/pivot-align-top.png</file>
  <file>icons/hicolor/32x32/actions/pivot-align-vcenter.png</file>
+ <file>icons/hicolor/32x32/actions/pivotGlobal.png</file>
+ <file>icons/hicolor/32x32/actions/pivotLocal.png</file>
  <file>icons/hicolor/32x32/actions/play.png</file>
  <file>icons/hicolor/32x32/actions/plus.png</file>
  <file>icons/hicolor/32x32/actions/pointTransform.png</file>
@@ -183,6 +189,8 @@
  <file>icons/hicolor/48x48/actions/pivot-align-right.png</file>
  <file>icons/hicolor/48x48/actions/pivot-align-top.png</file>
  <file>icons/hicolor/48x48/actions/pivot-align-vcenter.png</file>
+ <file>icons/hicolor/48x48/actions/pivotGlobal.png</file>
+ <file>icons/hicolor/48x48/actions/pivotLocal.png</file>
  <file>icons/hicolor/48x48/actions/play.png</file>
  <file>icons/hicolor/48x48/actions/plus.png</file>
  <file>icons/hicolor/48x48/actions/pointTransform.png</file>
@@ -232,6 +240,8 @@
  <file>icons/hicolor/64x64/actions/pivot-align-right.png</file>
  <file>icons/hicolor/64x64/actions/pivot-align-top.png</file>
  <file>icons/hicolor/64x64/actions/pivot-align-vcenter.png</file>
+ <file>icons/hicolor/64x64/actions/pivotGlobal.png</file>
+ <file>icons/hicolor/64x64/actions/pivotLocal.png</file>
  <file>icons/hicolor/64x64/actions/play.png</file>
  <file>icons/hicolor/64x64/actions/plus.png</file>
  <file>icons/hicolor/64x64/actions/pointTransform.png</file>
@@ -281,6 +291,8 @@
  <file>icons/hicolor/96x96/actions/pivot-align-right.png</file>
  <file>icons/hicolor/96x96/actions/pivot-align-top.png</file>
  <file>icons/hicolor/96x96/actions/pivot-align-vcenter.png</file>
+ <file>icons/hicolor/96x96/actions/pivotGlobal.png</file>
+ <file>icons/hicolor/96x96/actions/pivotLocal.png</file>
  <file>icons/hicolor/96x96/actions/play.png</file>
  <file>icons/hicolor/96x96/actions/plus.png</file>
  <file>icons/hicolor/96x96/actions/pointTransform.png</file>
@@ -330,6 +342,8 @@
  <file>icons/hicolor/128x128/actions/pivot-align-right.png</file>
  <file>icons/hicolor/128x128/actions/pivot-align-top.png</file>
  <file>icons/hicolor/128x128/actions/pivot-align-vcenter.png</file>
+ <file>icons/hicolor/128x128/actions/pivotGlobal.png</file>
+ <file>icons/hicolor/128x128/actions/pivotLocal.png</file>
  <file>icons/hicolor/128x128/actions/play.png</file>
  <file>icons/hicolor/128x128/actions/plus.png</file>
  <file>icons/hicolor/128x128/actions/pointTransform.png</file>
@@ -379,6 +393,8 @@
  <file>icons/hicolor/192x192/actions/pivot-align-right.png</file>
  <file>icons/hicolor/192x192/actions/pivot-align-top.png</file>
  <file>icons/hicolor/192x192/actions/pivot-align-vcenter.png</file>
+ <file>icons/hicolor/192x192/actions/pivotGlobal.png</file>
+ <file>icons/hicolor/192x192/actions/pivotLocal.png</file>
  <file>icons/hicolor/192x192/actions/play.png</file>
  <file>icons/hicolor/192x192/actions/plus.png</file>
  <file>icons/hicolor/192x192/actions/pointTransform.png</file>
@@ -428,6 +444,8 @@
  <file>icons/hicolor/256x256/actions/pivot-align-right.png</file>
  <file>icons/hicolor/256x256/actions/pivot-align-top.png</file>
  <file>icons/hicolor/256x256/actions/pivot-align-vcenter.png</file>
+ <file>icons/hicolor/256x256/actions/pivotGlobal.png</file>
+ <file>icons/hicolor/256x256/actions/pivotLocal.png</file>
  <file>icons/hicolor/256x256/actions/play.png</file>
  <file>icons/hicolor/256x256/actions/plus.png</file>
  <file>icons/hicolor/256x256/actions/pointTransform.png</file>
