@@ -135,6 +135,13 @@ void OutlineSettingsAnimator::setCapStyle(const SkPaint::Cap capStyle) {
     }
     mCapStyle = capStyle;
     prp_afterWholeInfluenceRangeChanged();
+
+    // workaround!
+    // we need to trigger a value changed to apply style
+    // a better solution is welcome ;)
+    qreal baseValue = mLineWidth->getCurrentBaseValue();
+    mLineWidth->setCurrentBaseValue(baseValue + 0.1);
+    mLineWidth->setCurrentBaseValue(baseValue);
 }
 
 void OutlineSettingsAnimator::setJoinStyle(const SkPaint::Join joinStyle) {
@@ -153,6 +160,13 @@ void OutlineSettingsAnimator::setJoinStyle(const SkPaint::Join joinStyle) {
     }
     mJoinStyle = joinStyle;
     prp_afterWholeInfluenceRangeChanged();
+
+    // workaround!
+    // we need to trigger a value changed to apply style
+    // a better solution is welcome ;)
+    qreal baseValue = mLineWidth->getCurrentBaseValue();
+    mLineWidth->setCurrentBaseValue(baseValue + 0.1);
+    mLineWidth->setCurrentBaseValue(baseValue);
 }
 
 void OutlineSettingsAnimator::setStrokerSettingsSk(SkStroke * const stroker) {
