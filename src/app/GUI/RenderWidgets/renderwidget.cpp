@@ -66,7 +66,7 @@ RenderWidget::RenderWidget(QWidget *parent)
     mStartRenderButton = new QPushButton(QIcon::fromTheme("play"),
                                          tr("Render"),
                                          this);
-    mStartRenderButton->setDisabled(true);
+    //mStartRenderButton->setDisabled(true);
     mStartRenderButton->setSizePolicy(QSizePolicy::Preferred,
                                       QSizePolicy::Preferred);
     connect(mStartRenderButton, &QPushButton::pressed,
@@ -75,7 +75,7 @@ RenderWidget::RenderWidget(QWidget *parent)
     mStopRenderButton = new QPushButton(QIcon::fromTheme("stop"),
                                         tr("Stop"),
                                         this);
-    mStopRenderButton->setDisabled(true);
+    //mStopRenderButton->setDisabled(true);
     mStopRenderButton->setSizePolicy(QSizePolicy::Preferred,
                                      QSizePolicy::Preferred);
     connect(mStopRenderButton, &QPushButton::pressed,
