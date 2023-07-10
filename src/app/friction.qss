@@ -68,3 +68,7 @@ QLineEdit#OutputDestinationLineEdit {
     border: 0;
     background-color: rgb(40, 40, 47);
 }
+
+FillStrokeSettingsWidget {
+    border: 0;
+}
