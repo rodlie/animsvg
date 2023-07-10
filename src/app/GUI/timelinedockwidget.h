@@ -41,13 +41,13 @@
 #include <QWidgetAction>
 #include <QToolBar>
 #include <QStackedWidget>
+#include <QToolButton>
 
 #include "smartPointers/ememory.h"
 #include "framerange.h"
 #include "timelinebasewrappernode.h"
 #include "triggerlabel.h"
 #include "qdoubleslider.h"
-#include "fontswidget.h"
 
 class FrameScrollBar;
 class TimelineWidget;
@@ -60,7 +60,6 @@ class Document;
 class LayoutHandler;
 class SwitchButton;
 class BrushContexedWrapper;
-class FontsWidget;
 
 enum class CanvasMode : short;
 
@@ -69,8 +68,7 @@ class TimelineDockWidget : public QWidget
 public:
     explicit TimelineDockWidget(Document &document,
                                 LayoutHandler* const layoutH,
-                                MainWindow * const parent,
-                                FontsWidget *fontwidget = nullptr);
+                                MainWindow * const parent);
     bool processKeyPress(QKeyEvent *event);
     void previewFinished();
     void previewBeingPlayed();
@@ -80,7 +78,7 @@ public:
     void updateSettingsForCurrentCanvas(Canvas * const canvas);
 
 private:
-    void setResolutionText(QString text);
+
 
     void setLoop(const bool loop);
     void interruptPreview();
@@ -96,6 +94,8 @@ private:
 
     void setupDrawPathSpins();
 
+    void updateFrameRange(const FrameRange &range);
+
     //void setBrushColor(const QColor& color);
     //void setBrush(BrushContexedWrapper* const brush);
 
@@ -105,16 +105,20 @@ private:
 
     QToolBar *mToolBar;
 
+    QToolButton *mFrictionButton;
+
     QVBoxLayout *mMainLayout;
-    QComboBox *mResolutionComboBox;
+
 
     QAction *mPlayFromBeginningButton;
     QAction *mPlayButton;
     QAction *mStopButton;
     QAction *mLoopButton;
 
+    QSpinBox *mFrameStartSpin;
+    QSpinBox *mFrameEndSpin;
+
     QAction* mLocalPivotAct;
-    SwitchButton *mLocalPivot;
     QAction* mNodeVisibilityAct;
     SwitchButton *mNodeVisibility;
 
@@ -127,7 +131,6 @@ private:
 
     QList<TimelineWidget*> mTimelineWidgets;
     AnimationDockWidget *mAnimationDockWidget;
-    FontsWidget *mFontWidget;
 };
 
 #endif // BOXESLISTANIMATIONDOCKWIDGET_H

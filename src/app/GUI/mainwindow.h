@@ -347,6 +347,9 @@ private:
     int mStackIndexScene;
     int mStackIndexWelcome;
 
+    QComboBox *mResolutionComboBox;
+    void setResolutionText(QString text);
+
 protected:
     void keyPressEvent(QKeyEvent *event);
     bool eventFilter(QObject *obj, QEvent *e);

@@ -45,18 +45,18 @@
 #include "layouthandler.h"
 #include "memoryhandler.h"
 #include "switchbutton.h"
-#include "editablecombobox.h"
 #include "appsupport.h"
 
 TimelineDockWidget::TimelineDockWidget(Document& document,
                                        LayoutHandler * const layoutH,
-                                       MainWindow * const parent,
-                                       FontsWidget *fontwidget)
+                                       MainWindow * const parent)
     : QWidget(parent)
     , mDocument(document)
     , mMainWindow(parent)
     , mTimelineLayout(layoutH->timelineLayout())
-    , mFontWidget(fontwidget)
+    , mFrictionButton(nullptr)
+    , mFrameStartSpin(nullptr)
+    , mFrameEndSpin(nullptr)
 {
     connect(RenderHandler::sInstance, &RenderHandler::previewFinished,
             this, &TimelineDockWidget::previewFinished);
@@ -76,20 +76,6 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     setLayout(mMainLayout);
     mMainLayout->setSpacing(0);
     mMainLayout->setMargin(0);
-
-    mResolutionComboBox = new EditableComboBox(this);
-    mResolutionComboBox->addItem("100 %");
-    mResolutionComboBox->addItem("75 %");
-    mResolutionComboBox->addItem("50 %");
-    mResolutionComboBox->addItem("25 %");
-    mResolutionComboBox->lineEdit()->setInputMask("D00 %");
-    mResolutionComboBox->setCurrentText("100 %");
-    MainWindow::sGetInstance()->installNumericFilter(mResolutionComboBox);
-    mResolutionComboBox->setInsertPolicy(QComboBox::NoInsert);
-    mResolutionComboBox->setSizePolicy(QSizePolicy::Maximum,
-                                       QSizePolicy::Maximum);
-    connect(mResolutionComboBox, &QComboBox::currentTextChanged,
-            this, &TimelineDockWidget::setResolutionText);
 
     const QSize iconSize(AppSupport::getSettings("ui",
                                                  "timelineToolbarIconSize",
@@ -125,12 +111,46 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     connect(mLoopButton, &QAction::triggered,
             this, &TimelineDockWidget::setLoop);
 
-    mLocalPivot = SwitchButton::sCreate2Switch(
-                "toolbarButtons/pivotGlobal.png", "toolbarButtons/pivotLocal.png",
-                gSingleLineTooltip("Pivot Global / Local", "P"), this);
-    mLocalPivot->setState(mDocument.fLocalPivot);
-    connect(mLocalPivot, &SwitchButton::toggled,
-            this, &TimelineDockWidget::setLocalPivot);
+    mLocalPivotAct = new QAction(mDocument.fLocalPivot ? QIcon::fromTheme("pivotLocal") : QIcon::fromTheme("pivotGlobal"),
+                                 tr("Pivot Global / Local"),
+                                 this);
+    connect(mLocalPivotAct, &QAction::triggered,
+            this, [this]() {
+        TimelineDockWidget::setLocalPivot(!mDocument.fLocalPivot);
+        mLocalPivotAct->setIcon(mDocument.fLocalPivot ? QIcon::fromTheme("pivotLocal") : QIcon::fromTheme("pivotGlobal"));
+    });
+
+    mFrictionButton = new QToolButton(this);
+    mFrictionButton->setObjectName(QString::fromUtf8("ToolButton"));
+    mFrictionButton->setPopupMode(QToolButton::InstantPopup);
+    mFrictionButton->setIcon(QIcon::fromTheme("friction"));
+    mFrictionButton->setFocusPolicy(Qt::NoFocus);
+
+    /*QToolButton *nodeVisibilityButton = new QToolButton(this);
+    nodeVisibilityButton->setObjectName(QString::fromUtf8("ToolButton"));
+    nodeVisibilityButton->setPopupMode(QToolButton::InstantPopup);
+    QAction *nodeVisibilityAction1 = new QAction(QIcon::fromTheme("friction"),
+                                                 tr("dissolvedAndNormalNodes"),
+                                                 this);
+    nodeVisibilityAction1->setData(0);
+    QAction *nodeVisibilityAction2 = new QAction(QIcon::fromTheme("friction"),
+                                                 tr("dissolvedNodesOnly"),
+                                                 this);
+    nodeVisibilityAction2->setData(1);
+    QAction *nodeVisibilityAction3 = new QAction(QIcon::fromTheme("friction"),
+                                                 tr("normalNodesOnly"),
+                                                 this);
+    nodeVisibilityAction3->setData(2);
+    nodeVisibilityButton->addAction(nodeVisibilityAction1);
+    nodeVisibilityButton->addAction(nodeVisibilityAction2);
+    nodeVisibilityButton->addAction(nodeVisibilityAction3);
+    nodeVisibilityButton->setDefaultAction(nodeVisibilityAction1);
+    connect(nodeVisibilityButton, &QToolButton::triggered,
+            this, [this, nodeVisibilityButton](QAction *act) {
+            nodeVisibilityButton->setDefaultAction(act);
+            mDocument.fNodeVisibility = static_cast<NodeVisiblity>(act->data().toInt());
+            Document::sInstance->actionFinished();
+    });*/
 
     mNodeVisibility = new SwitchButton(
                 gSingleLineTooltip("Node visibility", "N"), this);
@@ -143,46 +163,67 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
         Document::sInstance->actionFinished();
     });
 
+    mFrameStartSpin = new QSpinBox(this);
+    mFrameStartSpin->setRange(0, INT_MAX);
+    connect(mFrameStartSpin,
+            &QSpinBox::editingFinished,
+            this, [this]() {
+            const auto scene = *mDocument.fActiveScene;
+            if (!scene) { return; }
+            auto range = scene->getFrameRange();
+            int frame = mFrameStartSpin->value();
+            if (range.fMin == frame) { return; }
+            range.fMin = frame;
+            scene->setFrameRange(range);
+    });
+
+    mFrameEndSpin = new QSpinBox(this);
+    mFrameEndSpin->setRange(1, INT_MAX);
+    connect(mFrameEndSpin,
+            &QSpinBox::editingFinished,
+            this, [this]() {
+            const auto scene = *mDocument.fActiveScene;
+            if (!scene) { return; }
+            auto range = scene->getFrameRange();
+            int frame = mFrameEndSpin->value();
+            if (range.fMax == frame) { return; }
+            range.fMax = frame;
+            scene->setFrameRange(range);
+    });
+
     mToolBar = new QToolBar(this);
     mToolBar->setMovable(false);
 
     mToolBar->setIconSize(iconSize);
-    mToolBar->addSeparator();
 
 //    mControlButtonsLayout->addWidget(mGoToPreviousKeyButton);
 //    mGoToPreviousKeyButton->setFocusPolicy(Qt::NoFocus);
 //    mControlButtonsLayout->addWidget(mGoToNextKeyButton);
 //    mGoToNextKeyButton->setFocusPolicy(Qt::NoFocus);
-    QAction *resA = mToolBar->addAction(tr("Resolution:"));
-    resA->setToolTip(tr("Preview resolution"));
-    mToolBar->widgetForAction(resA)->setObjectName("inactiveToolButton");
 
-    mToolBar->addWidget(mResolutionComboBox);
+    mToolBar->addWidget(mFrictionButton);
+    mToolBar->addWidget(mFrameStartSpin);
 
-    //mResolutionComboBox->setFocusPolicy(Qt::NoFocus);
+    QWidget *spacerWidget1 = new QWidget(this);
+    spacerWidget1->setSizePolicy(QSizePolicy::Expanding,
+                                 QSizePolicy::Minimum);
+    mToolBar->addWidget(spacerWidget1);
 
     mToolBar->addAction(mPlayFromBeginningButton);
     mToolBar->addAction(mPlayButton);
     mToolBar->addAction(mStopButton);
-    //mToolBar->addSeparator();
     mToolBar->addAction(mLoopButton);
-
-    mLocalPivotAct = mToolBar->addWidget(mLocalPivot);
+    mToolBar->addAction(mLocalPivotAct);
     mNodeVisibilityAct = mToolBar->addWidget(mNodeVisibility);
 
     setupDrawPathSpins();
 
-    QWidget *spacerWidget = new QWidget(this);
-    spacerWidget->setSizePolicy(QSizePolicy::Expanding,
+    QWidget *spacerWidget2 = new QWidget(this);
+    spacerWidget2->setSizePolicy(QSizePolicy::Expanding,
                                  QSizePolicy::Minimum);
-    mToolBar->addWidget(spacerWidget);
+    mToolBar->addWidget(spacerWidget2);
 
-    if (mFontWidget) {
-        QLabel *fontLabel = new QLabel(tr("Font"), this);
-        mToolBar->addWidget(fontLabel);
-        mToolBar->addWidget(mFontWidget);
-        mToolBar->addSeparator();
-    }
+    mToolBar->addWidget(mFrameEndSpin);
 
     mMainLayout->addWidget(mToolBar);
 
@@ -258,11 +299,18 @@ void TimelineDockWidget::setupDrawPathSpins()
     mDrawPathSmoothAct = addSlider(tr("Smooth"), mDrawPathSmooth, mToolBar);
 }
 
-void TimelineDockWidget::setResolutionText(QString text)
+void TimelineDockWidget::updateFrameRange(const FrameRange &range)
 {
-    text = text.remove(" %");
-    const qreal res = clamp(text.toDouble(), 1, 200)/100;
-    mMainWindow->setResolutionValue(res);
+    if (range.fMin != mFrameStartSpin->value()) {
+        mFrameStartSpin->blockSignals(true);
+        mFrameStartSpin->setValue(range.fMin);
+        mFrameStartSpin->blockSignals(false);
+    }
+    if (range.fMax != mFrameEndSpin->value()) {
+        mFrameEndSpin->blockSignals(true);
+        mFrameEndSpin->setValue(range.fMax);
+        mFrameEndSpin->blockSignals(false);
+    }
 }
 
 void TimelineDockWidget::setLoop(const bool loop)
@@ -272,7 +320,7 @@ void TimelineDockWidget::setLoop(const bool loop)
 
 bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
 {
-    const CanvasMode mode = mDocument.fCanvasMode;
+    //const CanvasMode mode = mDocument.fCanvasMode;
     const int key = event->key();
     const auto mods = event->modifiers();
     if (key == Qt::Key_Escape) {
@@ -307,13 +355,13 @@ bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
         if (scene->anim_nextRelFrameWithKey(frame, targetFrame)) {
             mDocument.setActiveSceneFrame(targetFrame);
         }
-    } else if (key == Qt::Key_P &&
+    } /*else if (key == Qt::Key_P &&
                !(mods & Qt::ControlModifier) && !(mods & Qt::AltModifier)) {
-        mLocalPivot->toggle();
+        mLocalPivotAct->trigger();
     } else if (mode == CanvasMode::pointTransform && key == Qt::Key_N &&
                !(mods & Qt::ControlModifier) && !(mods & Qt::AltModifier)) {
         mNodeVisibility->toggle();
-    } else {
+    }*/ else {
         return false;
     }
     return true;
@@ -411,9 +459,13 @@ void TimelineDockWidget::setLocalPivot(const bool local)
 void TimelineDockWidget::updateSettingsForCurrentCanvas(Canvas* const canvas)
 {
     if (!canvas) { return; }
-    disconnect(mResolutionComboBox, &QComboBox::currentTextChanged,
-               this, &TimelineDockWidget::setResolutionText);
-    mResolutionComboBox->setCurrentText(QString::number(canvas->getResolution()*100) + " %");
-    connect(mResolutionComboBox, &QComboBox::currentTextChanged,
-            this, &TimelineDockWidget::setResolutionText);
+
+    const auto range = canvas->getFrameRange();
+    updateFrameRange(range);
+
+    connect(canvas,
+            &Canvas::newFrameRange,
+            this, [this](const FrameRange range) {
+            updateFrameRange(range);
+    });
 }

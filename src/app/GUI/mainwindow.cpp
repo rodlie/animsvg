@@ -56,6 +56,7 @@
 #include "filesourcelist.h"
 #include "videoencoder.h"
 #include "fillstrokesettings.h"
+#include "editablecombobox.h"
 
 #include "Sound/soundcomposition.h"
 #include "GUI/BoxesList/boxsinglewidget.h"
@@ -111,6 +112,7 @@ MainWindow::MainWindow(Document& document,
     , mRenderHandler(renderHandler)
     , mStackIndexScene(0)
     , mStackIndexWelcome(0)
+    , mResolutionComboBox(nullptr)
 {
     Q_ASSERT(!sInstance);
     sInstance = this;
@@ -187,8 +189,7 @@ MainWindow::MainWindow(Document& document,
                                        this);
     mTimeline = new TimelineDockWidget(mDocument,
                                        mLayoutHandler,
-                                       this,
-                                       mFontWidget);
+                                       this);
     mRenderWidget = new RenderWidget(this);
 
     const auto alignWidget = new AlignWidget(this);
@@ -252,15 +253,37 @@ MainWindow::MainWindow(Document& document,
     mStackIndexScene = mStackWidget->addWidget(mLayoutHandler->sceneLayout());
     mStackIndexWelcome = mStackWidget->addWidget(mWelcomeDialog);
 
-    //
+    QLabel *resolutionLabel = new QLabel(tr("Resolution"), this);
+    statusBar()->addPermanentWidget(resolutionLabel);
 
-    if (statusBar()) {
-        QLabel *layoutComboLabel = new QLabel(tr("Layout"), this);
-        statusBar()->addPermanentWidget(layoutComboLabel);
-        statusBar()->addPermanentWidget(mLayoutHandler->comboWidget());
-    }
+    mResolutionComboBox = new EditableComboBox(this);
+    mResolutionComboBox->addItem("100 %");
+    mResolutionComboBox->addItem("75 %");
+    mResolutionComboBox->addItem("50 %");
+    mResolutionComboBox->addItem("25 %");
+    mResolutionComboBox->lineEdit()->setInputMask("D00 %");
+    mResolutionComboBox->setCurrentText("100 %");
+    installNumericFilter(mResolutionComboBox);
+    mResolutionComboBox->setInsertPolicy(QComboBox::NoInsert);
+    mResolutionComboBox->setSizePolicy(QSizePolicy::Maximum,
+                                       QSizePolicy::Maximum);
+    connect(mResolutionComboBox, &QComboBox::currentTextChanged,
+            this, &MainWindow::setResolutionText);
+    statusBar()->addPermanentWidget(mResolutionComboBox);
+
+    QLabel *layoutComboLabel = new QLabel(tr("Layout"), this);
+    statusBar()->addPermanentWidget(layoutComboLabel);
+    statusBar()->addPermanentWidget(mLayoutHandler->comboWidget());
+
     viewerToolBar->addActions(mToolbarActGroup->actions());
     mViewerNodeBar->addActions(mToolBarNodeGroup->actions());
+
+    QWidget *fontWidget = new QWidget(this);
+    fontWidget->setAutoFillBackground(true);
+    fontWidget->setPalette(AppSupport::getNotSoDarkPalette());
+
+    QVBoxLayout *fontLayout = new QVBoxLayout(fontWidget);
+    fontLayout->addWidget(mFontWidget);
 
     QMargins frictionMargins(0, 0, 0, 0);
     int frictionSpacing = 0;
@@ -276,12 +299,20 @@ MainWindow::MainWindow(Document& document,
     frictionTopLayout->setContentsMargins(frictionMargins);
     frictionTopLayout->setSpacing(frictionSpacing);
 
-    QWidget *frictionTopSideBarWidget = new QWidget(this);
+    QTabWidget *frictionTopSideBarWidget = new QTabWidget(this);
     frictionTopSideBarWidget->setContentsMargins(frictionMargins);
+    frictionTopSideBarWidget->setMinimumWidth(sideBarMin);
+    frictionTopSideBarWidget->setTabPosition(QTabWidget::South);
+    frictionTopSideBarWidget->addTab(mFillStrokeSettings, tr("Fill and Stroke"));
+    frictionTopSideBarWidget->addTab(fontWidget, tr("Text"));
 
-    QVBoxLayout *frictionTopSideBarLayout = new QVBoxLayout(frictionTopSideBarWidget);
-    frictionTopSideBarLayout->setContentsMargins(frictionMargins);
-    frictionTopSideBarLayout->setSpacing(frictionSpacing);
+    QWidget *propertiesWidget = new QWidget(this);
+    QVBoxLayout *propertiesLayout = new QVBoxLayout(propertiesWidget);
+    propertiesLayout->setContentsMargins(frictionMargins);
+    propertiesLayout->setSpacing(frictionSpacing);
+
+    propertiesLayout->addWidget(mObjectSettingsScrollArea);
+    propertiesLayout->addWidget(alignWidget);
 
     frictionTopLayout->addWidget(viewerToolBar);
     frictionTopLayout->addWidget(mViewerNodeBar);
@@ -292,13 +323,10 @@ MainWindow::MainWindow(Document& document,
     frictionBottomSideBarWidget->setMinimumWidth(sideBarMin);
     frictionBottomSideBarWidget->setTabPosition(QTabWidget::South);
 
-    frictionBottomSideBarWidget->addTab(frictionTopSideBarWidget,
+    frictionBottomSideBarWidget->addTab(propertiesWidget,
                                       tr("Properties"));
     frictionBottomSideBarWidget->addTab(fsl, tr("Assets"));
     frictionBottomSideBarWidget->addTab(mRenderWidget, tr("Queue"));
-
-    frictionTopSideBarLayout->addWidget(mObjectSettingsScrollArea);
-    frictionTopSideBarLayout->addWidget(alignWidget);
 
     mSplitterMain = new QSplitter(this);
 
@@ -334,7 +362,7 @@ MainWindow::MainWindow(Document& document,
     mSplitterLeftTop->addWidget(frictionTopWidget);
     mSplitterLeftBottom->addWidget(mTimeline);
 
-    mSplitterRightTop->addWidget(mFillStrokeSettings);
+    mSplitterRightTop->addWidget(frictionTopSideBarWidget);
     mSplitterRightBottom->addWidget(frictionBottomSideBarWidget);
 
     setCentralWidget(mSplitterMain);
@@ -927,6 +955,13 @@ void MainWindow::setupMenuBar()
     setMenuBar(mMenuBar);
 }
 
+void MainWindow::setResolutionText(QString text)
+{
+    text = text.remove(" %");
+    const qreal res = clamp(text.toDouble(), 1, 200)/100;
+    setResolutionValue(res);
+}
+
 void MainWindow::openWelcomeDialog()
 {
     mStackWidget->setCurrentIndex(mStackIndexWelcome);
@@ -956,6 +991,10 @@ void MainWindow::updateSettingsForCurrentCanvas(Canvas* const scene)
     mPathEffectsVisible->setChecked(scene->getPathEffectsVisible());
     mTimeline->updateSettingsForCurrentCanvas(scene);
     mObjectSettingsWidget->setMainTarget(scene->getCurrentGroup());
+
+    mResolutionComboBox->blockSignals(true);
+    mResolutionComboBox->setCurrentText(QString::number(scene->getResolution()*100) + " %");
+    mResolutionComboBox->blockSignals(false);
 }
 
 void MainWindow::setupToolBar()
