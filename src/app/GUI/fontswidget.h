@@ -67,7 +67,7 @@ private:
 
     int mBlockEmit;
 
-    QHBoxLayout *mMainLayout;
+    QVBoxLayout *mMainLayout;
 
     QComboBox *mFontFamilyCombo;
     QComboBox *mFontStyleCombo;
