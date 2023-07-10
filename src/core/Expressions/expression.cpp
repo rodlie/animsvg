@@ -160,17 +160,14 @@ QJSValue Expression::evaluate() {
 
 QJSValue Expression::evaluate(const qreal relFrame)
 {
-    qDebug() << "evaluate frame" << relFrame;
     QJSValueList values;
     for (const auto& binding : mBindings) {
         QString path = binding.second->path();
         QJSValue val = binding.second->getJSValue(*mEngine, relFrame);
-        qDebug() << "evaluate binding" << binding.first << path << val.toNumber();
         if (path == "$frame") { values << QJSValue(relFrame); }
         else { values << val; }
     }
     QJSValue res = mEEvaluate.call(values);
-    qDebug() << "evaluate result" << res.toNumber();
     return res;
 }
 
