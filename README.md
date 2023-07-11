@@ -1,8 +1,7 @@
-# Friction - Motion Graphics
+# Friction
+![Logo](https://friction.graphics/assets/logo-black.svg)
 
-### Friction is a fast and flexible open-source 2D motion graphics application.
-
-![Screenshot](https://friction.graphics/assets/friction-screenshot-01.jpg)
+Friction is a fast and flexible open-source 2D motion graphics application for Linux and Windows.
 
 ***This application is beta quality, expect missing and/or broken features.***
 
