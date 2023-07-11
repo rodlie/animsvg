@@ -1,8 +1,5 @@
 # Friction
 
-![Logo](https://friction.graphics/assets/logo-black.svg#gh-light-mode-only)
-![Logo](https://friction.graphics/assets/logo.svg#gh-dark-mode-only)
-
 Friction is a fast and flexible open-source 2D motion graphics application for Linux and Windows.
 
 ***This application is beta quality, expect missing and/or broken features.***
@@ -11,7 +8,7 @@ Friction is a fast and flexible open-source 2D motion graphics application for L
 
 Copyright &copy; Friction [contributors](https://github.com/friction2d/friction/graphs/contributors).
 
-Friction is fork of [enve](https://github.com/MaurycyLiebner/enve). Copyright &copy; [Maurycy Liebner](https://github.com/MaurycyLiebner).
+Friction is a fork of [enve](https://github.com/MaurycyLiebner/enve). Copyright &copy; [Maurycy Liebner](https://github.com/MaurycyLiebner).
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
