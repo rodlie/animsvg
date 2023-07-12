@@ -284,7 +284,7 @@ TimelineWidget::TimelineWidget(Document &document,
     connect(mFrameRangeScrollBar, &FrameScrollBar::triggeredFrameRangeChange,
             this, &TimelineWidget::setViewedFrameRange);
     mKeysViewLayout->addWidget(mFrameRangeScrollBar);
-    mSceneChooser->setCurrentScene(mDocument.fActiveScene);
+    //mSceneChooser->setCurrentScene(mDocument.fActiveScene); // why?
 
 
     const auto chww = new ChangeWidthWidget(this);
