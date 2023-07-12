@@ -164,6 +164,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     });
 
     mFrameStartSpin = new QSpinBox(this);
+    mFrameStartSpin->setToolTip(tr("Scene frame start"));
     mFrameStartSpin->setRange(0, INT_MAX);
     connect(mFrameStartSpin,
             &QSpinBox::editingFinished,
@@ -173,11 +174,16 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
             auto range = scene->getFrameRange();
             int frame = mFrameStartSpin->value();
             if (range.fMin == frame) { return; }
+            if (frame >= range.fMax) {
+                mFrameStartSpin->setValue(range.fMin);
+                return;
+            }
             range.fMin = frame;
             scene->setFrameRange(range);
     });
 
     mFrameEndSpin = new QSpinBox(this);
+    mFrameEndSpin->setToolTip(tr("Scene frame end"));
     mFrameEndSpin->setRange(1, INT_MAX);
     connect(mFrameEndSpin,
             &QSpinBox::editingFinished,
@@ -187,6 +193,10 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
             auto range = scene->getFrameRange();
             int frame = mFrameEndSpin->value();
             if (range.fMax == frame) { return; }
+            if (frame <= range.fMin) {
+                mFrameEndSpin->setValue(range.fMax);
+                return;
+            }
             range.fMax = frame;
             scene->setFrameRange(range);
     });
