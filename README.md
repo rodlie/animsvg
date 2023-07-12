@@ -4,6 +4,30 @@ Friction is a fast and flexible open-source 2D motion graphics application for L
 
 ***This application is beta quality, expect missing and/or broken features.***
 
+## Contribute
+
+We accept any contributions (in form of a PR). Before submitting a PR it's recommended that you communicate with the developers first (in `Issues` or `Discussions`). Someone might already be working on the same feature/issue, or for some reason the feature is not wanted.
+
+It's always prefered to submit PR's against the `main` branch. If your feature is experimental, a new branch could be made available for further development before entering `main`.
+
+## Branches and versions
+
+Friction uses `X.Y.Z` version numbers and `X.Y` branches.
+
+* `X` = Major
+* `Y` = Minor
+* `Z` = Patch
+
+Branch `main` is always the current branch for the next `X` or `Y` release. The `main` branch should not be considered stable, but usable.
+
+A new stable branch is cut from `main` on each `X` or `Y` release and is maintained until a new stable branch is created.
+
+The next `Z` release usually comes from the latest stable branch (`vX.Y`).
+
+Breaking features under development should be kept in it's own branch until ready to be merged with `main`.
+
+*During `v0.9` development minor and patch releases are combined. Meaning `v0.9.3` will contain both features and fixes. This is an exception until we reach `v1.0.0`.*
+
 ## License
 
 Copyright &copy; Friction [contributors](https://github.com/friction2d/friction/graphs/contributors).
