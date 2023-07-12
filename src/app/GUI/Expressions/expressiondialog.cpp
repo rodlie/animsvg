@@ -327,6 +327,8 @@ ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
                                                QSizePolicy::Preferred);
     mEasingPresetStartValueSpin->setRange(0, INT_MAX);
     mEasingPresetStartValueSpin->setDecimals(5);
+    mEasingPresetStartValueSpin->setLocale(QLocale(QLocale::English,
+                                                   QLocale::UnitedStates));
     mEasingPresetStartValueSpin->setValue(mTarget->getCurrentBaseValue());
 
     QLabel *easingPresetValueToLabel = new QLabel(tr("To"), this);
@@ -336,6 +338,8 @@ ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
                                              QSizePolicy::Preferred);
     mEasingPresetEndValueSpin->setRange(0, INT_MAX);
     mEasingPresetEndValueSpin->setDecimals(5);
+    mEasingPresetEndValueSpin->setLocale(QLocale(QLocale::English,
+                                                 QLocale::UnitedStates));
     mEasingPresetEndValueSpin->setValue(mTarget->getCurrentBaseValue());
 
     easingPresetValueLayout->addWidget(easingPresetValueFromLabel);
