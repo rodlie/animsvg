@@ -99,6 +99,8 @@ MainWindow::MainWindow(Document& document,
     , mWelcomeDialog(nullptr)
     //, mCentralWidget(nullptr)
     , mStackWidget(nullptr)
+    , mTopSideBarWidget(nullptr)
+    , mBottomSideBarWidget(nullptr)
     , mTimeline(nullptr)
     , mRenderWidget(nullptr)
     //, mFillStrokeSettingsDockBar(nullptr)
@@ -106,12 +108,18 @@ MainWindow::MainWindow(Document& document,
     //, mSelectedObjectDockBar(nullptr)
     //, mFilesDockBar(nullptr)
     //, mBrushSettingsDockBar(nullptr)
+    , mAddToQueAct(nullptr)
     , mDocument(document)
     , mActions(actions)
     , mAudioHandler(audioHandler)
     , mRenderHandler(renderHandler)
     , mStackIndexScene(0)
     , mStackIndexWelcome(0)
+    , mTabColorIndex(0)
+    , mTabTextIndex(0)
+    , mTabPropertiesIndex(0)
+    , mTabAssetsIndex(0)
+    , mTabQueueIndex(0)
     , mResolutionComboBox(nullptr)
 {
     Q_ASSERT(!sInstance);
@@ -300,13 +308,13 @@ MainWindow::MainWindow(Document& document,
     frictionTopLayout->setContentsMargins(frictionMargins);
     frictionTopLayout->setSpacing(frictionSpacing);
 
-    QTabWidget *frictionTopSideBarWidget = new QTabWidget(this);
-    frictionTopSideBarWidget->tabBar()->setFocusPolicy(Qt::NoFocus);
-    frictionTopSideBarWidget->setContentsMargins(frictionMargins);
-    frictionTopSideBarWidget->setMinimumWidth(sideBarMin);
-    frictionTopSideBarWidget->setTabPosition(QTabWidget::South);
-    frictionTopSideBarWidget->addTab(mFillStrokeSettings, tr("Fill and Stroke"));
-    frictionTopSideBarWidget->addTab(fontWidget, tr("Text"));
+    mTopSideBarWidget = new QTabWidget(this);
+    mTopSideBarWidget->tabBar()->setFocusPolicy(Qt::NoFocus);
+    mTopSideBarWidget->setContentsMargins(frictionMargins);
+    mTopSideBarWidget->setMinimumWidth(sideBarMin);
+    mTopSideBarWidget->setTabPosition(QTabWidget::South);
+    mTabColorIndex = mTopSideBarWidget->addTab(mFillStrokeSettings, tr("Fill and Stroke"));
+    mTabTextIndex = mTopSideBarWidget->addTab(fontWidget, tr("Text"));
 
     QWidget *propertiesWidget = new QWidget(this);
     QVBoxLayout *propertiesLayout = new QVBoxLayout(propertiesWidget);
@@ -320,16 +328,15 @@ MainWindow::MainWindow(Document& document,
     frictionTopLayout->addWidget(mViewerNodeBar);
     frictionTopLayout->addWidget(mStackWidget);
 
-    QTabWidget *frictionBottomSideBarWidget = new QTabWidget(this);
-    frictionBottomSideBarWidget->tabBar()->setFocusPolicy(Qt::NoFocus);
-    frictionBottomSideBarWidget->setContentsMargins(frictionMargins);
-    frictionBottomSideBarWidget->setMinimumWidth(sideBarMin);
-    frictionBottomSideBarWidget->setTabPosition(QTabWidget::South);
+    mBottomSideBarWidget = new QTabWidget(this);
+    mBottomSideBarWidget->tabBar()->setFocusPolicy(Qt::NoFocus);
+    mBottomSideBarWidget->setContentsMargins(frictionMargins);
+    mBottomSideBarWidget->setMinimumWidth(sideBarMin);
+    mBottomSideBarWidget->setTabPosition(QTabWidget::South);
 
-    frictionBottomSideBarWidget->addTab(propertiesWidget,
-                                      tr("Properties"));
-    frictionBottomSideBarWidget->addTab(fsl, tr("Assets"));
-    frictionBottomSideBarWidget->addTab(mRenderWidget, tr("Queue"));
+    mTabPropertiesIndex = mBottomSideBarWidget->addTab(propertiesWidget, tr("Properties"));
+    mTabAssetsIndex = mBottomSideBarWidget->addTab(fsl, tr("Assets"));
+    mTabQueueIndex = mBottomSideBarWidget->addTab(mRenderWidget, tr("Queue"));
 
     mSplitterMain = new QSplitter(this);
 
@@ -365,8 +372,8 @@ MainWindow::MainWindow(Document& document,
     mSplitterLeftTop->addWidget(frictionTopWidget);
     mSplitterLeftBottom->addWidget(mTimeline);
 
-    mSplitterRightTop->addWidget(frictionTopSideBarWidget);
-    mSplitterRightBottom->addWidget(frictionBottomSideBarWidget);
+    mSplitterRightTop->addWidget(mTopSideBarWidget);
+    mSplitterRightBottom->addWidget(mBottomSideBarWidget);
 
     setCentralWidget(mSplitterMain);
 
@@ -696,8 +703,11 @@ void MainWindow::setupMenuBar()
 
     mSceneMenu->addSeparator();
 
-    mSceneMenu->addAction(tr("Add to Render Queue", "MenuBar_Scene"),
-                          this, &MainWindow::addCanvasToRenderQue);
+    mAddToQueAct = mSceneMenu->addAction(tr("Add to Render Queue", "MenuBar_Scene"),
+                                         this, &MainWindow::addCanvasToRenderQue,
+                                         QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                              "addToQue",
+                                                                              "F12").toString()));
 
     mSceneMenu->addSeparator();
 
@@ -846,6 +856,16 @@ void MainWindow::setupMenuBar()
     connect(mPathEffectsVisible, &QAction::triggered,
             &mActions, &Actions::setPathEffectsVisible);
 
+    const auto mViewFullScreen = mViewMenu->addAction(tr("Full Screen"));
+    mViewFullScreen->setCheckable(true);
+    mViewFullScreen->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                      "fullScreen",
+                                                                      "F11").toString()));
+    connect(mViewFullScreen, &QAction::triggered,
+            this, [this](const bool checked) {
+        if (checked) { showFullScreen(); }
+        else { showNormal(); }
+    });
 
     /*mPanelsMenu = mViewMenu->addMenu(tr("Docks", "MenuBar_View"));
 
@@ -978,6 +998,7 @@ void MainWindow::closeWelcomeDialog()
 void MainWindow::addCanvasToRenderQue()
 {
     if (!mDocument.fActiveScene) { return; }
+    mBottomSideBarWidget->setCurrentIndex(mTabQueueIndex);
     mRenderWidget->createNewRenderInstanceWidgetForCanvas(mDocument.fActiveScene);
 }
 

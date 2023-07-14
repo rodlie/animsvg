@@ -191,6 +191,9 @@ private:
     //CentralWidget *mCentralWidget;
     QStackedWidget *mStackWidget;
 
+    QTabWidget *mTopSideBarWidget;
+    QTabWidget *mBottomSideBarWidget;
+
     void openWelcomeDialog();
     void closeWelcomeDialog();
 
@@ -300,6 +303,8 @@ private:
 
     //QAction *mBrushColorBookmarksAction;
 
+    QAction *mAddToQueAct;
+
     FontsWidget *mFontWidget = nullptr;
     QAction* mFontWidgetAct = nullptr;
 
@@ -346,6 +351,12 @@ private:
 
     int mStackIndexScene;
     int mStackIndexWelcome;
+
+    int mTabColorIndex;
+    int mTabTextIndex;
+    int mTabPropertiesIndex;
+    int mTabAssetsIndex;
+    int mTabQueueIndex;
 
     QComboBox *mResolutionComboBox;
     void setResolutionText(QString text);
