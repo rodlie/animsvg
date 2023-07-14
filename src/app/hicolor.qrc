@@ -12,6 +12,8 @@
  <file>icons/hicolor/16x16/actions/childrenVisible.png</file>
  <file>icons/hicolor/16x16/actions/circleCreate.png</file>
  <file>icons/hicolor/16x16/actions/close.png</file>
+ <file>icons/hicolor/16x16/actions/dissolvedAndNormalNodes.png</file>
+ <file>icons/hicolor/16x16/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/16x16/actions/dots.png</file>
  <file>icons/hicolor/16x16/actions/drawPath.png</file>
  <file>icons/hicolor/16x16/actions/graph.png</file>
@@ -25,6 +27,7 @@
  <file>icons/hicolor/16x16/actions/nodeNew.png</file>
  <file>icons/hicolor/16x16/actions/nodeSmooth.png</file>
  <file>icons/hicolor/16x16/actions/nodeSymmetric.png</file>
+ <file>icons/hicolor/16x16/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/16x16/actions/nullCreate.png</file>
  <file>icons/hicolor/16x16/actions/paint.png</file>
  <file>icons/hicolor/16x16/actions/pathCreate.png</file>
@@ -63,6 +66,8 @@
  <file>icons/hicolor/22x22/actions/childrenVisible.png</file>
  <file>icons/hicolor/22x22/actions/circleCreate.png</file>
  <file>icons/hicolor/22x22/actions/close.png</file>
+ <file>icons/hicolor/22x22/actions/dissolvedAndNormalNodes.png</file>
+ <file>icons/hicolor/22x22/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/22x22/actions/dots.png</file>
  <file>icons/hicolor/22x22/actions/drawPath.png</file>
  <file>icons/hicolor/22x22/actions/graph.png</file>
@@ -76,6 +81,7 @@
  <file>icons/hicolor/22x22/actions/nodeNew.png</file>
  <file>icons/hicolor/22x22/actions/nodeSmooth.png</file>
  <file>icons/hicolor/22x22/actions/nodeSymmetric.png</file>
+ <file>icons/hicolor/22x22/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/22x22/actions/nullCreate.png</file>
  <file>icons/hicolor/22x22/actions/paint.png</file>
  <file>icons/hicolor/22x22/actions/pathCreate.png</file>
@@ -114,6 +120,8 @@
  <file>icons/hicolor/32x32/actions/childrenVisible.png</file>
  <file>icons/hicolor/32x32/actions/circleCreate.png</file>
  <file>icons/hicolor/32x32/actions/close.png</file>
+ <file>icons/hicolor/32x32/actions/dissolvedAndNormalNodes.png</file>
+ <file>icons/hicolor/32x32/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/32x32/actions/dots.png</file>
  <file>icons/hicolor/32x32/actions/drawPath.png</file>
  <file>icons/hicolor/32x32/actions/graph.png</file>
@@ -127,6 +135,7 @@
  <file>icons/hicolor/32x32/actions/nodeNew.png</file>
  <file>icons/hicolor/32x32/actions/nodeSmooth.png</file>
  <file>icons/hicolor/32x32/actions/nodeSymmetric.png</file>
+ <file>icons/hicolor/32x32/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/32x32/actions/nullCreate.png</file>
  <file>icons/hicolor/32x32/actions/paint.png</file>
  <file>icons/hicolor/32x32/actions/pathCreate.png</file>
@@ -165,6 +174,8 @@
  <file>icons/hicolor/48x48/actions/childrenVisible.png</file>
  <file>icons/hicolor/48x48/actions/circleCreate.png</file>
  <file>icons/hicolor/48x48/actions/close.png</file>
+ <file>icons/hicolor/48x48/actions/dissolvedAndNormalNodes.png</file>
+ <file>icons/hicolor/48x48/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/48x48/actions/dots.png</file>
  <file>icons/hicolor/48x48/actions/drawPath.png</file>
  <file>icons/hicolor/48x48/actions/graph.png</file>
@@ -178,6 +189,7 @@
  <file>icons/hicolor/48x48/actions/nodeNew.png</file>
  <file>icons/hicolor/48x48/actions/nodeSmooth.png</file>
  <file>icons/hicolor/48x48/actions/nodeSymmetric.png</file>
+ <file>icons/hicolor/48x48/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/48x48/actions/nullCreate.png</file>
  <file>icons/hicolor/48x48/actions/paint.png</file>
  <file>icons/hicolor/48x48/actions/pathCreate.png</file>
@@ -216,6 +228,8 @@
  <file>icons/hicolor/64x64/actions/childrenVisible.png</file>
  <file>icons/hicolor/64x64/actions/circleCreate.png</file>
  <file>icons/hicolor/64x64/actions/close.png</file>
+ <file>icons/hicolor/64x64/actions/dissolvedAndNormalNodes.png</file>
+ <file>icons/hicolor/64x64/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/64x64/actions/dots.png</file>
  <file>icons/hicolor/64x64/actions/drawPath.png</file>
  <file>icons/hicolor/64x64/actions/graph.png</file>
@@ -229,6 +243,7 @@
  <file>icons/hicolor/64x64/actions/nodeNew.png</file>
  <file>icons/hicolor/64x64/actions/nodeSmooth.png</file>
  <file>icons/hicolor/64x64/actions/nodeSymmetric.png</file>
+ <file>icons/hicolor/64x64/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/64x64/actions/nullCreate.png</file>
  <file>icons/hicolor/64x64/actions/paint.png</file>
  <file>icons/hicolor/64x64/actions/pathCreate.png</file>
@@ -267,6 +282,8 @@
  <file>icons/hicolor/96x96/actions/childrenVisible.png</file>
  <file>icons/hicolor/96x96/actions/circleCreate.png</file>
  <file>icons/hicolor/96x96/actions/close.png</file>
+ <file>icons/hicolor/96x96/actions/dissolvedAndNormalNodes.png</file>
+ <file>icons/hicolor/96x96/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/96x96/actions/dots.png</file>
  <file>icons/hicolor/96x96/actions/drawPath.png</file>
  <file>icons/hicolor/96x96/actions/graph.png</file>
@@ -280,6 +297,7 @@
  <file>icons/hicolor/96x96/actions/nodeNew.png</file>
  <file>icons/hicolor/96x96/actions/nodeSmooth.png</file>
  <file>icons/hicolor/96x96/actions/nodeSymmetric.png</file>
+ <file>icons/hicolor/96x96/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/96x96/actions/nullCreate.png</file>
  <file>icons/hicolor/96x96/actions/paint.png</file>
  <file>icons/hicolor/96x96/actions/pathCreate.png</file>
@@ -318,6 +336,8 @@
  <file>icons/hicolor/128x128/actions/childrenVisible.png</file>
  <file>icons/hicolor/128x128/actions/circleCreate.png</file>
  <file>icons/hicolor/128x128/actions/close.png</file>
+ <file>icons/hicolor/128x128/actions/dissolvedAndNormalNodes.png</file>
+ <file>icons/hicolor/128x128/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/128x128/actions/dots.png</file>
  <file>icons/hicolor/128x128/actions/drawPath.png</file>
  <file>icons/hicolor/128x128/actions/graph.png</file>
@@ -331,6 +351,7 @@
  <file>icons/hicolor/128x128/actions/nodeNew.png</file>
  <file>icons/hicolor/128x128/actions/nodeSmooth.png</file>
  <file>icons/hicolor/128x128/actions/nodeSymmetric.png</file>
+ <file>icons/hicolor/128x128/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/128x128/actions/nullCreate.png</file>
  <file>icons/hicolor/128x128/actions/paint.png</file>
  <file>icons/hicolor/128x128/actions/pathCreate.png</file>
@@ -369,6 +390,8 @@
  <file>icons/hicolor/192x192/actions/childrenVisible.png</file>
  <file>icons/hicolor/192x192/actions/circleCreate.png</file>
  <file>icons/hicolor/192x192/actions/close.png</file>
+ <file>icons/hicolor/192x192/actions/dissolvedAndNormalNodes.png</file>
+ <file>icons/hicolor/192x192/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/192x192/actions/dots.png</file>
  <file>icons/hicolor/192x192/actions/drawPath.png</file>
  <file>icons/hicolor/192x192/actions/graph.png</file>
@@ -382,6 +405,7 @@
  <file>icons/hicolor/192x192/actions/nodeNew.png</file>
  <file>icons/hicolor/192x192/actions/nodeSmooth.png</file>
  <file>icons/hicolor/192x192/actions/nodeSymmetric.png</file>
+ <file>icons/hicolor/192x192/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/192x192/actions/nullCreate.png</file>
  <file>icons/hicolor/192x192/actions/paint.png</file>
  <file>icons/hicolor/192x192/actions/pathCreate.png</file>
@@ -420,6 +444,8 @@
  <file>icons/hicolor/256x256/actions/childrenVisible.png</file>
  <file>icons/hicolor/256x256/actions/circleCreate.png</file>
  <file>icons/hicolor/256x256/actions/close.png</file>
+ <file>icons/hicolor/256x256/actions/dissolvedAndNormalNodes.png</file>
+ <file>icons/hicolor/256x256/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/256x256/actions/dots.png</file>
  <file>icons/hicolor/256x256/actions/drawPath.png</file>
  <file>icons/hicolor/256x256/actions/graph.png</file>
@@ -433,6 +459,7 @@
  <file>icons/hicolor/256x256/actions/nodeNew.png</file>
  <file>icons/hicolor/256x256/actions/nodeSmooth.png</file>
  <file>icons/hicolor/256x256/actions/nodeSymmetric.png</file>
+ <file>icons/hicolor/256x256/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/256x256/actions/nullCreate.png</file>
  <file>icons/hicolor/256x256/actions/paint.png</file>
  <file>icons/hicolor/256x256/actions/pathCreate.png</file>

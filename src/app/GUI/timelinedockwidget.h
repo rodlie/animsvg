@@ -120,7 +120,7 @@ private:
 
     QAction* mLocalPivotAct;
     QAction* mNodeVisibilityAct;
-    SwitchButton *mNodeVisibility;
+    QToolButton *mNodeVisibility;
 
     SwitchButton* mDrawPathAuto;
     QAction* mDrawPathAutoAct;

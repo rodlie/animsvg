@@ -257,6 +257,7 @@ MainWindow::MainWindow(Document& document,
     statusBar()->addPermanentWidget(resolutionLabel);
 
     mResolutionComboBox = new EditableComboBox(this);
+    mResolutionComboBox->setFocusPolicy(Qt::ClickFocus);
     mResolutionComboBox->addItem("100 %");
     mResolutionComboBox->addItem("75 %");
     mResolutionComboBox->addItem("50 %");
@@ -300,6 +301,7 @@ MainWindow::MainWindow(Document& document,
     frictionTopLayout->setSpacing(frictionSpacing);
 
     QTabWidget *frictionTopSideBarWidget = new QTabWidget(this);
+    frictionTopSideBarWidget->tabBar()->setFocusPolicy(Qt::NoFocus);
     frictionTopSideBarWidget->setContentsMargins(frictionMargins);
     frictionTopSideBarWidget->setMinimumWidth(sideBarMin);
     frictionTopSideBarWidget->setTabPosition(QTabWidget::South);
@@ -319,6 +321,7 @@ MainWindow::MainWindow(Document& document,
     frictionTopLayout->addWidget(mStackWidget);
 
     QTabWidget *frictionBottomSideBarWidget = new QTabWidget(this);
+    frictionBottomSideBarWidget->tabBar()->setFocusPolicy(Qt::NoFocus);
     frictionBottomSideBarWidget->setContentsMargins(frictionMargins);
     frictionBottomSideBarWidget->setMinimumWidth(sideBarMin);
     frictionBottomSideBarWidget->setTabPosition(QTabWidget::South);

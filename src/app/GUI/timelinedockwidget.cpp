@@ -54,9 +54,12 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     , mDocument(document)
     , mMainWindow(parent)
     , mTimelineLayout(layoutH->timelineLayout())
+    , mToolBar(nullptr)
     , mFrictionButton(nullptr)
     , mFrameStartSpin(nullptr)
     , mFrameEndSpin(nullptr)
+    , mNodeVisibilityAct(nullptr)
+    , mNodeVisibility(nullptr)
 {
     connect(RenderHandler::sInstance, &RenderHandler::previewFinished,
             this, &TimelineDockWidget::previewFinished);
@@ -126,44 +129,35 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mFrictionButton->setIcon(QIcon::fromTheme("friction"));
     mFrictionButton->setFocusPolicy(Qt::NoFocus);
 
-    /*QToolButton *nodeVisibilityButton = new QToolButton(this);
-    nodeVisibilityButton->setObjectName(QString::fromUtf8("ToolButton"));
-    nodeVisibilityButton->setPopupMode(QToolButton::InstantPopup);
-    QAction *nodeVisibilityAction1 = new QAction(QIcon::fromTheme("friction"),
-                                                 tr("dissolvedAndNormalNodes"),
+    mNodeVisibility = new QToolButton(this);
+    mNodeVisibility->setObjectName(QString::fromUtf8("ToolButton"));
+    mNodeVisibility->setPopupMode(QToolButton::InstantPopup);
+    QAction *nodeVisibilityAction1 = new QAction(QIcon::fromTheme("dissolvedAndNormalNodes"),
+                                                 tr("Dissolved and normal nodes"),
                                                  this);
     nodeVisibilityAction1->setData(0);
-    QAction *nodeVisibilityAction2 = new QAction(QIcon::fromTheme("friction"),
-                                                 tr("dissolvedNodesOnly"),
+    QAction *nodeVisibilityAction2 = new QAction(QIcon::fromTheme("dissolvedNodesOnly"),
+                                                 tr("Dissolved nodes only"),
                                                  this);
     nodeVisibilityAction2->setData(1);
-    QAction *nodeVisibilityAction3 = new QAction(QIcon::fromTheme("friction"),
-                                                 tr("normalNodesOnly"),
+    QAction *nodeVisibilityAction3 = new QAction(QIcon::fromTheme("normalNodesOnly"),
+                                                 tr("Normal nodes only"),
                                                  this);
     nodeVisibilityAction3->setData(2);
-    nodeVisibilityButton->addAction(nodeVisibilityAction1);
-    nodeVisibilityButton->addAction(nodeVisibilityAction2);
-    nodeVisibilityButton->addAction(nodeVisibilityAction3);
-    nodeVisibilityButton->setDefaultAction(nodeVisibilityAction1);
-    connect(nodeVisibilityButton, &QToolButton::triggered,
-            this, [this, nodeVisibilityButton](QAction *act) {
-            nodeVisibilityButton->setDefaultAction(act);
+    mNodeVisibility->addAction(nodeVisibilityAction1);
+    mNodeVisibility->addAction(nodeVisibilityAction2);
+    mNodeVisibility->addAction(nodeVisibilityAction3);
+    mNodeVisibility->setDefaultAction(nodeVisibilityAction1);
+    connect(mNodeVisibility, &QToolButton::triggered,
+            this, [this](QAction *act) {
+            qDebug() << "set node visibility" << act->data().toInt();
+            mNodeVisibility->setDefaultAction(act);
             mDocument.fNodeVisibility = static_cast<NodeVisiblity>(act->data().toInt());
             Document::sInstance->actionFinished();
-    });*/
-
-    mNodeVisibility = new SwitchButton(
-                gSingleLineTooltip("Node visibility", "N"), this);
-    mNodeVisibility->addState("toolbarButtons/dissolvedAndNormalNodes.png");
-    mNodeVisibility->addState("toolbarButtons/dissolvedNodesOnly.png");
-    mNodeVisibility->addState("toolbarButtons/normalNodesOnly.png");
-    connect(mNodeVisibility, &SwitchButton::toggled,
-            this, [this](const int state) {
-        mDocument.fNodeVisibility = static_cast<NodeVisiblity>(state);
-        Document::sInstance->actionFinished();
     });
 
     mFrameStartSpin = new QSpinBox(this);
+    mFrameStartSpin->setFocusPolicy(Qt::ClickFocus);
     mFrameStartSpin->setToolTip(tr("Scene frame start"));
     mFrameStartSpin->setRange(0, INT_MAX);
     connect(mFrameStartSpin,
@@ -183,6 +177,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     });
 
     mFrameEndSpin = new QSpinBox(this);
+    mFrameEndSpin->setFocusPolicy(Qt::ClickFocus);
     mFrameEndSpin->setToolTip(tr("Scene frame end"));
     mFrameEndSpin->setRange(1, INT_MAX);
     connect(mFrameEndSpin,
@@ -284,6 +279,7 @@ void TimelineDockWidget::setupDrawPathSpins()
     mDrawPathAuto->toggle();
     connect(mDrawPathAuto, &SwitchButton::toggled,
             &mDocument, [this](const int i) {
+        qDebug() << "manual/automatic fitting" << i;
         mDocument.fDrawPathManual = i == 0;
         mDrawPathMaxErrorAct->setDisabled(i == 0);
     });
@@ -429,14 +425,19 @@ void TimelineDockWidget::resumePreview()
 
 void TimelineDockWidget::updateButtonsVisibility(const CanvasMode mode)
 {
-    mLocalPivotAct->setVisible(mode == CanvasMode::pointTransform ||
-                               mode == CanvasMode::boxTransform);
-    mNodeVisibilityAct->setVisible(mode == CanvasMode::pointTransform);
+    if (mLocalPivotAct) {
+        mLocalPivotAct->setVisible(mode == CanvasMode::pointTransform ||
+                                   mode == CanvasMode::boxTransform);
+    }
+    if (mNodeVisibilityAct) {
+        mNodeVisibilityAct->setVisible(mode == CanvasMode::pointTransform);
+    }
 
     const bool drawPathMode = mode == CanvasMode::drawPath;
-    mDrawPathAutoAct->setVisible(drawPathMode);
-    mDrawPathMaxErrorAct->setVisible(drawPathMode);
-    mDrawPathSmoothAct->setVisible(drawPathMode);
+
+    if (mDrawPathAutoAct) { mDrawPathAutoAct->setVisible(drawPathMode); }
+    if (mDrawPathMaxErrorAct) { mDrawPathMaxErrorAct->setVisible(drawPathMode); }
+    if (mDrawPathSmoothAct) { mDrawPathSmoothAct->setVisible(drawPathMode); }
 }
 
 void TimelineDockWidget::pausePreview()
