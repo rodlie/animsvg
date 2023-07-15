@@ -109,6 +109,7 @@ MainWindow::MainWindow(Document& document,
     //, mFilesDockBar(nullptr)
     //, mBrushSettingsDockBar(nullptr)
     , mAddToQueAct(nullptr)
+    , mViewFullScreenAct(nullptr)
     , mDocument(document)
     , mActions(actions)
     , mAudioHandler(audioHandler)
@@ -871,12 +872,12 @@ void MainWindow::setupMenuBar()
     connect(mPathEffectsVisible, &QAction::triggered,
             &mActions, &Actions::setPathEffectsVisible);
 
-    const auto mViewFullScreen = mViewMenu->addAction(tr("Full Screen"));
-    mViewFullScreen->setCheckable(true);
-    mViewFullScreen->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                      "fullScreen",
-                                                                      "F11").toString()));
-    connect(mViewFullScreen, &QAction::triggered,
+    mViewFullScreenAct = mViewMenu->addAction(tr("Full Screen"));
+    mViewFullScreenAct->setCheckable(true);
+    mViewFullScreenAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                         "fullScreen",
+                                                                         "F11").toString()));
+    connect(mViewFullScreenAct, &QAction::triggered,
             this, [this](const bool checked) {
         if (checked) { showFullScreen(); }
         else { showNormal(); }
@@ -1685,7 +1686,16 @@ void MainWindow::readSettings(const QString &openProject)
     bool isMax = AppSupport::getSettings("ui",
                                          "maximized",
                                          false).toBool();
-    if (isMax) { showMaximized(); }
+    bool isFull = AppSupport::getSettings("ui",
+                                          "fullScreen",
+                                          false).toBool();
+
+    mViewFullScreenAct->blockSignals(true);
+    mViewFullScreenAct->setChecked(isFull);
+    mViewFullScreenAct->blockSignals(false);
+
+    if (isFull) { showFullScreen(); }
+    else if (isMax) { showMaximized(); }
 
     if (!openProject.isEmpty()) {
         QTimer::singleShot(10,
@@ -1707,6 +1717,7 @@ void MainWindow::writeSettings()
     AppSupport::setSettings("ui", "SplitterRightTop", mSplitterRightTop->saveState());
     AppSupport::setSettings("ui", "SplitterRightBottom", mSplitterRightBottom->saveState());
     AppSupport::setSettings("ui", "maximized", isMaximized());
+    AppSupport::setSettings("ui", "fullScreen", isFullScreen());
 }
 
 bool MainWindow::isEnabled()

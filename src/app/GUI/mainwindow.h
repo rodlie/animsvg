@@ -291,6 +291,7 @@ private:
     QAction *mPathEffectsVisible;
 
     QAction *mAddToQueAct;
+    QAction *mViewFullScreenAct;
 
     FontsWidget *mFontWidget = nullptr;
     QAction* mFontWidgetAct = nullptr;
