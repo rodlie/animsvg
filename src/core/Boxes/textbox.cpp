@@ -230,16 +230,16 @@ void TextBox::setupCanvasMenu(PropertyMenu * const menu) {
     if(menu->hasActionsForType<TextBox>()) return;
     menu->addedActionsForType<TextBox>();
     PathBox::setupCanvasMenu(menu);
-    const auto widget = menu->getParentWidget();
+    //const auto widget = menu->getParentWidget();
     menu->addSeparator();
     PropertyMenu::PlainSelectedOp<TextBox> txtEff = [](TextBox * box) {
         box->mTextEffects->addChild(enve::make_shared<TextEffect>());
     };
     menu->addPlainAction("Add Text Effect", txtEff);
-    PropertyMenu::PlainSelectedOp<TextBox> setText = [widget](TextBox * box) {
+    /*PropertyMenu::PlainSelectedOp<TextBox> setText = [widget](TextBox * box) {
         box->openTextEditor(widget);
     };
-    menu->addPlainAction("Set Text...", setText);
+    menu->addPlainAction("Set Text...", setText);*/
 }
 
 void TextBox::textToPath(const qreal x, const qreal y,

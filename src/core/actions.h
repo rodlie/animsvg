@@ -54,6 +54,7 @@ public:
     void setFontFamilyAndStyle(const QString& family,
                                const SkFontStyle& style) const;
     void setFontSize(const qreal size) const;
+    void setFontText(const QString &text);
 
     void connectPointsSlot() const;
     void disconnectPointsSlot() const;

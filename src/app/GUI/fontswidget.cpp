@@ -46,6 +46,7 @@ FontsWidget::FontsWidget(QWidget *parent)
     , mAlignTop(nullptr)
     , mAlignVCenter(nullptr)
     , mAlignBottom(nullptr)
+    , mTextInput(nullptr)
 {
     mFontStyleCombo = new QComboBox(this);
     mFontStyleCombo->setFocusPolicy(Qt::NoFocus);
@@ -145,6 +146,13 @@ FontsWidget::FontsWidget(QWidget *parent)
     connect(mAlignBottom, &QPushButton::pressed,
             this, [this]() { emit textVAlignmentChanged(Qt::AlignBottom); });
 
+    mTextInput = new QPlainTextEdit(this);
+    mTextInput->setPlaceholderText(tr("Enter text ..."));
+    connect(mTextInput, &QPlainTextEdit::textChanged,
+            this, [this]() {
+        emit textChanged(mTextInput->toPlainText());
+    });
+
     const auto buttonsLayout = new QHBoxLayout;
     //buttonsLayout->setSpacing(eSizesUI::widget/5);
     buttonsLayout->setContentsMargins(0, 0, 0, 0);
@@ -158,7 +166,7 @@ FontsWidget::FontsWidget(QWidget *parent)
     buttonsLayout->addWidget(mAlignBottom);
 
     mMainLayout->addLayout(buttonsLayout);
-    mMainLayout->addStretch();
+    mMainLayout->addWidget(mTextInput);
 
     afterFamilyChange();
 }
@@ -265,8 +273,14 @@ static QString styleStringHelper(const int weight,
 
 void FontsWidget::setDisplayedSettings(const float size,
                                        const QString &family,
-                                       const SkFontStyle &style)
+                                       const SkFontStyle &style,
+                                       const QString &text)
 {
+    qDebug() << "setDisplayedSettings" << size << family << text;
+    mTextInput->blockSignals(true);
+    mTextInput->setPlainText(text);
+    mTextInput->blockSignals(false);
+
     mBlockEmit++;
     mFontFamilyCombo->setCurrentText(family);
     const QString styleStr = styleStringHelper(style.weight(), style.slant());
@@ -281,6 +295,28 @@ void FontsWidget::setDisplayedSettings(const float size,
     if (id != -1) { mFontSizeCombo->setCurrentIndex(id); }
     else { mFontSizeCombo->setCurrentText(sizeStr); }
     mBlockEmit--;
+}
+
+void FontsWidget::setText(const QString &text)
+{
+    mTextInput->blockSignals(true);
+    mTextInput->setPlainText(text);
+    mTextInput->blockSignals(false);
+}
+
+const QString FontsWidget::getText()
+{
+    return mTextInput->toPlainText();
+}
+
+void FontsWidget::setTextFocus()
+{
+    mTextInput->setFocus();
+}
+
+void FontsWidget::clearText()
+{
+    mTextInput->clear();
 }
 
 void FontsWidget::emitFamilyAndStyleChanged()

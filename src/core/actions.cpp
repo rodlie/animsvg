@@ -479,6 +479,13 @@ void Actions::setFontSize(const qreal size) const {
     afterAction();
 }
 
+void Actions::setFontText(const QString &text)
+{
+    if (!mActiveScene) { return; }
+    mActiveScene->setSelectedFontText(text);
+    afterAction();
+}
+
 void Actions::connectPointsSlot() const
 {
     qDebug() << "connectPointsSlot";

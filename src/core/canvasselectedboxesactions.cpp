@@ -30,6 +30,7 @@
 #include "Animators/SmartPath/smartpathcollection.h"
 #include "Private/document.h"
 #include "eevent.h"
+#include "Boxes/textbox.h"
 
 void Canvas::groupSelectedBoxes() {
     if(mSelectedBoxes.isEmpty()) return;
@@ -166,7 +167,9 @@ void Canvas::setSelectedTextVAlignment(const Qt::Alignment alignment) const {
 }
 
 void Canvas::setSelectedFontFamilyAndStyle(const QString& family,
-                                           const SkFontStyle& style) {
+                                           const SkFontStyle& style)
+{
+#pragma message("FIXME: undo for font family is broken")
     pushUndoRedoName("Change Font");
     for(const auto &box : mSelectedBoxes) {
         box->setFontFamilyAndStyle(family, style);
@@ -177,6 +180,18 @@ void Canvas::setSelectedFontSize(const qreal size) {
     pushUndoRedoName("Change Font Size");
     for(const auto &box : mSelectedBoxes) {
         box->setFontSize(size);
+    }
+}
+
+void Canvas::setSelectedFontText(const QString &text)
+{
+    pushUndoRedoName("Change Text Value");
+    for (const auto &box : mSelectedBoxes) {
+        if (const auto txtBox = enve_cast<TextBox*>(box)) {
+            txtBox->prp_startTransform();
+            txtBox->setCurrentValue(text);
+            txtBox->prp_finishTransform();
+        }
     }
 }
 

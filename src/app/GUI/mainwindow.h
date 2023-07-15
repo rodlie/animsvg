@@ -118,9 +118,9 @@ public:
 
     void addCanvas(Canvas * const newCanvas);
 
-    FontsWidget *getFontsWidget() const {
+    /*FontsWidget *getFontsWidget() const {
         return mFontWidget;
-    }
+    }*/
     SimpleBrushWrapper *getCurrentBrush() const;
 
     /*UsageWidget* getUsageWidget() const {
@@ -268,16 +268,12 @@ private:
     QAction *mActionMergePointsAct;
     QAction* mActionNewNodeAct;
 
-
     QAction *mActionSymmetricPointCtrlsAct;
     QAction *mActionSmoothPointCtrlsAct;
     QAction *mActionCornerPointCtrlsAct;
 
-
     QAction *mActionLineAct;
     QAction *mActionCurveAct;
-
-    //QAction *mActionNewEmptyPaintFrameAct;
 
     QAction *mResetZoomAction;
     QAction *mZoomInAction;
@@ -293,15 +289,6 @@ private:
     QAction *mClipViewToCanvas;
     QAction *mRasterEffectsVisible;
     QAction *mPathEffectsVisible;
-    /*QAction *mSelectedObjectDockAct;
-    QAction *mFilesDockAct;
-    QAction *mTimelineDockAct;
-    QAction *mFillAndStrokeDockAct;
-    QAction *mBrushDockAction;
-    QAction *mAlignDockAction;
-    QAction *mLockDocksAction;*/
-
-    //QAction *mBrushColorBookmarksAction;
 
     QAction *mAddToQueAct;
 

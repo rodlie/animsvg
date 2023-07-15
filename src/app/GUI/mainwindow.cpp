@@ -191,6 +191,7 @@ MainWindow::MainWindow(Document& document,
     mFillStrokeSettings->setMinimumWidth(sideBarMin);
 
     mFontWidget = new FontsWidget(this);
+    mFontWidget->setDisabled(true);
 
     mLayoutHandler = new LayoutHandler(mDocument,
                                        mAudioHandler,
@@ -442,6 +443,20 @@ void MainWindow::setupMenuBar()
     const auto undoQAct = mEditMenu->addAction(tr("Undo", "MenuBar_Edit"));
     undoQAct->setShortcut(Qt::CTRL + Qt::Key_Z);
     mActions.undoAction->connect(undoQAct);
+
+    // workaround
+    // if we undo text changes we also want the font widget to reflect this
+    connect(undoQAct, &QAction::triggered,
+            this, [this]() {
+        const auto scene = *mDocument.fActiveScene;
+        if (!scene) { return; }
+        if (const auto txtBox = enve_cast<TextBox*>(scene->getCurrentBox())) {
+            mFontWidget->setDisplayedSettings(txtBox->getFontSize(),
+                                              txtBox->getFontFamily(),
+                                              txtBox->getFontStyle(),
+                                              txtBox->getCurrentValue());
+        }
+    });
 
     const auto redoQAct = mEditMenu->addAction(tr("Redo", "MenuBar_Edit"));
     redoQAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Z);
@@ -1223,6 +1238,7 @@ void MainWindow::setupToolBar()
             this,
             [this, textModeAct]() {
         if (mDocument.fCanvasMode == CanvasMode::textCreate) {
+            mTopSideBarWidget->setCurrentIndex(mTabTextIndex);
             textModeAct->setChecked(true);
         }
     });
@@ -1387,6 +1403,8 @@ void MainWindow::connectToolBarActions()
 {
     connect(mFontWidget, &FontsWidget::fontSizeChanged,
             &mActions, &Actions::setFontSize);
+    connect(mFontWidget, &FontsWidget::textChanged,
+            &mActions, &Actions::setFontText);
     connect(mFontWidget, &FontsWidget::fontFamilyAndStyleChanged,
             &mActions, &Actions::setFontFamilyAndStyle);
     connect(mFontWidget, &FontsWidget::textAlignmentChanged,
@@ -1462,9 +1480,14 @@ void MainWindow::setCurrentBox(BoundingBox *box)
 {
     mFillStrokeSettings->setCurrentBox(box);
     if (const auto txtBox = enve_cast<TextBox*>(box)) {
+        mFontWidget->setEnabled(true);
         mFontWidget->setDisplayedSettings(txtBox->getFontSize(),
                                           txtBox->getFontFamily(),
-                                          txtBox->getFontStyle());
+                                          txtBox->getFontStyle(),
+                                          txtBox->getCurrentValue());
+    } else {
+        mFontWidget->clearText();
+        mFontWidget->setDisabled(true);
     }
 }
 

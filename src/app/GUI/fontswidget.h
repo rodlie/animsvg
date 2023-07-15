@@ -31,6 +31,7 @@
 #include <QComboBox>
 #include <QFontDatabase>
 #include <QPushButton>
+#include <QPlainTextEdit>
 
 class SkFontStyle;
 
@@ -46,14 +47,20 @@ public:
 
     void setDisplayedSettings(const float size,
                               const QString &family,
-                              const SkFontStyle& style);
+                              const SkFontStyle &style,
+                              const QString &text = QString());
+    void setText(const QString &text);
+    const QString getText();
+    void setTextFocus();
+    void clearText();
 
 signals:
-    void fontFamilyAndStyleChanged(const QString& family,
-                                   const SkFontStyle& style);
+    void fontFamilyAndStyleChanged(const QString &family,
+                                   const SkFontStyle &style);
     void fontSizeChanged(qreal size);
     void textAlignmentChanged(Qt::Alignment alignment);
     void textVAlignmentChanged(Qt::Alignment alignment);
+    void textChanged(const QString &text);
 
 private:
     void updateStyles();
@@ -82,6 +89,8 @@ private:
     QPushButton *mAlignBottom;
 
     QFontDatabase mFontDatabase;
+
+    QPlainTextEdit *mTextInput;
 };
 
 #endif // FONTSWIDGET_H
