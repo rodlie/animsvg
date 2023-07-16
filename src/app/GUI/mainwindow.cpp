@@ -427,8 +427,12 @@ void MainWindow::setupMenuBar()
                          this, &MainWindow::saveBackup);
 
     const auto exportMenu = mFileMenu->addMenu(tr("Export", "MenuBar_File"));
-    exportMenu->addAction(tr("Export SVG...", "MenuBar_File"),
-                          this, &MainWindow::exportSVG);
+    exportMenu->addAction(QIcon::fromTheme("output"),
+                          tr("Export to SVG animation", "MenuBar_File"),
+                          this, &MainWindow::exportSVG,
+                          QKeySequence(AppSupport::getSettings("shortcuts",
+                                                               "exportSVG",
+                                                               "Shift+F12").toString()));
     mFileMenu->addSeparator();
     mFileMenu->addAction(tr("Close", "MenuBar_File"),
                          this, &MainWindow::closeProject,
@@ -718,7 +722,8 @@ void MainWindow::setupMenuBar()
 
     mSceneMenu->addSeparator();
 
-    mAddToQueAct = mSceneMenu->addAction(tr("Add to Render Queue", "MenuBar_Scene"),
+    mAddToQueAct = mSceneMenu->addAction(QIcon::fromTheme("render_animation"),
+                                         tr("Add to Render Queue", "MenuBar_Scene"),
                                          this, &MainWindow::addCanvasToRenderQue,
                                          QKeySequence(AppSupport::getSettings("shortcuts",
                                                                               "addToQue",
