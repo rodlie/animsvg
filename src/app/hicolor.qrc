@@ -18,6 +18,8 @@
  <file>icons/hicolor/16x16/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/16x16/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/16x16/actions/drawPath.png</file>
+ <file>icons/hicolor/16x16/actions/fastforward.png</file>
+ <file>icons/hicolor/16x16/actions/fund.png</file>
  <file>icons/hicolor/16x16/actions/graph.png</file>
  <file>icons/hicolor/16x16/actions/loop.png</file>
  <file>icons/hicolor/16x16/actions/minus.png</file>
@@ -32,6 +34,7 @@
  <file>icons/hicolor/16x16/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/16x16/actions/nullCreate.png</file>
  <file>icons/hicolor/16x16/actions/onlySelectedVisible.png</file>
+ <file>icons/hicolor/16x16/actions/output.png</file>
  <file>icons/hicolor/16x16/actions/paint.png</file>
  <file>icons/hicolor/16x16/actions/pathCreate.png</file>
  <file>icons/hicolor/16x16/actions/pause.png</file>
@@ -49,6 +52,8 @@
  <file>icons/hicolor/16x16/actions/pointTransform.png</file>
  <file>icons/hicolor/16x16/actions/preview.png</file>
  <file>icons/hicolor/16x16/actions/rectCreate.png</file>
+ <file>icons/hicolor/16x16/actions/render_animation.png</file>
+ <file>icons/hicolor/16x16/actions/rewind.png</file>
  <file>icons/hicolor/16x16/actions/segmentCurve.png</file>
  <file>icons/hicolor/16x16/actions/segmentLine.png</file>
  <file>icons/hicolor/16x16/actions/split_h.png</file>
@@ -75,6 +80,8 @@
  <file>icons/hicolor/22x22/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/22x22/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/22x22/actions/drawPath.png</file>
+ <file>icons/hicolor/22x22/actions/fastforward.png</file>
+ <file>icons/hicolor/22x22/actions/fund.png</file>
  <file>icons/hicolor/22x22/actions/graph.png</file>
  <file>icons/hicolor/22x22/actions/loop.png</file>
  <file>icons/hicolor/22x22/actions/minus.png</file>
@@ -89,6 +96,7 @@
  <file>icons/hicolor/22x22/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/22x22/actions/nullCreate.png</file>
  <file>icons/hicolor/22x22/actions/onlySelectedVisible.png</file>
+ <file>icons/hicolor/22x22/actions/output.png</file>
  <file>icons/hicolor/22x22/actions/paint.png</file>
  <file>icons/hicolor/22x22/actions/pathCreate.png</file>
  <file>icons/hicolor/22x22/actions/pause.png</file>
@@ -106,6 +114,8 @@
  <file>icons/hicolor/22x22/actions/pointTransform.png</file>
  <file>icons/hicolor/22x22/actions/preview.png</file>
  <file>icons/hicolor/22x22/actions/rectCreate.png</file>
+ <file>icons/hicolor/22x22/actions/render_animation.png</file>
+ <file>icons/hicolor/22x22/actions/rewind.png</file>
  <file>icons/hicolor/22x22/actions/segmentCurve.png</file>
  <file>icons/hicolor/22x22/actions/segmentLine.png</file>
  <file>icons/hicolor/22x22/actions/split_h.png</file>
@@ -132,6 +142,8 @@
  <file>icons/hicolor/32x32/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/32x32/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/32x32/actions/drawPath.png</file>
+ <file>icons/hicolor/32x32/actions/fastforward.png</file>
+ <file>icons/hicolor/32x32/actions/fund.png</file>
  <file>icons/hicolor/32x32/actions/graph.png</file>
  <file>icons/hicolor/32x32/actions/loop.png</file>
  <file>icons/hicolor/32x32/actions/minus.png</file>
@@ -146,6 +158,7 @@
  <file>icons/hicolor/32x32/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/32x32/actions/nullCreate.png</file>
  <file>icons/hicolor/32x32/actions/onlySelectedVisible.png</file>
+ <file>icons/hicolor/32x32/actions/output.png</file>
  <file>icons/hicolor/32x32/actions/paint.png</file>
  <file>icons/hicolor/32x32/actions/pathCreate.png</file>
  <file>icons/hicolor/32x32/actions/pause.png</file>
@@ -163,6 +176,8 @@
  <file>icons/hicolor/32x32/actions/pointTransform.png</file>
  <file>icons/hicolor/32x32/actions/preview.png</file>
  <file>icons/hicolor/32x32/actions/rectCreate.png</file>
+ <file>icons/hicolor/32x32/actions/render_animation.png</file>
+ <file>icons/hicolor/32x32/actions/rewind.png</file>
  <file>icons/hicolor/32x32/actions/segmentCurve.png</file>
  <file>icons/hicolor/32x32/actions/segmentLine.png</file>
  <file>icons/hicolor/32x32/actions/split_h.png</file>
@@ -189,6 +204,8 @@
  <file>icons/hicolor/48x48/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/48x48/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/48x48/actions/drawPath.png</file>
+ <file>icons/hicolor/48x48/actions/fastforward.png</file>
+ <file>icons/hicolor/48x48/actions/fund.png</file>
  <file>icons/hicolor/48x48/actions/graph.png</file>
  <file>icons/hicolor/48x48/actions/loop.png</file>
  <file>icons/hicolor/48x48/actions/minus.png</file>
@@ -203,6 +220,7 @@
  <file>icons/hicolor/48x48/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/48x48/actions/nullCreate.png</file>
  <file>icons/hicolor/48x48/actions/onlySelectedVisible.png</file>
+ <file>icons/hicolor/48x48/actions/output.png</file>
  <file>icons/hicolor/48x48/actions/paint.png</file>
  <file>icons/hicolor/48x48/actions/pathCreate.png</file>
  <file>icons/hicolor/48x48/actions/pause.png</file>
@@ -220,6 +238,8 @@
  <file>icons/hicolor/48x48/actions/pointTransform.png</file>
  <file>icons/hicolor/48x48/actions/preview.png</file>
  <file>icons/hicolor/48x48/actions/rectCreate.png</file>
+ <file>icons/hicolor/48x48/actions/render_animation.png</file>
+ <file>icons/hicolor/48x48/actions/rewind.png</file>
  <file>icons/hicolor/48x48/actions/segmentCurve.png</file>
  <file>icons/hicolor/48x48/actions/segmentLine.png</file>
  <file>icons/hicolor/48x48/actions/split_h.png</file>
@@ -246,6 +266,8 @@
  <file>icons/hicolor/64x64/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/64x64/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/64x64/actions/drawPath.png</file>
+ <file>icons/hicolor/64x64/actions/fastforward.png</file>
+ <file>icons/hicolor/64x64/actions/fund.png</file>
  <file>icons/hicolor/64x64/actions/graph.png</file>
  <file>icons/hicolor/64x64/actions/loop.png</file>
  <file>icons/hicolor/64x64/actions/minus.png</file>
@@ -260,6 +282,7 @@
  <file>icons/hicolor/64x64/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/64x64/actions/nullCreate.png</file>
  <file>icons/hicolor/64x64/actions/onlySelectedVisible.png</file>
+ <file>icons/hicolor/64x64/actions/output.png</file>
  <file>icons/hicolor/64x64/actions/paint.png</file>
  <file>icons/hicolor/64x64/actions/pathCreate.png</file>
  <file>icons/hicolor/64x64/actions/pause.png</file>
@@ -277,6 +300,8 @@
  <file>icons/hicolor/64x64/actions/pointTransform.png</file>
  <file>icons/hicolor/64x64/actions/preview.png</file>
  <file>icons/hicolor/64x64/actions/rectCreate.png</file>
+ <file>icons/hicolor/64x64/actions/render_animation.png</file>
+ <file>icons/hicolor/64x64/actions/rewind.png</file>
  <file>icons/hicolor/64x64/actions/segmentCurve.png</file>
  <file>icons/hicolor/64x64/actions/segmentLine.png</file>
  <file>icons/hicolor/64x64/actions/split_h.png</file>
@@ -303,6 +328,8 @@
  <file>icons/hicolor/96x96/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/96x96/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/96x96/actions/drawPath.png</file>
+ <file>icons/hicolor/96x96/actions/fastforward.png</file>
+ <file>icons/hicolor/96x96/actions/fund.png</file>
  <file>icons/hicolor/96x96/actions/graph.png</file>
  <file>icons/hicolor/96x96/actions/loop.png</file>
  <file>icons/hicolor/96x96/actions/minus.png</file>
@@ -317,6 +344,7 @@
  <file>icons/hicolor/96x96/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/96x96/actions/nullCreate.png</file>
  <file>icons/hicolor/96x96/actions/onlySelectedVisible.png</file>
+ <file>icons/hicolor/96x96/actions/output.png</file>
  <file>icons/hicolor/96x96/actions/paint.png</file>
  <file>icons/hicolor/96x96/actions/pathCreate.png</file>
  <file>icons/hicolor/96x96/actions/pause.png</file>
@@ -334,6 +362,8 @@
  <file>icons/hicolor/96x96/actions/pointTransform.png</file>
  <file>icons/hicolor/96x96/actions/preview.png</file>
  <file>icons/hicolor/96x96/actions/rectCreate.png</file>
+ <file>icons/hicolor/96x96/actions/render_animation.png</file>
+ <file>icons/hicolor/96x96/actions/rewind.png</file>
  <file>icons/hicolor/96x96/actions/segmentCurve.png</file>
  <file>icons/hicolor/96x96/actions/segmentLine.png</file>
  <file>icons/hicolor/96x96/actions/split_h.png</file>
@@ -360,6 +390,8 @@
  <file>icons/hicolor/128x128/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/128x128/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/128x128/actions/drawPath.png</file>
+ <file>icons/hicolor/128x128/actions/fastforward.png</file>
+ <file>icons/hicolor/128x128/actions/fund.png</file>
  <file>icons/hicolor/128x128/actions/graph.png</file>
  <file>icons/hicolor/128x128/actions/loop.png</file>
  <file>icons/hicolor/128x128/actions/minus.png</file>
@@ -374,6 +406,7 @@
  <file>icons/hicolor/128x128/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/128x128/actions/nullCreate.png</file>
  <file>icons/hicolor/128x128/actions/onlySelectedVisible.png</file>
+ <file>icons/hicolor/128x128/actions/output.png</file>
  <file>icons/hicolor/128x128/actions/paint.png</file>
  <file>icons/hicolor/128x128/actions/pathCreate.png</file>
  <file>icons/hicolor/128x128/actions/pause.png</file>
@@ -391,6 +424,8 @@
  <file>icons/hicolor/128x128/actions/pointTransform.png</file>
  <file>icons/hicolor/128x128/actions/preview.png</file>
  <file>icons/hicolor/128x128/actions/rectCreate.png</file>
+ <file>icons/hicolor/128x128/actions/render_animation.png</file>
+ <file>icons/hicolor/128x128/actions/rewind.png</file>
  <file>icons/hicolor/128x128/actions/segmentCurve.png</file>
  <file>icons/hicolor/128x128/actions/segmentLine.png</file>
  <file>icons/hicolor/128x128/actions/split_h.png</file>
@@ -417,6 +452,8 @@
  <file>icons/hicolor/192x192/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/192x192/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/192x192/actions/drawPath.png</file>
+ <file>icons/hicolor/192x192/actions/fastforward.png</file>
+ <file>icons/hicolor/192x192/actions/fund.png</file>
  <file>icons/hicolor/192x192/actions/graph.png</file>
  <file>icons/hicolor/192x192/actions/loop.png</file>
  <file>icons/hicolor/192x192/actions/minus.png</file>
@@ -431,6 +468,7 @@
  <file>icons/hicolor/192x192/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/192x192/actions/nullCreate.png</file>
  <file>icons/hicolor/192x192/actions/onlySelectedVisible.png</file>
+ <file>icons/hicolor/192x192/actions/output.png</file>
  <file>icons/hicolor/192x192/actions/paint.png</file>
  <file>icons/hicolor/192x192/actions/pathCreate.png</file>
  <file>icons/hicolor/192x192/actions/pause.png</file>
@@ -448,6 +486,8 @@
  <file>icons/hicolor/192x192/actions/pointTransform.png</file>
  <file>icons/hicolor/192x192/actions/preview.png</file>
  <file>icons/hicolor/192x192/actions/rectCreate.png</file>
+ <file>icons/hicolor/192x192/actions/render_animation.png</file>
+ <file>icons/hicolor/192x192/actions/rewind.png</file>
  <file>icons/hicolor/192x192/actions/segmentCurve.png</file>
  <file>icons/hicolor/192x192/actions/segmentLine.png</file>
  <file>icons/hicolor/192x192/actions/split_h.png</file>
@@ -474,6 +514,8 @@
  <file>icons/hicolor/256x256/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/256x256/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/256x256/actions/drawPath.png</file>
+ <file>icons/hicolor/256x256/actions/fastforward.png</file>
+ <file>icons/hicolor/256x256/actions/fund.png</file>
  <file>icons/hicolor/256x256/actions/graph.png</file>
  <file>icons/hicolor/256x256/actions/loop.png</file>
  <file>icons/hicolor/256x256/actions/minus.png</file>
@@ -488,6 +530,7 @@
  <file>icons/hicolor/256x256/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/256x256/actions/nullCreate.png</file>
  <file>icons/hicolor/256x256/actions/onlySelectedVisible.png</file>
+ <file>icons/hicolor/256x256/actions/output.png</file>
  <file>icons/hicolor/256x256/actions/paint.png</file>
  <file>icons/hicolor/256x256/actions/pathCreate.png</file>
  <file>icons/hicolor/256x256/actions/pause.png</file>
@@ -505,6 +548,8 @@
  <file>icons/hicolor/256x256/actions/pointTransform.png</file>
  <file>icons/hicolor/256x256/actions/preview.png</file>
  <file>icons/hicolor/256x256/actions/rectCreate.png</file>
+ <file>icons/hicolor/256x256/actions/render_animation.png</file>
+ <file>icons/hicolor/256x256/actions/rewind.png</file>
  <file>icons/hicolor/256x256/actions/segmentCurve.png</file>
  <file>icons/hicolor/256x256/actions/segmentLine.png</file>
  <file>icons/hicolor/256x256/actions/split_h.png</file>
