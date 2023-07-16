@@ -66,7 +66,6 @@
 #include "GUI/Dialogs/scenesettingsdialog.h"
 #include "ShaderEffects/shadereffectprogram.h"
 #include "importhandler.h"
-#include "switchbutton.h"
 #include "ColorWidgets/bookmarkedcolors.h"
 #include "GUI/edialogs.h"
 #include "GUI/dialogsinterface.h"

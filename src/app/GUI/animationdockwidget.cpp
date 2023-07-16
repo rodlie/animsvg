@@ -28,7 +28,6 @@
 #include "GUI/global.h"
 #include "keysview.h"
 #include "actionbutton.h"
-#include "switchbutton.h"
 #include "Private/esettings.h"
 
 AnimationDockWidget::AnimationDockWidget(QWidget *parent,
@@ -79,12 +78,20 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
     connect(valueLines, &SwitchButton::toggled,
             keysView, &KeysView::graphSetValueLinesDisabled);*/
 
-    const auto selectedVisible = SwitchButton::sCreate2Switch(
+    /*const auto selectedVisible = SwitchButton::sCreate2Switch(
                                      "toolbarButtons/onlySelectedVisibleUnchecked.png",
                                      "toolbarButtons/onlySelectedVisibleChecked.png",
                                      gSingleLineTooltip("View Only Selected Objects' Properties"),
                                      this);
     connect(selectedVisible, &SwitchButton::toggled,
+            keysView, &KeysView::graphSetOnlySelectedVisible);*/
+
+    QAction *onlySelectedAct = new QAction(QIcon::fromTheme("onlySelectedVisible"),
+                                           QString(),
+                                           this);
+    onlySelectedAct->setCheckable(true);
+    onlySelectedAct->setToolTip(tr("View only selected"));
+    connect(onlySelectedAct, &QAction::triggered,
             keysView, &KeysView::graphSetOnlySelectedVisible);
 
     addAction(mLineButton);
@@ -97,5 +104,5 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
     addAction(mFitToHeightButton);
     //addWidget(valueLines);
     addSeparator();
-    addWidget(selectedVisible);
+    addAction(onlySelectedAct);
 }

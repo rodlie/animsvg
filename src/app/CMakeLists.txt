@@ -183,7 +183,6 @@ set(
     GUI/fakemenubar.cpp
     GUI/layouthandler.cpp
     GUI/scenechooser.cpp
-    GUI/switchbutton.cpp
     GUI/timelinebasewrappernode.cpp
     GUI/timelinedockwidget.cpp
     GUI/timelinehighlightwidget.cpp
@@ -304,7 +303,6 @@ set(
     GUI/fakemenubar.h
     GUI/layouthandler.h
     GUI/scenechooser.h
-    GUI/switchbutton.h
     GUI/timelinebasewrappernode.h
     GUI/timelinedockwidget.h
     GUI/timelinehighlightwidget.h

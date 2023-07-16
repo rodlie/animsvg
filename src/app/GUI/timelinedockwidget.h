@@ -76,8 +76,6 @@ public:
     void updateSettingsForCurrentCanvas(Canvas * const canvas);
 
 private:
-
-
     void setLoop(const bool loop);
     void interruptPreview();
 
@@ -94,9 +92,6 @@ private:
 
     void updateFrameRange(const FrameRange &range);
 
-    //void setBrushColor(const QColor& color);
-    //void setBrush(BrushContexedWrapper* const brush);
-
     Document& mDocument;
     MainWindow* const mMainWindow;
     QStackedWidget* const mTimelineLayout;
@@ -106,7 +101,6 @@ private:
     QToolButton *mFrictionButton;
 
     QVBoxLayout *mMainLayout;
-
 
     QAction *mPlayFromBeginningButton;
     QAction *mPlayButton;

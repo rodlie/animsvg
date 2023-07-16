@@ -31,6 +31,7 @@
  <file>icons/hicolor/16x16/actions/nodeSymmetric.png</file>
  <file>icons/hicolor/16x16/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/16x16/actions/nullCreate.png</file>
+ <file>icons/hicolor/16x16/actions/onlySelectedVisible.png</file>
  <file>icons/hicolor/16x16/actions/paint.png</file>
  <file>icons/hicolor/16x16/actions/pathCreate.png</file>
  <file>icons/hicolor/16x16/actions/pause.png</file>
@@ -87,6 +88,7 @@
  <file>icons/hicolor/22x22/actions/nodeSymmetric.png</file>
  <file>icons/hicolor/22x22/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/22x22/actions/nullCreate.png</file>
+ <file>icons/hicolor/22x22/actions/onlySelectedVisible.png</file>
  <file>icons/hicolor/22x22/actions/paint.png</file>
  <file>icons/hicolor/22x22/actions/pathCreate.png</file>
  <file>icons/hicolor/22x22/actions/pause.png</file>
@@ -143,6 +145,7 @@
  <file>icons/hicolor/32x32/actions/nodeSymmetric.png</file>
  <file>icons/hicolor/32x32/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/32x32/actions/nullCreate.png</file>
+ <file>icons/hicolor/32x32/actions/onlySelectedVisible.png</file>
  <file>icons/hicolor/32x32/actions/paint.png</file>
  <file>icons/hicolor/32x32/actions/pathCreate.png</file>
  <file>icons/hicolor/32x32/actions/pause.png</file>
@@ -199,6 +202,7 @@
  <file>icons/hicolor/48x48/actions/nodeSymmetric.png</file>
  <file>icons/hicolor/48x48/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/48x48/actions/nullCreate.png</file>
+ <file>icons/hicolor/48x48/actions/onlySelectedVisible.png</file>
  <file>icons/hicolor/48x48/actions/paint.png</file>
  <file>icons/hicolor/48x48/actions/pathCreate.png</file>
  <file>icons/hicolor/48x48/actions/pause.png</file>
@@ -255,6 +259,7 @@
  <file>icons/hicolor/64x64/actions/nodeSymmetric.png</file>
  <file>icons/hicolor/64x64/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/64x64/actions/nullCreate.png</file>
+ <file>icons/hicolor/64x64/actions/onlySelectedVisible.png</file>
  <file>icons/hicolor/64x64/actions/paint.png</file>
  <file>icons/hicolor/64x64/actions/pathCreate.png</file>
  <file>icons/hicolor/64x64/actions/pause.png</file>
@@ -311,6 +316,7 @@
  <file>icons/hicolor/96x96/actions/nodeSymmetric.png</file>
  <file>icons/hicolor/96x96/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/96x96/actions/nullCreate.png</file>
+ <file>icons/hicolor/96x96/actions/onlySelectedVisible.png</file>
  <file>icons/hicolor/96x96/actions/paint.png</file>
  <file>icons/hicolor/96x96/actions/pathCreate.png</file>
  <file>icons/hicolor/96x96/actions/pause.png</file>
@@ -367,6 +373,7 @@
  <file>icons/hicolor/128x128/actions/nodeSymmetric.png</file>
  <file>icons/hicolor/128x128/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/128x128/actions/nullCreate.png</file>
+ <file>icons/hicolor/128x128/actions/onlySelectedVisible.png</file>
  <file>icons/hicolor/128x128/actions/paint.png</file>
  <file>icons/hicolor/128x128/actions/pathCreate.png</file>
  <file>icons/hicolor/128x128/actions/pause.png</file>
@@ -423,6 +430,7 @@
  <file>icons/hicolor/192x192/actions/nodeSymmetric.png</file>
  <file>icons/hicolor/192x192/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/192x192/actions/nullCreate.png</file>
+ <file>icons/hicolor/192x192/actions/onlySelectedVisible.png</file>
  <file>icons/hicolor/192x192/actions/paint.png</file>
  <file>icons/hicolor/192x192/actions/pathCreate.png</file>
  <file>icons/hicolor/192x192/actions/pause.png</file>
@@ -479,6 +487,7 @@
  <file>icons/hicolor/256x256/actions/nodeSymmetric.png</file>
  <file>icons/hicolor/256x256/actions/normalNodesOnly.png</file>
  <file>icons/hicolor/256x256/actions/nullCreate.png</file>
+ <file>icons/hicolor/256x256/actions/onlySelectedVisible.png</file>
  <file>icons/hicolor/256x256/actions/paint.png</file>
  <file>icons/hicolor/256x256/actions/pathCreate.png</file>
  <file>icons/hicolor/256x256/actions/pause.png</file>
