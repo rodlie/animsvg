@@ -72,3 +72,8 @@ QLineEdit#OutputDestinationLineEdit {
 FillStrokeSettingsWidget {
     border: 0;
 }
+
+QSpinBox#SpinBoxNoButtons::up-button,
+QSpinBox#SpinBoxNoButtons::down-button {
+    width: 0;
+}

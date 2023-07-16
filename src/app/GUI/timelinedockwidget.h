@@ -91,6 +91,7 @@ private:
     void setupDrawPathSpins();
 
     void updateFrameRange(const FrameRange &range);
+    void handleCurrentFrameChanged(int frame);
 
     Document& mDocument;
     MainWindow* const mMainWindow;
@@ -122,6 +123,7 @@ private:
 
     QAction *mFrameRewindAct;
     QAction *mFrameFastForwardAct;
+    QSpinBox *mCurrentFrameSpin;
 
     QList<TimelineWidget*> mTimelineWidgets;
     AnimationDockWidget *mAnimationDockWidget;

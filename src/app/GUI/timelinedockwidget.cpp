@@ -61,6 +61,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     , mNodeVisibility(nullptr)
     , mFrameRewindAct(nullptr)
     , mFrameFastForwardAct(nullptr)
+    , mCurrentFrameSpin(nullptr)
 {
     connect(RenderHandler::sInstance, &RenderHandler::previewFinished,
             this, &TimelineDockWidget::previewFinished);
@@ -224,6 +225,20 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
             scene->setFrameRange(range);
     });
 
+    mCurrentFrameSpin = new QSpinBox(this);
+    mCurrentFrameSpin->setObjectName(QString::fromUtf8("SpinBoxNoButtons"));
+    mCurrentFrameSpin->setFocusPolicy(Qt::ClickFocus);
+    mCurrentFrameSpin->setToolTip(tr("Current frame"));
+    mCurrentFrameSpin->setRange(-INT_MAX, INT_MAX);
+    connect(mCurrentFrameSpin,
+            &QSpinBox::editingFinished,
+            this, [this]() {
+        const auto scene = *mDocument.fActiveScene;
+        if (!scene) { return; }
+        scene->anim_setAbsFrame(mCurrentFrameSpin->value());
+        mDocument.actionFinished();
+    });
+
     mToolBar = new QToolBar(this);
     mToolBar->setMovable(false);
 
@@ -244,8 +259,9 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
 
     mToolBar->addAction(mFrameRewindAct);
     mToolBar->addAction(mPlayFromBeginningButton);
-    mToolBar->addAction(mPlayButton);
     mToolBar->addAction(mFrameFastForwardAct);
+    mToolBar->addWidget(mCurrentFrameSpin);
+    mToolBar->addAction(mPlayButton);
     mToolBar->addAction(mStopButton);
     mToolBar->addAction(mLoopButton);
     mToolBar->addAction(mLocalPivotAct);
@@ -347,6 +363,13 @@ void TimelineDockWidget::updateFrameRange(const FrameRange &range)
         mFrameEndSpin->setValue(range.fMax);
         mFrameEndSpin->blockSignals(false);
     }
+}
+
+void TimelineDockWidget::handleCurrentFrameChanged(int frame)
+{
+    mCurrentFrameSpin->blockSignals(true);
+    mCurrentFrameSpin->setValue(frame);
+    mCurrentFrameSpin->blockSignals(false);
 }
 
 void TimelineDockWidget::setLoop(const bool loop)
@@ -503,10 +526,13 @@ void TimelineDockWidget::updateSettingsForCurrentCanvas(Canvas* const canvas)
 
     const auto range = canvas->getFrameRange();
     updateFrameRange(range);
+    handleCurrentFrameChanged(canvas->anim_getCurrentAbsFrame());
 
     connect(canvas,
             &Canvas::newFrameRange,
             this, [this](const FrameRange range) {
             updateFrameRange(range);
     });
+    connect(canvas, &Canvas::currentFrameChanged,
+            this, &TimelineDockWidget::handleCurrentFrameChanged);
 }

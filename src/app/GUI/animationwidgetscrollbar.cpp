@@ -135,7 +135,7 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         const QRectF textRect(eSizesUI::widget, 0,
                               5*eSizesUI::widget, height());
         p.drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft,
-                   QString::number(mFirstViewedFrame));
+                   QString::number(mFrameRange.fMin));
     }
 
     p.end();
