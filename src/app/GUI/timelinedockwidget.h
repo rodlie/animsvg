@@ -120,6 +120,9 @@ private:
     QDoubleSlider *mDrawPathMaxError;
     QAction *mDrawPathMaxErrorAct;
 
+    QAction *mFrameRewindAct;
+    QAction *mFrameFastForwardAct;
+
     QList<TimelineWidget*> mTimelineWidgets;
     AnimationDockWidget *mAnimationDockWidget;
 };

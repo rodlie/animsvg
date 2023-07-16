@@ -59,6 +59,8 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     , mFrameEndSpin(nullptr)
     , mNodeVisibilityAct(nullptr)
     , mNodeVisibility(nullptr)
+    , mFrameRewindAct(nullptr)
+    , mFrameFastForwardAct(nullptr)
 {
     connect(RenderHandler::sInstance, &RenderHandler::previewFinished,
             this, &TimelineDockWidget::previewFinished);
@@ -82,6 +84,34 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     const QSize iconSize(AppSupport::getSettings("ui",
                                                  "timelineToolbarIconSize",
                                                  QSize(24, 24)).toSize());
+
+    mFrameRewindAct = new QAction(QIcon::fromTheme("rewind"),
+                                  tr("Rewind"),
+                                  this);
+    mFrameRewindAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                      "rewind",
+                                                                      "Shift+Left").toString()));
+    connect(mFrameRewindAct, &QAction::triggered,
+            this, [this]() {
+        const auto scene = *mDocument.fActiveScene;
+        if (!scene) { return; }
+        scene->anim_setAbsFrame(scene->getFrameRange().fMin);
+        mDocument.actionFinished();
+    });
+
+    mFrameFastForwardAct = new QAction(QIcon::fromTheme("fastforward"),
+                                       tr("Fast Forward"),
+                                       this);
+    mFrameFastForwardAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                           "fastForward",
+                                                                           "Shift+Right").toString()));
+    connect(mFrameFastForwardAct, &QAction::triggered,
+            this, [this]() {
+        const auto scene = *mDocument.fActiveScene;
+        if (!scene) { return; }
+        scene->anim_setAbsFrame(scene->getFrameRange().fMax);
+        mDocument.actionFinished();
+    });
 
     mPlayFromBeginningButton = new QAction(QIcon::fromTheme("preview"),
                                            tr("Play From the Beginning"),
@@ -212,8 +242,10 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
                                  QSizePolicy::Minimum);
     mToolBar->addWidget(spacerWidget1);
 
+    mToolBar->addAction(mFrameRewindAct);
     mToolBar->addAction(mPlayFromBeginningButton);
     mToolBar->addAction(mPlayButton);
+    mToolBar->addAction(mFrameFastForwardAct);
     mToolBar->addAction(mStopButton);
     mToolBar->addAction(mLoopButton);
     mToolBar->addAction(mLocalPivotAct);
