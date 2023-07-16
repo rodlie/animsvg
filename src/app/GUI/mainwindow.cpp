@@ -396,6 +396,8 @@ void MainWindow::setupMenuBar()
     mMenuBar = new QMenuBar(nullptr);
     connectAppFont(mMenuBar);
 
+    QList<QAction*> frictionButtonActions;
+
     mFileMenu = mMenuBar->addMenu(tr("File", "MenuBar"));
     mFileMenu->addAction(tr("New...", "MenuBar_File"),
                          this, &MainWindow::newFile,
@@ -427,12 +429,12 @@ void MainWindow::setupMenuBar()
                          this, &MainWindow::saveBackup);
 
     const auto exportMenu = mFileMenu->addMenu(tr("Export", "MenuBar_File"));
-    exportMenu->addAction(QIcon::fromTheme("output"),
-                          tr("Export to SVG animation", "MenuBar_File"),
-                          this, &MainWindow::exportSVG,
-                          QKeySequence(AppSupport::getSettings("shortcuts",
-                                                               "exportSVG",
-                                                               "Shift+F12").toString()));
+    frictionButtonActions << exportMenu->addAction(QIcon::fromTheme("output"),
+                                                   tr("Export to SVG animation", "MenuBar_File"),
+                                                   this, &MainWindow::exportSVG,
+                                                   QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                                        "exportSVG",
+                                                                                        "Shift+F12").toString()));
     mFileMenu->addSeparator();
     mFileMenu->addAction(tr("Close", "MenuBar_File"),
                          this, &MainWindow::closeProject,
@@ -728,6 +730,7 @@ void MainWindow::setupMenuBar()
                                          QKeySequence(AppSupport::getSettings("shortcuts",
                                                                               "addToQue",
                                                                               "F12").toString()));
+    frictionButtonActions << mAddToQueAct;
 
     mSceneMenu->addSeparator();
 
@@ -996,6 +999,8 @@ void MainWindow::setupMenuBar()
     });
 
     setMenuBar(mMenuBar);
+
+    mTimeline->setActions(frictionButtonActions);
 }
 
 void MainWindow::setResolutionText(QString text)
