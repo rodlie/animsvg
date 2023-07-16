@@ -536,3 +536,8 @@ void TimelineDockWidget::updateSettingsForCurrentCanvas(Canvas* const canvas)
     connect(canvas, &Canvas::currentFrameChanged,
             this, &TimelineDockWidget::handleCurrentFrameChanged);
 }
+
+void TimelineDockWidget::setActions(const QList<QAction *> actions)
+{
+    mFrictionButton->addActions(actions);
+}

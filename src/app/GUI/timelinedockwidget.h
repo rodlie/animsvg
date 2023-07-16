@@ -75,6 +75,8 @@ public:
 
     void updateSettingsForCurrentCanvas(Canvas * const canvas);
 
+    void setActions(const QList<QAction*> actions);
+
 private:
     void setLoop(const bool loop);
     void interruptPreview();
