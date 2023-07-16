@@ -31,7 +31,6 @@
 #include <QSpinBox>
 #include <QPushButton>
 #include <QLabel>
-#include <qscrollarea.h>
 #include <QScrollArea>
 #include <QApplication>
 #include <QScrollBar>

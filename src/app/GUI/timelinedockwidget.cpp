@@ -82,7 +82,6 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     const QSize iconSize(AppSupport::getSettings("ui",
                                                  "timelineToolbarIconSize",
                                                  QSize(24, 24)).toSize());
-    const QString iconsDir = eSettings::sIconsDir() + "/toolbarButtons";
 
     mPlayFromBeginningButton = new QAction(QIcon::fromTheme("preview"),
                                            tr("Play From the Beginning"),

@@ -48,7 +48,6 @@
 
 class VideoEncoder;
 class RenderWidget;
-class SwitchButton;
 class ActionButton;
 class BoxesList;
 class FontsWidget;
