@@ -44,7 +44,6 @@
 #include "renderinstancesettings.h"
 #include "layouthandler.h"
 #include "memoryhandler.h"
-#include "switchbutton.h"
 #include "appsupport.h"
 
 TimelineDockWidget::TimelineDockWidget(Document& document,
@@ -272,18 +271,18 @@ QAction* addSlider(const QString& name,
 
 void TimelineDockWidget::setupDrawPathSpins()
 {
-    mDrawPathAuto = SwitchButton::sCreate2Switch(
-                "toolbarButtons/drawPathAutoUnchecked.png",
-                "toolbarButtons/drawPathAutoChecked.png",
-                gSingleLineTooltip("Manual/Automatic Fitting"), this);
-    mDrawPathAuto->toggle();
-    connect(mDrawPathAuto, &SwitchButton::toggled,
-            &mDocument, [this](const int i) {
-        qDebug() << "manual/automatic fitting" << i;
-        mDocument.fDrawPathManual = i == 0;
-        mDrawPathMaxErrorAct->setDisabled(i == 0);
+    mDocument.fDrawPathManual = false;
+    mDrawPathAuto = new QAction(mDocument.fDrawPathManual ? QIcon::fromTheme("drawPathAutoUnchecked") : QIcon::fromTheme("drawPathAutoChecked"),
+                                tr("Automatic/Manual Fitting"),
+                                this);
+    connect(mDrawPathAuto, &QAction::triggered,
+            this, [this]() {
+        mDocument.fDrawPathManual = !mDocument.fDrawPathManual;
+        qDebug() << "manual fitting?" << mDocument.fDrawPathManual;
+        mDrawPathMaxErrorAct->setDisabled(mDocument.fDrawPathManual);
+        mDrawPathAuto->setIcon(mDocument.fDrawPathManual ? QIcon::fromTheme("drawPathAutoUnchecked") : QIcon::fromTheme("drawPathAutoChecked"));
     });
-    mDrawPathAutoAct = mToolBar->addWidget(mDrawPathAuto);
+    mToolBar->addAction(mDrawPathAuto);
 
     mDrawPathMaxError = new QDoubleSlider(1, 200, 1, this);
     mDrawPathMaxError->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -435,7 +434,7 @@ void TimelineDockWidget::updateButtonsVisibility(const CanvasMode mode)
 
     const bool drawPathMode = mode == CanvasMode::drawPath;
 
-    if (mDrawPathAutoAct) { mDrawPathAutoAct->setVisible(drawPathMode); }
+    if (mDrawPathAuto) { mDrawPathAuto->setVisible(drawPathMode); }
     if (mDrawPathMaxErrorAct) { mDrawPathMaxErrorAct->setVisible(drawPathMode); }
     if (mDrawPathSmoothAct) { mDrawPathSmoothAct->setVisible(drawPathMode); }
 }

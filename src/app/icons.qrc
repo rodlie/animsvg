@@ -21,8 +21,6 @@
         <file>icons/toolbarButtons/checkable/paintMove.svg</file>
         <file>icons/toolbarButtons/plain/brush+.svg</file>
         <file>icons/toolbarButtons/plain/brush-.svg</file>
-        <file>icons/toolbarButtons/plain/drawPathAutoChecked.svg</file>
-        <file>icons/toolbarButtons/plain/drawPathAutoUnchecked.svg</file>
         <file>icons/toolbarButtons/plain/onionDisabled.svg</file>
         <file>icons/toolbarButtons/plain/onionEnabled.svg</file>
         <file>icons/toolbarButtons/plain/zoom.svg</file>

@@ -58,7 +58,6 @@ class ActionButton;
 class Canvas;
 class Document;
 class LayoutHandler;
-class SwitchButton;
 class BrushContexedWrapper;
 
 enum class CanvasMode : short;
@@ -118,16 +117,15 @@ private:
     QSpinBox *mFrameStartSpin;
     QSpinBox *mFrameEndSpin;
 
-    QAction* mLocalPivotAct;
-    QAction* mNodeVisibilityAct;
+    QAction *mLocalPivotAct;
+    QAction *mNodeVisibilityAct;
     QToolButton *mNodeVisibility;
 
-    SwitchButton* mDrawPathAuto;
-    QAction* mDrawPathAutoAct;
-    QDoubleSlider* mDrawPathSmooth;
-    QAction* mDrawPathSmoothAct;
-    QDoubleSlider* mDrawPathMaxError;
-    QAction* mDrawPathMaxErrorAct;
+    QAction  *mDrawPathAuto;
+    QDoubleSlider *mDrawPathSmooth;
+    QAction *mDrawPathSmoothAct;
+    QDoubleSlider *mDrawPathMaxError;
+    QAction *mDrawPathMaxErrorAct;
 
     QList<TimelineWidget*> mTimelineWidgets;
     AnimationDockWidget *mAnimationDockWidget;
