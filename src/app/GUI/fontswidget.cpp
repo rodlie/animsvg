@@ -165,8 +165,8 @@ FontsWidget::FontsWidget(QWidget *parent)
     buttonsLayout->addWidget(mAlignVCenter);
     buttonsLayout->addWidget(mAlignBottom);
 
-    mMainLayout->addLayout(buttonsLayout);
     mMainLayout->addWidget(mTextInput);
+    mMainLayout->addLayout(buttonsLayout);
 
     afterFamilyChange();
 }
