@@ -144,6 +144,11 @@ MainWindow::MainWindow(Document& document,
             this, &MainWindow::updateCanvasModeButtonsChecked);
     connect(&mDocument, &Document::sceneCreated,
             this, &MainWindow::closeWelcomeDialog);
+    connect(&mDocument, &Document::openTextEditor,
+            this, [this] () {
+        mTopSideBarWidget->setCurrentIndex(mTabTextIndex);
+        mFontWidget->setTextFocus();
+    });
 
     //const auto iconDir = eSettings::sIconsDir();
     setWindowIcon(QIcon::fromTheme(AppSupport::getAppName()));

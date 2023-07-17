@@ -208,6 +208,7 @@ signals:
 //
     void evFilePathChanged(QString);
     void documentChanged();
+    void openTextEditor();
 };
 
 #endif // DOCUMENT_H

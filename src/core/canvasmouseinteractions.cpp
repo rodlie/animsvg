@@ -560,11 +560,12 @@ void Canvas::handleLeftMouseRelease(const eMouseEvent &e) {
             }
         }
         //mCanvasWindow->setCanvasMode(MOVE_PATH);
-    } /*else if(mCurrentMode == CanvasMode::textCreate) {
+    } else if(mCurrentMode == CanvasMode::textCreate) {
         if(mCurrentTextBox) {
-            mCurrentTextBox->openTextEditor(e.fWidget);
+            //mCurrentTextBox->openTextEditor(e.fWidget);
+            emit openTextEditor();
         }
-    }*/
+    }
     mValueInput.clearAndDisableInput();
     mTransMode = TransformMode::none;
 }

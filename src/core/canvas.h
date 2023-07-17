@@ -410,6 +410,7 @@ signals:
     void fpsChanged(qreal);
     void gradientCreated(SceneBoundGradient*);
     void gradientRemoved(SceneBoundGradient*);
+    void openTextEditor();
 
 public:
     void makePointCtrlsSymmetric();
