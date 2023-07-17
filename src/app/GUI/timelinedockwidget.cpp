@@ -186,6 +186,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     });
 
     mFrameStartSpin = new QSpinBox(this);
+    mFrameStartSpin->setAlignment(Qt::AlignHCenter);
     mFrameStartSpin->setFocusPolicy(Qt::ClickFocus);
     mFrameStartSpin->setToolTip(tr("Scene frame start"));
     mFrameStartSpin->setRange(0, INT_MAX);
@@ -206,6 +207,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     });
 
     mFrameEndSpin = new QSpinBox(this);
+    mFrameEndSpin->setAlignment(Qt::AlignHCenter);
     mFrameEndSpin->setFocusPolicy(Qt::ClickFocus);
     mFrameEndSpin->setToolTip(tr("Scene frame end"));
     mFrameEndSpin->setRange(1, INT_MAX);
@@ -226,6 +228,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     });
 
     mCurrentFrameSpin = new QSpinBox(this);
+    mCurrentFrameSpin->setAlignment(Qt::AlignHCenter);
     mCurrentFrameSpin->setObjectName(QString::fromUtf8("SpinBoxNoButtons"));
     mCurrentFrameSpin->setFocusPolicy(Qt::ClickFocus);
     mCurrentFrameSpin->setToolTip(tr("Current frame"));
