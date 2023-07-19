@@ -32,6 +32,7 @@ ClosableContainer::ClosableContainer(QWidget *parent) : QWidget(parent) {
     mMainLayout->setAlignment(Qt::AlignTop);
     setLayout(mMainLayout);
     mContentArrow = new QPushButton("", this);
+    mContentArrow->setFocusPolicy(Qt::NoFocus);
     mContentArrow->setObjectName("iconButton");
     mContentArrow->setCheckable(true);
     mContentArrow->setFixedSize(eSizesUI::widget, eSizesUI::widget);
@@ -67,6 +68,7 @@ void ClosableContainer::setCheckable(const bool check) {
     if(check == bool(mCheckBox)) return;
     if(check) {
         mCheckBox = new QCheckBox(this);
+        mCheckBox->setFocusPolicy(Qt::NoFocus);
         mCheckBox->setFixedSize(eSizesUI::widget, eSizesUI::widget);
         mMainLayout->insertWidget(0, mCheckBox, 0, Qt::AlignTop);
         mCheckBox->setChecked(true);

@@ -97,6 +97,7 @@ void RenderInstanceWidget::iniGUI() {
     QVBoxLayout *renderSettingsLayout = new QVBoxLayout(renderSettingsLabelWidget);
 
     mRenderSettingsButton = new QPushButton(tr("Render Settings ..."));
+    mRenderSettingsButton->setFocusPolicy(Qt::NoFocus);
     mRenderSettingsButton->setObjectName("renderSettings");
     mRenderSettingsButton->setSizePolicy(QSizePolicy::Preferred,
                                         QSizePolicy::Preferred);
@@ -116,10 +117,12 @@ void RenderInstanceWidget::iniGUI() {
     QVBoxLayout *outputSettingsLayout = new QVBoxLayout(outputSettingsLabelWidget);
 
     mOutputSettingsProfilesButton = new OutputProfilesListButton(this);
+    mOutputSettingsProfilesButton->setFocusPolicy(Qt::NoFocus);
     connect(mOutputSettingsProfilesButton, &OutputProfilesListButton::profileSelected,
             this, &RenderInstanceWidget::outputSettingsProfileSelected);
 
     mOutputSettingsButton = new QPushButton(tr("Output Settings ..."));
+    mOutputSettingsButton->setFocusPolicy(Qt::NoFocus);
     mOutputSettingsButton->setSizePolicy(QSizePolicy::Expanding,
                                          QSizePolicy::Preferred);
     connect(mOutputSettingsButton, &QPushButton::pressed,
@@ -138,6 +141,7 @@ void RenderInstanceWidget::iniGUI() {
     mOutputDestinationButton = new QPushButton(QIcon::fromTheme("dots"),
                                                QString(),
                                                this);
+    mOutputDestinationButton->setFocusPolicy(Qt::NoFocus);
     mOutputDestinationButton->setToolTip(tr("Select output file"));
     mOutputDestinationButton->setSizePolicy(QSizePolicy::Preferred,
                                             QSizePolicy::Preferred);
@@ -145,6 +149,7 @@ void RenderInstanceWidget::iniGUI() {
             this, &RenderInstanceWidget::openOutputDestinationDialog);
 
     mOutputDestinationLineEdit = new QLineEdit(this);
+    mOutputDestinationLineEdit->setFocusPolicy(Qt::NoFocus);
     mOutputDestinationLineEdit->setSizePolicy(QSizePolicy::Expanding,
                                               QSizePolicy::Preferred);
     mOutputDestinationLineEdit->setReadOnly(true);
