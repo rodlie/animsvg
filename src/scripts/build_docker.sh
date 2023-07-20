@@ -18,26 +18,42 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# Deploy Friction on Ubuntu, Fedora, RHEL.
+
 set -e -x
 g++ --version
+clang++ --version
 cmake --version
 python --version
 qmake-qt5 --version || qmake --version
 env
 cat /etc/os-release
 
-SNAP=${SNAP:-1}
+SNAP=${SNAP:-0}
 REL=${REL:-0}
 MKJOBS=${MKJOBS:-4}
+
+if [ "${REL}" = 0 ] && [ "${SNAP}" = 0 ]; then
+    echo "REL or SNAP?"
+    exit 1
+fi
 
 TIMESTAMP=${TIMESTAMP:-`date +%Y%m%d`}
 YEAR=${YEAR:-`date +%Y`}
 MONTH=${MONTH:-`date +%m`}
 DAY=${DAY:-`date +%d`}
 
+if [ "${REL}" = 1 ]; then
+    SNAP=0
+elif [ "${SNAP}" = 1 ]; then
+    REL=0
+fi
+
 DISTRO_ID=`cat /etc/os-release | sed '/^ID=/!d;s/ID=//;s/"//g'`
 if [ "${DISTRO_ID}" = "fedora" ]; then
     DISTRO_ID="fc"
+elif [ "${DISTRO_ID}" = "ubuntu" ]; then
+    DISTRO_ID="ubuntu"
 else
     DISTRO_ID="el"
 fi
@@ -46,6 +62,9 @@ DISTRO_VERSION_ID=`cat /etc/os-release | sed '/^VERSION_ID=/!d;s/VERSION_ID=//;s
 if [ "${DISTRO_ID}" = "fc" ]; then
     DISTRO_VERSION="${DISTRO_VERSION_ID}"
     DISTRO_PRETTY="Fedora Linux ${DISTRO_VERSION}"
+elif [ "${DISTRO_ID}" = "ubuntu" ]; then
+    DISTRO_VERSION="${DISTRO_VERSION_ID}"
+    DISTRO_PRETTY="Ubuntu Linux ${DISTRO_VERSION}"
 else
     DISTRO_VERSION="${DISTRO_VERSION_ID:0:1}"
     DISTRO_PRETTY="Enterprise Linux ${DISTRO_VERSION}"
@@ -53,12 +72,30 @@ fi
 
 DID="${DISTRO_ID}${DISTRO_VERSION}"
 
-FRICTION_ROOT="/friction2d"
+FRICTION_ROOT="/friction.graphics"
 FRICTION_DIR="${FRICTION_ROOT}/friction"
 FRICTION_SRC_DIR="${FRICTION_DIR}/src"
-FRICTION_SNAP="/snapshots"
-FRICTION_DIST="${FRICTION_SNAP}/distfiles"
-FRICTION_BRANCH=${FRICTION_BRANCH:-"main"}
+FRICTION_OUT_DIR="/snapshots"
+
+if [ "${REL}" = 1 ]; then
+    FRICTION_OUT_DIR="/releases"
+fi
+
+FRICTION_DIST="${FRICTION_OUT_DIR}/distfiles"
+FRICTION_BRANCH=${FRICTION_BRANCH:-""}
+FRICTION_COMMIT=${FRICTION_COMMIT:-""}
+FRICTION_TAG=${FRICTION_TAG:-""}
+
+if [ "${FRICTION_BRANCH}" != "" ]; then
+    FRICTION_COMMIT=""
+    FRICTION_TAG=""
+elif [ "${FRICTION_COMMIT}" != "" ]; then
+    FRICTION_BRANCH=""
+    FRICTION_TAG=""
+elif [ "${FRICTION_TAG}" != "" ]; then
+    FRICTION_BRANCH=""
+    FRICTION_COMMIT=""
+fi
 
 #QUAZIP_V="1.4"
 QSCINTILLA_V="2.13.4"
@@ -69,8 +106,13 @@ SKIA_V="4fcb5c225a"
 
 SF_NET_SRC="https://sourceforge.net/projects/friction/files/source"
 SF_NET_SNAP="https://sourceforge.net/projects/friction/files/snapshots"
+QSCINTILLA_URL="https://www.riverbankcomputing.com/static/Downloads/QScintilla"
+FFMPEG_URL="https://ffmpeg.org/releases"
+UNWIND_URL="http://download.savannah.nongnu.org/releases/libunwind"
 
-export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:${PKG_CONFIG_PATH}"
+if [ "${DISTRO_ID}" != "ubuntu" ]; then
+    export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:${PKG_CONFIG_PATH}"
+fi
 
 if [ ! -d "${FRICTION_ROOT}" ]; then
     mkdir -p ${FRICTION_ROOT}
@@ -83,8 +125,14 @@ fi
 if [ ! -d "${FRICTION_SRC_DIR}" ]; then
     cd ${FRICTION_ROOT}
     git clone https://github.com/friction2d/friction
-    if [ "${FRICTION_BRANCH}" != "main" ]; then
+    if [ "${FRICTION_BRANCH}" != "" ]; then
         (cd friction; git checkout ${FRICTION_BRANCH})
+    fi
+    if [ "${FRICTION_COMMIT}" != "" ]; then
+        (cd friction; git checkout ${FRICTION_COMMIT})
+    fi
+    if [ "${FRICTION_TAG}" != "" ]; then
+        (cd friction; git checkout tags/${FRICTION_TAG})
     fi
 fi
 
@@ -108,12 +156,14 @@ fi
 #    fi
 #fi
 
+if [ "${DISTRO_ID}" != "ubuntu" ]; then
+
 if [ ! -f "${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}/src/libqscintilla2_qt5.a" ]; then
     if [ -d "${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}" ]; then
         rm -rf ${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}
     fi
     if [ ! -f "${FRICTION_DIST}/qscintilla.tar.gz" ]; then
-        curl -L -k "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${QSCINTILLA_V}/QScintilla_src-${QSCINTILLA_V}.tar.gz" --output ${FRICTION_DIST}/qscintilla.tar.gz
+        curl -L -k "${QSCINTILLA_URL}/${QSCINTILLA_V}/QScintilla_src-${QSCINTILLA_V}.tar.gz" --output ${FRICTION_DIST}/qscintilla.tar.gz
     fi
     cd ${FRICTION_SRC_DIR}
     tar xf ${FRICTION_DIST}/qscintilla.tar.gz
@@ -139,7 +189,7 @@ if [ ! -f "/usr/local/lib/pkgconfig/libavcodec.pc" ]; then
         rm -rf ${FRICTION_SRC_DIR}/ffmpeg-${FFMPEG_V}
     fi
     if [ ! -f "${FRICTION_DIST}/ffmpeg.tar.xz" ]; then
-        curl -L -k "https://ffmpeg.org/releases/ffmpeg-${FFMPEG_V}.tar.xz" --output ${FRICTION_DIST}/ffmpeg.tar.xz
+        curl -L -k "${FFMPEG_URL}/ffmpeg-${FFMPEG_V}.tar.xz" --output ${FRICTION_DIST}/ffmpeg.tar.xz
     fi
     cd ${FRICTION_SRC_DIR}
     tar xf ${FRICTION_DIST}/ffmpeg.tar.xz
@@ -154,7 +204,7 @@ if [ ! -f "/usr/local/lib/pkgconfig/libunwind.pc" ]; then
         rm -rf ${FRICTION_SRC_DIR}/libunwind-${UNWIND_V}
     fi
     if [ ! -f "${FRICTION_DIST}/libunwind.tar.gz" ]; then
-        curl -L -k "http://download.savannah.nongnu.org/releases/libunwind/libunwind-${UNWIND_V}.tar.gz" --output ${FRICTION_DIST}/libunwind.tar.gz
+        curl -L -k "${UNWIND_URL}/libunwind-${UNWIND_V}.tar.gz" --output ${FRICTION_DIST}/libunwind.tar.gz
     fi
     cd ${FRICTION_SRC_DIR}
     tar xf ${FRICTION_DIST}/libunwind.tar.gz
@@ -167,6 +217,8 @@ fi
 if [ "${HAS_LOCAL_CACHE}" = 0 ]; then
     (cd /usr ; tar cvvfJ ${FRICTION_DIST}/local-build-${DID}.tar.xz local)
 fi
+
+fi # [ "${DISTRO_ID}" != "ubuntu" ]
 
 if [ ! -f "${FRICTION_SRC_DIR}/gperftools/.libs/libtcmalloc.a" ]; then
     if [ ! -f "${FRICTION_DIST}/gperftools.tar.xz" ]; then
@@ -237,40 +289,57 @@ fi
 mkdir build
 cd build
 
-cmake -G Ninja \
--DGIT_COMMIT=${COMMIT} \
--DGIT_BRANCH=${BRANCH} \
--DSNAPSHOT=${IS_SNAP} \
--DSNAPSHOT_VERSION_MAJOR=${YEAR} \
--DSNAPSHOT_VERSION_MINOR=${MONTH} \
--DSNAPSHOT_VERSION_PATCH=${DAY} \
--DCMAKE_BUILD_TYPE=Release \
--DSTATIC_FFMPEG=ON \
--DQSCINTILLA_INCLUDE_DIRS=${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}/src \
--DQSCINTILLA_LIBRARIES_DIRS=${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}/src \
--DQSCINTILLA_LIBRARIES=qscintilla2_qt5 ..
+CMAKE_EXTRA=""
+if [ "${DISTRO_ID}" != "ubuntu" ]; then
+    CMAKE_EXTRA="-DSTATIC_FFMPEG=ON"
+    CMAKE_EXTRA="${CMAKE_EXTRA} -DQSCINTILLA_INCLUDE_DIRS=${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}/src"
+    CMAKE_EXTRA="${CMAKE_EXTRA} -DQSCINTILLA_LIBRARIES_DIRS=${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}/src"
+    CMAKE_EXTRA="${CMAKE_EXTRA} -DQSCINTILLA_LIBRARIES=qscintilla2_qt5"
+fi
+
 if [ "${SNAP}" != 1 ]; then
+    cmake -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release \
+    ${CMAKE_EXTRA} ..
     VERSION=`cat version.txt`
+else
+    cmake -G Ninja \
+    -DGIT_COMMIT=${COMMIT} \
+    -DGIT_BRANCH=${BRANCH} \
+    -DSNAPSHOT=${IS_SNAP} \
+    -DSNAPSHOT_VERSION_MAJOR=${YEAR} \
+    -DSNAPSHOT_VERSION_MINOR=${MONTH} \
+    -DSNAPSHOT_VERSION_PATCH=${DAY} \
+    -DCMAKE_BUILD_TYPE=Release \
+    ${CMAKE_EXTRA} ..
 fi
 cmake --build .
-strip -s src/app/friction
-strip -s src/core/libfrictioncore.so.${VERSION}
-cpack -G RPM
 
-PKG="friction-${DID}.rpm"
+PKG_EXT="deb"
+if [ "${DISTRO_ID}" != "ubuntu" ]; then
+    PKG_EXT="rpm"
+    cpack -G RPM
+else
+    cpack -G DEB
+fi
+
+PKG="friction-${DID}.${PKG_EXT}"
 if [ "${REL}" = 1 ]; then
-    PKG="friction-${VERSION}-${DID}.rpm"
+    PKG="friction-${VERSION}-${DID}.${PKG_EXT}"
 elif [ "${SNAP}" = 1 ]; then
-    PKG="friction-${TIMESTAMP}-${BRANCH}-${COMMIT}-${DID}.rpm"
+    PKG="friction-${TIMESTAMP}-${BRANCH}-${COMMIT}-${DID}.${PKG_EXT}"
 fi
-mv friction.rpm ${PKG}
+mv friction.${PKG_EXT} ${PKG}
 
-if [ ! -d "${FRICTION_SNAP}/${YEAR}/${MONTH}" ]; then
-    mkdir -p ${FRICTION_SNAP}/${YEAR}/${MONTH}
+FRICTION_PKG_DIR="${FRICTION_OUT_DIR}/${YEAR}/${MONTH}"
+if [ "${REL}" = 1 ]; then
+    FRICTION_PKG_DIR="${FRICTION_OUT_DIR}/${VERSION}"
 fi
 
-cp ${PKG} ${FRICTION_SNAP}/${YEAR}/${MONTH}/
+if [ ! -d "${FRICTION_PKG_DIR}" ]; then
+    mkdir -p ${FRICTION_PKG_DIR}
+fi
 
-(cd ${FRICTION_SNAP} ;
-    echo "* [Latest download for ${DISTRO_PRETTY}](https://sourceforge.net/projects/friction/files/snapshots/${YEAR}/${MONTH}/${PKG}/download)" > friction-latest-${DID}.md
-)
+cp ${PKG} ${FRICTION_PKG_DIR}/
+
+echo "BUILD DONE: ${FRICTION_PKG_DIR}/${PKG}"
