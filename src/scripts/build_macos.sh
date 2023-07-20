@@ -43,11 +43,11 @@ fi
 OSX=${OSX:-10.13}
 QT=${QT:-"${HOME}/Qt/5.12.12/clang_64"}
 
-QUAZIP_V="1.4"
+#QUAZIP_V="1.4"
 QSCINTILLA_V="2.13.4"
 
-QUAZIP=${QUAZIP:-"${CWD}/quazip"}
-QUAZIP_LIB=${QUAZIP_LIB:-"quazip1-qt5"}
+#QUAZIP=${QUAZIP:-"${CWD}/quazip"}
+#QUAZIP_LIB=${QUAZIP_LIB:-"quazip1-qt5"}
 
 QSCINTILLA=${QSCINTILLA:-"${CWD}/qscintilla"}
 QSCINTILLA_LIB=${QSCINTILLA_LIB:-"qscintilla2_qt5"}
@@ -55,20 +55,20 @@ QSCINTILLA_LIB=${QSCINTILLA_LIB:-"qscintilla2_qt5"}
 export PATH="/opt/local/bin:${PATH}"
 export PKG_CONFIG_PATH="/opt/local/lib/pkgconfig"
 
-if [ ! -f "${QUAZIP}/build/quazip/lib${QUAZIP_LIB}.dylib" ]; then
-    if [ -d "${QUAZIP}" ]; then
-        rm -rf ${QUAZIP}
-    fi
-    if [ ! -f "${CWD}/quazip.tar.gz" ]; then
-        curl -L -k "https://github.com/stachenov/quazip/archive/refs/tags/v${QUAZIP_V}.tar.gz" --output ${CWD}/quazip.tar.gz
-    fi
-    cd ${CWD}
-    tar xf quazip.tar.gz
-    mv quazip-${QUAZIP_V} ${QUAZIP}
-    cd ${QUAZIP}
-    mkdir build && cd build
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${QT} -DCMAKE_OSX_DEPLOYMENT_TARGET=${OSX} .. && make
-fi
+#if [ ! -f "${QUAZIP}/build/quazip/lib${QUAZIP_LIB}.dylib" ]; then
+#    if [ -d "${QUAZIP}" ]; then
+#        rm -rf ${QUAZIP}
+#    fi
+#    if [ ! -f "${CWD}/quazip.tar.gz" ]; then
+#        curl -L -k "https://github.com/stachenov/quazip/archive/refs/tags/v${QUAZIP_V}.tar.gz" --output ${CWD}/quazip.tar.gz
+#    fi
+#    cd ${CWD}
+#    tar xf quazip.tar.gz
+#    mv quazip-${QUAZIP_V} ${QUAZIP}
+#    cd ${QUAZIP}
+#    mkdir build && cd build
+#    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${QT} -DCMAKE_OSX_DEPLOYMENT_TARGET=${OSX} .. && make
+#fi
 
 if [ ! -f "${QSCINTILLA}/src/lib${QSCINTILLA_LIB}.dylib" ]; then
     if [ -d "${QSCINTILLA}" ]; then
@@ -112,9 +112,6 @@ cmake -G Ninja \
 -DCMAKE_OSX_DEPLOYMENT_TARGET=${OSX} \
 -DCMAKE_BUILD_TYPE=Release \
 -DCMAKE_PREFIX_PATH=${QT} \
--DQUAZIP_INCLUDE_DIRS=${QUAZIP}/quazip \
--DQUAZIP_LIBRARIES_DIRS=${QUAZIP}/build/quazip \
--DQUAZIP_LIBRARIES=${QUAZIP_LIB} \
 -DQSCINTILLA_INCLUDE_DIRS=${QSCINTILLA}/src \
 -DQSCINTILLA_LIBRARIES_DIRS=${QSCINTILLA}/src \
 -DQSCINTILLA_LIBRARIES=${QSCINTILLA_LIB} \
@@ -139,4 +136,3 @@ elif [ "${SNAP}" = 1 ]; then
 fi
 
 hdiutil create -volname "${VOLNAME}" -srcfolder dmg -ov -format UDBZ ${DMG}.dmg
-echo "* [Latest download for macOS ${OSX}+](https://sourceforge.net/projects/friction/files/snapshots/${YEAR}/${MONTH}/${DMG}.dmg/download)" > friction-latest-macOS${OSX}.md
