@@ -2,7 +2,7 @@
 
 These instructions assume you have macOS High Sierra (10.13) or greater with Qt 5.12.12 *(through the official online installer)* and macports installed running on an Intel CPU.
 
-**NOTE! macOS is not supported at the moment.**
+**NOTE! macOS support is experimental.**
 
 ## Dependencies
 
@@ -21,7 +21,6 @@ These instructions assume you have macOS High Sierra (10.13) or greater with Qt 
     * Qml
     * Xml
     * Svg
-* quazip
 * qscintilla
 * ffmpeg
     * libavformat
@@ -62,18 +61,8 @@ Now we need to build ``skia`` (might take a while).
 ```
 cd friction/src/skia
 python3 tools/git-sync-deps
-bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=["-Wno-error"] skia_use_system_expat=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_icu=false skia_use_system_harfbuzz=false'
+bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=["-Wno-error"] extra_cflags_cc=["-frtti"] skia_use_system_expat=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_icu=false skia_use_system_harfbuzz=false skia_use_dng_sdk=false'
 ninja -C out/build -j4 skia
-```
-
-## Build quazip
-
-Download [quazip](https://github.com/stachenov/quazip/archive/refs/tags/v1.4.tar.gz), then extract and move to ``friction/quazip``.
-
-```
-cd friction/quazip
-mkdir build && cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$HOME/Qt/5.12.12/clang_64 .. && make
 ```
 
 ## Build qscintilla
@@ -93,9 +82,6 @@ mkdir build && cd build
 cmake \
 -DCMAKE_BUILD_TYPE=Release \
 -DCMAKE_PREFIX_PATH=$HOME/Qt/5.12.12/clang_64 \
--DQUAZIP_INCLUDE_DIRS=`pwd`/../quazip/quazip \
--DQUAZIP_LIBRARIES_DIRS=`pwd`/../quazip/build/quazip \
--DQUAZIP_LIBRARIES=quazip1-qt5 \
 -DQSCINTILLA_INCLUDE_DIRS=`pwd`/../qscintilla/src \
 -DQSCINTILLA_LIBRARIES_DIRS=`pwd`/../qscintilla/src \
 -DQSCINTILLA_LIBRARIES=qscintilla2_qt5 \

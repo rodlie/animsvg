@@ -10,6 +10,7 @@ Generic build instructions for GNU/Linux.
 * python3
 * ninja
 * cmake
+* clang
 * Qt5 *(5.12/5.15)*
     * Gui
     * Concurrent
@@ -33,6 +34,7 @@ Generic build instructions for GNU/Linux.
 ```
 sudo apt install -y \
 build-essential \
+clang \
 git \
 libtool \
 autoconf \
@@ -97,7 +99,7 @@ python3 tools/git-sync-deps
 ### Build
 
 ```
-bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=["-Wno-error"] target_os="linux" target_cpu="x64" skia_use_system_expat=false skia_use_system_freetype2=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_icu=false skia_use_system_harfbuzz=false'
+bin/gn gen out/build --args='is_official_build=true is_debug=false cc="clang" cxx="clang++" extra_cflags=["-Wno-error"] target_os="linux" target_cpu="x64" skia_use_system_expat=false skia_use_system_freetype2=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_icu=false skia_use_system_harfbuzz=false skia_use_dng_sdk=false'
 ninja -C out/build -j4 skia
 ```
 
