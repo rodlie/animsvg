@@ -5,6 +5,7 @@ Instructions for building Friction on Windows *(10)*.
 ## Requirements
 
 * [Visual Studio 2017 Community](https://visualstudio.microsoft.com/vs/older-downloads/)
+* [LLVM](https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.7/LLVM-15.0.7-win64.exe)
 * [CMake](https://cmake.org/files/v3.26/cmake-3.26.4-windows-x86_64.msi)
 * [Python](https://www.python.org/ftp/python/3.11.3/python-3.11.3-amd64.exe)
 * [Qt 5.12.12](https://download.qt.io/archive/qt/5.12/5.12.12/qt-opensource-windows-x86-5.12.12.exe)
