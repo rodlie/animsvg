@@ -27,7 +27,8 @@ SNAP=${SNAP:-0}
 BRANCH=${BRANCH:-""}
 COMMIT=${COMMIT:-""}
 TAG=${TAG:-""}
-JOBS=${JOBS:-8}
+MKJOBS=${JOBS:-8}
+CLANG=${CLANG:-1}
 
 JAMMY=${JAMMY:-1}
 LUNAR=${LUNAR:-1}
@@ -48,7 +49,7 @@ fi
 SF_NET_SRC="https://sourceforge.net/projects/friction/files/source"
 
 DOCKER_MOUNT="-t --mount type=bind,source=${CWD}/${MOUNT_DIR},target=/${MOUNT_DIR}"
-DOCKER="docker run -e REL=${REL} -e SNAP=${SNAP} -e MKJOBS=${JOBS}"
+DOCKER="docker run -e REL=${REL} -e SNAP=${SNAP} -e MKJOBS=${JOBS} -e CLANG=${CLANG}"
 if [ "${BRANCH}" != "" ]; then
     DOCKER="${DOCKER} -e FRICTION_BRANCH=${BRANCH}"
 fi

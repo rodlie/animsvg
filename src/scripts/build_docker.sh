@@ -31,7 +31,8 @@ cat /etc/os-release
 
 SNAP=${SNAP:-0}
 REL=${REL:-0}
-MKJOBS=${MKJOBS:-4}
+MKJOBS=${MKJOBS:-8}
+CLANG=${CLANG:-1}
 
 if [ "${REL}" = 0 ] && [ "${SNAP}" = 0 ]; then
     echo "REL or SNAP?"
@@ -56,6 +57,13 @@ elif [ "${DISTRO_ID}" = "ubuntu" ]; then
     DISTRO_ID="ubuntu"
 else
     DISTRO_ID="el"
+fi
+
+if [ "${DISTRO_ID}" != "ubuntu" ]; then
+    # ffmpeg with clang forces latomic, that won't work
+    # an easy check in configure should do, but for now just disable clang
+    # not that important anyway, as long as skia is built with clang we are ok
+    CLANG=0
 fi
 
 DISTRO_VERSION_ID=`cat /etc/os-release | sed '/^VERSION_ID=/!d;s/VERSION_ID=//;s/"//g'`
@@ -114,6 +122,13 @@ if [ "${DISTRO_ID}" != "ubuntu" ]; then
     export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:${PKG_CONFIG_PATH}"
 fi
 
+COMPILER=""
+if [ "${CLANG}" = 1 ]; then
+    #COMPILER="-clang"
+    export CC=clang
+    export CXX=clang++
+fi
+
 if [ ! -d "${FRICTION_ROOT}" ]; then
     mkdir -p ${FRICTION_ROOT}
 fi
@@ -168,20 +183,25 @@ if [ ! -f "${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}/src/libqscintilla2
     cd ${FRICTION_SRC_DIR}
     tar xf ${FRICTION_DIST}/qscintilla.tar.gz
     cd QScintilla_src-${QSCINTILLA_V}
-    if [ -f "${FRICTION_DIST}/qscintilla-build-${DID}.tar.xz" ]; then
-        tar xf ${FRICTION_DIST}/qscintilla-build-${DID}.tar.xz
+    if [ -f "${FRICTION_DIST}/qscintilla-build-${DID}${COMPILER}.tar.xz" ]; then
+        tar xf ${FRICTION_DIST}/qscintilla-build-${DID}${COMPILER}.tar.xz
     else
         cd src
-        qmake-qt5 CONFIG+=staticlib && make
+        if [ "${CLANG}" = 1 ]; then
+            qmake-qt5 CONFIG+=staticlib QMAKE_CXX=clang++ QMAKE_CC=clang QMAKE_LINK=clang++
+        else
+            qmake-qt5 CONFIG+=staticlib
+        fi
+        make
         cd ..
-        tar cvvfJ ${FRICTION_DIST}/qscintilla-build-${DID}.tar.xz src
+        tar cvvfJ ${FRICTION_DIST}/qscintilla-build-${DID}${COMPILER}.tar.xz src
     fi
 fi
 
 HAS_LOCAL_CACHE=0
-if [ -f "${FRICTION_DIST}/local-build-${DID}.tar.xz" ]; then
+if [ -f "${FRICTION_DIST}/local-build-${DID}${COMPILER}.tar.xz" ]; then
     HAS_LOCAL_CACHE=1
-    tar xf ${FRICTION_DIST}/local-build-${DID}.tar.xz -C /usr/
+    tar xf ${FRICTION_DIST}/local-build-${DID}${COMPILER}.tar.xz -C /usr/
 fi
 
 if [ ! -f "/usr/local/lib/pkgconfig/libavcodec.pc" ]; then
@@ -215,7 +235,7 @@ if [ ! -f "/usr/local/lib/pkgconfig/libunwind.pc" ]; then
 fi
 
 if [ "${HAS_LOCAL_CACHE}" = 0 ]; then
-    (cd /usr ; tar cvvfJ ${FRICTION_DIST}/local-build-${DID}.tar.xz local)
+    (cd /usr ; tar cvvfJ ${FRICTION_DIST}/local-build-${DID}${COMPILER}.tar.xz local)
 fi
 
 fi # [ "${DISTRO_ID}" != "ubuntu" ]
@@ -234,8 +254,8 @@ if [ ! -f "${FRICTION_SRC_DIR}/gperftools/.libs/libtcmalloc.a" ]; then
     tar xf ${FRICTION_DIST}/gperftools.tar.xz
     mv gperftools-${GPERF_V} gperftools
     cd gperftools
-    if [ -f "${FRICTION_DIST}/gperftools-build-${DID}.tar.xz" ]; then
-        tar xf ${FRICTION_DIST}/gperftools-build-${DID}.tar.xz
+    if [ -f "${FRICTION_DIST}/gperftools-build-${DID}${COMPILER}.tar.xz" ]; then
+        tar xf ${FRICTION_DIST}/gperftools-build-${DID}${COMPILER}.tar.xz
     else
         if [ "${DISTRO_ID}" = "fc" ]; then
             autoupdate
@@ -243,7 +263,7 @@ if [ ! -f "${FRICTION_SRC_DIR}/gperftools/.libs/libtcmalloc.a" ]; then
         ./autogen.sh
         ./configure --disable-shared
         make -j${MKJOBS}
-        tar cvvfJ ${FRICTION_DIST}/gperftools-build-${DID}.tar.xz .
+        tar cvvfJ ${FRICTION_DIST}/gperftools-build-${DID}${COMPILER}.tar.xz .
     fi
 fi
 
@@ -261,12 +281,12 @@ if [ ! -f "${FRICTION_SRC_DIR}/skia/out/build/libskia.a" ]; then
     tar xf ${FRICTION_DIST}/skia.tar.xz
     mv skia-${SKIA_V} skia
     cd skia
-    if [ -f "${FRICTION_DIST}/skia-build-${DID}.tar.xz" ]; then
-        tar xf ${FRICTION_DIST}/skia-build-${DID}.tar.xz
+    if [ -f "${FRICTION_DIST}/skia-build-${DID}${COMPILER}.tar.xz" ]; then
+        tar xf ${FRICTION_DIST}/skia-build-${DID}${COMPILER}.tar.xz
     else
-        bin/gn gen out/build --args='is_official_build=true is_debug=false extra_cflags=["-Wno-error"] target_os="linux" target_cpu="x64" skia_use_system_expat=false skia_use_system_freetype2=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_icu=false skia_use_system_harfbuzz=false'
+        bin/gn gen out/build --args='is_official_build=true is_debug=false cc="clang" cxx="clang++" extra_cflags=["-Wno-error"] target_os="linux" target_cpu="x64" skia_use_system_expat=false skia_use_system_freetype2=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_icu=false skia_use_system_harfbuzz=false skia_use_dng_sdk=false'
         ninja -C out/build -j${MKJOBS} skia
-        tar cvvfJ ${FRICTION_DIST}/skia-build-${DID}.tar.xz out
+        tar cvvfJ ${FRICTION_DIST}/skia-build-${DID}${COMPILER}.tar.xz out
     fi
 fi
 
@@ -296,6 +316,9 @@ if [ "${DISTRO_ID}" != "ubuntu" ]; then
     CMAKE_EXTRA="${CMAKE_EXTRA} -DQSCINTILLA_LIBRARIES_DIRS=${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}/src"
     CMAKE_EXTRA="${CMAKE_EXTRA} -DQSCINTILLA_LIBRARIES=qscintilla2_qt5"
 fi
+if [ "${CLANG}" = 1 ]; then
+    CMAKE_EXTRA="${CMAKE_EXTRA} -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang"
+fi
 
 if [ "${SNAP}" != 1 ]; then
     cmake -G Ninja \
@@ -323,11 +346,11 @@ else
     cpack -G DEB
 fi
 
-PKG="friction-${DID}.${PKG_EXT}"
+PKG="friction-${DID}${COMPILER}.${PKG_EXT}"
 if [ "${REL}" = 1 ]; then
-    PKG="friction-${VERSION}-${DID}.${PKG_EXT}"
+    PKG="friction-${VERSION}-${DID}${COMPILER}.${PKG_EXT}"
 elif [ "${SNAP}" = 1 ]; then
-    PKG="friction-${TIMESTAMP}-${BRANCH}-${COMMIT}-${DID}.${PKG_EXT}"
+    PKG="friction-${TIMESTAMP}-${BRANCH}-${COMMIT}-${DID}${COMPILER}.${PKG_EXT}"
 fi
 mv friction.${PKG_EXT} ${PKG}
 
