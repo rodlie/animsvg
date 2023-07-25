@@ -77,7 +77,7 @@ git clone --recurse-submodules https://github.com/friction2d/friction
 ```
 cd src/gperftools
 ./autogen.sh
-./configure --disable-shared
+CC=clang CXX=clang++ ./configure --disable-shared
 make -j4
 ```
 
@@ -117,6 +117,8 @@ Note that if you are not using Ubuntu you will need to set paths for ``qscintill
 cmake -G Ninja \
 -DCMAKE_BUILD_TYPE=Release \
 -DCMAKE_INSTALL_PREFIX=/usr \
+-DCMAKE_CXX_COMPILER=clang++ \
+-DCMAKE_C_COMPILER=clang \
 -DQSCINTILLA_INCLUDE_DIRS=<PATH_TO_QSCINTILLA_INCLUDE_DIR> \
 -DQSCINTILLA_LIBRARIES_DIRS=<PATH_TO_LIBS> \
 -DQSCINTILLA_LIBRARIES=<QSCINTILLA_LIBRARY_NAME> \
@@ -126,7 +128,12 @@ cmake -G Ninja \
 else just use:
 
 ```
-cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr ..
+cmake -G Ninja \
+-DCMAKE_BUILD_TYPE=Release \
+-DCMAKE_INSTALL_PREFIX=/usr \
+-DCMAKE_CXX_COMPILER=clang++ \
+-DCMAKE_C_COMPILER=clang \
+..
 ```
 
 Now build:

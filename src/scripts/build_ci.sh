@@ -68,8 +68,6 @@ libqt5svg5-dev \
 libswresample-dev \
 libswscale-dev \
 libunwind-dev \
-qt5-image-formats-plugins \
-libqt5multimedia5-plugins \
 qtbase5-dev-tools \
 qtbase5-dev \
 qtdeclarative5-dev-tools \
@@ -104,7 +102,7 @@ if [ ! -f "${CWD}/src/gperftools/.libs/libtcmalloc.a" ]; then
     fi
     cd ${CWD}/src/gperftools
     ./autogen.sh
-    ./configure --disable-shared
+    CC=clang CXX=clang++ ./configure --disable-shared
     make -j${MKJOBS}
 fi
 
@@ -132,6 +130,13 @@ rm -rf build || true
 mkdir build
 cd build
 
-cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DGIT_COMMIT=${COMMIT} -DGIT_BRANCH=${BRANCH} ..
+cmake -G Ninja \
+-DCMAKE_BUILD_TYPE=Release \
+-DCMAKE_INSTALL_PREFIX=/usr \
+-DCMAKE_CXX_COMPILER=clang++ \
+-DCMAKE_C_COMPILER=clang \
+-DGIT_COMMIT=${COMMIT} \
+-DGIT_BRANCH=${BRANCH} \
+..
 cmake --build .
 cpack -G DEB
