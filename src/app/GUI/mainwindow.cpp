@@ -865,7 +865,7 @@ void MainWindow::setupMenuBar()
     mClipViewToCanvas = mViewMenu->addAction(
                 tr("Clip to Scene", "MenuBar_View"));
     mClipViewToCanvas->setCheckable(true);
-    mClipViewToCanvas->setChecked(true);
+    //mClipViewToCanvas->setChecked(true);
     mClipViewToCanvas->setShortcut(QKeySequence(Qt::Key_C));
     connect(mClipViewToCanvas, &QAction::triggered,
             &mActions, &Actions::setClipToCanvas);
@@ -1040,9 +1040,19 @@ void MainWindow::updateSettingsForCurrentCanvas(Canvas* const scene)
         mTimeline->updateSettingsForCurrentCanvas(nullptr);
         return;
     }
+
+    mClipViewToCanvas->blockSignals(true);
     mClipViewToCanvas->setChecked(scene->clipToCanvas());
+    mClipViewToCanvas->blockSignals(false);
+
+    mRasterEffectsVisible->blockSignals(true);
     mRasterEffectsVisible->setChecked(scene->getRasterEffectsVisible());
+    mRasterEffectsVisible->blockSignals(false);
+
+    mPathEffectsVisible->blockSignals(true);
     mPathEffectsVisible->setChecked(scene->getPathEffectsVisible());
+    mPathEffectsVisible->blockSignals(false);
+
     mTimeline->updateSettingsForCurrentCanvas(scene);
     mObjectSettingsWidget->setMainTarget(scene->getCurrentGroup());
 
