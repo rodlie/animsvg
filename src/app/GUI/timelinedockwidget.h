@@ -81,7 +81,7 @@ private:
     void setLoop(const bool loop);
     void interruptPreview();
 
-    void setLocalPivot(const bool local);
+    //void setLocalPivot(const bool local);
 
     void playPreview();
     void renderPreview();
@@ -113,7 +113,7 @@ private:
     QSpinBox *mFrameStartSpin;
     QSpinBox *mFrameEndSpin;
 
-    QAction *mLocalPivotAct;
+    //QAction *mLocalPivotAct;
     QAction *mNodeVisibilityAct;
     QToolButton *mNodeVisibility;
 

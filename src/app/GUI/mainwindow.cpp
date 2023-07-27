@@ -109,6 +109,7 @@ MainWindow::MainWindow(Document& document,
     //, mBrushSettingsDockBar(nullptr)
     , mAddToQueAct(nullptr)
     , mViewFullScreenAct(nullptr)
+    , mLocalPivotAct(nullptr)
     , mDocument(document)
     , mActions(actions)
     , mAudioHandler(audioHandler)
@@ -291,6 +292,13 @@ MainWindow::MainWindow(Document& document,
     statusBar()->addPermanentWidget(mLayoutHandler->comboWidget());
 
     viewerToolBar->addActions(mToolbarActGroup->actions());
+
+    QWidget *spacerWidget = new QWidget(this);
+    spacerWidget->setSizePolicy(QSizePolicy::Minimum,
+                                QSizePolicy::Expanding);
+    viewerToolBar->addWidget(spacerWidget);
+    viewerToolBar->addAction(mLocalPivotAct);
+
     mViewerNodeBar->addActions(mToolBarNodeGroup->actions());
 
     QWidget *fontWidget = new QWidget(this);
@@ -1317,6 +1325,18 @@ void MainWindow::setupToolBar()
     });
     mToolbarActGroup->addAction(pickModeAct);
 
+    // pivot
+    mLocalPivotAct = new QAction(mDocument.fLocalPivot ? QIcon::fromTheme("pivotLocal") : QIcon::fromTheme("pivotGlobal"),
+                                 tr("Pivot Global / Local"),
+                                 this);
+    connect(mLocalPivotAct, &QAction::triggered,
+            this, [this]() {
+        mDocument.fLocalPivot = !mDocument.fLocalPivot;
+        for (const auto& scene : mDocument.fScenes) { scene->updatePivot(); }
+        Document::sInstance->actionFinished();
+        mLocalPivotAct->setIcon(mDocument.fLocalPivot ? QIcon::fromTheme("pivotLocal") : QIcon::fromTheme("pivotGlobal"));
+    });
+
     // add toolbar group actions
     //mToolBar->addSeparator();
     //mToolBar->addActions(mToolbarActGroup->actions());
@@ -1462,6 +1482,9 @@ void MainWindow::updateCanvasModeButtonsChecked()
     mActionCornerPointCtrlsAct->setVisible(pointMode);
     mActionLineAct->setVisible(pointMode);
     mActionCurveAct->setVisible(pointMode);
+
+    mLocalPivotAct->setVisible(mode == CanvasMode::pointTransform ||
+                               mode == CanvasMode::boxTransform);
 
     //const bool paintMode = mode == CanvasMode::paint;
     //mActionNewEmptyPaintFrameAct->setVisible(paintMode);

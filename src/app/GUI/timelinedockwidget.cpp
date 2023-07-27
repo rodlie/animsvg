@@ -143,14 +143,14 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     connect(mLoopButton, &QAction::triggered,
             this, &TimelineDockWidget::setLoop);
 
-    mLocalPivotAct = new QAction(mDocument.fLocalPivot ? QIcon::fromTheme("pivotLocal") : QIcon::fromTheme("pivotGlobal"),
+    /*mLocalPivotAct = new QAction(mDocument.fLocalPivot ? QIcon::fromTheme("pivotLocal") : QIcon::fromTheme("pivotGlobal"),
                                  tr("Pivot Global / Local"),
                                  this);
     connect(mLocalPivotAct, &QAction::triggered,
             this, [this]() {
         TimelineDockWidget::setLocalPivot(!mDocument.fLocalPivot);
         mLocalPivotAct->setIcon(mDocument.fLocalPivot ? QIcon::fromTheme("pivotLocal") : QIcon::fromTheme("pivotGlobal"));
-    });
+    });*/
 
     mFrictionButton = new QToolButton(this);
     mFrictionButton->setObjectName(QString::fromUtf8("ToolButton"));
@@ -267,7 +267,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mToolBar->addAction(mPlayButton);
     mToolBar->addAction(mStopButton);
     mToolBar->addAction(mLoopButton);
-    mToolBar->addAction(mLocalPivotAct);
+    //mToolBar->addAction(mLocalPivotAct);
     mNodeVisibilityAct = mToolBar->addWidget(mNodeVisibility);
 
     setupDrawPathSpins();
@@ -481,10 +481,10 @@ void TimelineDockWidget::resumePreview()
 
 void TimelineDockWidget::updateButtonsVisibility(const CanvasMode mode)
 {
-    if (mLocalPivotAct) {
+    /*if (mLocalPivotAct) {
         mLocalPivotAct->setVisible(mode == CanvasMode::pointTransform ||
                                    mode == CanvasMode::boxTransform);
-    }
+    }*/
     if (mNodeVisibilityAct) {
         mNodeVisibilityAct->setVisible(mode == CanvasMode::pointTransform);
     }
@@ -516,12 +516,12 @@ void TimelineDockWidget::interruptPreview()
     RenderHandler::sInstance->interruptPreview();
 }
 
-void TimelineDockWidget::setLocalPivot(const bool local)
+/*void TimelineDockWidget::setLocalPivot(const bool local)
 {
     mDocument.fLocalPivot = local;
     for (const auto& scene : mDocument.fScenes) { scene->updatePivot(); }
     Document::sInstance->actionFinished();
-}
+}*/
 
 void TimelineDockWidget::updateSettingsForCurrentCanvas(Canvas* const canvas)
 {

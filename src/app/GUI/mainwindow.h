@@ -292,6 +292,8 @@ private:
     QAction *mAddToQueAct;
     QAction *mViewFullScreenAct;
 
+    QAction *mLocalPivotAct;
+
     FontsWidget *mFontWidget = nullptr;
     QAction* mFontWidgetAct = nullptr;
 
