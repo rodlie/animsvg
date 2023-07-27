@@ -40,6 +40,7 @@ public:
         });*/
         //setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         setObjectName("QActionButton");
+        setFocusPolicy(Qt::NoFocus);
         //setStyleSheet("QPushButton::menu-indicator { width:0px; }");
     }
 
