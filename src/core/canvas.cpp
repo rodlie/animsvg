@@ -263,8 +263,8 @@ void Canvas::renderSk(SkCanvas* const canvas,
         canvas->clear(SK_ColorBLACK);
         canvas->clipRect(canvasRect);
     } else {
-        canvas->clear(SkColorSetARGB(255, 70, 70, 70));
-        paint.setColor(SK_ColorBLACK);
+        canvas->clear(SkColorSetARGB(255, 33, 33, 38));
+        paint.setColor(SK_ColorGRAY);
         paint.setStyle(SkPaint::kStroke_Style);
         paint.setPathEffect(dashPathEffect);
         canvas->drawRect(toSkRect(getCurrentBounds()), paint);
@@ -410,7 +410,7 @@ void Canvas::renderSk(SkCanvas* const canvas,
 
     paint.setStyle(SkPaint::kStroke_Style);
     paint.setStrokeWidth(invZoom);
-    paint.setColor(mClipToCanvasSize ? SK_ColorGRAY : SK_ColorBLACK);
+    paint.setColor(SK_ColorGRAY);
     paint.setPathEffect(nullptr);
     canvas->drawRect(canvasRect, paint);
 
