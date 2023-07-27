@@ -270,6 +270,11 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     //mToolBar->addAction(mLocalPivotAct);
     //mNodeVisibilityAct = mToolBar->addWidget(mNodeVisibility);
 
+    mToolBar->addAction(QIcon::fromTheme("render_animation"),
+                        tr("Add to Render Queue"), this, [] {
+        MainWindow::sGetInstance()->addCanvasToRenderQue();
+    });
+
     setupDrawPathSpins();
 
     QWidget *spacerWidget2 = new QWidget(this);

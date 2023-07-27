@@ -1022,7 +1022,7 @@ void MainWindow::setupMenuBar()
 
     setMenuBar(mMenuBar);
 
-    mTimeline->setActions(frictionButtonActions);
+    //mTimeline->setActions(frictionButtonActions);
 }
 
 void MainWindow::setResolutionText(QString text)
