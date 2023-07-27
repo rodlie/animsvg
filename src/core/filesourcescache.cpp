@@ -26,9 +26,8 @@
 #include "filesourcescache.h"
 #include <QStringList>
 
-QStringList FileExtensions::image{"png", "jpg", "tiff",
-                                  "tif", "jpeg", "bmp"
-                                  "webp"};
+QStringList FileExtensions::image{"png", "jpg", "jpeg",
+                                  "bmp", "webp"};
 QStringList FileExtensions::sound{"mp3", "wav", "aiff",
                                   "flac", "m4a", "oga"};
 QStringList FileExtensions::video{"avi", "mp4", "mov",
