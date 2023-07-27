@@ -41,7 +41,7 @@ SceneSettingsDialog::SceneSettingsDialog(Canvas * const canvas,
 
 SceneSettingsDialog::SceneSettingsDialog(const QString &defName,
                                            QWidget * const parent) :
-    SceneSettingsDialog(defName, 1920, 1080, {0, 200}, 24., nullptr, parent) {}
+    SceneSettingsDialog(defName, 1920, 1080, {0, 300}, 30., nullptr, parent) {}
 
 SceneSettingsDialog::SceneSettingsDialog(const QString &name,
                                            const int width,
@@ -116,7 +116,7 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
 
     mBgColorLabel = new QLabel("Background:", this);
     mBgColorButton = new ColorAnimatorButton(bg, this);
-    if(!bg) mBgColorButton->setColor(Qt::white);
+    if (!bg) { mBgColorButton->setColor(Qt::black); }
 
     mBgColorLayout = new QHBoxLayout();
     mBgColorLayout->addWidget(mBgColorLabel);
