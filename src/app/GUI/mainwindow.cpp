@@ -110,6 +110,9 @@ MainWindow::MainWindow(Document& document,
     , mAddToQueAct(nullptr)
     , mViewFullScreenAct(nullptr)
     , mLocalPivotAct(nullptr)
+    , mNodeVisibility(nullptr)
+    , mFontWidget(nullptr)
+    , mFontWidgetAct(nullptr)
     , mDocument(document)
     , mActions(actions)
     , mAudioHandler(audioHandler)
@@ -293,13 +296,19 @@ MainWindow::MainWindow(Document& document,
 
     viewerToolBar->addActions(mToolbarActGroup->actions());
 
-    QWidget *spacerWidget = new QWidget(this);
-    spacerWidget->setSizePolicy(QSizePolicy::Minimum,
-                                QSizePolicy::Expanding);
-    viewerToolBar->addWidget(spacerWidget);
+    QWidget *spacerWidget1 = new QWidget(this);
+    spacerWidget1->setSizePolicy(QSizePolicy::Minimum,
+                                 QSizePolicy::Expanding);
+    viewerToolBar->addWidget(spacerWidget1);
     viewerToolBar->addAction(mLocalPivotAct);
 
     mViewerNodeBar->addActions(mToolBarNodeGroup->actions());
+
+    QWidget *spacerWidget2 = new QWidget(this);
+    spacerWidget2->setSizePolicy(QSizePolicy::Minimum,
+                                 QSizePolicy::Expanding);
+    mViewerNodeBar->addWidget(spacerWidget2);
+    mViewerNodeBar->addWidget(mNodeVisibility);
 
     QWidget *fontWidget = new QWidget(this);
     fontWidget->setAutoFillBackground(true);
@@ -1419,6 +1428,34 @@ void MainWindow::setupToolBar()
     connect(mActionCurveAct, &QAction::triggered,
             this, [this]() { mActions.makeSegmentCurve(); });
     mToolBarNodeGroup->addAction(mActionCurveAct);
+
+    // nodeVisibility
+    mNodeVisibility = new QToolButton(this);
+    mNodeVisibility->setObjectName(QString::fromUtf8("ToolButton"));
+    mNodeVisibility->setPopupMode(QToolButton::InstantPopup);
+    QAction *nodeVisibilityAction1 = new QAction(QIcon::fromTheme("dissolvedAndNormalNodes"),
+                                                 tr("Dissolved and normal nodes"),
+                                                 this);
+    nodeVisibilityAction1->setData(0);
+    QAction *nodeVisibilityAction2 = new QAction(QIcon::fromTheme("dissolvedNodesOnly"),
+                                                 tr("Dissolved nodes only"),
+                                                 this);
+    nodeVisibilityAction2->setData(1);
+    QAction *nodeVisibilityAction3 = new QAction(QIcon::fromTheme("normalNodesOnly"),
+                                                 tr("Normal nodes only"),
+                                                 this);
+    nodeVisibilityAction3->setData(2);
+    mNodeVisibility->addAction(nodeVisibilityAction1);
+    mNodeVisibility->addAction(nodeVisibilityAction2);
+    mNodeVisibility->addAction(nodeVisibilityAction3);
+    mNodeVisibility->setDefaultAction(nodeVisibilityAction1);
+    connect(mNodeVisibility, &QToolButton::triggered,
+            this, [this](QAction *act) {
+            qDebug() << "set node visibility" << act->data().toInt();
+            mNodeVisibility->setDefaultAction(act);
+            mDocument.fNodeVisibility = static_cast<NodeVisiblity>(act->data().toInt());
+            Document::sInstance->actionFinished();
+    });
 
     // fontWidget
     //mFontWidget = new FontsWidget(this);

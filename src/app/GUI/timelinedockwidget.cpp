@@ -57,8 +57,8 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     , mFrictionButton(nullptr)
     , mFrameStartSpin(nullptr)
     , mFrameEndSpin(nullptr)
-    , mNodeVisibilityAct(nullptr)
-    , mNodeVisibility(nullptr)
+    //, mNodeVisibilityAct(nullptr)
+    //, mNodeVisibility(nullptr)
     , mFrameRewindAct(nullptr)
     , mFrameFastForwardAct(nullptr)
     , mCurrentFrameSpin(nullptr)
@@ -158,7 +158,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mFrictionButton->setIcon(QIcon::fromTheme("friction"));
     mFrictionButton->setFocusPolicy(Qt::NoFocus);
 
-    mNodeVisibility = new QToolButton(this);
+    /*mNodeVisibility = new QToolButton(this);
     mNodeVisibility->setObjectName(QString::fromUtf8("ToolButton"));
     mNodeVisibility->setPopupMode(QToolButton::InstantPopup);
     QAction *nodeVisibilityAction1 = new QAction(QIcon::fromTheme("dissolvedAndNormalNodes"),
@@ -183,7 +183,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
             mNodeVisibility->setDefaultAction(act);
             mDocument.fNodeVisibility = static_cast<NodeVisiblity>(act->data().toInt());
             Document::sInstance->actionFinished();
-    });
+    });*/
 
     mFrameStartSpin = new QSpinBox(this);
     mFrameStartSpin->setAlignment(Qt::AlignHCenter);
@@ -268,7 +268,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mToolBar->addAction(mStopButton);
     mToolBar->addAction(mLoopButton);
     //mToolBar->addAction(mLocalPivotAct);
-    mNodeVisibilityAct = mToolBar->addWidget(mNodeVisibility);
+    //mNodeVisibilityAct = mToolBar->addWidget(mNodeVisibility);
 
     setupDrawPathSpins();
 
@@ -485,9 +485,9 @@ void TimelineDockWidget::updateButtonsVisibility(const CanvasMode mode)
         mLocalPivotAct->setVisible(mode == CanvasMode::pointTransform ||
                                    mode == CanvasMode::boxTransform);
     }*/
-    if (mNodeVisibilityAct) {
+    /*if (mNodeVisibilityAct) {
         mNodeVisibilityAct->setVisible(mode == CanvasMode::pointTransform);
-    }
+    }*/
 
     const bool drawPathMode = mode == CanvasMode::drawPath;
 

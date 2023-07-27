@@ -32,6 +32,7 @@
 #include <QStackedWidget>
 #include <QToolBox>
 #include <QSplitter>
+#include <QToolButton>
 
 #include "undoredo.h"
 #include "Private/Tasks/taskscheduler.h"
@@ -294,8 +295,10 @@ private:
 
     QAction *mLocalPivotAct;
 
-    FontsWidget *mFontWidget = nullptr;
-    QAction* mFontWidgetAct = nullptr;
+    QToolButton *mNodeVisibility;
+
+    FontsWidget *mFontWidget;
+    QAction* mFontWidgetAct;
 
     QMenuBar *mMenuBar;
     QMenu *mFileMenu;

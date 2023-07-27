@@ -114,8 +114,8 @@ private:
     QSpinBox *mFrameEndSpin;
 
     //QAction *mLocalPivotAct;
-    QAction *mNodeVisibilityAct;
-    QToolButton *mNodeVisibility;
+    //QAction *mNodeVisibilityAct;
+    //QToolButton *mNodeVisibility;
 
     QAction  *mDrawPathAuto;
     QDoubleSlider *mDrawPathSmooth;
