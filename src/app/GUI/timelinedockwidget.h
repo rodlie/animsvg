@@ -41,6 +41,7 @@
 #include <QToolBar>
 #include <QStackedWidget>
 #include <QToolButton>
+#include <QProgressBar>
 
 #include "smartPointers/ememory.h"
 #include "framerange.h"
@@ -95,6 +96,8 @@ private:
     void updateFrameRange(const FrameRange &range);
     void handleCurrentFrameChanged(int frame);
 
+    void showRenderStatus(bool show);
+
     Document& mDocument;
     MainWindow* const mMainWindow;
     QStackedWidget* const mTimelineLayout;
@@ -125,7 +128,11 @@ private:
 
     QAction *mFrameRewindAct;
     QAction *mFrameFastForwardAct;
+    QAction *mCurrentFrameSpinAct;
     QSpinBox *mCurrentFrameSpin;
+
+    QAction *mRenderProgressAct;
+    QProgressBar *mRenderProgress;
 
     QList<TimelineWidget*> mTimelineWidgets;
     AnimationDockWidget *mAnimationDockWidget;

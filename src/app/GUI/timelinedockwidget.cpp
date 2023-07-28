@@ -61,7 +61,10 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     //, mNodeVisibility(nullptr)
     , mFrameRewindAct(nullptr)
     , mFrameFastForwardAct(nullptr)
+    , mCurrentFrameSpinAct(nullptr)
     , mCurrentFrameSpin(nullptr)
+    , mRenderProgressAct(nullptr)
+    , mRenderProgress(nullptr)
 {
     connect(RenderHandler::sInstance, &RenderHandler::previewFinished,
             this, &TimelineDockWidget::previewFinished);
@@ -252,6 +255,9 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
 //    mControlButtonsLayout->addWidget(mGoToNextKeyButton);
 //    mGoToNextKeyButton->setFocusPolicy(Qt::NoFocus);
 
+    mRenderProgress = new QProgressBar(this);
+    mRenderProgress->setFormat(tr("Render"));
+
     mToolBar->addWidget(mFrictionButton);
     mToolBar->addWidget(mFrameStartSpin);
 
@@ -263,12 +269,15 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mToolBar->addAction(mFrameRewindAct);
     mToolBar->addAction(mPlayFromBeginningButton);
     mToolBar->addAction(mFrameFastForwardAct);
-    mToolBar->addWidget(mCurrentFrameSpin);
+    mRenderProgressAct = mToolBar->addWidget(mRenderProgress);
+    mCurrentFrameSpinAct = mToolBar->addWidget(mCurrentFrameSpin);
     mToolBar->addAction(mPlayButton);
     mToolBar->addAction(mStopButton);
     mToolBar->addAction(mLoopButton);
     //mToolBar->addAction(mLocalPivotAct);
     //mNodeVisibilityAct = mToolBar->addWidget(mNodeVisibility);
+
+    mRenderProgressAct->setVisible(false);
 
     mToolBar->addAction(QIcon::fromTheme("render_animation"),
                         tr("Add to Render Queue"), this, [] {
@@ -361,6 +370,7 @@ void TimelineDockWidget::setupDrawPathSpins()
 
 void TimelineDockWidget::updateFrameRange(const FrameRange &range)
 {
+    mRenderProgress->setRange(range.fMin, range.fMax);
     if (range.fMin != mFrameStartSpin->value()) {
         mFrameStartSpin->blockSignals(true);
         mFrameStartSpin->setValue(range.fMin);
@@ -378,6 +388,14 @@ void TimelineDockWidget::handleCurrentFrameChanged(int frame)
     mCurrentFrameSpin->blockSignals(true);
     mCurrentFrameSpin->setValue(frame);
     mCurrentFrameSpin->blockSignals(false);
+    if (mRenderProgress->isVisible()) { mRenderProgress->setValue(frame); }
+}
+
+void TimelineDockWidget::showRenderStatus(bool show)
+{
+    if (!show) { mRenderProgress->setValue(0); }
+    mCurrentFrameSpinAct->setVisible(!show);
+    mRenderProgressAct->setVisible(show);
 }
 
 void TimelineDockWidget::setLoop(const bool loop)
@@ -437,6 +455,7 @@ bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
 void TimelineDockWidget::previewFinished()
 {
     //setPlaying(false);
+    showRenderStatus(false);
     mPlayFromBeginningButton->setDisabled(false);
     mStopButton->setDisabled(true);
     mPlayButton->setIcon(QIcon::fromTheme("play"));
@@ -448,6 +467,7 @@ void TimelineDockWidget::previewFinished()
 
 void TimelineDockWidget::previewBeingPlayed()
 {
+    showRenderStatus(false);
     mPlayFromBeginningButton->setDisabled(true);
     mStopButton->setDisabled(false);
     mPlayButton->setIcon(QIcon::fromTheme("pause"));
@@ -459,6 +479,7 @@ void TimelineDockWidget::previewBeingPlayed()
 
 void TimelineDockWidget::previewBeingRendered()
 {
+    showRenderStatus(true);
     mPlayFromBeginningButton->setDisabled(true);
     mStopButton->setDisabled(false);
     mPlayButton->setIcon(QIcon::fromTheme("play"));
@@ -470,6 +491,7 @@ void TimelineDockWidget::previewBeingRendered()
 
 void TimelineDockWidget::previewPaused()
 {
+    showRenderStatus(false);
     mPlayFromBeginningButton->setDisabled(true);
     mStopButton->setDisabled(false);
     mPlayButton->setIcon(QIcon::fromTheme("play"));
