@@ -388,13 +388,8 @@ void TimelineDockWidget::updateFrameRange(const FrameRange &range)
 
 void TimelineDockWidget::handleCurrentFrameChanged(int frame)
 {
-    mCurrentFrameSpin->blockSignals(true);
     mCurrentFrameSpin->setValue(frame);
-    mCurrentFrameSpin->blockSignals(false);
-    if (mRenderProgress->isVisible()) {
-        mRenderProgress->setValue(frame);
-        if (frame >= mRenderProgress->maximum()) { showRenderStatus(false); }
-    }
+    if (mRenderProgress->isVisible()) { mRenderProgress->setValue(frame); }
 }
 
 void TimelineDockWidget::showRenderStatus(bool show)
@@ -461,6 +456,9 @@ bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
 void TimelineDockWidget::previewFinished()
 {
     //setPlaying(false);
+    mFrameStartSpin->setEnabled(true);
+    mFrameEndSpin->setEnabled(true);
+    mCurrentFrameSpinAct->setEnabled(true);
     showRenderStatus(false);
     mPlayFromBeginningButton->setDisabled(false);
     mStopButton->setDisabled(true);
@@ -473,6 +471,9 @@ void TimelineDockWidget::previewFinished()
 
 void TimelineDockWidget::previewBeingPlayed()
 {
+    mFrameStartSpin->setEnabled(false);
+    mFrameEndSpin->setEnabled(false);
+    mCurrentFrameSpinAct->setEnabled(false);
     showRenderStatus(false);
     mPlayFromBeginningButton->setDisabled(true);
     mStopButton->setDisabled(false);
@@ -485,6 +486,9 @@ void TimelineDockWidget::previewBeingPlayed()
 
 void TimelineDockWidget::previewBeingRendered()
 {
+    mFrameStartSpin->setEnabled(false);
+    mFrameEndSpin->setEnabled(false);
+    mCurrentFrameSpinAct->setEnabled(false);
     showRenderStatus(true);
     mPlayFromBeginningButton->setDisabled(true);
     mStopButton->setDisabled(false);
@@ -497,6 +501,9 @@ void TimelineDockWidget::previewBeingRendered()
 
 void TimelineDockWidget::previewPaused()
 {
+    mFrameStartSpin->setEnabled(true);
+    mFrameEndSpin->setEnabled(true);
+    mCurrentFrameSpinAct->setEnabled(true);
     showRenderStatus(false);
     mPlayFromBeginningButton->setDisabled(true);
     mStopButton->setDisabled(false);
