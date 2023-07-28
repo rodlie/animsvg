@@ -391,7 +391,10 @@ void TimelineDockWidget::handleCurrentFrameChanged(int frame)
     mCurrentFrameSpin->blockSignals(true);
     mCurrentFrameSpin->setValue(frame);
     mCurrentFrameSpin->blockSignals(false);
-    if (mRenderProgress->isVisible()) { mRenderProgress->setValue(frame); }
+    if (mRenderProgress->isVisible()) {
+        mRenderProgress->setValue(frame);
+        if (frame >= mRenderProgress->maximum()) { showRenderStatus(false); }
+    }
 }
 
 void TimelineDockWidget::showRenderStatus(bool show)
