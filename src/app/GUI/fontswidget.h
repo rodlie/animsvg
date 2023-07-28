@@ -33,7 +33,11 @@
 #include <QPushButton>
 #include <QPlainTextEdit>
 
+#include "GUI/coloranimatorbutton.h"
+
 class SkFontStyle;
+class ColorAnimator;
+class ColorAnimatorButton;
 
 class FontsWidget : public QWidget
 {
@@ -53,6 +57,7 @@ public:
     const QString getText();
     void setTextFocus();
     void clearText();
+    void setColorTarget(ColorAnimator * const target);
 
 signals:
     void fontFamilyAndStyleChanged(const QString &family,
@@ -91,6 +96,8 @@ private:
     QFontDatabase mFontDatabase;
 
     QPlainTextEdit *mTextInput;
+
+    ColorAnimatorButton *mColorButton;
 };
 
 #endif // FONTSWIDGET_H

@@ -41,7 +41,7 @@
 
 TextBox::TextBox() : PathBox("Text", eBoxType::text) {
     mFillSettings->setPaintType(PaintType::FLATPAINT);
-    mFillSettings->setCurrentColor(QColor(0, 0, 0));
+    mFillSettings->setCurrentColor(QColor(Qt::white));
     mStrokeSettings->setPaintType(PaintType::NOPAINT);
 
     const auto pathsUpdater = [this](const UpdateReason reason) {

@@ -1570,9 +1570,11 @@ void MainWindow::setCurrentBox(BoundingBox *box)
                                           txtBox->getFontFamily(),
                                           txtBox->getFontStyle(),
                                           txtBox->getCurrentValue());
+        mFontWidget->setColorTarget(txtBox->getFillSettings()->getColorAnimator());
     } else {
         mFontWidget->clearText();
         mFontWidget->setDisabled(true);
+        mFontWidget->setColorTarget(nullptr);
     }
 }
 

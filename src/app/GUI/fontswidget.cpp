@@ -47,6 +47,7 @@ FontsWidget::FontsWidget(QWidget *parent)
     , mAlignVCenter(nullptr)
     , mAlignBottom(nullptr)
     , mTextInput(nullptr)
+    , mColorButton(nullptr)
 {
     mFontStyleCombo = new QComboBox(this);
     mFontStyleCombo->setFocusPolicy(Qt::NoFocus);
@@ -61,6 +62,8 @@ FontsWidget::FontsWidget(QWidget *parent)
     mFontSizeCombo->setCompleter(nullptr);
     mFontSizeCombo->setMinimumContentsLength(3);
     mFontSizeCombo->setToolTip(tr("Font size"));
+
+    mColorButton = new ColorAnimatorButton(QColor(Qt::white), this);
 
     MainWindow::sGetInstance()->installNumericFilter(mFontSizeCombo);
     mFontSizeCombo->setValidator(new QDoubleValidator(1, 999, 2, mFontSizeCombo));
@@ -105,6 +108,7 @@ FontsWidget::FontsWidget(QWidget *parent)
     fontStyleLayout->addWidget(mFontStyleCombo);
     fontStyleLayout->addWidget(fontSizeLabel);
     fontStyleLayout->addWidget(mFontSizeCombo);
+    fontStyleLayout->addWidget(mColorButton);
 
     mMainLayout->addWidget(fontFamilyWidget);
     mMainLayout->addWidget(fontStyleWidget);
@@ -317,6 +321,11 @@ void FontsWidget::setTextFocus()
 void FontsWidget::clearText()
 {
     mTextInput->clear();
+}
+
+void FontsWidget::setColorTarget(ColorAnimator * const target)
+{
+    mColorButton->setColorTarget(target);
 }
 
 void FontsWidget::emitFamilyAndStyleChanged()
