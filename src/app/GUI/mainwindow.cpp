@@ -336,8 +336,12 @@ MainWindow::MainWindow(Document& document,
     mTopSideBarWidget->setContentsMargins(frictionMargins);
     mTopSideBarWidget->setMinimumWidth(sideBarMin);
     mTopSideBarWidget->setTabPosition(QTabWidget::South);
-    mTabColorIndex = mTopSideBarWidget->addTab(mFillStrokeSettings, tr("Fill and Stroke"));
-    mTabTextIndex = mTopSideBarWidget->addTab(fontWidget, tr("Text"));
+    mTabColorIndex = mTopSideBarWidget->addTab(mFillStrokeSettings,
+                                               QIcon::fromTheme("color"),
+                                               tr("Fill and Stroke"));
+    mTabTextIndex = mTopSideBarWidget->addTab(fontWidget,
+                                              QIcon::fromTheme("textCreate"),
+                                              tr("Text and Font"));
 
     QWidget *propertiesWidget = new QWidget(this);
     QVBoxLayout *propertiesLayout = new QVBoxLayout(propertiesWidget);
@@ -357,9 +361,15 @@ MainWindow::MainWindow(Document& document,
     mBottomSideBarWidget->setMinimumWidth(sideBarMin);
     mBottomSideBarWidget->setTabPosition(QTabWidget::South);
 
-    mTabPropertiesIndex = mBottomSideBarWidget->addTab(propertiesWidget, tr("Properties"));
-    mTabAssetsIndex = mBottomSideBarWidget->addTab(fsl, tr("Assets"));
-    mTabQueueIndex = mBottomSideBarWidget->addTab(mRenderWidget, tr("Queue"));
+    mTabPropertiesIndex = mBottomSideBarWidget->addTab(propertiesWidget,
+                                                       QIcon::fromTheme("drawPathAutoChecked"),
+                                                       tr("Properties"));
+    mTabAssetsIndex = mBottomSideBarWidget->addTab(fsl,
+                                                   QIcon::fromTheme("asset_manager"),
+                                                   tr("Assets"));
+    mTabQueueIndex = mBottomSideBarWidget->addTab(mRenderWidget,
+                                                  QIcon::fromTheme("render_animation"),
+                                                  tr("Queue"));
 
     mSplitterMain = new QSplitter(this);
 

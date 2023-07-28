@@ -7,11 +7,13 @@
  <file>icons/hicolor/16x16/actions/alignRight.png</file>
  <file>icons/hicolor/16x16/actions/alignTop.png</file>
  <file>icons/hicolor/16x16/actions/alignVCenter.png</file>
+ <file>icons/hicolor/16x16/actions/asset_manager.png</file>
  <file>icons/hicolor/16x16/actions/boxTransform.png</file>
  <file>icons/hicolor/16x16/actions/childrenHidden.png</file>
  <file>icons/hicolor/16x16/actions/childrenVisible.png</file>
  <file>icons/hicolor/16x16/actions/circleCreate.png</file>
  <file>icons/hicolor/16x16/actions/close.png</file>
+ <file>icons/hicolor/16x16/actions/color.png</file>
  <file>icons/hicolor/16x16/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/16x16/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/16x16/actions/dots.png</file>
@@ -69,11 +71,13 @@
  <file>icons/hicolor/22x22/actions/alignRight.png</file>
  <file>icons/hicolor/22x22/actions/alignTop.png</file>
  <file>icons/hicolor/22x22/actions/alignVCenter.png</file>
+ <file>icons/hicolor/22x22/actions/asset_manager.png</file>
  <file>icons/hicolor/22x22/actions/boxTransform.png</file>
  <file>icons/hicolor/22x22/actions/childrenHidden.png</file>
  <file>icons/hicolor/22x22/actions/childrenVisible.png</file>
  <file>icons/hicolor/22x22/actions/circleCreate.png</file>
  <file>icons/hicolor/22x22/actions/close.png</file>
+ <file>icons/hicolor/22x22/actions/color.png</file>
  <file>icons/hicolor/22x22/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/22x22/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/22x22/actions/dots.png</file>
@@ -131,11 +135,13 @@
  <file>icons/hicolor/32x32/actions/alignRight.png</file>
  <file>icons/hicolor/32x32/actions/alignTop.png</file>
  <file>icons/hicolor/32x32/actions/alignVCenter.png</file>
+ <file>icons/hicolor/32x32/actions/asset_manager.png</file>
  <file>icons/hicolor/32x32/actions/boxTransform.png</file>
  <file>icons/hicolor/32x32/actions/childrenHidden.png</file>
  <file>icons/hicolor/32x32/actions/childrenVisible.png</file>
  <file>icons/hicolor/32x32/actions/circleCreate.png</file>
  <file>icons/hicolor/32x32/actions/close.png</file>
+ <file>icons/hicolor/32x32/actions/color.png</file>
  <file>icons/hicolor/32x32/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/32x32/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/32x32/actions/dots.png</file>
@@ -193,11 +199,13 @@
  <file>icons/hicolor/48x48/actions/alignRight.png</file>
  <file>icons/hicolor/48x48/actions/alignTop.png</file>
  <file>icons/hicolor/48x48/actions/alignVCenter.png</file>
+ <file>icons/hicolor/48x48/actions/asset_manager.png</file>
  <file>icons/hicolor/48x48/actions/boxTransform.png</file>
  <file>icons/hicolor/48x48/actions/childrenHidden.png</file>
  <file>icons/hicolor/48x48/actions/childrenVisible.png</file>
  <file>icons/hicolor/48x48/actions/circleCreate.png</file>
  <file>icons/hicolor/48x48/actions/close.png</file>
+ <file>icons/hicolor/48x48/actions/color.png</file>
  <file>icons/hicolor/48x48/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/48x48/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/48x48/actions/dots.png</file>
@@ -255,11 +263,13 @@
  <file>icons/hicolor/64x64/actions/alignRight.png</file>
  <file>icons/hicolor/64x64/actions/alignTop.png</file>
  <file>icons/hicolor/64x64/actions/alignVCenter.png</file>
+ <file>icons/hicolor/64x64/actions/asset_manager.png</file>
  <file>icons/hicolor/64x64/actions/boxTransform.png</file>
  <file>icons/hicolor/64x64/actions/childrenHidden.png</file>
  <file>icons/hicolor/64x64/actions/childrenVisible.png</file>
  <file>icons/hicolor/64x64/actions/circleCreate.png</file>
  <file>icons/hicolor/64x64/actions/close.png</file>
+ <file>icons/hicolor/64x64/actions/color.png</file>
  <file>icons/hicolor/64x64/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/64x64/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/64x64/actions/dots.png</file>
@@ -317,11 +327,13 @@
  <file>icons/hicolor/96x96/actions/alignRight.png</file>
  <file>icons/hicolor/96x96/actions/alignTop.png</file>
  <file>icons/hicolor/96x96/actions/alignVCenter.png</file>
+ <file>icons/hicolor/96x96/actions/asset_manager.png</file>
  <file>icons/hicolor/96x96/actions/boxTransform.png</file>
  <file>icons/hicolor/96x96/actions/childrenHidden.png</file>
  <file>icons/hicolor/96x96/actions/childrenVisible.png</file>
  <file>icons/hicolor/96x96/actions/circleCreate.png</file>
  <file>icons/hicolor/96x96/actions/close.png</file>
+ <file>icons/hicolor/96x96/actions/color.png</file>
  <file>icons/hicolor/96x96/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/96x96/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/96x96/actions/dots.png</file>
@@ -379,11 +391,13 @@
  <file>icons/hicolor/128x128/actions/alignRight.png</file>
  <file>icons/hicolor/128x128/actions/alignTop.png</file>
  <file>icons/hicolor/128x128/actions/alignVCenter.png</file>
+ <file>icons/hicolor/128x128/actions/asset_manager.png</file>
  <file>icons/hicolor/128x128/actions/boxTransform.png</file>
  <file>icons/hicolor/128x128/actions/childrenHidden.png</file>
  <file>icons/hicolor/128x128/actions/childrenVisible.png</file>
  <file>icons/hicolor/128x128/actions/circleCreate.png</file>
  <file>icons/hicolor/128x128/actions/close.png</file>
+ <file>icons/hicolor/128x128/actions/color.png</file>
  <file>icons/hicolor/128x128/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/128x128/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/128x128/actions/dots.png</file>
@@ -441,11 +455,13 @@
  <file>icons/hicolor/192x192/actions/alignRight.png</file>
  <file>icons/hicolor/192x192/actions/alignTop.png</file>
  <file>icons/hicolor/192x192/actions/alignVCenter.png</file>
+ <file>icons/hicolor/192x192/actions/asset_manager.png</file>
  <file>icons/hicolor/192x192/actions/boxTransform.png</file>
  <file>icons/hicolor/192x192/actions/childrenHidden.png</file>
  <file>icons/hicolor/192x192/actions/childrenVisible.png</file>
  <file>icons/hicolor/192x192/actions/circleCreate.png</file>
  <file>icons/hicolor/192x192/actions/close.png</file>
+ <file>icons/hicolor/192x192/actions/color.png</file>
  <file>icons/hicolor/192x192/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/192x192/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/192x192/actions/dots.png</file>
@@ -503,11 +519,13 @@
  <file>icons/hicolor/256x256/actions/alignRight.png</file>
  <file>icons/hicolor/256x256/actions/alignTop.png</file>
  <file>icons/hicolor/256x256/actions/alignVCenter.png</file>
+ <file>icons/hicolor/256x256/actions/asset_manager.png</file>
  <file>icons/hicolor/256x256/actions/boxTransform.png</file>
  <file>icons/hicolor/256x256/actions/childrenHidden.png</file>
  <file>icons/hicolor/256x256/actions/childrenVisible.png</file>
  <file>icons/hicolor/256x256/actions/circleCreate.png</file>
  <file>icons/hicolor/256x256/actions/close.png</file>
+ <file>icons/hicolor/256x256/actions/color.png</file>
  <file>icons/hicolor/256x256/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/256x256/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/256x256/actions/dots.png</file>
