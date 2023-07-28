@@ -256,7 +256,10 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
 //    mGoToNextKeyButton->setFocusPolicy(Qt::NoFocus);
 
     mRenderProgress = new QProgressBar(this);
-    mRenderProgress->setFormat(tr("Render"));
+    mRenderProgress->setSizePolicy(QSizePolicy::Preferred,
+                                   QSizePolicy::Preferred);
+    mRenderProgress->setMinimumWidth(150);
+    mRenderProgress->setFormat(tr("Cache %p%"));
 
     mToolBar->addWidget(mFrictionButton);
     mToolBar->addWidget(mFrameStartSpin);
