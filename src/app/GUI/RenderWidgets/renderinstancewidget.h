@@ -76,7 +76,7 @@ private:
 
     OutputProfilesListButton *mOutputSettingsProfilesButton;
     QPushButton *mOutputSettingsButton;
-    QLabel *mNameLabel;
+    QLineEdit *mNameLabel;
     QVBoxLayout *mContentLayout = new QVBoxLayout();
     RenderInstanceSettings mSettings;
 signals:

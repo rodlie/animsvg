@@ -75,10 +75,11 @@ void RenderInstanceWidget::iniGUI() {
 
     setCheckable(true);
     setObjectName("darkWidget");
-    mNameLabel = new QLabel(this);
-    mNameLabel->setTextFormat(Qt::RichText);
+    mNameLabel = new QLineEdit(this);
     mNameLabel->setFixedHeight(eSizesUI::widget);
     mNameLabel->setObjectName("darkWidget");
+    mNameLabel->setReadOnly(true);
+    mNameLabel->setFrame(false);
 
     setLabelWidget(mNameLabel);
 
@@ -177,21 +178,18 @@ void RenderInstanceWidget::updateFromSettings() {
     bool enabled = renderState != RenderState::paused &&
        renderState != RenderState::rendering;
     setEnabled(enabled);
-    QString nameLabelTxt = "&nbsp;&nbsp;" + mSettings.getName() +
-            "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    QString nameLabelTxt = QString("%1 ").arg(mSettings.getName());
     if(renderState == RenderState::error) {
-        nameLabelTxt += "<font color='red'>" +
-                        mSettings.getRenderError() +
-                        "</font>";
+        nameLabelTxt += tr(": Error"); //mSettings.getRenderError();
     } else if(renderState == RenderState::finished) {
-        nameLabelTxt += "<font color='green'>finished</font>";
+        nameLabelTxt += tr(": Finished");
         mCheckBox->setChecked(false);
     } else if(renderState == RenderState::rendering) {
-        nameLabelTxt += "rendering...";
+        nameLabelTxt += tr(": Rendering ...");
     } else if(renderState == RenderState::waiting) {
-        nameLabelTxt += "waiting";
+        nameLabelTxt += tr(": Waiting ...");
     } else if(renderState == RenderState::paused) {
-        nameLabelTxt += "paused";
+        nameLabelTxt += tr(": Paused");
     }
     mNameLabel->setText(nameLabelTxt);
 
