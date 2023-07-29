@@ -40,6 +40,8 @@ This program is free software: you can redistribute it and/or modify it under th
 
 **This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the [GNU General Public License](LICENSE.md) for more details.**
 
+Friction includes some icons from Blender. These icons are released under a [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license.
+
 ## Contributors
 
 ### Friction
