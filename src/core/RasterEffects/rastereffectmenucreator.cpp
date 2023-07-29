@@ -33,7 +33,6 @@ void RasterEffectMenuCreator::forEveryEffect(const EffectAdder& add) {
     add("Blur", "", []() { return enve::make_shared<BlurEffect>(); });
     add("Shadow", "", []() { return enve::make_shared<ShadowEffect>(); });
     add("Motion Blur", "", []() { return enve::make_shared<MotionBlurEffect>(); });
-    add("Oil Painting", "", []() { return enve::make_shared<OilEffect>(); });
     add("Brightness-Contrast", "Color", []() { return enve::make_shared<BrightnessContrastEffect>(); });
     add("Colorize", "Color", []() { return enve::make_shared<ColorizeEffect>(); });
     add("Wipe", "Transitions", []() { return enve::make_shared<WipeEffect>(); });

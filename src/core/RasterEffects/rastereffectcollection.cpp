@@ -159,8 +159,6 @@ qsptr<RasterEffect> createRasterEffectForNonCustomType(const RasterEffectType ty
             return enve::make_shared<ShadowEffect>();
         case(RasterEffectType::MOTION_BLUR):
             return enve::make_shared<MotionBlurEffect>();
-        case(RasterEffectType::OIL):
-            return enve::make_shared<OilEffect>();
         case(RasterEffectType::WIPE):
             return enve::make_shared<WipeEffect>();
         case(RasterEffectType::NOISE_FADE):

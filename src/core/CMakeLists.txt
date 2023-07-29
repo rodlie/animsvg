@@ -190,18 +190,12 @@ set(
     Properties/boolpropertycontainer.cpp
     Properties/boxtargetproperty.cpp
     Properties/emimedata.cpp
-    RasterEffects/OilImpl/oilbristle.cpp
-    RasterEffects/OilImpl/oilbrush.cpp
-    RasterEffects/OilImpl/oilhelpers.cpp
-    RasterEffects/OilImpl/oilsimulator.cpp
-    RasterEffects/OilImpl/oiltrace.cpp
     RasterEffects/blureffect.cpp
     RasterEffects/brightnesscontrasteffect.cpp
     RasterEffects/colorizeeffect.cpp
     RasterEffects/customrastereffect.cpp
     RasterEffects/motionblureffect.cpp
     RasterEffects/noisefadeeffect.cpp
-    RasterEffects/oileffect.cpp
     RasterEffects/openglrastereffectcaller.cpp
     RasterEffects/rastereffect.cpp
     RasterEffects/rastereffectcaller.cpp
@@ -506,19 +500,12 @@ set(
     Properties/emimedata.h
     Properties/namedproperty.h
     Properties/newproperty.h
-    RasterEffects/OilImpl/oilPaint.h
-    RasterEffects/OilImpl/oilbristle.h
-    RasterEffects/OilImpl/oilbrush.h
-    RasterEffects/OilImpl/oilhelpers.h
-    RasterEffects/OilImpl/oilsimulator.h
-    RasterEffects/OilImpl/oiltrace.h
     RasterEffects/blureffect.h
     RasterEffects/brightnesscontrasteffect.h
     RasterEffects/colorizeeffect.h
     RasterEffects/customrastereffect.h
     RasterEffects/motionblureffect.h
     RasterEffects/noisefadeeffect.h
-    RasterEffects/oileffect.h
     RasterEffects/openglrastereffectcaller.h
     RasterEffects/rastereffect.h
     RasterEffects/customrastereffectcreator.h
