@@ -77,6 +77,8 @@ private:
     void afterFamilyChange();
     void afterStyleChange();
 
+    const QStringList filterFonts();
+
     int mBlockEmit;
 
     QVBoxLayout *mMainLayout;

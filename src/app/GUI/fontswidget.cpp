@@ -68,7 +68,8 @@ FontsWidget::FontsWidget(QWidget *parent)
     MainWindow::sGetInstance()->installNumericFilter(mFontSizeCombo);
     mFontSizeCombo->setValidator(new QDoubleValidator(1, 999, 2, mFontSizeCombo));
 
-    mFontFamilyCombo->addItems(mFontDatabase.families());
+    mFontFamilyCombo->addItems(filterFonts());
+
     connect(mFontFamilyCombo, &QComboBox::currentTextChanged,
             this, &FontsWidget::afterFamilyChange);
 
@@ -200,6 +201,27 @@ void FontsWidget::afterStyleChange()
 {
     updateSizes();
     emitFamilyAndStyleChanged();
+}
+
+const QStringList FontsWidget::filterFonts()
+{
+    QStringList families = mFontDatabase.families();
+    // "if the font family is available from two or more foundries the foundry name is included in the family name"
+
+    // Yeah, that's not going to work. I get a lot of "family name [Bits]" and "family name [unknown]" from the font database.
+    // This breaks font selection as skia expects the proper font family name (of course).
+
+    // So ...
+    QStringList fonts;
+    for (int i = 0; i < families.size(); ++i) {
+        QString font = families.at(i);
+        if (font.startsWith(".")) { continue; } // get a lot of .someKindOfFont on macOS, ignore!
+        if (font.contains("[") && font.contains("]")) {
+            fonts << font.remove(QRegExp("\\[(.*)\\]")).trimmed();
+        } else { fonts << font; }
+    }
+    fonts.removeDuplicates();
+    return fonts;
 }
 
 void FontsWidget::updateSizes()
