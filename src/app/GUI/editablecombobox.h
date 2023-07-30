@@ -31,7 +31,8 @@
 class EditableComboBox : public QComboBox
 {
 public:
-    EditableComboBox(QWidget* const parent);
+    EditableComboBox(QWidget* const parent,
+                     bool clickFocus = false);
 };
 
 #endif // EDITABLECOMBOBOX_H

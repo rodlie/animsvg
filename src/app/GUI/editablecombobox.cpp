@@ -27,11 +27,16 @@
 
 #include <QLineEdit>
 
-EditableComboBox::EditableComboBox(QWidget* const parent)
+EditableComboBox::EditableComboBox(QWidget* const parent,
+                                   bool clickFocus)
     : QComboBox(parent)
 {
     setEditable(true);
     const auto lineEdit = new QLineEdit(parent);
     lineEdit->setObjectName("comboEdit");
     setLineEdit(lineEdit);
+    if (clickFocus) {
+        setFocusPolicy(Qt::ClickFocus);
+        lineEdit->setFocusPolicy(Qt::ClickFocus);
+    }
 }

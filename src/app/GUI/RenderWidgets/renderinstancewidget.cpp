@@ -76,6 +76,7 @@ void RenderInstanceWidget::iniGUI() {
     setCheckable(true);
     setObjectName("darkWidget");
     mNameLabel = new QLineEdit(this);
+    mNameLabel->setFocusPolicy(Qt::NoFocus);
     mNameLabel->setFixedHeight(eSizesUI::widget);
     mNameLabel->setObjectName("darkWidget");
     mNameLabel->setReadOnly(true);

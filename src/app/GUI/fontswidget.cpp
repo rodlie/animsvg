@@ -57,13 +57,13 @@ FontsWidget::FontsWidget(QWidget *parent)
     mFontFamilyCombo->setFocusPolicy(Qt::NoFocus);
     mFontFamilyCombo->setToolTip(tr("Font family"));
 
-    mFontSizeCombo = new EditableComboBox(this);
-    mFontSizeCombo->setFocusPolicy(Qt::ClickFocus);
+    mFontSizeCombo = new EditableComboBox(this, true);
     mFontSizeCombo->setCompleter(nullptr);
     mFontSizeCombo->setMinimumContentsLength(3);
     mFontSizeCombo->setToolTip(tr("Font size"));
 
     mColorButton = new ColorAnimatorButton(QColor(Qt::white), this);
+    mColorButton->setFocusPolicy(Qt::NoFocus);
 
     MainWindow::sGetInstance()->installNumericFilter(mFontSizeCombo);
     mFontSizeCombo->setValidator(new QDoubleValidator(1, 999, 2, mFontSizeCombo));
@@ -116,18 +116,21 @@ FontsWidget::FontsWidget(QWidget *parent)
 
     mAlignLeft = new QPushButton(QIcon::fromTheme("alignLeft"),
                                  QString(), this);
+    mAlignLeft->setFocusPolicy(Qt::NoFocus);
     mAlignLeft->setToolTip(tr("Align Text Left"));
     connect(mAlignLeft, &QPushButton::pressed,
             this, [this]() { emit textAlignmentChanged(Qt::AlignLeft); });
 
     mAlignCenter = new QPushButton(QIcon::fromTheme("alignCenter"),
                                    QString(), this);
+    mAlignCenter->setFocusPolicy(Qt::NoFocus);
     mAlignCenter->setToolTip(tr("Align Text Center"));
     connect(mAlignCenter, &QPushButton::pressed,
             this, [this]() { emit textAlignmentChanged(Qt::AlignCenter); });
 
     mAlignRight = new QPushButton(QIcon::fromTheme("alignRight"),
                                   QString(), this);
+    mAlignRight->setFocusPolicy(Qt::NoFocus);
     mAlignRight->setToolTip(tr("Align Text Right"));
     connect(mAlignRight, &QPushButton::pressed,
             this, [this]() { emit textAlignmentChanged(Qt::AlignRight); });
@@ -135,23 +138,27 @@ FontsWidget::FontsWidget(QWidget *parent)
 
     mAlignTop = new QPushButton(QIcon::fromTheme("alignTop"),
                                 QString(), this);
+    mAlignTop->setFocusPolicy(Qt::NoFocus);
     mAlignTop->setToolTip(tr("Align Text Top"));
     connect(mAlignTop, &QPushButton::pressed,
             this, [this]() { emit textVAlignmentChanged(Qt::AlignTop); });
 
     mAlignVCenter = new QPushButton(QIcon::fromTheme("alignVCenter"),
                                     QString(), this);
+    mAlignVCenter->setFocusPolicy(Qt::NoFocus);
     mAlignVCenter->setToolTip(tr("Align Text Center"));
     connect(mAlignVCenter, &QPushButton::pressed,
             this, [this]() { emit textVAlignmentChanged(Qt::AlignCenter); });
 
     mAlignBottom = new QPushButton(QIcon::fromTheme("alignBottom"),
                                    QString(), this);
+    mAlignBottom->setFocusPolicy(Qt::NoFocus);
     mAlignBottom->setToolTip(tr("Align Text Bottom"));
     connect(mAlignBottom, &QPushButton::pressed,
             this, [this]() { emit textVAlignmentChanged(Qt::AlignBottom); });
 
     mTextInput = new QPlainTextEdit(this);
+    mTextInput->setFocusPolicy(Qt::ClickFocus);
     mTextInput->setPlaceholderText(tr("Enter text ..."));
     connect(mTextInput, &QPlainTextEdit::textChanged,
             this, [this]() {
