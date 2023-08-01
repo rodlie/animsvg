@@ -33,6 +33,7 @@
 #include "GUI/dialogsinterface.h"
 
 #include <QMessageBox>
+#include <QStandardItemModel>
 
 Actions* Actions::sInstance = nullptr;
 
@@ -655,14 +656,30 @@ void Actions::setPathEffectsVisible(const bool bT) {
 
 eBoxOrSound* Actions::handleDropEvent(QDropEvent * const event,
                                       const QPointF& relDropPos,
-                                      const int frame) {
-    if(!mActiveScene) return nullptr;
+                                      const int frame)
+{
+    if (!mActiveScene) { return nullptr; }
     const QMimeData* mimeData = event->mimeData();
 
-    if(mimeData->hasUrls()) {
+    QList<QUrl> internalUrls;
+    if (mimeData->hasFormat("application/x-qabstractitemmodeldatalist")) {
+        QStandardItemModel dummyModel;
+        if (dummyModel.dropMimeData(event->mimeData(),
+                                    event->dropAction(),
+                                    0,
+                                    0,
+                                    QModelIndex()))
+        {
+            QModelIndex index = dummyModel.index(0, 0);
+            QString path = index.data(Qt::UserRole).toString();
+            if (QFile::exists(path)) { internalUrls << QUrl::fromUserInput(path); }
+        }
+    }
+
+    if (mimeData->hasUrls() || internalUrls.count() > 0) {
         event->acceptProposedAction();
-        const QList<QUrl> urlList = mimeData->urls();
-        for(int i = 0; i < urlList.size() && i < 32; i++) {
+        const QList<QUrl> urlList = internalUrls.count() > 0 ? internalUrls : mimeData->urls();
+        for (int i = 0; i < urlList.size() && i < 32; i++) {
             try {
                 return importFile(urlList.at(i).toLocalFile(),
                                   mActiveScene->getCurrentGroup(),
