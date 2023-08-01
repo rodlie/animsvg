@@ -74,6 +74,7 @@ private:
     void fileHandlerAfterAssigned(ImageFileHandler* obj);
 
     FileHandlerObjRef<ImageFileHandler> mFileHandler;
+    QString mPath;
 };
 
 #endif // IMAGEBOX_H

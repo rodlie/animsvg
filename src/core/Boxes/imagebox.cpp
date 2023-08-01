@@ -93,6 +93,7 @@ void ImageBox::prp_readPropertyXEV_impl(const QDomElement& ele, const XevImporte
 }
 
 void ImageBox::setFilePathNoRename(const QString &path) {
+    mPath = path;
     mFileHandler.assign(path);
     prp_afterWholeInfluenceRangeChanged();
 }
@@ -159,18 +160,22 @@ void ImageBox::changeSourceFile() {
 
 void ImageBox::setupRenderData(const qreal relFrame, const QMatrix& parentM,
                                BoxRenderData * const data,
-                               Canvas* const scene) {
+                               Canvas* const scene)
+{
+    if (!mFileHandler) { mFileHandler.assign(mPath); }
     BoundingBox::setupRenderData(relFrame, parentM, data, scene);
     const auto imgData = static_cast<ImageBoxRenderData*>(data);
-    if(mFileHandler->hasImage()) {
+    if (mFileHandler->hasImage()) {
         imgData->setContainer(mFileHandler->getImageContainer());
     } else {
         const auto loader = mFileHandler->scheduleLoad();
-        if(loader) loader->addDependent(imgData);
+        if (loader) { loader->addDependent(imgData); }
     }
 }
 
-stdsptr<BoxRenderData> ImageBox::createRenderData() {
+stdsptr<BoxRenderData> ImageBox::createRenderData()
+{
+    if (!mFileHandler) { mFileHandler.assign(mPath); }
     return enve::make_shared<ImageBoxRenderData>(mFileHandler, this);
 }
 
