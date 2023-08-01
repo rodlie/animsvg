@@ -9,6 +9,7 @@
  <file>icons/hicolor/16x16/actions/alignVCenter.png</file>
  <file>icons/hicolor/16x16/actions/asset_manager.png</file>
  <file>icons/hicolor/16x16/actions/boxTransform.png</file>
+ <file>icons/hicolor/16x16/actions/checkmark.png</file>
  <file>icons/hicolor/16x16/actions/childrenHidden.png</file>
  <file>icons/hicolor/16x16/actions/childrenVisible.png</file>
  <file>icons/hicolor/16x16/actions/circleCreate.png</file>
@@ -20,7 +21,12 @@
  <file>icons/hicolor/16x16/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/16x16/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/16x16/actions/drawPath.png</file>
+ <file>icons/hicolor/16x16/actions/error.png</file>
  <file>icons/hicolor/16x16/actions/fastforward.png</file>
+ <file>icons/hicolor/16x16/actions/file_blank.png</file>
+ <file>icons/hicolor/16x16/actions/file_image.png</file>
+ <file>icons/hicolor/16x16/actions/file_movie.png</file>
+ <file>icons/hicolor/16x16/actions/file_sound.png</file>
  <file>icons/hicolor/16x16/actions/fund.png</file>
  <file>icons/hicolor/16x16/actions/graph.png</file>
  <file>icons/hicolor/16x16/actions/loop.png</file>
@@ -73,6 +79,7 @@
  <file>icons/hicolor/22x22/actions/alignVCenter.png</file>
  <file>icons/hicolor/22x22/actions/asset_manager.png</file>
  <file>icons/hicolor/22x22/actions/boxTransform.png</file>
+ <file>icons/hicolor/22x22/actions/checkmark.png</file>
  <file>icons/hicolor/22x22/actions/childrenHidden.png</file>
  <file>icons/hicolor/22x22/actions/childrenVisible.png</file>
  <file>icons/hicolor/22x22/actions/circleCreate.png</file>
@@ -84,7 +91,12 @@
  <file>icons/hicolor/22x22/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/22x22/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/22x22/actions/drawPath.png</file>
+ <file>icons/hicolor/22x22/actions/error.png</file>
  <file>icons/hicolor/22x22/actions/fastforward.png</file>
+ <file>icons/hicolor/22x22/actions/file_blank.png</file>
+ <file>icons/hicolor/22x22/actions/file_image.png</file>
+ <file>icons/hicolor/22x22/actions/file_movie.png</file>
+ <file>icons/hicolor/22x22/actions/file_sound.png</file>
  <file>icons/hicolor/22x22/actions/fund.png</file>
  <file>icons/hicolor/22x22/actions/graph.png</file>
  <file>icons/hicolor/22x22/actions/loop.png</file>
@@ -137,6 +149,7 @@
  <file>icons/hicolor/32x32/actions/alignVCenter.png</file>
  <file>icons/hicolor/32x32/actions/asset_manager.png</file>
  <file>icons/hicolor/32x32/actions/boxTransform.png</file>
+ <file>icons/hicolor/32x32/actions/checkmark.png</file>
  <file>icons/hicolor/32x32/actions/childrenHidden.png</file>
  <file>icons/hicolor/32x32/actions/childrenVisible.png</file>
  <file>icons/hicolor/32x32/actions/circleCreate.png</file>
@@ -148,7 +161,12 @@
  <file>icons/hicolor/32x32/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/32x32/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/32x32/actions/drawPath.png</file>
+ <file>icons/hicolor/32x32/actions/error.png</file>
  <file>icons/hicolor/32x32/actions/fastforward.png</file>
+ <file>icons/hicolor/32x32/actions/file_blank.png</file>
+ <file>icons/hicolor/32x32/actions/file_image.png</file>
+ <file>icons/hicolor/32x32/actions/file_movie.png</file>
+ <file>icons/hicolor/32x32/actions/file_sound.png</file>
  <file>icons/hicolor/32x32/actions/fund.png</file>
  <file>icons/hicolor/32x32/actions/graph.png</file>
  <file>icons/hicolor/32x32/actions/loop.png</file>
@@ -201,6 +219,7 @@
  <file>icons/hicolor/48x48/actions/alignVCenter.png</file>
  <file>icons/hicolor/48x48/actions/asset_manager.png</file>
  <file>icons/hicolor/48x48/actions/boxTransform.png</file>
+ <file>icons/hicolor/48x48/actions/checkmark.png</file>
  <file>icons/hicolor/48x48/actions/childrenHidden.png</file>
  <file>icons/hicolor/48x48/actions/childrenVisible.png</file>
  <file>icons/hicolor/48x48/actions/circleCreate.png</file>
@@ -212,7 +231,12 @@
  <file>icons/hicolor/48x48/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/48x48/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/48x48/actions/drawPath.png</file>
+ <file>icons/hicolor/48x48/actions/error.png</file>
  <file>icons/hicolor/48x48/actions/fastforward.png</file>
+ <file>icons/hicolor/48x48/actions/file_blank.png</file>
+ <file>icons/hicolor/48x48/actions/file_image.png</file>
+ <file>icons/hicolor/48x48/actions/file_movie.png</file>
+ <file>icons/hicolor/48x48/actions/file_sound.png</file>
  <file>icons/hicolor/48x48/actions/fund.png</file>
  <file>icons/hicolor/48x48/actions/graph.png</file>
  <file>icons/hicolor/48x48/actions/loop.png</file>
@@ -265,6 +289,7 @@
  <file>icons/hicolor/64x64/actions/alignVCenter.png</file>
  <file>icons/hicolor/64x64/actions/asset_manager.png</file>
  <file>icons/hicolor/64x64/actions/boxTransform.png</file>
+ <file>icons/hicolor/64x64/actions/checkmark.png</file>
  <file>icons/hicolor/64x64/actions/childrenHidden.png</file>
  <file>icons/hicolor/64x64/actions/childrenVisible.png</file>
  <file>icons/hicolor/64x64/actions/circleCreate.png</file>
@@ -276,7 +301,12 @@
  <file>icons/hicolor/64x64/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/64x64/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/64x64/actions/drawPath.png</file>
+ <file>icons/hicolor/64x64/actions/error.png</file>
  <file>icons/hicolor/64x64/actions/fastforward.png</file>
+ <file>icons/hicolor/64x64/actions/file_blank.png</file>
+ <file>icons/hicolor/64x64/actions/file_image.png</file>
+ <file>icons/hicolor/64x64/actions/file_movie.png</file>
+ <file>icons/hicolor/64x64/actions/file_sound.png</file>
  <file>icons/hicolor/64x64/actions/fund.png</file>
  <file>icons/hicolor/64x64/actions/graph.png</file>
  <file>icons/hicolor/64x64/actions/loop.png</file>
@@ -329,6 +359,7 @@
  <file>icons/hicolor/96x96/actions/alignVCenter.png</file>
  <file>icons/hicolor/96x96/actions/asset_manager.png</file>
  <file>icons/hicolor/96x96/actions/boxTransform.png</file>
+ <file>icons/hicolor/96x96/actions/checkmark.png</file>
  <file>icons/hicolor/96x96/actions/childrenHidden.png</file>
  <file>icons/hicolor/96x96/actions/childrenVisible.png</file>
  <file>icons/hicolor/96x96/actions/circleCreate.png</file>
@@ -340,7 +371,12 @@
  <file>icons/hicolor/96x96/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/96x96/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/96x96/actions/drawPath.png</file>
+ <file>icons/hicolor/96x96/actions/error.png</file>
  <file>icons/hicolor/96x96/actions/fastforward.png</file>
+ <file>icons/hicolor/96x96/actions/file_blank.png</file>
+ <file>icons/hicolor/96x96/actions/file_image.png</file>
+ <file>icons/hicolor/96x96/actions/file_movie.png</file>
+ <file>icons/hicolor/96x96/actions/file_sound.png</file>
  <file>icons/hicolor/96x96/actions/fund.png</file>
  <file>icons/hicolor/96x96/actions/graph.png</file>
  <file>icons/hicolor/96x96/actions/loop.png</file>
@@ -393,6 +429,7 @@
  <file>icons/hicolor/128x128/actions/alignVCenter.png</file>
  <file>icons/hicolor/128x128/actions/asset_manager.png</file>
  <file>icons/hicolor/128x128/actions/boxTransform.png</file>
+ <file>icons/hicolor/128x128/actions/checkmark.png</file>
  <file>icons/hicolor/128x128/actions/childrenHidden.png</file>
  <file>icons/hicolor/128x128/actions/childrenVisible.png</file>
  <file>icons/hicolor/128x128/actions/circleCreate.png</file>
@@ -404,7 +441,12 @@
  <file>icons/hicolor/128x128/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/128x128/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/128x128/actions/drawPath.png</file>
+ <file>icons/hicolor/128x128/actions/error.png</file>
  <file>icons/hicolor/128x128/actions/fastforward.png</file>
+ <file>icons/hicolor/128x128/actions/file_blank.png</file>
+ <file>icons/hicolor/128x128/actions/file_image.png</file>
+ <file>icons/hicolor/128x128/actions/file_movie.png</file>
+ <file>icons/hicolor/128x128/actions/file_sound.png</file>
  <file>icons/hicolor/128x128/actions/fund.png</file>
  <file>icons/hicolor/128x128/actions/graph.png</file>
  <file>icons/hicolor/128x128/actions/loop.png</file>
@@ -457,6 +499,7 @@
  <file>icons/hicolor/192x192/actions/alignVCenter.png</file>
  <file>icons/hicolor/192x192/actions/asset_manager.png</file>
  <file>icons/hicolor/192x192/actions/boxTransform.png</file>
+ <file>icons/hicolor/192x192/actions/checkmark.png</file>
  <file>icons/hicolor/192x192/actions/childrenHidden.png</file>
  <file>icons/hicolor/192x192/actions/childrenVisible.png</file>
  <file>icons/hicolor/192x192/actions/circleCreate.png</file>
@@ -468,7 +511,12 @@
  <file>icons/hicolor/192x192/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/192x192/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/192x192/actions/drawPath.png</file>
+ <file>icons/hicolor/192x192/actions/error.png</file>
  <file>icons/hicolor/192x192/actions/fastforward.png</file>
+ <file>icons/hicolor/192x192/actions/file_blank.png</file>
+ <file>icons/hicolor/192x192/actions/file_image.png</file>
+ <file>icons/hicolor/192x192/actions/file_movie.png</file>
+ <file>icons/hicolor/192x192/actions/file_sound.png</file>
  <file>icons/hicolor/192x192/actions/fund.png</file>
  <file>icons/hicolor/192x192/actions/graph.png</file>
  <file>icons/hicolor/192x192/actions/loop.png</file>
@@ -521,6 +569,7 @@
  <file>icons/hicolor/256x256/actions/alignVCenter.png</file>
  <file>icons/hicolor/256x256/actions/asset_manager.png</file>
  <file>icons/hicolor/256x256/actions/boxTransform.png</file>
+ <file>icons/hicolor/256x256/actions/checkmark.png</file>
  <file>icons/hicolor/256x256/actions/childrenHidden.png</file>
  <file>icons/hicolor/256x256/actions/childrenVisible.png</file>
  <file>icons/hicolor/256x256/actions/circleCreate.png</file>
@@ -532,7 +581,12 @@
  <file>icons/hicolor/256x256/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/256x256/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/256x256/actions/drawPath.png</file>
+ <file>icons/hicolor/256x256/actions/error.png</file>
  <file>icons/hicolor/256x256/actions/fastforward.png</file>
+ <file>icons/hicolor/256x256/actions/file_blank.png</file>
+ <file>icons/hicolor/256x256/actions/file_image.png</file>
+ <file>icons/hicolor/256x256/actions/file_movie.png</file>
+ <file>icons/hicolor/256x256/actions/file_sound.png</file>
  <file>icons/hicolor/256x256/actions/fund.png</file>
  <file>icons/hicolor/256x256/actions/graph.png</file>
  <file>icons/hicolor/256x256/actions/loop.png</file>
