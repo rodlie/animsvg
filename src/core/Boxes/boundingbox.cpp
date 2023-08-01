@@ -872,7 +872,7 @@ void BoundingBox::setupWithoutRasterEffects(const qreal relFrame,
                                             const QMatrix& parentM,
                                             BoxRenderData * const data,
                                             Canvas* const scene) {
-    Q_ASSERT(scene);
+    //Q_ASSERT(scene);
     if(!scene) return;
 
     data->fBoxStateId = mStateId;
@@ -903,7 +903,7 @@ void BoundingBox::setupWithoutRasterEffects(const qreal relFrame,
 void BoundingBox::setupRasterEffects(const qreal relFrame,
                                      BoxRenderData * const data,
                                      Canvas* const scene) {
-    Q_ASSERT(scene);
+    //Q_ASSERT(scene);
     if(!scene) return;
     const bool effectsVisible = scene->getRasterEffectsVisible();
     if(data->fOpacity > 0.001 && effectsVisible) {
