@@ -168,6 +168,7 @@ set(
     GUI/Settings/timelinesettingswidget.cpp
     GUI/alignwidget.cpp
     GUI/audiohandler.cpp
+    GUI/assetswidget.cpp
     GUI/bookmarkedwidget.cpp
     GUI/buttonbase.cpp
     GUI/buttonslist.cpp
@@ -250,7 +251,7 @@ set(
     GUI/qrealanimatorvalueslider.cpp
     GUI/glwindow.cpp
     GUI/fontswidget.cpp
-    GUI/filesourcelist.cpp
+    #GUI/filesourcelist.cpp
     GUI/customfpsdialog.cpp
     GUI/fillstrokesettings.cpp
     #GUI/BrushWidgets/brushselectionwidget.cpp
@@ -289,6 +290,7 @@ set(
     GUI/Settings/timelinesettingswidget.h
     GUI/alignwidget.h
     GUI/audiohandler.h
+    GUI/assetswidget.h
     GUI/bookmarkedwidget.h
     GUI/buttonbase.h
     GUI/buttonslist.h
@@ -360,7 +362,7 @@ set(
     GUI/animationwidgetscrollbar.h
     GUI/canvaswindow.h
     GUI/customfpsdialog.h
-    GUI/filesourcelist.h
+    #GUI/filesourcelist.h
     GUI/fillstrokesettings.h
     GUI/fontswidget.h
     GUI/keyfocustarget.h

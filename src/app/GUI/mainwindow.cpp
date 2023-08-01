@@ -53,7 +53,7 @@
 #include "fontswidget.h"
 #include "GUI/global.h"
 #include "filesourcescache.h"
-#include "filesourcelist.h"
+//#include "filesourcelist.h"
 #include "videoencoder.h"
 #include "fillstrokesettings.h"
 #include "editablecombobox.h"
@@ -80,6 +80,8 @@
 #include "efiltersettings.h"
 #include "Settings/settingsdialog.h"
 #include "appsupport.h"
+
+#include "GUI/assetswidget.h"
 
 MainWindow *MainWindow::sInstance = nullptr;
 
@@ -239,9 +241,11 @@ MainWindow::MainWindow(Document& document,
     connect(mObjectSettingsScrollArea, &ScrollArea::widthChanged,
             mObjectSettingsWidget, &BoxScrollWidget::setWidth);
 
-    const auto fsl = new FileSourceList(this);
+    /*const auto fsl = new FileSourceList(this);
     connect(fsl, &FileSourceList::doubleClicked,
-            this, &MainWindow::importFile);
+            this, &MainWindow::importFile);*/
+
+    const auto assets = new AssetsWidget(this);
 
     QToolBar *viewerToolBar = new QToolBar(this);
     viewerToolBar->setOrientation(Qt::Vertical);
@@ -364,7 +368,7 @@ MainWindow::MainWindow(Document& document,
     mTabPropertiesIndex = mBottomSideBarWidget->addTab(propertiesWidget,
                                                        QIcon::fromTheme("drawPathAutoChecked"),
                                                        tr("Properties"));
-    mTabAssetsIndex = mBottomSideBarWidget->addTab(fsl,
+    mTabAssetsIndex = mBottomSideBarWidget->addTab(assets,
                                                    QIcon::fromTheme("asset_manager"),
                                                    tr("Assets"));
     mTabQueueIndex = mBottomSideBarWidget->addTab(mRenderWidget,
