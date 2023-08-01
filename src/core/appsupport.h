@@ -73,6 +73,8 @@ public:
     static const QString getAppShaderEffectsPath();
     static const QString getAppExPresetsPath();
     static const QString getAppUserExPresetsPath();
+    static const QString getFileMimeType(const QString &path);
+    static const QString getFileIcon(const QString &path);
 };
 
 #endif // APPSUPPORT_H

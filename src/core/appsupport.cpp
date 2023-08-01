@@ -30,6 +30,8 @@
 #include <QSettings>
 #include <QStandardPaths>
 #include <QDir>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 AppSupport::AppSupport(QObject *parent)
     : QObject{parent}
@@ -257,4 +259,21 @@ const QString AppSupport::getAppUserExPresetsPath()
     QDir dir(path);
     if (!dir.exists()) { dir.mkpath(path); }
     return path;
+}
+
+const QString AppSupport::getFileMimeType(const QString &path)
+{
+    QMimeDatabase db;
+    QMimeType type = db.mimeTypeForFile(path);
+    return type.name();
+}
+
+const QString AppSupport::getFileIcon(const QString &path)
+{
+    QString fileIcon = "file_blank";
+    QString mime = getFileMimeType(path);
+    if (mime.startsWith("image")) { fileIcon = "file_image"; }
+    else if (mime.startsWith("video")) { fileIcon = "file_movie"; }
+    else if (mime.startsWith("audio")) { fileIcon = "file_sound"; }
+    return fileIcon;
 }
