@@ -787,11 +787,11 @@ eBoxOrSound* Actions::linkFile(const QString &path)
         const auto svg = enve::make_shared<SvgLinkBox>();
         svg->setFilePath(path);
         result = svg;
-    } else if (suffix == "ora") {
+    } /*else if (suffix == "ora") {
         const auto ora = enve::make_shared<ImageBox>();
         ora->setFilePath(path);
         result = ora;
-    } else { RuntimeThrow(tr("Cannot link file format %1").arg(path)); }
+    }*/ else { RuntimeThrow(tr("Cannot link file format %1").arg(path)); }
     mActiveScene->getCurrentGroup()->addContained(result);
     mDocument.actionFinished();
     return result.get();
