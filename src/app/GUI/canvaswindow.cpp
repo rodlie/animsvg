@@ -598,9 +598,12 @@ void CanvasWindow::dropEvent(QDropEvent *event) {
     mActions.handleDropEvent(event, pos);
 }
 
-void CanvasWindow::dragEnterEvent(QDragEnterEvent *event) {
-    if(event->mimeData()->hasUrls()) {
-       event->acceptProposedAction();
+void CanvasWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls() ||
+        event->mimeData()->hasFormat("application/x-qabstractitemmodeldatalist"))
+    {
+        event->acceptProposedAction();
         KFT_setFocus();
     }
 }
