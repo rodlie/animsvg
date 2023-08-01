@@ -71,9 +71,12 @@ void KeysView::dropEvent(QDropEvent *event) {
     Actions::sInstance->handleDropEvent(event, QPointF(0, 0), frame);
 }
 
-void KeysView::dragEnterEvent(QDragEnterEvent *event) {
-    if(event->mimeData()->hasUrls()) {
-       event->acceptProposedAction();
+void KeysView::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls() ||
+        event->mimeData()->hasFormat("application/x-qabstractitemmodeldatalist"))
+    {
+        event->acceptProposedAction();
         KFT_setFocus();
     }
 }
