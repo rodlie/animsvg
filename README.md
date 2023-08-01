@@ -28,7 +28,7 @@ The next `Z` release usually comes from the latest stable branch (`vX.Y`).
 
 Breaking features under development should be kept in it's own branch until ready to be merged with `main`.
 
-*During `v0.9` development minor and patch releases are combined. Meaning `v0.9.3` will contain both features and fixes. This is an exception until we reach `v1.0.0`.*
+*During `v0.9` development minor and patch releases are combined. Meaning `v0.9.x` will contain both features and fixes. This is an exception until we reach `v1.0.0`.*
 
 ## License
 
@@ -40,7 +40,7 @@ This program is free software: you can redistribute it and/or modify it under th
 
 **This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the [GNU General Public License](LICENSE.md) for more details.**
 
-Friction includes some icons from Blender. These icons are released under a [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license.
+Friction includes several [icons](https://github.com/Shrinks99/blender-icons) from Blender. These icons are released under a [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license.
 
 ## Contributors
 

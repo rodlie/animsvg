@@ -435,54 +435,68 @@ void MainWindow::setupMenuBar()
     QList<QAction*> frictionButtonActions;
 
     mFileMenu = mMenuBar->addMenu(tr("File", "MenuBar"));
-    mFileMenu->addAction(tr("New...", "MenuBar_File"),
+    mFileMenu->addAction(QIcon::fromTheme("file_new"),
+                         tr("New", "MenuBar_File"),
                          this, &MainWindow::newFile,
                          Qt::CTRL + Qt::Key_N);
-    mFileMenu->addAction(tr("Open...", "MenuBar_File"),
+    mFileMenu->addAction(QIcon::fromTheme("file_folder"),
+                         tr("Open", "MenuBar_File"),
                          this, qOverload<>(&MainWindow::openFile),
                          Qt::CTRL + Qt::Key_O);
-    mRecentMenu = mFileMenu->addMenu(tr("Open Recent", "MenuBar_File"));
+    mRecentMenu = mFileMenu->addMenu(QIcon::fromTheme("file_folder"),
+                                     tr("Open Recent", "MenuBar_File"));
     mFileMenu->addSeparator();
-    mFileMenu->addAction("Link...",
+    mFileMenu->addAction(QIcon::fromTheme("linked"),
+                         tr("Link"),
                          this, &MainWindow::linkFile,
                          Qt::CTRL + Qt::Key_L);
-    mFileMenu->addAction(tr("Import File...", "MenuBar_File"),
+    mFileMenu->addAction(QIcon::fromTheme("file_blank"),
+                         tr("Import File", "MenuBar_File"),
                          this, qOverload<>(&MainWindow::importFile),
                          Qt::CTRL + Qt::Key_I);
-    mFileMenu->addAction(tr("Import Image Sequence...", "MenuBar_File"),
+    mFileMenu->addAction(QIcon::fromTheme("renderlayers"),
+                         tr("Import Image Sequence", "MenuBar_File"),
                          this, &MainWindow::importImageSequence);
     mFileMenu->addSeparator();
-    mFileMenu->addAction(tr("Revert", "MenuBar_File"),
+    mFileMenu->addAction(QIcon::fromTheme("loop_back"),
+                         tr("Revert", "MenuBar_File"),
                          this, &MainWindow::revert);
     mFileMenu->addSeparator();
-    mFileMenu->addAction(tr("Save", "MenuBar_File"),
+    mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
+                         tr("Save", "MenuBar_File"),
                          this, qOverload<>(&MainWindow::saveFile),
                          Qt::CTRL + Qt::Key_S);
-    mFileMenu->addAction(tr("Save As...", "MenuBar_File"),
+    mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
+                         tr("Save As", "MenuBar_File"),
                          this, [this]() { saveFileAs(); },
                          Qt::CTRL + Qt::SHIFT + Qt::Key_S);
-    mFileMenu->addAction(tr("Save Backup", "MenuBar_File"),
+    mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
+                         tr("Save Backup", "MenuBar_File"),
                          this, &MainWindow::saveBackup);
 
-    const auto exportMenu = mFileMenu->addMenu(tr("Export", "MenuBar_File"));
-    frictionButtonActions << exportMenu->addAction(QIcon::fromTheme("output"),
-                                                   tr("Export to SVG animation", "MenuBar_File"),
+    const auto exportMenu = mFileMenu->addMenu(QIcon::fromTheme("output"),
+                                               tr("Export", "MenuBar_File"));
+    frictionButtonActions << exportMenu->addAction(QIcon::fromTheme("seq_preview"),
+                                                   tr("Web Animation (SVG + SMIL)", "MenuBar_File"),
                                                    this, &MainWindow::exportSVG,
                                                    QKeySequence(AppSupport::getSettings("shortcuts",
                                                                                         "exportSVG",
                                                                                         "Shift+F12").toString()));
     mFileMenu->addSeparator();
-    mFileMenu->addAction(tr("Close", "MenuBar_File"),
+    mFileMenu->addAction(QIcon::fromTheme("cancel"),
+                         tr("Close", "MenuBar_File"),
                          this, &MainWindow::closeProject,
                          QKeySequence(tr("Ctrl+W")));
     mFileMenu->addSeparator();
-    mFileMenu->addAction(tr("Exit", "MenuBar_File"),
+    mFileMenu->addAction(QIcon::fromTheme("quit"),
+                         tr("Exit", "MenuBar_File"),
                          this, &MainWindow::close,
                          QKeySequence(tr("Ctrl+Q")));
 
     mEditMenu = mMenuBar->addMenu(tr("Edit", "MenuBar"));
 
-    const auto undoQAct = mEditMenu->addAction(tr("Undo", "MenuBar_Edit"));
+    const auto undoQAct = mEditMenu->addAction(QIcon::fromTheme("loop_back"),
+                                               tr("Undo", "MenuBar_Edit"));
     undoQAct->setShortcut(Qt::CTRL + Qt::Key_Z);
     mActions.undoAction->connect(undoQAct);
 
@@ -500,7 +514,8 @@ void MainWindow::setupMenuBar()
         }
     });
 
-    const auto redoQAct = mEditMenu->addAction(tr("Redo", "MenuBar_Edit"));
+    const auto redoQAct = mEditMenu->addAction(QIcon::fromTheme("loop_forwards"),
+                                               tr("Redo", "MenuBar_Edit"));
     redoQAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Z);
     mActions.redoAction->connect(redoQAct);
 
@@ -748,13 +763,14 @@ void MainWindow::setupMenuBar()
 
     mSceneMenu = mMenuBar->addMenu(tr("Scene", "MenuBar"));
 
-    mSceneMenu->addAction(tr("New Scene", "MenuBar_Scene"), this, [this]() {
+    mSceneMenu->addAction(QIcon::fromTheme("sequence"),
+                          tr("New Scene", "MenuBar_Scene"), this, [this]() {
         SceneSettingsDialog::sNewSceneDialog(mDocument, this);
     });
 
     {
-        const auto qAct = mSceneMenu->addAction(
-                    tr("Delete Scene", "MenuBar_Scene"));
+        const auto qAct = mSceneMenu->addAction(QIcon::fromTheme("sequence"),
+                                                tr("Delete Scene", "MenuBar_Scene"));
         mActions.deleteSceneAction->connect(qAct);
     }
 
@@ -771,8 +787,8 @@ void MainWindow::setupMenuBar()
     mSceneMenu->addSeparator();
 
     {
-        const auto qAct = mSceneMenu->addAction(
-                    tr("Scene Properties", "MenuBar_Scene"));
+        const auto qAct = mSceneMenu->addAction(QIcon::fromTheme("sequence"),
+                                                tr("Scene Properties", "MenuBar_Scene"));
         mActions.sceneSettingsAction->connect(qAct);
     }
 
@@ -1011,7 +1027,8 @@ void MainWindow::setupMenuBar()
 
     const auto help = mMenuBar->addMenu(tr("Help", "MenuBar"));
 
-    help->addAction(tr("About", "MenuBar_Help"), this, [this]() {
+    help->addAction(QIcon::fromTheme("question"),
+                    tr("About", "MenuBar_Help"), this, [this]() {
         QString aboutText = QString("<h1 style=\"font-weight: normal;\">%1</h1>"
                                     "<h3 style=\"font-weight: normal;\">%4 %3</h3>"
                                     "<p>%5 &copy; %1 <a style=\"text-decoration: none;\" href=\"%2\">%6</a>.</p>"
@@ -1027,10 +1044,12 @@ void MainWindow::setupMenuBar()
                                  tr("This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version."));
         QMessageBox::about(this, tr("About"), aboutText);
     });
-    help->addAction(tr("About Qt", "MenuBar_Help"), this, [this]() {
+    help->addAction(QIcon::fromTheme("question"),
+                    tr("About Qt", "MenuBar_Help"), this, [this]() {
         QMessageBox::aboutQt(this, tr("About Qt"));
     });
-    help->addAction(tr("Check for updates", "MenuBar_Help"), this, []() {
+    help->addAction(QIcon::fromTheme("question"),
+                    tr("Check for updates", "MenuBar_Help"), this, []() {
         QDesktopServices::openUrl(QUrl::fromUserInput(AppSupport::getAppLatestReleaseUrl()));
     });
 

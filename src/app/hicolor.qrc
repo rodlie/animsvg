@@ -9,12 +9,14 @@
  <file>icons/hicolor/16x16/actions/alignVCenter.png</file>
  <file>icons/hicolor/16x16/actions/asset_manager.png</file>
  <file>icons/hicolor/16x16/actions/boxTransform.png</file>
+ <file>icons/hicolor/16x16/actions/cancel.png</file>
  <file>icons/hicolor/16x16/actions/checkmark.png</file>
  <file>icons/hicolor/16x16/actions/childrenHidden.png</file>
  <file>icons/hicolor/16x16/actions/childrenVisible.png</file>
  <file>icons/hicolor/16x16/actions/circleCreate.png</file>
  <file>icons/hicolor/16x16/actions/close.png</file>
  <file>icons/hicolor/16x16/actions/color.png</file>
+ <file>icons/hicolor/16x16/actions/disk_drive.png</file>
  <file>icons/hicolor/16x16/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/16x16/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/16x16/actions/dots.png</file>
@@ -24,11 +26,16 @@
  <file>icons/hicolor/16x16/actions/error.png</file>
  <file>icons/hicolor/16x16/actions/fastforward.png</file>
  <file>icons/hicolor/16x16/actions/file_blank.png</file>
+ <file>icons/hicolor/16x16/actions/file_folder.png</file>
  <file>icons/hicolor/16x16/actions/file_image.png</file>
  <file>icons/hicolor/16x16/actions/file_movie.png</file>
+ <file>icons/hicolor/16x16/actions/file_new.png</file>
  <file>icons/hicolor/16x16/actions/file_sound.png</file>
  <file>icons/hicolor/16x16/actions/fund.png</file>
  <file>icons/hicolor/16x16/actions/graph.png</file>
+ <file>icons/hicolor/16x16/actions/linked.png</file>
+ <file>icons/hicolor/16x16/actions/loop_back.png</file>
+ <file>icons/hicolor/16x16/actions/loop_forwards.png</file>
  <file>icons/hicolor/16x16/actions/loop.png</file>
  <file>icons/hicolor/16x16/actions/minus.png</file>
  <file>icons/hicolor/16x16/actions/newEmpty.png</file>
@@ -59,11 +66,16 @@
  <file>icons/hicolor/16x16/actions/plus.png</file>
  <file>icons/hicolor/16x16/actions/pointTransform.png</file>
  <file>icons/hicolor/16x16/actions/preview.png</file>
+ <file>icons/hicolor/16x16/actions/question.png</file>
+ <file>icons/hicolor/16x16/actions/quit.png</file>
  <file>icons/hicolor/16x16/actions/rectCreate.png</file>
  <file>icons/hicolor/16x16/actions/render_animation.png</file>
+ <file>icons/hicolor/16x16/actions/renderlayers.png</file>
  <file>icons/hicolor/16x16/actions/rewind.png</file>
  <file>icons/hicolor/16x16/actions/segmentCurve.png</file>
  <file>icons/hicolor/16x16/actions/segmentLine.png</file>
+ <file>icons/hicolor/16x16/actions/seq_preview.png</file>
+ <file>icons/hicolor/16x16/actions/sequence.png</file>
  <file>icons/hicolor/16x16/actions/split_h.png</file>
  <file>icons/hicolor/16x16/actions/split_v.png</file>
  <file>icons/hicolor/16x16/actions/stop.png</file>
@@ -79,12 +91,14 @@
  <file>icons/hicolor/22x22/actions/alignVCenter.png</file>
  <file>icons/hicolor/22x22/actions/asset_manager.png</file>
  <file>icons/hicolor/22x22/actions/boxTransform.png</file>
+ <file>icons/hicolor/22x22/actions/cancel.png</file>
  <file>icons/hicolor/22x22/actions/checkmark.png</file>
  <file>icons/hicolor/22x22/actions/childrenHidden.png</file>
  <file>icons/hicolor/22x22/actions/childrenVisible.png</file>
  <file>icons/hicolor/22x22/actions/circleCreate.png</file>
  <file>icons/hicolor/22x22/actions/close.png</file>
  <file>icons/hicolor/22x22/actions/color.png</file>
+ <file>icons/hicolor/22x22/actions/disk_drive.png</file>
  <file>icons/hicolor/22x22/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/22x22/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/22x22/actions/dots.png</file>
@@ -94,11 +108,16 @@
  <file>icons/hicolor/22x22/actions/error.png</file>
  <file>icons/hicolor/22x22/actions/fastforward.png</file>
  <file>icons/hicolor/22x22/actions/file_blank.png</file>
+ <file>icons/hicolor/22x22/actions/file_folder.png</file>
  <file>icons/hicolor/22x22/actions/file_image.png</file>
  <file>icons/hicolor/22x22/actions/file_movie.png</file>
+ <file>icons/hicolor/22x22/actions/file_new.png</file>
  <file>icons/hicolor/22x22/actions/file_sound.png</file>
  <file>icons/hicolor/22x22/actions/fund.png</file>
  <file>icons/hicolor/22x22/actions/graph.png</file>
+ <file>icons/hicolor/22x22/actions/linked.png</file>
+ <file>icons/hicolor/22x22/actions/loop_back.png</file>
+ <file>icons/hicolor/22x22/actions/loop_forwards.png</file>
  <file>icons/hicolor/22x22/actions/loop.png</file>
  <file>icons/hicolor/22x22/actions/minus.png</file>
  <file>icons/hicolor/22x22/actions/newEmpty.png</file>
@@ -129,11 +148,16 @@
  <file>icons/hicolor/22x22/actions/plus.png</file>
  <file>icons/hicolor/22x22/actions/pointTransform.png</file>
  <file>icons/hicolor/22x22/actions/preview.png</file>
+ <file>icons/hicolor/22x22/actions/question.png</file>
+ <file>icons/hicolor/22x22/actions/quit.png</file>
  <file>icons/hicolor/22x22/actions/rectCreate.png</file>
  <file>icons/hicolor/22x22/actions/render_animation.png</file>
+ <file>icons/hicolor/22x22/actions/renderlayers.png</file>
  <file>icons/hicolor/22x22/actions/rewind.png</file>
  <file>icons/hicolor/22x22/actions/segmentCurve.png</file>
  <file>icons/hicolor/22x22/actions/segmentLine.png</file>
+ <file>icons/hicolor/22x22/actions/seq_preview.png</file>
+ <file>icons/hicolor/22x22/actions/sequence.png</file>
  <file>icons/hicolor/22x22/actions/split_h.png</file>
  <file>icons/hicolor/22x22/actions/split_v.png</file>
  <file>icons/hicolor/22x22/actions/stop.png</file>
@@ -149,12 +173,14 @@
  <file>icons/hicolor/32x32/actions/alignVCenter.png</file>
  <file>icons/hicolor/32x32/actions/asset_manager.png</file>
  <file>icons/hicolor/32x32/actions/boxTransform.png</file>
+ <file>icons/hicolor/32x32/actions/cancel.png</file>
  <file>icons/hicolor/32x32/actions/checkmark.png</file>
  <file>icons/hicolor/32x32/actions/childrenHidden.png</file>
  <file>icons/hicolor/32x32/actions/childrenVisible.png</file>
  <file>icons/hicolor/32x32/actions/circleCreate.png</file>
  <file>icons/hicolor/32x32/actions/close.png</file>
  <file>icons/hicolor/32x32/actions/color.png</file>
+ <file>icons/hicolor/32x32/actions/disk_drive.png</file>
  <file>icons/hicolor/32x32/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/32x32/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/32x32/actions/dots.png</file>
@@ -164,11 +190,16 @@
  <file>icons/hicolor/32x32/actions/error.png</file>
  <file>icons/hicolor/32x32/actions/fastforward.png</file>
  <file>icons/hicolor/32x32/actions/file_blank.png</file>
+ <file>icons/hicolor/32x32/actions/file_folder.png</file>
  <file>icons/hicolor/32x32/actions/file_image.png</file>
  <file>icons/hicolor/32x32/actions/file_movie.png</file>
+ <file>icons/hicolor/32x32/actions/file_new.png</file>
  <file>icons/hicolor/32x32/actions/file_sound.png</file>
  <file>icons/hicolor/32x32/actions/fund.png</file>
  <file>icons/hicolor/32x32/actions/graph.png</file>
+ <file>icons/hicolor/32x32/actions/linked.png</file>
+ <file>icons/hicolor/32x32/actions/loop_back.png</file>
+ <file>icons/hicolor/32x32/actions/loop_forwards.png</file>
  <file>icons/hicolor/32x32/actions/loop.png</file>
  <file>icons/hicolor/32x32/actions/minus.png</file>
  <file>icons/hicolor/32x32/actions/newEmpty.png</file>
@@ -199,11 +230,16 @@
  <file>icons/hicolor/32x32/actions/plus.png</file>
  <file>icons/hicolor/32x32/actions/pointTransform.png</file>
  <file>icons/hicolor/32x32/actions/preview.png</file>
+ <file>icons/hicolor/32x32/actions/question.png</file>
+ <file>icons/hicolor/32x32/actions/quit.png</file>
  <file>icons/hicolor/32x32/actions/rectCreate.png</file>
  <file>icons/hicolor/32x32/actions/render_animation.png</file>
+ <file>icons/hicolor/32x32/actions/renderlayers.png</file>
  <file>icons/hicolor/32x32/actions/rewind.png</file>
  <file>icons/hicolor/32x32/actions/segmentCurve.png</file>
  <file>icons/hicolor/32x32/actions/segmentLine.png</file>
+ <file>icons/hicolor/32x32/actions/seq_preview.png</file>
+ <file>icons/hicolor/32x32/actions/sequence.png</file>
  <file>icons/hicolor/32x32/actions/split_h.png</file>
  <file>icons/hicolor/32x32/actions/split_v.png</file>
  <file>icons/hicolor/32x32/actions/stop.png</file>
@@ -219,12 +255,14 @@
  <file>icons/hicolor/48x48/actions/alignVCenter.png</file>
  <file>icons/hicolor/48x48/actions/asset_manager.png</file>
  <file>icons/hicolor/48x48/actions/boxTransform.png</file>
+ <file>icons/hicolor/48x48/actions/cancel.png</file>
  <file>icons/hicolor/48x48/actions/checkmark.png</file>
  <file>icons/hicolor/48x48/actions/childrenHidden.png</file>
  <file>icons/hicolor/48x48/actions/childrenVisible.png</file>
  <file>icons/hicolor/48x48/actions/circleCreate.png</file>
  <file>icons/hicolor/48x48/actions/close.png</file>
  <file>icons/hicolor/48x48/actions/color.png</file>
+ <file>icons/hicolor/48x48/actions/disk_drive.png</file>
  <file>icons/hicolor/48x48/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/48x48/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/48x48/actions/dots.png</file>
@@ -234,11 +272,16 @@
  <file>icons/hicolor/48x48/actions/error.png</file>
  <file>icons/hicolor/48x48/actions/fastforward.png</file>
  <file>icons/hicolor/48x48/actions/file_blank.png</file>
+ <file>icons/hicolor/48x48/actions/file_folder.png</file>
  <file>icons/hicolor/48x48/actions/file_image.png</file>
  <file>icons/hicolor/48x48/actions/file_movie.png</file>
+ <file>icons/hicolor/48x48/actions/file_new.png</file>
  <file>icons/hicolor/48x48/actions/file_sound.png</file>
  <file>icons/hicolor/48x48/actions/fund.png</file>
  <file>icons/hicolor/48x48/actions/graph.png</file>
+ <file>icons/hicolor/48x48/actions/linked.png</file>
+ <file>icons/hicolor/48x48/actions/loop_back.png</file>
+ <file>icons/hicolor/48x48/actions/loop_forwards.png</file>
  <file>icons/hicolor/48x48/actions/loop.png</file>
  <file>icons/hicolor/48x48/actions/minus.png</file>
  <file>icons/hicolor/48x48/actions/newEmpty.png</file>
@@ -269,11 +312,16 @@
  <file>icons/hicolor/48x48/actions/plus.png</file>
  <file>icons/hicolor/48x48/actions/pointTransform.png</file>
  <file>icons/hicolor/48x48/actions/preview.png</file>
+ <file>icons/hicolor/48x48/actions/question.png</file>
+ <file>icons/hicolor/48x48/actions/quit.png</file>
  <file>icons/hicolor/48x48/actions/rectCreate.png</file>
  <file>icons/hicolor/48x48/actions/render_animation.png</file>
+ <file>icons/hicolor/48x48/actions/renderlayers.png</file>
  <file>icons/hicolor/48x48/actions/rewind.png</file>
  <file>icons/hicolor/48x48/actions/segmentCurve.png</file>
  <file>icons/hicolor/48x48/actions/segmentLine.png</file>
+ <file>icons/hicolor/48x48/actions/seq_preview.png</file>
+ <file>icons/hicolor/48x48/actions/sequence.png</file>
  <file>icons/hicolor/48x48/actions/split_h.png</file>
  <file>icons/hicolor/48x48/actions/split_v.png</file>
  <file>icons/hicolor/48x48/actions/stop.png</file>
@@ -289,12 +337,14 @@
  <file>icons/hicolor/64x64/actions/alignVCenter.png</file>
  <file>icons/hicolor/64x64/actions/asset_manager.png</file>
  <file>icons/hicolor/64x64/actions/boxTransform.png</file>
+ <file>icons/hicolor/64x64/actions/cancel.png</file>
  <file>icons/hicolor/64x64/actions/checkmark.png</file>
  <file>icons/hicolor/64x64/actions/childrenHidden.png</file>
  <file>icons/hicolor/64x64/actions/childrenVisible.png</file>
  <file>icons/hicolor/64x64/actions/circleCreate.png</file>
  <file>icons/hicolor/64x64/actions/close.png</file>
  <file>icons/hicolor/64x64/actions/color.png</file>
+ <file>icons/hicolor/64x64/actions/disk_drive.png</file>
  <file>icons/hicolor/64x64/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/64x64/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/64x64/actions/dots.png</file>
@@ -304,11 +354,16 @@
  <file>icons/hicolor/64x64/actions/error.png</file>
  <file>icons/hicolor/64x64/actions/fastforward.png</file>
  <file>icons/hicolor/64x64/actions/file_blank.png</file>
+ <file>icons/hicolor/64x64/actions/file_folder.png</file>
  <file>icons/hicolor/64x64/actions/file_image.png</file>
  <file>icons/hicolor/64x64/actions/file_movie.png</file>
+ <file>icons/hicolor/64x64/actions/file_new.png</file>
  <file>icons/hicolor/64x64/actions/file_sound.png</file>
  <file>icons/hicolor/64x64/actions/fund.png</file>
  <file>icons/hicolor/64x64/actions/graph.png</file>
+ <file>icons/hicolor/64x64/actions/linked.png</file>
+ <file>icons/hicolor/64x64/actions/loop_back.png</file>
+ <file>icons/hicolor/64x64/actions/loop_forwards.png</file>
  <file>icons/hicolor/64x64/actions/loop.png</file>
  <file>icons/hicolor/64x64/actions/minus.png</file>
  <file>icons/hicolor/64x64/actions/newEmpty.png</file>
@@ -339,11 +394,16 @@
  <file>icons/hicolor/64x64/actions/plus.png</file>
  <file>icons/hicolor/64x64/actions/pointTransform.png</file>
  <file>icons/hicolor/64x64/actions/preview.png</file>
+ <file>icons/hicolor/64x64/actions/question.png</file>
+ <file>icons/hicolor/64x64/actions/quit.png</file>
  <file>icons/hicolor/64x64/actions/rectCreate.png</file>
  <file>icons/hicolor/64x64/actions/render_animation.png</file>
+ <file>icons/hicolor/64x64/actions/renderlayers.png</file>
  <file>icons/hicolor/64x64/actions/rewind.png</file>
  <file>icons/hicolor/64x64/actions/segmentCurve.png</file>
  <file>icons/hicolor/64x64/actions/segmentLine.png</file>
+ <file>icons/hicolor/64x64/actions/seq_preview.png</file>
+ <file>icons/hicolor/64x64/actions/sequence.png</file>
  <file>icons/hicolor/64x64/actions/split_h.png</file>
  <file>icons/hicolor/64x64/actions/split_v.png</file>
  <file>icons/hicolor/64x64/actions/stop.png</file>
@@ -359,12 +419,14 @@
  <file>icons/hicolor/96x96/actions/alignVCenter.png</file>
  <file>icons/hicolor/96x96/actions/asset_manager.png</file>
  <file>icons/hicolor/96x96/actions/boxTransform.png</file>
+ <file>icons/hicolor/96x96/actions/cancel.png</file>
  <file>icons/hicolor/96x96/actions/checkmark.png</file>
  <file>icons/hicolor/96x96/actions/childrenHidden.png</file>
  <file>icons/hicolor/96x96/actions/childrenVisible.png</file>
  <file>icons/hicolor/96x96/actions/circleCreate.png</file>
  <file>icons/hicolor/96x96/actions/close.png</file>
  <file>icons/hicolor/96x96/actions/color.png</file>
+ <file>icons/hicolor/96x96/actions/disk_drive.png</file>
  <file>icons/hicolor/96x96/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/96x96/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/96x96/actions/dots.png</file>
@@ -374,11 +436,16 @@
  <file>icons/hicolor/96x96/actions/error.png</file>
  <file>icons/hicolor/96x96/actions/fastforward.png</file>
  <file>icons/hicolor/96x96/actions/file_blank.png</file>
+ <file>icons/hicolor/96x96/actions/file_folder.png</file>
  <file>icons/hicolor/96x96/actions/file_image.png</file>
  <file>icons/hicolor/96x96/actions/file_movie.png</file>
+ <file>icons/hicolor/96x96/actions/file_new.png</file>
  <file>icons/hicolor/96x96/actions/file_sound.png</file>
  <file>icons/hicolor/96x96/actions/fund.png</file>
  <file>icons/hicolor/96x96/actions/graph.png</file>
+ <file>icons/hicolor/96x96/actions/linked.png</file>
+ <file>icons/hicolor/96x96/actions/loop_back.png</file>
+ <file>icons/hicolor/96x96/actions/loop_forwards.png</file>
  <file>icons/hicolor/96x96/actions/loop.png</file>
  <file>icons/hicolor/96x96/actions/minus.png</file>
  <file>icons/hicolor/96x96/actions/newEmpty.png</file>
@@ -409,11 +476,16 @@
  <file>icons/hicolor/96x96/actions/plus.png</file>
  <file>icons/hicolor/96x96/actions/pointTransform.png</file>
  <file>icons/hicolor/96x96/actions/preview.png</file>
+ <file>icons/hicolor/96x96/actions/question.png</file>
+ <file>icons/hicolor/96x96/actions/quit.png</file>
  <file>icons/hicolor/96x96/actions/rectCreate.png</file>
  <file>icons/hicolor/96x96/actions/render_animation.png</file>
+ <file>icons/hicolor/96x96/actions/renderlayers.png</file>
  <file>icons/hicolor/96x96/actions/rewind.png</file>
  <file>icons/hicolor/96x96/actions/segmentCurve.png</file>
  <file>icons/hicolor/96x96/actions/segmentLine.png</file>
+ <file>icons/hicolor/96x96/actions/seq_preview.png</file>
+ <file>icons/hicolor/96x96/actions/sequence.png</file>
  <file>icons/hicolor/96x96/actions/split_h.png</file>
  <file>icons/hicolor/96x96/actions/split_v.png</file>
  <file>icons/hicolor/96x96/actions/stop.png</file>
@@ -429,12 +501,14 @@
  <file>icons/hicolor/128x128/actions/alignVCenter.png</file>
  <file>icons/hicolor/128x128/actions/asset_manager.png</file>
  <file>icons/hicolor/128x128/actions/boxTransform.png</file>
+ <file>icons/hicolor/128x128/actions/cancel.png</file>
  <file>icons/hicolor/128x128/actions/checkmark.png</file>
  <file>icons/hicolor/128x128/actions/childrenHidden.png</file>
  <file>icons/hicolor/128x128/actions/childrenVisible.png</file>
  <file>icons/hicolor/128x128/actions/circleCreate.png</file>
  <file>icons/hicolor/128x128/actions/close.png</file>
  <file>icons/hicolor/128x128/actions/color.png</file>
+ <file>icons/hicolor/128x128/actions/disk_drive.png</file>
  <file>icons/hicolor/128x128/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/128x128/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/128x128/actions/dots.png</file>
@@ -444,11 +518,16 @@
  <file>icons/hicolor/128x128/actions/error.png</file>
  <file>icons/hicolor/128x128/actions/fastforward.png</file>
  <file>icons/hicolor/128x128/actions/file_blank.png</file>
+ <file>icons/hicolor/128x128/actions/file_folder.png</file>
  <file>icons/hicolor/128x128/actions/file_image.png</file>
  <file>icons/hicolor/128x128/actions/file_movie.png</file>
+ <file>icons/hicolor/128x128/actions/file_new.png</file>
  <file>icons/hicolor/128x128/actions/file_sound.png</file>
  <file>icons/hicolor/128x128/actions/fund.png</file>
  <file>icons/hicolor/128x128/actions/graph.png</file>
+ <file>icons/hicolor/128x128/actions/linked.png</file>
+ <file>icons/hicolor/128x128/actions/loop_back.png</file>
+ <file>icons/hicolor/128x128/actions/loop_forwards.png</file>
  <file>icons/hicolor/128x128/actions/loop.png</file>
  <file>icons/hicolor/128x128/actions/minus.png</file>
  <file>icons/hicolor/128x128/actions/newEmpty.png</file>
@@ -479,11 +558,16 @@
  <file>icons/hicolor/128x128/actions/plus.png</file>
  <file>icons/hicolor/128x128/actions/pointTransform.png</file>
  <file>icons/hicolor/128x128/actions/preview.png</file>
+ <file>icons/hicolor/128x128/actions/question.png</file>
+ <file>icons/hicolor/128x128/actions/quit.png</file>
  <file>icons/hicolor/128x128/actions/rectCreate.png</file>
  <file>icons/hicolor/128x128/actions/render_animation.png</file>
+ <file>icons/hicolor/128x128/actions/renderlayers.png</file>
  <file>icons/hicolor/128x128/actions/rewind.png</file>
  <file>icons/hicolor/128x128/actions/segmentCurve.png</file>
  <file>icons/hicolor/128x128/actions/segmentLine.png</file>
+ <file>icons/hicolor/128x128/actions/seq_preview.png</file>
+ <file>icons/hicolor/128x128/actions/sequence.png</file>
  <file>icons/hicolor/128x128/actions/split_h.png</file>
  <file>icons/hicolor/128x128/actions/split_v.png</file>
  <file>icons/hicolor/128x128/actions/stop.png</file>
@@ -499,12 +583,14 @@
  <file>icons/hicolor/192x192/actions/alignVCenter.png</file>
  <file>icons/hicolor/192x192/actions/asset_manager.png</file>
  <file>icons/hicolor/192x192/actions/boxTransform.png</file>
+ <file>icons/hicolor/192x192/actions/cancel.png</file>
  <file>icons/hicolor/192x192/actions/checkmark.png</file>
  <file>icons/hicolor/192x192/actions/childrenHidden.png</file>
  <file>icons/hicolor/192x192/actions/childrenVisible.png</file>
  <file>icons/hicolor/192x192/actions/circleCreate.png</file>
  <file>icons/hicolor/192x192/actions/close.png</file>
  <file>icons/hicolor/192x192/actions/color.png</file>
+ <file>icons/hicolor/192x192/actions/disk_drive.png</file>
  <file>icons/hicolor/192x192/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/192x192/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/192x192/actions/dots.png</file>
@@ -514,11 +600,16 @@
  <file>icons/hicolor/192x192/actions/error.png</file>
  <file>icons/hicolor/192x192/actions/fastforward.png</file>
  <file>icons/hicolor/192x192/actions/file_blank.png</file>
+ <file>icons/hicolor/192x192/actions/file_folder.png</file>
  <file>icons/hicolor/192x192/actions/file_image.png</file>
  <file>icons/hicolor/192x192/actions/file_movie.png</file>
+ <file>icons/hicolor/192x192/actions/file_new.png</file>
  <file>icons/hicolor/192x192/actions/file_sound.png</file>
  <file>icons/hicolor/192x192/actions/fund.png</file>
  <file>icons/hicolor/192x192/actions/graph.png</file>
+ <file>icons/hicolor/192x192/actions/linked.png</file>
+ <file>icons/hicolor/192x192/actions/loop_back.png</file>
+ <file>icons/hicolor/192x192/actions/loop_forwards.png</file>
  <file>icons/hicolor/192x192/actions/loop.png</file>
  <file>icons/hicolor/192x192/actions/minus.png</file>
  <file>icons/hicolor/192x192/actions/newEmpty.png</file>
@@ -549,11 +640,16 @@
  <file>icons/hicolor/192x192/actions/plus.png</file>
  <file>icons/hicolor/192x192/actions/pointTransform.png</file>
  <file>icons/hicolor/192x192/actions/preview.png</file>
+ <file>icons/hicolor/192x192/actions/question.png</file>
+ <file>icons/hicolor/192x192/actions/quit.png</file>
  <file>icons/hicolor/192x192/actions/rectCreate.png</file>
  <file>icons/hicolor/192x192/actions/render_animation.png</file>
+ <file>icons/hicolor/192x192/actions/renderlayers.png</file>
  <file>icons/hicolor/192x192/actions/rewind.png</file>
  <file>icons/hicolor/192x192/actions/segmentCurve.png</file>
  <file>icons/hicolor/192x192/actions/segmentLine.png</file>
+ <file>icons/hicolor/192x192/actions/seq_preview.png</file>
+ <file>icons/hicolor/192x192/actions/sequence.png</file>
  <file>icons/hicolor/192x192/actions/split_h.png</file>
  <file>icons/hicolor/192x192/actions/split_v.png</file>
  <file>icons/hicolor/192x192/actions/stop.png</file>
@@ -569,12 +665,14 @@
  <file>icons/hicolor/256x256/actions/alignVCenter.png</file>
  <file>icons/hicolor/256x256/actions/asset_manager.png</file>
  <file>icons/hicolor/256x256/actions/boxTransform.png</file>
+ <file>icons/hicolor/256x256/actions/cancel.png</file>
  <file>icons/hicolor/256x256/actions/checkmark.png</file>
  <file>icons/hicolor/256x256/actions/childrenHidden.png</file>
  <file>icons/hicolor/256x256/actions/childrenVisible.png</file>
  <file>icons/hicolor/256x256/actions/circleCreate.png</file>
  <file>icons/hicolor/256x256/actions/close.png</file>
  <file>icons/hicolor/256x256/actions/color.png</file>
+ <file>icons/hicolor/256x256/actions/disk_drive.png</file>
  <file>icons/hicolor/256x256/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/256x256/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/256x256/actions/dots.png</file>
@@ -584,11 +682,16 @@
  <file>icons/hicolor/256x256/actions/error.png</file>
  <file>icons/hicolor/256x256/actions/fastforward.png</file>
  <file>icons/hicolor/256x256/actions/file_blank.png</file>
+ <file>icons/hicolor/256x256/actions/file_folder.png</file>
  <file>icons/hicolor/256x256/actions/file_image.png</file>
  <file>icons/hicolor/256x256/actions/file_movie.png</file>
+ <file>icons/hicolor/256x256/actions/file_new.png</file>
  <file>icons/hicolor/256x256/actions/file_sound.png</file>
  <file>icons/hicolor/256x256/actions/fund.png</file>
  <file>icons/hicolor/256x256/actions/graph.png</file>
+ <file>icons/hicolor/256x256/actions/linked.png</file>
+ <file>icons/hicolor/256x256/actions/loop_back.png</file>
+ <file>icons/hicolor/256x256/actions/loop_forwards.png</file>
  <file>icons/hicolor/256x256/actions/loop.png</file>
  <file>icons/hicolor/256x256/actions/minus.png</file>
  <file>icons/hicolor/256x256/actions/newEmpty.png</file>
@@ -619,11 +722,16 @@
  <file>icons/hicolor/256x256/actions/plus.png</file>
  <file>icons/hicolor/256x256/actions/pointTransform.png</file>
  <file>icons/hicolor/256x256/actions/preview.png</file>
+ <file>icons/hicolor/256x256/actions/question.png</file>
+ <file>icons/hicolor/256x256/actions/quit.png</file>
  <file>icons/hicolor/256x256/actions/rectCreate.png</file>
  <file>icons/hicolor/256x256/actions/render_animation.png</file>
+ <file>icons/hicolor/256x256/actions/renderlayers.png</file>
  <file>icons/hicolor/256x256/actions/rewind.png</file>
  <file>icons/hicolor/256x256/actions/segmentCurve.png</file>
  <file>icons/hicolor/256x256/actions/segmentLine.png</file>
+ <file>icons/hicolor/256x256/actions/seq_preview.png</file>
+ <file>icons/hicolor/256x256/actions/sequence.png</file>
  <file>icons/hicolor/256x256/actions/split_h.png</file>
  <file>icons/hicolor/256x256/actions/split_v.png</file>
  <file>icons/hicolor/256x256/actions/stop.png</file>

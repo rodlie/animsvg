@@ -60,7 +60,8 @@ BoxScroller {
     background-color: transparent;
 }
 
-QProgressBar#RenderProgressBar {
+QProgressBar#RenderProgressBar,
+QMenuBar {
     border: 0;
 }
 
