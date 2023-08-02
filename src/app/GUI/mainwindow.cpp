@@ -104,6 +104,7 @@ MainWindow::MainWindow(Document& document,
     , mBottomSideBarWidget(nullptr)
     , mTimeline(nullptr)
     , mRenderWidget(nullptr)
+    , mToolbar(nullptr)
     //, mFillStrokeSettingsDockBar(nullptr)
     //, mTimelineDockBar(nullptr)
     //, mSelectedObjectDockBar(nullptr)
@@ -276,6 +277,7 @@ MainWindow::MainWindow(Document& document,
     mStackIndexWelcome = mStackWidget->addWidget(mWelcomeDialog);
 
     QLabel *resolutionLabel = new QLabel(tr("Resolution"), this);
+    resolutionLabel->setContentsMargins(5, 0, 5, 0);
     statusBar()->addPermanentWidget(resolutionLabel);
 
     mResolutionComboBox = new EditableComboBox(this);
@@ -295,6 +297,7 @@ MainWindow::MainWindow(Document& document,
     statusBar()->addPermanentWidget(mResolutionComboBox);
 
     QLabel *layoutComboLabel = new QLabel(tr("Layout"), this);
+    layoutComboLabel->setContentsMargins(5, 0, 5, 0);
     statusBar()->addPermanentWidget(layoutComboLabel);
     statusBar()->addPermanentWidget(mLayoutHandler->comboWidget());
 
@@ -435,53 +438,91 @@ void MainWindow::setupMenuBar()
     QList<QAction*> frictionButtonActions;
 
     mFileMenu = mMenuBar->addMenu(tr("File", "MenuBar"));
-    mFileMenu->addAction(QIcon::fromTheme("file_new"),
-                         tr("New", "MenuBar_File"),
-                         this, &MainWindow::newFile,
-                         Qt::CTRL + Qt::Key_N);
-    mFileMenu->addAction(QIcon::fromTheme("file_folder"),
-                         tr("Open", "MenuBar_File"),
-                         this, qOverload<>(&MainWindow::openFile),
-                         Qt::CTRL + Qt::Key_O);
+
+    const auto newAct = mFileMenu->addAction(QIcon::fromTheme("file_blank"),
+                                             tr("New", "MenuBar_File"),
+                                             this, &MainWindow::newFile,
+                                             Qt::CTRL + Qt::Key_N);
+    mToolbar->addAction(newAct);
+
+    const auto openAct = mFileMenu->addAction(QIcon::fromTheme("file_folder"),
+                                              tr("Open", "MenuBar_File"),
+                                              this, qOverload<>(&MainWindow::openFile),
+                                              Qt::CTRL + Qt::Key_O);
+
+    QToolButton *loadToolBtn = new QToolButton(this);
+    loadToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
+    loadToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    QMenu *loadToolMenu = new QMenu(this);
+    loadToolBtn->setMenu(loadToolMenu);
+
+    mToolbar->addWidget(loadToolBtn);
+    loadToolBtn->setDefaultAction(openAct);
+
     mRecentMenu = mFileMenu->addMenu(QIcon::fromTheme("file_folder"),
                                      tr("Open Recent", "MenuBar_File"));
+
     mFileMenu->addSeparator();
-    mFileMenu->addAction(QIcon::fromTheme("linked"),
-                         tr("Link"),
-                         this, &MainWindow::linkFile,
-                         Qt::CTRL + Qt::Key_L);
-    mFileMenu->addAction(QIcon::fromTheme("file_blank"),
-                         tr("Import File", "MenuBar_File"),
-                         this, qOverload<>(&MainWindow::importFile),
-                         Qt::CTRL + Qt::Key_I);
-    mFileMenu->addAction(QIcon::fromTheme("renderlayers"),
-                         tr("Import Image Sequence", "MenuBar_File"),
-                         this, &MainWindow::importImageSequence);
+    const auto linkedAct = mFileMenu->addAction(QIcon::fromTheme("linked"),
+                                                tr("Link"),
+                                                this, &MainWindow::linkFile,
+                                                Qt::CTRL + Qt::Key_L);
+
+    const auto importAct = mFileMenu->addAction(QIcon::fromTheme("file_blank"),
+                                                tr("Import File", "MenuBar_File"),
+                                                this, qOverload<>(&MainWindow::importFile),
+                                                Qt::CTRL + Qt::Key_I);
+
+    const auto importSeqAct = mFileMenu->addAction(QIcon::fromTheme("renderlayers"),
+                                                   tr("Import Image Sequence", "MenuBar_File"),
+                                                   this, &MainWindow::importImageSequence);
+
+    loadToolMenu->addAction(linkedAct);
+    loadToolMenu->addAction(importAct);
+    loadToolMenu->addAction(importSeqAct);
+    loadToolMenu->addMenu(mRecentMenu);
+
     mFileMenu->addSeparator();
     mFileMenu->addAction(QIcon::fromTheme("loop_back"),
                          tr("Revert", "MenuBar_File"),
                          this, &MainWindow::revert);
+
+    QToolButton *saveToolBtn = new QToolButton(this);
+    saveToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
+    saveToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    QMenu *saveToolMenu = new QMenu(this);
+    saveToolBtn->setMenu(saveToolMenu);
+    mToolbar->addWidget(saveToolBtn);
+
     mFileMenu->addSeparator();
-    mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
-                         tr("Save", "MenuBar_File"),
-                         this, qOverload<>(&MainWindow::saveFile),
-                         Qt::CTRL + Qt::Key_S);
-    mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
-                         tr("Save As", "MenuBar_File"),
-                         this, [this]() { saveFileAs(); },
-                         Qt::CTRL + Qt::SHIFT + Qt::Key_S);
-    mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
-                         tr("Save Backup", "MenuBar_File"),
-                         this, &MainWindow::saveBackup);
+    const auto saveAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
+                                              tr("Save", "MenuBar_File"),
+                                              this, qOverload<>(&MainWindow::saveFile),
+                                              Qt::CTRL + Qt::Key_S);
+
+    const auto saveAsAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
+                                                tr("Save As", "MenuBar_File"),
+                                                this, [this]() { saveFileAs(); },
+                                                Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+
+    const auto saveBackAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
+                                                  tr("Save Backup", "MenuBar_File"),
+                                                  this, &MainWindow::saveBackup);
 
     const auto exportMenu = mFileMenu->addMenu(QIcon::fromTheme("output"),
                                                tr("Export", "MenuBar_File"));
-    frictionButtonActions << exportMenu->addAction(QIcon::fromTheme("seq_preview"),
-                                                   tr("Web Animation (SVG + SMIL)", "MenuBar_File"),
-                                                   this, &MainWindow::exportSVG,
-                                                   QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                                        "exportSVG",
-                                                                                        "Shift+F12").toString()));
+
+    const auto exportSvgAct = exportMenu->addAction(QIcon::fromTheme("seq_preview"),
+                                                    tr("Web Animation (SVG + SMIL)", "MenuBar_File"),
+                                                    this, &MainWindow::exportSVG,
+                                                    QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                                         "exportSVG",
+                                                                                         "Shift+F12").toString()));
+    saveToolBtn->setDefaultAction(saveAct);
+    saveToolMenu->addAction(saveAsAct);
+    saveToolMenu->addAction(saveBackAct);
+    saveToolMenu->addAction(exportSvgAct);
+
     mFileMenu->addSeparator();
     mFileMenu->addAction(QIcon::fromTheme("cancel"),
                          tr("Close", "MenuBar_File"),
@@ -596,8 +637,8 @@ void MainWindow::setupMenuBar()
 
     mViewMenu = mMenuBar->addMenu(tr("View", "MenuBar"));
 
-    auto mToolsMenu = mMenuBar->addMenu(tr("Tools", "MenuBar"));
-    mToolsMenu->addActions(mToolbarActGroup->actions());
+    //auto mToolsMenu = mMenuBar->addMenu(tr("Tools", "MenuBar"));
+    //mToolsMenu->addActions(mToolbarActGroup->actions());
 
     mObjectMenu = mMenuBar->addMenu(tr("Object", "MenuBar"));
 
@@ -761,17 +802,29 @@ void MainWindow::setupMenuBar()
 
 //    mEffectsMenu->addAction("Blur");
 
+    QToolButton *sceneToolBtn = new QToolButton(this);
+    sceneToolBtn->setText(tr("Scene"));
+    sceneToolBtn->setIcon(QIcon::fromTheme("sequence"));
+    sceneToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
+    sceneToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    QMenu *sceneToolMenu = new QMenu(this);
+    sceneToolBtn->setMenu(sceneToolMenu);
+    mToolbar->addWidget(sceneToolBtn);
+
     mSceneMenu = mMenuBar->addMenu(tr("Scene", "MenuBar"));
 
-    mSceneMenu->addAction(QIcon::fromTheme("sequence"),
-                          tr("New Scene", "MenuBar_Scene"), this, [this]() {
+    const auto newSceneAct = mSceneMenu->addAction(QIcon::fromTheme("file_new"),
+                                                   tr("New Scene", "MenuBar_Scene"),
+                                                   this, [this]() {
         SceneSettingsDialog::sNewSceneDialog(mDocument, this);
     });
+    sceneToolMenu->addAction(newSceneAct);
 
     {
-        const auto qAct = mSceneMenu->addAction(QIcon::fromTheme("sequence"),
+        const auto qAct = mSceneMenu->addAction(QIcon::fromTheme("cancel"),
                                                 tr("Delete Scene", "MenuBar_Scene"));
         mActions.deleteSceneAction->connect(qAct);
+        sceneToolMenu->addAction(qAct);
     }
 
     mSceneMenu->addSeparator();
@@ -782,7 +835,7 @@ void MainWindow::setupMenuBar()
                                          QKeySequence(AppSupport::getSettings("shortcuts",
                                                                               "addToQue",
                                                                               "F12").toString()));
-    frictionButtonActions << mAddToQueAct;
+    sceneToolMenu->addAction(mAddToQueAct);
 
     mSceneMenu->addSeparator();
 
@@ -790,6 +843,10 @@ void MainWindow::setupMenuBar()
         const auto qAct = mSceneMenu->addAction(QIcon::fromTheme("sequence"),
                                                 tr("Scene Properties", "MenuBar_Scene"));
         mActions.sceneSettingsAction->connect(qAct);
+        sceneToolBtn->setDefaultAction(qAct);
+        sceneToolBtn->setText(tr("Scene"));
+        connect(qAct, &QAction::changed,
+                this, [sceneToolBtn]() { sceneToolBtn->setText(tr("Scene")); });
     }
 
     const auto zoomMenu = mViewMenu->addMenu(
@@ -1027,8 +1084,10 @@ void MainWindow::setupMenuBar()
 
     const auto help = mMenuBar->addMenu(tr("Help", "MenuBar"));
 
-    help->addAction(QIcon::fromTheme("question"),
-                    tr("About", "MenuBar_Help"), this, [this]() {
+    frictionButtonActions << help->addAction(QIcon::fromTheme("friction"),
+                                             tr("About", "MenuBar_Help"),
+                                             this,
+                                             [this]() {
         QString aboutText = QString("<h1 style=\"font-weight: normal;\">%1</h1>"
                                     "<h3 style=\"font-weight: normal;\">%4 %3</h3>"
                                     "<p>%5 &copy; %1 <a style=\"text-decoration: none;\" href=\"%2\">%6</a>.</p>"
@@ -1055,7 +1114,7 @@ void MainWindow::setupMenuBar()
 
     setMenuBar(mMenuBar);
 
-    //mTimeline->setActions(frictionButtonActions);
+    mTimeline->setActions(frictionButtonActions);
 }
 
 void MainWindow::setResolutionText(QString text)
@@ -1114,13 +1173,16 @@ void MainWindow::updateSettingsForCurrentCanvas(Canvas* const scene)
 void MainWindow::setupToolBar()
 {
     //const QSize iconSize(AppSupport::getSettings("ui",
-      //                                           "mainToolbarIconSize",
-        //                                         QSize(24, 24)).toSize());
+    //                                             "mainToolbarIconSize",
+    //                                             QSize(24, 24)).toSize());
 
-    /*mToolBar = new QToolBar(tr("Toolbar"), this);
-    mToolBar->setIconSize(iconSize);
-    mToolBar->setMovable(true);
-    mToolBar->setObjectName(QString::fromUtf8("toolbarWidget"));*/
+    mToolbar = new QToolBar(tr("Toolbar"), this);
+    mToolbar->setObjectName("mainToolbar");
+    mToolbar->setFocusPolicy(Qt::NoFocus);
+    //mToolbar->setIconSize(iconSize);
+    mToolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    mToolbar->setMovable(false);
+    addToolBar(mToolbar);
 
     mToolbarActGroup = new QActionGroup(this);
     mToolBarNodeGroup = new QActionGroup(this);
@@ -2108,13 +2170,13 @@ void MainWindow::lockFinished()
 
 void MainWindow::resizeEvent(QResizeEvent* e)
 {
-    if (statusBar()) { statusBar()->setMaximumWidth(width()); }
+    //if (statusBar()) { statusBar()->setMaximumWidth(width()); }
     QMainWindow::resizeEvent(e);
 }
 
 void MainWindow::showEvent(QShowEvent *e)
 {
-    if (statusBar()) { statusBar()->setMaximumWidth(width()); }
+    //if (statusBar()) { statusBar()->setMaximumWidth(width()); }
     QMainWindow::showEvent(e);
 }
 

@@ -248,7 +248,7 @@ private:
 
     //QStatusBar* mStatusBar;
     //UsageWidget* mUsageWidget = nullptr;
-    //QToolBar *mToolBar;
+    QToolBar *mToolbar;
 
     QActionGroup *mToolbarActGroup;
     QActionGroup *mToolBarNodeGroup;
