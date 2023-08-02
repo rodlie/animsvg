@@ -582,5 +582,10 @@ void TimelineDockWidget::updateSettingsForCurrentCanvas(Canvas* const canvas)
 
 void TimelineDockWidget::setActions(const QList<QAction *> actions)
 {
+    if (actions.count() < 1) { return; }
+    else if (actions.count() == 1) {
+        mFrictionButton->setDefaultAction(actions.at(0));
+        return;
+    }
     mFrictionButton->addActions(actions);
 }
