@@ -999,6 +999,13 @@ void MainWindow::setupMenuBar()
         else { showNormal(); }
     });
 
+    const auto viewTimelineAct = mViewMenu->addAction(tr("View Timeline"));
+    viewTimelineAct->setCheckable(true);
+    viewTimelineAct->setChecked(true);
+    viewTimelineAct->setShortcut(QKeySequence(Qt::Key_T));
+    connect(viewTimelineAct, &QAction::triggered,
+            this, [this](bool triggered) { mTimeline->setVisible(triggered); });
+
     /*mPanelsMenu = mViewMenu->addMenu(tr("Docks", "MenuBar_View"));
 
     mSelectedObjectDockAct = mPanelsMenu->addAction(
