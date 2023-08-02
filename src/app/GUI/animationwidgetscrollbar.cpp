@@ -111,11 +111,11 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     qreal xL = (-minMod + (mRange ? 0. : 0.5))*pixPerFrame + x0;
     int currentFrame = minFrame - minMod;
 
-    if(!mRange) {
+    /*if(!mRange) {
         const int nEmpty = qCeil((70 - xL)/inc);
         currentFrame += nEmpty*mDrawFrameInc;
         xL += nEmpty*inc;
-    }
+    }*/
 
     const qreal threeFourthsHeight = height()*0.75;
     const qreal maxX = width() + eSizesUI::widget;
@@ -130,13 +130,13 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         currentFrame += mDrawFrameInc;
     }
 
-    p.setPen(QPen(Qt::white, 1));
+    /*p.setPen(QPen(Qt::white, 1));
     if(!mRange) {
         const QRectF textRect(eSizesUI::widget, 0,
                               5*eSizesUI::widget, height());
         p.drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft,
                    QString::number(mFrameRange.fMin));
-    }
+    }*/
 
     p.end();
 }
