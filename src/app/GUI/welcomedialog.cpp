@@ -66,14 +66,17 @@ WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
     const auto buttonWid = new QWidget(this);
     const auto buttonLay = new QHBoxLayout(buttonWid);
 
-    const auto newButton = new QPushButton(tr("New"), this);
+    const auto newButton = new QPushButton(QIcon::fromTheme("file_blank"),
+                                           tr("New"),
+                                           this);
     connect(newButton, &QPushButton::released, newFunc);
 
     const auto openButton = new QToolButton(this);
     openButton->setText(tr("Open"));
+    openButton->setIcon(QIcon::fromTheme("file_folder"));
     openButton->setSizePolicy(QSizePolicy::Preferred,
                               QSizePolicy::Expanding);
-    openButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
+    openButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     openButton->setPopupMode(QToolButton::MenuButtonPopup);
     openButton->setMenu(recentMenu);
     connect(openButton, &QPushButton::released, openFunc);
