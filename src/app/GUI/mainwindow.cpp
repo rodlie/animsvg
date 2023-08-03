@@ -116,6 +116,10 @@ MainWindow::MainWindow(Document& document,
     , mNodeVisibility(nullptr)
     , mFontWidget(nullptr)
     , mFontWidgetAct(nullptr)
+    , mDrawPathAuto(nullptr)
+    , mDrawPathSmooth(nullptr)
+    , mDrawPathSmoothAct(nullptr)
+    , mDrawPathMaxError(nullptr)
     , mDocument(document)
     , mActions(actions)
     , mAudioHandler(audioHandler)
@@ -255,8 +259,13 @@ MainWindow::MainWindow(Document& document,
     mViewerNodeBar->setObjectName(QString::fromUtf8("ViewerNodeBar"));
     mViewerNodeBar->setOrientation(Qt::Vertical);
 
+    mViewerDrawBar = new QToolBar(this);
+    mViewerDrawBar->setObjectName(QString::fromUtf8("ViewerDrawBar"));
+    mViewerDrawBar->setOrientation(Qt::Horizontal);
+
     setupToolBar();
     setupMenuBar();
+    setupDrawPathSpins();
 
     connectToolBarActions();
 
@@ -358,9 +367,17 @@ MainWindow::MainWindow(Document& document,
     propertiesLayout->addWidget(mObjectSettingsScrollArea);
     propertiesLayout->addWidget(alignWidget);
 
+    QWidget *viewerWidget = new QWidget(this);
+    viewerWidget->setContentsMargins(frictionMargins);
+    QVBoxLayout *viewerLayout = new QVBoxLayout(viewerWidget);
+    viewerLayout->setContentsMargins(frictionMargins);
+    viewerLayout->setSpacing(frictionSpacing);
+    viewerLayout->addWidget(mStackWidget);
+    viewerLayout->addWidget(mViewerDrawBar);
+
     frictionTopLayout->addWidget(viewerToolBar);
     frictionTopLayout->addWidget(mViewerNodeBar);
-    frictionTopLayout->addWidget(mStackWidget);
+    frictionTopLayout->addWidget(viewerWidget);
 
     mBottomSideBarWidget = new QTabWidget(this);
     mBottomSideBarWidget->tabBar()->setFocusPolicy(Qt::NoFocus);
@@ -1094,10 +1111,10 @@ void MainWindow::setupMenuBar()
 
     const auto help = mMenuBar->addMenu(tr("Help", "MenuBar"));
 
-    frictionButtonActions << help->addAction(QIcon::fromTheme("friction"),
-                                             tr("About", "MenuBar_Help"),
-                                             this,
-                                             [this]() {
+    const auto aboutAct = help->addAction(QIcon::fromTheme("friction"),
+                                          tr("About", "MenuBar_Help"),
+                                          this,
+                                          [this]() {
         QString aboutText = QString("<h1 style=\"font-weight: normal;\">%1</h1>"
                                     "<h3 style=\"font-weight: normal;\">%4 %3</h3>"
                                     "<p>%5 &copy; %1 <a style=\"text-decoration: none;\" href=\"%2\">%6</a>.</p>"
@@ -1124,7 +1141,20 @@ void MainWindow::setupMenuBar()
 
     setMenuBar(mMenuBar);
 
-    mTimeline->setActions(frictionButtonActions);
+    // spacer
+    QWidget* spacer = new QWidget(this);
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    mToolbar->addWidget(spacer);
+
+    // friction button
+    const auto frictionButton = new QToolButton(this);
+    frictionButton->setObjectName(QString::fromUtf8("ToolButton"));
+    frictionButton->setPopupMode(QToolButton::InstantPopup);
+    frictionButton->setIcon(QIcon::fromTheme("friction"));
+    frictionButton->setDefaultAction(aboutAct);
+    frictionButton->setToolTip(QString());
+    frictionButton->setFocusPolicy(Qt::NoFocus);
+    mToolbar->addWidget(frictionButton);
 }
 
 void MainWindow::setResolutionText(QString text)
@@ -1132,6 +1162,61 @@ void MainWindow::setResolutionText(QString text)
     text = text.remove(" %");
     const qreal res = clamp(text.toDouble(), 1, 200)/100;
     setResolutionValue(res);
+}
+
+QAction *MainWindow::addSlider(const QString &name,
+                               QDoubleSlider * const slider,
+                               QToolBar * const toolBar)
+{
+    const auto widget = new QWidget;
+    widget->setContentsMargins(5, 0, 5, 0);
+    const auto layout = new QHBoxLayout(widget);
+    layout->setContentsMargins(0, 0, 0, 0);
+    const auto label = new QLabel(name);
+
+    layout->addWidget(label);
+    layout->addWidget(slider);
+    return toolBar->addWidget(widget);
+}
+
+void MainWindow::setupDrawPathSpins()
+{
+    mDocument.fDrawPathManual = false;
+    mDrawPathAuto = new QAction(mDocument.fDrawPathManual ? QIcon::fromTheme("drawPathAutoUnchecked") : QIcon::fromTheme("drawPathAutoChecked"),
+                                tr("Automatic/Manual Fitting"),
+                                this);
+    connect(mDrawPathAuto, &QAction::triggered,
+            this, [this]() {
+        mDocument.fDrawPathManual = !mDocument.fDrawPathManual;
+        qDebug() << "manual fitting?" << mDocument.fDrawPathManual;
+        mDrawPathMaxErrorAct->setDisabled(mDocument.fDrawPathManual);
+        mDrawPathAuto->setIcon(mDocument.fDrawPathManual ? QIcon::fromTheme("drawPathAutoUnchecked") : QIcon::fromTheme("drawPathAutoChecked"));
+    });
+    mViewerDrawBar->addAction(mDrawPathAuto);
+
+    mDrawPathMaxError = new QDoubleSlider(1, 200, 1, this);
+    mDrawPathMaxError->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+    mDrawPathMaxError->setNumberDecimals(0);
+    mDrawPathMaxError->setDisplayedValue(mDocument.fDrawPathMaxError);
+    connect(mDrawPathMaxError, &QDoubleSlider::valueEdited,
+            this, [this](const qreal value) {
+        mDocument.fDrawPathMaxError = qFloor(value);
+    });
+    mDrawPathMaxErrorAct = addSlider(tr("Max Error"),
+                                     mDrawPathMaxError,
+                                     mViewerDrawBar);
+
+    mDrawPathSmooth = new QDoubleSlider(1, 200, 1, this);
+    mDrawPathSmooth->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+    mDrawPathSmooth->setNumberDecimals(0);
+    mDrawPathSmooth->setDisplayedValue(mDocument.fDrawPathSmooth);
+    connect(mDrawPathSmooth, &QDoubleSlider::valueEdited,
+            this, [this](const qreal value) {
+        mDocument.fDrawPathSmooth = qFloor(value);
+    });
+    mDrawPathSmoothAct = addSlider(tr("Smooth"),
+                                   mDrawPathSmooth,
+                                   mViewerDrawBar);
 }
 
 void MainWindow::openWelcomeDialog()
@@ -1182,9 +1267,9 @@ void MainWindow::updateSettingsForCurrentCanvas(Canvas* const scene)
 
 void MainWindow::setupToolBar()
 {
-    //const QSize iconSize(AppSupport::getSettings("ui",
-    //                                             "mainToolbarIconSize",
-    //                                             QSize(24, 24)).toSize());
+    /*const QSize iconSize(AppSupport::getSettings("ui",
+                                                 "mainToolbarIconSize",
+                                                 QSize(24, 24)).toSize());*/
 
     mToolbar = new QToolBar(tr("Toolbar"), this);
     mToolbar->setObjectName("mainToolbar");
@@ -1614,6 +1699,8 @@ void MainWindow::updateCanvasModeButtonsChecked()
     //mFontWidgetAct->setVisible(boxMode);
 
     const bool pointMode = mode == CanvasMode::pointTransform;
+
+    mViewerDrawBar->setVisible(mode == CanvasMode::drawPath);
     mViewerNodeBar->setVisible(pointMode);
     mActionConnectPointsAct->setVisible(pointMode);
     mActionDisconnectPointsAct->setVisible(pointMode);

@@ -33,6 +33,8 @@
 #include <QToolBox>
 #include <QSplitter>
 #include <QToolButton>
+#include <QLabel>
+#include <QToolBar>
 
 #include "undoredo.h"
 #include "Private/Tasks/taskscheduler.h"
@@ -46,6 +48,7 @@
 #include "fileshandler.h"
 #include "ekeyfilter.h"
 #include "GUI/RenderWidgets/renderwidget.h"
+#include "GUI/qdoubleslider.h"
 
 class VideoEncoder;
 class RenderWidget;
@@ -254,6 +257,7 @@ private:
     QActionGroup *mToolBarNodeGroup;
 
     QToolBar *mViewerNodeBar;
+    QToolBar *mViewerDrawBar;
 
     QSplitter *mSplitterMain;
     QSplitter *mSplitterLeft;
@@ -299,6 +303,12 @@ private:
 
     FontsWidget *mFontWidget;
     QAction* mFontWidgetAct;
+
+    QAction *mDrawPathAuto;
+    QDoubleSlider *mDrawPathSmooth;
+    QAction *mDrawPathSmoothAct;
+    QDoubleSlider *mDrawPathMaxError;
+    QAction *mDrawPathMaxErrorAct;
 
     QMenuBar *mMenuBar;
     QMenu *mFileMenu;
@@ -352,6 +362,11 @@ private:
 
     QComboBox *mResolutionComboBox;
     void setResolutionText(QString text);
+
+    QAction* addSlider(const QString &name,
+                       QDoubleSlider* const slider,
+                       QToolBar* const toolBar);
+    void setupDrawPathSpins();
 
 protected:
     void keyPressEvent(QKeyEvent *event);

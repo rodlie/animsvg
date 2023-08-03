@@ -36,6 +36,7 @@ QPushButton#QActionButton:checked
 
 QToolBar#animationDockWidget,
 QToolBar#ViewerNodeBar,
+QToolBar#ViewerDrawBar,
 #darkWidget
 {
     background-color: rgb(33, 33, 38);
