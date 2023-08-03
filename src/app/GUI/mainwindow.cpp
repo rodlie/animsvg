@@ -453,6 +453,7 @@ void MainWindow::setupMenuBar()
     QToolButton *loadToolBtn = new QToolButton(this);
     loadToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
     loadToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    loadToolBtn->setFocusPolicy(Qt::NoFocus);
     QMenu *loadToolMenu = new QMenu(this);
     loadToolBtn->setMenu(loadToolMenu);
 
@@ -490,6 +491,7 @@ void MainWindow::setupMenuBar()
     QToolButton *saveToolBtn = new QToolButton(this);
     saveToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
     saveToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    saveToolBtn->setFocusPolicy(Qt::NoFocus);
     QMenu *saveToolMenu = new QMenu(this);
     saveToolBtn->setMenu(saveToolMenu);
     mToolbar->addWidget(saveToolBtn);
@@ -807,6 +809,7 @@ void MainWindow::setupMenuBar()
     sceneToolBtn->setIcon(QIcon::fromTheme("sequence"));
     sceneToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
     sceneToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    sceneToolBtn->setFocusPolicy(Qt::NoFocus);
     QMenu *sceneToolMenu = new QMenu(this);
     sceneToolBtn->setMenu(sceneToolMenu);
     mToolbar->addWidget(sceneToolBtn);
