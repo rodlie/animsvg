@@ -54,11 +54,8 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     , mMainWindow(parent)
     , mTimelineLayout(layoutH->timelineLayout())
     , mToolBar(nullptr)
-    , mFrictionButton(nullptr)
     , mFrameStartSpin(nullptr)
     , mFrameEndSpin(nullptr)
-    //, mNodeVisibilityAct(nullptr)
-    //, mNodeVisibility(nullptr)
     , mFrameRewindAct(nullptr)
     , mFrameFastForwardAct(nullptr)
     , mCurrentFrameSpinAct(nullptr)
@@ -146,48 +143,6 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     connect(mLoopButton, &QAction::triggered,
             this, &TimelineDockWidget::setLoop);
 
-    /*mLocalPivotAct = new QAction(mDocument.fLocalPivot ? QIcon::fromTheme("pivotLocal") : QIcon::fromTheme("pivotGlobal"),
-                                 tr("Pivot Global / Local"),
-                                 this);
-    connect(mLocalPivotAct, &QAction::triggered,
-            this, [this]() {
-        TimelineDockWidget::setLocalPivot(!mDocument.fLocalPivot);
-        mLocalPivotAct->setIcon(mDocument.fLocalPivot ? QIcon::fromTheme("pivotLocal") : QIcon::fromTheme("pivotGlobal"));
-    });*/
-
-    mFrictionButton = new QToolButton(this);
-    mFrictionButton->setObjectName(QString::fromUtf8("ToolButton"));
-    mFrictionButton->setPopupMode(QToolButton::InstantPopup);
-    mFrictionButton->setIcon(QIcon::fromTheme("friction"));
-    mFrictionButton->setFocusPolicy(Qt::NoFocus);
-
-    /*mNodeVisibility = new QToolButton(this);
-    mNodeVisibility->setObjectName(QString::fromUtf8("ToolButton"));
-    mNodeVisibility->setPopupMode(QToolButton::InstantPopup);
-    QAction *nodeVisibilityAction1 = new QAction(QIcon::fromTheme("dissolvedAndNormalNodes"),
-                                                 tr("Dissolved and normal nodes"),
-                                                 this);
-    nodeVisibilityAction1->setData(0);
-    QAction *nodeVisibilityAction2 = new QAction(QIcon::fromTheme("dissolvedNodesOnly"),
-                                                 tr("Dissolved nodes only"),
-                                                 this);
-    nodeVisibilityAction2->setData(1);
-    QAction *nodeVisibilityAction3 = new QAction(QIcon::fromTheme("normalNodesOnly"),
-                                                 tr("Normal nodes only"),
-                                                 this);
-    nodeVisibilityAction3->setData(2);
-    mNodeVisibility->addAction(nodeVisibilityAction1);
-    mNodeVisibility->addAction(nodeVisibilityAction2);
-    mNodeVisibility->addAction(nodeVisibilityAction3);
-    mNodeVisibility->setDefaultAction(nodeVisibilityAction1);
-    connect(mNodeVisibility, &QToolButton::triggered,
-            this, [this](QAction *act) {
-            qDebug() << "set node visibility" << act->data().toInt();
-            mNodeVisibility->setDefaultAction(act);
-            mDocument.fNodeVisibility = static_cast<NodeVisiblity>(act->data().toInt());
-            Document::sInstance->actionFinished();
-    });*/
-
     mFrameStartSpin = new QSpinBox(this);
     mFrameStartSpin->setAlignment(Qt::AlignHCenter);
     mFrameStartSpin->setFocusPolicy(Qt::ClickFocus);
@@ -250,18 +205,12 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
 
     mToolBar->setIconSize(iconSize);
 
-//    mControlButtonsLayout->addWidget(mGoToPreviousKeyButton);
-//    mGoToPreviousKeyButton->setFocusPolicy(Qt::NoFocus);
-//    mControlButtonsLayout->addWidget(mGoToNextKeyButton);
-//    mGoToNextKeyButton->setFocusPolicy(Qt::NoFocus);
-
     mRenderProgress = new QProgressBar(this);
     mRenderProgress->setSizePolicy(QSizePolicy::Preferred,
                                    QSizePolicy::Preferred);
     mRenderProgress->setMinimumWidth(150);
     mRenderProgress->setFormat(tr("Cache %p%"));
 
-    mToolBar->addWidget(mFrictionButton);
     mToolBar->addWidget(mFrameStartSpin);
 
     QWidget *spacerWidget1 = new QWidget(this);
@@ -277,17 +226,8 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mToolBar->addAction(mPlayButton);
     mToolBar->addAction(mStopButton);
     mToolBar->addAction(mLoopButton);
-    //mToolBar->addAction(mLocalPivotAct);
-    //mNodeVisibilityAct = mToolBar->addWidget(mNodeVisibility);
 
     mRenderProgressAct->setVisible(false);
-
-    mToolBar->addAction(QIcon::fromTheme("render_animation"),
-                        tr("Add to Render Queue"), this, [] {
-        MainWindow::sGetInstance()->addCanvasToRenderQue();
-    });
-
-    setupDrawPathSpins();
 
     QWidget *spacerWidget2 = new QWidget(this);
     spacerWidget2->setSizePolicy(QSizePolicy::Expanding,
@@ -312,63 +252,10 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mMainLayout->addWidget(mTimelineLayout);
 
     previewFinished();
-    //addNewBoxesListKeysViewWidget(1);
-    //addNewBoxesListKeysViewWidget(0);
 
     connect(&mDocument, &Document::activeSceneSet,
             this, &TimelineDockWidget::updateSettingsForCurrentCanvas);
 
-}
-
-QAction* addSlider(const QString& name,
-                   QDoubleSlider* const slider,
-                   QToolBar* const toolBar)
-{
-    const auto widget = new QWidget;
-    widget->setContentsMargins(5, 0, 5, 0);
-    const auto layout = new QHBoxLayout;
-    layout->setContentsMargins(0, 0, 0, 0);
-    widget->setLayout(layout);
-    const auto label = new QLabel(name/* + ": "*/);
-
-    layout->addWidget(label);
-    layout->addWidget(slider);
-    return toolBar->addWidget(widget);
-}
-
-void TimelineDockWidget::setupDrawPathSpins()
-{
-    mDocument.fDrawPathManual = false;
-    mDrawPathAuto = new QAction(mDocument.fDrawPathManual ? QIcon::fromTheme("drawPathAutoUnchecked") : QIcon::fromTheme("drawPathAutoChecked"),
-                                tr("Automatic/Manual Fitting"),
-                                this);
-    connect(mDrawPathAuto, &QAction::triggered,
-            this, [this]() {
-        mDocument.fDrawPathManual = !mDocument.fDrawPathManual;
-        qDebug() << "manual fitting?" << mDocument.fDrawPathManual;
-        mDrawPathMaxErrorAct->setDisabled(mDocument.fDrawPathManual);
-        mDrawPathAuto->setIcon(mDocument.fDrawPathManual ? QIcon::fromTheme("drawPathAutoUnchecked") : QIcon::fromTheme("drawPathAutoChecked"));
-    });
-    mToolBar->addAction(mDrawPathAuto);
-
-    mDrawPathMaxError = new QDoubleSlider(1, 200, 1, this);
-    mDrawPathMaxError->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    mDrawPathMaxError->setNumberDecimals(0);
-    mDrawPathMaxError->setDisplayedValue(mDocument.fDrawPathMaxError);
-    connect(mDrawPathMaxError, &QDoubleSlider::valueEdited,
-            this, [this](const qreal value) {
-        mDocument.fDrawPathMaxError = qFloor(value);
-    });
-    mDrawPathMaxErrorAct = addSlider(tr("Max Error"), mDrawPathMaxError, mToolBar);
-
-    mDrawPathSmooth = new QDoubleSlider(1, 200, 1, this);
-    mDrawPathSmooth->setNumberDecimals(0);
-    mDrawPathSmooth->setDisplayedValue(mDocument.fDrawPathSmooth);
-    connect(mDrawPathSmooth, &QDoubleSlider::valueEdited,
-            this, [this](const qreal value) {
-        mDocument.fDrawPathSmooth = qFloor(value);
-    });
-    mDrawPathSmoothAct = addSlider(tr("Smooth"), mDrawPathSmooth, mToolBar);
 }
 
 void TimelineDockWidget::updateFrameRange(const FrameRange &range)
@@ -406,7 +293,6 @@ void TimelineDockWidget::setLoop(const bool loop)
 
 bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
 {
-    //const CanvasMode mode = mDocument.fCanvasMode;
     const int key = event->key();
     const auto mods = event->modifiers();
     if (key == Qt::Key_Escape) {
@@ -441,13 +327,7 @@ bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
         if (scene->anim_nextRelFrameWithKey(frame, targetFrame)) {
             mDocument.setActiveSceneFrame(targetFrame);
         }
-    } /*else if (key == Qt::Key_P &&
-               !(mods & Qt::ControlModifier) && !(mods & Qt::AltModifier)) {
-        mLocalPivotAct->trigger();
-    } else if (mode == CanvasMode::pointTransform && key == Qt::Key_N &&
-               !(mods & Qt::ControlModifier) && !(mods & Qt::AltModifier)) {
-        mNodeVisibility->toggle();
-    }*/ else {
+    } else {
         return false;
     }
     return true;
@@ -521,19 +401,7 @@ void TimelineDockWidget::resumePreview()
 
 void TimelineDockWidget::updateButtonsVisibility(const CanvasMode mode)
 {
-    /*if (mLocalPivotAct) {
-        mLocalPivotAct->setVisible(mode == CanvasMode::pointTransform ||
-                                   mode == CanvasMode::boxTransform);
-    }*/
-    /*if (mNodeVisibilityAct) {
-        mNodeVisibilityAct->setVisible(mode == CanvasMode::pointTransform);
-    }*/
-
-    const bool drawPathMode = mode == CanvasMode::drawPath;
-
-    if (mDrawPathAuto) { mDrawPathAuto->setVisible(drawPathMode); }
-    if (mDrawPathMaxErrorAct) { mDrawPathMaxErrorAct->setVisible(drawPathMode); }
-    if (mDrawPathSmoothAct) { mDrawPathSmoothAct->setVisible(drawPathMode); }
+    Q_UNUSED(mode)
 }
 
 void TimelineDockWidget::pausePreview()
@@ -556,13 +424,6 @@ void TimelineDockWidget::interruptPreview()
     RenderHandler::sInstance->interruptPreview();
 }
 
-/*void TimelineDockWidget::setLocalPivot(const bool local)
-{
-    mDocument.fLocalPivot = local;
-    for (const auto& scene : mDocument.fScenes) { scene->updatePivot(); }
-    Document::sInstance->actionFinished();
-}*/
-
 void TimelineDockWidget::updateSettingsForCurrentCanvas(Canvas* const canvas)
 {
     if (!canvas) { return; }
@@ -578,14 +439,4 @@ void TimelineDockWidget::updateSettingsForCurrentCanvas(Canvas* const canvas)
     });
     connect(canvas, &Canvas::currentFrameChanged,
             this, &TimelineDockWidget::handleCurrentFrameChanged);
-}
-
-void TimelineDockWidget::setActions(const QList<QAction *> actions)
-{
-    if (actions.count() < 1) { return; }
-    else if (actions.count() == 1) {
-        mFrictionButton->setDefaultAction(actions.at(0));
-        return;
-    }
-    mFrictionButton->addActions(actions);
 }

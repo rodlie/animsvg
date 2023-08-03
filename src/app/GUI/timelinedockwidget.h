@@ -76,13 +76,9 @@ public:
 
     void updateSettingsForCurrentCanvas(Canvas * const canvas);
 
-    void setActions(const QList<QAction*> actions);
-
 private:
     void setLoop(const bool loop);
     void interruptPreview();
-
-    //void setLocalPivot(const bool local);
 
     void playPreview();
     void renderPreview();
@@ -90,8 +86,6 @@ private:
     void resumePreview();
 
     void updateButtonsVisibility(const CanvasMode mode);
-
-    void setupDrawPathSpins();
 
     void updateFrameRange(const FrameRange &range);
     void handleCurrentFrameChanged(int frame);
@@ -104,8 +98,6 @@ private:
 
     QToolBar *mToolBar;
 
-    QToolButton *mFrictionButton;
-
     QVBoxLayout *mMainLayout;
 
     QAction *mPlayFromBeginningButton;
@@ -115,16 +107,6 @@ private:
 
     QSpinBox *mFrameStartSpin;
     QSpinBox *mFrameEndSpin;
-
-    //QAction *mLocalPivotAct;
-    //QAction *mNodeVisibilityAct;
-    //QToolButton *mNodeVisibility;
-
-    QAction  *mDrawPathAuto;
-    QDoubleSlider *mDrawPathSmooth;
-    QAction *mDrawPathSmoothAct;
-    QDoubleSlider *mDrawPathMaxError;
-    QAction *mDrawPathMaxErrorAct;
 
     QAction *mFrameRewindAct;
     QAction *mFrameFastForwardAct;
