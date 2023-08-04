@@ -28,6 +28,7 @@
 #include <QScrollBar>
 
 #include "expressionhighlighter.h"
+#include "appsupport.h"
 
 ExpressionEditor::ExpressionEditor(QrealAnimator * const target,
                                    QWidget * const parent) :
@@ -37,7 +38,8 @@ ExpressionEditor::ExpressionEditor(QrealAnimator * const target,
                                    const QString &text,
                                    QWidget * const parent) :
     QTextEdit(parent) {
-    setStyleSheet("QWidget { background: #2E2F30; }");
+    setPalette(AppSupport::getDarkPalette());
+    //setStyleSheet("QWidget { background: #2E2F30; }");
     setCursorWidth(2);
     setFont(QFont("monospace"));
     setMinimumWidth(20*eSizesUI::widget);

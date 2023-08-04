@@ -50,7 +50,7 @@ public:
     using QsciLexerJavaScript::QsciLexerJavaScript;
     JSLexer(QsciScintilla* const editor) : QsciLexerJavaScript(editor) {
         const QFont font(DEFAULT_FONT);
-        setDefaultPaper("#2E2F30");
+        setDefaultPaper(QColor(33, 33, 38)/*"#2E2F30"*/);
         setFont(font);
         setColor("#D6CF9A");
 
@@ -155,12 +155,12 @@ public:
         setMarginWidth(1, "9");
         setMarginsFont(font);
         setMarginsForegroundColor("#999999");
-        setMarginsBackgroundColor("#444444");
+        setMarginsBackgroundColor(QColor(40, 40, 47)/*"#444444"*/);
 
         setTabWidth(4);
         setBraceMatching(SloppyBraceMatch);
-        setMatchedBraceBackgroundColor("#555555");
-        setUnmatchedBraceBackgroundColor("#555555");
+        setMatchedBraceBackgroundColor(QColor(33, 33, 38)/*"#555555"*/);
+        setUnmatchedBraceBackgroundColor(QColor(33, 33, 38)/*"#555555"*/);
         setMatchedBraceForegroundColor("#D6CF9A");
         setUnmatchedBraceForegroundColor(QColor(255, 115, 115));
         setCaretForegroundColor(Qt::white);
@@ -448,11 +448,13 @@ ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
     tabLayout->setSpacing(0);
     tabLayout->setContentsMargins(0, 0, 0, 0);
     mBindingsButton = new QPushButton("Bindings && Script", this);
+    mBindingsButton->setFocusPolicy(Qt::NoFocus);
     mBindingsButton->setObjectName("leftButton");
     mBindingsButton->setCheckable(true);
     mBindingsButton->setChecked(true);
 
     mDefinitionsButon = new QPushButton("Definitions", this);
+    mDefinitionsButon->setFocusPolicy(Qt::NoFocus);
     mDefinitionsButon->setObjectName("rightButton");
     mDefinitionsButon->setCheckable(true);
 
@@ -599,7 +601,7 @@ ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
     p.end();
     mRedDotIcon = QIcon(pix);
 
-    mBindingsButton->setFocus();
+    //mBindingsButton->setFocus();
 }
 
 void ExpressionDialog::setCurrentTabId(const int id) {
