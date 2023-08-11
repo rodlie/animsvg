@@ -38,8 +38,10 @@
 #include "appsupport.h"
 
 #ifdef Q_OS_WIN
-    #include "windowsincludes.h"
-#endif // Q_OS_WIN
+#include "windowsincludes.h"
+#include <QtPlatformHeaders/QWindowsWindowFunctions>
+#endif
+
 extern "C" {
     #include <libavformat/avformat.h>
 }
@@ -116,6 +118,10 @@ int main(int argc, char *argv[])
     std::cout << "Setup Default QSurfaceFormat" << std::endl;
     QApplication app(argc, argv);
     setlocale(LC_NUMERIC, "C");
+
+#ifdef Q_OS_WIN
+    QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
+#endif
 
     AppSupport::setupTheme();
 
