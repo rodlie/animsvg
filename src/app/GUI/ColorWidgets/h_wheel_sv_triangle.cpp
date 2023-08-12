@@ -79,7 +79,7 @@ void H_Wheel_SV_Triangle::paintGL() {
 }
 
 void H_Wheel_SV_Triangle::wheelEvent(QWheelEvent *e) {
-    if(e->delta() > 0) {
+    if(e->angleDelta().y() > 0) {
         mHue += 0.01;
         if(mHue > 1)
         {

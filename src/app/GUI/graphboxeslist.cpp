@@ -398,10 +398,10 @@ void KeysView::graphWheelEvent(QWheelEvent *event) {
     if(event->modifiers() & Qt::ControlModifier) {
         qreal valUnderMouse;
         qreal frame;
-        graphGetValueAndFrameFromPos(event->posF(),
+        graphGetValueAndFrameFromPos(event->position(),
                                      valUnderMouse, frame);
         qreal graphScaleInc;
-        if(event->delta() > 0) {
+        if(event->angleDelta().y() > 0) {
             graphScaleInc = 0.1;
         } else {
             graphScaleInc = -0.1;
@@ -411,7 +411,7 @@ void KeysView::graphWheelEvent(QWheelEvent *event) {
         mPixelsPerValUnit += graphScaleInc*mPixelsPerValUnit;
         graphUpdateDimensions();
     } else {
-        if(event->delta() > 0) {
+        if(event->angleDelta().y() > 0) {
             graphIncMinShownVal(1);
         } else {
             graphIncMinShownVal(-1);

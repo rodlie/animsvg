@@ -157,19 +157,19 @@ int FrameScrollBar::getMinFrame() {
 void FrameScrollBar::wheelEvent(QWheelEvent *event) {
     if(mRange) {
         if(event->modifiers() & Qt::CTRL) {
-            if(event->delta() > 0) {
+            if(event->angleDelta().y() > 0) {
                 setFirstViewedFrame(mFirstViewedFrame - mViewedFramesSpan/20);
             } else {
                 setFirstViewedFrame(mFirstViewedFrame + mViewedFramesSpan/20);
             }
         } else {
             int newFramesSpan = mViewedFramesSpan;
-            if(event->delta() > 0) newFramesSpan *= 0.85;
+            if(event->angleDelta().y() > 0) newFramesSpan *= 0.85;
             else newFramesSpan *= 1.15;
             setFramesSpan(newFramesSpan);
         }
     } else {
-        if(event->delta() > 0) {
+        if(event->angleDelta().y() > 0) {
             setFirstViewedFrame(mFirstViewedFrame - 1);
         } else {
             setFirstViewedFrame(mFirstViewedFrame + 1);
