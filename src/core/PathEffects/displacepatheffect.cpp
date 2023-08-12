@@ -34,7 +34,7 @@ DisplacePathEffect::DisplacePathEffect() :
     mMaxDev = enve::make_shared<QrealAnimator>("max deviation");
     mSmoothness = QrealAnimator::sCreate0to1Animator("smoothness");
     mLengthBased = enve::make_shared<BoolPropertyContainer>("length inc");
-    mSeed = enve::make_shared<QrealAnimator>(qrand() % 9999, 0, 9999, 1, "smooth seed");
+    mSeed = enve::make_shared<QrealAnimator>(QRandomGenerator::global()->generate() % 9999, 0, 9999, 1, "smooth seed");
 
     mSegLength->setValueRange(1, 1000);
     mSegLength->setCurrentBaseValue(20);

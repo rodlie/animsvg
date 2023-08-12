@@ -26,7 +26,7 @@
 #include "randomgrid.h"
 
 RandomGrid::RandomGrid() : StaticComplexAnimator("randomness grid") {
-    mSeed = enve::make_shared<QrealAnimator>(qrand() % 9999, 0, 9999, 1, "smooth seed");
+    mSeed = enve::make_shared<QrealAnimator>(QRandomGenerator::global()->generate() % 9999, 0, 9999, 1, "smooth seed");
     mGridSize = enve::make_shared<QrealAnimator>(100, 1, 9999, 1, "grid size");
 
     ca_addChild(mSeed);
