@@ -28,6 +28,7 @@
 #include "GUI/global.h"
 #include "Boxes/boundingbox.h"
 #include "Private/esettings.h"
+#include "appsupport.h"
 
 TimelineMovable::TimelineMovable(const Type type, Property &parentProp) :
     mType(type), mParentProperty(parentProp) {}
@@ -348,7 +349,7 @@ void DurationRectangle::writeDurationRectangleXEV(QDomElement& ele) const {
 
 void DurationRectangle::readDurationRectangleXEV(const QDomElement& ele) {
     const auto visRangeStr = ele.attribute("visFrameRange");
-    const auto visRangeStrs = visRangeStr.split(' ', QString::SkipEmptyParts);
+    const auto visRangeStrs = visRangeStr.split(' ', QT_SKIP_EMPTY);
     if(visRangeStrs.count() != 2) RuntimeThrow("Invalid frame range " + visRangeStr);
     mMinFrame.setValueUnClamped(XmlExportHelpers::stringToInt(visRangeStrs[0]));
     mMaxFrame.setValueUnClamped(XmlExportHelpers::stringToInt(visRangeStrs[1]));

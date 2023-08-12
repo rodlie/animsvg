@@ -26,6 +26,7 @@
 #include "smartpath.h"
 
 #include "XML/xmlexporthelpers.h"
+#include "appsupport.h"
 
 SmartPath::SmartPath(const SkPath &path) {
     setPath(path);
@@ -387,9 +388,9 @@ QString SmartPath::toXEV() const {
 void SmartPath::loadXEV(const QStringRef& xev) {
     ListOfNodes listOfNodes;
 
-    const auto nodes = xev.split(',', QString::SkipEmptyParts);
+    const auto nodes = xev.split(',', QT_SKIP_EMPTY);
     for(const auto& node : nodes) {
-        const auto values = node.split(' ', QString::SkipEmptyParts);
+        const auto values = node.split(' ', QT_SKIP_EMPTY);
         if(values.count() == 1) {
             const qreal t = XmlExportHelpers::stringToDouble(values[0]);
             listOfNodes.append(Node(t));

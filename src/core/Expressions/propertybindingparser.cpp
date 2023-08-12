@@ -29,6 +29,7 @@
 
 #include "framebinding.h"
 #include "valuebinding.h"
+#include "appsupport.h"
 
 void skipSpaces(const QString& exp, int& position) {
     while(position < exp.count() && exp.at(position) == ' ') {
@@ -147,7 +148,7 @@ PropertyBindingMap PropertyBindingParser::parseBindings(
         const PropertyBinding::Validator& validator,
         const Property* const context) {
     const auto lines = exp.split(QRegExp("\n|\r\n|\r|;"),
-                                 QString::SkipEmptyParts);
+                                 QT_SKIP_EMPTY);
     PropertyBindingMap result;
     for(const auto& line : lines) {
         QString name;

@@ -25,6 +25,7 @@
 
 #include "fixedlenanimationrect.h"
 #include "Properties/property.h"
+#include "appsupport.h"
 
 int FixedLenAnimationRect::getMinAnimRelFrame() const {
     return mMinAnimationFrame;
@@ -94,7 +95,7 @@ void FixedLenAnimationRect::writeDurationRectangleXEV(QDomElement& ele) const {
 void FixedLenAnimationRect::readDurationRectangleXEV(const QDomElement& ele) {
     DurationRectangle::readDurationRectangleXEV(ele);
     const auto animRangeStr = ele.attribute("animFrameRange");
-    const auto animRangeStrs = animRangeStr.split(' ', QString::SkipEmptyParts);
+    const auto animRangeStrs = animRangeStr.split(' ', QT_SKIP_EMPTY);
     if(animRangeStrs.count() != 2) RuntimeThrow("Invalid frame range " + animRangeStr);
     mMinAnimationFrame = XmlExportHelpers::stringToInt(animRangeStrs[0]);
     mMaxAnimationFrame = XmlExportHelpers::stringToInt(animRangeStrs[1]);

@@ -28,6 +28,7 @@
 #include "undoredo.h"
 #include "simplemath.h"
 #include "svgexporthelpers.h"
+#include "appsupport.h"
 
 QStringAnimator::QStringAnimator(const QString &name) :
     SteppedAnimator<QString>(name) {}
@@ -78,7 +79,7 @@ void QStringAnimator::prp_readPropertyXEV_impl(
         const QDomElement& ele, const XevImporter& imp) {
     if(ele.hasAttribute("frames")) {
         const auto framesStr = ele.attribute("frames");
-        const auto frameStrs = framesStr.splitRef(' ', QString::SkipEmptyParts);
+        const auto frameStrs = framesStr.splitRef(' ', QT_SKIP_EMPTY);
 
         for(const QStringRef& frame : frameStrs) {
             const int iFrame = XmlExportHelpers::stringToInt(frame);

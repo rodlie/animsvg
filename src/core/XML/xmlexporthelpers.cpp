@@ -31,6 +31,7 @@
 #include "xevexporter.h"
 #include "xevimporter.h"
 #include "exceptions.h"
+#include "appsupport.h"
 
 SkBlendMode XmlExportHelpers::stringToBlendMode(const QString& compOpStr) {
     if(compOpStr.isEmpty()) return SkBlendMode::kSrcOver;
@@ -140,7 +141,7 @@ SimpleBrushWrapper* XevExportHelpers::brushFromElement(const QDomElement& ele) {
 }
 
 QMatrix XmlExportHelpers::stringToMatrix(const QString& str) {
-    const auto vals = str.split(' ', QString::SkipEmptyParts);
+    const auto vals = str.split(' ', QT_SKIP_EMPTY);
     if(vals.count() != 6) RuntimeThrow("Invalid matrix value '" + str + "'");
     const qreal m11 = stringToDouble(vals[0]);
     const qreal m12 = stringToDouble(vals[1]);
