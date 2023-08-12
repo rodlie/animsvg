@@ -685,8 +685,8 @@ void KeysView::handleMouseMove(const QPoint &pos,
                                const Qt::MouseButtons &buttons) {
     const QPoint posU = pos + QPoint(-eSizesUI::widget/2, 0);
     if(buttons & Qt::MiddleButton) {
-        if(mGraphViewed) graphMiddleMove(posU);
-        else middleMove(posU);
+        if (mGraphViewed) { graphMiddleMove(posU); }
+        else { middleMove(posU); }
         emit changedViewedFrames({mMinViewedFrame, mMaxViewedFrame});
     } else if(mIsMouseGrabbing || buttons & Qt::LeftButton) {
         handleMouseMoveScroll(pos);

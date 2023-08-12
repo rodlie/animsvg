@@ -222,6 +222,8 @@ void Canvas::mouseDoubleClickEvent(const eMouseEvent &e) {
 
 void Canvas::tabletEvent(const QTabletEvent * const e,
                          const QPointF &pos) {
+    Q_UNUSED(e)
+    Q_UNUSED(pos)
     /*const auto type = e->type();
     if(mCurrentMode == CanvasMode::paint) {
         if(type == QEvent::TabletRelease ||

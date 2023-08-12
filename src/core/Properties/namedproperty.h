@@ -21,7 +21,7 @@ public:
         dst << this->prp_getName();
     }
 
-    void prp_setupTreeViewMenu(PropertyMenu * const menu) {
+    void prp_setupTreeViewMenu(PropertyMenu * const menu) override {
         if(menu->hasActionsForType<NamedProperty<T>>()) return;
         menu->addedActionsForType<NamedProperty<T>>();
         {

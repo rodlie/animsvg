@@ -643,7 +643,7 @@ void BoxSingleWidget::mouseMoveEvent(QMouseEvent *event) {
     {
         const auto prop = static_cast<Property*>(mTarget->getTarget());
         const QString name = prop->prp_getName();
-        const int nameWidth = QApplication::fontMetrics().width(name);
+        const int nameWidth = QApplication::fontMetrics().horizontalAdvance(name);
         QPixmap pixmap(mFillWidget->x() + nameWidth + eSizesUI::widget, height());
         render(&pixmap);
         drag->setPixmap(pixmap);

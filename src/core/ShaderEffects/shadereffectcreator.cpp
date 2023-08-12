@@ -130,7 +130,7 @@ ShaderEffectCreator::Identifier ShaderEffectCreator::sReadIdentifierXEV(
     const QString propsStr = ele.attribute("properties");
     const auto propsStrList = propsStr.splitRef(',');
     QList<ShaderPropertyType> props;
-    for(const auto propStr : propsStrList) {
+    for(const auto &propStr : propsStrList) {
         const int propInt = XmlExportHelpers::stringToInt(propStr);
         const ShaderPropertyType prop = static_cast<ShaderPropertyType>(propInt);
         props << prop;

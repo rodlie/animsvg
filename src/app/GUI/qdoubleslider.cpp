@@ -319,7 +319,8 @@ void QDoubleSlider::fitWidthToContent() {
         textMax = valueToText(mMaxValue);
         textMin = valueToText(mMinValue);
     }
-    const int textWidth = qMax(fm.width(textMax), fm.width(textMin));
+    const int textWidth = qMax(fm.horizontalAdvance(textMax),
+                               fm.horizontalAdvance(textMin));
     const int maxWidth = (mShowName ? 6 : 3)*eSizesUI::widget;
     const int padding = eSizesUI::widget/2;
     const int newWidth = qMin(maxWidth, textWidth + padding);

@@ -38,7 +38,7 @@ public:
 protected:
     T getValueAtRelFrameK(const qreal frame,
                           const KeyT<T> * const prevKey,
-                          const KeyT<T> * const nextKey) const {
+                          const KeyT<T> * const nextKey) const override {
         Q_UNUSED(frame)
         if(prevKey) return prevKey->getValue();
         return nextKey->getValue();

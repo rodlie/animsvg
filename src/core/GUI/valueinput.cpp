@@ -42,7 +42,7 @@ void ValueInput::draw(SkCanvas *canvas, const int y) {
     SkPaint paint;
 
     const auto transStr = getText();
-    const int textWidth = QApplication::fontMetrics().width(transStr);
+    const int textWidth = QApplication::fontMetrics().horizontalAdvance(transStr);
     const SkRect inputRect =
             SkRect::MakeXYWH(2*eSizesUI::widget, y,
                              textWidth + eSizesUI::widget, eSizesUI::widget);
@@ -63,7 +63,7 @@ void ValueInput::draw(SkCanvas *canvas, const int y) {
 void ValueInput::draw(QPainter *p, const int y) {
     p->setFont(QApplication::font());
     const auto transStr = getText();
-    const int textWidth = QApplication::fontMetrics().width(transStr);
+    const int textWidth = QApplication::fontMetrics().horizontalAdvance(transStr);
     const QRect inputRect(2*eSizesUI::widget, y,
                           textWidth + eSizesUI::widget, eSizesUI::widget);
     p->fillRect(inputRect, QColor(255, 255, 255, 55));

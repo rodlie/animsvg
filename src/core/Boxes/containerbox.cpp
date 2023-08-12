@@ -1534,6 +1534,7 @@ qsptr<BoundingBox> createBoxOfNonCustomType(const eBoxType type) {
         case(eBoxType::canvas) : break;
         case(eBoxType::count) : break;
         case(eBoxType::custom): break;
+    default:;
     }
     return nullptr;
 }

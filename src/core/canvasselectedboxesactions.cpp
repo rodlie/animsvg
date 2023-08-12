@@ -94,6 +94,7 @@ bool Canvas::anim_prevRelFrameWithKey(const int relFrame,
 }
 
 void Canvas::shiftAllPointsForAllKeys(const int by) {
+    Q_UNUSED(by)
     for(const auto &box : mSelectedBoxes) {
         if(const auto svp = enve_cast<SmartVectorPath*>(box)) {
 //            svp->shiftAllPointsForAllKeys(by);
@@ -110,6 +111,7 @@ void Canvas::revertAllPointsForAllKeys() {
 }
 
 void Canvas::shiftAllPoints(const int by) {
+    Q_UNUSED(by)
     for(const auto &box : mSelectedBoxes) {
         if(const auto svp = enve_cast<SmartVectorPath*>(box)) {
             //svp->shiftAllPoints(by);

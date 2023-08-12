@@ -117,7 +117,7 @@ private:
     QProgressBar *mRenderProgress;
 
     QList<TimelineWidget*> mTimelineWidgets;
-    AnimationDockWidget *mAnimationDockWidget;
+    //AnimationDockWidget *mAnimationDockWidget;
 };
 
 #endif // BOXESLISTANIMATIONDOCKWIDGET_H
