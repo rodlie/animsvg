@@ -911,7 +911,7 @@ void MainWindow::setupMenuBar()
         const auto target = KeyFocusTarget::KFT_getCurrentTarget();
         const auto cwTarget = dynamic_cast<CanvasWindow*>(target);
         if (!cwTarget) { return; }
-        cwTarget->resetTransormation();
+        cwTarget->resetTransformation();
     });
 
     const auto filteringMenu = mViewMenu->addMenu(

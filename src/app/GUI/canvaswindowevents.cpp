@@ -28,18 +28,25 @@
 #include "GUI/global.h"
 #include "Private/document.h"
 
-QPointF CanvasWindow::mapToCanvasCoord(const QPointF& windowCoord) {
+#include <QResizeEvent>
+#include <QEvent>
+
+QPointF CanvasWindow::mapToCanvasCoord(const QPointF& windowCoord)
+{
     qreal pixelRatio = devicePixelRatioF();
     return mViewTransform.inverted().scale(pixelRatio, pixelRatio).map(windowCoord);
 }
 
-void CanvasWindow::translateView(const QPointF &trans) {
-    if(!mCurrentCanvas) return;
+void CanvasWindow::translateView(const QPointF &trans)
+{
+    if (!mCurrentCanvas) { return; }
     mViewTransform.translate(trans.x(), trans.y());
 }
 
-void CanvasWindow::zoomView(const qreal scaleBy, const QPointF &absOrigin) {
-    if(!mCurrentCanvas) return;
+void CanvasWindow::zoomView(const qreal scaleBy,
+                            const QPointF &absOrigin)
+{
+    if (!mCurrentCanvas) { return; }
     const QPointF transPoint = -mapToCanvasCoord(absOrigin);
 
     mViewTransform.translate(-transPoint.x(), -transPoint.y());
@@ -47,13 +54,13 @@ void CanvasWindow::zoomView(const qreal scaleBy, const QPointF &absOrigin) {
     mViewTransform.translate(transPoint.x(), transPoint.y());
 }
 
-#include <QResizeEvent>
-void CanvasWindow::resizeEvent(QResizeEvent *e) {
-    if(e->size().isValid()) {
-        if(mOldSize.isValid()) {
+void CanvasWindow::resizeEvent(QResizeEvent *e)
+{
+    if (e->size().isValid()) {
+        if (mOldSize.isValid()) {
             const auto dSize = e->size() - mOldSize;
-            const qreal div = 2*mViewTransform.m11();
-            const QPointF trans{dSize.width()/div, dSize.height()/div};
+            const qreal div = 2 * mViewTransform.m11();
+            const QPointF trans{dSize.width() / div, dSize.height() / div};
             translateView(trans);
         }
         // e->oldSize() returns {-1, -1} after chaning parent
@@ -62,64 +69,71 @@ void CanvasWindow::resizeEvent(QResizeEvent *e) {
     GLWindow::resizeEvent(e);
 }
 
-void CanvasWindow::fitCanvasToSize() {
-    if(mFitToSizeBlocked) {
+void CanvasWindow::fitCanvasToSize()
+{
+    if (mFitToSizeBlocked) {
         mFitToSizeBlocked = false;
         return;
     }
-    if(!mCurrentCanvas) return;
+    if (!mCurrentCanvas) { return; }
     mViewTransform.reset();
     qreal pixelRatio = devicePixelRatioF();
     const auto canvasSize = mCurrentCanvas->getCanvasSize();
-    const qreal widWidth = width()*pixelRatio;
-    const qreal widHeight = height()*pixelRatio;
-    const qreal widthScale = (widWidth - eSizesUI::widget)/canvasSize.width();
-    const qreal heightScale = (widHeight - eSizesUI::widget)/canvasSize.height();
+    const qreal widWidth = width() * pixelRatio;
+    const qreal widHeight = height() * pixelRatio;
+    const qreal widthScale = (widWidth - eSizesUI::widget) / canvasSize.width();
+    const qreal heightScale = (widHeight - eSizesUI::widget) / canvasSize.height();
     const qreal minScale = qMin(widthScale, heightScale);
-    translateView({(widWidth - canvasSize.width()*minScale)*0.5,
-                   (widHeight - canvasSize.height()*minScale)*0.5});
+    translateView({(widWidth - canvasSize.width() * minScale) * 0.5,
+                   (widHeight - canvasSize.height() * minScale) * 0.5});
     mViewTransform.scale(minScale, minScale);
 }
 
-void CanvasWindow::zoomInView() {
-    if(!mCurrentCanvas) return;
+void CanvasWindow::zoomInView()
+{
+    if (!mCurrentCanvas) {  }return;
     const auto canvasSize = mCurrentCanvas->getCanvasSize();
-    mViewTransform.translate(canvasSize.width()*0.5, canvasSize.height()*0.5);
+    mViewTransform.translate(canvasSize.width() * 0.5, canvasSize.height() * 0.5);
     mViewTransform.scale(1.1, 1.1);
-    mViewTransform.translate(-canvasSize.width()*0.5, -canvasSize.height()*0.5);
+    mViewTransform.translate(-canvasSize.width() * 0.5, -canvasSize.height() * 0.5);
 }
 
-void CanvasWindow::zoomOutView() {
-    if(!mCurrentCanvas) return;
+void CanvasWindow::zoomOutView()
+{
+    if (!mCurrentCanvas) { return; }
     const auto canvasSize = mCurrentCanvas->getCanvasSize();
-    mViewTransform.translate(canvasSize.width()*0.5, canvasSize.height()*0.5);
+    mViewTransform.translate(canvasSize.width() * 0.5, canvasSize.height() * 0.5);
     mViewTransform.scale(0.9, 0.9);
-    mViewTransform.translate(-canvasSize.width()*0.5, -canvasSize.height()*0.5);
+    mViewTransform.translate(-canvasSize.width() * 0.5, -canvasSize.height() * 0.5);
 }
 
-#include <QEvent>
-
-bool CanvasWindow::event(QEvent *e) {
-    if(e->type() == QEvent::ShowToParent) fitCanvasToSize();
-    else if(e->type() == QEvent::Show) KFT_setFocus();
+bool CanvasWindow::event(QEvent *e)
+{
+    if (e->type() == QEvent::ShowToParent) { fitCanvasToSize(); }
+    else if (e->type() == QEvent::Show) { KFT_setFocus(); }
     return QWidget::event(e);
 }
 
-void CanvasWindow::hideEvent(QHideEvent *e) {
+void CanvasWindow::hideEvent(QHideEvent *e)
+{
     GLWindow::hideEvent(e);
-    if(mCurrentCanvas)
+    if (mCurrentCanvas) {
         mDocument.removeVisibleScene(mCurrentCanvas);
+    }
 }
 
-void CanvasWindow::showEvent(QShowEvent *e) {
+void CanvasWindow::showEvent(QShowEvent *e)
+{
     GLWindow::showEvent(e);
-    if(mCurrentCanvas)
+    if (mCurrentCanvas) {
         mDocument.addVisibleScene(mCurrentCanvas);
+    }
 }
 
-void CanvasWindow::resetTransormation() {
-    if(!mCurrentCanvas) return;
+void CanvasWindow::resetTransformation()
+{
+    if (!mCurrentCanvas) { return; }
     mViewTransform.reset();
-    translateView({(width() - mCurrentCanvas->getCanvasWidth())*0.5,
-                   (height() - mCurrentCanvas->getCanvasHeight())*0.5});
+    translateView({(width() - mCurrentCanvas->getCanvasWidth()) * 0.5,
+                   (height() - mCurrentCanvas->getCanvasHeight()) * 0.5});
 }

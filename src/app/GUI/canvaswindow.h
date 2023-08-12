@@ -52,8 +52,10 @@ class OutlineSettingsAnimator;
 class SimpleBrushWrapper;
 class Actions;
 
-class CanvasWindow : public GLWindow, public KeyFocusTarget {
+class CanvasWindow : public GLWindow, public KeyFocusTarget
+{
     Q_OBJECT
+
 public:
     explicit CanvasWindow(Document& document,
                           QWidget * const parent = nullptr);
@@ -91,7 +93,9 @@ public:
 
     void readStateXEV(XevReadBoxesHandler& boxReadHandler,
                       const QDomElement& ele);
-    void writeStateXEV(QDomElement& ele, QDomDocument& doc) const;
+    void writeStateXEV(QDomElement& ele,
+                       QDomDocument& doc) const;
+
 protected:
     bool event(QEvent *e);
 
@@ -105,6 +109,7 @@ protected:
 
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event);
     void mouseDoubleClickEvent(QMouseEvent *event);
@@ -115,6 +120,7 @@ protected:
         clearFocus();
         update();
     }
+
 private:
     void setCanvasMode(const CanvasMode mode);
     void updatePaintModeCursor();
@@ -128,13 +134,13 @@ private:
     QPointF mPrevPressPos;
     //bool mValidPaintTarget = false;
 
-    bool mBlockInput = false;
-    bool mMouseGrabber = false;
+    bool mBlockInput;
+    bool mMouseGrabber;
 
     qsptr<WindowSingleWidgetTarget> mWindowSWTTarget;
 
     ConnContextPtr<Canvas> mCurrentCanvas;
-    bool mFitToSizeBlocked = false;
+    bool mFitToSizeBlocked;
 
     //void paintEvent(QPaintEvent *);
 
@@ -151,19 +157,22 @@ private:
     bool handleRevertPathKeyPress(QKeyEvent *event);
     bool handleStartTransformKeyPress(const eKeyEvent &e);
     bool handleSelectAllKeyPress(QKeyEvent *event);
-    bool handleShiftKeysKeyPress(QKeyEvent *event);    
+    //bool handleShiftKeysKeyPress(QKeyEvent *event);
+
 signals:
     void changeCanvasFrameRange(FrameRange);
     void currentSceneChanged(Canvas* const scene);
+
 public:
     void setCurrentCanvas(const int id);
 
     QPointF mapToCanvasCoord(const QPointF& windowCoord);
     void translateView(const QPointF &trans);
-    void zoomView(const qreal scaleBy, const QPointF &absOrigin);
+    void zoomView(const qreal scaleBy,
+                  const QPointF &absOrigin);
 
     void fitCanvasToSize();
-    void resetTransormation();
+    void resetTransformation();
     void zoomInView();
     void zoomOutView();
 };
