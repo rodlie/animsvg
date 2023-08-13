@@ -31,13 +31,16 @@
 
 struct eSoundSettingsData;
 
-class AudioHandler : public QObject {
+class AudioHandler : public QObject
+{
+    Q_OBJECT
 public:
     AudioHandler();
 
     static AudioHandler* sInstance;
 
-    struct DataRequest {
+    struct DataRequest
+    {
         char* fData;
         int fSize;
 
@@ -46,27 +49,41 @@ public:
         }
     };
 
-    DataRequest dataRequest() {
-        if(mAudioOutput && mAudioOutput->state() != QAudio::StoppedState) {
-            if(mAudioOutput->bytesFree() >= mAudioOutput->periodSize())
+    DataRequest dataRequest()
+    {
+        if (mAudioOutput && mAudioOutput->state() != QAudio::StoppedState) {
+            if (mAudioOutput->bytesFree() >= mAudioOutput->periodSize()) {
                 return {mAudioBuffer.data(), mAudioOutput->periodSize()};
+            }
         }
         return {nullptr, 0};
     }
 
-    void provideData(const DataRequest& request) {
-        if(!request || !mAudioIOOutput) return;
+    void provideData(const DataRequest& request)
+    {
+        if (!request || !mAudioIOOutput) { return; }
         mAudioIOOutput->write(request.fData, request.fSize);
     }
 
-    void initializeAudio(eSoundSettingsData &soundSettings);
+    void initializeAudio(eSoundSettingsData &soundSettings,
+                         const QString &deviceName = QString());
+    void initializeAudio(const QString &deviceName = QString(),
+                         bool save = false);
     void startAudio();
     void pauseAudio();
     void resumeAudio();
     void stopAudio();
     void setVolume(const int value);
+    qreal getVolume();
+    const QString getDeviceName();
+    QAudioDeviceInfo findDevice(const QString &deviceName);
+    const QStringList listDevices();
 
     QAudioOutput* audioOutput() const { return mAudioOutput; }
+
+signals:
+    void deviceChanged();
+
 private:
     QAudioDeviceInfo mAudioDevice;
     QAudioOutput *mAudioOutput = nullptr;

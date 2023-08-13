@@ -35,6 +35,7 @@
 #include <QToolButton>
 #include <QLabel>
 #include <QToolBar>
+#include <QComboBox>
 
 #include "undoredo.h"
 #include "Private/Tasks/taskscheduler.h"
@@ -222,6 +223,8 @@ private:
     void readRecentFiles();
     void writeRecentFiles();
 
+    void updateAudioDevices();
+
     QStringList mRecentFiles;
 
 //    bool mRendering = false;
@@ -244,6 +247,8 @@ private:
     QWidget *mFilesDockBar;
     QWidget *mBrushSettingsDockBar;
     QWidget *mAlignDockBar;*/
+
+    QComboBox *mAudioDevicesCombo;
 
     TimelineDockWidget *mTimeline;
     RenderWidget *mRenderWidget;

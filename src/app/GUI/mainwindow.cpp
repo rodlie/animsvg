@@ -102,6 +102,7 @@ MainWindow::MainWindow(Document& document,
     , mStackWidget(nullptr)
     , mTopSideBarWidget(nullptr)
     , mBottomSideBarWidget(nullptr)
+    , mAudioDevicesCombo(nullptr)
     , mTimeline(nullptr)
     , mRenderWidget(nullptr)
     , mToolbar(nullptr)
@@ -271,6 +272,22 @@ MainWindow::MainWindow(Document& document,
 
     readRecentFiles();
     updateRecentMenu();
+
+    QLabel *audioLabel = new QLabel(tr("Audio Device"), this);
+    mAudioDevicesCombo = new QComboBox(this);
+    mAudioDevicesCombo->setSizePolicy(QSizePolicy::Minimum,
+                                      QSizePolicy::Preferred);
+    mAudioDevicesCombo->setMaximumWidth(200);
+    mAudioDevicesCombo->setFocusPolicy(Qt::NoFocus);
+    statusBar()->addPermanentWidget(audioLabel);
+    statusBar()->addPermanentWidget(mAudioDevicesCombo);
+    updateAudioDevices();
+    connect(mAudioDevicesCombo, &QComboBox::currentTextChanged,
+            this, [this](const QString &text) {
+        mAudioHandler.initializeAudio(text, true);
+    });
+    connect(&mAudioHandler, &AudioHandler::deviceChanged,
+            this, [this]() { updateAudioDevices(); });
 
     mEventFilterDisabled = false;
 
@@ -2313,4 +2330,14 @@ void MainWindow::writeRecentFiles()
     QStringList files;
     for (const auto &file : mRecentFiles) { files.append(file); }
     AppSupport::setSettings("files", "recentSaved", files);
+}
+
+void MainWindow::updateAudioDevices()
+{
+    if (!mAudioDevicesCombo) { return; }
+    mAudioDevicesCombo->blockSignals(true);
+    mAudioDevicesCombo->clear();
+    mAudioDevicesCombo->addItems(mAudioHandler.listDevices());
+    mAudioDevicesCombo->setCurrentText(mAudioHandler.getDeviceName());
+    mAudioDevicesCombo->blockSignals(false);
 }

@@ -258,7 +258,9 @@ int main(int argc, char *argv[])
     AudioHandler audioHandler;
 
     try {
-        audioHandler.initializeAudio(soundSettings.sData());
+        audioHandler.initializeAudio(soundSettings.sData(),
+                                     AppSupport::getSettings(QString::fromUtf8("audio"),
+                                                             QString::fromUtf8("output")).toString());
     } catch(const std::exception& e) {
         gPrintExceptionCritical(e);
     }
