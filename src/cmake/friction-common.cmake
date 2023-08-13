@@ -31,10 +31,15 @@ if(UNIX)
         add_compile_options(-frtti)
     endif()
 endif()
+
 if(CMAKE_BUILD_TYPE MATCHES "^(release|Release|RELEASE)$")
     add_definitions(-DQT_NO_DEBUG_OUTPUT)
 else()
     add_definitions(-DQT_MESSAGELOGCONTEXT)
+endif()
+
+if (MSVC)
+    add_definitions("/MP")
 endif()
 
 find_package(PkgConfig QUIET)

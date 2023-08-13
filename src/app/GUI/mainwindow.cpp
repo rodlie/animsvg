@@ -273,7 +273,7 @@ MainWindow::MainWindow(Document& document,
     readRecentFiles();
     updateRecentMenu();
 
-    QLabel *audioLabel = new QLabel(tr("Audio Device"), this);
+    QLabel *audioLabel = new QLabel(tr("Audio Output"), this);
     mAudioDevicesCombo = new QComboBox(this);
     mAudioDevicesCombo->setSizePolicy(QSizePolicy::Minimum,
                                       QSizePolicy::Preferred);
