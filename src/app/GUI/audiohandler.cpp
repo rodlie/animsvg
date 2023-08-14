@@ -122,8 +122,8 @@ void AudioHandler::initializeAudio(const QString &deviceName,
 }
 
 void AudioHandler::startAudio() {
-    if (!QAudioDeviceInfo::availableDevices(QAudio::AudioOutput)
-        .contains(mAudioDevice)) { initializeAudio(); }
+    //if (!QAudioDeviceInfo::availableDevices(QAudio::AudioOutput)
+        //.contains(mAudioDevice)) { initializeAudio(); }
     mAudioIOOutput = mAudioOutput->start();
 }
 
