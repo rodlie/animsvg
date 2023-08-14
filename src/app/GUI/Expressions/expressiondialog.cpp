@@ -325,7 +325,7 @@ ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
     mEasingPresetStartValueSpin = new QDoubleSpinBox(this);
     mEasingPresetStartValueSpin->setSizePolicy(QSizePolicy::Expanding,
                                                QSizePolicy::Preferred);
-    mEasingPresetStartValueSpin->setRange(0, INT_MAX);
+    mEasingPresetStartValueSpin->setRange(-INT_MAX, INT_MAX);
     mEasingPresetStartValueSpin->setDecimals(5);
     mEasingPresetStartValueSpin->setLocale(QLocale(QLocale::English,
                                                    QLocale::UnitedStates));
@@ -336,7 +336,7 @@ ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
     mEasingPresetEndValueSpin = new QDoubleSpinBox(this);
     mEasingPresetEndValueSpin->setSizePolicy(QSizePolicy::Expanding,
                                              QSizePolicy::Preferred);
-    mEasingPresetEndValueSpin->setRange(0, INT_MAX);
+    mEasingPresetEndValueSpin->setRange(-INT_MAX, INT_MAX);
     mEasingPresetEndValueSpin->setDecimals(5);
     mEasingPresetEndValueSpin->setLocale(QLocale(QLocale::English,
                                                  QLocale::UnitedStates));
