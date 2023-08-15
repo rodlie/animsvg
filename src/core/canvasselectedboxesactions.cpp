@@ -420,8 +420,9 @@ void Canvas::setCurrentBox(BoundingBox* const box) {
 }
 
 //#include "Boxes/paintbox.h"
-void Canvas::addBoxToSelection(BoundingBox * const box) {
-    if(box->isSelected()) return;
+void Canvas::addBoxToSelection(BoundingBox * const box)
+{
+    if (box->isSelected() || box->isLocked()) { return; }
     auto& connCtx = mSelectedBoxes.addObj(box);
     mLastSelectedBox = box;
     connCtx << connect(box, &BoundingBox::globalPivotInfluenced,
@@ -430,7 +431,7 @@ void Canvas::addBoxToSelection(BoundingBox * const box) {
                        this, &Canvas::selectedPaintSettingsChanged);
     connCtx << connect(box, &BoundingBox::visibilityChanged,
                        this, [this, box](const bool visible) {
-        if(!visible) removeBoxFromSelection(box);
+        if (!visible) { removeBoxFromSelection(box); }
     });
     connCtx << connect(box, &BoundingBox::parentChanged,
                        this, [this, box]() {
