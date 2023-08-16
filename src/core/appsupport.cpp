@@ -32,6 +32,8 @@
 #include <QDir>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QDomDocument>
+#include <QDomElement>
 
 AppSupport::AppSupport(QObject *parent)
     : QObject{parent}
@@ -242,6 +244,17 @@ const QString AppSupport::getAppShaderEffectsPath()
     return path;
 }
 
+const QString AppSupport::getAppShaderPresetsPath()
+{
+    QString path1 = QApplication::applicationDirPath();
+    QString path2 = path1;
+    path1.append(QString::fromUtf8("/presets/shaders"));
+    path2.append(QString::fromUtf8("/../share/friction/presets/shaders"));
+    if (QFile::exists(path1)) { return path1; }
+    if (QFile::exists(path2)) { return path2; }
+    return QString();
+}
+
 const QString AppSupport::getAppExPresetsPath()
 {
     QString path1 = QApplication::applicationDirPath();
@@ -276,4 +289,31 @@ const QString AppSupport::getFileIcon(const QString &path)
     else if (mime.startsWith("video")) { fileIcon = "file_movie"; }
     else if (mime.startsWith("audio")) { fileIcon = "file_sound"; }
     return fileIcon;
+}
+
+const QPair<QString, QString> AppSupport::getShaderID(const QString &path)
+{
+    QPair<QString,QString> result;
+
+    QFile greFile(path);
+    if (!greFile.exists()) { return result; }
+    if (!greFile.open(QIODevice::ReadOnly)) { return result; }
+
+    QDomDocument document;
+    QString errMsg;
+    if (!document.setContent(&greFile, &errMsg)) {
+        greFile.close();
+        return result;
+    }
+    greFile.close();
+
+    QDomElement root = document.firstChildElement();
+    if (root.tagName() != "ShaderEffect") { return result; }
+
+    const QString effectName = root.attribute("name");
+    const QString menuPath = root.attribute("menuPath");
+    result.first = effectName;
+    result.second = menuPath;
+
+    return result;
 }

@@ -29,6 +29,7 @@
 #include <QObject>
 #include <QVariant>
 #include <QPalette>
+#include <QPair>
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #define QT_ENDL Qt::endl
@@ -71,10 +72,12 @@ public:
     static const QString getAppPathEffectsPath();
     static const QString getAppRasterEffectsPath();
     static const QString getAppShaderEffectsPath();
+    static const QString getAppShaderPresetsPath();
     static const QString getAppExPresetsPath();
     static const QString getAppUserExPresetsPath();
     static const QString getFileMimeType(const QString &path);
     static const QString getFileIcon(const QString &path);
+    static const QPair<QString,QString> getShaderID(const QString &path);
 };
 
 #endif // APPSUPPORT_H

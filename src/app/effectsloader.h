@@ -28,6 +28,9 @@
 
 #include "Private/Tasks/offscreenqgl33c.h"
 
+#include <QList>
+#include <QPair>
+
 struct ShaderEffectProgram;
 struct ShaderEffectCreator;
 
@@ -52,7 +55,8 @@ private:
     void reloadProgram(ShaderEffectCreator * const loaded,
                        const QString &fragPath);
     void iniSingleRasterEffectProgram(const QString &grePath);
-    void iniShaderEffectProgramExec(const QString &grePath);
+    void iniShaderEffectProgramExec(const QString &grePath,
+                                    bool watch = true);
 
     void iniCustomRasterEffect(const QString &soPath);
     void iniIfCustomRasterEffect(const QString &path);
@@ -60,6 +64,7 @@ private:
     QStringList mLoadedGREPaths;
     GLuint mPlainSquareVAO;
     GLuint mTexturedSquareVAO;
+    QList<QPair<QString,QString>> mLoadedShaders;
 };
 
 #endif // EFFECTSLOADER_H
