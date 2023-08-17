@@ -34,6 +34,7 @@
 #include <QMimeType>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QDirIterator>
 
 AppSupport::AppSupport(QObject *parent)
     : QObject{parent}
@@ -315,5 +316,15 @@ const QPair<QString, QString> AppSupport::getShaderID(const QString &path)
     result.first = effectName;
     result.second = menuPath;
 
+    return result;
+}
+
+const QStringList AppSupport::getFilesFromPath(const QString &path,
+                                               const QStringList &suffix)
+{
+    QStringList result;
+    if (path.isEmpty() || !QFile::exists(path)) { return result; }
+    QDirIterator it(path, suffix, QDir::Files, QDirIterator::Subdirectories);
+    while (it.hasNext()) { result << it.next(); }
     return result;
 }

@@ -30,6 +30,7 @@
 #include <QVariant>
 #include <QPalette>
 #include <QPair>
+#include <QStringList>
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #define QT_ENDL Qt::endl
@@ -78,6 +79,8 @@ public:
     static const QString getFileMimeType(const QString &path);
     static const QString getFileIcon(const QString &path);
     static const QPair<QString,QString> getShaderID(const QString &path);
+    static const QStringList getFilesFromPath(const QString &path,
+                                              const QStringList &suffix = QStringList());
 };
 
 #endif // APPSUPPORT_H

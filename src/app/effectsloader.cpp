@@ -258,14 +258,8 @@ void EffectsLoader::iniShaderEffects()
 {
     makeCurrent();
 
-    const QString presetPath = AppSupport::getAppShaderPresetsPath();
-    QDirIterator presetIt(presetPath, QDirIterator::NoIteratorFlags);
-
-    while (presetIt.hasNext()) {
-        const QString path = presetIt.next();
-        const QFileInfo fileInfo(path);
-        if (!fileInfo.isFile() ||
-            fileInfo.suffix() != "gre") { continue; }
+    for (const auto &path : AppSupport::getFilesFromPath(AppSupport::getAppShaderPresetsPath(),
+                                                         QStringList() << "*.gre")) {
         try {
             iniShaderEffectProgramExec(path, false);
         } catch(const std::exception& e) {
@@ -274,13 +268,8 @@ void EffectsLoader::iniShaderEffects()
     }
 
     const QString dirPath = AppSupport::getAppShaderEffectsPath();
-    QDirIterator dirIt(dirPath, QDirIterator::NoIteratorFlags);
-
-    while (dirIt.hasNext()) {
-        const QString path = dirIt.next();
-        const QFileInfo fileInfo(path);
-        if (!fileInfo.isFile() ||
-            fileInfo.suffix() != "gre") { continue; }
+    for (const auto &path : AppSupport::getFilesFromPath(dirPath,
+                                                         QStringList() << "*.gre")) {
         try {
             iniShaderEffectProgramExec(path);
         } catch(const std::exception& e) {
