@@ -249,8 +249,8 @@ const QString AppSupport::getAppShaderPresetsPath()
 {
     QString path1 = QApplication::applicationDirPath();
     QString path2 = path1;
-    path1.append(QString::fromUtf8("/presets/shaders"));
-    path2.append(QString::fromUtf8("/../share/friction/presets/shaders"));
+    path1.append(QString::fromUtf8("/plugins/shaders"));
+    path2.append(QString::fromUtf8("/../share/friction/plugins/shaders"));
     if (QFile::exists(path1)) { return path1; }
     if (QFile::exists(path2)) { return path2; }
     return QString();
