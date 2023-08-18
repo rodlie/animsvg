@@ -149,6 +149,7 @@ if [ ! -d "${FRICTION_SRC_DIR}" ]; then
     if [ "${FRICTION_TAG}" != "" ]; then
         (cd friction; git checkout tags/${FRICTION_TAG})
     fi
+    (cd friction; git submodule update -i)
 fi
 
 #if [ ! -f "${FRICTION_SRC_DIR}/quazip-${QUAZIP_V}/build/quazip/libquazip1-qt5.a" ]; then
