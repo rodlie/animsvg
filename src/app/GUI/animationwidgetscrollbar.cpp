@@ -207,7 +207,7 @@ bool FrameScrollBar::setFirstViewedFrame(const int firstFrame) {
 #include <QMenu>
 void FrameScrollBar::mousePressEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::RightButton) {
+    if (event->button() == Qt::RightButton && !mRange) {
         QMenu menu(this);
         /*QAction *clampAction = new QAction("Clamp", this);
         clampAction->setCheckable(true);
