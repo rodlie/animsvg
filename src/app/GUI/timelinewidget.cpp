@@ -277,9 +277,10 @@ TimelineWidget::TimelineWidget(Document &document,
     mMainLayout->addWidget(mFrameScrollBar, 0, 1);
 
     mFrameRangeScrollBar = new FrameScrollBar(20, 200, true, true, true, this);
-    eSizesUI::widget.add(mFrameRangeScrollBar, [this](const int size) {
-        mFrameRangeScrollBar->setMinimumHeight(size+5/**2/3*/);
-    });
+    mFrameRangeScrollBar->setFixedHeight(10);
+    //eSizesUI::widget.add(mFrameRangeScrollBar, [this](const int size) {
+    //    mFrameRangeScrollBar->setMinimumHeight(size+5/**2/3*/);
+    //});
 
     connect(mFrameRangeScrollBar, &FrameScrollBar::triggeredFrameRangeChange,
             this, &TimelineWidget::setViewedFrameRange);

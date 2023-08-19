@@ -88,9 +88,9 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     const int handleLeft = mBottom ? qRound(hLeftFrames*pixPerFrame + x0) : qRound((hLeftFrames*pixPerFrame + x0)+(handleWidth/2)-(handleFixedWidth/2));
 
     handleRect.setLeft(handleLeft);
-    handleRect.setTop(mBottom ? 0 : 5);
+    handleRect.setTop(mBottom ? 2 : 5);
     handleRect.setWidth(mBottom ? handleWidth : handleFixedWidth);
-    handleRect.setBottom(mBottom ? 4 : height());
+    handleRect.setBottom(mBottom ? 6 : height());
     p.fillRect(handleRect, col);
 
     if (mCurrentCanvas) {
@@ -125,27 +125,18 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
 
     const qreal threeFourthsHeight = height()*0.75;
     const qreal maxX = width() + eSizesUI::widget;
-    while(xL < maxX) {
-        //if(!mRange) {
-            p.drawLine(QPointF(xL, threeFourthsHeight + 2),
-                       QPointF(xL, height()));
-        //}
-        QString drawValue = QString::number(currentFrame);
-        qreal leftValue = xL;
-        if (mDisplayTime && mFps > 0) {
-            drawValue = AppSupport::getTimeCodeFromFrame(currentFrame, mFps);
-            if (mRange) {
-                if (currentFrame == mFrameRange.fMin) {
-                    leftValue = xL + 40;
-                } else if (currentFrame == mFrameRange.fMax) {
-                    leftValue = xL - 40;
-                }
+    if (!mRange) {
+        while(xL < maxX) {
+            p.drawLine(QPointF(xL, threeFourthsHeight + 2), QPointF(xL, height()));
+            QString drawValue = QString::number(currentFrame);
+            if (mDisplayTime && mFps > 0) {
+                drawValue = AppSupport::getTimeCodeFromFrame(currentFrame, mFps);
             }
+            p.drawText(QRectF(xL - inc, 0, 2*inc, height()),
+                       Qt::AlignCenter, drawValue);
+            xL += inc;
+            currentFrame += mDrawFrameInc;
         }
-        p.drawText(QRectF(leftValue - inc, 0, 2*inc, height()),
-                   Qt::AlignCenter, drawValue);
-        xL += inc;
-        currentFrame += mDrawFrameInc;
     }
 
     /*p.setPen(QPen(Qt::white, 1));
