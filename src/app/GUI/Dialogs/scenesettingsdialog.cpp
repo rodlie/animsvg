@@ -106,6 +106,8 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
 
     mFPSLabel = new QLabel("Fps:", this);
     mFPSSpinBox = new QDoubleSpinBox(this);
+    mFPSSpinBox->setLocale(QLocale(QLocale::English,
+                                   QLocale::UnitedStates));
     mFPSSpinBox->setRange(1, 300);
     mFPSSpinBox->setValue(fps);
 
