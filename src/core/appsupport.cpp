@@ -35,6 +35,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QDirIterator>
+#include <QtMath>
 
 AppSupport::AppSupport(QObject *parent)
     : QObject{parent}
@@ -327,4 +328,16 @@ const QStringList AppSupport::getFilesFromPath(const QString &path,
     QDirIterator it(path, suffix, QDir::Files, QDirIterator::Subdirectories);
     while (it.hasNext()) { result << it.next(); }
     return result;
+}
+
+const QString AppSupport::getTimeCodeFromFrame(int frame, float fps)
+{
+    int ss = qFloor(frame / fps);
+    int mm = qFloor(ss / 60);
+    int hh = qFloor(mm / 60);
+    int ff = frame - (ss * fps);
+    return QString("%1:%2:%3:%4").arg(QString::number(hh).rightJustified(2, '0'),
+                                      QString::number(mm).rightJustified(2, '0'),
+                                      QString::number(ss).rightJustified(2, '0'),
+                                      QString::number(ff).rightJustified(2, '0'));
 }

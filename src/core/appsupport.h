@@ -81,6 +81,7 @@ public:
     static const QPair<QString,QString> getShaderID(const QString &path);
     static const QStringList getFilesFromPath(const QString &path,
                                               const QStringList &suffix = QStringList());
+    static const QString getTimeCodeFromFrame(int frame, float fps);
 };
 
 #endif // APPSUPPORT_H
