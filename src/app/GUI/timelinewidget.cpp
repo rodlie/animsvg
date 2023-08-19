@@ -306,6 +306,7 @@ void TimelineWidget::setCurrentScene(Canvas * const scene) {
     mCurrentScene = scene;
     mSceneChooser->setCurrentScene(scene);
     mFrameScrollBar->setCurrentCanvas(scene);
+    mFrameRangeScrollBar->setCurrentCanvas(scene);
     mBoxesListWidget->setCurrentScene(scene);
     mKeysView->setCurrentScene(scene);
     if(scene) {

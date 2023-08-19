@@ -484,6 +484,15 @@ public:
         emit fpsChanged(fps);
     }
 
+    bool getDisplayTimecode()
+    {
+        return mDisplayTimeCode;
+    }
+    void setDisplayTimecode(bool timecode)
+    {
+        mDisplayTimeCode = timecode;
+    }
+
     BoundingBox *getBoxAt(const QPointF &absPos)
     {
         if (mClipToCanvasSize) {
@@ -757,6 +766,8 @@ protected:
     int mWidth;
     int mHeight;
     qreal mFps;
+
+    bool mDisplayTimeCode = false;
 
     bool mPivotUpdateNeeded = false;
 

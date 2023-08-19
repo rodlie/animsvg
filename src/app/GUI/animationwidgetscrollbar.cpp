@@ -29,6 +29,8 @@
 #include "GUI/global.h"
 #include "colorhelpers.h"
 
+#include "appsupport.h"
+
 FrameScrollBar::FrameScrollBar(const int minSpan,
                                const int maxSpan,
                                const bool range,
@@ -54,6 +56,7 @@ qreal FrameScrollBar::posToFrame(int xPos) {
 
 void FrameScrollBar::setCurrentCanvas(Canvas * const canvas) {
     mCurrentCanvas = canvas;
+    if (mCurrentCanvas) { mDisplayTime = mCurrentCanvas->getDisplayTimecode(); }
 }
 
 void FrameScrollBar::paintEvent(QPaintEvent *) {
@@ -90,17 +93,20 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     handleRect.setBottom(mBottom ? 4 : height());
     p.fillRect(handleRect, col);
 
-    if(mCurrentCanvas) {
-        const int soundHeight = eSizesUI::widget/3;
-        const int rasterHeight = eSizesUI::widget - soundHeight;
-        const QRectF rasterRect(x0, 0, w1, rasterHeight);
-        const auto& rasterCache = mCurrentCanvas->getSceneFramesHandler();
-        rasterCache.drawCacheOnTimeline(&p, rasterRect, minFrame, maxFrame);
-
+    if (mCurrentCanvas) {
         const qreal fps = mCurrentCanvas->getFps();
-        const QRectF soundRect(x0, rasterHeight, w1, soundHeight);
-        const auto& soundCache = mCurrentCanvas->getSoundCacheHandler();
-        soundCache.drawCacheOnTimeline(&p, soundRect, minFrame, maxFrame, fps);
+        mFps = fps;
+        if (!mRange) {
+            const int soundHeight = eSizesUI::widget/3;
+            const int rasterHeight = eSizesUI::widget - soundHeight;
+            const QRectF rasterRect(x0, 0, w1, rasterHeight);
+            const auto& rasterCache = mCurrentCanvas->getSceneFramesHandler();
+            rasterCache.drawCacheOnTimeline(&p, rasterRect, minFrame, maxFrame);
+
+            const QRectF soundRect(x0, rasterHeight, w1, soundHeight);
+            const auto& soundCache = mCurrentCanvas->getSoundCacheHandler();
+            soundCache.drawCacheOnTimeline(&p, soundRect, minFrame, maxFrame, fps);
+        }
     }
 
     p.setPen(Qt::white);
@@ -120,12 +126,24 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     const qreal threeFourthsHeight = height()*0.75;
     const qreal maxX = width() + eSizesUI::widget;
     while(xL < maxX) {
-        if(!mRange) {
+        //if(!mRange) {
             p.drawLine(QPointF(xL, threeFourthsHeight + 2),
                        QPointF(xL, height()));
+        //}
+        QString drawValue = QString::number(currentFrame);
+        qreal leftValue = xL;
+        if (mDisplayTime && mFps > 0) {
+            drawValue = AppSupport::getTimeCodeFromFrame(currentFrame, mFps);
+            if (mRange) {
+                if (currentFrame == mFrameRange.fMin) {
+                    leftValue = xL + 40;
+                } else if (currentFrame == mFrameRange.fMax) {
+                    leftValue = xL - 40;
+                }
+            }
         }
-        p.drawText(QRectF(xL - inc, 0, 2*inc, height()),
-                   Qt::AlignCenter, QString::number(currentFrame));
+        p.drawText(QRectF(leftValue - inc, 0, 2*inc, height()),
+                   Qt::AlignCenter, drawValue);
         xL += inc;
         currentFrame += mDrawFrameInc;
     }
@@ -196,40 +214,51 @@ bool FrameScrollBar::setFirstViewedFrame(const int firstFrame) {
 
 }
 #include <QMenu>
-void FrameScrollBar::mousePressEvent(QMouseEvent *event) {
-    if(event->button() == Qt::RightButton) {
+void FrameScrollBar::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::RightButton) {
         QMenu menu(this);
-        QAction *clampAction = new QAction("Clamp", this);
+        /*QAction *clampAction = new QAction("Clamp", this);
         clampAction->setCheckable(true);
         clampAction->setChecked(mClamp);
-        menu.addAction(clampAction);
+        menu.addAction(clampAction);*/
 
-        menu.addSeparator();
+        //menu.addSeparator();
 
-        /*QAction *timeAction = new QAction("Display Time", this);
+        QAction *timeAction = new QAction(tr("Display Timecodes"), this);
+        timeAction->setCheckable(true);
         timeAction->setChecked(mDisplayTime);
         menu.addAction(timeAction);
 
-        QAction *framesAction = new QAction("Display Frames", this);
+        QAction *framesAction = new QAction(tr("Display Frames"), this);
+        framesAction->setCheckable(true);
         framesAction->setChecked(!mDisplayTime);
-        menu.addAction(framesAction);*/
+        menu.addAction(framesAction);
 
         QAction* selectedAction = menu.exec(event->globalPos());
-        if(selectedAction) {
-            if(selectedAction == clampAction) {
+        if (selectedAction) {
+            /*if (selectedAction == clampAction) {
                 mClamp = !mClamp;
-            }/* else if(selectedAction == framesAction) {
+            } else*/ if (selectedAction == framesAction) {
                 mDisplayTime = false;
-            } else if(selectedAction == timeAction) {
+                update();
+                if (mCurrentCanvas) {
+                    mCurrentCanvas->setDisplayTimecode(mDisplayTime);
+                }
+            } else if (selectedAction == timeAction) {
                 mDisplayTime = true;
-            }*/
+                update();
+                if (mCurrentCanvas) {
+                    mCurrentCanvas->setDisplayTimecode(mDisplayTime);
+                }
+            }
         }
         return;
     }
     mPressed = true;
     mLastMousePressFrame = posToFrame(event->x() );
-    if(mLastMousePressFrame < mFirstViewedFrame ||
-       mLastMousePressFrame > mFirstViewedFrame + mViewedFramesSpan) {
+    if (mLastMousePressFrame < mFirstViewedFrame ||
+        mLastMousePressFrame > mFirstViewedFrame + mViewedFramesSpan) {
         setFirstViewedFrame(qRound(mLastMousePressFrame - mViewedFramesSpan/2.));
         emitTriggeredChange();
     }
