@@ -284,6 +284,8 @@ TimelineWidget::TimelineWidget(Document &document,
 
     connect(mFrameRangeScrollBar, &FrameScrollBar::triggeredFrameRangeChange,
             this, &TimelineWidget::setViewedFrameRange);
+    connect(mKeysView, &KeysView::wheelEventSignal,
+            mFrameRangeScrollBar, &FrameScrollBar::callWheelEvent);
     mKeysViewLayout->addWidget(mFrameRangeScrollBar);
     //mSceneChooser->setCurrentScene(mDocument.fActiveScene); // why?
 

@@ -304,6 +304,31 @@ void FrameScrollBar::setCanvasFrameRange(const FrameRange &range) {
     update();
 }
 
+void FrameScrollBar::callWheelEvent(QWheelEvent *event)
+{
+    if (!mRange) { return; }
+    bool triggered = false;
+    if (event->modifiers() & Qt::CTRL) {
+        int newFramesSpan = mViewedFramesSpan;
+        if (event->angleDelta().y() > 0) { newFramesSpan *= 0.85; }
+        else { newFramesSpan *= 1.15; }
+        setFramesSpan(newFramesSpan);
+        triggered = true;
+   } else if (event->modifiers() & Qt::SHIFT) {
+        if (event->angleDelta().y() > 0) {
+            setFirstViewedFrame(mFirstViewedFrame - mViewedFramesSpan/20);
+            triggered = true;
+        } else {
+            setFirstViewedFrame(mFirstViewedFrame + mViewedFramesSpan/20);
+            triggered = true;
+        }
+    }
+    if (!triggered) { return; }
+
+    emitTriggeredChange();
+    update();
+}
+
 void FrameScrollBar::emitChange() {
     emit frameRangeChange(getViewedRange());
 }

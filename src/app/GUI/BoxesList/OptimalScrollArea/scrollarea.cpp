@@ -58,8 +58,10 @@ void ScrollArea::resizeEvent(QResizeEvent *e) {
     QScrollArea::resizeEvent(e);
 }
 #include "GUI/global.h"
-void ScrollArea::callWheelEvent(QWheelEvent *event) {
-    if(event->angleDelta().y() > 0) {
+void ScrollArea::callWheelEvent(QWheelEvent *event)
+{
+    if (event->modifiers() & Qt::CTRL || event->modifiers() & Qt::SHIFT) { return; }
+    if (event->angleDelta().y() > 0) {
         scrollBy(0, -eSizesUI::widget);
     } else {
         scrollBy(0, eSizesUI::widget);

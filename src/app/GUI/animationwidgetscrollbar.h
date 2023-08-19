@@ -59,6 +59,8 @@ public:
     void setDisplayedFrameRange(const FrameRange& range);
     void setViewedFrameRange(const FrameRange& range);
     void setCanvasFrameRange(const FrameRange& range);
+    void callWheelEvent(QWheelEvent *event);
+
 protected:
     qreal posToFrame(int xPos);
     void paintEvent(QPaintEvent *);
