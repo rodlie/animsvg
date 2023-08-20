@@ -35,6 +35,10 @@ if(UNIX AND NOT APPLE)
     set(CPACK_PACKAGE_VENDOR ${PROJECT_COPYRIGHT})
     set(CPACK_STRIP_FILES TRUE)
 
+    set(CPACK_ARCH_PACKAGE_ARCHITECTURE "x86_64")
+    set(CPACK_ARCH_PACKAGE_LICENSE_NAME "GPLv3")
+    set(CPACK_ARCH_PACKAGE_DEPENDS "fontconfig freetype2 ffmpeg qscintilla-qt5 qt5-base qt5-imageformats qt5-multimedia qt5-svg qt5-declarative libunwind")
+
     set(CPACK_RPM_SPEC_MORE_DEFINE "%define _build_id_links none")
     set(CPACK_RPM_PACKAGE_LICENSE ${PROJECT_LICENSE})
     set(CPACK_RPM_PACKAGE_SUMMARY ${PROJECT_DESCRIPTION})
