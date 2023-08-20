@@ -139,7 +139,7 @@ fi
 
 if [ ! -d "${FRICTION_SRC_DIR}" ]; then
     cd ${FRICTION_ROOT}
-    git clone https://github.com/friction2d/friction
+    git clone --recurse-submodules="src/plugins/shaders" https://github.com/friction2d/friction
     if [ "${FRICTION_BRANCH}" != "" ]; then
         (cd friction; git checkout ${FRICTION_BRANCH})
     fi
@@ -149,7 +149,7 @@ if [ ! -d "${FRICTION_SRC_DIR}" ]; then
     if [ "${FRICTION_TAG}" != "" ]; then
         (cd friction; git checkout tags/${FRICTION_TAG})
     fi
-    (cd friction; git submodule update -i)
+    #(cd friction; git submodule update -i)
 fi
 
 #if [ ! -f "${FRICTION_SRC_DIR}/quazip-${QUAZIP_V}/build/quazip/libquazip1-qt5.a" ]; then
