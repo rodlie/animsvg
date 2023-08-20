@@ -349,7 +349,9 @@ void FontsWidget::setTextFocus()
 
 void FontsWidget::clearText()
 {
+    mTextInput->blockSignals(true);
     mTextInput->clear();
+    mTextInput->blockSignals(false);
 }
 
 void FontsWidget::setColorTarget(ColorAnimator * const target)
