@@ -53,5 +53,9 @@ endif()
 
 add_subdirectory(src/core)
 add_subdirectory(src/app)
-add_subdirectory(src/plugins/shaders)
 
+# Bundle experimental shaders
+option(BUNDLE_SHADERS "Include shader effects with the application" OFF)
+if(${BUNDLE_SHADERS})
+    add_subdirectory(src/plugins/shaders)
+endif()
