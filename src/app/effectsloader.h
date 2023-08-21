@@ -55,8 +55,7 @@ private:
     void reloadProgram(ShaderEffectCreator * const loaded,
                        const QString &fragPath);
     void iniSingleRasterEffectProgram(const QString &grePath);
-    void iniShaderEffectProgramExec(const QString &grePath,
-                                    bool watch = true);
+    void iniShaderEffectProgramExec(const QString &grePath);
 
     void iniCustomRasterEffect(const QString &soPath);
     void iniIfCustomRasterEffect(const QString &path);

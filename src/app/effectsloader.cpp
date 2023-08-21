@@ -261,7 +261,7 @@ void EffectsLoader::iniShaderEffects()
     for (const auto &path : AppSupport::getFilesFromPath(AppSupport::getAppShaderPresetsPath(),
                                                          QStringList() << "*.gre")) {
         try {
-            iniShaderEffectProgramExec(path, false);
+            iniShaderEffectProgramExec(path);
         } catch(const std::exception& e) {
             gPrintExceptionCritical(e);
         }
@@ -277,7 +277,11 @@ void EffectsLoader::iniShaderEffects()
         }
     }
 
-    const auto newFileWatcher = QSharedPointer<QFileSystemModel>(
+    qDebug() << "Shaders paths" << mLoadedGREPaths;
+    qDebug() << "Shaders total" << mLoadedShaders.count();
+
+    // TODO: rewrite this
+    /*const auto newFileWatcher = QSharedPointer<QFileSystemModel>(
                 new QFileSystemModel);
     newFileWatcher->setRootPath(dirPath);
     connect(newFileWatcher.get(), &QFileSystemModel::directoryLoaded,
@@ -309,7 +313,7 @@ void EffectsLoader::iniShaderEffects()
                 iniSingleRasterEffectProgram(grePath);
             }
         });
-    });
+    });*/
     doneCurrent();
 }
 
@@ -325,10 +329,9 @@ void EffectsLoader::iniSingleRasterEffectProgram(const QString &grePath)
     }
 }
 
-void EffectsLoader::iniShaderEffectProgramExec(const QString &grePath,
-                                               bool watch)
+void EffectsLoader::iniShaderEffectProgramExec(const QString &grePath)
 {
-    if (!QFile::exists(grePath)) { return; }
+    if (!QFile::exists(grePath) || mLoadedGREPaths.contains(grePath)) { return; }
 
     const auto shaderID = AppSupport::getShaderID(grePath);
     if (shaderID.first.isEmpty() || shaderID.second.isEmpty()) { return; }
@@ -342,32 +345,13 @@ void EffectsLoader::iniShaderEffectProgramExec(const QString &grePath,
     const QString fragPath = QString::fromUtf8("%1/%2.frag").arg(fileInfo.path(),
                                                                  fileInfo.completeBaseName());
     if (!QFile::exists(fragPath)) { return; }
-    qDebug() << "Loading ShaderEffect" << shaderID.first << shaderID.second << grePath;
+    qDebug() << "Loading Shader" << shaderID.first << shaderID.second << grePath;
     try {
-        const auto loaded = ShaderEffectCreator::sLoadFromFile(this, grePath).get();
+        // TODO: we should keep each creator in an list, replace shaderID
+        /*const auto loaded =*/ ShaderEffectCreator::sLoadFromFile(this, grePath).get();
         mLoadedGREPaths << grePath;
         mLoadedShaders << shaderID;
-
-        if (watch) {
-            const auto newFileWatcher = QSharedPointer<QFileSystemWatcher>(
-                        new QFileSystemWatcher);
-            newFileWatcher->addPath(fragPath);
-            connect(newFileWatcher.get(), &QFileSystemWatcher::fileChanged,
-                    this, [this, loaded, fragPath, newFileWatcher]() {
-                reloadProgram(loaded, fragPath);
-            });
-        }
     } catch(...) {
-        if (watch) {
-            const auto newFileWatcher = QSharedPointer<QFileSystemWatcher>(
-                        new QFileSystemWatcher);
-            newFileWatcher->addPath(grePath);
-            newFileWatcher->addPath(fragPath);
-            connect(newFileWatcher.get(), &QFileSystemWatcher::fileChanged,
-                    this, [this, grePath]() {
-                iniSingleRasterEffectProgram(grePath);
-            });
-        }
         RuntimeThrow("Error while loading ShaderEffect from '" + grePath + "'");
     }
 }
