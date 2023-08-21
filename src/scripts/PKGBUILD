@@ -1,0 +1,21 @@
+pkgname=friction
+pkgver=__VERSION__
+pkgrel=1
+pkgdesc="Friction Motion Graphics"
+arch=('x86_64')
+url="https://friction.graphics"
+license=('GPL3')
+depends=('fontconfig'
+         'ffmpeg'
+         'qscintilla-qt5'
+         'qt5-base'
+         'qt5-imageformats'
+         'qt5-multimedia'
+         'qt5-svg'
+         'qt5-declarative'
+         'libunwind')
+
+package() {
+    mkdir $pkgdir/usr
+    cp -a $srcdir/../friction-__VERSION__-Linux/* $pkgdir/usr/
+}

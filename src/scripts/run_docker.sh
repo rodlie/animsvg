@@ -34,6 +34,7 @@ JAMMY=${JAMMY:-1}
 LUNAR=${LUNAR:-1}
 EL=${EL:-1}
 FC=${FC:-1}
+AL=${AL:-0}
 
 if [ "${SNAP}" = 1 ]; then
     REL=0
@@ -109,4 +110,7 @@ if [ "${EL}" = 1 ]; then
 fi
 if [ "${FC}" = 1 ]; then
     $DOCKER friction-fedora
+fi
+if [ "${AL}" = 1 ]; then
+    $DOCKER friction-arch
 fi

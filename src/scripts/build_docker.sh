@@ -18,7 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Deploy Friction on Ubuntu, Fedora, RHEL.
+# Deploy Friction on Ubuntu, Fedora, RHEL, Arch.
 
 set -e -x
 g++ --version
@@ -55,11 +55,13 @@ if [ "${DISTRO_ID}" = "fedora" ]; then
     DISTRO_ID="fc"
 elif [ "${DISTRO_ID}" = "ubuntu" ]; then
     DISTRO_ID="ubuntu"
+elif [ "${DISTRO_ID}" = "arch" ]; then
+    DISTRO_ID="arch"
 else
     DISTRO_ID="el"
 fi
 
-if [ "${DISTRO_ID}" != "ubuntu" ]; then
+if [ "${DISTRO_ID}" = "fc" ] || [ "${DISTRO_ID}" = "el" ]; then
     # ffmpeg with clang forces latomic, that won't work
     # an easy check in configure should do, but for now just disable clang
     # not that important anyway, as long as skia is built with clang we are ok
@@ -73,6 +75,9 @@ if [ "${DISTRO_ID}" = "fc" ]; then
 elif [ "${DISTRO_ID}" = "ubuntu" ]; then
     DISTRO_VERSION="${DISTRO_VERSION_ID}"
     DISTRO_PRETTY="Ubuntu Linux ${DISTRO_VERSION}"
+elif [ "${DISTRO_ID}" = "arch" ]; then
+    DISTRO_VERSION="${DISTRO_VERSION_ID}"
+    DISTRO_PRETTY="Arch Linux ${DISTRO_VERSION}"
 else
     DISTRO_VERSION="${DISTRO_VERSION_ID:0:1}"
     DISTRO_PRETTY="Enterprise Linux ${DISTRO_VERSION}"
@@ -118,7 +123,7 @@ QSCINTILLA_URL="https://www.riverbankcomputing.com/static/Downloads/QScintilla"
 FFMPEG_URL="https://ffmpeg.org/releases"
 UNWIND_URL="http://download.savannah.nongnu.org/releases/libunwind"
 
-if [ "${DISTRO_ID}" != "ubuntu" ]; then
+if [ "${DISTRO_ID}" = "fc" ] || [ "${DISTRO_ID}" = "el" ]; then
     export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:${PKG_CONFIG_PATH}"
 fi
 
@@ -172,7 +177,7 @@ fi
 #    fi
 #fi
 
-if [ "${DISTRO_ID}" != "ubuntu" ]; then
+if [ "${DISTRO_ID}" = "fc" ] || [ "${DISTRO_ID}" = "el" ]; then
 
 if [ ! -f "${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}/src/libqscintilla2_qt5.a" ]; then
     if [ -d "${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}" ]; then
@@ -239,7 +244,7 @@ if [ "${HAS_LOCAL_CACHE}" = 0 ]; then
     (cd /usr ; tar cvvfJ ${FRICTION_DIST}/local-build-${DID}${COMPILER}.tar.xz local)
 fi
 
-fi # [ "${DISTRO_ID}" != "ubuntu" ]
+fi # [ "${DISTRO_ID}" = "fc" ] || [ "${DISTRO_ID}" = "el" ]
 
 if [ ! -f "${FRICTION_SRC_DIR}/gperftools/.libs/libtcmalloc.a" ]; then
     if [ ! -f "${FRICTION_DIST}/gperftools.tar.xz" ]; then
@@ -311,7 +316,7 @@ mkdir build
 cd build
 
 CMAKE_EXTRA=""
-if [ "${DISTRO_ID}" != "ubuntu" ]; then
+if [ "${DISTRO_ID}" = "fc" ] || [ "${DISTRO_ID}" = "el" ]; then
     CMAKE_EXTRA="-DSTATIC_FFMPEG=ON"
     CMAKE_EXTRA="${CMAKE_EXTRA} -DQSCINTILLA_INCLUDE_DIRS=${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}/src"
     CMAKE_EXTRA="${CMAKE_EXTRA} -DQSCINTILLA_LIBRARIES_DIRS=${FRICTION_SRC_DIR}/QScintilla_src-${QSCINTILLA_V}/src"
@@ -340,20 +345,38 @@ fi
 cmake --build .
 
 PKG_EXT="deb"
-if [ "${DISTRO_ID}" != "ubuntu" ]; then
+if [ "${DISTRO_ID}" = "fc" ] || [ "${DISTRO_ID}" = "el" ]; then
     PKG_EXT="rpm"
     cpack -G RPM
+elif [ "${DISTRO_ID}" = "arch" ]; then
+    PKG_EXT="tar.xz"
+    cpack -G TXZ
 else
     cpack -G DEB
 fi
 
+OPKG="friction.${PKG_EXT}"
 PKG="friction-${DID}${COMPILER}.${PKG_EXT}"
+
+if [ "${DISTRO_ID}" = "arch" ]; then
+    mkdir -p pkgbuild
+    chmod 777 pkgbuild
+    (cd pkgbuild ;
+    tar xvf ../friction-${VERSION}-Linux.${PKG_EXT}
+    cat /PKGBUILD | sed 's/__VERSION__/'${VERSION}'/g' > PKGBUILD
+    sudo -u nobody makepkg
+    )
+    PKG_EXT="pkg.tar.zst"
+    OPKG="friction-${VERSION}-1-x86_64.pkg.tar.zst"
+    cp pkgbuild/${OPKG} .
+fi
+
 if [ "${REL}" = 1 ]; then
     PKG="friction-${VERSION}-${DID}${COMPILER}.${PKG_EXT}"
 elif [ "${SNAP}" = 1 ]; then
     PKG="friction-${TIMESTAMP}-${BRANCH}-${COMMIT}-${DID}${COMPILER}.${PKG_EXT}"
 fi
-mv friction.${PKG_EXT} ${PKG}
+mv ${OPKG} ${PKG}
 
 FRICTION_PKG_DIR="${FRICTION_OUT_DIR}/${YEAR}/${MONTH}"
 if [ "${REL}" = 1 ]; then
@@ -365,5 +388,9 @@ if [ ! -d "${FRICTION_PKG_DIR}" ]; then
 fi
 
 cp ${PKG} ${FRICTION_PKG_DIR}/
+
+if [ "${DISTRO_ID}" = "arch" ]; then
+    cp pkgbuild/*.pkg.* ${FRICTION_PKG_DIR}/
+fi
 
 echo "BUILD DONE: ${FRICTION_PKG_DIR}/${PKG}"
