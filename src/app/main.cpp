@@ -120,7 +120,9 @@ int main(int argc, char *argv[])
     setlocale(LC_NUMERIC, "C");
 
 #ifdef Q_OS_WIN
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
     QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
+#endif
 #endif
 
     AppSupport::setupTheme();
