@@ -49,7 +49,6 @@ find_package(
     5.12
     COMPONENTS
     Gui
-    Concurrent
     Widgets
     OpenGL
     Multimedia
@@ -61,7 +60,6 @@ find_package(
 set(QT_LIBRARIES
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Gui
-    Qt${QT_VERSION_MAJOR}::Concurrent
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::OpenGL
     Qt${QT_VERSION_MAJOR}::Multimedia

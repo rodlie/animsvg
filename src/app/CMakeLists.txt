@@ -231,7 +231,6 @@ set(
     GUI/RenderWidgets/closablecontainer.cpp
     GUI/BoxesList/boxtargetwidget.cpp
     GUI/BoxesList/OptimalScrollArea/minimalscrollwidget.cpp
-    execdelegator.cpp
     GUI/BoxesList/boxscrollarea.cpp
     videoencoder.cpp
     GUI/RenderWidgets/outputsettingsprofilesdialog.cpp
@@ -352,7 +351,6 @@ set(
     GUI/RenderWidgets/closablecontainer.h
     GUI/BoxesList/boxtargetwidget.h
     GUI/BoxesList/OptimalScrollArea/minimalscrollwidget.h
-    execdelegator.h
     GUI/BoxesList/boxscrollarea.h
     videoencoder.h
     GUI/RenderWidgets/outputsettingsprofilesdialog.h
