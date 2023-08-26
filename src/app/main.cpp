@@ -120,9 +120,10 @@ int main(int argc, char *argv[])
     setlocale(LC_NUMERIC, "C");
 
 #ifdef Q_OS_WIN
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
+// we ship a custom build of Qt 5.12.12 (with this feature backported) on Windows, so ignore this check
+// #if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
     QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
-#endif
+// #endif
 #endif
 
     AppSupport::setupTheme();
