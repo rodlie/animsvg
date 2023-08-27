@@ -1,0 +1,51 @@
+--- qtdeclarative/src/qmldebug/qqmlprofilerevent_p.h.orig	2023-08-27 18:42:23.217200254 +0200
++++ qtdeclarative/src/qmldebug/qqmlprofilerevent_p.h	2023-08-27 18:42:39.177914148 +0200
+@@ -40,6 +40,7 @@
+ #ifndef QQMLPROFILEREVENT_P_H
+ #define QQMLPROFILEREVENT_P_H
+ 
++#include <limits>
+ #include "qqmlprofilerclientdefinitions_p.h"
+ 
+ #include <QtCore/qstring.h>
+--- qtdeclarative/src/qml/jsruntime/qv4regexp_p.h.orig	2023-08-27 18:28:00.494732255 +0200
++++ qtdeclarative/src/qml/jsruntime/qv4regexp_p.h	2023-08-27 18:28:11.015002704 +0200
+@@ -57,7 +57,7 @@
+ #include <wtf/FastAllocBase.h>
+ #include <wtf/BumpPointerAllocator.h>
+ 
+-#include <limits.h>
++#include <limits>
+ 
+ #include <yarr/Yarr.h>
+ #include <yarr/YarrInterpreter.h>
+--- qtdeclarative/src/qml/jsruntime/qv4propertykey_p.h.orig	2023-08-27 18:25:13.146447812 +0200
++++ qtdeclarative/src/qml/jsruntime/qv4propertykey_p.h	2023-08-27 18:25:37.631072376 +0200
+@@ -50,6 +50,7 @@
+ // We mean it.
+ //
+ 
++#include <limits>
+ #include <private/qv4global_p.h>
+ 
+ QT_BEGIN_NAMESPACE
+--- qtbase/src/corelib/global/qendian.h.orig	2023-08-27 17:57:14.217737111 +0200
++++ qtbase/src/corelib/global/qendian.h	2023-08-27 17:57:28.366116283 +0200
+@@ -41,6 +41,7 @@
+ #ifndef QENDIAN_H
+ #define QENDIAN_H
+ 
++#include <limits>
+ #include <QtCore/qfloat16.h>
+ #include <QtCore/qglobal.h>
+ 
+--- qtbase/src/corelib/tools/qbytearraymatcher.h.orig	2023-08-27 17:58:30.455782238 +0200
++++ qtbase/src/corelib/tools/qbytearraymatcher.h	2023-08-27 17:58:42.956118008 +0200
+@@ -40,6 +40,7 @@
+ #ifndef QBYTEARRAYMATCHER_H
+ #define QBYTEARRAYMATCHER_H
+ 
++#include <limits>
+ #include <QtCore/qbytearray.h>
+ 
+ QT_BEGIN_NAMESPACE
