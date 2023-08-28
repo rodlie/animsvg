@@ -8,6 +8,7 @@
 #include "interfacesettingswidget.h"
 #include "canvassettingswidget.h"
 #include "timelinesettingswidget.h"
+#include "pluginssettingswidget.h"
 
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -39,6 +40,9 @@ SettingsDialog::SettingsDialog(QWidget * const parent) :
 
     const auto timeline = new TimelineSettingsWidget(this);
     addSettingsWidget(timeline, tr("Timeline"));
+
+    const auto plugins = new PluginsSettingsWidget(this);
+    addSettingsWidget(plugins, tr("Plugins"));
 
     //const auto external = new ExternalAppsSettingsWidget(this);
     //addSettingsWidget(external, "External Apps");

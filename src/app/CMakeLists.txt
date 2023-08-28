@@ -166,6 +166,7 @@ set(
     GUI/Settings/settingsdialog.cpp
     GUI/Settings/settingswidget.cpp
     GUI/Settings/timelinesettingswidget.cpp
+    GUI/Settings/pluginssettingswidget.cpp
     GUI/alignwidget.cpp
     GUI/audiohandler.cpp
     GUI/assetswidget.cpp
@@ -287,6 +288,7 @@ set(
     GUI/Settings/settingsdialog.h
     GUI/Settings/settingswidget.h
     GUI/Settings/timelinesettingswidget.h
+    GUI/Settings/pluginssettingswidget.h
     GUI/alignwidget.h
     GUI/audiohandler.h
     GUI/assetswidget.h
