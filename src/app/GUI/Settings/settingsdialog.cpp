@@ -18,7 +18,7 @@ SettingsDialog::SettingsDialog(QWidget * const parent) :
     eSizesUI::widget.add(this, [this](const int size) {
         setMinimumWidth(20*size);
     });
-    setWindowTitle("Settings");
+    setWindowTitle(tr("Settings"));
 
     const auto mainLauout = new QVBoxLayout;
     setLayout(mainLauout);
@@ -29,16 +29,16 @@ SettingsDialog::SettingsDialog(QWidget * const parent) :
     });
 
     const auto performance = new PerformanceSettingsWidget(this);
-    addSettingsWidget(performance, "Performance");
+    addSettingsWidget(performance,tr("Performance"));
 
     //const auto ui = new InterfaceSettingsWidget(this);
     //addSettingsWidget(ui, "Interface");
 
     const auto canvas = new CanvasSettingsWidget(this);
-    addSettingsWidget(canvas, "Canvas");
+    addSettingsWidget(canvas, tr("Canvas"));
 
     const auto timeline = new TimelineSettingsWidget(this);
-    addSettingsWidget(timeline, "Timeline");
+    addSettingsWidget(timeline, tr("Timeline"));
 
     //const auto external = new ExternalAppsSettingsWidget(this);
     //addSettingsWidget(external, "External Apps");
