@@ -123,7 +123,9 @@ void PerformanceSettingsWidget::applySettings() {
 }
 
 
-void PerformanceSettingsWidget::updateSettings() {
+void PerformanceSettingsWidget::updateSettings(bool restore)
+{
+    Q_UNUSED(restore)
     const bool capCpu = mSett.fCpuThreadsCap > 0;
     mCpuThreadsCapCheck->setChecked(capCpu);
     const int nThreads = capCpu ? mSett.fCpuThreadsCap :

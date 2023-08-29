@@ -96,7 +96,9 @@ void TimelineSettingsWidget::applySettings() {
     mSett.fAnimationRangeColor = mAnimationRangeColor->color();
 }
 
-void TimelineSettingsWidget::updateSettings() {
+void TimelineSettingsWidget::updateSettings(bool restore)
+{
+    Q_UNUSED(restore)
     mAlternateRowCheck->setChecked(mSett.fTimelineAlternateRow);
     mAlternateRowColor->setColor(mSett.fTimelineAlternateRowColor);
 

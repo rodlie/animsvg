@@ -43,7 +43,7 @@ public:
     void addSeparator();
 
     virtual void applySettings() = 0;
-    virtual void updateSettings() = 0;
+    virtual void updateSettings(bool restore = false) = 0;
 protected:
     eSettings& mSett;
 private:

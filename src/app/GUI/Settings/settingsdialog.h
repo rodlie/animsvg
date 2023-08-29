@@ -13,7 +13,7 @@ public:
 private:
     void addSettingsWidget(SettingsWidget* const widget,
                            const QString& name);
-    void updateSettings();
+    void updateSettings(bool restore = false);
 
     QTabWidget* mTabWidget = nullptr;
     QList<SettingsWidget*> mSettingWidgets;

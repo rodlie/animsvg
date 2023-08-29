@@ -238,11 +238,12 @@ const QString AppSupport::getAppRasterEffectsPath()
     return path;
 }
 
-const QString AppSupport::getAppShaderEffectsPath()
+const QString AppSupport::getAppShaderEffectsPath(bool restore)
 {
-    QString path = getSettings("settings",
-                               "CustomShaderPath",
-                               QString::fromUtf8("%1/ShaderEffects").arg(getAppConfigPath())).toString();
+    QString def = QString::fromUtf8("%1/ShaderEffects").arg(getAppConfigPath());
+    QString path = restore ? def : getSettings("settings",
+                                               "CustomShaderPath",
+                                               def).toString();
     QDir dir(path);
     if (!dir.exists() && path.startsWith(getAppConfigPath())) { dir.mkpath(path); }
     return path;

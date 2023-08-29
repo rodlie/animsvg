@@ -35,7 +35,7 @@ public:
     explicit InterfaceSettingsWidget(QWidget *parent);
 
     void applySettings();
-    void updateSettings();
+    void updateSettings(bool restore = false);
 private:
     QSlider* mInterfaceScaling = nullptr;
 };

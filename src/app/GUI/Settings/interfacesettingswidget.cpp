@@ -50,6 +50,8 @@ void InterfaceSettingsWidget::applySettings() {
     eSizesUI::widget.updateSize();
 }
 
-void InterfaceSettingsWidget::updateSettings() {
+void InterfaceSettingsWidget::updateSettings(bool restore)
+{
+    Q_UNUSED(restore)
     mInterfaceScaling->setValue(100*mSett.fInterfaceScaling);
 }

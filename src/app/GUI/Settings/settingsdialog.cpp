@@ -80,7 +80,7 @@ SettingsDialog::SettingsDialog(QWidget * const parent) :
 
     connect(restoreButton, &QPushButton::released, this, [this]() {
         eSettings::sInstance->loadDefaults();
-        updateSettings();
+        updateSettings(true /* restore */);
         eSizesUI::font.updateSize();
         eSizesUI::widget.updateSize();
     });
@@ -111,8 +111,8 @@ void SettingsDialog::addSettingsWidget(SettingsWidget * const widget,
     mSettingWidgets << widget;
 }
 
-void SettingsDialog::updateSettings() {
+void SettingsDialog::updateSettings(bool restore) {
     for(const auto widget : mSettingWidgets) {
-        widget->updateSettings();
+        widget->updateSettings(restore);
     }
 }

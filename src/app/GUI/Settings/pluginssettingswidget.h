@@ -35,7 +35,7 @@ class PluginsSettingsWidget : public SettingsWidget
 public:
     explicit PluginsSettingsWidget(QWidget *parent = nullptr);
     void applySettings();
-    void updateSettings();
+    void updateSettings(bool restore = false);
 
 private:
     QLineEdit *mShaderPath;

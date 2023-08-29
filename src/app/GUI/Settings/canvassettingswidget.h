@@ -39,7 +39,7 @@ public:
     explicit CanvasSettingsWidget(QWidget* const parent = nullptr);
 
     void applySettings();
-    void updateSettings();
+    void updateSettings(bool restore = false);
 private:
     QCheckBox* mRtlSupport = nullptr;
 

@@ -91,7 +91,9 @@ void CanvasSettingsWidget::applySettings() {
     mSett.fCanvasRtlSupport = mRtlSupport->isChecked();
 }
 
-void CanvasSettingsWidget::updateSettings() {
+void CanvasSettingsWidget::updateSettings(bool restore)
+{
+    Q_UNUSED(restore)
     mPathNodeSize->setValue(100*mSett.fPathNodeScaling);
     mPathNodeColor->setColor(mSett.fPathNodeColor);
     mPathNodeSelectedColor->setColor(mSett.fPathNodeSelectedColor);

@@ -102,11 +102,15 @@ void PluginsSettingsWidget::applySettings()
                             disabledShaders);
 }
 
-void PluginsSettingsWidget::updateSettings()
+void PluginsSettingsWidget::updateSettings(bool restore)
 {
-    mShaderPath->setText(AppSupport::getAppShaderEffectsPath());
+    mShaderPath->setText(AppSupport::getAppShaderEffectsPath(restore));
     mShadersDisabled = AppSupport::getSettings("settings",
                                                "DisabledShaders").toStringList();
+    if (restore) {
+        mShadersDisabled.clear();
+        populateShaderTree();
+    }
 }
 
 void PluginsSettingsWidget::populateShaderTree()

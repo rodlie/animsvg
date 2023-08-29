@@ -72,7 +72,7 @@ public:
     static const QString getAppOutputProfilesPath();
     static const QString getAppPathEffectsPath();
     static const QString getAppRasterEffectsPath();
-    static const QString getAppShaderEffectsPath();
+    static const QString getAppShaderEffectsPath(bool restore = false);
     static const QString getAppShaderPresetsPath();
     static const QString getAppExPresetsPath();
     static const QString getAppUserExPresetsPath();

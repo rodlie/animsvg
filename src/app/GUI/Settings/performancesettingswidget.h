@@ -12,7 +12,7 @@ public:
     explicit PerformanceSettingsWidget(QWidget *parent = nullptr);
 
     void applySettings();
-    void updateSettings();
+    void updateSettings(bool restore = false);
 private:
     void updateAccPreferenceDesc();
 

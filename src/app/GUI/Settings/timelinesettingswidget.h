@@ -37,7 +37,7 @@ public:
     explicit TimelineSettingsWidget(QWidget *parent = nullptr);
 
     void applySettings();
-    void updateSettings();
+    void updateSettings(bool restore = false);
 private:
     QCheckBox* mAlternateRowCheck = nullptr;
     ColorAnimatorButton* mAlternateRowColor = nullptr;
