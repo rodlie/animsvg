@@ -6,10 +6,14 @@
 
 class SettingsWidget;
 
-class SettingsDialog : public QDialog {
+class SettingsDialog : public QDialog
+{
     Q_OBJECT
+
 public:
     explicit SettingsDialog(QWidget * const parent = nullptr);
+    ~SettingsDialog();
+
 private:
     void addSettingsWidget(SettingsWidget* const widget,
                            const QString& name);

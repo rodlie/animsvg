@@ -4,6 +4,8 @@
 #include "exceptions.h"
 #include "GUI/global.h"
 
+#include "appsupport.h"
+
 #include "performancesettingswidget.h"
 #include "interfacesettingswidget.h"
 #include "canvassettingswidget.h"
@@ -14,26 +16,19 @@
 #include <QPushButton>
 #include <QStatusBar>
 
-SettingsDialog::SettingsDialog(QWidget * const parent) :
-    QDialog(parent) {
-    eSizesUI::widget.add(this, [this](const int size) {
-        setMinimumWidth(20*size);
-    });
+SettingsDialog::SettingsDialog(QWidget * const parent)
+    : QDialog(parent)
+{
+
     setWindowTitle(tr("Settings"));
 
-    const auto mainLauout = new QVBoxLayout;
-    setLayout(mainLauout);
+    const auto mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
 
     mTabWidget = new QTabWidget(this);
-    eSizesUI::widget.add(this, [this](const int size) {
-        mTabWidget->setContentsMargins(size, size, size, size);
-    });
 
     const auto performance = new PerformanceSettingsWidget(this);
     addSettingsWidget(performance,tr("Hardware"));
-
-    //const auto ui = new InterfaceSettingsWidget(this);
-    //addSettingsWidget(ui, "Interface");
 
     const auto canvas = new CanvasSettingsWidget(this);
     addSettingsWidget(canvas, tr("Canvas"));
@@ -44,10 +39,7 @@ SettingsDialog::SettingsDialog(QWidget * const parent) :
     const auto plugins = new PluginsSettingsWidget(this);
     addSettingsWidget(plugins, tr("Plugins"));
 
-    //const auto external = new ExternalAppsSettingsWidget(this);
-    //addSettingsWidget(external, "External Apps");
-
-    mainLauout->addWidget(mTabWidget);
+    mainLayout->addWidget(mTabWidget);
 
     const auto buttonsLayout = new QHBoxLayout;
 
@@ -67,29 +59,25 @@ SettingsDialog::SettingsDialog(QWidget * const parent) :
     applyButton->setFocusPolicy(Qt::NoFocus);
 
     buttonsLayout->addWidget(restoreButton);
-    eSizesUI::widget.addSpacing(buttonsLayout);
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(applyButton);
     buttonsLayout->addWidget(cancelButton);
 
-    eSizesUI::widget.addSpacing(mainLauout);
-    mainLauout->addStretch();
-    mainLauout->addLayout(buttonsLayout);
+    mainLayout->addLayout(buttonsLayout);
     const auto statusBar = new QStatusBar(this);
-    mainLauout->addWidget(statusBar);
+    statusBar->setSizeGripEnabled(false);
+    mainLayout->addWidget(statusBar);
 
     connect(restoreButton, &QPushButton::released, this, [this]() {
         eSettings::sInstance->loadDefaults();
         updateSettings(true /* restore */);
-        eSizesUI::font.updateSize();
-        eSizesUI::widget.updateSize();
     });
 
     connect(cancelButton, &QPushButton::released, this, &QDialog::close);
 
     connect(applyButton, &QPushButton::released,
             this, [this, statusBar]() {
-        for(const auto widget : mSettingWidgets) {
+        for (const auto widget : mSettingWidgets) {
             widget->applySettings();
         }
         emit eSettings::sInstance->settingsChanged();
@@ -103,16 +91,27 @@ SettingsDialog::SettingsDialog(QWidget * const parent) :
     });
 
     updateSettings();
+    restoreGeometry(AppSupport::getSettings("ui",
+                                            "SettingsDialogGeometry").toByteArray());
+}
+
+SettingsDialog::~SettingsDialog()
+{
+    AppSupport::setSettings("ui",
+                            "SettingsDialogGeometry",
+                            saveGeometry());
 }
 
 void SettingsDialog::addSettingsWidget(SettingsWidget * const widget,
-                                       const QString &name) {
+                                       const QString &name)
+{
     mTabWidget->addTab(widget, name);
     mSettingWidgets << widget;
 }
 
-void SettingsDialog::updateSettings(bool restore) {
-    for(const auto widget : mSettingWidgets) {
+void SettingsDialog::updateSettings(bool restore)
+{
+    for (const auto widget : mSettingWidgets) {
         widget->updateSettings(restore);
     }
 }
