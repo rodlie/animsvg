@@ -40,7 +40,14 @@
 #include "Boxes/customboxcreator.h"
 #include "appsupport.h"
 
-EffectsLoader::EffectsLoader() {}
+EffectsLoader* EffectsLoader::sInstance = nullptr;
+
+EffectsLoader::EffectsLoader()
+{
+    Q_ASSERT(!sInstance);
+    sInstance = this;
+    reloadDisabledShaders();
+}
 
 EffectsLoader::~EffectsLoader()
 {
@@ -147,6 +154,17 @@ void EffectsLoader::iniCustomBoxes()
             }
         });
     });*/
+}
+
+const QStringList EffectsLoader::getLoadedShaderEffects()
+{
+    return mLoadedGREPaths;
+}
+
+void EffectsLoader::reloadDisabledShaders()
+{
+    mShadersDisabled = AppSupport::getSettings("settings",
+                                               "DisabledShaders").toStringList();
 }
 
 void iniCustomPathEffect(const QString &path)
@@ -277,7 +295,7 @@ void EffectsLoader::iniShaderEffects()
         }
     }
 
-    qDebug() << "Shaders paths" << mLoadedGREPaths;
+    //qDebug() << "Shaders paths" << mLoadedGREPaths;
     qDebug() << "Shaders total" << mLoadedShaders.count();
 
     // TODO: rewrite this
@@ -336,8 +354,14 @@ void EffectsLoader::iniShaderEffectProgramExec(const QString &grePath)
     const auto shaderID = AppSupport::getShaderID(grePath);
     if (shaderID.first.isEmpty() || shaderID.second.isEmpty()) { return; }
 
+    if (mShadersDisabled.contains(grePath)) {
+        qDebug() << "SKIP DISABLED SHADER:" << shaderID.first << shaderID.second << grePath;
+        mLoadedGREPaths << grePath;
+        return;
+    }
+
     if (mLoadedShaders.contains(shaderID)) {
-        qDebug() << "SKIP SHADER:" << shaderID.first << shaderID.second << grePath;
+        qDebug() << "SKIP DUPLICATE SHADER:" << shaderID.first << shaderID.second << grePath;
         return;
     }
 
