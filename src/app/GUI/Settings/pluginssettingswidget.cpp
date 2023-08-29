@@ -111,6 +111,7 @@ void PluginsSettingsWidget::updateSettings()
 
 void PluginsSettingsWidget::populateShaderTree()
 {
+    mShaderTree->setSortingEnabled(false);
     mShaderTree->clear();
     for (auto &shader: mShadersList) {
         QPair<QString, QString> shaderID = AppSupport::getShaderID(shader);
@@ -122,4 +123,6 @@ void PluginsSettingsWidget::populateShaderTree()
         item->setText(1, shaderID.second);
         mShaderTree->addTopLevelItem(item);
     }
+    mShaderTree->setSortingEnabled(true);
+    mShaderTree->sortByColumn(0, Qt::AscendingOrder);
 }
