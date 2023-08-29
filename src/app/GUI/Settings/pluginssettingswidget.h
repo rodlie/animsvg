@@ -27,6 +27,8 @@
 #include "settingswidget.h"
 
 #include <QLineEdit>
+#include <QStringList>
+#include <QTreeWidget>
 
 class PluginsSettingsWidget : public SettingsWidget
 {
@@ -37,6 +39,11 @@ public:
 
 private:
     QLineEdit *mShaderPath;
+    QStringList mShadersList;
+    QStringList mShadersDisabled;
+    QTreeWidget *mShaderTree;
+
+    void populateShaderTree();
 };
 
 #endif // PLUGINSSETTINGSWIDGET_H

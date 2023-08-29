@@ -23,6 +23,7 @@
 
 #include "pluginssettingswidget.h"
 #include "appsupport.h"
+#include "effectsloader.h"
 
 #include <QHBoxLayout>
 #include <QLabel>
@@ -30,15 +31,26 @@
 #include <QFileDialog>
 #include <QDir>
 #include <QFile>
+#include <QTreeWidgetItem>
+#include <QHeaderView>
 
 PluginsSettingsWidget::PluginsSettingsWidget(QWidget *parent)
     : SettingsWidget(parent)
     , mShaderPath(nullptr)
+    , mShaderTree(nullptr)
 {
+    mShadersList = EffectsLoader::sInstance->getLoadedShaderEffects();
+
+    mShadersDisabled = AppSupport::getSettings("settings",
+                                               "DisabledShaders").toStringList();
+
     const auto mShaderWidget = new QWidget(this);
+    mShaderWidget->setContentsMargins(0, 0, 0, 0);
     const auto mShaderLayout = new QHBoxLayout(mShaderWidget);
+    mShaderLayout->setContentsMargins(0, 0, 0, 0);
 
     const auto mShaderLabel = new QLabel(tr("Shaders Path"), this);
+    mShaderLabel->setToolTip(tr("This location will be scanned for plugins during startup."));
     mShaderPath = new QLineEdit(this);
     mShaderPath->setText(AppSupport::getAppShaderEffectsPath());
     const auto mShaderPathButton = new QPushButton(QIcon::fromTheme("dots"),
@@ -59,6 +71,19 @@ PluginsSettingsWidget::PluginsSettingsWidget(QWidget *parent)
                                                          QDir::homePath());
         if (QFile::exists(path)) { mShaderPath->setText(path); }
     });
+
+    mShaderTree = new QTreeWidget(this);
+    mShaderTree->setHeaderLabels(QStringList() << tr("Shader") << tr("Group"));
+    mShaderTree->setAlternatingRowColors(true);
+    mShaderTree->setSortingEnabled(false);
+    mShaderTree->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    addWidget(mShaderTree);
+    populateShaderTree();
+
+    const auto infoLabel = new QLabel(this);
+    infoLabel->setText(tr("Any changes in this section will require a restart of Friction."));
+    addWidget(infoLabel);
 }
 
 void PluginsSettingsWidget::applySettings()
@@ -66,9 +91,35 @@ void PluginsSettingsWidget::applySettings()
     AppSupport::setSettings("settings",
                             "CustomShaderPath",
                             mShaderPath->text());
+    QStringList disabledShaders;
+    for (int i = 0; i < mShaderTree->topLevelItemCount(); ++i ) {
+        const auto item = mShaderTree->topLevelItem(i);
+        if (item->checkState(0) == Qt::Unchecked) { disabledShaders << item->data(0,
+                                                                                  Qt::UserRole).toString(); }
+    }
+    AppSupport::setSettings("settings",
+                            "DisabledShaders",
+                            disabledShaders);
 }
 
 void PluginsSettingsWidget::updateSettings()
 {
     mShaderPath->setText(AppSupport::getAppShaderEffectsPath());
+    mShadersDisabled = AppSupport::getSettings("settings",
+                                               "DisabledShaders").toStringList();
+}
+
+void PluginsSettingsWidget::populateShaderTree()
+{
+    mShaderTree->clear();
+    for (auto &shader: mShadersList) {
+        QPair<QString, QString> shaderID = AppSupport::getShaderID(shader);
+        QTreeWidgetItem *item = new QTreeWidgetItem(mShaderTree);
+        item->setCheckState(0, mShadersDisabled.contains(shader) ? Qt::Unchecked : Qt::Checked);
+        item->setToolTip(0, shader);
+        item->setData(0, Qt::UserRole, shader);
+        item->setText(0, shaderID.first);
+        item->setText(1, shaderID.second);
+        mShaderTree->addTopLevelItem(item);
+    }
 }

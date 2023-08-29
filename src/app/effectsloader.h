@@ -30,6 +30,7 @@
 
 #include <QList>
 #include <QPair>
+#include <QStringList>
 
 struct ShaderEffectProgram;
 struct ShaderEffectCreator;
@@ -42,11 +43,15 @@ public:
     EffectsLoader();
     ~EffectsLoader();
 
+    static EffectsLoader* sInstance;
+
     void initializeGpu();
     void iniCustomPathEffects();
     void iniCustomRasterEffects();
     void iniShaderEffects();
     void iniCustomBoxes();
+    const QStringList getLoadedShaderEffects();
+    void reloadDisabledShaders();
 
 signals:
     void programChanged(ShaderEffectProgram*);
@@ -64,6 +69,7 @@ private:
     GLuint mPlainSquareVAO;
     GLuint mTexturedSquareVAO;
     QList<QPair<QString,QString>> mLoadedShaders;
+    QStringList mShadersDisabled;
 };
 
 #endif // EFFECTSLOADER_H
