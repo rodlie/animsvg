@@ -30,7 +30,7 @@ SettingsDialog::SettingsDialog(QWidget * const parent) :
     });
 
     const auto performance = new PerformanceSettingsWidget(this);
-    addSettingsWidget(performance,tr("Performance"));
+    addSettingsWidget(performance,tr("Hardware"));
 
     //const auto ui = new InterfaceSettingsWidget(this);
     //addSettingsWidget(ui, "Interface");
@@ -51,14 +51,26 @@ SettingsDialog::SettingsDialog(QWidget * const parent) :
 
     const auto buttonsLayout = new QHBoxLayout;
 
-    const auto restoreButton = new QPushButton(tr("Restore Defaults"), this);
-    const auto cancelButton = new QPushButton(tr("Close"), this);
-    const auto applyButton = new QPushButton(tr("Save"), this);
+    const auto restoreButton = new QPushButton(QIcon::fromTheme("loop_back"),
+                                               tr("Restore Defaults"),
+                                               this);
+    restoreButton->setFocusPolicy(Qt::NoFocus);
+
+    const auto cancelButton = new QPushButton(QIcon::fromTheme("cancel"),
+                                              tr("Close"),
+                                              this);
+    cancelButton->setFocusPolicy(Qt::NoFocus);
+
+    const auto applyButton = new QPushButton(QIcon::fromTheme("disk_drive"),
+                                             tr("Save"),
+                                             this);
+    applyButton->setFocusPolicy(Qt::NoFocus);
+
     buttonsLayout->addWidget(restoreButton);
     eSizesUI::widget.addSpacing(buttonsLayout);
     buttonsLayout->addStretch();
-    buttonsLayout->addWidget(cancelButton);
     buttonsLayout->addWidget(applyButton);
+    buttonsLayout->addWidget(cancelButton);
 
     eSizesUI::widget.addSpacing(mainLauout);
     mainLauout->addStretch();
