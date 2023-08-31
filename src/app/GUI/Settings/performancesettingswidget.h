@@ -6,13 +6,17 @@
 #include <QLabel>
 #include <QCheckBox>
 #include <QSlider>
+#include <QComboBox>
 
-class PerformanceSettingsWidget : public SettingsWidget {
+class PerformanceSettingsWidget : public SettingsWidget
+{
 public:
     explicit PerformanceSettingsWidget(QWidget *parent = nullptr);
 
     void applySettings();
     void updateSettings(bool restore = false);
+    void updateAudioDevices();
+
 private:
     void updateAccPreferenceDesc();
 
@@ -36,6 +40,8 @@ private:
 
     QCheckBox* mHddCacheMBCapCheck = nullptr;
     QSpinBox* mHddCacheMBCapSpin = nullptr;
+
+    QComboBox *mAudioDevicesCombo;
 };
 
 #endif // PERFORMANCESETTINGSWIDGET_H

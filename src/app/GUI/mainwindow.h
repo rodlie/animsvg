@@ -248,8 +248,6 @@ private:
     QWidget *mBrushSettingsDockBar;
     QWidget *mAlignDockBar;*/
 
-    QComboBox *mAudioDevicesCombo;
-
     TimelineDockWidget *mTimeline;
     RenderWidget *mRenderWidget;
     //BrushSelectionWidget *mBrushSelectionWidget = nullptr;

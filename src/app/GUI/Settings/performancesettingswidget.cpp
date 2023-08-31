@@ -4,8 +4,15 @@
 #include "hardwareinfo.h"
 #include "GUI/global.h"
 
-PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent) :
-    SettingsWidget(parent) {
+#include "../audiohandler.h"
+
+#include <QTimer>
+
+PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
+    : SettingsWidget(parent)
+    , mAudioDevicesCombo(nullptr)
+{
+
     QHBoxLayout* cpuCapSett = new QHBoxLayout;
 
     mCpuThreadsCapCheck = new QCheckBox("CPU threads cap", this);
@@ -107,6 +114,29 @@ PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent) :
 //            hddCacheSett, &QWidget::setEnabled);
 
     //    mainLauout->addWidget(hddCacheSett);
+    const auto audioWidget = new QWidget(this);
+    audioWidget->setContentsMargins(0, 0, 0, 0);
+
+    const auto audioLayout = new QHBoxLayout(audioWidget);
+    audioLayout->setContentsMargins(0, 0, 0, 0);
+
+    QLabel *audioLabel = new QLabel(tr("Audio Output"), this);
+    mAudioDevicesCombo = new QComboBox(this);
+    mAudioDevicesCombo->setSizePolicy(QSizePolicy::Preferred,
+                                      QSizePolicy::Preferred);
+    mAudioDevicesCombo->setFocusPolicy(Qt::NoFocus);
+    mAudioDevicesCombo->setEnabled(false);
+
+    audioLayout->addWidget(audioLabel);
+    audioLayout->addWidget(mAudioDevicesCombo);
+
+    addSeparator();
+    addWidget(audioWidget);
+
+    QTimer::singleShot(250, this,
+                       &PerformanceSettingsWidget::updateAudioDevices);
+    connect(AudioHandler::sInstance, &AudioHandler::deviceChanged,
+            this, [this]() { updateAudioDevices(); });
 }
 
 void PerformanceSettingsWidget::applySettings() {
@@ -120,12 +150,13 @@ void PerformanceSettingsWidget::applySettings() {
 //        sett.fHddCache = mHddCacheCheck->isChecked();
 //        sett.fRamMBCap = mHddCacheMBCapCheck->isChecked() ?
 //                    mHddCacheMBCapSpin->value() : 0;
+
+    AudioHandler::sInstance->initializeAudio(mAudioDevicesCombo->currentText(), true);
 }
 
 
 void PerformanceSettingsWidget::updateSettings(bool restore)
 {
-    Q_UNUSED(restore)
     const bool capCpu = mSett.fCpuThreadsCap > 0;
     mCpuThreadsCapCheck->setChecked(capCpu);
     const int nThreads = capCpu ? mSett.fCpuThreadsCap :
@@ -147,6 +178,23 @@ void PerformanceSettingsWidget::updateSettings(bool restore)
 //    mHddCacheMBCapCheck->setChecked(sett.fHddCacheMBCap > 0);
 //    mHddCacheMBCapSpin->setEnabled(sett.fHddCacheMBCap > 0);
 //    mHddCacheMBCapSpin->setValue(sett.fHddCacheMBCap);
+
+    if (restore) {
+        AudioHandler::sInstance->initializeAudio(QString(), true);
+    }
+}
+
+void PerformanceSettingsWidget::updateAudioDevices()
+{
+    const auto mAudioHandler = AudioHandler::sInstance;
+    mAudioDevicesCombo->blockSignals(true);
+    mAudioDevicesCombo->clear();
+    mAudioDevicesCombo->addItems(mAudioHandler->listDevices());
+    if (mAudioDevicesCombo->count() > 0) {
+        mAudioDevicesCombo->setCurrentText(mAudioHandler->getDeviceName());
+        mAudioDevicesCombo->setEnabled(true);
+    } else { mAudioDevicesCombo->setEnabled(false); }
+    mAudioDevicesCombo->blockSignals(false);
 }
 
 void PerformanceSettingsWidget::updateAccPreferenceDesc() {
