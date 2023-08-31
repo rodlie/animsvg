@@ -553,6 +553,12 @@ void MainWindow::setupMenuBar()
                          this, &MainWindow::closeProject,
                          QKeySequence(tr("Ctrl+W")));
     mFileMenu->addSeparator();
+    mFileMenu->addAction(tr("Preferences", "MenuBar_Edit"), [this]() {
+        const auto settDial = new SettingsDialog(this);
+        settDial->setAttribute(Qt::WA_DeleteOnClose);
+        settDial->show();
+    }, QKeySequence(tr("Ctrl+P")));
+    mFileMenu->addSeparator();
     mFileMenu->addAction(QIcon::fromTheme("quit"),
                          tr("Exit", "MenuBar_File"),
                          this, &MainWindow::close,
@@ -644,13 +650,6 @@ void MainWindow::setupMenuBar()
         m->clearMemory();
         mTimeline->update();
     }, QKeySequence(tr("Ctrl+R")));
-    mEditMenu->addSeparator();
-    mEditMenu->addAction(tr("Settings", "MenuBar_Edit"), [this]() {
-        const auto settDial = new SettingsDialog(this);
-        settDial->setAttribute(Qt::WA_DeleteOnClose);
-        settDial->show();
-    });
-
 
 //    mSelectSameMenu = mEditMenu->addMenu("Select Same");
 //    mSelectSameMenu->addAction("Fill and Stroke");

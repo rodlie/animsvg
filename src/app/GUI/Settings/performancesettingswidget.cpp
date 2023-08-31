@@ -154,7 +154,6 @@ void PerformanceSettingsWidget::applySettings() {
     AudioHandler::sInstance->initializeAudio(mAudioDevicesCombo->currentText(), true);
 }
 
-
 void PerformanceSettingsWidget::updateSettings(bool restore)
 {
     const bool capCpu = mSett.fCpuThreadsCap > 0;

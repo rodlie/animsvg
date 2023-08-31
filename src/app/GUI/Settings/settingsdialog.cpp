@@ -20,7 +20,7 @@ SettingsDialog::SettingsDialog(QWidget * const parent)
     : QDialog(parent)
 {
 
-    setWindowTitle(tr("Settings"));
+    setWindowTitle(tr("Preferences"));
 
     const auto mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
