@@ -196,7 +196,7 @@ const QString AppSupport::getAppIssuesUrl()
 
 const QString AppSupport::getAppLatestReleaseUrl()
 {
-    return QString::fromUtf8("https://github.com/friction2d/friction/releases/latest");
+    return QString::fromUtf8("https://friction.graphics/news");
 }
 
 const QString AppSupport::getAppCommitUrl()
