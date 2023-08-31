@@ -553,7 +553,8 @@ void MainWindow::setupMenuBar()
                          this, &MainWindow::closeProject,
                          QKeySequence(tr("Ctrl+W")));
     mFileMenu->addSeparator();
-    mFileMenu->addAction(tr("Preferences", "MenuBar_Edit"), [this]() {
+    mFileMenu->addAction(QIcon::fromTheme("preferences"),
+                         tr("Preferences", "MenuBar_Edit"), [this]() {
         const auto settDial = new SettingsDialog(this);
         settDial->setAttribute(Qt::WA_DeleteOnClose);
         settDial->show();
