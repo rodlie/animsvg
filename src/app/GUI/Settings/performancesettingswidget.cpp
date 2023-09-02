@@ -5,6 +5,7 @@
 #include "GUI/global.h"
 
 #include "../audiohandler.h"
+#include "appsupport.h"
 
 #include <QTimer>
 
@@ -151,7 +152,10 @@ void PerformanceSettingsWidget::applySettings() {
 //        sett.fRamMBCap = mHddCacheMBCapCheck->isChecked() ?
 //                    mHddCacheMBCapSpin->value() : 0;
 
-    AudioHandler::sInstance->initializeAudio(mAudioDevicesCombo->currentText(), true);
+    const auto audioHandler = AudioHandler::sInstance;
+    if (mAudioDevicesCombo->currentText() != audioHandler->getDeviceName()) {
+        audioHandler->initializeAudio(mAudioDevicesCombo->currentText(), true);
+    }
 }
 
 void PerformanceSettingsWidget::updateSettings(bool restore)
