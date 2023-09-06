@@ -79,7 +79,7 @@ AlignWidget::AlignWidget(QWidget* const parent)
     hCenterButton->setFocusPolicy(Qt::NoFocus);
     hCenterButton->setIcon(QIcon::fromTheme("pivot-align-hcenter"));
     hCenterButton->setIconSize(QSize(buttonSize, buttonSize));
-    hCenterButton->setToolTip(tr("Align Horzontal Center"));
+    hCenterButton->setToolTip(tr("Align Horizontal Center"));
     connect(hCenterButton, &QPushButton::pressed, this, [this]() {
         triggerAlign(Qt::AlignHCenter);
     });

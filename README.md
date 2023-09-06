@@ -73,7 +73,7 @@ Platform support may undergo changes in future releases without prior notice.
 
 We accept any contributions (in form of a PR). Before submitting a PR it's recommended that you communicate with the developers first (in `Issues` or `Discussions`). Someone might already be working on the same feature/issue, or for some reason the feature is not wanted.
 
-It's always prefered to submit PR's against the `main` branch. If your feature is experimental, a new branch could be made available for further development before entering `main`.
+It's always preferred to submit PR's against the `main` branch. If your feature is experimental, a new branch could be made available for further development before entering `main`.
 
 ## Branches and versions
 

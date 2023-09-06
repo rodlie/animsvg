@@ -219,7 +219,7 @@ protected:
 	void paintTraceStep();
 
     /**
-     * @brief Sets if a canvas should be GPU accelarated
+     * @brief Sets if a canvas should be GPU accelerated
      */
     const bool mUseGpu;
 
