@@ -79,3 +79,30 @@ QSpinBox#SpinBoxNoButtons::up-button,
 QSpinBox#SpinBoxNoButtons::down-button {
     width: 0;
 }
+
+QPushButton#WelcomeNewButton,
+QToolButton#WelcomeOpenButton {
+    padding: 0.25em;
+    border: 2px solid #666;
+    border-radius: 10%;
+    color: #ebebeb;
+    font-weight: bold;
+}
+
+QPushButton#WelcomeNewButton:hover,
+QToolButton#WelcomeOpenButton:hover {
+    border-color: #ebebeb;
+}
+
+QToolButton#WelcomeOpenButton::menu-button {
+    padding-right: 0.5em;
+    border-top-right: 2px solid #ebebeb;
+    border-bottom-right: 2px solid #ebebeb;
+    border-top-right-radius: 10%;
+    border-bottom-right-radius: 10%;
+    color: #ebebeb;
+}
+
+QToolButton#WelcomeOpenButton[popupMode="1"] {
+    padding-right: 0.5em;
+}
