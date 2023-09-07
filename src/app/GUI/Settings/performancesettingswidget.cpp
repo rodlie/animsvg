@@ -192,6 +192,7 @@ void PerformanceSettingsWidget::updateSettings(bool restore)
 
     if (restore) {
         AudioHandler::sInstance->initializeAudio(QString(), true);
+        restoreDefaultRasterEffectsSupport();
     }
 }
 
@@ -276,6 +277,13 @@ void PerformanceSettingsWidget::saveRasterEffectsSupport()
                           box->currentData());
     }
     settings.endGroup();
+}
+
+void PerformanceSettingsWidget::restoreDefaultRasterEffectsSupport()
+{
+    for (const auto &box : mRasterEffectsHardwareSupport) {
+        box->setCurrentText(tr("GPU preffered"));
+    }
 }
 
 void PerformanceSettingsWidget::updateAccPreferenceDesc() {

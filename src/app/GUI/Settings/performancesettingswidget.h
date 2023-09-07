@@ -21,6 +21,7 @@ public:
 private:
     void setupRasterEffectWidgets();
     void saveRasterEffectsSupport();
+    void restoreDefaultRasterEffectsSupport();
     void updateAccPreferenceDesc();
 
     QCheckBox* mCpuThreadsCapCheck = nullptr;
