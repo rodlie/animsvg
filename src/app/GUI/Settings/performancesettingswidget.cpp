@@ -20,7 +20,7 @@ PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
 
     QHBoxLayout* cpuCapSett = new QHBoxLayout;
 
-    mCpuThreadsCapCheck = new QCheckBox("CPU threads cap", this);
+    mCpuThreadsCapCheck = new QCheckBox(tr("CPU cap"), this);
     mCpuThreadsCapLabel = new QLabel(this);
     mCpuThreadsCapSlider = new QSlider(Qt::Horizontal);
     mCpuThreadsCapSlider->setRange(1, HardwareInfo::sCpuThreads());
@@ -45,7 +45,7 @@ PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
 
     QHBoxLayout* ramCapSett = new QHBoxLayout;
 
-    mRamMBCapCheck = new QCheckBox("RAM cap", this);
+    mRamMBCapCheck = new QCheckBox(tr("RAM cap"), this);
     mRamMBCapSpin = new QSpinBox(this);
     mRamMBCapSpin->setRange(250, intMB(HardwareInfo::sRamKB()).fValue);
     mRamMBCapSpin->setSuffix(" MB");
@@ -72,12 +72,12 @@ PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
 
     addSeparator();
 
-    mAccPreferenceLabel = new QLabel("Acceleration preference:");
+    mAccPreferenceLabel = new QLabel(tr("Acceleration preference"));
     const auto sliderLayout = new QHBoxLayout;
-    mAccPreferenceCpuLabel = new QLabel("CPU");
+    mAccPreferenceCpuLabel = new QLabel(tr("CPU"));
     mAccPreferenceSlider = new QSlider(Qt::Horizontal);
     mAccPreferenceSlider->setRange(0, 4);
-    mAccPreferenceGpuLabel = new QLabel("GPU");
+    mAccPreferenceGpuLabel = new QLabel(tr("GPU"));
     sliderLayout->addWidget(mAccPreferenceCpuLabel);
     sliderLayout->addWidget(mAccPreferenceSlider);
     sliderLayout->addWidget(mAccPreferenceGpuLabel);
@@ -91,34 +91,9 @@ PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
 
     addSeparator();
 
-    mPathGpuAccCheck = new QCheckBox("Path GPU acceleration", this);
+    mPathGpuAccCheck = new QCheckBox(tr("Path GPU acceleration"), this);
     addWidget(mPathGpuAccCheck);
 
-//    const auto line2 = new QFrame();
-//    line2->setFrameShape(QFrame::HLine);
-//    line2->setFrameShadow(QFrame::Sunken);
-//    mainLauout->addWidget(line2);
-
-//    mHddCacheCheck = new QCheckBox("HDD cache", this);
-//    mainLauout->addWidget(mHddCacheCheck);
-
-//    QWidget* hddCacheSett = new QWidget(this);
-//    hddCacheSett->setContentsMargins(0, 0, 0, 0);
-//    const auto hddCacheSettLay = new QHBoxLayout;
-//    hddCacheSett->setLayout(hddCacheSettLay);
-//    hddCacheSettLay->setContentsMargins(0, 0, 0, 0);
-
-//    mHddCacheMBCapCheck = new QCheckBox("HDD cache MB cap", this);
-//    mHddCacheMBCapSpin = new QSpinBox(this);
-//    connect(mHddCacheMBCapCheck, &QCheckBox::toggled,
-//            mHddCacheMBCapSpin, &QWidget::setEnabled);
-
-//    hddCacheSettLay->addWidget(mHddCacheMBCapCheck);
-//    hddCacheSettLay->addWidget(mHddCacheMBCapSpin);
-//    connect(mHddCacheCheck, &QCheckBox::toggled,
-//            hddCacheSett, &QWidget::setEnabled);
-
-    //    mainLauout->addWidget(hddCacheSett);
     const auto audioWidget = new QWidget(this);
     audioWidget->setContentsMargins(0, 0, 0, 0);
 
@@ -146,7 +121,8 @@ PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
             this, [this]() { updateAudioDevices(); });
 }
 
-void PerformanceSettingsWidget::applySettings() {
+void PerformanceSettingsWidget::applySettings()
+{
     mSett.fCpuThreadsCap = mCpuThreadsCapCheck->isChecked() ?
                 mCpuThreadsCapSlider->value() : 0;
     mSett.fRamMBCap = intMB(mRamMBCapCheck->isChecked() ?
@@ -154,9 +130,6 @@ void PerformanceSettingsWidget::applySettings() {
     mSett.fAccPreference = static_cast<AccPreference>(
                 mAccPreferenceSlider->value());
     mSett.fPathGpuAcc = mPathGpuAccCheck->isChecked();
-//        sett.fHddCache = mHddCacheCheck->isChecked();
-//        sett.fRamMBCap = mHddCacheMBCapCheck->isChecked() ?
-//                    mHddCacheMBCapSpin->value() : 0;
 
     saveRasterEffectsSupport();
 
@@ -183,12 +156,6 @@ void PerformanceSettingsWidget::updateSettings(bool restore)
     mAccPreferenceSlider->setValue(static_cast<int>(mSett.fAccPreference));
     updateAccPreferenceDesc();
     mPathGpuAccCheck->setChecked(mSett.fPathGpuAcc);
-
-//    mHddCacheCheck->setChecked(sett.fHddCache);
-
-//    mHddCacheMBCapCheck->setChecked(sett.fHddCacheMBCap > 0);
-//    mHddCacheMBCapSpin->setEnabled(sett.fHddCacheMBCap > 0);
-//    mHddCacheMBCapSpin->setValue(sett.fHddCacheMBCap);
 
     if (restore) {
         AudioHandler::sInstance->initializeAudio(QString(), true);
@@ -286,24 +253,25 @@ void PerformanceSettingsWidget::restoreDefaultRasterEffectsSupport()
     }
 }
 
-void PerformanceSettingsWidget::updateAccPreferenceDesc() {
+void PerformanceSettingsWidget::updateAccPreferenceDesc()
+{
     const int value = mAccPreferenceSlider->value();
     QString toolTip;
-    if(value == 0) {
-        mAccPreferenceDescLabel->setText("Strong CPU preference");
-        toolTip = "Use the GPU only for tasks not supported by the CPU";
-    } else if(value == 1) {
-        mAccPreferenceDescLabel->setText("Soft CPU preference");
-        toolTip = "Use the GPU only for tasks marked as preferred for the GPU";
-    } else if(value == 2) {
-        mAccPreferenceDescLabel->setText(" Hardware agnostic (recommended) ");
-        toolTip = "Adhere to the default hardware preference";
-    } else if(value == 3) {
-        mAccPreferenceDescLabel->setText("Soft GPU preference");
-        toolTip = "Use the CPU only for tasks marked as preferred for the CPU";
-    } else if(value == 4) {
-        mAccPreferenceDescLabel->setText("Strong GPU preference");
-        toolTip = "Use the CPU only for tasks not supported by the GPU";
+    if (value == 0) {
+        mAccPreferenceDescLabel->setText(tr("Strong CPU preference"));
+        toolTip = tr("Use the GPU only for tasks not supported by the CPU");
+    } else if (value == 1) {
+        mAccPreferenceDescLabel->setText(tr("Soft CPU preference"));
+        toolTip = tr("Use the GPU only for tasks marked as preferred for the GPU");
+    } else if (value == 2) {
+        mAccPreferenceDescLabel->setText(tr(" Hardware agnostic (recommended) "));
+        toolTip = tr("Adhere to the default hardware preference");
+    } else if (value == 3) {
+        mAccPreferenceDescLabel->setText(tr("Soft GPU preference"));
+        toolTip = tr("Use the CPU only for tasks marked as preferred for the CPU");
+    } else if (value == 4) {
+        mAccPreferenceDescLabel->setText(tr("Strong GPU preference"));
+        toolTip = tr("Use the CPU only for tasks not supported by the GPU");
     }
     mAccPreferenceDescLabel->setToolTip(gSingleLineTooltip(toolTip));
     mAccPreferenceSlider->setToolTip(gSingleLineTooltip(toolTip));

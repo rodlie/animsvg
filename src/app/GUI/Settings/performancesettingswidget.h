@@ -40,11 +40,6 @@ private:
 
     QCheckBox* mPathGpuAccCheck = nullptr;
 
-    QCheckBox* mHddCacheCheck = nullptr;
-
-    QCheckBox* mHddCacheMBCapCheck = nullptr;
-    QSpinBox* mHddCacheMBCapSpin = nullptr;
-
     QComboBox *mAudioDevicesCombo;
 
     QList<QComboBox*> mRasterEffectsHardwareSupport;
