@@ -56,7 +56,7 @@ WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
     logoLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
     logoLabel->setText(QString::fromUtf8("<div style=\"margin: 0; padding: 0; text-align: center; font-weight: normal;\">"
                                          "<p style=\"margin: 0; padding: 0;\"><img src=\":/icons/hicolor/%2x%2/apps/%4.png\" width=\"%2\" height=\"%2\"></p>"
-                                         "<h1 style=\"font-weight: normal; margin-top: 0; padding-top: 0;\">%3<br><span style=\"font-size: large;\">%1</span></h1>"
+                                         "<h1 style=\"font-weight: normal; margin-top: 0; padding-top: 0;\">%3<br><span style=\"font-size: x-large;\">%1</span></h1>"
                                          "</div>")
                                         .arg(AppSupport::getAppVersion(false),
                                              QString::number(logoSize),
@@ -66,17 +66,21 @@ WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
     const auto buttonWid = new QWidget(this);
     const auto buttonLay = new QHBoxLayout(buttonWid);
 
-    const auto newButton = new QPushButton(QIcon::fromTheme("file_blank"),
+    const auto newButton = new QPushButton(/*QIcon::fromTheme("file_blank"),*/
                                            tr("New"),
                                            this);
+    newButton->setObjectName("WelcomeNewButton");
+    newButton->setSizePolicy(QSizePolicy::Preferred,
+                             QSizePolicy::Expanding);
     connect(newButton, &QPushButton::released, newFunc);
 
     const auto openButton = new QToolButton(this);
+    openButton->setObjectName("WelcomeOpenButton");
     openButton->setText(tr("Open"));
-    openButton->setIcon(QIcon::fromTheme("file_folder"));
+    //openButton->setIcon(QIcon::fromTheme("file_folder"));
     openButton->setSizePolicy(QSizePolicy::Preferred,
                               QSizePolicy::Expanding);
-    openButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    //openButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     openButton->setPopupMode(QToolButton::MenuButtonPopup);
     openButton->setMenu(recentMenu);
     connect(openButton, &QPushButton::released, openFunc);
