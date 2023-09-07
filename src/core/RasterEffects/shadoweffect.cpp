@@ -3,6 +3,7 @@
 #include "Boxes/containerbox.h"
 #include "svgexporter.h"
 #include "svgexporthelpers.h"
+#include "appsupport.h"
 
 class ShadowEffectCaller : public RasterEffectCaller {
 public:
@@ -32,8 +33,12 @@ private:
 };
 
 ShadowEffect::ShadowEffect() :
-    RasterEffect("shadow", HardwareSupport::gpuPreffered,
-                 false, RasterEffectType::SHADOW) {
+    RasterEffect("shadow",
+                 AppSupport::getRasterEffectHardwareSupport("Shadow",
+                                                            HardwareSupport::gpuPreffered),
+                 false,
+                 RasterEffectType::SHADOW)
+{
     mBlurRadius = enve::make_shared<QrealAnimator>("blur radius");
     mOpacity = enve::make_shared<QrealAnimator>(1, 0, 1, 0.01, "opacity");
     mColor = enve::make_shared<ColorAnimator>();

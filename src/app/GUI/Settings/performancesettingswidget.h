@@ -7,6 +7,7 @@
 #include <QCheckBox>
 #include <QSlider>
 #include <QComboBox>
+#include <QList>
 
 class PerformanceSettingsWidget : public SettingsWidget
 {
@@ -18,6 +19,8 @@ public:
     void updateAudioDevices();
 
 private:
+    void setupRasterEffectWidgets();
+    void saveRasterEffectsSupport();
     void updateAccPreferenceDesc();
 
     QCheckBox* mCpuThreadsCapCheck = nullptr;
@@ -42,6 +45,8 @@ private:
     QSpinBox* mHddCacheMBCapSpin = nullptr;
 
     QComboBox *mAudioDevicesCombo;
+
+    QList<QComboBox*> mRasterEffectsHardwareSupport;
 };
 
 #endif // PERFORMANCESETTINGSWIDGET_H

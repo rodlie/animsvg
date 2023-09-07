@@ -4,6 +4,7 @@
 #include "Boxes/containerbox.h"
 #include "svgexporthelpers.h"
 #include "svgexporter.h"
+#include "appsupport.h"
 
 class BlurEffectCaller : public RasterEffectCaller {
 public:
@@ -19,8 +20,12 @@ private:
 };
 
 BlurEffect::BlurEffect() :
-    RasterEffect("blur", HardwareSupport::gpuPreffered,
-                 false, RasterEffectType::BLUR) {
+    RasterEffect("blur",
+                 AppSupport::getRasterEffectHardwareSupport("Blur",
+                                                            HardwareSupport::gpuPreffered),
+                 false,
+                 RasterEffectType::BLUR)
+{
     mRadius = enve::make_shared<QrealAnimator>(10, 0, 999.999, 1, "radius");
     ca_addChild(mRadius);
     connect(mRadius.get(), &QrealAnimator::effectiveValueChanged,

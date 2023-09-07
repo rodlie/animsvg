@@ -30,9 +30,15 @@
 #include "colorhelpers.h"
 #include "Animators/qrealanimator.h"
 
+#include "appsupport.h"
+
 BrightnessContrastEffect::BrightnessContrastEffect() :
-    RasterEffect("brightness-contrast", HardwareSupport::gpuPreffered,
-                 true, RasterEffectType::BRIGHTNESS_CONTRAST) {
+    RasterEffect("brightness-contrast",
+                 AppSupport::getRasterEffectHardwareSupport("BrightnessContrast",
+                                                            HardwareSupport::gpuPreffered),
+                 true,
+                 RasterEffectType::BRIGHTNESS_CONTRAST)
+{
     mBrightness = enve::make_shared<QrealAnimator>(0, -1, 1, 0.01, "brightness");
     ca_addChild(mBrightness);
 

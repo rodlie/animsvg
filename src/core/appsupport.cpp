@@ -344,3 +344,43 @@ const QString AppSupport::getTimeCodeFromFrame(int frame, float fps)
                                       QString::number(ss).rightJustified(2, '0'),
                                       QString::number(ff).rightJustified(2, '0'));
 }
+
+HardwareSupport AppSupport::getRasterEffectHardwareSupport(const QString &effect,
+                                                           HardwareSupport fallback)
+{
+    if (effect.isEmpty()) { return fallback; }
+    QVariant variant;
+    QSettings settings;
+    settings.beginGroup("RasterEffects");
+    variant = settings.value(QString("%1HardwareSupport").arg(effect));
+    settings.endGroup();
+    if (variant.isValid()) {
+        HardwareSupport supported = static_cast<HardwareSupport>(variant.toInt());
+        if (supported == HardwareSupport::hardwareDefault) { return fallback; }
+        else { return supported; }
+    }
+    return fallback;
+}
+
+const QString AppSupport::getRasterEffectHardwareSupportString(const QString &effect,
+                                                               HardwareSupport fallback)
+{
+    HardwareSupport supported = getRasterEffectHardwareSupport(effect, fallback);
+    QString result;
+    switch (supported) {
+    case HardwareSupport::cpuOnly:
+        result = tr("CPU-only");
+        break;
+    case HardwareSupport::cpuPreffered:
+        result = tr("CPU preffered");
+        break;
+    case HardwareSupport::gpuOnly:
+        result = tr("GPU-only");
+        break;
+    case HardwareSupport::gpuPreffered:
+        result = tr("GPU preffered");
+        break;
+    default:;
+    }
+    return result;
+}
