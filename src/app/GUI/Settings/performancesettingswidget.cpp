@@ -8,6 +8,10 @@
 #include "appsupport.h"
 
 #include <QTimer>
+#include <QGroupBox>
+#include <QScrollArea>
+
+#define RASTER_HW_SUPPORT_ID Qt::UserRole + 1
 
 PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
     : SettingsWidget(parent)
@@ -134,6 +138,8 @@ PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
     addSeparator();
     addWidget(audioWidget);
 
+    setupRasterEffectWidgets();
+
     QTimer::singleShot(250, this,
                        &PerformanceSettingsWidget::updateAudioDevices);
     connect(AudioHandler::sInstance, &AudioHandler::deviceChanged,
@@ -151,6 +157,8 @@ void PerformanceSettingsWidget::applySettings() {
 //        sett.fHddCache = mHddCacheCheck->isChecked();
 //        sett.fRamMBCap = mHddCacheMBCapCheck->isChecked() ?
 //                    mHddCacheMBCapSpin->value() : 0;
+
+    saveRasterEffectsSupport();
 
     const auto audioHandler = AudioHandler::sInstance;
     if (mAudioDevicesCombo->currentText() != audioHandler->getDeviceName()) {
@@ -198,6 +206,76 @@ void PerformanceSettingsWidget::updateAudioDevices()
         mAudioDevicesCombo->setEnabled(true);
     } else { mAudioDevicesCombo->setEnabled(false); }
     mAudioDevicesCombo->blockSignals(false);
+}
+
+void PerformanceSettingsWidget::setupRasterEffectWidgets()
+{
+    QStringList effects = {"Blur",
+                           "BrightnessContrast",
+                           "Colorize",
+                           "MotionBlur",
+                           "NoiseFade",
+                           "Shadow",
+                           "Wipe"};
+    HardwareSupport defaultSupport = HardwareSupport::gpuPreffered;
+
+    addSeparator();
+
+    const auto area = new QScrollArea(this);
+    const auto container = new QGroupBox(this);
+    const auto containerLayout = new QVBoxLayout(container);
+    const auto containerInner = new QWidget(this);
+    const auto containerInnerLayout = new QVBoxLayout(containerInner);
+
+    area->setWidget(containerInner);
+    area->setWidgetResizable(true);
+    area->setContentsMargins(0, 0, 0, 0);
+
+    container->setTitle(tr("Raster Effects"));
+
+    container->setContentsMargins(0, 0, 0, 0);
+
+    containerInnerLayout->setMargin(5);
+    containerLayout->setMargin(0);
+
+    containerLayout->addWidget(area);
+
+    for (const auto &effect : effects) {
+        const auto box = new QComboBox(this);
+        box->addItem(tr("CPU-only"), static_cast<int>(HardwareSupport::cpuOnly));
+        box->addItem(tr("CPU preffered"), static_cast<int>(HardwareSupport::cpuPreffered));
+        box->addItem(tr("GPU-only"), static_cast<int>(HardwareSupport::gpuOnly));
+        box->addItem(tr("GPU preffered"), static_cast<int>(HardwareSupport::gpuPreffered));
+        box->setItemData(0, effect, RASTER_HW_SUPPORT_ID);
+        box->setCurrentText(AppSupport::getRasterEffectHardwareSupportString(effect, defaultSupport));
+        mRasterEffectsHardwareSupport << box;
+
+        const auto label = new QLabel(effect, this);
+        const auto wid = new QWidget(this);
+        const auto lay = new QHBoxLayout(wid);
+
+        wid->setContentsMargins(0, 0, 0, 0);
+        lay->setMargin(0);
+        lay->addWidget(label);
+        lay->addWidget(box);
+
+        containerInnerLayout->addWidget(wid);
+    }
+
+    addWidget(container);
+}
+
+void PerformanceSettingsWidget::saveRasterEffectsSupport()
+{
+    QSettings settings;
+    settings.beginGroup("RasterEffects");
+    for (const auto &box : mRasterEffectsHardwareSupport) {
+        settings.setValue(QString("%1HardwareSupport")
+                          .arg(box->itemData(0,
+                                             RASTER_HW_SUPPORT_ID).toString()),
+                          box->currentData());
+    }
+    settings.endGroup();
 }
 
 void PerformanceSettingsWidget::updateAccPreferenceDesc() {

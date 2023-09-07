@@ -30,7 +30,8 @@ enum class HardwareSupport : short {
     cpuOnly,
     cpuPreffered,
     gpuPreffered,
-    gpuOnly
+    gpuOnly,
+    hardwareDefault
 };
 
 enum class Hardware : short {

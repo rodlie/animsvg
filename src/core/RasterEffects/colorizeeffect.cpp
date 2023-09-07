@@ -32,9 +32,15 @@
 #include "ReadWrite/evformat.h"
 #include "Properties/newproperty.h"
 
+#include "appsupport.h"
+
 ColorizeEffect::ColorizeEffect() :
-    RasterEffect("colorize", HardwareSupport::gpuPreffered,
-                 true, RasterEffectType::COLORIZE) {
+    RasterEffect("colorize",
+                 AppSupport::getRasterEffectHardwareSupport("Colorize",
+                                                            HardwareSupport::gpuPreffered),
+                 true,
+                 RasterEffectType::COLORIZE)
+{
     using InfluenceType = NewProperty<QrealAnimator, EvFormat::colorizeInfluence>;
     mInfluence = enve::make_shared<InfluenceType>(1, 0, 1, 0.01, "influence");
     ca_addChild(mInfluence);

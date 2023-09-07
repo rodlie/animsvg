@@ -29,9 +29,15 @@
 
 #include "Animators/qrealanimator.h"
 
+#include "appsupport.h"
+
 WipeEffect::WipeEffect() :
-    RasterEffect("wipe", HardwareSupport::gpuPreffered,
-                 true, RasterEffectType::WIPE) {
+    RasterEffect("wipe",
+                 AppSupport::getRasterEffectHardwareSupport("Wipe",
+                                                            HardwareSupport::gpuPreffered),
+                 true,
+                 RasterEffectType::WIPE)
+{
     mSharpness = enve::make_shared<QrealAnimator>(0, 0, 1, 0.01, "sharpness");
     ca_addChild(mSharpness);
 

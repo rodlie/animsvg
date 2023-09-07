@@ -28,6 +28,7 @@
 #include "Boxes/boxrenderdata.h"
 #include "Animators/qrealanimator.h"
 #include "Boxes/boundingbox.h"
+#include "appsupport.h"
 
 class MotionBlurCaller : public RasterEffectCaller {
     e_OBJECT
@@ -65,8 +66,12 @@ private:
 };
 
 MotionBlurEffect::MotionBlurEffect() :
-    RasterEffect("motion blur", HardwareSupport::gpuPreffered,
-                 false, RasterEffectType::MOTION_BLUR) {
+    RasterEffect("motion blur",
+                 AppSupport::getRasterEffectHardwareSupport("MotionBlur",
+                                                            HardwareSupport::gpuPreffered),
+                 false,
+                 RasterEffectType::MOTION_BLUR)
+{
     mOpacity = enve::make_shared<QrealAnimator>("opacity");
     mOpacity->setValueRange(0, 999);
     mOpacity->setCurrentBaseValue(100);

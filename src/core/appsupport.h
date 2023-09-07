@@ -32,6 +32,8 @@
 #include <QPair>
 #include <QStringList>
 
+#include "hardwareenums.h"
+
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #define QT_ENDL Qt::endl
 #define QT_SKIP_EMPTY Qt::SkipEmptyParts
@@ -82,6 +84,10 @@ public:
     static const QStringList getFilesFromPath(const QString &path,
                                               const QStringList &suffix = QStringList());
     static const QString getTimeCodeFromFrame(int frame, float fps);
+    static HardwareSupport getRasterEffectHardwareSupport(const QString &effect,
+                                                          HardwareSupport fallback);
+    static const QString getRasterEffectHardwareSupportString(const QString &effect,
+                                                              HardwareSupport fallback);
 };
 
 #endif // APPSUPPORT_H
