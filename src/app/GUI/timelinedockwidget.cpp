@@ -82,10 +82,6 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mMainLayout->setSpacing(0);
     mMainLayout->setMargin(0);
 
-    const QSize iconSize(AppSupport::getSettings("ui",
-                                                 "timelineToolbarIconSize",
-                                                 QSize(24, 24)).toSize());
-
     mFrameRewindAct = new QAction(QIcon::fromTheme("rewind"),
                                   tr("Rewind"),
                                   this);
@@ -202,8 +198,6 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
 
     mToolBar = new QToolBar(this);
     mToolBar->setMovable(false);
-
-    mToolBar->setIconSize(iconSize);
 
     mRenderProgress = new QProgressBar(this);
     mRenderProgress->setSizePolicy(QSizePolicy::Preferred,

@@ -44,7 +44,8 @@ QToolBar#ViewerDrawBar,
 
 QComboBox#blendModeCombo,
 QWidget#menuBarWidget QPushButton,
-QLineEdit#SearchLine {
+QLineEdit#SearchLine,
+AlignWidget QComboBox {
     background-color: rgb(23, 23, 28);
 }
 
@@ -96,13 +97,17 @@ QToolButton#WelcomeOpenButton:hover {
 
 QToolButton#WelcomeOpenButton::menu-button {
     padding-right: 0.5em;
-    border-top-right: 2px solid #ebebeb;
-    border-bottom-right: 2px solid #ebebeb;
     border-top-right-radius: 10%;
     border-bottom-right-radius: 10%;
     color: #ebebeb;
 }
 
 QToolButton#WelcomeOpenButton[popupMode="1"] {
-    padding-right: 0.5em;
+    padding-right: 1em;
+}
+
+AlignWidget QPushButton {
+    background-color: none;
+    border: 0;
+    border-radius: 10%;
 }
