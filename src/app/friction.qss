@@ -44,7 +44,8 @@ QToolBar#ViewerDrawBar,
 
 QComboBox#blendModeCombo,
 QWidget#menuBarWidget QPushButton,
-QLineEdit#SearchLine {
+QLineEdit#SearchLine,
+AlignWidget QComboBox {
     background-color: rgb(23, 23, 28);
 }
 
@@ -80,8 +81,7 @@ QSpinBox#SpinBoxNoButtons::down-button {
     width: 0;
 }
 
-QPushButton#WelcomeNewButton,
-QToolButton#WelcomeOpenButton {
+QPushButton#WelcomeButton {
     padding: 0.25em;
     border: 2px solid #666;
     border-radius: 10%;
@@ -89,20 +89,28 @@ QToolButton#WelcomeOpenButton {
     font-weight: bold;
 }
 
-QPushButton#WelcomeNewButton:hover,
-QToolButton#WelcomeOpenButton:hover {
+QPushButton#WelcomeButton:hover {
     border-color: #ebebeb;
 }
 
-QToolButton#WelcomeOpenButton::menu-button {
-    padding-right: 0.5em;
-    border-top-right: 2px solid #ebebeb;
-    border-bottom-right: 2px solid #ebebeb;
-    border-top-right-radius: 10%;
-    border-bottom-right-radius: 10%;
+QPushButton#WelcomeRecentButton {
+    padding: 0.25em;
+    border: none;
+    border-radius: 10%;
     color: #ebebeb;
+    font-weight: bold;
 }
 
-QToolButton#WelcomeOpenButton[popupMode="1"] {
-    padding-right: 0.5em;
+QPushButton#WelcomeRecentButton:hover {
+    border: 2px solid #ebebeb;
+}
+
+AlignWidget QPushButton {
+    background-color: none;
+    border: 0;
+    border-radius: 10%;
+}
+
+QCheckBox::indicator:unchecked:hover {
+    background-color: rgb(112, 8, 10);
 }

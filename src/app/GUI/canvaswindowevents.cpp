@@ -87,6 +87,7 @@ void CanvasWindow::fitCanvasToSize()
     translateView({(widWidth - canvasSize.width() * minScale) * 0.5,
                    (widHeight - canvasSize.height() * minScale) * 0.5});
     mViewTransform.scale(minScale, minScale);
+    update();
 }
 
 void CanvasWindow::zoomInView()

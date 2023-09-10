@@ -25,6 +25,7 @@
 #include <QApplication>
 #include <QSurfaceFormat>
 #include <QProcess>
+#include <QDesktopWidget>
 
 #include "hardwareinfo.h"
 #include "Private/esettings.h"
@@ -149,15 +150,17 @@ int main(int argc, char *argv[])
                        HardwareInfo::sGpuVendor());
 
     OS_FONT = QApplication::font();
-    eSizesUI::font.setEvaluator([/*&settings*/]() {
+    eSizesUI::font.setEvaluator([]() {
+        double dpi = (qApp->desktop()->logicalDpiX() / 96.0);
+        qDebug() << "DPI" << dpi;
         const auto fm = QFontMetrics(OS_FONT);
-        const qreal scaling = qBound(0.5, /*settings.fInterfaceScaling*/1.0, 1.5);
+        const qreal scaling = qBound(0.5, dpi, 1.5);
         return qRound(fm.height()*scaling);
     });
     eSizesUI::widget.setEvaluator([]() {
         return eSizesUI::font.size()*4/3;
     });
-    /*QObject::connect(&eSizesUI::font, &SizeSetter::sizeChanged,
+    QObject::connect(&eSizesUI::font, &SizeSetter::sizeChanged,
                      &eSizesUI::widget, &SizeSetter::updateSize);
     eSizesUI::font.add(&app, [&app](const int size) {
         const auto fm = QFontMetrics(OS_FONT);
@@ -169,7 +172,7 @@ int main(int argc, char *argv[])
             font.setPixelSize(qRound(mult*OS_FONT.pixelSize()));
         }
         app.setFont(font);
-    });*/
+    });
 
     eSizesUI::widget.add(&eSizesUI::button, [](const int size) {
         eSizesUI::button.set(qRound(size*1.1));

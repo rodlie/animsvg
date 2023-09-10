@@ -29,6 +29,8 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 
+#include "GUI/global.h"
+
 AlignWidget::AlignWidget(QWidget* const parent)
     : QWidget(parent)
     , mAlignPivot(nullptr)
@@ -47,6 +49,7 @@ AlignWidget::AlignWidget(QWidget* const parent)
 
     combosLay->addWidget(new QLabel(tr("Align")));
     mAlignPivot = new QComboBox(this);
+    mAlignPivot->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     mAlignPivot->setFocusPolicy(Qt::NoFocus);
     mAlignPivot->addItem(tr("Geometry"));
     mAlignPivot->addItem(tr("Pivot"));
@@ -54,6 +57,7 @@ AlignWidget::AlignWidget(QWidget* const parent)
 
     combosLay->addWidget(new QLabel(tr("Relative to")));
     mRelativeTo = new QComboBox(this);
+    mRelativeTo->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     mRelativeTo->setFocusPolicy(Qt::NoFocus);
     mRelativeTo->addItem(tr("Scene"));
     mRelativeTo->addItem(tr("Last Selected"));
@@ -63,7 +67,7 @@ AlignWidget::AlignWidget(QWidget* const parent)
     mainLayout->addLayout(buttonsLay);
     mainLayout->addStretch();
 
-    int buttonSize = 20;
+    int buttonSize = eSizesUI::button;
 
     const auto leftButton = new QPushButton(this);
     leftButton->setFocusPolicy(Qt::NoFocus);
