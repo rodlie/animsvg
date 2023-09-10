@@ -29,7 +29,6 @@
 #include <QPushButton>
 #include <QPainter>
 #include <QLabel>
-#include <QToolButton>
 
 #include "appsupport.h"
 
@@ -64,30 +63,34 @@ WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
                                              AppSupport::getAppName()));
 
     const auto buttonWid = new QWidget(this);
+    buttonWid->setContentsMargins(0, 0, 0, 0);
     const auto buttonLay = new QHBoxLayout(buttonWid);
+    buttonLay->setMargin(0);
 
-    const auto newButton = new QPushButton(/*QIcon::fromTheme("file_blank"),*/
-                                           tr("New"),
-                                           this);
-    newButton->setObjectName("WelcomeNewButton");
+    const auto newButton = new QPushButton(tr("New"), this);
+    newButton->setObjectName("WelcomeButton");
     newButton->setSizePolicy(QSizePolicy::Preferred,
                              QSizePolicy::Expanding);
     connect(newButton, &QPushButton::released, newFunc);
 
-    const auto openButton = new QToolButton(this);
-    openButton->setObjectName("WelcomeOpenButton");
+    const auto openButton = new QPushButton(this);
+    openButton->setObjectName("WelcomeButton");
     openButton->setText(tr("Open"));
-    //openButton->setIcon(QIcon::fromTheme("file_folder"));
     openButton->setSizePolicy(QSizePolicy::Preferred,
                               QSizePolicy::Expanding);
-    //openButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    openButton->setPopupMode(QToolButton::MenuButtonPopup);
-    openButton->setMenu(recentMenu);
     connect(openButton, &QPushButton::released, openFunc);
+
+    const auto recentButton = new QPushButton(tr("Open Recent"), this);
+    recentButton->setSizePolicy(QSizePolicy::Preferred,
+                                QSizePolicy::Preferred);
+    recentButton->setContentsMargins(0, 0, 0, 0);
+    recentButton->setObjectName("WelcomeRecentButton");
+    recentButton->setMenu(recentMenu);
 
     thisLay->addWidget(mainWid, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     sceneLay->addWidget(logoLabel);
     sceneLay->addWidget(buttonWid);
+    sceneLay->addWidget(recentButton);
     buttonLay->addWidget(newButton);
     buttonLay->addWidget(openButton);
     mainLay->addWidget(sceneWid);
