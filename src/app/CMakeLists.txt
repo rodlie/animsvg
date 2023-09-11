@@ -205,6 +205,7 @@ set(
     GUI/GradientWidgets/gradientwidget.cpp
     GUI/ColorWidgets/glwidget.cpp
     GUI/widgetwrappernode.cpp
+    GUI/window.cpp
     GUI/wrappernode.cpp
     effectsloader.cpp
     eimporters.cpp
@@ -368,6 +369,7 @@ set(
     GUI/keyfocustarget.h
     GUI/keysview.h
     GUI/mainwindow.h
+    GUI/window.h
     GUI/qdoubleslider.h
     GUI/qrealanimatorvalueslider.h
     GUI/glwindow.h
