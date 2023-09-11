@@ -217,6 +217,14 @@ MainWindow::MainWindow(Document& document,
                                        this);
     mRenderWidget = new RenderWidget(this);
 
+    connect(mRenderWidget, &RenderWidget::progress,
+            this, [this](int frame, int total) {
+        statusBar()->showMessage(tr("Rendering frame %1 of %2 ...")
+                                 .arg(frame)
+                                 .arg(total),
+                                 1000);
+    });
+
     const auto alignWidget = new AlignWidget(this);
     alignWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     connect(alignWidget, &AlignWidget::alignTriggered,

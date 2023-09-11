@@ -52,6 +52,9 @@ public:
     void write(eWriteStream& dst) const;
     void read(eReadStream& src);
 
+signals:
+    void progress(int frame, int total);
+
 private:
     void render(RenderInstanceSettings& settings);
     void addRenderInstanceWidget(RenderInstanceWidget *wid);
