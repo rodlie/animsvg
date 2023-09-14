@@ -36,6 +36,7 @@
 #include <QLabel>
 #include <QToolBar>
 #include <QComboBox>
+#include <QTimer>
 
 #include "undoredo.h"
 #include "Private/Tasks/taskscheduler.h"
@@ -375,6 +376,12 @@ private:
 
     bool mBackupOnSave;
     bool mAutoSaveOnChanged;
+    bool mAutoSave;
+    int mAutoSaveTimeout;
+
+    QTimer *mAutoSaveTimer;
+    void checkAutoSaveOnChanged();
+    void checkAutoSaveTimer();
 
 protected:
     void keyPressEvent(QKeyEvent *event);

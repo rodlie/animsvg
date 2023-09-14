@@ -134,6 +134,9 @@ MainWindow::MainWindow(Document& document,
     , mResolutionComboBox(nullptr)
     , mBackupOnSave(false)
     , mAutoSaveOnChanged(false)
+    , mAutoSave(false)
+    , mAutoSaveTimeout(0)
+    , mAutoSaveTimer(nullptr)
 {
     Q_ASSERT(!sInstance);
     sInstance = this;
@@ -192,6 +195,19 @@ MainWindow::MainWindow(Document& document,
             file.close();
         }
     }*/
+
+    mAutoSaveTimer = new QTimer(this);
+    connect (mAutoSaveTimer, &QTimer::timeout,
+             this, &MainWindow::checkAutoSaveTimer);
+    mAutoSave = AppSupport::getSettings("files",
+                                        "AutoSave",
+                                        false).toBool();
+    mAutoSaveTimeout = AppSupport::getSettings("files",
+                                               "AutoSaveTimeout",
+                                               300000).toInt();
+    if (mAutoSave) {
+        mAutoSaveTimer->start(mAutoSaveTimeout);
+    }
 
     QFile stylesheet(QString::fromUtf8(":/styles/%1.qss").arg(AppSupport::getAppName()));
     if (stylesheet.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -578,6 +594,17 @@ void MainWindow::setupMenuBar()
             this, [this](bool triggered) {
         mAutoSaveOnChanged = triggered;
         AppSupport::setSettings("files", "AutoSaveOnChanged", mAutoSaveOnChanged);
+    });
+
+    const auto autoSaveAct = saveToolMenu->addAction(tr("Auto Save on Timer"));
+    autoSaveAct->setCheckable(true);
+    autoSaveAct->setChecked(mAutoSave);
+    connect(autoSaveAct, &QAction::triggered,
+            this, [this](bool triggered) {
+        mAutoSave = triggered;
+        if (mAutoSaveTimer->isActive() && !mAutoSave) { mAutoSaveTimer->stop(); }
+        else if (!mAutoSaveTimer->isActive() && mAutoSave) { mAutoSaveTimer->start(mAutoSaveTimeout); }
+        AppSupport::setSettings("files", "AutoSave", mAutoSave);
     });
 
     mFileMenu->addSeparator();
@@ -1257,6 +1284,32 @@ void MainWindow::setupDrawPathSpins()
                                    mViewerDrawBar);
 }
 
+void MainWindow::checkAutoSaveOnChanged()
+{
+    qDebug() << "check auto save on changed" << mAutoSaveOnChanged;
+    if (!mAutoSave &&
+        mAutoSaveOnChanged &&
+        mChangedSinceSaving &&
+        !mDocument.fEvFile.isEmpty())
+    {
+        qDebug() << "auto save on changed";
+        saveFile(mDocument.fEvFile);
+    }
+}
+
+void MainWindow::checkAutoSaveTimer()
+{
+    qDebug() << "check auto save timer" << mAutoSave << mAutoSaveTimeout;
+    if (mAutoSave &&
+        !mAutoSaveOnChanged &&
+        mChangedSinceSaving &&
+        !mDocument.fEvFile.isEmpty())
+    {
+        qDebug() << "auto save on timer";
+        saveFile(mDocument.fEvFile);
+    }
+}
+
 void MainWindow::openWelcomeDialog()
 {
     mStackWidget->setCurrentIndex(mStackIndexWelcome);
@@ -1784,14 +1837,8 @@ void MainWindow::setFileChangedSinceSaving(const bool changed)
     qDebug() << "project changed?" << changed;
     if (changed == mChangedSinceSaving) { return; }
     mChangedSinceSaving = changed;
-    if (mAutoSaveOnChanged &&
-        mChangedSinceSaving &&
-        !mDocument.fEvFile.isEmpty()) {
-        qDebug() << "auto save on changed";
-        saveFile(mDocument.fEvFile);
-        return;
-    }
     updateTitle();
+    checkAutoSaveOnChanged();
 }
 
 SimpleBrushWrapper *MainWindow::getCurrentBrush() const
