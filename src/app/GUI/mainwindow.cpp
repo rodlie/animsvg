@@ -132,6 +132,7 @@ MainWindow::MainWindow(Document& document,
     , mTabAssetsIndex(0)
     , mTabQueueIndex(0)
     , mResolutionComboBox(nullptr)
+    , mBackupOnSave(false)
 {
     Q_ASSERT(!sInstance);
     sInstance = this;
@@ -554,6 +555,17 @@ void MainWindow::setupMenuBar()
     saveToolMenu->addAction(saveAsAct);
     saveToolMenu->addAction(saveBackAct);
     saveToolMenu->addAction(exportSvgAct);
+    saveToolMenu->addSeparator();
+
+    const auto backupOnSaveAct = saveToolMenu->addAction(tr("Backup on Save"));
+    backupOnSaveAct->setCheckable(true);
+    backupOnSaveAct->setChecked(AppSupport::getSettings("files",
+                                                        "BackupOnSave").toBool());
+    connect(backupOnSaveAct, &QAction::triggered,
+            this, [this](bool triggered) {
+        mBackupOnSave = triggered;
+        AppSupport::setSettings("files", "BackupOnSave", mBackupOnSave);
+    });
 
     mFileMenu->addSeparator();
     mFileMenu->addAction(QIcon::fromTheme("cancel"),
@@ -2101,6 +2113,7 @@ void MainWindow::saveFile(const QString& path,
         if (setPath) mDocument.setPath(path);
         setFileChangedSinceSaving(false);
         updateLastSaveDir(path);
+        if (mBackupOnSave) { saveBackup(); }
     } catch(const std::exception& e) {
         gPrintExceptionCritical(e);
     }
@@ -2137,7 +2150,7 @@ void MainWindow::saveBackup()
         backupFile.setFileName(backupPath.arg(id) );
     }
     try {
-        saveToFile(backupPath.arg(id));
+        saveToFile(backupPath.arg(id), false);
     } catch(const std::exception& e) {
         gPrintExceptionCritical(e);
     }

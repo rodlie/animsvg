@@ -94,7 +94,8 @@ public:
     BoxScrollWidget *getObjectSettingsList();
 
     FillStrokeSettingsWidget *getFillStrokeSettings();
-    void saveToFile(const QString &path);
+    void saveToFile(const QString &path,
+                    const bool addRecent = true);
     void saveToFileXEV(const QString& path);
     void loadEVFile(const QString &path);
     void loadXevFile(const QString &path);
@@ -171,7 +172,8 @@ public:
     void openFile();
     void openFile(const QString& openPath);
     void saveFile();
-    void saveFile(const QString& path, const bool setPath = true);
+    void saveFile(const QString& path,
+                  const bool setPath = true);
     void saveFileAs(const bool setPath = true);
     void saveBackup();
     void exportSVG();
@@ -370,6 +372,8 @@ private:
                        QDoubleSlider* const slider,
                        QToolBar* const toolBar);
     void setupDrawPathSpins();
+
+    bool mBackupOnSave;
 
 protected:
     void keyPressEvent(QKeyEvent *event);
