@@ -374,6 +374,7 @@ private:
     void setupDrawPathSpins();
 
     bool mBackupOnSave;
+    bool mAutoSaveOnChanged;
 
 protected:
     void keyPressEvent(QKeyEvent *event);

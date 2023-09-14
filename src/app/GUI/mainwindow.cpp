@@ -133,6 +133,7 @@ MainWindow::MainWindow(Document& document,
     , mTabQueueIndex(0)
     , mResolutionComboBox(nullptr)
     , mBackupOnSave(false)
+    , mAutoSaveOnChanged(false)
 {
     Q_ASSERT(!sInstance);
     sInstance = this;
@@ -561,10 +562,22 @@ void MainWindow::setupMenuBar()
     backupOnSaveAct->setCheckable(true);
     backupOnSaveAct->setChecked(AppSupport::getSettings("files",
                                                         "BackupOnSave").toBool());
+    mBackupOnSave = backupOnSaveAct->isChecked();
     connect(backupOnSaveAct, &QAction::triggered,
             this, [this](bool triggered) {
         mBackupOnSave = triggered;
         AppSupport::setSettings("files", "BackupOnSave", mBackupOnSave);
+    });
+
+    const auto autoSaveOnChangedAct = saveToolMenu->addAction(tr("Auto Save on Changes"));
+    autoSaveOnChangedAct->setCheckable(true);
+    autoSaveOnChangedAct->setChecked(AppSupport::getSettings("files",
+                                                             "AutoSaveOnChanged").toBool());
+    mAutoSaveOnChanged = autoSaveOnChangedAct->isChecked();
+    connect(autoSaveOnChangedAct, &QAction::triggered,
+            this, [this](bool triggered) {
+        mAutoSaveOnChanged = triggered;
+        AppSupport::setSettings("files", "AutoSaveOnChanged", mAutoSaveOnChanged);
     });
 
     mFileMenu->addSeparator();
@@ -1768,8 +1781,16 @@ void MainWindow::setResolutionValue(const qreal value)
 
 void MainWindow::setFileChangedSinceSaving(const bool changed)
 {
+    qDebug() << "project changed?" << changed;
     if (changed == mChangedSinceSaving) { return; }
     mChangedSinceSaving = changed;
+    if (mAutoSaveOnChanged &&
+        mChangedSinceSaving &&
+        !mDocument.fEvFile.isEmpty()) {
+        qDebug() << "auto save on changed";
+        saveFile(mDocument.fEvFile);
+        return;
+    }
     updateTitle();
 }
 
@@ -2113,7 +2134,10 @@ void MainWindow::saveFile(const QString& path,
         if (setPath) mDocument.setPath(path);
         setFileChangedSinceSaving(false);
         updateLastSaveDir(path);
-        if (mBackupOnSave) { saveBackup(); }
+        if (mBackupOnSave) {
+            qDebug() << "auto backup";
+            saveBackup();
+        }
     } catch(const std::exception& e) {
         gPrintExceptionCritical(e);
     }
