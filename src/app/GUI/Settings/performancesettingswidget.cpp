@@ -230,6 +230,8 @@ void PerformanceSettingsWidget::setupRasterEffectWidgets()
         containerInnerLayout->addWidget(wid);
     }
 
+    containerLayout->addStretch();
+
     addWidget(container);
 }
 

@@ -21,23 +21,25 @@
 #
 */
 
-// Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
-
-#ifndef INTERFACESETTINGSWIDGET_H
-#define INTERFACESETTINGSWIDGET_H
+#ifndef GENERALSETTINGSWIDGET_H
+#define GENERALSETTINGSWIDGET_H
 
 #include "settingswidget.h"
 
-#include <QSlider>
+#include <QCheckBox>
+#include <QSpinBox>
 
-class InterfaceSettingsWidget : public SettingsWidget {
+class GeneralSettingsWidget : public SettingsWidget
+{
 public:
-    explicit InterfaceSettingsWidget(QWidget *parent);
-
+    explicit GeneralSettingsWidget(QWidget *parent = nullptr);
     void applySettings();
     void updateSettings(bool restore = false);
+
 private:
-    QSlider* mInterfaceScaling = nullptr;
+    QCheckBox *mAutoBackup;
+    QCheckBox *mAutoSave;
+    QSpinBox *mAutoSaveTimer;
 };
 
-#endif // INTERFACESETTINGSWIDGET_H
+#endif // GENERALSETTINGSWIDGET_H
