@@ -110,6 +110,7 @@ MainWindow::MainWindow(Document& document,
     //, mSelectedObjectDockBar(nullptr)
     //, mFilesDockBar(nullptr)
     //, mBrushSettingsDockBar(nullptr)
+    , mSaveAct(nullptr)
     , mAddToQueAct(nullptr)
     , mViewFullScreenAct(nullptr)
     , mLocalPivotAct(nullptr)
@@ -133,7 +134,6 @@ MainWindow::MainWindow(Document& document,
     , mTabQueueIndex(0)
     , mResolutionComboBox(nullptr)
     , mBackupOnSave(false)
-    , mAutoSaveOnChanged(false)
     , mAutoSave(false)
     , mAutoSaveTimeout(0)
     , mAutoSaveTimer(nullptr)
@@ -205,9 +205,7 @@ MainWindow::MainWindow(Document& document,
     mAutoSaveTimeout = AppSupport::getSettings("files",
                                                "AutoSaveTimeout",
                                                300000).toInt();
-    if (mAutoSave) {
-        mAutoSaveTimer->start(mAutoSaveTimeout);
-    }
+    if (mAutoSave) { mAutoSaveTimer->start(mAutoSaveTimeout); }
 
     QFile stylesheet(QString::fromUtf8(":/styles/%1.qss").arg(AppSupport::getAppName()));
     if (stylesheet.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -545,10 +543,10 @@ void MainWindow::setupMenuBar()
     mToolbar->addWidget(saveToolBtn);
 
     mFileMenu->addSeparator();
-    const auto saveAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
-                                              tr("Save", "MenuBar_File"),
-                                              this, qOverload<>(&MainWindow::saveFile),
-                                              Qt::CTRL + Qt::Key_S);
+    mSaveAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
+                                    tr("Save", "MenuBar_File"),
+                                    this, qOverload<>(&MainWindow::saveFile),
+                                    Qt::CTRL + Qt::Key_S);
 
     const auto saveAsAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
                                                 tr("Save As", "MenuBar_File"),
@@ -568,7 +566,7 @@ void MainWindow::setupMenuBar()
                                                     QKeySequence(AppSupport::getSettings("shortcuts",
                                                                                          "exportSVG",
                                                                                          "Shift+F12").toString()));
-    saveToolBtn->setDefaultAction(saveAct);
+    saveToolBtn->setDefaultAction(mSaveAct);
     saveToolMenu->addAction(saveAsAct);
     saveToolMenu->addAction(saveBackAct);
     saveToolMenu->addAction(exportSvgAct);
@@ -585,18 +583,7 @@ void MainWindow::setupMenuBar()
         AppSupport::setSettings("files", "BackupOnSave", mBackupOnSave);
     });
 
-    const auto autoSaveOnChangedAct = saveToolMenu->addAction(tr("Auto Save on Changes"));
-    autoSaveOnChangedAct->setCheckable(true);
-    autoSaveOnChangedAct->setChecked(AppSupport::getSettings("files",
-                                                             "AutoSaveOnChanged").toBool());
-    mAutoSaveOnChanged = autoSaveOnChangedAct->isChecked();
-    connect(autoSaveOnChangedAct, &QAction::triggered,
-            this, [this](bool triggered) {
-        mAutoSaveOnChanged = triggered;
-        AppSupport::setSettings("files", "AutoSaveOnChanged", mAutoSaveOnChanged);
-    });
-
-    const auto autoSaveAct = saveToolMenu->addAction(tr("Auto Save on Timer"));
+    const auto autoSaveAct = saveToolMenu->addAction(tr("Auto Save"));
     autoSaveAct->setCheckable(true);
     autoSaveAct->setChecked(mAutoSave);
     connect(autoSaveAct, &QAction::triggered,
@@ -1284,30 +1271,13 @@ void MainWindow::setupDrawPathSpins()
                                    mViewerDrawBar);
 }
 
-void MainWindow::checkAutoSaveOnChanged()
-{
-    qDebug() << "check auto save on changed" << mAutoSaveOnChanged;
-    if (!mAutoSave &&
-        mAutoSaveOnChanged &&
-        mChangedSinceSaving &&
-        !mDocument.fEvFile.isEmpty())
-    {
-        qDebug() << "auto save on changed";
-        saveFile(mDocument.fEvFile);
-    }
-}
-
 void MainWindow::checkAutoSaveTimer()
 {
     qDebug() << "check auto save timer" << mAutoSave << mAutoSaveTimeout;
     if (mAutoSave &&
-        !mAutoSaveOnChanged &&
         mChangedSinceSaving &&
         !mDocument.fEvFile.isEmpty())
-    {
-        qDebug() << "auto save on timer";
-        saveFile(mDocument.fEvFile);
-    }
+    { saveFile(mDocument.fEvFile); }
 }
 
 void MainWindow::openWelcomeDialog()
@@ -1834,11 +1804,9 @@ void MainWindow::setResolutionValue(const qreal value)
 
 void MainWindow::setFileChangedSinceSaving(const bool changed)
 {
-    qDebug() << "project changed?" << changed;
     if (changed == mChangedSinceSaving) { return; }
     mChangedSinceSaving = changed;
     updateTitle();
-    checkAutoSaveOnChanged();
 }
 
 SimpleBrushWrapper *MainWindow::getCurrentBrush() const
@@ -2123,6 +2091,9 @@ void MainWindow::updateTitle()
     QString file = info.baseName();
     if (file.isEmpty()) { file = tr("Untitled"); }
     setWindowTitle(QString("%1%2").arg(file, unsaved));
+    if (mSaveAct) {
+        mSaveAct->setText(mChangedSinceSaving ? tr("Save *") : tr("Save"));
+    }
 }
 
 void MainWindow::openFile()

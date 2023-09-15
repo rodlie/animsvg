@@ -273,6 +273,8 @@ private:
     QSplitter *mSplitterRightTop;
     QSplitter *mSplitterRightBottom;
 
+    QAction *mSaveAct;
+
     QAction *mActionConnectPointsAct;
     QAction *mActionDisconnectPointsAct;
     QAction *mActionMergePointsAct;
@@ -375,12 +377,10 @@ private:
     void setupDrawPathSpins();
 
     bool mBackupOnSave;
-    bool mAutoSaveOnChanged;
     bool mAutoSave;
     int mAutoSaveTimeout;
 
     QTimer *mAutoSaveTimer;
-    void checkAutoSaveOnChanged();
     void checkAutoSaveTimer();
 
 protected:
