@@ -103,16 +103,15 @@ void GeneralSettingsWidget::applySettings()
 
 void GeneralSettingsWidget::updateSettings(bool restore)
 {
-    Q_UNUSED(restore)
-
-    mAutoBackup->setChecked(AppSupport::getSettings("files",
-                                                    "BackupOnSave",
-                                                    false).toBool());
-    mAutoSave->setChecked(AppSupport::getSettings("files",
-                                                  "AutoSave",
-                                                  false).toBool());
-    int ms = AppSupport::getSettings("files",
-                                     "AutoSaveTimeout",
-                                     300000).toInt();
+    mAutoBackup->setChecked(restore ? false : AppSupport::getSettings("files",
+                                                                      "BackupOnSave",
+                                                                      false).toBool());
+    mAutoSave->setChecked(restore ? false : AppSupport::getSettings("files",
+                                                                    "AutoSave",
+                                                                    false).toBool());
+    int ms = restore ? 300000 : AppSupport::getSettings("files",
+                                                        "AutoSaveTimeout",
+                                                        300000).toInt();
+    if (ms < 60000) { ms = 60000; }
     mAutoSaveTimer->setValue((ms / 1000) / 60);
 }
