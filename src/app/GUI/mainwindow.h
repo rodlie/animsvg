@@ -187,6 +187,7 @@ public:
     void importImageSequence();
     void importFile();
     void revert();
+    void updateAutoSaveBackupState();
 
 protected:
     void lockFinished();

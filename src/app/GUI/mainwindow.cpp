@@ -199,13 +199,6 @@ MainWindow::MainWindow(Document& document,
     mAutoSaveTimer = new QTimer(this);
     connect (mAutoSaveTimer, &QTimer::timeout,
              this, &MainWindow::checkAutoSaveTimer);
-    mAutoSave = AppSupport::getSettings("files",
-                                        "AutoSave",
-                                        false).toBool();
-    mAutoSaveTimeout = AppSupport::getSettings("files",
-                                               "AutoSaveTimeout",
-                                               300000).toInt();
-    if (mAutoSave) { mAutoSaveTimer->start(mAutoSaveTimeout); }
 
     QFile stylesheet(QString::fromUtf8(":/styles/%1.qss").arg(AppSupport::getAppName()));
     if (stylesheet.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -571,28 +564,6 @@ void MainWindow::setupMenuBar()
     saveToolMenu->addAction(saveBackAct);
     saveToolMenu->addAction(exportSvgAct);
     saveToolMenu->addSeparator();
-
-    const auto backupOnSaveAct = saveToolMenu->addAction(tr("Backup on Save"));
-    backupOnSaveAct->setCheckable(true);
-    backupOnSaveAct->setChecked(AppSupport::getSettings("files",
-                                                        "BackupOnSave").toBool());
-    mBackupOnSave = backupOnSaveAct->isChecked();
-    connect(backupOnSaveAct, &QAction::triggered,
-            this, [this](bool triggered) {
-        mBackupOnSave = triggered;
-        AppSupport::setSettings("files", "BackupOnSave", mBackupOnSave);
-    });
-
-    const auto autoSaveAct = saveToolMenu->addAction(tr("Auto Save"));
-    autoSaveAct->setCheckable(true);
-    autoSaveAct->setChecked(mAutoSave);
-    connect(autoSaveAct, &QAction::triggered,
-            this, [this](bool triggered) {
-        mAutoSave = triggered;
-        if (mAutoSaveTimer->isActive() && !mAutoSave) { mAutoSaveTimer->stop(); }
-        else if (!mAutoSaveTimer->isActive() && mAutoSave) { mAutoSaveTimer->start(mAutoSaveTimeout); }
-        AppSupport::setSettings("files", "AutoSave", mAutoSave);
-    });
 
     mFileMenu->addSeparator();
     mFileMenu->addAction(QIcon::fromTheme("cancel"),
@@ -2036,6 +2007,8 @@ void MainWindow::readSettings(const QString &openProject)
     if (isFull) { showFullScreen(); }
     else if (isMax) { showMaximized(); }
 
+    updateAutoSaveBackupState();
+
     if (!openProject.isEmpty()) {
         QTimer::singleShot(10,
                            this,
@@ -2311,6 +2284,32 @@ void MainWindow::revert()
 {
     const QString path = mDocument.fEvFile;
     openFile(path);
+}
+
+void MainWindow::updateAutoSaveBackupState()
+{
+    mBackupOnSave = AppSupport::getSettings("files",
+                                            "BackupOnSave",
+                                            false).toBool();
+    mAutoSave = AppSupport::getSettings("files",
+                                        "AutoSave",
+                                        false).toBool();
+    int lastTimeout = mAutoSaveTimeout;
+    mAutoSaveTimeout = AppSupport::getSettings("files",
+                                               "AutoSaveTimeout",
+                                               300000).toInt();
+    qDebug() << "update auto save/backup state" << mBackupOnSave << mAutoSave << mAutoSaveTimeout;
+    if (mAutoSave && !mAutoSaveTimer->isActive()) {
+        mAutoSaveTimer->start(mAutoSaveTimeout);
+    } else if (!mAutoSave && mAutoSaveTimer->isActive()) {
+        mAutoSaveTimer->stop();
+    }
+    if (mAutoSave &&
+        lastTimeout > 0 &&
+        lastTimeout != mAutoSaveTimeout) {
+        if (mAutoSaveTimer->isActive()) { mAutoSaveTimer->stop(); }
+        mAutoSaveTimer->start(mAutoSaveTimeout);
+    }
 }
 
 stdsptr<void> MainWindow::lock()
