@@ -137,6 +137,8 @@ MainWindow::MainWindow(Document& document,
     , mAutoSave(false)
     , mAutoSaveTimeout(0)
     , mAutoSaveTimer(nullptr)
+    , mAboutWidget(nullptr)
+    , mAboutWindow(nullptr)
 {
     Q_ASSERT(!sInstance);
     sInstance = this;
@@ -1137,29 +1139,10 @@ void MainWindow::setupMenuBar()
     const auto aboutAct = help->addAction(QIcon::fromTheme("friction"),
                                           tr("About", "MenuBar_Help"),
                                           this,
-                                          [this]() {
-        QString aboutText = QString("<h1 style=\"font-weight: normal;\">%1</h1>"
-                                    "<h3 style=\"font-weight: normal;\">%4 %3</h3>"
-                                    "<p>%5 &copy; %1 <a style=\"text-decoration: none;\" href=\"%2\">%6</a>.</p>"
-                                    "<p>%7</p>"
-                                    "<p style=\"font-size: small;\">%8</p>")
-                            .arg(AppSupport::getAppDisplayName(),
-                                 AppSupport::getAppContributorsUrl(),
-                                 AppSupport::getAppVersion(true),
-                                 tr("version"),
-                                 tr("Copyright"),
-                                 tr("contributors"),
-                                 tr("Visit <a href=\"%1\">%1</a> for more information.").arg(AppSupport::getAppUrl()),
-                                 tr("This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version."));
-        QMessageBox::about(this, tr("About"), aboutText);
-    });
+                                          &MainWindow::openAboutWindow);
     help->addAction(QIcon::fromTheme("question"),
                     tr("About Qt", "MenuBar_Help"), this, [this]() {
         QMessageBox::aboutQt(this, tr("About Qt"));
-    });
-    help->addAction(QIcon::fromTheme("question"),
-                    tr("Check for updates", "MenuBar_Help"), this, []() {
-        QDesktopServices::openUrl(QUrl::fromUserInput(AppSupport::getAppLatestReleaseUrl()));
     });
 
     setMenuBar(mMenuBar);
@@ -1249,6 +1232,23 @@ void MainWindow::checkAutoSaveTimer()
         mChangedSinceSaving &&
         !mDocument.fEvFile.isEmpty())
     { saveFile(mDocument.fEvFile); }
+}
+
+void MainWindow::openAboutWindow()
+{
+    if (!mAboutWidget) {
+        mAboutWidget = new AboutWidget(this);
+    }
+    if (!mAboutWindow) {
+        mAboutWindow = new Window(this,
+                                  mAboutWidget,
+                                  tr("About"),
+                                  "AboutWindow",
+                                  false,
+                                  false);
+        mAboutWindow->setMinimumSize(640, 480);
+    }
+    mAboutWindow->focusWindow();
 }
 
 void MainWindow::openWelcomeDialog()

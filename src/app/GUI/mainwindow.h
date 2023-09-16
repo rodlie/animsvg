@@ -51,6 +51,8 @@
 #include "ekeyfilter.h"
 #include "GUI/RenderWidgets/renderwidget.h"
 #include "GUI/qdoubleslider.h"
+#include "window.h"
+#include "GUI/aboutwidget.h"
 
 class VideoEncoder;
 class RenderWidget;
@@ -383,6 +385,10 @@ private:
 
     QTimer *mAutoSaveTimer;
     void checkAutoSaveTimer();
+
+    AboutWidget *mAboutWidget;
+    Window *mAboutWindow;
+    void openAboutWindow();
 
 protected:
     void keyPressEvent(QKeyEvent *event);

@@ -167,6 +167,7 @@ set(
     GUI/Settings/settingswidget.cpp
     GUI/Settings/timelinesettingswidget.cpp
     GUI/Settings/pluginssettingswidget.cpp
+    GUI/aboutwidget.cpp
     GUI/alignwidget.cpp
     GUI/audiohandler.cpp
     GUI/assetswidget.cpp
@@ -290,6 +291,7 @@ set(
     GUI/Settings/settingswidget.h
     GUI/Settings/timelinesettingswidget.h
     GUI/Settings/pluginssettingswidget.h
+    GUI/aboutwidget.h
     GUI/alignwidget.h
     GUI/audiohandler.h
     GUI/assetswidget.h
@@ -394,6 +396,7 @@ add_executable(
     resources.qrc
     icons.qrc
     hicolor.qrc
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs.qrc
     ${WINDOWS_RESOURCE_FILE}
 )
 
