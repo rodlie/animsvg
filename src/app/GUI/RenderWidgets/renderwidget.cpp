@@ -150,6 +150,7 @@ void RenderWidget::setRenderedFrame(const int frame)
 {
     if (!mCurrentRenderedSettings) { return; }
     mRenderProgressBar->setValue(frame);
+    emit progress(frame, mRenderProgressBar->maximum());
 }
 
 void RenderWidget::clearRenderQueue()

@@ -110,6 +110,7 @@ MainWindow::MainWindow(Document& document,
     //, mSelectedObjectDockBar(nullptr)
     //, mFilesDockBar(nullptr)
     //, mBrushSettingsDockBar(nullptr)
+    , mSaveAct(nullptr)
     , mAddToQueAct(nullptr)
     , mViewFullScreenAct(nullptr)
     , mLocalPivotAct(nullptr)
@@ -132,6 +133,10 @@ MainWindow::MainWindow(Document& document,
     , mTabAssetsIndex(0)
     , mTabQueueIndex(0)
     , mResolutionComboBox(nullptr)
+    , mBackupOnSave(false)
+    , mAutoSave(false)
+    , mAutoSaveTimeout(0)
+    , mAutoSaveTimer(nullptr)
 {
     Q_ASSERT(!sInstance);
     sInstance = this;
@@ -191,6 +196,10 @@ MainWindow::MainWindow(Document& document,
         }
     }*/
 
+    mAutoSaveTimer = new QTimer(this);
+    connect (mAutoSaveTimer, &QTimer::timeout,
+             this, &MainWindow::checkAutoSaveTimer);
+
     QFile stylesheet(QString::fromUtf8(":/styles/%1.qss").arg(AppSupport::getAppName()));
     if (stylesheet.open(QIODevice::ReadOnly | QIODevice::Text)) {
         setStyleSheet(stylesheet.readAll());
@@ -216,6 +225,14 @@ MainWindow::MainWindow(Document& document,
                                        mLayoutHandler,
                                        this);
     mRenderWidget = new RenderWidget(this);
+
+    connect(mRenderWidget, &RenderWidget::progress,
+            this, [this](int frame, int total) {
+        statusBar()->showMessage(tr("Rendering frame %1 of %2 ...")
+                                 .arg(frame)
+                                 .arg(total),
+                                 1000);
+    });
 
     const auto alignWidget = new AlignWidget(this);
     alignWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -519,10 +536,10 @@ void MainWindow::setupMenuBar()
     mToolbar->addWidget(saveToolBtn);
 
     mFileMenu->addSeparator();
-    const auto saveAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
-                                              tr("Save", "MenuBar_File"),
-                                              this, qOverload<>(&MainWindow::saveFile),
-                                              Qt::CTRL + Qt::Key_S);
+    mSaveAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
+                                    tr("Save", "MenuBar_File"),
+                                    this, qOverload<>(&MainWindow::saveFile),
+                                    Qt::CTRL + Qt::Key_S);
 
     const auto saveAsAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
                                                 tr("Save As", "MenuBar_File"),
@@ -542,10 +559,11 @@ void MainWindow::setupMenuBar()
                                                     QKeySequence(AppSupport::getSettings("shortcuts",
                                                                                          "exportSVG",
                                                                                          "Shift+F12").toString()));
-    saveToolBtn->setDefaultAction(saveAct);
+    saveToolBtn->setDefaultAction(mSaveAct);
     saveToolMenu->addAction(saveAsAct);
     saveToolMenu->addAction(saveBackAct);
     saveToolMenu->addAction(exportSvgAct);
+    saveToolMenu->addSeparator();
 
     mFileMenu->addSeparator();
     mFileMenu->addAction(QIcon::fromTheme("cancel"),
@@ -1222,6 +1240,15 @@ void MainWindow::setupDrawPathSpins()
     mDrawPathSmoothAct = addSlider(tr("Smooth"),
                                    mDrawPathSmooth,
                                    mViewerDrawBar);
+}
+
+void MainWindow::checkAutoSaveTimer()
+{
+    qDebug() << "check auto save timer" << mAutoSave << mAutoSaveTimeout;
+    if (mAutoSave &&
+        mChangedSinceSaving &&
+        !mDocument.fEvFile.isEmpty())
+    { saveFile(mDocument.fEvFile); }
 }
 
 void MainWindow::openWelcomeDialog()
@@ -1980,6 +2007,8 @@ void MainWindow::readSettings(const QString &openProject)
     if (isFull) { showFullScreen(); }
     else if (isMax) { showMaximized(); }
 
+    updateAutoSaveBackupState();
+
     if (!openProject.isEmpty()) {
         QTimer::singleShot(10,
                            this,
@@ -2035,6 +2064,9 @@ void MainWindow::updateTitle()
     QString file = info.baseName();
     if (file.isEmpty()) { file = tr("Untitled"); }
     setWindowTitle(QString("%1%2").arg(file, unsaved));
+    if (mSaveAct) {
+        mSaveAct->setText(mChangedSinceSaving ? tr("Save *") : tr("Save"));
+    }
 }
 
 void MainWindow::openFile()
@@ -2093,6 +2125,10 @@ void MainWindow::saveFile(const QString& path,
         if (setPath) mDocument.setPath(path);
         setFileChangedSinceSaving(false);
         updateLastSaveDir(path);
+        if (mBackupOnSave) {
+            qDebug() << "auto backup";
+            saveBackup();
+        }
     } catch(const std::exception& e) {
         gPrintExceptionCritical(e);
     }
@@ -2129,7 +2165,7 @@ void MainWindow::saveBackup()
         backupFile.setFileName(backupPath.arg(id) );
     }
     try {
-        saveToFile(backupPath.arg(id));
+        saveToFile(backupPath.arg(id), false);
     } catch(const std::exception& e) {
         gPrintExceptionCritical(e);
     }
@@ -2248,6 +2284,32 @@ void MainWindow::revert()
 {
     const QString path = mDocument.fEvFile;
     openFile(path);
+}
+
+void MainWindow::updateAutoSaveBackupState()
+{
+    mBackupOnSave = AppSupport::getSettings("files",
+                                            "BackupOnSave",
+                                            false).toBool();
+    mAutoSave = AppSupport::getSettings("files",
+                                        "AutoSave",
+                                        false).toBool();
+    int lastTimeout = mAutoSaveTimeout;
+    mAutoSaveTimeout = AppSupport::getSettings("files",
+                                               "AutoSaveTimeout",
+                                               300000).toInt();
+    qDebug() << "update auto save/backup state" << mBackupOnSave << mAutoSave << mAutoSaveTimeout;
+    if (mAutoSave && !mAutoSaveTimer->isActive()) {
+        mAutoSaveTimer->start(mAutoSaveTimeout);
+    } else if (!mAutoSave && mAutoSaveTimer->isActive()) {
+        mAutoSaveTimer->stop();
+    }
+    if (mAutoSave &&
+        lastTimeout > 0 &&
+        lastTimeout != mAutoSaveTimeout) {
+        if (mAutoSaveTimer->isActive()) { mAutoSaveTimer->stop(); }
+        mAutoSaveTimer->start(mAutoSaveTimeout);
+    }
 }
 
 stdsptr<void> MainWindow::lock()

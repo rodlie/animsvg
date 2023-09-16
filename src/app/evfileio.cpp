@@ -113,7 +113,8 @@ void MainWindow::loadEVFile(const QString &path) {
     addRecentFile(path);
 }
 
-void MainWindow::saveToFile(const QString &path)
+void MainWindow::saveToFile(const QString &path,
+                            const bool addRecent)
 {
     QFile file(path);
     if (file.exists()) { file.remove(); }
@@ -156,7 +157,7 @@ void MainWindow::saveToFile(const QString &path)
     file.close();
 
     BoundingBox::sClearWriteBoxes();
-    addRecentFile(path);
+    if (addRecent) { addRecentFile(path); }
 }
 
 #include "XML/xevzipfilesaver.h"

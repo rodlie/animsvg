@@ -6,8 +6,8 @@
 
 #include "appsupport.h"
 
+#include "generalsettingswidget.h"
 #include "performancesettingswidget.h"
-#include "interfacesettingswidget.h"
 #include "canvassettingswidget.h"
 #include "timelinesettingswidget.h"
 #include "pluginssettingswidget.h"
@@ -26,6 +26,9 @@ SettingsDialog::SettingsDialog(QWidget * const parent)
     setLayout(mainLayout);
 
     mTabWidget = new QTabWidget(this);
+
+    const auto general = new GeneralSettingsWidget(this);
+    addSettingsWidget(general, tr("General"));
 
     const auto performance = new PerformanceSettingsWidget(this);
     addSettingsWidget(performance,tr("Hardware"));

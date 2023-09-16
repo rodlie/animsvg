@@ -161,7 +161,7 @@ set(
     GUI/RenderWidgets/rendersettingsdialog.cpp
     GUI/RenderWidgets/rendersettingsdisplaywidget.cpp
     GUI/Settings/canvassettingswidget.cpp
-    GUI/Settings/interfacesettingswidget.cpp
+    GUI/Settings/generalsettingswidget.cpp
     GUI/Settings/performancesettingswidget.cpp
     GUI/Settings/settingsdialog.cpp
     GUI/Settings/settingswidget.cpp
@@ -284,7 +284,7 @@ set(
     GUI/RenderWidgets/rendersettingsdialog.h
     GUI/RenderWidgets/rendersettingsdisplaywidget.h
     GUI/Settings/canvassettingswidget.h
-    GUI/Settings/interfacesettingswidget.h
+    GUI/Settings/generalsettingswidget.h
     GUI/Settings/performancesettingswidget.h
     GUI/Settings/settingsdialog.h
     GUI/Settings/settingswidget.h
