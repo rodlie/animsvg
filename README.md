@@ -1,73 +1,8 @@
 # Friction
 
-[![Logo](https://friction.graphics/assets/logo-uni.svg)](https://friction.graphics)
+Friction is an open-source, vector-based application designed for creating web animations and videos. See [friction.graphics](https://friction.graphics) for more information.
 
-Friction is an open-source, vector-based application designed for creating web animations and videos.
-
-***This application is beta quality, expect missing and/or broken features.***
-
-## Features
-
-### High Performance
-
-![Screenshot 1](https://friction.graphics/assets/screenshots/friction-screenshot.jpg)
-
-Friction provides a scalable, high-performance GPU/CPU vector and raster pipeline developed in C++, using Skia and the Qt framework.
-
-### Animations for the Web
-
-![Screenshot 2](https://friction.graphics/assets/screenshots/friction-web-animations.jpg)
-
-Create smooth and responsive animations for the web with Friction! Using Friction, you can create animated scalable vector graphics (SVG) using the synchronized multimedia integration language (SMIL), as recommended by the World Wide Web Consortium (W3C).
-
-### Multiple Scenes and Timelines
-
-![Screenshot 3](https://friction.graphics/assets/screenshots/friction-multiple-scenes.jpg)
-
-Friction gives you the flexibility to work on multiple scenes at once, with multiple viewers, timelines, and graphs. Adjust it to fit your needs and screen real estate.
-
-### Powerful Expression Editor
-
-![Screenshot 4](https://friction.graphics/assets/screenshots/friction-expressions.jpg)
-
-Power users are welcome! Friction provides support for expressions with ECMAScript in parameters and effects. Additionally, it includes a complete code editor with autocompletion, syntax highlighting, custom functions, and more.
-
-### Text and Path Effects
-
-![Screenshot 5](https://friction.graphics/assets/screenshots/friction-text-effect.jpg)
-
-Friction includes a diverse range of effects for enhancing your vector graphics and text. Stay tuned for upcoming releases, as we continue to expand our collection of effects.
-
-### Raster/Shader Effects
-
-![Screenshot 6](https://friction.graphics/assets/screenshots/friction-shader-effects.jpg)
-
-Friction offers support for user-customizable shader effects that can be added while the application is running. It includes a foundational set of core effects, such as motion blur.
-
-## System Requirements
-
-Most computers in use today should work just fine with Friction. The only strict requirements are:
-
-* OpenGL 3.3 compatible graphics card
-  * NVIDIA GeForce 8000 series or higher
-  * AMD Radeon HD 2000 series or higher
-  * Intel HD Graphics 4000 or higher
-* AVX compatible CPU
-  * Intel Sandy Bridge or higher
-  * AMD Bulldozer or higher
-
-In general, a dual-core laptop with 4GB of RAM should be usable for small projects. Larger projects and/or the use of raster graphics and effects will require more RAM and CPU/GPU power.
-
-## Supported Platforms
-
-Friction currently supports the following platforms:
-
-* Windows 10 / 11
-* Ubuntu 22.04 LTS / 23.04
-* Fedora 38
-* Enterprise Linux 9
-
-Platform support may undergo changes in future releases without prior notice.
+***Friction is beta quality, expect missing and/or broken features.***
 
 ## Contribute
 
