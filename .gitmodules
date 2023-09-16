@@ -7,3 +7,6 @@
 [submodule "src/plugins/shaders"]
 	path = src/plugins/shaders
 	url = https://github.com/friction2d/friction-shader-plugins
+[submodule "docs"]
+	path = docs
+	url = https://github.com/friction2d/friction2d.github.io
