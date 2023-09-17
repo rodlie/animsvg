@@ -72,8 +72,13 @@ PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
 
     addSeparator();
 
+    const auto gpuGroup = new QGroupBox(HardwareInfo::sGpuRenderer(),
+                                        this);
+    const auto gpuGroupLayout = new QVBoxLayout(gpuGroup);
+
     mAccPreferenceLabel = new QLabel(tr("Acceleration preference"));
-    const auto sliderLayout = new QHBoxLayout;
+    const auto sliderWidget = new QWidget(this);
+    const auto sliderLayout = new QHBoxLayout(sliderWidget);
     mAccPreferenceCpuLabel = new QLabel(tr("CPU"));
     mAccPreferenceSlider = new QSlider(Qt::Horizontal);
     mAccPreferenceSlider->setRange(0, 4);
@@ -81,26 +86,24 @@ PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
     sliderLayout->addWidget(mAccPreferenceCpuLabel);
     sliderLayout->addWidget(mAccPreferenceSlider);
     sliderLayout->addWidget(mAccPreferenceGpuLabel);
-    mAccPreferenceDescLabel = new QLabel();
+    mAccPreferenceDescLabel = new QLabel(this);
     mAccPreferenceDescLabel->setAlignment(Qt::AlignCenter);
     connect(mAccPreferenceSlider, &QSlider::valueChanged,
             this, &PerformanceSettingsWidget::updateAccPreferenceDesc);
-    addWidget(mAccPreferenceLabel);
-    addLayout(sliderLayout);
-    addWidget(mAccPreferenceDescLabel);
-
-    addSeparator();
+    gpuGroupLayout->addWidget(mAccPreferenceLabel);
+    gpuGroupLayout->addWidget(sliderWidget);
+    gpuGroupLayout->addWidget(mAccPreferenceDescLabel);
 
     mPathGpuAccCheck = new QCheckBox(tr("Path GPU acceleration"), this);
-    addWidget(mPathGpuAccCheck);
+    gpuGroupLayout->addWidget(mPathGpuAccCheck);
+    addWidget(gpuGroup);
 
-    const auto audioWidget = new QWidget(this);
-    audioWidget->setContentsMargins(0, 0, 0, 0);
+    const auto audioWidget = new QGroupBox(this);
+    audioWidget->setTitle(tr("Audio"));
 
     const auto audioLayout = new QHBoxLayout(audioWidget);
-    audioLayout->setContentsMargins(0, 0, 0, 0);
 
-    QLabel *audioLabel = new QLabel(tr("Audio Output"), this);
+    QLabel *audioLabel = new QLabel(tr("Output"), this);
     mAudioDevicesCombo = new QComboBox(this);
     mAudioDevicesCombo->setSizePolicy(QSizePolicy::Preferred,
                                       QSizePolicy::Preferred);

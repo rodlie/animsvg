@@ -54,8 +54,7 @@ class CORE_EXPORT eSettings : public QObject
 
 public:
     eSettings(const int cpuThreads,
-              const intKB ramKB,
-              const GpuVendor gpuVendor);
+              const intKB ramKB);
 
     // accessors
     static intMB sRamMBCap();
@@ -80,7 +79,6 @@ public:
     const intKB fRamKB;
     intMB fRamMBCap = intMB(0); // <= 0 - cap at 80 %
 
-    const GpuVendor fGpuVendor;
     AccPreference fAccPreference = AccPreference::defaultPreference;
     bool fPathGpuAcc = true;
 

@@ -56,22 +56,6 @@ extern "C" {
 
 #define GPU_NOT_COMPATIBLE gPrintException("Your GPU drivers do not seem to be compatible.")
 
-void printHardware()
-{
-    std::cout << "Hardware:" << std::endl;
-    std::cout << "    CPU Threads: " << HardwareInfo::sCpuThreads() << std::endl;
-    std::cout << "         Memory: " << intMB(HardwareInfo::sRamKB()).fValue << "MB" << std::endl;
-    std::cout << "            GPU: ";
-    switch(HardwareInfo::sGpuVendor()) {
-    case GpuVendor::amd: std::cout << "AMD"; break;
-    case GpuVendor::intel: std::cout << "Intel"; break;
-    case GpuVendor::nvidia: std::cout << "Nvidia"; break;
-    case GpuVendor::unrecognized: std::cout << "Unrecognized"; break;
-    }
-    std::cout << std::endl;
-    std::cout << std::endl;
-}
-
 void setDefaultFormat()
 {
     QSurfaceFormat format;
@@ -143,11 +127,9 @@ int main(int argc, char *argv[])
         GPU_NOT_COMPATIBLE;
         gPrintExceptionCritical(e);
     }
-    printHardware();
 
     eSettings settings(HardwareInfo::sCpuThreads(),
-                       HardwareInfo::sRamKB(),
-                       HardwareInfo::sGpuVendor());
+                       HardwareInfo::sRamKB());
 
     OS_FONT = QApplication::font();
     eSizesUI::font.setEvaluator([]() {

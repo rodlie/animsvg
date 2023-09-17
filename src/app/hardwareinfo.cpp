@@ -40,7 +40,9 @@ int HardwareInfo::mCpuThreads = -1;
 
 intKB HardwareInfo::mRamKB(0);
 
-GpuVendor HardwareInfo::mGpuVendor = GpuVendor::unrecognized;
+QString HardwareInfo::mGpuVendor = QObject::tr("Unknown");
+QString HardwareInfo::mGpuRenderer = QObject::tr("Unknown");
+QString HardwareInfo::mGpuVersion = QObject::tr("Unknown");
 
 intKB getTotalRamBytes() {
 #if defined(Q_OS_WIN)
@@ -77,7 +79,8 @@ intKB getTotalRamBytes() {
 
 #include "Private/Tasks/offscreenqgl33c.h"
 
-GpuVendor gpuVendor() {
+const QStringList gpuVendor()
+{
     OffscreenQGL33c gl;
     gl.initialize();
     gl.makeCurrent();
@@ -85,23 +88,19 @@ GpuVendor gpuVendor() {
     const QString renderer(reinterpret_cast<const char*>(gl.glGetString(GL_RENDERER)));
     const QString version(reinterpret_cast<const char*>(gl.glGetString(GL_VERSION)));
     gl.doneCurrent();
-    const auto checkVendor = [&vendor, &renderer, &version](const QString& str) {
-        return vendor.contains(str, Qt::CaseInsensitive) ||
-               renderer.contains(str, Qt::CaseInsensitive) ||
-               version.contains(str, Qt::CaseInsensitive);
-    };
-
-    if(checkVendor("nvidia") || checkVendor("nouveau")) return GpuVendor::nvidia;
-    if(checkVendor("intel")) return GpuVendor::intel;
-    if(checkVendor("amd") || checkVendor("ati") ||
-       checkVendor("advanced micro devices")) {
-        return GpuVendor::amd;
-    }
-    return GpuVendor::unrecognized;
+    QStringList specs;
+    QString na = QObject::tr("Unknown");
+    specs << (vendor.isEmpty() ? na : vendor);
+    specs << (renderer.isEmpty() ? na : renderer);
+    specs << (version.isEmpty() ? na : version);
+    return specs;
 }
 
 void HardwareInfo::sUpdateInfo() {
     mCpuThreads = QThread::idealThreadCount();
     mRamKB = getTotalRamBytes();
-    mGpuVendor = gpuVendor();
+    const auto gpu = gpuVendor();
+    mGpuVendor = gpu.at(0);
+    mGpuRenderer = gpu.at(1);
+    mGpuVersion = gpu.at(2);
 }

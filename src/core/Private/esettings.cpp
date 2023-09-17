@@ -162,12 +162,10 @@ eSettings* eSettings::sInstance = nullptr;
 static QList<stdsptr<eSetting>> gSettings;
 
 eSettings::eSettings(const int cpuThreads,
-                     const intKB ramKB,
-                     const GpuVendor gpuVendor)
+                     const intKB ramKB)
     : fUserSettingsDir(AppSupport::getAppConfigPath())
     , fCpuThreads(cpuThreads)
     , fRamKB(ramKB)
-    , fGpuVendor(gpuVendor)
 {
     Q_ASSERT(!sInstance);
     sInstance = this;
