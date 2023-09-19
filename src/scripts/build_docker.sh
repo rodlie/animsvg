@@ -144,7 +144,7 @@ fi
 
 if [ ! -d "${FRICTION_SRC_DIR}" ]; then
     cd ${FRICTION_ROOT}
-    git clone --recurse-submodules="src/plugins/shaders" https://github.com/friction2d/friction
+    git clone --recurse-submodules="src/plugins/shaders" --recurse-submodules="docs" https://github.com/friction2d/friction
     if [ "${FRICTION_BRANCH}" != "" ]; then
         (cd friction; git checkout ${FRICTION_BRANCH})
     fi
