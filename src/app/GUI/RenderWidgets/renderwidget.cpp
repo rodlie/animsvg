@@ -59,8 +59,10 @@ RenderWidget::RenderWidget(QWidget *parent)
     bottomWidget->setPalette(darkPal);
 
     mRenderProgressBar = new QProgressBar(this);
-    mRenderProgressBar->setObjectName(QString::fromUtf8("RenderProgressBar"));
-    mRenderProgressBar->setFormat(QString());
+    //mRenderProgressBar->setObjectName(QString::fromUtf8("RenderProgressBar"));
+    setSizePolicy(QSizePolicy::Expanding,
+                  QSizePolicy::Expanding);
+    mRenderProgressBar->setFormat("%p%");
     mRenderProgressBar->setValue(0);
 
     mStartRenderButton = new QPushButton(QIcon::fromTheme("play"),
@@ -194,6 +196,7 @@ void RenderWidget::render(RenderInstanceSettings &settings)
             this, [this](const RenderState state) {
         if (state == RenderState::finished) {
             mRenderProgressBar->setValue(mRenderProgressBar->maximum());
+            emit rendererFinished();
         }
     });
 }

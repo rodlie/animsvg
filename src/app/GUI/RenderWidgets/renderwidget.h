@@ -54,6 +54,7 @@ public:
 
 signals:
     void progress(int frame, int total);
+    void rendererFinished();
 
 private:
     void render(RenderInstanceSettings& settings);
