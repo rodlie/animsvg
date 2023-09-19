@@ -464,6 +464,7 @@ MainWindow::MainWindow(Document& document,
 MainWindow::~MainWindow()
 {
     std::cout << "Closing Friction, please wait ... " << std::endl;
+    if (mAutoSaveTimer->isActive()) { mAutoSaveTimer->stop(); }
     writeSettings();
     sInstance = nullptr;
 //    mtaskExecutorThread->terminate();
