@@ -35,6 +35,8 @@
 
 #include "appsupport.h"
 
+#include <QDesktopServices>
+
 RenderInstanceWidget::RenderInstanceWidget(
         Canvas *canvas, QWidget *parent) :
     ClosableContainer(parent), mSettings(canvas) {
@@ -150,6 +152,21 @@ void RenderInstanceWidget::iniGUI() {
     connect(mOutputDestinationButton, &QPushButton::pressed,
             this, &RenderInstanceWidget::openOutputDestinationDialog);
 
+    const auto playButton = new QPushButton(QIcon::fromTheme("play"),
+                                            QString(),
+                                            this);
+    playButton->setFocusPolicy(Qt::NoFocus);
+    playButton->setToolTip(tr("Open in default application"));
+    playButton->setSizePolicy(QSizePolicy::Preferred,
+                              QSizePolicy::Preferred);
+    connect(playButton, &QPushButton::pressed,
+            this, [this]() {
+        QString dst = mOutputDestinationLineEdit->text();
+        if (QFile::exists(dst)) {
+            QDesktopServices::openUrl(QUrl::fromLocalFile(dst));
+        }
+    });
+
     mOutputDestinationLineEdit = new QLineEdit(this);
     mOutputDestinationLineEdit->setFocusPolicy(Qt::NoFocus);
     mOutputDestinationLineEdit->setSizePolicy(QSizePolicy::Expanding,
@@ -164,6 +181,7 @@ void RenderInstanceWidget::iniGUI() {
     outputDesinationLayout->setMargin(0);
 
     outputDesinationLayout->addWidget(mOutputDestinationButton);
+    outputDesinationLayout->addWidget(playButton);
     outputDesinationLayout->addWidget(mOutputDestinationLineEdit);
 
     outputSettingsLayout->addWidget(outputDestinationWidget);
