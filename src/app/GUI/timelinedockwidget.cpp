@@ -289,17 +289,22 @@ bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
 {
     const int key = event->key();
     const auto mods = event->modifiers();
-    if (key == Qt::Key_Escape) {
-        const auto state = RenderHandler::sInstance->currentPreviewState();
-        if (state == PreviewSate::stopped) { return false; }
+    const auto state = RenderHandler::sInstance->currentPreviewState();
+    if (key == Qt::Key_Escape) { // stop playback
+        if (state == PreviewState::stopped) { return false; }
         interruptPreview();
-    } else if (key == Qt::Key_Space) {
-        const auto state = RenderHandler::sInstance->currentPreviewState();
-        switch(state) {
-            case PreviewSate::stopped: renderPreview(); break;
-            case PreviewSate::rendering: playPreview(); break;
-            case PreviewSate::playing: pausePreview(); break;
-            case PreviewSate::paused: resumePreview(); break;
+    } else if (key == Qt::Key_Space && (mods & Qt::ShiftModifier)) { // play from first frame
+        const auto scene = *mDocument.fActiveScene;
+        if (!scene) { return false; }
+        if (state != PreviewState::stopped) { interruptPreview(); }
+        scene->anim_setAbsFrame(scene->getFrameRange().fMin);
+        renderPreview();
+    } else if (key == Qt::Key_Space) { // start/resume playback
+        switch (state) {
+            case PreviewState::stopped: renderPreview(); break;
+            case PreviewState::rendering: playPreview(); break;
+            case PreviewState::playing: pausePreview(); break;
+            case PreviewState::paused: resumePreview(); break;
         }
     } else if (key == Qt::Key_Right && !(mods & Qt::ControlModifier)) {
         mDocument.incActiveSceneFrame();
