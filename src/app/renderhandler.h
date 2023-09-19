@@ -38,7 +38,7 @@ class Document;
 class VideoEncoder;
 class MemoryHandler;
 
-enum class PreviewSate {
+enum class PreviewState {
     stopped, rendering, playing, paused
 };
 
@@ -64,8 +64,8 @@ public:
 
     void setLoop(const bool loop);
 
-    PreviewSate currentPreviewState() const
-    { return mPreviewSate; }
+    PreviewState currentPreviewState() const
+    { return mPreviewState; }
 
     static RenderHandler* sInstance;
 signals:
@@ -85,7 +85,7 @@ private:
     void nextPreviewFrame();
     void nextCurrentRenderFrame();
 
-    void setPreviewState(const PreviewSate state);
+    void setPreviewState(const PreviewState state);
     void setRenderingPreview(const bool rendering);
     void setPreviewing(const bool previewing);
 
@@ -111,7 +111,7 @@ private:
     int mMaxPreviewFrame;
     int mMinPreviewFrame;
 
-    PreviewSate mPreviewSate = PreviewSate::stopped;
+    PreviewState mPreviewState = PreviewState::stopped;
     //! @brief true if preview is currently playing
     bool mPreviewing = false;
     //! @brief true if currently preview is being rendered

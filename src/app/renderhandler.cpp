@@ -151,19 +151,18 @@ void RenderHandler::nextCurrentRenderFrame() {
     else setFrameAction(mCurrentRenderFrame);
 }
 
-void RenderHandler::setPreviewState(const PreviewSate state) {
-    if(mPreviewSate == state) return;
-    if(mPreviewSate == PreviewSate::stopped) {
+void RenderHandler::setPreviewState(const PreviewState state)
+{
+    if (mPreviewState == state) { return; }
+    if (mPreviewState == PreviewState::stopped) {
         setRenderingPreview(true);
-    } else if(mPreviewSate == PreviewSate::rendering) {
+    } else if (mPreviewState == PreviewState::rendering) {
         setRenderingPreview(false);
-        if(state == PreviewSate::playing) {
-            setPreviewing(true);
-        }
-    } else if(state == PreviewSate::stopped) {
+        if (state == PreviewState::playing) { setPreviewing(true); }
+    } else if (state == PreviewState::stopped) {
         setPreviewing(false);
     }
-    mPreviewSate = state;
+    mPreviewState = state;
 }
 
 void RenderHandler::renderPreview() {
@@ -186,7 +185,7 @@ void RenderHandler::renderPreview() {
     mCurrentScene->setMinFrameUseRange(mCurrentRenderFrame);
     mCurrentSoundComposition->setMinFrameUseRange(mCurrentRenderFrame);
 
-    setPreviewState(PreviewSate::rendering);
+    setPreviewState(PreviewState::rendering);
 
     emit previewBeingRendered();
 
@@ -241,7 +240,7 @@ void RenderHandler::stopPreview() {
     mPreviewFPSTimer->stop();
     stopAudio();
     emit previewFinished();
-    setPreviewState(PreviewSate::stopped);
+    setPreviewState(PreviewState::stopped);
 }
 
 void RenderHandler::pausePreview() {
@@ -249,7 +248,7 @@ void RenderHandler::pausePreview() {
         mAudioHandler.pauseAudio();
         mPreviewFPSTimer->stop();
         emit previewPaused();
-        setPreviewState(PreviewSate::paused);
+        setPreviewState(PreviewState::paused);
     }
 }
 
@@ -258,7 +257,7 @@ void RenderHandler::resumePreview() {
         mAudioHandler.resumeAudio();
         mPreviewFPSTimer->start();
         emit previewBeingPlayed();
-        setPreviewState(PreviewSate::playing);
+        setPreviewState(PreviewState::playing);
     }
 }
 
@@ -288,7 +287,7 @@ void RenderHandler::playPreview() {
     mCurrentPreviewFrame = minPreviewFrame;
     mCurrentScene->setSceneFrame(mCurrentPreviewFrame);
 
-    setPreviewState(PreviewSate::playing);
+    setPreviewState(PreviewState::playing);
 
     startAudio();
 
