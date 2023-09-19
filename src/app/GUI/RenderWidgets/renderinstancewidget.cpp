@@ -100,7 +100,7 @@ void RenderInstanceWidget::iniGUI() {
     renderSettingsLabelWidget->setObjectName("darkWidget");
     QVBoxLayout *renderSettingsLayout = new QVBoxLayout(renderSettingsLabelWidget);
 
-    mRenderSettingsButton = new QPushButton(tr("Render Settings ..."));
+    mRenderSettingsButton = new QPushButton(tr("Scene ..."));
     mRenderSettingsButton->setFocusPolicy(Qt::NoFocus);
     mRenderSettingsButton->setObjectName("renderSettings");
     mRenderSettingsButton->setSizePolicy(QSizePolicy::Preferred,
@@ -117,7 +117,7 @@ void RenderInstanceWidget::iniGUI() {
 
     QWidget *outputSettingsLabelWidget = new QWidget(this);
     outputSettingsLabelWidget->setContentsMargins(0, 0, 0, 0);
-    outputSettingsLabelWidget->setObjectName("darkWidget");
+    //outputSettingsLabelWidget->setObjectName("darkWidget");
     QVBoxLayout *outputSettingsLayout = new QVBoxLayout(outputSettingsLabelWidget);
 
     mOutputSettingsProfilesButton = new OutputProfilesListButton(this);
@@ -125,7 +125,7 @@ void RenderInstanceWidget::iniGUI() {
     connect(mOutputSettingsProfilesButton, &OutputProfilesListButton::profileSelected,
             this, &RenderInstanceWidget::outputSettingsProfileSelected);
 
-    mOutputSettingsButton = new QPushButton(tr("Output Settings ..."));
+    mOutputSettingsButton = new QPushButton(tr("Output ..."));
     mOutputSettingsButton->setFocusPolicy(Qt::NoFocus);
     mOutputSettingsButton->setSizePolicy(QSizePolicy::Expanding,
                                          QSizePolicy::Preferred);
@@ -215,7 +215,7 @@ void RenderInstanceWidget::updateFromSettings() {
     QString destinationTxt = mSettings.getOutputDestination();
     mOutputDestinationLineEdit->setText(destinationTxt);
     const OutputSettings &outputSettings = mSettings.getOutputRenderSettings();
-    OutputSettingsProfile *outputProfile = mSettings.getOutputSettingsProfile();
+    /*OutputSettingsProfile *outputProfile = mSettings.getOutputSettingsProfile();
     QString outputTxt;
     if(outputProfile) {
         outputTxt = outputProfile->getName();
@@ -227,7 +227,8 @@ void RenderInstanceWidget::updateFromSettings() {
             outputTxt = tr("Output Settings ...");
         }
     }
-    mOutputSettingsButton->setText(outputTxt);
+
+    mOutputSettingsButton->setText(outputTxt);*/
     mOutputSettingsDisplayWidget->setOutputSettings(outputSettings);
 
     const RenderSettings &renderSettings = mSettings.getRenderSettings();
@@ -265,13 +266,13 @@ void RenderInstanceWidget::openOutputSettingsDialog() {
         mSettings.setOutputSettingsProfile(nullptr);
         OutputSettings outputSettings = dialog->getSettings();
         mSettings.setOutputRenderSettings(outputSettings);
-        const auto outputFormat = outputSettings.fOutputFormat;
+        /*const auto outputFormat = outputSettings.fOutputFormat;
         if(!outputFormat) {
             mOutputSettingsButton->setText("Settings");
         } else {
             mOutputSettingsButton->setText("Custom " +
                         QString(outputFormat->long_name));
-        }
+        }*/
         mOutputSettingsDisplayWidget->setOutputSettings(outputSettings);
         updateOutputDestinationFromCurrentFormat();
     }

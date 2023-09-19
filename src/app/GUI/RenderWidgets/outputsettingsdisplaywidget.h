@@ -59,39 +59,39 @@ private:
     }
 
     void setOutputFormatText(const QString &txt) {
-        mOutputFormatLabel->setText("<b>Format:</b> " + txt);
+        mOutputFormatLabel->setText("<b>Format:</b><br>" + txt);
     }
 
     void setVideoCodecText(const QString &txt) {
-        mVideoCodecLabel->setText("<b>Video codec:</b> " + txt);
+        mVideoCodecLabel->setText("<b>Video codec:</b><br>" + txt);
     }
 
     void setPixelFormatText(const QString &txt) {
-        mVideoPixelFormatLabel->setText("<b>Pixel format:</b> " + txt);
+        mVideoPixelFormatLabel->setText("<b>Pixel format:</b><br>" + txt);
     }
 
     void setVideoBitrateText(const QString &txt) {
-        mVideoBitrateLabel->setText("<b>Video bitrate:</b> " + txt);
+        mVideoBitrateLabel->setText("<b>Video bitrate:</b><br>" + txt);
     }
 
     void setAudioCodecText(const QString &txt) {
-        mAudioCodecLabel->setText("<b>Audio codec:</b> " + txt);
+        mAudioCodecLabel->setText("<b>Audio codec:</b><br>" + txt);
     }
 
     void setAudioSampleRateText(const QString &txt) {
-        mAudioSampleRateLabel->setText("<b>Audio sample rate:</b> " + txt);
+        mAudioSampleRateLabel->setText("<b>Audio sample rate:</b><br>" + txt);
     }
 
     void setAudioSampleFormatText(const QString &txt) {
-        mAudioSampleFormatLabel->setText("<b>Audio sample format:</b> " + txt);
+        mAudioSampleFormatLabel->setText("<b>Audio sample format:</b><br>" + txt);
     }
 
     void setAudioBitrateText(const QString &txt) {
-        mAudioBitrateLabel->setText("<b>Audio bitrate:</b> " + txt);
+        mAudioBitrateLabel->setText("<b>Audio bitrate:</b><br>" + txt);
     }
 
     void setAudioChannelLayoutText(const QString &txt) {
-        mAudioChannelLayoutLabel->setText("<b>Audio channel layout:</b> " + txt);
+        mAudioChannelLayoutLabel->setText("<b>Audio channel layout:</b><br>" + txt);
     }
 
     QVBoxLayout *mMainLayout;

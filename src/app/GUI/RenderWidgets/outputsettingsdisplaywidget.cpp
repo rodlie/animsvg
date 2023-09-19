@@ -32,15 +32,26 @@ OutputSettingsDisplayWidget::OutputSettingsDisplayWidget(QWidget *parent)
     mMainLayout = new QVBoxLayout(this);
     setLayout(mMainLayout);
     mAudioVideoLayout = new QVBoxLayout();
-    mOutputFormatLabel = new QLabel("<b>Format:</b>", this);
-    mVideoCodecLabel = new QLabel("<b>Video codec:</b>", this);
-    mVideoPixelFormatLabel = new QLabel("<b>Pixel format:</b>", this);
-    mVideoBitrateLabel = new QLabel("<b>Video bitrate:</b>", this);
-    mAudioCodecLabel = new QLabel("<b>Audio codec:</b>", this);
-    mAudioSampleRateLabel = new QLabel("<b>Audio sample rate:</b>", this);
-    mAudioSampleFormatLabel = new QLabel("<b>Audio sample format:</b>", this);
-    mAudioBitrateLabel = new QLabel("<b>Audio bitrate:</b>", this);
-    mAudioChannelLayoutLabel = new QLabel("<b>Audio channel layout:</b>", this);
+    mOutputFormatLabel = new QLabel("<b>Format:</b><br>", this);
+    mVideoCodecLabel = new QLabel("<b>Video codec:</b><br>", this);
+    mVideoPixelFormatLabel = new QLabel("<b>Pixel format:</b><br>", this);
+    mVideoBitrateLabel = new QLabel("<b>Video bitrate:</b><br>", this);
+    mAudioCodecLabel = new QLabel("<b>Audio codec:</b><br>", this);
+    mAudioSampleRateLabel = new QLabel("<b>Audio sample rate:</b><br>", this);
+    mAudioSampleFormatLabel = new QLabel("<b>Audio sample format:</b><br>", this);
+    mAudioBitrateLabel = new QLabel("<b>Audio bitrate:</b><br>", this);
+    mAudioChannelLayoutLabel = new QLabel("<b>Audio channel layout:</b><br>", this);
+
+    mOutputFormatLabel->setWordWrap(true);
+    mVideoCodecLabel->setWordWrap(true);
+    mVideoCodecLabel->setWordWrap(true);
+    mVideoPixelFormatLabel->setWordWrap(true);
+    mVideoBitrateLabel->setWordWrap(true);
+    mAudioCodecLabel->setWordWrap(true);
+    mAudioSampleRateLabel->setWordWrap(true);
+    mAudioSampleFormatLabel->setWordWrap(true);
+    mAudioBitrateLabel->setWordWrap(true);
+    mAudioChannelLayoutLabel->setWordWrap(true);
 
     mVideoLayout = new QVBoxLayout();
     mVideoLayout->addWidget(mVideoCodecLabel);
@@ -57,8 +68,8 @@ OutputSettingsDisplayWidget::OutputSettingsDisplayWidget(QWidget *parent)
     mAudioVideoLayout->addLayout(mVideoLayout);
     mAudioVideoLayout->addLayout(mAudioLayout);
 
-    mAudioLayout->setSpacing(0);
-    mVideoLayout->setSpacing(0);
+    //mAudioLayout->setSpacing(0);
+    //mVideoLayout->setSpacing(0);
 
     mMainLayout->addWidget(mOutputFormatLabel);
     mMainLayout->addLayout(mAudioVideoLayout);
