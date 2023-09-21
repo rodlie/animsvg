@@ -48,6 +48,7 @@
 #include "timelinebasewrappernode.h"
 #include "triggerlabel.h"
 #include "qdoubleslider.h"
+#include "renderhandler.h"
 
 class FrameScrollBar;
 class TimelineWidget;
@@ -73,6 +74,10 @@ public:
     void previewBeingPlayed();
     void previewBeingRendered();
     void previewPaused();
+
+    bool setPreviewFromStart(PreviewState state);
+    bool setNextKeyframe();
+    bool setPrevKeyframe();
 
     void updateSettingsForCurrentCanvas(Canvas * const canvas);
 

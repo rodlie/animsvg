@@ -115,10 +115,12 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
                                            this);
     connect(mPlayFromBeginningButton, &QAction::triggered,
             this, [this]() {
-        const auto scene = *mDocument.fActiveScene;
+        /*const auto scene = *mDocument.fActiveScene;
         if (!scene) { return; }
         scene->anim_setAbsFrame(scene->getFrameRange().fMin);
-        renderPreview();
+        renderPreview();*/
+        const auto state = RenderHandler::sInstance->currentPreviewState();
+        setPreviewFromStart(state);
     });
 
     mPlayButton = new QAction(QIcon::fromTheme("play"),
@@ -294,11 +296,12 @@ bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
         if (state == PreviewState::stopped) { return false; }
         interruptPreview();
     } else if (key == Qt::Key_Space && (mods & Qt::ShiftModifier)) { // play from first frame
-        const auto scene = *mDocument.fActiveScene;
+        /*const auto scene = *mDocument.fActiveScene;
         if (!scene) { return false; }
         if (state != PreviewState::stopped) { interruptPreview(); }
         scene->anim_setAbsFrame(scene->getFrameRange().fMin);
-        renderPreview();
+        renderPreview();*/
+        if (!setPreviewFromStart(state)) { return false; }
     } else if (key == Qt::Key_Space) { // start/resume playback
         switch (state) {
             case PreviewState::stopped: renderPreview(); break;
@@ -306,26 +309,28 @@ bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
             case PreviewState::playing: pausePreview(); break;
             case PreviewState::paused: resumePreview(); break;
         }
-    } else if (key == Qt::Key_Right && !(mods & Qt::ControlModifier)) {
+    } else if (key == Qt::Key_Right && !(mods & Qt::ControlModifier)) { // next frame
         mDocument.incActiveSceneFrame();
-    } else if (key == Qt::Key_Left && !(mods & Qt::ControlModifier)) {
+    } else if (key == Qt::Key_Left && !(mods & Qt::ControlModifier)) { // previous frame
         mDocument.decActiveSceneFrame();
-    } else if (key == Qt::Key_Down && !(mods & Qt::ControlModifier)) {
-        const auto scene = *mDocument.fActiveScene;
+    } else if (key == Qt::Key_Down && !(mods & Qt::ControlModifier)) { // previous keyframe
+        /*const auto scene = *mDocument.fActiveScene;
         if (!scene) { return false; }
         int targetFrame;
         const int frame = mDocument.getActiveSceneFrame();
         if (scene->anim_prevRelFrameWithKey(frame, targetFrame)) {
             mDocument.setActiveSceneFrame(targetFrame);
-        }
-    } else if (key == Qt::Key_Up && !(mods & Qt::ControlModifier)) {
-        const auto scene = *mDocument.fActiveScene;
+        }*/
+        if (!setPrevKeyframe()) { return false; }
+    } else if (key == Qt::Key_Up && !(mods & Qt::ControlModifier)) { // next keyframe
+        /*const auto scene = *mDocument.fActiveScene;
         if (!scene) { return false; }
         int targetFrame;
         const int frame = mDocument.getActiveSceneFrame();
         if (scene->anim_nextRelFrameWithKey(frame, targetFrame)) {
             mDocument.setActiveSceneFrame(targetFrame);
-        }
+        }*/
+        if (!setNextKeyframe()) { return false; }
     } else {
         return false;
     }
@@ -391,6 +396,40 @@ void TimelineDockWidget::previewPaused()
     disconnect(mPlayButton, nullptr, this, nullptr);
     connect(mPlayButton, &QAction::triggered,
             this, &TimelineDockWidget::resumePreview);
+}
+
+bool TimelineDockWidget::setPreviewFromStart(PreviewState state)
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return false; }
+    if (state != PreviewState::stopped) { interruptPreview(); }
+    scene->anim_setAbsFrame(scene->getFrameRange().fMin);
+    renderPreview();
+    return true;
+}
+
+bool TimelineDockWidget::setNextKeyframe()
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return false; }
+    int targetFrame;
+    const int frame = mDocument.getActiveSceneFrame();
+    if (scene->anim_nextRelFrameWithKey(frame, targetFrame)) {
+        mDocument.setActiveSceneFrame(targetFrame);
+    }
+    return true;
+}
+
+bool TimelineDockWidget::setPrevKeyframe()
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return false; }
+    int targetFrame;
+    const int frame = mDocument.getActiveSceneFrame();
+    if (scene->anim_prevRelFrameWithKey(frame, targetFrame)) {
+        mDocument.setActiveSceneFrame(targetFrame);
+    }
+    return true;
 }
 
 void TimelineDockWidget::resumePreview()
