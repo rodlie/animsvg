@@ -38,8 +38,22 @@ else()
     add_definitions(-DQT_MESSAGELOGCONTEXT)
 endif()
 
-if (MSVC)
+if(MSVC)
     add_definitions("/MP")
+endif()
+
+if(UNIX AND NOT APPLE)
+    option(STATIC_FFMPEG "Link against static ffmpeg" OFF)
+    if(${STATIC_FFMPEG})
+        set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-Bsymbolic")
+    endif()
+endif()
+
+if(NOT WIN32)
+    if ((NOT ${CMAKE_VERSION} VERSION_LESS 3.11) AND (NOT OpenGL_GL_PREFERENCE))
+        set(OpenGL_GL_PREFERENCE "GLVND")
+    endif()
+    find_package(OpenGL REQUIRED)
 endif()
 
 find_package(PkgConfig QUIET)
@@ -78,6 +92,7 @@ else()
     else()
         set(SKIA_LIBRARIES
             skia
-            fontconfig)
+            fontconfig
+            ${OPENGL_LIBRARY})
     endif()
 endif()

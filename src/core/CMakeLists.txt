@@ -37,12 +37,6 @@ add_definitions(-DPROJECT_GIT="${GIT_COMMIT}")
 add_definitions(-DPROJECT_BRANCH="${GIT_BRANCH}")
 add_definitions(-DPROJECT_TAG="${GIT_TAG}")
 
-option(STATIC_FFMPEG "Link against static ffmpeg" OFF)
-
-if(${STATIC_FFMPEG})
-    set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-Bsymbolic")
-endif()
-
 add_definitions(-DCORE_LIBRARY)
 
 include_directories(
@@ -681,13 +675,11 @@ set(
     zipfilesaver.h
 )
 
-add_library(
-    ${PROJECT_NAME}
-    SHARED
-    ${HEADERS}
-    ${SOURCES}
-    coreresources.qrc
-)
+if(NOT WIN32)
+    add_library(${PROJECT_NAME} STATIC ${HEADERS} ${SOURCES} coreresources.qrc)
+else()
+    add_library(${PROJECT_NAME} SHARED ${HEADERS} ${SOURCES} coreresources.qrc)
+endif()
 
 set_target_properties(
     ${PROJECT_NAME}
@@ -731,12 +723,12 @@ if(APPLE)
     )
 endif()
 
-if(UNIX AND NOT APPLE)
-    include(GNUInstallDirs)
-    install(
-        TARGETS
-        ${PROJECT_NAME}
-        DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}
-    )
-endif()
+#if(UNIX AND NOT APPLE)
+#    include(GNUInstallDirs)
+#    install(
+#        TARGETS
+#        ${PROJECT_NAME}
+#        DESTINATION
+#        ${CMAKE_INSTALL_LIBDIR}
+#    )
+#endif()
