@@ -186,6 +186,9 @@ void RenderInstanceSettings::read(eReadStream &src) {
     mRenderSettings.read(src);
     mOutputSettings.read(src);
 
+    // always set render state to none on read
+    mState = RenderState::none;
+
     QString outputProfile; src >> outputProfile;
     const auto profile = OutputSettingsProfile::sGetByName(outputProfile);
     setOutputSettingsProfile(profile);
