@@ -34,16 +34,18 @@ public:
 
     static int sCpuThreads() { return mCpuThreads; }
     static intKB sRamKB() { return mRamKB; }
-    static const QString sGpuVendor() { return mGpuVendor; }
-    static const QString sGpuRenderer() { return mGpuRenderer; }
-    static const QString sGpuVersion() { return mGpuVersion; }
+    static GpuVendor sGpuVendor() { return mGpuVendor; }
+    static const QString sGpuVendorString() { return mGpuVendorString; }
+    static const QString sGpuRendererString() { return mGpuRendererString; }
+    static const QString sGpuVersionString() { return mGpuVersionString; }
 
 private:
     static int mCpuThreads;
     static intKB mRamKB;
-    static QString mGpuVendor;
-    static QString mGpuRenderer;
-    static QString mGpuVersion;
+    static GpuVendor mGpuVendor;
+    static QString mGpuVendorString;
+    static QString mGpuRendererString;
+    static QString mGpuVersionString;
 };
 
 #endif // HARDWAREINFO_H

@@ -100,7 +100,6 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
 
     setDefaultFormat();
-    std::cout << "Setup Default QSurfaceFormat" << std::endl;
     QApplication app(argc, argv);
     setlocale(LC_NUMERIC, "C");
 
@@ -127,6 +126,11 @@ int main(int argc, char *argv[])
         GPU_NOT_COMPATIBLE;
         gPrintExceptionCritical(e);
     }
+
+    std::cout << "GPU Vendor: " << HardwareInfo::sGpuVendorString().toStdString() << std::endl
+              << "GPU Renderer: " << HardwareInfo::sGpuRendererString().toStdString() << std::endl
+              << "GPU Version: " << HardwareInfo::sGpuVersionString().toStdString() << std::endl
+              << "---" << std::endl;
 
     eSettings settings(HardwareInfo::sCpuThreads(),
                        HardwareInfo::sRamKB());

@@ -72,7 +72,7 @@ PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
 
     addSeparator();
 
-    const auto gpuGroup = new QGroupBox(HardwareInfo::sGpuRenderer(),
+    const auto gpuGroup = new QGroupBox(HardwareInfo::sGpuRendererString(),
                                         this);
     const auto gpuGroupLayout = new QVBoxLayout(gpuGroup);
 

@@ -40,9 +40,10 @@ int HardwareInfo::mCpuThreads = -1;
 
 intKB HardwareInfo::mRamKB(0);
 
-QString HardwareInfo::mGpuVendor = QObject::tr("Unknown");
-QString HardwareInfo::mGpuRenderer = QObject::tr("Unknown");
-QString HardwareInfo::mGpuVersion = QObject::tr("Unknown");
+GpuVendor HardwareInfo::mGpuVendor = GpuVendor::unrecognized;
+QString HardwareInfo::mGpuVendorString = QObject::tr("Unknown");
+QString HardwareInfo::mGpuRendererString = QObject::tr("Unknown");
+QString HardwareInfo::mGpuVersionString = QObject::tr("Unknown");
 
 intKB getTotalRamBytes() {
 #if defined(Q_OS_WIN)
@@ -79,7 +80,7 @@ intKB getTotalRamBytes() {
 
 #include "Private/Tasks/offscreenqgl33c.h"
 
-const QStringList gpuVendor()
+const QPair<GpuVendor, QStringList> gpuVendor()
 {
     OffscreenQGL33c gl;
     gl.initialize();
@@ -88,19 +89,34 @@ const QStringList gpuVendor()
     const QString renderer(reinterpret_cast<const char*>(gl.glGetString(GL_RENDERER)));
     const QString version(reinterpret_cast<const char*>(gl.glGetString(GL_VERSION)));
     gl.doneCurrent();
+
+    GpuVendor gpu = GpuVendor::unrecognized;
+    const auto checkVendor = [&vendor, &renderer, &version](const QString &str) {
+        return (vendor.contains(str, Qt::CaseInsensitive) ||
+                renderer.contains(str, Qt::CaseInsensitive) ||
+                version.contains(str, Qt::CaseInsensitive));
+    };
+    if (checkVendor("nvidia") || checkVendor("nouveau")) { gpu = GpuVendor::nvidia; }
+    if (checkVendor("intel")) { gpu = GpuVendor::intel; }
+    if (checkVendor("amd") || checkVendor("ati") ||
+        checkVendor("advanced micro devices")) {
+        gpu = GpuVendor::amd;
+    }
+
     QStringList specs;
     QString na = QObject::tr("Unknown");
     specs << (vendor.isEmpty() ? na : vendor);
     specs << (renderer.isEmpty() ? na : renderer);
     specs << (version.isEmpty() ? na : version);
-    return specs;
+    return QPair<GpuVendor, QStringList>(gpu, specs);
 }
 
 void HardwareInfo::sUpdateInfo() {
     mCpuThreads = QThread::idealThreadCount();
     mRamKB = getTotalRamBytes();
     const auto gpu = gpuVendor();
-    mGpuVendor = gpu.at(0);
-    mGpuRenderer = gpu.at(1);
-    mGpuVersion = gpu.at(2);
+    mGpuVendor = gpu.first;
+    mGpuVendorString = gpu.second.at(0);
+    mGpuRendererString = gpu.second.at(1);
+    mGpuVersionString = gpu.second.at(2);
 }
