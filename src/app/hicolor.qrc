@@ -81,6 +81,7 @@
  <file>icons/hicolor/16x16/actions/split_v.png</file>
  <file>icons/hicolor/16x16/actions/stop.png</file>
  <file>icons/hicolor/16x16/actions/textCreate.png</file>
+ <file>icons/hicolor/16x16/actions/trash.png</file>
  <file>icons/hicolor/16x16/actions/zoom.png</file>
  <file>icons/hicolor/16x16/apps/friction.png</file>
  <file>icons/hicolor/16x16/mimetypes/application-x-friction.png</file>
@@ -164,6 +165,7 @@
  <file>icons/hicolor/22x22/actions/split_v.png</file>
  <file>icons/hicolor/22x22/actions/stop.png</file>
  <file>icons/hicolor/22x22/actions/textCreate.png</file>
+ <file>icons/hicolor/22x22/actions/trash.png</file>
  <file>icons/hicolor/22x22/actions/zoom.png</file>
  <file>icons/hicolor/22x22/apps/friction.png</file>
  <file>icons/hicolor/22x22/mimetypes/application-x-friction.png</file>
@@ -247,6 +249,7 @@
  <file>icons/hicolor/32x32/actions/split_v.png</file>
  <file>icons/hicolor/32x32/actions/stop.png</file>
  <file>icons/hicolor/32x32/actions/textCreate.png</file>
+ <file>icons/hicolor/32x32/actions/trash.png</file>
  <file>icons/hicolor/32x32/actions/zoom.png</file>
  <file>icons/hicolor/32x32/apps/friction.png</file>
  <file>icons/hicolor/32x32/mimetypes/application-x-friction.png</file>
@@ -330,6 +333,7 @@
  <file>icons/hicolor/48x48/actions/split_v.png</file>
  <file>icons/hicolor/48x48/actions/stop.png</file>
  <file>icons/hicolor/48x48/actions/textCreate.png</file>
+ <file>icons/hicolor/48x48/actions/trash.png</file>
  <file>icons/hicolor/48x48/actions/zoom.png</file>
  <file>icons/hicolor/48x48/apps/friction.png</file>
  <file>icons/hicolor/48x48/mimetypes/application-x-friction.png</file>
@@ -413,6 +417,7 @@
  <file>icons/hicolor/64x64/actions/split_v.png</file>
  <file>icons/hicolor/64x64/actions/stop.png</file>
  <file>icons/hicolor/64x64/actions/textCreate.png</file>
+ <file>icons/hicolor/64x64/actions/trash.png</file>
  <file>icons/hicolor/64x64/actions/zoom.png</file>
  <file>icons/hicolor/64x64/apps/friction.png</file>
  <file>icons/hicolor/64x64/mimetypes/application-x-friction.png</file>
@@ -496,6 +501,7 @@
  <file>icons/hicolor/96x96/actions/split_v.png</file>
  <file>icons/hicolor/96x96/actions/stop.png</file>
  <file>icons/hicolor/96x96/actions/textCreate.png</file>
+ <file>icons/hicolor/96x96/actions/trash.png</file>
  <file>icons/hicolor/96x96/actions/zoom.png</file>
  <file>icons/hicolor/96x96/apps/friction.png</file>
  <file>icons/hicolor/96x96/mimetypes/application-x-friction.png</file>
@@ -579,6 +585,7 @@
  <file>icons/hicolor/128x128/actions/split_v.png</file>
  <file>icons/hicolor/128x128/actions/stop.png</file>
  <file>icons/hicolor/128x128/actions/textCreate.png</file>
+ <file>icons/hicolor/128x128/actions/trash.png</file>
  <file>icons/hicolor/128x128/actions/zoom.png</file>
  <file>icons/hicolor/128x128/apps/friction.png</file>
  <file>icons/hicolor/128x128/mimetypes/application-x-friction.png</file>
@@ -662,6 +669,7 @@
  <file>icons/hicolor/192x192/actions/split_v.png</file>
  <file>icons/hicolor/192x192/actions/stop.png</file>
  <file>icons/hicolor/192x192/actions/textCreate.png</file>
+ <file>icons/hicolor/192x192/actions/trash.png</file>
  <file>icons/hicolor/192x192/actions/zoom.png</file>
  <file>icons/hicolor/192x192/apps/friction.png</file>
  <file>icons/hicolor/192x192/mimetypes/application-x-friction.png</file>
@@ -745,6 +753,7 @@
  <file>icons/hicolor/256x256/actions/split_v.png</file>
  <file>icons/hicolor/256x256/actions/stop.png</file>
  <file>icons/hicolor/256x256/actions/textCreate.png</file>
+ <file>icons/hicolor/256x256/actions/trash.png</file>
  <file>icons/hicolor/256x256/actions/zoom.png</file>
  <file>icons/hicolor/256x256/apps/friction.png</file>
  <file>icons/hicolor/256x256/mimetypes/application-x-friction.png</file>

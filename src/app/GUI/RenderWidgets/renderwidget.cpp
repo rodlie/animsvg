@@ -74,14 +74,25 @@ RenderWidget::RenderWidget(QWidget *parent)
     connect(mStartRenderButton, &QPushButton::pressed,
             this, qOverload<>(&RenderWidget::render));
 
-    mStopRenderButton = new QPushButton(QIcon::fromTheme("stop"),
-                                        tr("Stop"),
+    mStopRenderButton = new QPushButton(QIcon::fromTheme("cancel"),
+                                        QString(),
                                         this);
+    mStopRenderButton->setToolTip(tr("Stop Rendering"));
     mStopRenderButton->setFocusPolicy(Qt::NoFocus);
     mStopRenderButton->setSizePolicy(QSizePolicy::Preferred,
                                      QSizePolicy::Preferred);
     connect(mStopRenderButton, &QPushButton::pressed,
             this, &RenderWidget::stopRendering);
+
+    const auto mClearQueueButton = new QPushButton(QIcon::fromTheme("trash"),
+                                                   QString(),
+                                                   this);
+    mClearQueueButton->setToolTip(tr("Clear Queue"));
+    mClearQueueButton->setFocusPolicy(Qt::NoFocus);
+    mClearQueueButton->setSizePolicy(QSizePolicy::Preferred,
+                                     QSizePolicy::Preferred);
+    connect(mClearQueueButton, &QPushButton::pressed,
+            this, &RenderWidget::clearRenderQueue);
 
     mContWidget = new QWidget(this);
     mContWidget->setContentsMargins(0, 0, 0, 0);
@@ -98,6 +109,7 @@ RenderWidget::RenderWidget(QWidget *parent)
     bottomLayout->addWidget(mRenderProgressBar);
     bottomLayout->addWidget(mStartRenderButton);
     bottomLayout->addWidget(mStopRenderButton);
+    bottomLayout->addWidget(mClearQueueButton);
 
     mMainLayout->addWidget(mScrollArea);
     mMainLayout->addWidget(bottomWidget);
