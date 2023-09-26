@@ -198,6 +198,28 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
         mDocument.actionFinished();
     });
 
+    const auto mPrevKeyframeAct = new QAction(QIcon::fromTheme("prev_keyframe"),
+                                              QString(),
+                                              this);
+    mPrevKeyframeAct->setToolTip(tr("Previous Keyframe"));
+    connect(mPrevKeyframeAct, &QAction::triggered,
+            this, [this]() {
+        if (setPrevKeyframe()) {
+            mDocument.actionFinished();
+        }
+    });
+
+    const auto mNextKeyframeAct = new QAction(QIcon::fromTheme("next_keyframe"),
+                                              QString(),
+                                              this);
+    mNextKeyframeAct->setToolTip(tr("Next Keyframe"));
+    connect(mNextKeyframeAct, &QAction::triggered,
+            this, [this]() {
+        if (setNextKeyframe()) {
+            mDocument.actionFinished();
+        }
+    });
+
     mToolBar = new QToolBar(this);
     mToolBar->setMovable(false);
 
@@ -215,7 +237,9 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mToolBar->addWidget(spacerWidget1);
 
     mToolBar->addAction(mFrameRewindAct);
+    mToolBar->addAction(mPrevKeyframeAct);
     mToolBar->addAction(mPlayFromBeginningButton);
+    mToolBar->addAction(mNextKeyframeAct);
     mToolBar->addAction(mFrameFastForwardAct);
     mRenderProgressAct = mToolBar->addWidget(mRenderProgress);
     mCurrentFrameSpinAct = mToolBar->addWidget(mCurrentFrameSpin);
