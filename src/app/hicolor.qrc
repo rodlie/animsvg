@@ -39,6 +39,7 @@
  <file>icons/hicolor/16x16/actions/loop.png</file>
  <file>icons/hicolor/16x16/actions/minus.png</file>
  <file>icons/hicolor/16x16/actions/newEmpty.png</file>
+ <file>icons/hicolor/16x16/actions/next_keyframe.png</file>
  <file>icons/hicolor/16x16/actions/nodeConnect.png</file>
  <file>icons/hicolor/16x16/actions/nodeCorner.png</file>
  <file>icons/hicolor/16x16/actions/nodeDisconnect.png</file>
@@ -67,6 +68,7 @@
  <file>icons/hicolor/16x16/actions/pointTransform.png</file>
  <file>icons/hicolor/16x16/actions/preferences.png</file>
  <file>icons/hicolor/16x16/actions/preview.png</file>
+ <file>icons/hicolor/16x16/actions/prev_keyframe.png</file>
  <file>icons/hicolor/16x16/actions/question.png</file>
  <file>icons/hicolor/16x16/actions/quit.png</file>
  <file>icons/hicolor/16x16/actions/rectCreate.png</file>
@@ -123,6 +125,7 @@
  <file>icons/hicolor/22x22/actions/loop.png</file>
  <file>icons/hicolor/22x22/actions/minus.png</file>
  <file>icons/hicolor/22x22/actions/newEmpty.png</file>
+ <file>icons/hicolor/22x22/actions/next_keyframe.png</file>
  <file>icons/hicolor/22x22/actions/nodeConnect.png</file>
  <file>icons/hicolor/22x22/actions/nodeCorner.png</file>
  <file>icons/hicolor/22x22/actions/nodeDisconnect.png</file>
@@ -151,6 +154,7 @@
  <file>icons/hicolor/22x22/actions/pointTransform.png</file>
  <file>icons/hicolor/22x22/actions/preferences.png</file>
  <file>icons/hicolor/22x22/actions/preview.png</file>
+ <file>icons/hicolor/22x22/actions/prev_keyframe.png</file>
  <file>icons/hicolor/22x22/actions/question.png</file>
  <file>icons/hicolor/22x22/actions/quit.png</file>
  <file>icons/hicolor/22x22/actions/rectCreate.png</file>
@@ -207,6 +211,7 @@
  <file>icons/hicolor/32x32/actions/loop.png</file>
  <file>icons/hicolor/32x32/actions/minus.png</file>
  <file>icons/hicolor/32x32/actions/newEmpty.png</file>
+ <file>icons/hicolor/32x32/actions/next_keyframe.png</file>
  <file>icons/hicolor/32x32/actions/nodeConnect.png</file>
  <file>icons/hicolor/32x32/actions/nodeCorner.png</file>
  <file>icons/hicolor/32x32/actions/nodeDisconnect.png</file>
@@ -235,6 +240,7 @@
  <file>icons/hicolor/32x32/actions/pointTransform.png</file>
  <file>icons/hicolor/32x32/actions/preferences.png</file>
  <file>icons/hicolor/32x32/actions/preview.png</file>
+ <file>icons/hicolor/32x32/actions/prev_keyframe.png</file>
  <file>icons/hicolor/32x32/actions/question.png</file>
  <file>icons/hicolor/32x32/actions/quit.png</file>
  <file>icons/hicolor/32x32/actions/rectCreate.png</file>
@@ -291,6 +297,7 @@
  <file>icons/hicolor/48x48/actions/loop.png</file>
  <file>icons/hicolor/48x48/actions/minus.png</file>
  <file>icons/hicolor/48x48/actions/newEmpty.png</file>
+ <file>icons/hicolor/48x48/actions/next_keyframe.png</file>
  <file>icons/hicolor/48x48/actions/nodeConnect.png</file>
  <file>icons/hicolor/48x48/actions/nodeCorner.png</file>
  <file>icons/hicolor/48x48/actions/nodeDisconnect.png</file>
@@ -319,6 +326,7 @@
  <file>icons/hicolor/48x48/actions/pointTransform.png</file>
  <file>icons/hicolor/48x48/actions/preferences.png</file>
  <file>icons/hicolor/48x48/actions/preview.png</file>
+ <file>icons/hicolor/48x48/actions/prev_keyframe.png</file>
  <file>icons/hicolor/48x48/actions/question.png</file>
  <file>icons/hicolor/48x48/actions/quit.png</file>
  <file>icons/hicolor/48x48/actions/rectCreate.png</file>
@@ -375,6 +383,7 @@
  <file>icons/hicolor/64x64/actions/loop.png</file>
  <file>icons/hicolor/64x64/actions/minus.png</file>
  <file>icons/hicolor/64x64/actions/newEmpty.png</file>
+ <file>icons/hicolor/64x64/actions/next_keyframe.png</file>
  <file>icons/hicolor/64x64/actions/nodeConnect.png</file>
  <file>icons/hicolor/64x64/actions/nodeCorner.png</file>
  <file>icons/hicolor/64x64/actions/nodeDisconnect.png</file>
@@ -403,6 +412,7 @@
  <file>icons/hicolor/64x64/actions/pointTransform.png</file>
  <file>icons/hicolor/64x64/actions/preferences.png</file>
  <file>icons/hicolor/64x64/actions/preview.png</file>
+ <file>icons/hicolor/64x64/actions/prev_keyframe.png</file>
  <file>icons/hicolor/64x64/actions/question.png</file>
  <file>icons/hicolor/64x64/actions/quit.png</file>
  <file>icons/hicolor/64x64/actions/rectCreate.png</file>
@@ -459,6 +469,7 @@
  <file>icons/hicolor/96x96/actions/loop.png</file>
  <file>icons/hicolor/96x96/actions/minus.png</file>
  <file>icons/hicolor/96x96/actions/newEmpty.png</file>
+ <file>icons/hicolor/96x96/actions/next_keyframe.png</file>
  <file>icons/hicolor/96x96/actions/nodeConnect.png</file>
  <file>icons/hicolor/96x96/actions/nodeCorner.png</file>
  <file>icons/hicolor/96x96/actions/nodeDisconnect.png</file>
@@ -487,6 +498,7 @@
  <file>icons/hicolor/96x96/actions/pointTransform.png</file>
  <file>icons/hicolor/96x96/actions/preferences.png</file>
  <file>icons/hicolor/96x96/actions/preview.png</file>
+ <file>icons/hicolor/96x96/actions/prev_keyframe.png</file>
  <file>icons/hicolor/96x96/actions/question.png</file>
  <file>icons/hicolor/96x96/actions/quit.png</file>
  <file>icons/hicolor/96x96/actions/rectCreate.png</file>
@@ -543,6 +555,7 @@
  <file>icons/hicolor/128x128/actions/loop.png</file>
  <file>icons/hicolor/128x128/actions/minus.png</file>
  <file>icons/hicolor/128x128/actions/newEmpty.png</file>
+ <file>icons/hicolor/128x128/actions/next_keyframe.png</file>
  <file>icons/hicolor/128x128/actions/nodeConnect.png</file>
  <file>icons/hicolor/128x128/actions/nodeCorner.png</file>
  <file>icons/hicolor/128x128/actions/nodeDisconnect.png</file>
@@ -571,6 +584,7 @@
  <file>icons/hicolor/128x128/actions/pointTransform.png</file>
  <file>icons/hicolor/128x128/actions/preferences.png</file>
  <file>icons/hicolor/128x128/actions/preview.png</file>
+ <file>icons/hicolor/128x128/actions/prev_keyframe.png</file>
  <file>icons/hicolor/128x128/actions/question.png</file>
  <file>icons/hicolor/128x128/actions/quit.png</file>
  <file>icons/hicolor/128x128/actions/rectCreate.png</file>
@@ -627,6 +641,7 @@
  <file>icons/hicolor/192x192/actions/loop.png</file>
  <file>icons/hicolor/192x192/actions/minus.png</file>
  <file>icons/hicolor/192x192/actions/newEmpty.png</file>
+ <file>icons/hicolor/192x192/actions/next_keyframe.png</file>
  <file>icons/hicolor/192x192/actions/nodeConnect.png</file>
  <file>icons/hicolor/192x192/actions/nodeCorner.png</file>
  <file>icons/hicolor/192x192/actions/nodeDisconnect.png</file>
@@ -655,6 +670,7 @@
  <file>icons/hicolor/192x192/actions/pointTransform.png</file>
  <file>icons/hicolor/192x192/actions/preferences.png</file>
  <file>icons/hicolor/192x192/actions/preview.png</file>
+ <file>icons/hicolor/192x192/actions/prev_keyframe.png</file>
  <file>icons/hicolor/192x192/actions/question.png</file>
  <file>icons/hicolor/192x192/actions/quit.png</file>
  <file>icons/hicolor/192x192/actions/rectCreate.png</file>
@@ -711,6 +727,7 @@
  <file>icons/hicolor/256x256/actions/loop.png</file>
  <file>icons/hicolor/256x256/actions/minus.png</file>
  <file>icons/hicolor/256x256/actions/newEmpty.png</file>
+ <file>icons/hicolor/256x256/actions/next_keyframe.png</file>
  <file>icons/hicolor/256x256/actions/nodeConnect.png</file>
  <file>icons/hicolor/256x256/actions/nodeCorner.png</file>
  <file>icons/hicolor/256x256/actions/nodeDisconnect.png</file>
@@ -739,6 +756,7 @@
  <file>icons/hicolor/256x256/actions/pointTransform.png</file>
  <file>icons/hicolor/256x256/actions/preferences.png</file>
  <file>icons/hicolor/256x256/actions/preview.png</file>
+ <file>icons/hicolor/256x256/actions/prev_keyframe.png</file>
  <file>icons/hicolor/256x256/actions/question.png</file>
  <file>icons/hicolor/256x256/actions/quit.png</file>
  <file>icons/hicolor/256x256/actions/rectCreate.png</file>
