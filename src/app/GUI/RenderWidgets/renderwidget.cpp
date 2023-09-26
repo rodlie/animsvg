@@ -277,3 +277,8 @@ void RenderWidget::sendNextForRender()
         render(wid->getSettings());
     } else { sendNextForRender(); }
 }
+
+int RenderWidget::count()
+{
+    return mRenderInstanceWidgets.count();
+}

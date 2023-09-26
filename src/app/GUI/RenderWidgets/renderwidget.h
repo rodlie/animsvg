@@ -79,6 +79,7 @@ public:
     void stopRendering();
     void clearAwaitingRender();
     void sendNextForRender();
+    int count();
 };
 
 #endif // RENDERWIDGET_H

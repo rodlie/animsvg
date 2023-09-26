@@ -77,7 +77,7 @@ AboutWidget::AboutWidget(QWidget *parent)
                                         "</tr></table>")
                       .arg(HardwareInfo::sCpuThreads())
                       .arg(intMB(HardwareInfo::sRamKB()).fValue)
-                      .arg(HardwareInfo::sGpuRenderer()));
+                      .arg(HardwareInfo::sGpuRendererString()));
 
     mTopLayout->addWidget(mTopLabel);
     mTopLayout->addStretch();
@@ -85,39 +85,81 @@ AboutWidget::AboutWidget(QWidget *parent)
 
     mLayout->addWidget(mTopWidget);
 
+    QString css = "<style>"
+                  "h1, h2, h3 { font-weight: normal; }"
+                  "pre { font-size: small; white-space: pre-wrap; }"
+                  "</style>";
+
     const auto mTab = new QTabWidget(this);
     mTab->setSizePolicy(QSizePolicy::Expanding,
                         QSizePolicy::Expanding);
     mLayout->addWidget(mTab);
 
-    const auto mAboutBrowser = new QTextBrowser(this);
-    mAboutBrowser->setOpenExternalLinks(true);
-    mAboutBrowser->setOpenLinks(true);
-    QFile fileReadme(":/docs/about.html");
-    if (fileReadme.open(QIODevice::Text | QIODevice::ReadOnly)) {
-        mAboutBrowser->setHtml(fileReadme.readAll());
-        fileReadme.close();
+    AboutWidgetTab tab1;
+    tab1.title = tr("Information");
+    tab1.path = ":/docs/about.html";
+
+    AboutWidgetTab tab2;
+    tab2.title = tr("Privacy");
+    tab2.path = ":/docs/privacy.html";
+
+    AboutWidgetTab tab3;
+    tab3.title = tr("License");
+    tab3.path = ":/docs/LICENSE";
+    tab3.html = false;
+
+    QList<AboutWidgetTab> tabs;
+    tabs << tab1 << tab2 << tab3;
+    for (int i = 0; i < tabs.size(); ++i) {
+        const auto tab = tabs.at(i);
+        QFile file(tab.path);
+        if (!file.open(QIODevice::Text | QIODevice::ReadOnly)) { continue; }
+        const auto browser = new QTextBrowser(this);
+        browser->setAcceptRichText(tab.html);
+        browser->setOpenExternalLinks(tab.html);
+        browser->setOpenLinks(tab.html);
+        QString content = tab.html ? css : QString();
+        content.append(file.readAll());
+        if (tab.html) { browser->setHtml(content); }
+        else { browser->setPlainText(content); }
+        file.close();
+        mTab->addTab(browser, tab.title);
     }
 
-    const auto mPrivacyBrowser = new QTextBrowser(this);
-    mPrivacyBrowser->setOpenExternalLinks(false);
-    mPrivacyBrowser->setOpenLinks(false);
-    QFile filePrivacy(":/docs/privacy.html");
-    if (filePrivacy.open(QIODevice::Text | QIODevice::ReadOnly)) {
-        mPrivacyBrowser->setHtml(filePrivacy.readAll());
-        filePrivacy.close();
-    }
+    /*const auto mThirdParty = new QTabWidget(this);
+    mThirdParty->setTabPosition(QTabWidget::South);
+    mThirdParty->setTabBarAutoHide(true);
+    mThirdParty->setObjectName(QString::fromUtf8("ThirdPartyBrowser"));
 
-    const auto mLicenseBrowser = new QTextBrowser(this);
-    mLicenseBrowser->setOpenExternalLinks(false);
-    mLicenseBrowser->setOpenLinks(false);
-    QFile fileLicense(":/docs/LICENSE");
-    if (fileLicense.open(QIODevice::Text | QIODevice::ReadOnly)) {
-        mLicenseBrowser->setPlainText(fileLicense.readAll());
-        fileLicense.close();
+    QStringList parties;
+    parties << "skia";
+#ifdef FRICTION_BUNDLE_QT
+    parties << "qt";
+#endif
+#ifdef FRICTION_BUNDLE_FFMPEG
+    parties << "ffmpeg";
+#endif
+#ifdef FRICTION_BUNDLE_QSCINTILLA
+    parties << "qscintilla";
+#endif
+#ifdef FRICTION_BUNDLE_GPERFTOOLS
+    parties << "gperftools";
+#endif
+    for (int i = 0; i < parties.size(); ++i) {
+        QString doc = parties.at(i);
+#ifdef Q_OS_WIN
+        if (doc == "ffmpeg") { doc = "ffmpeg_win"; }
+#endif
+        QFile file(QString(":/docs/3rdparty/%1.html").arg(doc));
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) { continue; }
+        const auto browser = new QTextBrowser(this);
+        browser->setOpenExternalLinks(false);
+        browser->setOpenLinks(false);
+        QString html = css;
+        html.append(file.readAll());
+        browser->setHtml(html);
+        file.close();
+        mThirdParty->addTab(browser, parties.at(i));
     }
-
-    mTab->addTab(mAboutBrowser, tr("Information"));
-    mTab->addTab(mPrivacyBrowser, tr("Privacy"));
-    mTab->addTab(mLicenseBrowser, tr("License"));
+    mTab->addTab(mThirdParty, tr("Third-party"));*/
 }

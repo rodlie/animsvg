@@ -30,6 +30,11 @@ class AboutWidget : public QWidget
 {
     Q_OBJECT
 public:
+    struct AboutWidgetTab {
+        QString title;
+        QString path;
+        bool html = true;
+    };
     explicit AboutWidget(QWidget *parent = nullptr);
 
 };

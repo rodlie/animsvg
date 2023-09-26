@@ -1143,6 +1143,15 @@ void MainWindow::setupMenuBar()
         QMessageBox::aboutQt(this, tr("About Qt"));
     });
 
+    mToolbar->addAction(QIcon::fromTheme("render_animation"),
+                        tr("Render"), this, [this]() {
+        if (mRenderWidget->count() < 1) {
+            addCanvasToRenderQue();
+        } else {
+            mBottomSideBarWidget->setCurrentIndex(mTabQueueIndex);
+        }
+    });
+
     setMenuBar(mMenuBar);
 
     // spacer
