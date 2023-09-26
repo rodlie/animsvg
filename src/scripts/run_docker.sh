@@ -32,6 +32,7 @@ CLANG=${CLANG:-1}
 
 JAMMY=${JAMMY:-1}
 LUNAR=${LUNAR:-1}
+MANTIC=${MANTIC:-1}
 EL=${EL:-1}
 FC=${FC:-1}
 AL=${AL:-0}
@@ -104,6 +105,9 @@ if [ "${JAMMY}" = 1 ]; then
 fi
 if [ "${LUNAR}" = 1 ]; then
     $DOCKER friction-lunar
+fi
+if [ "${MANTIC}" = 1 ]; then
+    $DOCKER friction-mantic
 fi
 if [ "${EL}" = 1 ]; then
     $DOCKER friction-rhel
