@@ -190,6 +190,7 @@ public:
     void importFile();
     void revert();
     void updateAutoSaveBackupState();
+    void openRendererWindow();
 
 protected:
     void lockFinished();

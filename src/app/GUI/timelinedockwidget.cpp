@@ -238,11 +238,11 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
 
     mToolBar->addAction(mFrameRewindAct);
     mToolBar->addAction(mPrevKeyframeAct);
-    mToolBar->addAction(mPlayFromBeginningButton);
     mToolBar->addAction(mNextKeyframeAct);
     mToolBar->addAction(mFrameFastForwardAct);
     mRenderProgressAct = mToolBar->addWidget(mRenderProgress);
     mCurrentFrameSpinAct = mToolBar->addWidget(mCurrentFrameSpin);
+    mToolBar->addAction(mPlayFromBeginningButton);
     mToolBar->addAction(mPlayButton);
     mToolBar->addAction(mStopButton);
     mToolBar->addAction(mLoopButton);

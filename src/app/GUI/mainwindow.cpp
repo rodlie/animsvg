@@ -1144,13 +1144,8 @@ void MainWindow::setupMenuBar()
     });
 
     mToolbar->addAction(QIcon::fromTheme("render_animation"),
-                        tr("Render"), this, [this]() {
-        if (mRenderWidget->count() < 1) {
-            addCanvasToRenderQue();
-        } else {
-            mBottomSideBarWidget->setCurrentIndex(mTabQueueIndex);
-        }
-    });
+                        tr("Render"),
+                        this, &MainWindow::openRendererWindow);
 
     setMenuBar(mMenuBar);
 
@@ -2316,6 +2311,15 @@ void MainWindow::updateAutoSaveBackupState()
         lastTimeout != mAutoSaveTimeout) {
         if (mAutoSaveTimer->isActive()) { mAutoSaveTimer->stop(); }
         mAutoSaveTimer->start(mAutoSaveTimeout);
+    }
+}
+
+void MainWindow::openRendererWindow()
+{
+    if (mRenderWidget->count() < 1) {
+        addCanvasToRenderQue();
+    } else {
+        mBottomSideBarWidget->setCurrentIndex(mTabQueueIndex);
     }
 }
 
