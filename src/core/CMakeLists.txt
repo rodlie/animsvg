@@ -582,7 +582,7 @@ set(
     filesourcescache.h
     gpurendertools.h
     hardwareenums.h
-    hardwareinfo.cpp
+    hardwareinfo.h
     importhandler.h
     matrixdecomposition.h
     memorydatahandler.h
