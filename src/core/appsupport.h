@@ -88,6 +88,7 @@ public:
                                                           HardwareSupport fallback);
     static const QString getRasterEffectHardwareSupportString(const QString &effect,
                                                               HardwareSupport fallback);
+    static const QByteArray filterShader(QByteArray data);
 };
 
 #endif // APPSUPPORT_H

@@ -260,6 +260,7 @@ set(
     fileshandler.cpp
     filesourcescache.cpp
     gpurendertools.cpp
+    hardwareinfo.cpp
     importhandler.cpp
     matrixdecomposition.cpp
     memorydatahandler.cpp
@@ -581,6 +582,7 @@ set(
     filesourcescache.h
     gpurendertools.h
     hardwareenums.h
+    hardwareinfo.h
     importhandler.h
     matrixdecomposition.h
     memorydatahandler.h
@@ -671,6 +673,7 @@ set(
     typemenu.h
     pointtypemenu.h
     wrappedint.h
+    windowsincludes.h
     zipfileloader.h
     zipfilesaver.h
 )

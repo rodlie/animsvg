@@ -211,7 +211,6 @@ set(
     effectsloader.cpp
     eimporters.cpp
     evfileio.cpp
-    hardwareinfo.cpp
     iconloader.cpp
     outputsettings.cpp
     renderhandler.cpp
@@ -332,7 +331,6 @@ set(
     GUI/wrappernode.h
     effectsloader.h
     eimporters.h
-    hardwareinfo.h
     iconloader.h
     outputsettings.h
     renderhandler.h
@@ -384,7 +382,6 @@ set(
     GUI/namedcontainer.h
     #GUI/BrushWidgets/brushwidget.h
     boxtypemenu.h
-    windowsincludes.h
     GUI/Settings/labeledslider.h
 )
 

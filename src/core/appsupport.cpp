@@ -22,6 +22,7 @@
 */
 
 #include "appsupport.h"
+#include "hardwareinfo.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -383,4 +384,14 @@ const QString AppSupport::getRasterEffectHardwareSupportString(const QString &ef
     default:;
     }
     return result;
+}
+
+const QByteArray AppSupport::filterShader(QByteArray data)
+{
+#ifdef Q_OS_WIN
+    if (HardwareInfo::sGpuVendor() == GpuVendor::intel) {
+        return data.replace("texture2D", "texture");
+    }
+#endif
+    return data;
 }
