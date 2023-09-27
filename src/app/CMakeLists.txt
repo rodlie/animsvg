@@ -382,7 +382,6 @@ set(
     GUI/namedcontainer.h
     #GUI/BrushWidgets/brushwidget.h
     boxtypemenu.h
-    windowsincludes.h
     GUI/Settings/labeledslider.h
 )
 

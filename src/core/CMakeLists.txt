@@ -673,6 +673,7 @@ set(
     typemenu.h
     pointtypemenu.h
     wrappedint.h
+    windowsincludes.h
     zipfileloader.h
     zipfilesaver.h
 )
