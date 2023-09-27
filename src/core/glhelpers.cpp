@@ -25,11 +25,14 @@
 
 #include "glhelpers.h"
 #include "exceptions.h"
+#include "appsupport.h"
 
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
+
+#include <QFile>
 
 QString GL_PLAIN_VERT = ":/shaders/plain.vert";
 GLuint GL_PLAIN_SQUARE_VBO;
@@ -126,7 +129,7 @@ void checkCompileErrors(QGL33 * const gl,
     }
 }
 
-#include <QFile>
+
 void gIniProgram(QGL33 * const gl, GLuint& program,
                  const QString& vShaderPath,
                  const QString& fShaderPath) {
@@ -138,14 +141,14 @@ void gIniProgram(QGL33 * const gl, GLuint& program,
         QFile vShaderFile(vShaderPath);
         if(!vShaderFile.open(QIODevice::ReadOnly))
             RuntimeThrow("Could not open " + vShaderPath);
-        const QByteArray vData = vShaderFile.readAll();
+        const QByteArray vData = AppSupport::filterShader(vShaderFile.readAll());
         vertexCode = vData.toStdString();
         vShaderFile.close();
 
         QFile fShaderFile(fShaderPath);
         if(!fShaderFile.open(QIODevice::ReadOnly))
             RuntimeThrow("Could not open " + fShaderPath);
-        const QByteArray fData = fShaderFile.readAll();
+        const QByteArray fData = AppSupport::filterShader(fShaderFile.readAll());
         fragmentCode = fData.toStdString();
         fShaderFile.close();
     } catch(...) {

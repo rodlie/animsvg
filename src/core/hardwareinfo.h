@@ -25,9 +25,12 @@
 
 #ifndef HARDWAREINFO_H
 #define HARDWAREINFO_H
+
+#include "core_global.h"
+
 #include "Private/esettings.h"
 
-class HardwareInfo {
+class CORE_EXPORT HardwareInfo {
     HardwareInfo() = delete;
 public:
     static void sUpdateInfo();
