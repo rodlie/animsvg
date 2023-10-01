@@ -32,6 +32,11 @@ include(friction-ffmpeg)
 
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 
+option(USE_ROBOTO "Use Roboto font" OFF)
+if(${USE_ROBOTO})
+    add_definitions(-DFRICTION_BUNDLE_ROBOTO)
+endif()
+
 if(APPLE)
     set(ICON_FILE ${CMAKE_CURRENT_SOURCE_DIR}/icons/${PROJECT_NAME}.icns)
     set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
@@ -385,15 +390,24 @@ set(
     GUI/Settings/labeledslider.h
 )
 
+set(
+    RESOURCES
+    resources.qrc
+    icons.qrc
+    hicolor.qrc
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs.qrc
+)
+
+if(${USE_ROBOTO})
+    list(APPEND RESOURCES fonts.qrc)
+endif()
+
 add_executable(
     ${PROJECT_NAME}
     ${ICON_FILE}
     ${HEADERS}
     ${SOURCES}
-    resources.qrc
-    icons.qrc
-    hicolor.qrc
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs.qrc
+    ${RESOURCES}
     ${WINDOWS_RESOURCE_FILE}
 )
 
