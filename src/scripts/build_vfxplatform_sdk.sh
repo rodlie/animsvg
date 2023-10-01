@@ -67,57 +67,57 @@ STATIC_CONFIGURE="${COMMON_CONFIGURE} --disable-shared --enable-static"
 DEFAULT_CONFIGURE="${SHARED_CONFIGURE}"
 
 # patchelf
-if [ ! -f "${PELF_BIN}" ]; then
-    cd ${SRC}
-    PELF_SRC=patchelf-${PELF_V}
-    rm -rf ${PELF_SRC} || true
-    tar xf ${DIST}/${PELF_SRC}.tar.bz2
-    cd ${PELF_SRC}
-    ./configure ${COMMON_CONFIGURE}
-    make -j${JOBS}
-    make install
-fi # patchelf
+#if [ ! -f "${PELF_BIN}" ]; then
+#    cd ${SRC}
+#    PELF_SRC=patchelf-${PELF_V}
+#    rm -rf ${PELF_SRC} || true
+#    tar xf ${DIST}/${PELF_SRC}.tar.bz2
+#    cd ${PELF_SRC}
+#    ./configure ${COMMON_CONFIGURE}
+#    make -j${JOBS}
+#    make install
+#fi # patchelf
 
 # cmake
-if [ ! -f "${CMAKE_BIN}" ]; then
-    cd ${SRC}
-    CMAKE_SRC=cmake-${CMAKE_V}
-    rm -rf ${CMAKE_SRC} || true
-    tar xf ${DIST}/${CMAKE_SRC}.tar.gz
-    cd ${CMAKE_SRC}
-    ./configure ${COMMON_CONFIGURE} -- -DCMAKE_USE_OPENSSL=OFF
-    make -j${JOBS}
-    make install
-fi # cmake
+#if [ ! -f "${CMAKE_BIN}" ]; then
+#    cd ${SRC}
+#    CMAKE_SRC=cmake-${CMAKE_V}
+#    rm -rf ${CMAKE_SRC} || true
+#    tar xf ${DIST}/${CMAKE_SRC}.tar.gz
+#    cd ${CMAKE_SRC}
+#    ./configure ${COMMON_CONFIGURE} -- -DCMAKE_USE_OPENSSL=OFF
+#    make -j${JOBS}
+#    make install
+#fi # cmake
 
 # libunwind
-if [ ! -f "${SDK}/lib/pkgconfig/libunwind.pc" ]; then
-    cd ${SRC}
-    UNWIND_SRC=libunwind-${UNWIND_V}
-    rm -rf ${UNWIND_SRC} || true
-    tar xf ${DIST}/${UNWIND_SRC}.tar.gz
-    cd ${UNWIND_SRC}
-    ./configure ${STATIC_CONFIGURE} --disable-minidebuginfo --disable-tests
-    make -j${JOBS}
-    make install
-fi # libunwind
+#if [ ! -f "${SDK}/lib/pkgconfig/libunwind.pc" ]; then
+#    cd ${SRC}
+#    UNWIND_SRC=libunwind-${UNWIND_V}
+#    rm -rf ${UNWIND_SRC} || true
+#    tar xf ${DIST}/${UNWIND_SRC}.tar.gz
+#    cd ${UNWIND_SRC}
+#    ./configure ${STATIC_CONFIGURE} --disable-minidebuginfo --disable-tests
+#    make -j${JOBS}
+#    make install
+#fi # libunwind
 
 # gperftools
-if [ ! -f "${GPERF_LIB}" ]; then
-    cd ${SRC}
-    GPERF_SRC=gperftools-${GPERF_V}
-    rm -rf ${GPERF_SRC} || true
-    rm -rf ${GPERF_DIR} || true
-    tar xf ${DIST}/${GPERF_SRC}.tar.xz
-    mv ${GPERF_SRC} ${GPERF_DIR}
-    cd ${GPERF_DIR}
-    ./autogen.sh
-    CFLAGS="${DEFAULT_CFLAGS}" \
-    CXXFLAGS="${DEFAULT_CFLAGS}" \
-    LDFLAGS="${DEFAULT_LDFLAGS} -lunwind" \
-    ./configure ${STATIC_CONFIGURE} --enable-libunwind
-    make -j${JOBS}
-fi # gperftools
+#if [ ! -f "${GPERF_LIB}" ]; then
+#    cd ${SRC}
+#    GPERF_SRC=gperftools-${GPERF_V}
+#    rm -rf ${GPERF_SRC} || true
+#    rm -rf ${GPERF_DIR} || true
+#    tar xf ${DIST}/${GPERF_SRC}.tar.xz
+#    mv ${GPERF_SRC} ${GPERF_DIR}
+#    cd ${GPERF_DIR}
+#    ./autogen.sh
+#    CFLAGS="${DEFAULT_CFLAGS}" \
+#    CXXFLAGS="${DEFAULT_CFLAGS}" \
+#    LDFLAGS="${DEFAULT_LDFLAGS} -lunwind" \
+#    ./configure ${STATIC_CONFIGURE} --enable-libunwind
+#    make -j${JOBS}
+#fi # gperftools
 
 # libxkbcommon
 if [ ! -f "${SDK}/lib/pkgconfig/xkbcommon.pc" ]; then
@@ -226,15 +226,16 @@ if [ ! -f "${QMAKE_BIN}" ]; then
 fi # qt
 
 # qscintilla
-if [ ! -f "${SDK}/lib/libqscintilla2_qt5.so" ]; then
+if [ ! -f "${SDK}/lib/libqscintilla2_friction_qt5.so" ]; then
     cd ${SRC}
     QSC_SRC="QScintilla_src-${QSCINTILLA_V}"
     rm -rf ${QSC_SRC}
     tar xf ${DIST}/${QSC_SRC}.tar.gz
     cd ${QSC_SRC}/src
+    sed -i 's/qscintilla2_qt/qscintilla2_friction_qt/g' qscintilla.pro
     ${SDK}/bin/qmake CONFIG+=release
     make -j${JOBS}
-    cp -a libqscintilla2_qt5* ${SDK}/lib/
+    cp -a libqscintilla2_friction_qt5* ${SDK}/lib/
     cp -a Qsci ${SDK}/include/
 fi # qscintilla
 
