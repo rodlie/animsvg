@@ -39,6 +39,8 @@ SKIA_DIR=${SDK}/skia
 SKIA_LIB=${SKIA_DIR}/out/build/libskia.a
 
 export PATH="${SDK}/bin:${PATH}"
+export PKG_CONFIG_PATH="${SDK}/lib/pkgconfig"
+export LD_LIBRARY_PATH="${SDK}/lib:${LD_LIBRARY_PATH}"
 
 if [ ! -d "${SDK}" ]; then
     mkdir -p "${SDK}/lib"

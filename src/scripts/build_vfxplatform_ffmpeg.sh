@@ -29,6 +29,7 @@ SRC=${SDK}/src
 DIST=${DIST:-"/mnt/mxe/pkg"}
 JOBS=${JOBS:-4}
 
+# Keep in sync with https://github.com/friction2d/mxe
 ZLIB_V=1.2.13
 BZIP_V=1.0.8
 NASM_V=2.14.02
@@ -42,6 +43,7 @@ LSMASH_V=2.14.5
 X264_V=20180806-2245
 X265_V=3.5
 AOM_V=3.6.1
+FFMPEG_V=4.4.4
 
 export PATH="${SDK}/bin:${PATH}"
 export PKG_CONFIG_PATH="${SDK}/lib/pkgconfig"
@@ -272,5 +274,51 @@ if [ ! -f "${SDK}/lib/libaom.so" ]; then
     make install
     rm ${SDK}/lib/libaom.a
 fi # aom
+
+# ffmpeg
+if [ ! -f "${SDK}/lib/pkgconfig/libavcodec.pc" ]; then
+    cd ${SRC}
+    FFMPEG_SRC=ffmpeg-${FFMPEG_V}
+    rm -rf ${FFMPEG_SRC} || true
+    tar xf ${DIST}/${FFMPEG_SRC}.tar.xz
+    cd ${FFMPEG_SRC}
+    CFLAGS="${DEFAULT_CFLAGS}" \
+    CXXFLAGS="${DEFAULT_CFLAGS}" \
+    LDFLAGS="${DEFAULT_LDFLAGS}" \
+    ./configure ${SHARED_CONFIGURE} \
+    --disable-xlib \
+    --disable-libxcb \
+    --disable-libv4l2 \
+    --disable-alsa \
+    --disable-network \
+    --disable-programs \
+    --disable-debug \
+    --disable-doc \
+    --enable-avresample \
+    --enable-gpl \
+    --enable-version3 \
+    --disable-avisynth \
+    --disable-gnutls \
+    --disable-libass \
+    --disable-libbluray \
+    --disable-libbs2b \
+    --disable-libcaca \
+    --enable-libmp3lame \
+    --disable-libopencore-amrnb \
+    --disable-libopencore-amrwb \
+    --disable-libopus \
+    --disable-libspeex \
+    --enable-libtheora \
+    --disable-libvidstab \
+    --disable-libvo-amrwbenc \
+    --enable-libvorbis \
+    --enable-libvpx \
+    --enable-libx264 \
+    --enable-libaom \
+    --enable-libx265 \
+    --enable-libxvid
+     make -j${JOBS}
+     make install
+fi # ffmpeg
 
 echo "FFMPEG DONE"
