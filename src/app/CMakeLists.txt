@@ -32,6 +32,10 @@ include(friction-ffmpeg)
 
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 
+if(${LINUX_DEPLOY})
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+endif()
+
 option(USE_ROBOTO "Use Roboto font" OFF)
 if(${USE_ROBOTO})
     add_definitions(-DFRICTION_BUNDLE_ROBOTO)

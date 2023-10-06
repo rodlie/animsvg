@@ -42,6 +42,9 @@ if(MSVC)
     add_definitions("/MP")
 endif()
 
+option(LINUX_DEPLOY "Linux Deploy" OFF)
+option(WIN_DEPLOY "Windows Deploy" OFF)
+
 if(UNIX AND NOT APPLE)
     option(STATIC_FFMPEG "Link against static ffmpeg" OFF)
     if(${STATIC_FFMPEG})

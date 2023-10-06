@@ -20,7 +20,7 @@
 
 set -e -x
 
-source /opt/rh/llvm-toolset-7/enable
+source /opt/rh/llvm-toolset-7.0/enable
 clang -v
 
 CWD=`pwd`
