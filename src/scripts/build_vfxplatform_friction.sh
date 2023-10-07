@@ -1,3 +1,8 @@
+#!/bin/bash
+#
+# Friction - https://friction.graphics
+#
+# Copyright (c) Friction contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -57,20 +62,22 @@ fi
 
 rm -rf build-vfxplatform || true
 mkdir build-vfxplatform && cd build-vfxplatform
+
 cmake -GNinja \
 -DCMAKE_INSTALL_PREFIX=${SDK} \
 -DCMAKE_PREFIX_PATH=${SDK} \
 -DCMAKE_BUILD_TYPE=Release \
 -DUSE_ROBOTO=ON \
+-DLINUX_DEPLOY=ON \
 -DQSCINTILLA_INCLUDE_DIRS=${SDK}/include \
 -DQSCINTILLA_LIBRARIES_DIRS=${SDK}/lib \
--DQSCINTILLA_LIBRARIES=qscintilla2_friction_qt5 ..
-# -DCMAKE_CXX_COMPILER=clang++ \
-# -DCMAKE_C_COMPILER=clang ..
+-DQSCINTILLA_LIBRARIES=qscintilla2_friction_qt5 \
+..
+
+FRICTION_VERSION=`cat version.txt`
 cmake --build .
 
-ls -lah src/app/friction
-strip -s src/app/friction
-ls -lah src/app/friction
-ldd src/app/friction
-objdump -p src/app/friction | grep NEEDED
+FRICTION_INSTALL_DIR=friction-${FRICTION_VERSION}-Linux-x86_64-X11
+mkdir -p ${CWD}/${FRICTION_INSTALL_DIR}/opt/friction/{bin,lib,share} || true
+mkdir -p ${CWD}/${FRICTION_INSTALL_DIR}/opt/friction/plugins/{audio,generic,imageformats,platforminputcontexts,platforms,xcbglintegrations} || true
+DESTDIR=${CWD}/${FRICTION_INSTALL_DIR} cmake --build . --target install
