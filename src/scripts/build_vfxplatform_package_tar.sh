@@ -22,7 +22,7 @@ set -e -x
 
 CWD=`pwd`
 SDK=${SDK:-"/opt/friction"}
-FRICTION_PKG=${FRICTION_PKG:-friction-0.9.5-Linux-x86_64-X11}
+FRICTION_PKG=${FRICTION_PKG:-friction-0.9.5}
 
 if [ ! -d "${CWD}/${FRICTION_PKG}" ]; then
     echo "Missing Friction build"
@@ -97,9 +97,11 @@ scalable
 
 mkdir -p ${CWD}/${FRICTION_PKG}/usr/bin
 mkdir -p ${CWD}/${FRICTION_PKG}/usr/share/mime/packages
+mkdir -p ${CWD}/${FRICTION_PKG}/usr/share/applications
 
 (cd ${CWD}/${FRICTION_PKG}/usr/bin; ln -sf ../../opt/friction/bin/friction .)
 (cd ${CWD}/${FRICTION_PKG}/usr/share/mime/packages ; ln -sf ../../../../opt/friction/share/mime/packages/friction.xml .)
+(cd ${CWD}/${FRICTION_PKG}/usr/share/applications; ln -sf ../../../opt/friction/share/applications/friction.desktop .)
 
 for icon in ${HICOLOR}; do
     ICON_SUFFIX=png
@@ -114,6 +116,6 @@ for icon in ${HICOLOR}; do
 done
 
 cd ${CWD}
-tar cvvf ${FRICTION_PKG}.tar ${FRICTION_PKG}
+tar cvf ${FRICTION_PKG}.tar ${FRICTION_PKG}
 
 echo "PKG TAR DONE"

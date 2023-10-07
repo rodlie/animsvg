@@ -77,7 +77,7 @@ cmake -GNinja \
 FRICTION_VERSION=`cat version.txt`
 cmake --build .
 
-FRICTION_INSTALL_DIR=friction-${FRICTION_VERSION}-Linux-x86_64-X11
+FRICTION_INSTALL_DIR=friction-${FRICTION_VERSION}
 mkdir -p ${CWD}/${FRICTION_INSTALL_DIR}/opt/friction/{bin,lib,share} || true
 mkdir -p ${CWD}/${FRICTION_INSTALL_DIR}/opt/friction/plugins/{audio,generic,imageformats,platforminputcontexts,platforms,xcbglintegrations} || true
 DESTDIR=${CWD}/${FRICTION_INSTALL_DIR} cmake --build . --target install
