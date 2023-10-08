@@ -67,9 +67,6 @@ SHARED_CONFIGURE="${COMMON_CONFIGURE} --enable-shared --disable-static"
 STATIC_CONFIGURE="${COMMON_CONFIGURE} --disable-shared --enable-static"
 DEFAULT_CONFIGURE="${SHARED_CONFIGURE}"
 
-# REMOVE
-# libpng.pc  libpng15.pc  png.h  pngconf.h  pnglibconf.h
-
 # nasm
 if [ ! -f "${SDK}/bin/nasm" ]; then
     cd ${SRC}

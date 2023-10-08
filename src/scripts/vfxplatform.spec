@@ -8,6 +8,7 @@ Source0: friction-%{version}.tar
 
 AutoReq: no
 %global debug_package %{nil}
+%global __provides_exclude_from /opt
 
 %description
 Friction is an open-source, vector-based application designed for creating web animations and videos.

@@ -20,11 +20,18 @@
 
 set -e -x
 
-CWD=`pwd`
+CWD=${CWD:-`pwd`}
 SDK=${SDK:-"/opt/friction"}
-FRICTION_PKG=${FRICTION_PKG:-friction-0.9.5}
+BUILD=${BUILD:-"${HOME}"}
+VERSION=${VERSION:-""}
+FRICTION_PKG=friction-${VERSION}
 
-if [ ! -d "${CWD}/${FRICTION_PKG}" ]; then
+if [ "${VERSION}" = "" ]; then
+    echo "Missing version"
+    exit 1
+fi
+
+if [ ! -d "${BUILD}/${FRICTION_PKG}" ]; then
     echo "Missing Friction build"
     exit 1
 fi
@@ -33,9 +40,9 @@ export PATH="${SDK}/bin:${PATH}"
 export PKG_CONFIG_PATH="${SDK}/lib/pkgconfig"
 export LD_LIBRARY_PATH="${SDK}/lib:${LD_LIBRARY_PATH}"
 
-BIN_DIR=${CWD}/${FRICTION_PKG}/opt/friction/bin
-LIB_DIR=${CWD}/${FRICTION_PKG}/opt/friction/lib
-PLUG_DIR=${CWD}/${FRICTION_PKG}/opt/friction/plugins
+BIN_DIR=${BUILD}/${FRICTION_PKG}/opt/friction/bin
+LIB_DIR=${BUILD}/${FRICTION_PKG}/opt/friction/lib
+PLUG_DIR=${BUILD}/${FRICTION_PKG}/opt/friction/plugins
 
 APP_DEPENDS=`(cd ${BIN_DIR} ; ldd friction | awk '{print $3}' | grep ${SDK})`
 
@@ -95,27 +102,83 @@ HICOLOR="
 scalable
 "
 
-mkdir -p ${CWD}/${FRICTION_PKG}/usr/bin
-mkdir -p ${CWD}/${FRICTION_PKG}/usr/share/mime/packages
-mkdir -p ${CWD}/${FRICTION_PKG}/usr/share/applications
+mkdir -p ${BUILD}/${FRICTION_PKG}/usr/bin
+mkdir -p ${BUILD}/${FRICTION_PKG}/usr/share/mime/packages
+mkdir -p ${BUILD}/${FRICTION_PKG}/usr/share/applications
 
-(cd ${CWD}/${FRICTION_PKG}/usr/bin; ln -sf ../../opt/friction/bin/friction .)
-(cd ${CWD}/${FRICTION_PKG}/usr/share/mime/packages ; ln -sf ../../../../opt/friction/share/mime/packages/friction.xml .)
-(cd ${CWD}/${FRICTION_PKG}/usr/share/applications; ln -sf ../../../opt/friction/share/applications/friction.desktop .)
+(cd ${BUILD}/${FRICTION_PKG}/usr/bin; ln -sf ../../opt/friction/bin/friction .)
+(cd ${BUILD}/${FRICTION_PKG}/usr/share/mime/packages ; ln -sf ../../../../opt/friction/share/mime/packages/friction.xml .)
+(cd ${BUILD}/${FRICTION_PKG}/usr/share/applications; ln -sf ../../../opt/friction/share/applications/friction.desktop .)
 
 for icon in ${HICOLOR}; do
     ICON_SUFFIX=png
     if [ "${icon}" = "scalable" ]; then
         ICON_SUFFIX=svg
     fi
-    mkdir -p ${CWD}/${FRICTION_PKG}/usr/share/icons/hicolor/${icon}/{apps,mimetypes}
-    ICON_APP_DIR=${CWD}/${FRICTION_PKG}/usr/share/icons/hicolor/${icon}/apps
-    ICON_MIME_DIR=${CWD}/${FRICTION_PKG}/usr/share/icons/hicolor/${icon}/mimetypes
+    mkdir -p ${BUILD}/${FRICTION_PKG}/usr/share/icons/hicolor/${icon}/{apps,mimetypes}
+    ICON_APP_DIR=${BUILD}/${FRICTION_PKG}/usr/share/icons/hicolor/${icon}/apps
+    ICON_MIME_DIR=${BUILD}/${FRICTION_PKG}/usr/share/icons/hicolor/${icon}/mimetypes
     (cd ${ICON_APP_DIR} ; ln -sf ../../../../../../opt/friction/share/icons/hicolor/${icon}/apps/friction.${ICON_SUFFIX} .)
     (cd ${ICON_MIME_DIR} ; ln -sf ../../../../../../opt/friction/share/icons/hicolor/${icon}/mimetypes/application-x-friction.${ICON_SUFFIX} .)
 done
 
-cd ${CWD}
+strip -s ${BUILD}/${FRICTION_PKG}/opt/friction/bin/friction
+strip -s ${BUILD}/${FRICTION_PKG}/opt/friction/lib/*so*
+strip -s ${BUILD}/${FRICTION_PKG}/opt/friction/plugins/*/*.so
+
+cd ${BUILD}
 tar cvf ${FRICTION_PKG}.tar ${FRICTION_PKG}
 
-echo "PKG TAR DONE"
+if [ ! -d "${HOME}/rpmbuild/SOURCES" ]; then
+    mkdir -p ${HOME}/rpmbuild/SOURCES
+fi
+
+mv ${FRICTION_PKG}.tar ${HOME}/rpmbuild/SOURCES/
+cat ${CWD}/vfxplatform.spec | sed 's/__FRICTION_VERSION__/'${VERSION}'/g' > rpm.spec
+RPM_PKG=friction-${VERSION}-1.x86_64.rpm
+DEB_PKG=friction_${VERSION}-1_amd64.deb
+
+rpmbuild -bb rpm.spec
+rm -rf deb || true
+mkdir deb
+(cd deb; fakeroot alien -k --to-deb --scripts ${HOME}/rpmbuild/RPMS/x86_64/${RPM_PKG})
+
+FRICTION_PORTABLE=${FRICTION_PKG}-portable-x86_64
+FRICTION_PORTABLE_DIR=${BUILD}/${FRICTION_PORTABLE}
+cd ${BUILD}
+mv ${BUILD}/${FRICTION_PKG} ${FRICTION_PORTABLE_DIR}
+(cd ${FRICTION_PORTABLE_DIR} ;
+rm -rf usr
+mv opt/friction/* .
+rm -rf opt share/doc
+ln -sf bin/friction .
+echo "[Paths]" > bin/qt.conf
+echo "Prefix = .." >> bin/qt.conf
+echo "Plugins = plugins" >> bin/qt.conf
+)
+(cd ${FRICTION_PORTABLE_DIR}/bin ; patchelf --set-rpath '$ORIGIN/../lib' friction)
+(cd ${FRICTION_PORTABLE_DIR}/lib ;
+for so in *.so*; do
+    patchelf --set-rpath '$ORIGIN' ${so}
+done
+)
+
+PLUGS="
+audio
+generic
+imageformats
+platforminputcontexts
+platforms
+xcbglintegrations
+"
+for pdir in ${PLUGS}; do
+    for so in ${FRICTION_PORTABLE_DIR}/plugins/${pdir}/*.so; do
+        patchelf --set-rpath '$ORIGIN/../../lib' ${so}
+    done
+done
+
+cd ${BUILD}
+tar cvf ${FRICTION_PORTABLE}.tar ${FRICTION_PORTABLE}
+xz -9 ${FRICTION_PORTABLE}.tar
+
+echo "PKGS DONE"

@@ -23,9 +23,10 @@ set -e -x
 source /opt/rh/devtoolset-7/enable
 gcc -v
 
-CWD=`pwd`
+CWD=${CWD:-`pwd`}
 SDK=${SDK:-"/opt/friction"}
-SRC=${SDK}/src
+BUILD=${BUILD:-"${HOME}"}
+CHECKOUT=${CHECKOUT:-"main"}
 
 export PATH="${SDK}/bin:${PATH}"
 export PKG_CONFIG_PATH="${SDK}/lib/pkgconfig"
@@ -36,17 +37,17 @@ if [ ! -d "${SDK}" ]; then
     exit 1
 fi
 
-if [ ! -d "${SRC}" ]; then
-    mkdir -p ${SRC}
+if [ ! -d "${BUILD}" ]; then
+    mkdir -p ${BUILD}
 fi
 
-if [ ! -d "${SRC}/friction" ]; then
-    (cd ${SRC} ; git clone https://github.com/friction2d/friction)
+if [ ! -d "${BUILD}/friction" ]; then
+    (cd ${BUILD} ; git clone https://github.com/friction2d/friction)
 fi
 
-cd ${SRC}/friction
+cd ${BUILD}/friction
 git fetch --all
-git checkout main
+git checkout ${CHECKOUT}
 git pull
 git submodule update -i docs
 
@@ -78,6 +79,6 @@ FRICTION_VERSION=`cat version.txt`
 cmake --build .
 
 FRICTION_INSTALL_DIR=friction-${FRICTION_VERSION}
-mkdir -p ${CWD}/${FRICTION_INSTALL_DIR}/opt/friction/{bin,lib,share} || true
-mkdir -p ${CWD}/${FRICTION_INSTALL_DIR}/opt/friction/plugins/{audio,generic,imageformats,platforminputcontexts,platforms,xcbglintegrations} || true
-DESTDIR=${CWD}/${FRICTION_INSTALL_DIR} cmake --build . --target install
+mkdir -p ${BUILD}/${FRICTION_INSTALL_DIR}/opt/friction/{bin,lib,share} || true
+mkdir -p ${BUILD}/${FRICTION_INSTALL_DIR}/opt/friction/plugins/{audio,generic,imageformats,platforminputcontexts,platforms,xcbglintegrations} || true
+DESTDIR=${BUILD}/${FRICTION_INSTALL_DIR} cmake --build . --target install
