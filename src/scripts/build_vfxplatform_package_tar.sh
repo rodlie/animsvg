@@ -22,6 +22,7 @@ set -e -x
 
 CWD=${CWD:-`pwd`}
 SDK=${SDK:-"/opt/friction"}
+DISTFILES=${DISTFILES:-"/mnt"}
 BUILD=${BUILD:-"${HOME}"}
 VERSION=${VERSION:-""}
 FRICTION_PKG=friction-${VERSION}
@@ -138,11 +139,15 @@ cat ${CWD}/vfxplatform.spec | sed 's/__FRICTION_VERSION__/'${VERSION}'/g' > rpm.
 RPM_PKG=friction-${VERSION}-1.x86_64.rpm
 DEB_PKG=friction_${VERSION}-1_amd64.deb
 
+# RPM
 rpmbuild -bb rpm.spec
+
+# DEB
 rm -rf deb || true
 mkdir deb
 (cd deb; fakeroot alien -k --to-deb --scripts ${HOME}/rpmbuild/RPMS/x86_64/${RPM_PKG})
 
+# Portable
 FRICTION_PORTABLE=${FRICTION_PKG}-portable-x86_64
 FRICTION_PORTABLE_DIR=${BUILD}/${FRICTION_PORTABLE}
 cd ${BUILD}
@@ -180,5 +185,15 @@ done
 cd ${BUILD}
 tar cvf ${FRICTION_PORTABLE}.tar ${FRICTION_PORTABLE}
 xz -9 ${FRICTION_PORTABLE}.tar
+
+# AppImage
+(cd ${FRICTION_PORTABLE_DIR} ;
+ln -sf bin/friction AppRun
+ln -sf share/applications/friction.desktop .
+ln -sf share/icons/hicolor/256x256/apps/friction.png .
+ln -sf share/icons/hicolor/256x256/apps/friction.png .DirIcon
+)
+tar xf ${DISTFILES}/appimagetool.tar.xz
+ARCH=x86_64 ./appimagetool/AppRun ${FRICTION_PORTABLE}
 
 echo "PKGS DONE"

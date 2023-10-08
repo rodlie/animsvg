@@ -37,4 +37,4 @@ CWD=${CWD} SDK=${SDK} BUILD=${BUILD} ${CWD}/build_vfxplatform_friction.sh
 VERSION=`cat ${BUILD}/friction/build-vfxplatform/version.txt`
 
 # Package Friction (TAR)
-CWD=${CWD} SDK=${SDK} BUILD=${BUILD} VERSION=${VERSION} ${CWD}/build_vfxplatform_package_tar.sh
+CWD=${CWD} SDK=${SDK} DISTFILES=${DISTFILES} BUILD=${BUILD} VERSION=${VERSION} ${CWD}/build_vfxplatform_package_tar.sh
