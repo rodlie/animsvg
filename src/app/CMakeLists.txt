@@ -41,6 +41,19 @@ if(${USE_ROBOTO})
     add_definitions(-DFRICTION_BUNDLE_ROBOTO)
 endif()
 
+option(USE_SKIA_SYSTEM_LIBS "Use skia (third-party) system libraries on Linux" OFF)
+if(${USE_SKIA_SYSTEM_LIBS})
+    pkg_check_modules(EXPAT REQUIRED expat)
+    pkg_check_modules(FREETYPE REQUIRED freetype2)
+    pkg_check_modules(JPEG REQUIRED libjpeg)
+    pkg_check_modules(PNG REQUIRED libpng)
+    pkg_check_modules(WEBP REQUIRED libwebpmux)
+    pkg_check_modules(WEBPMUX REQUIRED libwebpdemux)
+    pkg_check_modules(ZLIB REQUIRED zlib)
+    pkg_check_modules(ICU REQUIRED icu-i18n)
+    pkg_check_modules(HARFBUZZ REQUIRED harfbuzz)
+endif()
+
 if(APPLE)
     set(ICON_FILE ${CMAKE_CURRENT_SOURCE_DIR}/icons/${PROJECT_NAME}.icns)
     set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
@@ -106,6 +119,19 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../core
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia
 )
+
+if(${USE_SKIA_SYSTEM_LIBS})
+    include_directories(
+        ${EXPAT_INCLUDE_DIRS}
+        ${FREETYPE_INCLUDE_DIRS}
+        ${JPEG_INCLUDE_DIRS}
+        ${PNG_INCLUDE_DIRS}
+        ${WEBP_INCLUDE_DIRS}
+        ${ZLIB_INCLUDE_DIRS}
+        ${ICU_INCLUDE_DIRS}
+        ${HARFBUZZ_INCLUDE_DIRS}
+    )
+endif()
 
 if(UNIX)
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/include)
@@ -432,6 +458,21 @@ target_link_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia/out/build
 )
 
+if(${USE_SKIA_SYSTEM_LIBS})
+    target_link_directories(
+        ${PROJECT_NAME}
+        PRIVATE
+        ${EXPAT_LIBRARIES_DIRS}
+        ${FREETYPE_LIBRARIES_DIRS}
+        ${JPEG_LIBRARIES_DIRS}
+        ${PNG_LIBRARIES_DIRS}
+        ${WEBP_LIBRARIES_DIRS}
+        ${ZLIB_LIBRARIES_DIRS}
+        ${ICU_LIBRARIES_DIRS}
+        ${HARFBUZZ_LIBRARIES_DIRS}
+    )
+endif()
+
 if(UNIX)
     target_link_directories(
         ${PROJECT_NAME}
@@ -450,6 +491,22 @@ target_link_libraries(
     ${FFMPEG_LIBRARIES}
     ${SKIA_LIBRARIES}
 )
+
+if(${USE_SKIA_SYSTEM_LIBS})
+    target_link_libraries(
+        ${PROJECT_NAME}
+        PRIVATE
+        ${EXPAT_LIBRARIES}
+        ${FREETYPE_LIBRARIES}
+        ${JPEG_LIBRARIES}
+        ${PNG_LIBRARIES}
+        ${WEBP_LIBRARIES}
+        ${WEBPMUX_LIBRARIES}
+        ${ZLIB_LIBRARIES}
+        ${ICU_LIBRARIES}
+        ${HARFBUZZ_LIBRARIES}
+    )
+endif()
 
 if(APPLE)
     target_link_libraries(
