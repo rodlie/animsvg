@@ -33,6 +33,8 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QComboBox>
+#include <QToolButton>
+
 #include "smartPointers/ememory.h"
 #include "framerange.h"
 
@@ -61,6 +63,10 @@ public:
     QString getCanvasName() const;
     FrameRange getFrameRange() const;
     qreal getFps() const;
+
+    const QStringList getFpsPresets() const;
+    void checkFpsPresets() const;
+    void populateFpsPresets();
 
     void applySettingsToCanvas(Canvas * const canvas) const;
 
@@ -101,6 +107,8 @@ private:
     QPushButton *mOkButton;
     QPushButton *mCancelButton;
     QHBoxLayout *mButtonsLayout;
+
+    QToolButton *mFpsToolButton;
 };
 
 #endif // SCENESETTINGSDIALOG_H
