@@ -26,6 +26,7 @@
 #include "scenesettingsdialog.h"
 #include "canvas.h"
 #include "GUI/coloranimatorbutton.h"
+#include "appsupport.h"
 
 SceneSettingsDialog::SceneSettingsDialog(Canvas * const canvas,
                                            QWidget * const parent) :
@@ -76,11 +77,18 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
     mHeightSpinBox->setRange(1, 9999);
     mHeightSpinBox->setValue(height);
 
+    mResToolButton = new QToolButton(this);
+    mResToolButton->setArrowType(Qt::NoArrow);
+    mResToolButton->setPopupMode(QToolButton::InstantPopup);
+    mResToolButton->setObjectName("ToolButton");
+    mResToolButton->setIcon(QIcon::fromTheme("dots"));
+
     mSizeLayout = new QHBoxLayout();
     mSizeLayout->addWidget(mWidthLabel);
     mSizeLayout->addWidget(mWidthSpinBox);
     mSizeLayout->addWidget(mHeightLabel);
     mSizeLayout->addWidget(mHeightSpinBox);
+    mSizeLayout->addWidget(mResToolButton);
     mMainLayout->addLayout(mSizeLayout);
 
     mFrameRangeLabel = new QLabel("Duration:", this);
@@ -152,6 +160,7 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
 
     validate();
 
+    populateResPresets();
     populateFpsPresets();
 }
 
@@ -198,42 +207,36 @@ qreal SceneSettingsDialog::getFps() const {
     return mFPSSpinBox->value();
 }
 
-const QStringList SceneSettingsDialog::getFpsPresets() const
-{
-    QStringList presets;
-    QSettings settings;
-    settings.beginGroup("presets");
-    presets = settings.value("fps", QStringList() << "23.976" << "24" << "25" << "30" << "50" << "60").toStringList();
-    settings.endGroup();
-    return presets;
-}
-
-void SceneSettingsDialog::checkFpsPresets() const
-{
-    QStringList presets = getFpsPresets();
-    if (presets.contains(QString::number(getFps()))) { return; }
-    presets << QString::number(getFps());
-    QSettings settings;
-    settings.beginGroup("presets");
-    settings.setValue("fps", presets);
-    settings.endGroup();
-}
-
 void SceneSettingsDialog::populateFpsPresets()
 {
-    QStringList presets = getFpsPresets();
+    QStringList presets = AppSupport::getFpsPresets();
 
     QMap<double, QString> m;
     for (auto s : presets) { m[s.toDouble()] = s; }
     presets = QStringList(m.values());
 
-    for (int i = 0; i < presets.count(); ++i) {
-        QString preset = presets.at(i);
+    for (const auto &preset : presets) {
         const auto act = new QAction(preset, this);
         connect (act, &QAction::triggered, [this, preset]() {
             mFPSSpinBox->setValue(preset.toDouble());
         });
         mFpsToolButton->addAction(act);
+    }
+}
+
+void SceneSettingsDialog::populateResPresets()
+{
+    const auto presets = AppSupport::getResolutionPresets();
+    for (const auto &preset : presets) {
+        const auto act = new QAction(QString("%1 x %2")
+                                     .arg(preset.first)
+                                     .arg(preset.second),
+                                     this);
+        connect (act, &QAction::triggered, [this, preset]() {
+            mWidthSpinBox->setValue(preset.first);
+            mHeightSpinBox->setValue(preset.second);
+        });
+        mResToolButton->addAction(act);
     }
 }
 
@@ -243,7 +246,8 @@ void SceneSettingsDialog::applySettingsToCanvas(Canvas * const canvas) const {
     canvas->setCanvasSize(getCanvasWidth(), getCanvasHeight());
     canvas->setFps(getFps());
     canvas->setFrameRange(getFrameRange());
-    checkFpsPresets();
+    AppSupport::saveFpsPreset(getFps());
+    AppSupport::saveResolutionPreset(getCanvasWidth(), getCanvasHeight());
     if(canvas != mTargetCanvas) {
         canvas->getBgColorAnimator()->setColor(mBgColorButton->color());
     }

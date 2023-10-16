@@ -64,9 +64,8 @@ public:
     FrameRange getFrameRange() const;
     qreal getFps() const;
 
-    const QStringList getFpsPresets() const;
-    void checkFpsPresets() const;
     void populateFpsPresets();
+    void populateResPresets();
 
     void applySettingsToCanvas(Canvas * const canvas) const;
 
@@ -108,6 +107,7 @@ private:
     QPushButton *mCancelButton;
     QHBoxLayout *mButtonsLayout;
 
+    QToolButton *mResToolButton;
     QToolButton *mFpsToolButton;
 };
 

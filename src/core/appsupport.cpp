@@ -395,3 +395,100 @@ const QByteArray AppSupport::filterShader(QByteArray data)
 #endif
     return data;
 }
+
+const QStringList AppSupport::getFpsPresets()
+{
+    QStringList presets;
+    QSettings settings;
+    settings.beginGroup("presets");
+    presets = settings.value("fps",
+                             QStringList()
+                             << "24"
+                             << "25"
+                             << "30"
+                             << "50"
+                             << "60").toStringList();
+    settings.endGroup();
+    return presets;
+}
+
+void AppSupport::saveFpsPreset(const double value)
+{
+    if (value <= 0) { return; }
+    auto presets = getFpsPresets();
+    if (presets.contains(QString::number(value))) { return; }
+    presets << QString::number(value);
+    QSettings settings;
+    settings.beginGroup("presets");
+    settings.setValue("fps", presets);
+    settings.endGroup();
+}
+
+bool AppSupport::removeFpsPreset(const double value)
+{
+    if (value <= 0) { return false; }
+    auto presets = getFpsPresets();
+    if (!presets.removeAll(QString::number(value))) { return false; }
+    QSettings settings;
+    settings.beginGroup("presets");
+    settings.setValue("fps", presets);
+    settings.endGroup();
+    return true;
+}
+
+const QStringList AppSupport::getResolutionPresetsList()
+{
+    QStringList presets;
+    QSettings settings;
+    settings.beginGroup("presets");
+    presets = settings.value("resolution",
+                             QStringList()
+                             << "1280x720"
+                             << "1920x1080"
+                             << "2560x1440"
+                             << "3840x2160").toStringList();
+    settings.endGroup();
+    return presets;
+}
+
+const QList<QPair<int, int> > AppSupport::getResolutionPresets()
+{
+    const auto presets = getResolutionPresetsList();
+    QList<QPair<int, int>> l;
+    for (auto &v: presets) {
+        auto res = v.split("x");
+        if (res.count() != 2) { continue; }
+        l.append(QPair<int, int>(res.at(0).trimmed().toInt(),
+                                 res.at(1).trimmed().toInt()));
+    }
+    std::sort(l.begin(), l.end());
+    return l;
+}
+
+void AppSupport::saveResolutionPreset(const int w,
+                                      const int h)
+{
+    if (w <= 0 || h <= 0) { return; }
+    const auto v = QString("%1x%2").arg(w).arg(h);
+    auto presets = getResolutionPresetsList();
+    if (presets.contains(v)) { return; }
+    presets << v;
+    QSettings settings;
+    settings.beginGroup("presets");
+    settings.setValue("resolution", presets);
+    settings.endGroup();
+}
+
+bool AppSupport::removeResolutionPreset(const int w,
+                                        const int h)
+{
+    if (w <= 0 || h <= 0) { return false; }
+    const auto v = QString("%1x%2").arg(w).arg(h);
+    auto presets = getResolutionPresetsList();
+    if (!presets.removeAll(v)) { return false; }
+    QSettings settings;
+    settings.beginGroup("presets");
+    settings.setValue("resolution", presets);
+    settings.endGroup();
+    return true;
+}
