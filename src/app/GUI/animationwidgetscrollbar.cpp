@@ -76,28 +76,12 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     const int maxFrame = mFrameRange.fMax + f1;
     const qreal w1 = width() - 1.5*eSizesUI::widget + f1*pixPerFrame - x0;
 
-    QColor col = mHandleColor;
-    if(mPressed) {
-        col.setHsv(col.hue(), col.saturation(), qMin(255, col.value() + 40));
-    }
-    QRect handleRect;
-    const int hLeftFrames = mFirstViewedFrame - minFrame;
-
-    const int handleFixedWidth = 16;
-    const int handleWidth = qRound(mViewedFramesSpan*pixPerFrame);
-    const int handleLeft = mBottom ? qRound(hLeftFrames*pixPerFrame + x0) : qRound((hLeftFrames*pixPerFrame + x0)+(handleWidth/2)-(handleFixedWidth/2));
-
-    handleRect.setLeft(handleLeft);
-    handleRect.setTop(mBottom ? 2 : 5);
-    handleRect.setWidth(mBottom ? handleWidth : handleFixedWidth);
-    handleRect.setBottom(mBottom ? 6 : height());
-    p.fillRect(handleRect, col);
-
+    // draw cache
     if (mCurrentCanvas) {
         const qreal fps = mCurrentCanvas->getFps();
         mFps = fps;
         if (!mRange) {
-            const int soundHeight = eSizesUI::widget/3;
+            const int soundHeight = eSizesUI::widget / 1.5;
             const int rasterHeight = eSizesUI::widget - soundHeight;
             const QRectF rasterRect(x0, 0, w1, rasterHeight);
             const auto& rasterCache = mCurrentCanvas->getSceneFramesHandler();
@@ -109,22 +93,49 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         }
     }
 
-    p.setPen(Qt::white);
+    QColor col = mHandleColor;
 
     const qreal inc = mDrawFrameInc*pixPerFrame;
-
     const int minMod = minFrame%mDrawFrameInc;
     qreal xL = (-minMod + (mRange ? 0. : 0.5))*pixPerFrame + x0;
+    qreal xxL = xL;
     int currentFrame = minFrame - minMod;
-
-    /*if(!mRange) {
-        const int nEmpty = qCeil((70 - xL)/inc);
-        currentFrame += nEmpty*mDrawFrameInc;
-        xL += nEmpty*inc;
-    }*/
-
     const qreal threeFourthsHeight = height()*0.75;
     const qreal maxX = width() + eSizesUI::widget;
+
+    // draw minor ticks
+    if (!mRange) {
+        p.setPen(mHandleColor);
+        while (xxL < maxX) {
+            p.drawLine(QPointF(xxL, threeFourthsHeight + 2), QPointF(xxL, height()));
+            xxL += inc/5;
+        }
+    }
+
+    // draw handle
+    QRectF handleRect;
+    const int hLeftFrames = mFirstViewedFrame - minFrame;
+    const qreal handleFixedWidth = 16;
+    const qreal handleWidth = (mViewedFramesSpan*pixPerFrame);
+    const qreal handleLeft = mBottom ? (hLeftFrames*pixPerFrame + x0) : ((hLeftFrames*pixPerFrame + x0)+(handleWidth/2)-(handleFixedWidth/2));
+
+    handleRect.setLeft(handleLeft);
+    handleRect.setTop(mBottom ? 2 : 5);
+    handleRect.setWidth(mBottom ? handleWidth : handleFixedWidth);
+    handleRect.setBottom(mBottom ? 6 : height());
+    if (mRange) { p.fillRect(handleRect, col); }
+    else { // triangle
+        QPainterPath path;
+        path.moveTo(handleRect.left() + (handleRect.width() / 2), handleRect.bottom());
+        path.lineTo(handleRect.topLeft());
+        path.lineTo(handleRect.topRight());
+        path.lineTo(handleRect.left() + (handleRect.width() / 2), handleRect.bottom());
+        p.fillPath(path, QColor(180, 0, 0));
+    }
+
+    p.setPen(Qt::white);
+
+    // draw main ticks
     if (!mRange) {
         while(xL < maxX) {
             p.drawLine(QPointF(xL, threeFourthsHeight + 2), QPointF(xL, height()));
@@ -138,14 +149,6 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
             currentFrame += mDrawFrameInc;
         }
     }
-
-    /*p.setPen(QPen(Qt::white, 1));
-    if(!mRange) {
-        const QRectF textRect(eSizesUI::widget, 0,
-                              5*eSizesUI::widget, height());
-        p.drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft,
-                   QString::number(mFrameRange.fMin));
-    }*/
 
     p.end();
 }
