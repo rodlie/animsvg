@@ -31,10 +31,13 @@
 #include "GUI/global.h"
 #include "Private/esettings.h"
 
-TimelineHighlightWidget::TimelineHighlightWidget(
-        const bool track, QWidget * const parent) :
-    QWidget(parent),
-    mSettings(*eSettings::sInstance) {
+TimelineHighlightWidget::TimelineHighlightWidget(const bool track,
+                                                 QWidget * const parent,
+                                                 const bool alt)
+    : QWidget(parent)
+    , mAlt(alt)
+    , mSettings(*eSettings::sInstance)
+{
     setAttribute(Qt::WA_TranslucentBackground);
     setMouseTracking(track);
 }
@@ -53,14 +56,14 @@ void TimelineHighlightWidget::leaveEvent(QEvent *) {
 
 void TimelineHighlightWidget::paintEvent(QPaintEvent *) {
     QPainter p(this);
-    if(mSettings.fTimelineAlternateRow) {
+    if (mSettings.fTimelineAlternateRow && mAlt) {
         const int height = this->height();
         const QColor color = mSettings.fTimelineAlternateRowColor;
-        for(int i = 0; i < height; i += 2*eSizesUI::widget) {
+        for (int i = 0; i < height; i += 2*eSizesUI::widget) {
             p.fillRect(0, i, width(), eSizesUI::widget, color);
         }
     }
-    if(mSettings.fTimelineHighlightRow && mHoverRow >= 0) {
+    if (mSettings.fTimelineHighlightRow && mHoverRow >= 0) {
         p.fillRect(0, mHoverRow*eSizesUI::widget,
                    width(), eSizesUI::widget,
                    mSettings.fTimelineHighlightRowColor);

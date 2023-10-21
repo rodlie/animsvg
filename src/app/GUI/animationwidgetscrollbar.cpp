@@ -105,7 +105,7 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
 
     // draw minor ticks
     if (!mRange) {
-        p.setPen(mHandleColor);
+        p.setPen(QPen(Qt::white, 2));
         while (xxL < maxX) {
             p.drawLine(QPointF(xxL, threeFourthsHeight + 2), QPointF(xxL, height()));
             xxL += inc/5;
@@ -120,9 +120,9 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     const qreal handleLeft = mBottom ? (hLeftFrames*pixPerFrame + x0) : ((hLeftFrames*pixPerFrame + x0)+(handleWidth/2)-(handleFixedWidth/2));
 
     handleRect.setLeft(handleLeft);
-    handleRect.setTop(mBottom ? 2 : 5);
+    handleRect.setTop(mBottom ? 2 : 0);
     handleRect.setWidth(mBottom ? handleWidth : handleFixedWidth);
-    handleRect.setBottom(mBottom ? 6 : height());
+    handleRect.setBottom(mBottom ? 6 : height()/2);
     if (mRange) { p.fillRect(handleRect, col); }
     else { // triangle
         QPainterPath path;
@@ -133,7 +133,7 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         p.fillPath(path, QColor(180, 0, 0));
     }
 
-    p.setPen(Qt::white);
+    p.setPen(QPen(Qt::white, 2));
 
     // draw main ticks
     if (!mRange) {

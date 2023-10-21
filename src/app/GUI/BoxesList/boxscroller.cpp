@@ -71,7 +71,7 @@ void BoxScroller::paintEvent(QPaintEvent *) {
 
 TimelineHighlightWidget *BoxScroller::requestHighlighter() {
     if(!mHighlighter) {
-        mHighlighter = new TimelineHighlightWidget(false, this);
+        mHighlighter = new TimelineHighlightWidget(false, this, true);
         mHighlighter->resize(size());
     }
     return mHighlighter;

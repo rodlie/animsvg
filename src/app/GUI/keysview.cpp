@@ -60,7 +60,7 @@ KeysView::KeysView(BoxScrollWidget *boxesListVisible,
 
 TimelineHighlightWidget *KeysView::requestHighlighter() {
     if(!mHighlighter) {
-        mHighlighter = new TimelineHighlightWidget(true, this);
+        mHighlighter = new TimelineHighlightWidget(true, this, false);
         mHighlighter->resize(size());
     }
     return mHighlighter;
@@ -499,16 +499,6 @@ void KeysView::paintEvent(QPaintEvent *) {
         p.drawLine(QPointF(xTT, 0), QPointF(xTT, height()));
     }
 
-    if(mCurrentScene) {
-        if(mCurrentScene->getCurrentFrame() <= maxFrame &&
-           mCurrentScene->getCurrentFrame() >= minFrame) {
-            xT = (mCurrentScene->getCurrentFrame() - mMinViewedFrame)*mPixelsPerFrame +
-                    mPixelsPerFrame*0.5;
-            p.setPen(QPen(QColor(180, 0, 0), 2));
-            p.drawLine(QPointF(xT, 0), QPointF(xT, height()));
-        }
-    }
-
     p.setPen(QPen(Qt::black, 1));
 
     if(mGraphViewed) {
@@ -533,6 +523,15 @@ void KeysView::paintEvent(QPaintEvent *) {
                               mSelectionRect.y() - mViewedTop,
                               mSelectionRect.width()*mPixelsPerFrame,
                               mSelectionRect.height()));
+        }
+    }
+
+    if (mCurrentScene) {
+        if (mCurrentScene->getCurrentFrame() <= maxFrame &&
+           mCurrentScene->getCurrentFrame() >= minFrame) {
+            xT = (mCurrentScene->getCurrentFrame() - mMinViewedFrame)*mPixelsPerFrame + mPixelsPerFrame*0.5;
+            p.setPen(QPen(QColor(180, 0, 0), 2));
+            p.drawLine(QPointF(xT, 0), QPointF(xT, height()));
         }
     }
 

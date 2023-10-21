@@ -32,7 +32,9 @@ class eSettings;
 
 class TimelineHighlightWidget : public QWidget {
 public:
-    TimelineHighlightWidget(const bool track, QWidget* const parent);
+    TimelineHighlightWidget(const bool track,
+                            QWidget* const parent,
+                            const bool alt);
 
     void setOther(TimelineHighlightWidget* const other);
 protected:
@@ -42,6 +44,7 @@ protected:
 private:
     void setHoverRow(const int row);
 
+    bool mAlt;
     int mHoverRow = -1;
     const eSettings& mSettings;
     TimelineHighlightWidget* mOther = nullptr;
