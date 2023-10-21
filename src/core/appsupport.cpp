@@ -155,6 +155,9 @@ const QString AppSupport::getAppVersion(bool html)
 #ifdef PROJECT_VERSION
     version = QString::fromUtf8(PROJECT_VERSION);
 #endif
+#ifndef PROJECT_OFFICIAL
+    version.append("-dev");
+#endif
     QString git;
 #ifdef PROJECT_GIT
     git = QString::fromUtf8(PROJECT_GIT);

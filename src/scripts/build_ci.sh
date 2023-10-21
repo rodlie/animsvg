@@ -18,7 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Friction CI (Ubuntu)
+# Friction CI (Ubuntu 22.04)
 
 set -e -x
 
@@ -80,6 +80,10 @@ MKJOBS=${MKJOBS:-4}
 COMMIT=`git rev-parse --short HEAD`
 BRANCH=`git rev-parse --abbrev-ref HEAD`
 
+if [ "${BRANCH}" = "main" ]; then
+    BRANCH=""
+fi
+
 if [ ! -f "${CWD}/src/gperftools/.libs/libtcmalloc.a" ]; then
     cd ${CWD}/src/gperftools
     ./autogen.sh
@@ -97,9 +101,9 @@ if [ ! -f "${CWD}/src/skia/out/build/libskia.a" ]; then
 fi
 
 cd ${CWD}
-rm -rf build || true
-mkdir build
-cd build
+rm -rf build-ci || true
+mkdir build-ci
+cd build-ci
 
 cmake -G Ninja \
 -DUSE_SKIA_SYSTEM_LIBS=ON \

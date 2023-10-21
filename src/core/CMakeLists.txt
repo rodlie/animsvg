@@ -35,7 +35,6 @@ message("-- skia libraries: ${SKIA_LIBRARIES}")
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 add_definitions(-DPROJECT_GIT="${GIT_COMMIT}")
 add_definitions(-DPROJECT_BRANCH="${GIT_BRANCH}")
-add_definitions(-DPROJECT_TAG="${GIT_TAG}")
 
 add_definitions(-DCORE_LIBRARY)
 

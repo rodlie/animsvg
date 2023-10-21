@@ -23,7 +23,6 @@
 
 #include "aboutwidget.h"
 #include "appsupport.h"
-#include "hardwareinfo.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -44,44 +43,16 @@ AboutWidget::AboutWidget(QWidget *parent)
 
     mTopLabel->setText(QString::fromUtf8("<div style=\"margin: 0; padding: 0; text-align: center; font-weight: normal;\">"
                                          "<img src=\":/icons/hicolor/%2x%2/apps/%4.png\" width=\"%2\" height=\"%2\">"
-                                         "<h1 style=\"font-weight: normal; margin-top: 0; padding-top: 0;\">%3<br><span style=\"font-size: x-large;\">%1</span></h1>"
+                                         "<h1 style=\"font-weight: normal; margin-top: 0; padding-top: 0;\">%3<br><span style=\"font-size: large;\">%1</span></h1>"
                                          "</div>")
                                          .arg(AppSupport::getAppVersion(true),
                                               QString::number(96),
                                               AppSupport::getAppDisplayName(),
                                               AppSupport::getAppName()));
 
-    const auto mHwLabel = new QLabel(this);
-    mHwLabel->setText(QString::fromUtf8("<style>"
-                                        "table { width: 100%; }"
-                                        ".center {"
-                                        "text-align: center;"
-                                        "padding-left: .5em;"
-                                        "padding-right: .5em;"
-                                        "}"
-                                        ".right { text-align: right; }"
-                                        ".bold { font-weight: bold; }"
-                                        "</style>"
-                                        "<table><tr>"
-                                        "<td class=\"bold\">OpenGL</td>"
-                                        "<td class=\"bold center\">:</td>"
-                                        "<td class=\"right\">%3</td>"
-                                        "</tr><tr>"
-                                        "<td class=\"bold\">Threads</td>"
-                                        "<td class=\"bold center\">:</td>"
-                                        "<td class=\"right\">%1 available</td>"
-                                        "</tr><tr>"
-                                        "<td class=\"bold\">Memory</td>"
-                                        "<td class=\"bold center\">:</td>"
-                                        "<td class=\"right\">%2 MB total</td>"
-                                        "</tr></table>")
-                      .arg(HardwareInfo::sCpuThreads())
-                      .arg(intMB(HardwareInfo::sRamKB()).fValue)
-                      .arg(HardwareInfo::sGpuRendererString()));
-
+    mTopLayout->addStretch();
     mTopLayout->addWidget(mTopLabel);
     mTopLayout->addStretch();
-    mTopLayout->addWidget(mHwLabel);
 
     mLayout->addWidget(mTopWidget);
 

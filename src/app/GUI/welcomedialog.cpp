@@ -55,7 +55,7 @@ WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
     logoLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
     logoLabel->setText(QString::fromUtf8("<div style=\"margin: 0; padding: 0; text-align: center; font-weight: normal;\">"
                                          "<p style=\"margin: 0; padding: 0;\"><img src=\":/icons/hicolor/%2x%2/apps/%4.png\" width=\"%2\" height=\"%2\"></p>"
-                                         "<h1 style=\"font-weight: normal; margin-top: 0; padding-top: 0;\">%3<br><span style=\"font-size: x-large;\">%1</span></h1>"
+                                         "<h1 style=\"font-weight: normal; margin-top: 0; padding-top: 0;\">%3<br><span style=\"font-size: large;\">%1</span></h1>"
                                          "</div>")
                                         .arg(AppSupport::getAppVersion(false),
                                              QString::number(logoSize),
