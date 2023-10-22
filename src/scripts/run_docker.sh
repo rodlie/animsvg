@@ -27,15 +27,12 @@ SNAP=${SNAP:-0}
 BRANCH=${BRANCH:-""}
 COMMIT=${COMMIT:-""}
 TAG=${TAG:-""}
-MKJOBS=${JOBS:-8}
+MKJOBS=${JOBS:-4}
 CLANG=${CLANG:-1}
 
 JAMMY=${JAMMY:-1}
 LUNAR=${LUNAR:-1}
 MANTIC=${MANTIC:-1}
-EL=${EL:-1}
-FC=${FC:-1}
-AL=${AL:-0}
 
 if [ "${SNAP}" = 1 ]; then
     REL=0
@@ -68,36 +65,18 @@ if [ "${SNAP}" = 1 ]; then
     FRICTION_DIST="${CWD}/snapshots/distfiles"
 fi
 
-#QUAZIP_V="1.4"
-QSCINTILLA_V="2.13.4"
-FFMPEG_V="4.4.4"
-UNWIND_V="1.6.2"
 GPERF_V="4df0b85"
-SKIA_V="4fcb5c225a"
+SKIA_V="72dd4c3cb3"
 
 if [ ! -d "${FRICTION_DIST}" ]; then
     mkdir -p ${FRICTION_DIST}
 fi
 
-if [ "${EL}" = 1 ] || [ "${FC}" = 1 ]; then
-    #if [ ! -f "${FRICTION_DIST}/quazip.tar.gz" ]; then
-    #    curl -L -k "${SF_NET_SRC}/quazip-${QUAZIP_V}.tar.gz" --output ${FRICTION_DIST}/quazip.tar.gz
-    #fi
-    if [ ! -f "${FRICTION_DIST}/qscintilla.tar.gz" ]; then
-        curl -L -k "${SF_NET_SRC}/QScintilla_src-${QSCINTILLA_V}.tar.gz/download" --output ${FRICTION_DIST}/qscintilla.tar.gz
-    fi
-    if [ ! -f "${FRICTION_DIST}/ffmpeg.tar.xz" ]; then
-        curl -L -k "${SF_NET_SRC}/ffmpeg-${FFMPEG_V}.tar.xz/download" --output ${FRICTION_DIST}/ffmpeg.tar.xz
-    fi
-    if [ ! -f "${FRICTION_DIST}/libunwind.tar.gz" ]; then
-        curl -L -k "${SF_NET_SRC}/libunwind-${UNWIND_V}.tar.gz/download" --output ${FRICTION_DIST}/libunwind.tar.gz
-    fi
+if [ ! -f "${FRICTION_DIST}/gperftools-${GPERF_V}.tar.xz" ]; then
+    curl -k -L "${SF_NET_SRC}/gperftools-${GPERF_V}.tar.xz/download" --output ${FRICTION_DIST}/gperftools-${GPERF_V}.tar.xz
 fi
-if [ ! -f "${FRICTION_DIST}/gperftools.tar.xz" ]; then
-    curl -k -L "${SF_NET_SRC}/gperftools-${GPERF_V}.tar.xz/download" --output ${FRICTION_DIST}/gperftools.tar.xz
-fi
-if [ ! -f "${FRICTION_DIST}/skia.tar.xz" ]; then
-    curl -k -L "${SF_NET_SRC}/skia-${SKIA_V}-minimal.tar.xz/download" --output ${FRICTION_DIST}/skia.tar.xz
+if [ ! -f "${FRICTION_DIST}/skia-${SKIA_V}.tar.xz" ]; then
+    curl -k -L "${SF_NET_SRC}/skia-${SKIA_V}.tar.xz/download" --output ${FRICTION_DIST}/skia-${SKIA_V}.tar.xz
 fi
 
 if [ "${JAMMY}" = 1 ]; then
@@ -108,13 +87,4 @@ if [ "${LUNAR}" = 1 ]; then
 fi
 if [ "${MANTIC}" = 1 ]; then
     $DOCKER friction-mantic
-fi
-if [ "${EL}" = 1 ]; then
-    $DOCKER friction-rhel
-fi
-if [ "${FC}" = 1 ]; then
-    $DOCKER friction-fedora
-fi
-if [ "${AL}" = 1 ]; then
-    $DOCKER friction-arch
 fi

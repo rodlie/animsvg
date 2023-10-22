@@ -1,7 +1,0 @@
-FROM archlinux:base-devel
-
-RUN pacman --noconfirm -Syu clang git curl libtool autoconf automake cmake python ninja fontconfig freetype2 ffmpeg qscintilla-qt5 qt5-base qt5-imageformats qt5-multimedia qt5-svg qt5-tools qt5-wayland qt5-declarative libunwind
-
-COPY build_docker.sh /
-COPY PKGBUILD /
-CMD [ "bash", "./build_docker.sh" ]
