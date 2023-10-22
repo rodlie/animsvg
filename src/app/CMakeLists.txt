@@ -52,6 +52,8 @@ if(${USE_SKIA_SYSTEM_LIBS})
     pkg_check_modules(ZLIB REQUIRED zlib)
     pkg_check_modules(ICU REQUIRED icu-i18n)
     pkg_check_modules(HARFBUZZ REQUIRED harfbuzz)
+else()
+    add_definitions(-DFRICTION_BUNDLE_SKIA_BUNDLE)
 endif()
 
 if(APPLE)
@@ -593,9 +595,6 @@ if(UNIX AND NOT APPLE)
         FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/../../LICENSE.md
         ${CMAKE_CURRENT_SOURCE_DIR}/../../README.md
-        ${CMAKE_BINARY_DIR}/LICENSE-gperftools.md
-        ${CMAKE_BINARY_DIR}/LICENSE-skia.md
-        ${CMAKE_BINARY_DIR}/README-easing.md
         DESTINATION
         ${CMAKE_INSTALL_DOCDIR}-${PROJECT_VERSION}
     )

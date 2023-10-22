@@ -97,13 +97,17 @@ AboutWidget::AboutWidget(QWidget *parent)
         mTab->addTab(browser, tab.title);
     }
 
-    /*const auto mThirdParty = new QTabWidget(this);
+    const auto mThirdParty = new QTabWidget(this);
     mThirdParty->setTabPosition(QTabWidget::South);
     mThirdParty->setTabBarAutoHide(true);
     mThirdParty->setObjectName(QString::fromUtf8("ThirdPartyBrowser"));
 
     QStringList parties;
+#ifdef FRICTION_BUNDLE_SKIA_BUNDLE
+    parties << "skia_bundle";
+#else
     parties << "skia";
+#endif
 #ifdef FRICTION_BUNDLE_QT
     parties << "qt";
 #endif
@@ -118,9 +122,6 @@ AboutWidget::AboutWidget(QWidget *parent)
 #endif
     for (int i = 0; i < parties.size(); ++i) {
         QString doc = parties.at(i);
-#ifdef Q_OS_WIN
-        if (doc == "ffmpeg") { doc = "ffmpeg_win"; }
-#endif
         QFile file(QString(":/docs/3rdparty/%1.html").arg(doc));
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) { continue; }
         const auto browser = new QTextBrowser(this);
@@ -130,7 +131,8 @@ AboutWidget::AboutWidget(QWidget *parent)
         html.append(file.readAll());
         browser->setHtml(html);
         file.close();
-        mThirdParty->addTab(browser, parties.at(i));
+        QString title = parties.at(i).split("_").takeFirst().toUpper();
+        mThirdParty->addTab(browser, title);
     }
-    mTab->addTab(mThirdParty, tr("Third-party"));*/
+    mTab->addTab(mThirdParty, tr("Third-party"));
 }

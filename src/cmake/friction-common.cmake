@@ -50,6 +50,7 @@ if(UNIX AND NOT APPLE)
     if(${STATIC_FFMPEG})
         set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-Bsymbolic")
     endif()
+    add_definitions(-DFRICTION_BUNDLE_GPERFTOOLS)
 endif()
 
 if(NOT WIN32)
