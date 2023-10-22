@@ -59,9 +59,9 @@ FRICTION_DIR="${FRICTION_ROOT}/friction"
 FRICTION_SRC_DIR="${FRICTION_DIR}/src"
 FRICTION_OUT_DIR="/snapshots"
 
-if [ "${REL}" = 1 ]; then
-    FRICTION_OUT_DIR="/releases"
-fi
+# if [ "${REL}" = 1 ]; then
+#     FRICTION_OUT_DIR="/releases"
+# fi
 
 FRICTION_DIST="${FRICTION_OUT_DIR}/distfiles"
 FRICTION_BRANCH=${FRICTION_BRANCH:-""}
@@ -128,13 +128,13 @@ if [ ! -f "${FRICTION_SRC_DIR}/gperftools/.libs/libtcmalloc.a" ]; then
     tar xf ${FRICTION_DIST}/gperftools-${GPERF_V}.tar.xz
     mv gperftools-${GPERF_V} gperftools
     cd gperftools
-    if [ -f "${FRICTION_DIST}/gperftools-build-${DID}${COMPILER}.tar.xz" ]; then
-        tar xf ${FRICTION_DIST}/gperftools-build-${DID}${COMPILER}.tar.xz
+    if [ -f "${FRICTION_DIST}/gperftools-${GPERF_V}-build-${DID}${COMPILER}.tar.xz" ]; then
+        tar xf ${FRICTION_DIST}/gperftools-${GPERF_V}-build-${DID}${COMPILER}.tar.xz
     else
         ./autogen.sh
         ./configure --disable-shared
         make -j${MKJOBS}
-        tar cvvfJ ${FRICTION_DIST}/gperftools-build-${DID}${COMPILER}.tar.xz .
+        tar cvvfJ ${FRICTION_DIST}/gperftools-${GPERF_V}-build-${DID}${COMPILER}.tar.xz .
     fi
 fi
 
@@ -152,15 +152,15 @@ if [ ! -f "${FRICTION_SRC_DIR}/skia/out/build/libskia.a" ]; then
     tar xf ${FRICTION_DIST}/skia-${SKIA_V}.tar.xz
     mv skia-${SKIA_V} skia
     cd skia
-    if [ -f "${FRICTION_DIST}/skia-build-${DID}${COMPILER}.tar.xz" ]; then
-        tar xf ${FRICTION_DIST}/skia-build-${DID}${COMPILER}.tar.xz
+    if [ -f "${FRICTION_DIST}/skia-${SKIA_V}-build-${DID}${COMPILER}.tar.xz" ]; then
+        tar xf ${FRICTION_DIST}/skia-${SKIA_V}-build-${DID}${COMPILER}.tar.xz
     else
         if [ ! -f "bin/gn" ]; then
             (cd bin ; python3 fetch-gn)
         fi
         bin/gn gen out/build --args='is_official_build=true is_debug=false cc="clang" cxx="clang++" extra_cflags=["-Wno-error"] target_os="linux" target_cpu="x64" skia_use_system_expat=true skia_use_system_freetype2=true skia_use_system_libjpeg_turbo=true skia_use_system_libpng=true skia_use_system_libwebp=true skia_use_system_zlib=true skia_use_system_icu=true skia_use_system_harfbuzz=true skia_use_dng_sdk=false'
         ninja -C out/build -j${MKJOBS} skia
-        tar cvvfJ ${FRICTION_DIST}/skia-build-${DID}${COMPILER}.tar.xz out
+        tar cvvfJ ${FRICTION_DIST}/skia-${SKIA_V}-build-${DID}${COMPILER}.tar.xz out
     fi
 fi
 
