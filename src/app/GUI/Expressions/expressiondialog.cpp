@@ -623,7 +623,7 @@ void ExpressionDialog::setCurrentTabId(const int id) {
 
 const QStringList ExpressionDialog::generateEasingPresets()
 {
-    QDir userDir(QString::fromUtf8("%1/easing").arg(AppSupport::getAppUserExPresetsPath()));
+    /*QDir userDir(QString::fromUtf8("%1/easing").arg(AppSupport::getAppUserExPresetsPath()));
     QDir appDir(QString::fromUtf8("%1/easing").arg(AppSupport::getAppExPresetsPath()));
     const auto userPresets = userDir.entryInfoList(QStringList() << "*.js", QDir::Files);
     const auto appPresets = appDir.entryInfoList(QStringList() << "*.js", QDir::Files);
@@ -634,8 +634,39 @@ const QStringList ExpressionDialog::generateEasingPresets()
         qDebug() << "Checking expression preset" << presets.at(i).absoluteFilePath();
         if (!readEasingPreset(presets.at(i).absoluteFilePath()).valid) { continue; }
         usable << presets.at(i).absoluteFilePath();
-    }
-    return usable;
+    }*/
+    QStringList presets;
+    presets << ":/easing/presets/easeInBack.js"
+            << ":/easing/presets/easeInBounce.js"
+            << ":/easing/presets/easeInCirc.js"
+            << ":/easing/presets/easeInCubic.js"
+            << ":/easing/presets/easeInElastic.js"
+            << ":/easing/presets/easeInExpo.js"
+            << ":/easing/presets/easeInOutBack.js"
+            << ":/easing/presets/easeInOutBounce.js"
+            << ":/easing/presets/easeInOutCirc.js"
+            << ":/easing/presets/easeInOutCubic.js"
+            << ":/easing/presets/easeInOutElastic.js"
+            << ":/easing/presets/easeInOutExpo.js"
+            << ":/easing/presets/easeInOutQuad.js"
+            << ":/easing/presets/easeInOutQuart.js"
+            << ":/easing/presets/easeInOutQuint.js"
+            << ":/easing/presets/easeInOutSine.js"
+            << ":/easing/presets/easeInQuad.js"
+            << ":/easing/presets/easeInQuart.js"
+            << ":/easing/presets/easeInQuint.js"
+            << ":/easing/presets/easeInSine.js"
+            << ":/easing/presets/easeOutBack.js"
+            << ":/easing/presets/easeOutBounce.js"
+            << ":/easing/presets/easeOutCirc.js"
+            << ":/easing/presets/easeOutCubic.js"
+            << ":/easing/presets/easeOutElastic.js"
+            << ":/easing/presets/easeOutExpo.js"
+            << ":/easing/presets/easeOutQuad.js"
+            << ":/easing/presets/easeOutQuart.js"
+            << ":/easing/presets/easeOutQuint.js"
+            << ":/easing/presets/easeOutSine.js";
+    return presets;
 }
 
 bool ExpressionDialog::populateEasingPresets()

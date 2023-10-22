@@ -426,6 +426,7 @@ set(
     icons.qrc
     hicolor.qrc
     ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs.qrc
+    ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing.qrc
 )
 
 if(${USE_ROBOTO})
@@ -587,41 +588,6 @@ if(UNIX AND NOT APPLE)
         icons/hicolor/scalable/mimetypes/application-x-${PROJECT_NAME}.svg
         DESTINATION
         ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/mimetypes/
-    )
-    install(
-        FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInBack.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInBounce.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInCirc.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInCubic.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInElastic.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInExpo.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutBack.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutBounce.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutCirc.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutCubic.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutElastic.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutExpo.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutQuad.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutQuart.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutQuint.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInOutSine.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInQuad.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInQuart.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInQuint.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeInSine.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutBack.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutBounce.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutCirc.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutCubic.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutElastic.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutExpo.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutQuad.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutQuart.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutQuint.js
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/presets/easeOutSine.js
-        DESTINATION
-        ${CMAKE_INSTALL_DATAROOTDIR}/friction/presets/expressions/easing/
     )
     install(
         FILES
