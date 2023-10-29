@@ -106,5 +106,5 @@ cmake --build .
 
 FRICTION_INSTALL_DIR=friction-${VERSION}
 mkdir -p ${BUILD}/${FRICTION_INSTALL_DIR}/opt/friction/{bin,lib,share} || true
-mkdir -p ${BUILD}/${FRICTION_INSTALL_DIR}/opt/friction/plugins/{audio,generic,imageformats,platforminputcontexts,platforms,xcbglintegrations} || true
+mkdir -p ${BUILD}/${FRICTION_INSTALL_DIR}/opt/friction/plugins/{audio,generic,platforminputcontexts,platforms,xcbglintegrations} || true
 DESTDIR=${BUILD}/${FRICTION_INSTALL_DIR} cmake --build . --target install

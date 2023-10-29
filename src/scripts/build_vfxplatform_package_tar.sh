@@ -67,7 +67,6 @@ cp ${SDK}/plugins/generic/libqevdevmouseplugin.so ${PLUG_DIR}/generic/
 cp ${SDK}/plugins/generic/libqevdevtabletplugin.so ${PLUG_DIR}/generic/
 cp ${SDK}/plugins/generic/libqevdevtouchplugin.so ${PLUG_DIR}/generic/
 cp ${SDK}/plugins/generic/libqtuiotouchplugin.so ${PLUG_DIR}/generic/
-cp ${SDK}/plugins/imageformats/libqsvg.so ${PLUG_DIR}/imageformats/
 cp ${SDK}/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so ${PLUG_DIR}/platforminputcontexts/
 cp ${SDK}/plugins/platforms/libqoffscreen.so ${PLUG_DIR}/platforms/
 cp ${SDK}/plugins/platforms/libqxcb.so ${PLUG_DIR}/platforms/
@@ -166,7 +165,6 @@ done
 PLUGS="
 audio
 generic
-imageformats
 platforminputcontexts
 platforms
 xcbglintegrations

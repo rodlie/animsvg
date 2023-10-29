@@ -32,18 +32,13 @@ JOBS=${JOBS:-4}
 XKBCOMMON_V=0.7.1
 QT_V=5.12.12
 QSCINTILLA_V=2.14.1
-GPERF_V=4df0b85
 PELF_V=0.17.0
 CMAKE_V=3.26.3
-UNWIND_V=1.4.0
 
 NINJA_BIN=${SDK}/bin/ninja
 CMAKE_BIN=${SDK}/bin/cmake
 PELF_BIN=${SDK}/bin/patchelf
 QMAKE_BIN=${SDK}/bin/qmake
-
-GPERF_DIR=${SDK}/gperftools
-GPERF_LIB=${GPERF_DIR}/.libs/libtcmalloc.a
 
 export PATH="${SDK}/bin:${PATH}"
 export PKG_CONFIG_PATH="${SDK}/lib/pkgconfig"
@@ -90,35 +85,6 @@ if [ ! -f "${CMAKE_BIN}" ]; then
     make -j${JOBS}
     make install
 fi # cmake
-
-# libunwind
-if [ ! -f "${SDK}/lib/pkgconfig/libunwind.pc" ]; then
-    cd ${SRC}
-    UNWIND_SRC=libunwind-${UNWIND_V}
-    rm -rf ${UNWIND_SRC} || true
-    tar xf ${DIST}/${UNWIND_SRC}.tar.gz
-    cd ${UNWIND_SRC}
-    ./configure ${DEFAULT_CONFIGURE} --disable-minidebuginfo --disable-tests
-    make -j${JOBS}
-    make install
-fi # libunwind
-
-# gperftools
-if [ ! -f "${GPERF_LIB}" ]; then
-    cd ${SRC}
-    GPERF_SRC=gperftools-${GPERF_V}
-    rm -rf ${GPERF_SRC} || true
-    rm -rf ${GPERF_DIR} || true
-    tar xf ${DIST}/${GPERF_SRC}.tar.xz
-    mv ${GPERF_SRC} ${GPERF_DIR}
-    cd ${GPERF_DIR}
-    ./autogen.sh
-    CFLAGS="${DEFAULT_CFLAGS}" \
-    CXXFLAGS="${DEFAULT_CFLAGS}" \
-    LDFLAGS="${DEFAULT_LDFLAGS} -lunwind" \
-    ./configure ${STATIC_CONFIGURE} --enable-libunwind
-    make -j${JOBS}
-fi # gperftools
 
 # libxkbcommon
 if [ ! -f "${SDK}/lib/pkgconfig/xkbcommon.pc" ]; then

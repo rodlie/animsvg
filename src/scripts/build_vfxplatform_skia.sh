@@ -31,12 +31,26 @@ JOBS=${JOBS:-4}
 
 NINJA_V=1.11.1
 GN_V=82d673ac
+UNWIND_V=1.4.0
+GPERF_V=4df0b85
 SKIA_V=4fcb5c225a
 
 NINJA_BIN=${SDK}/bin/ninja
 GN_BIN=${SDK}/bin/gn
+
+GPERF_DIR=${SDK}/gperftools
+GPERF_LIB=${GPERF_DIR}/.libs/libtcmalloc.a
+
 SKIA_DIR=${SDK}/skia
 SKIA_LIB=${SKIA_DIR}/out/build/libskia.a
+
+STATIC_CFLAGS="-fPIC"
+DEFAULT_CFLAGS="-I${SDK}/include"
+DEFAULT_LDFLAGS="-L${SDK}/lib"
+COMMON_CONFIGURE="--prefix=${SDK}"
+SHARED_CONFIGURE="${COMMON_CONFIGURE} --enable-shared --disable-static"
+STATIC_CONFIGURE="${COMMON_CONFIGURE} --disable-shared --enable-static"
+DEFAULT_CONFIGURE="${SHARED_CONFIGURE}"
 
 export PATH="${SDK}/bin:${PATH}"
 export PKG_CONFIG_PATH="${SDK}/lib/pkgconfig"
@@ -88,4 +102,34 @@ if [ ! -f "${SKIA_LIB}" ]; then
     ${NINJA_BIN} -C out/build -j${JOBS} skia
 fi # skia
 
-echo "SKIA DONE"
+# libunwind
+if [ ! -f "${SDK}/lib/pkgconfig/libunwind.pc" ]; then
+    cd ${SRC}
+    UNWIND_SRC=libunwind-${UNWIND_V}
+    rm -rf ${UNWIND_SRC} || true
+    tar xf ${DIST}/${UNWIND_SRC}.tar.gz
+    cd ${UNWIND_SRC}
+    CC=clang CXX=clang++ ./configure ${DEFAULT_CONFIGURE} --disable-minidebuginfo --disable-tests
+    make -j${JOBS}
+    make install
+fi # libunwind
+
+# gperftools
+if [ ! -f "${GPERF_LIB}" ]; then
+    cd ${SRC}
+    GPERF_SRC=gperftools-${GPERF_V}
+    rm -rf ${GPERF_SRC} || true
+    rm -rf ${GPERF_DIR} || true
+    tar xf ${DIST}/${GPERF_SRC}.tar.xz
+    mv ${GPERF_SRC} ${GPERF_DIR}
+    cd ${GPERF_DIR}
+    ./autogen.sh
+    CC=clang CXX=clang++ \
+    CFLAGS="${DEFAULT_CFLAGS}" \
+    CXXFLAGS="${DEFAULT_CFLAGS}" \
+    LDFLAGS="${DEFAULT_LDFLAGS} -lunwind" \
+    ./configure ${STATIC_CONFIGURE} --enable-libunwind
+    make -j${JOBS}
+fi # gperftools
+
+echo "SDK PART 1 DONE"
