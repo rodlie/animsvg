@@ -19,3 +19,4 @@ build-*
 *.patch
 ffmpeg
 
+*.7z

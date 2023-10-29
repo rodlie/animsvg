@@ -20,13 +20,17 @@
 
 set -e -x
 
-source /opt/rh/devtoolset-7/enable
-gcc -v
+source /opt/rh/llvm-toolset-7.0/enable
+clang -v
 
 CWD=${CWD:-`pwd`}
 SDK=${SDK:-"/opt/friction"}
 BUILD=${BUILD:-"${HOME}"}
-CHECKOUT=${CHECKOUT:-"main"}
+
+REL=${REL:-1}
+BRANCH=${BRANCH:-""}
+COMMIT=${COMMIT:-""}
+TAG=${TAG:-""}
 
 export PATH="${SDK}/bin:${PATH}"
 export PKG_CONFIG_PATH="${SDK}/lib/pkgconfig"
@@ -41,15 +45,25 @@ if [ ! -d "${BUILD}" ]; then
     mkdir -p ${BUILD}
 fi
 
+CHECKOUT="main"
+if [ "${BRANCH}" != "" ]; then
+    CHECKOUT="${BRANCH}"
+elif [ "${COMMIT}" != "" ]; then
+    CHECKOUT="${COMMIT}"
+elif [ "${TAG}" != "" ]; then
+    CHECKOUT="tags/${TAG}"
+fi
+
 if [ ! -d "${BUILD}/friction" ]; then
-    (cd ${BUILD} ; git clone https://github.com/friction2d/friction)
+    (cd ${BUILD} ;
+        git clone https://github.com/friction2d/friction
+        cd friction
+        git checkout ${CHECKOUT}
+        git submodule update -i --recursive docs
+    )
 fi
 
 cd ${BUILD}/friction
-git fetch --all
-git checkout ${CHECKOUT}
-git pull
-git submodule update -i docs
 
 if [ ! -d "src/skia/out" ]; then
     mv src/skia src/skia.orig
@@ -64,21 +78,34 @@ fi
 rm -rf build-vfxplatform || true
 mkdir build-vfxplatform && cd build-vfxplatform
 
+REL_STATUS="ON"
+if [ "${REL}" != 1 ]; then
+    REL_STATUS="OFF"
+fi
+
 cmake -GNinja \
 -DCMAKE_INSTALL_PREFIX=${SDK} \
 -DCMAKE_PREFIX_PATH=${SDK} \
 -DCMAKE_BUILD_TYPE=Release \
 -DUSE_ROBOTO=ON \
 -DLINUX_DEPLOY=ON \
+-DFRICTION_OFFICIAL_RELEASE=${REL_STATUS} \
 -DQSCINTILLA_INCLUDE_DIRS=${SDK}/include \
 -DQSCINTILLA_LIBRARIES_DIRS=${SDK}/lib \
 -DQSCINTILLA_LIBRARIES=qscintilla2_friction_qt5 \
+-DCMAKE_CXX_COMPILER=clang++ \
+-DCMAKE_C_COMPILER=clang \
 ..
 
-FRICTION_VERSION=`cat version.txt`
+VERSION=`cat version.txt`
+if [ "${REL}" != 1 ]; then
+    GIT=`git rev-parse --short HEAD`
+    VERSION="${VERSION}-dev-${GIT}"
+fi
+
 cmake --build .
 
-FRICTION_INSTALL_DIR=friction-${FRICTION_VERSION}
+FRICTION_INSTALL_DIR=friction-${VERSION}
 mkdir -p ${BUILD}/${FRICTION_INSTALL_DIR}/opt/friction/{bin,lib,share} || true
 mkdir -p ${BUILD}/${FRICTION_INSTALL_DIR}/opt/friction/plugins/{audio,generic,imageformats,platforminputcontexts,platforms,xcbglintegrations} || true
 DESTDIR=${BUILD}/${FRICTION_INSTALL_DIR} cmake --build . --target install

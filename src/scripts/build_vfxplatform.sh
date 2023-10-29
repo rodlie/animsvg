@@ -25,16 +25,39 @@ SDK=${SDK:-"/opt/friction"}
 DISTFILES=${DISTFILES:-"/mnt"}
 BUILD=${BUILD:-"${HOME}"}
 
-# Build SDK
-# CWD=${CWD} SDK=${SDK} DISTFILES=${DISTFILES} ${CWD}/build_vfxplatform_skia.sh
-# CWD=${CWD} SDK=${SDK} DISTFILES=${DISTFILES} ${CWD}/build_vfxplatform_sdk.sh
-# CWD=${CWD} SDK=${SDK} DISTFILES=${DISTFILES} ${CWD}/build_vfxplatform_ffmpeg.sh
+REL=${REL:-1}
+BRANCH=${BRANCH:-""}
+COMMIT=${COMMIT:-""}
+TAG=${TAG:-""}
+MKJOBS=${MKJOBS:-4}
 
-# Build friction
-CWD=${CWD} SDK=${SDK} BUILD=${BUILD} ${CWD}/build_vfxplatform_friction.sh
+# Build SDK
+# CWD=${CWD} SDK=${SDK} DISTFILES=${DISTFILES} MKJOBS=${MKJOBS} ${CWD}/build_vfxplatform_skia.sh
+# CWD=${CWD} SDK=${SDK} DISTFILES=${DISTFILES} MKJOBS=${MKJOBS} ${CWD}/build_vfxplatform_sdk.sh
+# CWD=${CWD} SDK=${SDK} DISTFILES=${DISTFILES} MKJOBS=${MKJOBS} ${CWD}/build_vfxplatform_ffmpeg.sh
+
+# Build Friction
+CWD=${CWD} \
+SDK=${SDK} \
+BUILD=${BUILD} \
+MKJOBS=${MKJOBS} \
+REL=${REL} \
+BRANCH=${BRANCH} \
+COMMIT=${COMMIT} \
+TAG=${TAG} \
+${CWD}/build_vfxplatform_friction.sh
 
 # Get Friction version
 VERSION=`cat ${BUILD}/friction/build-vfxplatform/version.txt`
+if [ "${REL}" != 1 ]; then
+    GIT=`(cd ${BUILD}/friction ; git rev-parse --short HEAD)`
+    VERSION="${VERSION}-dev-${GIT}"
+fi
 
-# Package Friction (TAR)
-CWD=${CWD} SDK=${SDK} DISTFILES=${DISTFILES} BUILD=${BUILD} VERSION=${VERSION} ${CWD}/build_vfxplatform_package_tar.sh
+# Package Friction
+CWD=${CWD} \
+SDK=${SDK} \
+DISTFILES=${DISTFILES} \
+BUILD=${BUILD} \
+VERSION=${VERSION} \
+${CWD}/build_vfxplatform_package_tar.sh

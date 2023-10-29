@@ -1,10 +1,10 @@
 Name: friction
-Version: __FRICTION_VERSION__
-Release: 1
+Version: __FRICTION_PKG_VERSION__
+Release: 1universal
 Summary: Friction Motion Graphics
 Group: System Environment/Base
 License: GPL3
-Source0: friction-%{version}.tar
+Source0: friction-__FRICTION_VERSION__.tar
 
 AutoReq: no
 %global debug_package %{nil}
@@ -14,7 +14,7 @@ AutoReq: no
 Friction is an open-source, vector-based application designed for creating web animations and videos.
 
 %prep
-%setup -q #unpack tarball
+%setup -n friction-__FRICTION_VERSION__
 
 %build
 

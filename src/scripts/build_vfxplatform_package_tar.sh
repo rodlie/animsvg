@@ -31,6 +31,7 @@ if [ "${VERSION}" = "" ]; then
     echo "Missing version"
     exit 1
 fi
+PKG_VERSION=`echo ${VERSION} | sed 's/-/./g'`
 
 if [ ! -d "${BUILD}/${FRICTION_PKG}" ]; then
     echo "Missing Friction build"
@@ -135,22 +136,16 @@ if [ ! -d "${HOME}/rpmbuild/SOURCES" ]; then
 fi
 
 mv ${FRICTION_PKG}.tar ${HOME}/rpmbuild/SOURCES/
-cat ${CWD}/vfxplatform.spec | sed 's/__FRICTION_VERSION__/'${VERSION}'/g' > rpm.spec
-RPM_PKG=friction-${VERSION}-1.x86_64.rpm
-DEB_PKG=friction_${VERSION}-1_amd64.deb
+cat ${BUILD}/friction/src/scripts/vfxplatform.spec | sed 's/__FRICTION_PKG_VERSION__/'${PKG_VERSION}'/g;s/__FRICTION_VERSION__/'${VERSION}'/g' > rpm.spec
 
 # RPM
 rpmbuild -bb rpm.spec
-
-# DEB
-rm -rf deb || true
-mkdir deb
-(cd deb; fakeroot alien -k --to-deb --scripts ${HOME}/rpmbuild/RPMS/x86_64/${RPM_PKG})
 
 # Portable
 FRICTION_PORTABLE=${FRICTION_PKG}-portable-x86_64
 FRICTION_PORTABLE_DIR=${BUILD}/${FRICTION_PORTABLE}
 cd ${BUILD}
+rm -f ${FRICTION_PORTABLE_DIR} || true
 mv ${BUILD}/${FRICTION_PKG} ${FRICTION_PORTABLE_DIR}
 (cd ${FRICTION_PORTABLE_DIR} ;
 rm -rf usr
@@ -196,4 +191,4 @@ ln -sf share/icons/hicolor/256x256/apps/friction.png .DirIcon
 tar xf ${DISTFILES}/appimagetool.tar.xz
 ARCH=x86_64 ./appimagetool/AppRun ${FRICTION_PORTABLE}
 
-echo "PKGS DONE"
+echo "PKG DONE"
