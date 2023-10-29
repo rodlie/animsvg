@@ -34,6 +34,10 @@ add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 
 if(${LINUX_DEPLOY})
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+    add_definitions(-DLINUX_DEPLOY)
+endif()
+if(${WIN_DEPLOY})
+    add_definitions(-DWIN_DEPLOY)
 endif()
 
 option(USE_ROBOTO "Use Roboto font" OFF)
@@ -427,9 +431,16 @@ set(
     resources.qrc
     icons.qrc
     hicolor.qrc
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs.qrc
     ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing.qrc
 )
+
+if(${LINUX_DEPLOY})
+    list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs_lin.qrc)
+elseif(${WIN_DEPLOY})
+    list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs_win.qrc)
+else()
+    list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs.qrc)
+endif()
 
 if(${USE_ROBOTO})
     list(APPEND RESOURCES fonts.qrc)

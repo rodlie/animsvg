@@ -103,23 +103,22 @@ AboutWidget::AboutWidget(QWidget *parent)
     mThirdParty->setObjectName(QString::fromUtf8("ThirdPartyBrowser"));
 
     QStringList parties;
-#ifdef FRICTION_BUNDLE_SKIA_BUNDLE
-    parties << "skia_bundle";
+#if defined LINUX_DEPLOY
+    parties << "skia_bundle" << "qt"  << "qscintilla" << "ffmpeg" << "unwind" << "xkbcommon";
+#elif defined WIN_DEPLOY
+    parties << "skia_bundle" << "qt"  << "qscintilla" << "ffmpeg_win";
 #else
-    parties << "skia";
+    #ifdef FRICTION_BUNDLE_SKIA_BUNDLE
+        parties << "skia_bundle";
+    #else
+        parties << "skia";
+    #endif
+    #ifdef Q_OS_LINUX
+        parties << "gperftools";
+    #endif
 #endif
-#ifdef FRICTION_BUNDLE_QT
-    parties << "qt";
-#endif
-#ifdef FRICTION_BUNDLE_FFMPEG
-    parties << "ffmpeg";
-#endif
-#ifdef FRICTION_BUNDLE_QSCINTILLA
-    parties << "qscintilla";
-#endif
-#ifdef FRICTION_BUNDLE_GPERFTOOLS
-    parties << "gperftools";
-#endif
+
+
     for (int i = 0; i < parties.size(); ++i) {
         QString doc = parties.at(i);
         QFile file(QString(":/docs/3rdparty/%1.html").arg(doc));
