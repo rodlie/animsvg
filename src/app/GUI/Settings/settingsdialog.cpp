@@ -11,6 +11,7 @@
 #include "canvassettingswidget.h"
 #include "timelinesettingswidget.h"
 #include "pluginssettingswidget.h"
+#include "presetsettingswidget.h"
 
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -41,6 +42,9 @@ SettingsDialog::SettingsDialog(QWidget * const parent)
 
     const auto plugins = new PluginsSettingsWidget(this);
     addSettingsWidget(plugins, tr("Plugins"));
+
+    const auto presets = new PresetSettingsWidget(this);
+    addSettingsWidget(presets, tr("Presets"));
 
     mainLayout->addWidget(mTabWidget);
 

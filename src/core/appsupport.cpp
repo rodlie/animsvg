@@ -415,6 +415,14 @@ const QStringList AppSupport::getFpsPresets()
     return presets;
 }
 
+void AppSupport::saveFpsPresets(const QStringList &presets)
+{
+    QSettings settings;
+    settings.beginGroup("presets");
+    settings.setValue("fps", presets);
+    settings.endGroup();
+}
+
 void AppSupport::saveFpsPreset(const double value)
 {
     if (value <= 0) { return; }
@@ -466,6 +474,18 @@ const QList<QPair<int, int> > AppSupport::getResolutionPresets()
     }
     std::sort(l.begin(), l.end());
     return l;
+}
+
+void AppSupport::saveResolutionPresets(const QList<QPair<int, int> > &presets)
+{
+    QStringList list;
+    for (const auto &preset: presets) {
+        list << QString("%1x%2").arg(preset.first).arg(preset.second);
+    }
+    QSettings settings;
+    settings.beginGroup("presets");
+    settings.setValue("resolution", list);
+    settings.endGroup();
 }
 
 void AppSupport::saveResolutionPreset(const int w,

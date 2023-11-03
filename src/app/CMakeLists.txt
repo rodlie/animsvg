@@ -208,6 +208,7 @@ set(
     GUI/Settings/settingswidget.cpp
     GUI/Settings/timelinesettingswidget.cpp
     GUI/Settings/pluginssettingswidget.cpp
+    GUI/Settings/presetsettingswidget.cpp
     GUI/aboutwidget.cpp
     GUI/alignwidget.cpp
     GUI/audiohandler.cpp
@@ -331,6 +332,7 @@ set(
     GUI/Settings/settingswidget.h
     GUI/Settings/timelinesettingswidget.h
     GUI/Settings/pluginssettingswidget.h
+    GUI/Settings/presetsettingswidget.h
     GUI/aboutwidget.h
     GUI/alignwidget.h
     GUI/audiohandler.h

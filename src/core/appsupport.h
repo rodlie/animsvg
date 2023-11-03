@@ -90,10 +90,12 @@ public:
                                                               HardwareSupport fallback);
     static const QByteArray filterShader(QByteArray data);
     static const QStringList getFpsPresets();
+    static void saveFpsPresets(const QStringList &presets);
     static void saveFpsPreset(const double value);
     static bool removeFpsPreset(const double value);
     static const QStringList getResolutionPresetsList();
     static const QList<QPair<int, int>> getResolutionPresets();
+    static void saveResolutionPresets(const QList<QPair<int, int>> &presets);
     static void saveResolutionPreset(const int w, const int h);
     static bool removeResolutionPreset(const int w, const int h);
 };
