@@ -391,6 +391,10 @@ private:
     Window *mAboutWindow;
     void openAboutWindow();
 
+    Window *mTimelineWindow;
+    QAction *mTimelineWindowAct;
+    void openTimelineWindow();
+
 protected:
     void keyPressEvent(QKeyEvent *event);
     bool eventFilter(QObject *obj, QEvent *e);

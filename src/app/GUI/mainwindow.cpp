@@ -139,6 +139,8 @@ MainWindow::MainWindow(Document& document,
     , mAutoSaveTimer(nullptr)
     , mAboutWidget(nullptr)
     , mAboutWindow(nullptr)
+    , mTimelineWindow(nullptr)
+    , mTimelineWindowAct(nullptr)
 {
     Q_ASSERT(!sInstance);
     sInstance = this;
@@ -1047,7 +1049,26 @@ void MainWindow::setupMenuBar()
     viewTimelineAct->setChecked(true);
     viewTimelineAct->setShortcut(QKeySequence(Qt::Key_T));
     connect(viewTimelineAct, &QAction::triggered,
-            this, [this](bool triggered) { mTimeline->setVisible(triggered); });
+            this, [this](bool triggered) {
+        if (mTimelineWindowAct->isChecked()) {
+            openTimelineWindow();
+        } else { mTimeline->setVisible(triggered); }
+    });
+
+    mTimelineWindowAct = mViewMenu->addAction(tr("Timeline Window"));
+    mTimelineWindowAct->setCheckable(true);
+    connect(mTimelineWindowAct, &QAction::triggered,
+            this, [this](bool triggered) {
+        if (!triggered) {
+            statusBar()->showMessage(tr("Restart Friction to apply"), 5000);
+            // TODO: move widget from window to main ui without restart
+        } else {
+            openTimelineWindow();
+        }
+        AppSupport::setSettings("ui",
+                                "TimelineWindow",
+                                triggered);
+    });
 
     /*mPanelsMenu = mViewMenu->addMenu(tr("Docks", "MenuBar_View"));
 
@@ -1245,12 +1266,25 @@ void MainWindow::openAboutWindow()
         mAboutWindow = new Window(this,
                                   mAboutWidget,
                                   tr("About"),
-                                  "AboutWindow",
+                                  QString("AboutWindow"),
                                   false,
                                   false);
         mAboutWindow->setMinimumSize(640, 480);
     }
     mAboutWindow->focusWindow();
+}
+
+void MainWindow::openTimelineWindow()
+{
+    if (!mTimelineWindow) {
+        mTimelineWindow = new Window(this,
+                                     mTimeline,
+                                     tr("Timeline"),
+                                     QString("TimelineWindow"),
+                                     true,
+                                     true);
+    }
+    mTimelineWindow->focusWindow();
 }
 
 void MainWindow::openWelcomeDialog()
@@ -2001,10 +2035,19 @@ void MainWindow::readSettings(const QString &openProject)
     bool isFull = AppSupport::getSettings("ui",
                                           "fullScreen",
                                           false).toBool();
+    bool isTimelineWindow = AppSupport::getSettings("ui",
+                                                    "TimelineWindow",
+                                                    false).toBool();
 
     mViewFullScreenAct->blockSignals(true);
     mViewFullScreenAct->setChecked(isFull);
     mViewFullScreenAct->blockSignals(false);
+
+    mTimelineWindowAct->blockSignals(true);
+    mTimelineWindowAct->setChecked(isTimelineWindow);
+    mTimelineWindowAct->blockSignals(false);
+
+    if (isTimelineWindow) { openTimelineWindow(); }
 
     if (isFull) { showFullScreen(); }
     else if (isMax) { showMaximized(); }
