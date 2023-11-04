@@ -59,6 +59,12 @@ AboutWidget::AboutWidget(QWidget *parent)
     QString css = "<style>"
                   "h1, h2, h3 { font-weight: normal; }"
                   "pre { font-size: small; white-space: pre-wrap; }"
+                  "th { background-color: rgb(23, 23, 28); padding: .5em; }"
+                  "td {"
+                  "border: 1px solid rgb(23, 23, 28);"
+                  "background-color: rgb(46, 46, 53);"
+                  "padding: .5em;"
+                  "}"
                   "</style>";
 
     const auto mTab = new QTabWidget(this);
@@ -67,22 +73,20 @@ AboutWidget::AboutWidget(QWidget *parent)
     mLayout->addWidget(mTab);
 
     AboutWidgetTab tab1;
-    tab1.title = tr("Information");
+    tab1.title = tr("About");
     tab1.path = ":/docs/about.html";
 
     AboutWidgetTab tab2;
-    tab2.title = tr("Privacy");
-    tab2.path = ":/docs/privacy.html";
+    tab2.title = tr("Shortcuts");
+    tab2.path = ":/docs/documentation/shortcuts.html";
 
     AboutWidgetTab tab3;
-    tab3.title = tr("License");
-    tab3.path = ":/docs/LICENSE";
-    tab3.html = false;
+    tab3.title = tr("Privacy");
+    tab3.path = ":/docs/privacy.html";
 
     QList<AboutWidgetTab> tabs;
     tabs << tab1 << tab2 << tab3;
-    for (int i = 0; i < tabs.size(); ++i) {
-        const auto tab = tabs.at(i);
+    for (const auto &tab: tabs) {
         QFile file(tab.path);
         if (!file.open(QIODevice::Text | QIODevice::ReadOnly)) { continue; }
         const auto browser = new QTextBrowser(this);
@@ -91,7 +95,8 @@ AboutWidget::AboutWidget(QWidget *parent)
         browser->setOpenLinks(tab.html);
         QString content = tab.html ? css : QString();
         content.append(file.readAll());
-        if (tab.html) { browser->setHtml(content); }
+        if (tab.html) { browser->setHtml(content.replace("<table",
+                                                         "<table width=\"100%\">")); }
         else { browser->setPlainText(content); }
         file.close();
         mTab->addTab(browser, tab.title);
@@ -103,6 +108,7 @@ AboutWidget::AboutWidget(QWidget *parent)
     mThirdParty->setObjectName(QString::fromUtf8("ThirdPartyBrowser"));
 
     QStringList parties;
+    parties << "friction";
 #if defined LINUX_DEPLOY
     parties << "skia_bundle" << "qt"  << "qscintilla" << "ffmpeg" << "unwind" << "xkbcommon";
 #elif defined WIN_DEPLOY
@@ -118,20 +124,21 @@ AboutWidget::AboutWidget(QWidget *parent)
     #endif
 #endif
 
-
-    for (int i = 0; i < parties.size(); ++i) {
-        QString doc = parties.at(i);
-        QFile file(QString(":/docs/3rdparty/%1.html").arg(doc));
+    for (const auto &doc: parties) {
+        QFile file(doc == "friction" ? QString(":/docs/LICENSE") : QString(":/docs/3rdparty/%1.html").arg(doc));
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) { continue; }
         const auto browser = new QTextBrowser(this);
         browser->setOpenExternalLinks(false);
         browser->setOpenLinks(false);
-        QString html = css;
-        html.append(file.readAll());
-        browser->setHtml(html);
+        if (doc == "friction") { browser->setPlainText(file.readAll()); }
+        else {
+            QString html = css;
+            html.append(file.readAll());
+            browser->setHtml(html);
+        }
         file.close();
-        QString title = parties.at(i).split("_").takeFirst().toUpper();
+        QString title = doc.split("_").takeFirst();
         mThirdParty->addTab(browser, title);
     }
-    mTab->addTab(mThirdParty, tr("Third-party"));
+    mTab->addTab(mThirdParty, tr("Licenses"));
 }
