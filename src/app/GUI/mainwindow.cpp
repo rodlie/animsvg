@@ -1282,6 +1282,7 @@ void MainWindow::openTimelineWindow()
                                      tr("Timeline"),
                                      QString("TimelineWindow"),
                                      true,
+                                     true,
                                      true);
     }
     mTimelineWindow->focusWindow();
@@ -1994,7 +1995,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 bool MainWindow::processKeyEvent(QKeyEvent *event)
 {
-    if (isActiveWindow()) {
+    if (isActiveWindow() || (mTimelineWindow && mTimelineWindow->isActiveWindow())) {
         bool returnBool = false;
         if (event->type() == QEvent::KeyPress &&
             mTimeline->processKeyPress(event))

@@ -28,14 +28,18 @@
 #include <QVBoxLayout>
 #include <QWindow>
 
+#include "mainwindow.h"
+
 Window::Window(QWidget *parent,
                QWidget *child,
                const QString title,
                const QString id,
                bool visible,
-               bool blockEscKey)
+               bool blockEscKey,
+               bool forwardKeys)
     : QDialog(parent)
     , mBlockEscKey(blockEscKey)
+    , mForwardKeys(forwardKeys)
 {
     setWindowFlags(Qt::Window |
                    Qt::WindowTitleHint |
@@ -67,6 +71,9 @@ void Window::focusWindow()
 
 void Window::keyPressEvent(QKeyEvent *event)
 {
+    if (mForwardKeys) {
+        MainWindow::sGetInstance()->processKeyEvent(event);
+    }
     if (mBlockEscKey && event->key() == Qt::Key_Escape) { return; }
     QDialog::keyPressEvent(event);
 }

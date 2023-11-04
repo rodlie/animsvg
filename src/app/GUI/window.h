@@ -37,7 +37,8 @@ public:
                     const QString title,
                     const QString id,
                     bool visible = true,
-                    bool blockEscKey = true);
+                    bool blockEscKey = true,
+                    bool forwardKeys = false);
     ~Window();
     void focusWindow();
 
@@ -48,6 +49,7 @@ private:
     void loadState(bool visible = true);
     void saveState();
     bool mBlockEscKey;
+    bool mForwardKeys;
 };
 
 #endif // WINDOW_H
