@@ -95,7 +95,7 @@ AboutWidget::AboutWidget(QWidget *parent)
         browser->setOpenLinks(tab.html);
         QString content = tab.html ? css : QString();
         content.append(file.readAll());
-        if (tab.html) { browser->setHtml(content.replace("<table",
+        if (tab.html) { browser->setHtml(content.replace("<table>",
                                                          "<table width=\"100%\">")); }
         else { browser->setPlainText(content); }
         file.close();
