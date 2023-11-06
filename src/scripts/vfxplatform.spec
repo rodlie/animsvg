@@ -1,6 +1,6 @@
 Name: friction
 Version: __FRICTION_PKG_VERSION__
-Release: 1universal
+Release: 1
 Summary: Friction Motion Graphics
 Group: System Environment/Base
 License: GPL3
