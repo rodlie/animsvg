@@ -64,6 +64,7 @@ private:
     QPushButton *mStartRenderButton;
     QPushButton *mStopRenderButton;
     QPushButton *mAddRenderButton;
+    QPushButton *mClearQueueButton;
     QWidget *mContWidget;
     QVBoxLayout *mContLayout;
     ScrollArea *mScrollArea;

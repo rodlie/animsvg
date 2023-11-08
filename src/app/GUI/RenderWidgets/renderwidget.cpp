@@ -42,6 +42,7 @@ RenderWidget::RenderWidget(QWidget *parent)
     , mStartRenderButton(nullptr)
     , mStopRenderButton(nullptr)
     , mAddRenderButton(nullptr)
+    , mClearQueueButton(nullptr)
     , mContWidget(nullptr)
     , mContLayout(nullptr)
     , mScrollArea(nullptr)
@@ -98,9 +99,9 @@ RenderWidget::RenderWidget(QWidget *parent)
         MainWindow::sGetInstance()->addCanvasToRenderQue();
     });
 
-    const auto mClearQueueButton = new QPushButton(QIcon::fromTheme("trash"),
-                                                   QString(),
-                                                   this);
+    mClearQueueButton = new QPushButton(QIcon::fromTheme("trash"),
+                                        QString(),
+                                        this);
     mClearQueueButton->setToolTip(tr("Clear Queue"));
     mClearQueueButton->setFocusPolicy(Qt::NoFocus);
     mClearQueueButton->setSizePolicy(QSizePolicy::Preferred,
@@ -239,18 +240,25 @@ void RenderWidget::leaveOnlyStartRenderButtonEnabled()
     mStartRenderButton->setEnabled(true);
     mStopRenderButton->setDisabled(true);
     mRenderProgressBar->setValue(0);
+
+    mAddRenderButton->setEnabled(true);
+    mClearQueueButton->setEnabled(true);
 }
 
 void RenderWidget::disableButtons()
 {
     mStartRenderButton->setDisabled(true);
     mStopRenderButton->setDisabled(true);
+    mAddRenderButton->setDisabled(true);
+    mClearQueueButton->setDisabled(true);
 }
 
 void RenderWidget::enableButtons()
 {
     mStartRenderButton->setEnabled(true);
     mStopRenderButton->setEnabled(true);
+    mAddRenderButton->setEnabled(true);
+    mClearQueueButton->setEnabled(true);
 }
 
 void RenderWidget::render()
