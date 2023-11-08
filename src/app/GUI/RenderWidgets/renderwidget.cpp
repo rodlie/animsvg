@@ -274,6 +274,7 @@ void RenderWidget::render()
 void RenderWidget::stopRendering()
 {
     disableButtons();
+    emit rendererFinished();
     clearAwaitingRender();
     VideoEncoder::sInterruptEncoding();
     if (mCurrentRenderedSettings) {
