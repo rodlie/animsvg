@@ -65,17 +65,27 @@ void PathPivot::drawSk(SkCanvas * const canvas,
 void PathPivot::drawTransforming(SkCanvas * const canvas,
                                  const CanvasMode mode,
                                  const float invScale,
-                                 const float interval) {
+                                 const float interval)
+{
     drawSk(canvas, mode, invScale, false, false);
+
     SkPaint paint;
     paint.setStyle(SkPaint::kStroke_Style);
-    paint.setColor(SK_ColorBLACK);
-    const float intervals[2] = {interval, interval};
-    paint.setPathEffect(SkDashPathEffect::Make(intervals, 2, 0));
+    paint.setColor(SK_ColorYELLOW);
     paint.setAntiAlias(true);
     canvas->drawLine(toSkPoint(getAbsolutePos()),
                      toSkPoint(mMousePos), paint);
-    paint.setPathEffect(nullptr);
+
+    SkPaint paintDashed;
+    paintDashed.setStyle(SkPaint::kStroke_Style);
+    paintDashed.setColor(SK_ColorRED);
+    const float intervals[2] = {interval, interval};
+    paintDashed.setPathEffect(SkDashPathEffect::Make(intervals, 2, 0));
+    paintDashed.setAntiAlias(true);
+    canvas->drawLine(toSkPoint(getAbsolutePos()),
+                     toSkPoint(mMousePos), paintDashed);
+    paintDashed.setPathEffect(nullptr);
+
 }
 
 bool PathPivot::isVisible(const CanvasMode mode) const {
