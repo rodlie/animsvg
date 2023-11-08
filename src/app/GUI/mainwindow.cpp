@@ -141,6 +141,9 @@ MainWindow::MainWindow(Document& document,
     , mAboutWindow(nullptr)
     , mTimelineWindow(nullptr)
     , mTimelineWindowAct(nullptr)
+    , mRenderWindow(nullptr)
+    , mRenderWindowAct(nullptr)
+    , mRenderProgress(nullptr)
 {
     Q_ASSERT(!sInstance);
     sInstance = this;
@@ -230,10 +233,10 @@ MainWindow::MainWindow(Document& document,
                                        this);
     mRenderWidget = new RenderWidget(this);
 
+    connect(mRenderWidget, &RenderWidget::progress,
+            this, &MainWindow::handleRenderProgress);
     connect(mRenderWidget, &RenderWidget::rendererFinished,
-            this, [this]() {
-        statusBar()->showMessage(tr("Renderer finished"), 5000);
-    });
+            this, &MainWindow::handleRenderFinished);
 
     const auto alignWidget = new AlignWidget(this);
     alignWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -293,6 +296,12 @@ MainWindow::MainWindow(Document& document,
     mEventFilterDisabled = false;
 
     installEventFilter(this);
+
+    mRenderProgress = new QProgressBar(this);
+    mRenderProgress->setFormat(tr("Render %p%"));
+    mRenderProgress->setMaximumWidth(300);
+    mRenderProgress->setVisible(false);
+    statusBar()->addPermanentWidget(mRenderProgress);
 
     connect(&mAudioHandler, &AudioHandler::deviceChanged,
             this, [this]() { statusBar()->showMessage(tr("Changed audio output: %1")
@@ -1070,6 +1079,21 @@ void MainWindow::setupMenuBar()
                                 triggered);
     });
 
+    mRenderWindowAct = mViewMenu->addAction(tr("Queue Window"));
+    mRenderWindowAct->setCheckable(true);
+    connect(mRenderWindowAct, &QAction::triggered,
+            this, [this](bool triggered) {
+        if (!triggered) {
+            statusBar()->showMessage(tr("Restart Friction to apply"), 5000);
+            // TODO: move widget from window to main ui without restart
+        } else {
+            openRenderQueueWindow();
+        }
+        AppSupport::setSettings("ui",
+                                "RenderWindow",
+                                triggered);
+    });
+
     /*mPanelsMenu = mViewMenu->addMenu(tr("Docks", "MenuBar_View"));
 
     mSelectedObjectDockAct = mPanelsMenu->addAction(
@@ -1288,6 +1312,35 @@ void MainWindow::openTimelineWindow()
     mTimelineWindow->focusWindow();
 }
 
+void MainWindow::openRenderQueueWindow(const bool &focus)
+{
+    if (!mRenderWindow) {
+        mBottomSideBarWidget->removeTab(mTabQueueIndex);
+        mRenderWidget->setVisible(true);
+        mRenderWindow = new Window(this,
+                                   mRenderWidget,
+                                   tr("Renderer"),
+                                   QString("RenderWindow"),
+                                   focus,
+                                   true,
+                                   false);
+    }
+    if (!focus) { return; }
+    mRenderWindow->focusWindow();
+}
+
+void MainWindow::handleRenderProgress(int frame, int total)
+{
+    if (!mRenderProgress->isVisible()) { mRenderProgress->setVisible(true); }
+    mRenderProgress->setRange(0, total);
+    mRenderProgress->setValue(frame);
+}
+
+void MainWindow::handleRenderFinished()
+{
+    mRenderProgress->setVisible(false);
+}
+
 void MainWindow::openWelcomeDialog()
 {
     mStackWidget->setCurrentIndex(mStackIndexWelcome);
@@ -1301,7 +1354,8 @@ void MainWindow::closeWelcomeDialog()
 void MainWindow::addCanvasToRenderQue()
 {
     if (!mDocument.fActiveScene) { return; }
-    mBottomSideBarWidget->setCurrentIndex(mTabQueueIndex);
+    if (mRenderWindowAct->isChecked()) { openRenderQueueWindow(); }
+    else { mBottomSideBarWidget->setCurrentIndex(mTabQueueIndex); }
     mRenderWidget->createNewRenderInstanceWidgetForCanvas(mDocument.fActiveScene);
 }
 
@@ -2039,6 +2093,9 @@ void MainWindow::readSettings(const QString &openProject)
     bool isTimelineWindow = AppSupport::getSettings("ui",
                                                     "TimelineWindow",
                                                     false).toBool();
+    bool isRenderWindow = AppSupport::getSettings("ui",
+                                                  "RenderWindow",
+                                                  false).toBool();
 
     mViewFullScreenAct->blockSignals(true);
     mViewFullScreenAct->setChecked(isFull);
@@ -2048,7 +2105,12 @@ void MainWindow::readSettings(const QString &openProject)
     mTimelineWindowAct->setChecked(isTimelineWindow);
     mTimelineWindowAct->blockSignals(false);
 
+    mRenderWindowAct->blockSignals(true);
+    mRenderWindowAct->setChecked(isRenderWindow);
+    mRenderWindowAct->blockSignals(false);
+
     if (isTimelineWindow) { openTimelineWindow(); }
+    if (isRenderWindow) { openRenderQueueWindow(false); }
 
     if (isFull) { showFullScreen(); }
     else if (isMax) { showMaximized(); }
@@ -2363,7 +2425,8 @@ void MainWindow::openRendererWindow()
     if (mRenderWidget->count() < 1) {
         addCanvasToRenderQue();
     } else {
-        mBottomSideBarWidget->setCurrentIndex(mTabQueueIndex);
+        if (mRenderWindowAct->isChecked()) { openRenderQueueWindow(); }
+        else { mBottomSideBarWidget->setCurrentIndex(mTabQueueIndex); }
     }
 }
 
