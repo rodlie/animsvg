@@ -33,6 +33,7 @@
 #include "renderhandler.h"
 #include "videoencoder.h"
 #include "appsupport.h"
+#include "../mainwindow.h"
 
 RenderWidget::RenderWidget(QWidget *parent)
     : QWidget(parent)
@@ -40,6 +41,7 @@ RenderWidget::RenderWidget(QWidget *parent)
     , mRenderProgressBar(nullptr)
     , mStartRenderButton(nullptr)
     , mStopRenderButton(nullptr)
+    , mAddRenderButton(nullptr)
     , mContWidget(nullptr)
     , mContLayout(nullptr)
     , mScrollArea(nullptr)
@@ -84,6 +86,18 @@ RenderWidget::RenderWidget(QWidget *parent)
     connect(mStopRenderButton, &QPushButton::pressed,
             this, &RenderWidget::stopRendering);
 
+    mAddRenderButton = new QPushButton(QIcon::fromTheme("plus"),
+                                       QString(),
+                                       this);
+    mAddRenderButton->setToolTip(tr("Add current scene to queue"));
+    mAddRenderButton->setFocusPolicy(Qt::NoFocus);
+    mAddRenderButton->setSizePolicy(QSizePolicy::Preferred,
+                                    QSizePolicy::Preferred);
+    connect(mAddRenderButton, &QPushButton::pressed,
+            this, []() {
+        MainWindow::sGetInstance()->addCanvasToRenderQue();
+    });
+
     const auto mClearQueueButton = new QPushButton(QIcon::fromTheme("trash"),
                                                    QString(),
                                                    this);
@@ -109,6 +123,7 @@ RenderWidget::RenderWidget(QWidget *parent)
     bottomLayout->addWidget(mRenderProgressBar);
     bottomLayout->addWidget(mStartRenderButton);
     bottomLayout->addWidget(mStopRenderButton);
+    bottomLayout->addWidget(mAddRenderButton);
     bottomLayout->addWidget(mClearQueueButton);
 
     mMainLayout->addWidget(mScrollArea);
