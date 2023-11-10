@@ -27,6 +27,7 @@
 #include "settingswidget.h"
 
 #include <QTreeWidget>
+#include <QCheckBox>
 
 class PresetSettingsWidget : public SettingsWidget
 {
@@ -38,6 +39,10 @@ public:
 private:
     QTreeWidget *mTreeResolutions;
     QTreeWidget *mTreeFps;
+    QCheckBox *mCheckResolutions;
+    QCheckBox *mCheckResolutionsAuto;
+    QCheckBox *mCheckFps;
+    QCheckBox *mCheckFpsAuto;
 
     void setupResolutionPresetWidget();
     void populateResolutionsPresets();

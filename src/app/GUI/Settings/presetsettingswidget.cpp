@@ -29,11 +29,16 @@
 #include <QHeaderView>
 #include <QList>
 #include <QPair>
+#include <QPushButton>
 
 PresetSettingsWidget::PresetSettingsWidget(QWidget *parent)
     : SettingsWidget(parent)
     , mTreeResolutions(nullptr)
     , mTreeFps(nullptr)
+    , mCheckResolutions(nullptr)
+    , mCheckResolutionsAuto(nullptr)
+    , mCheckFps(nullptr)
+    , mCheckFpsAuto(nullptr)
 {
     setupResolutionPresetWidget();
     setupFpsPresetWidget();
@@ -74,12 +79,37 @@ void PresetSettingsWidget::setupResolutionPresetWidget()
     containerLayout->addWidget(area);
 
     mTreeResolutions = new QTreeWidget(this);
-    mTreeResolutions->setHeaderLabels(QStringList() << tr("Width") << tr("Height"));
+    mTreeResolutions->setHeaderLabels(QStringList() << QString("") << tr("Width") << tr("Height"));
     mTreeResolutions->setAlternatingRowColors(true);
     mTreeResolutions->setSortingEnabled(false);
-    mTreeResolutions->setHeaderHidden(true);
+    mTreeResolutions->setHeaderHidden(false);
     mTreeResolutions->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    mTreeResolutions->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
+    const auto mPushButtonAddResolution = new QPushButton(QIcon::fromTheme("plus"),
+                                                          QString(),
+                                                          this);
+    mPushButtonAddResolution->setFocusPolicy(Qt::NoFocus);
+
+    connect(mPushButtonAddResolution, &QPushButton::pressed,
+            this, [this]() {
+        QTreeWidgetItem *item = new QTreeWidgetItem(mTreeResolutions);
+        item->setCheckState(0, Qt::Checked);
+        item->setFlags(item->flags() | Qt::ItemIsEditable);
+        item->setText(1, QString::number(0));
+        item->setText(2, QString::number(0));
+        mTreeResolutions->addTopLevelItem(item);
+    });
+    mTreeResolutions->addScrollBarWidget(mPushButtonAddResolution, Qt::AlignBottom);
+
+    mCheckResolutions = new QCheckBox(this);
+    mCheckResolutionsAuto = new QCheckBox(this);
+
+    mCheckResolutions->setText(tr("Enable presets"));
+    mCheckResolutionsAuto->setText(tr("Auto add presets"));
+
+    containerInnerLayout->addWidget(mCheckResolutions);
+    containerInnerLayout->addWidget(mCheckResolutionsAuto);
     containerInnerLayout->addWidget(mTreeResolutions);
 
     addWidget(container);
@@ -87,28 +117,40 @@ void PresetSettingsWidget::setupResolutionPresetWidget()
 
 void PresetSettingsWidget::populateResolutionsPresets()
 {
-    mTreeResolutions->setSortingEnabled(false);
+    mCheckResolutions->setChecked(AppSupport::getSettings("presets",
+                                                          "EnableResolutions",
+                                                          true).toBool());
+    mCheckResolutionsAuto->setChecked(AppSupport::getSettings("presets",
+                                                              "EnableResolutionsAuto",
+                                                              true).toBool());
+
     mTreeResolutions->clear();
     for (auto &resolution: AppSupport::getResolutionPresets()) {
         QTreeWidgetItem *item = new QTreeWidgetItem(mTreeResolutions);
         item->setCheckState(0, Qt::Checked);
-        item->setText(0, QString::number(resolution.first));
-        item->setText(1, QString::number(resolution.second));
+        item->setFlags(item->flags() | Qt::ItemIsEditable);
+        item->setText(1, QString::number(resolution.first));
+        item->setText(2, QString::number(resolution.second));
         mTreeResolutions->addTopLevelItem(item);
     }
-    mTreeResolutions->setSortingEnabled(true);
-    mTreeResolutions->sortByColumn(0, Qt::AscendingOrder);
 }
 
 void PresetSettingsWidget::saveResolutionsPresets()
 {
+    AppSupport::setSettings("presets",
+                            "EnableResolutions",
+                            mCheckResolutions->isChecked());
+    AppSupport::setSettings("presets",
+                            "EnableResolutionsAuto",
+                            mCheckResolutionsAuto->isChecked());
+
     QList<QPair<int, int>> resolutions;
     for (int i = 0; i < mTreeResolutions->topLevelItemCount(); ++i) {
         const auto item = mTreeResolutions->topLevelItem(i);
         if (item->checkState(0) != Qt::Checked) { continue; }
         QPair<int, int> resolution;
-        resolution.first = item->text(0).toInt();
-        resolution.second = item->text(1).toInt();
+        resolution.first = item->text(1).toInt();
+        resolution.second = item->text(2).toInt();
         resolutions << resolution;
     }
     if (resolutions != AppSupport::getResolutionPresets()) {
@@ -128,7 +170,7 @@ void PresetSettingsWidget::setupFpsPresetWidget()
     area->setWidgetResizable(true);
     area->setContentsMargins(0, 0, 0, 0);
 
-    container->setTitle(tr("Scene FPS"));
+    container->setTitle(tr("Scene Frame Rates"));
 
     container->setContentsMargins(0, 0, 0, 0);
 
@@ -142,7 +184,31 @@ void PresetSettingsWidget::setupFpsPresetWidget()
     mTreeFps->setAlternatingRowColors(true);
     mTreeFps->setSortingEnabled(false);
     mTreeFps->setHeaderHidden(true);
+    mTreeFps->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
+    const auto mPushButtonAddFps = new QPushButton(QIcon::fromTheme("plus"),
+                                                   QString(),
+                                                   this);
+    mPushButtonAddFps->setFocusPolicy(Qt::NoFocus);
+
+    connect(mPushButtonAddFps, &QPushButton::pressed,
+            this, [this]() {
+        QTreeWidgetItem *item = new QTreeWidgetItem(mTreeFps);
+        item->setCheckState(0, Qt::Checked);
+        item->setFlags(item->flags() | Qt::ItemIsEditable);
+        item->setText(0, QString::number(0));
+        mTreeFps->addTopLevelItem(item);
+    });
+    mTreeFps->addScrollBarWidget(mPushButtonAddFps, Qt::AlignBottom);
+
+    mCheckFps = new QCheckBox(this);
+    mCheckFpsAuto = new QCheckBox(this);
+
+    mCheckFps->setText(tr("Enable presets"));
+    mCheckFpsAuto->setText(tr("Auto add presets"));
+
+    containerInnerLayout->addWidget(mCheckFps);
+    containerInnerLayout->addWidget(mCheckFpsAuto);
     containerInnerLayout->addWidget(mTreeFps);
 
     addWidget(container);
@@ -150,7 +216,13 @@ void PresetSettingsWidget::setupFpsPresetWidget()
 
 void PresetSettingsWidget::populateFpsPresets()
 {
-    mTreeFps->setSortingEnabled(false);
+    mCheckFps->setChecked(AppSupport::getSettings("presets",
+                                                  "EnableFPS",
+                                                  true).toBool());
+    mCheckFpsAuto->setChecked(AppSupport::getSettings("presets",
+                                                      "EnableFPSAuto",
+                                                      true).toBool());
+
     mTreeFps->clear();
     for (auto &fps: AppSupport::getFpsPresets()) {
         QTreeWidgetItem *item = new QTreeWidgetItem(mTreeFps);
@@ -158,16 +230,22 @@ void PresetSettingsWidget::populateFpsPresets()
         item->setText(0, fps);
         mTreeFps->addTopLevelItem(item);
     }
-    mTreeFps->setSortingEnabled(true);
-    mTreeFps->sortByColumn(0, Qt::AscendingOrder);
 }
 
 void PresetSettingsWidget::saveFpsPresets()
 {
+    AppSupport::setSettings("presets",
+                            "EnableFPS",
+                            mCheckFps->isChecked());
+    AppSupport::setSettings("presets",
+                            "EnableFPSAuto",
+                            mCheckFpsAuto->isChecked());
+
     QStringList fps;
     for (int i = 0; i < mTreeFps->topLevelItemCount(); ++i) {
         const auto item = mTreeFps->topLevelItem(i);
-        if (item->checkState(0) != Qt::Checked) { continue; }
+        if (item->checkState(0) != Qt::Checked ||
+            item->text(0).toDouble() <= 1.) { continue; }
         fps << item->text(0);
     }
     if (fps != AppSupport::getFpsPresets()) {
