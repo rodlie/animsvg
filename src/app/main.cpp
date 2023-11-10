@@ -147,6 +147,9 @@ int main(int argc, char *argv[])
     OS_FONT = QApplication::font();
     eSizesUI::font.setEvaluator([]() {
         double dpi = (qApp->desktop()->logicalDpiX() / 96.0);
+#ifdef FRICTION_BUNDLE_ROBOTO
+        dpi -= 0.1;
+#endif
         qDebug() << "DPI" << dpi;
         const auto fm = QFontMetrics(OS_FONT);
         const qreal scaling = qBound(0.5, dpi, 1.5);
