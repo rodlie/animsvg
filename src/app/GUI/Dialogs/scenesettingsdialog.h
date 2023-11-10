@@ -109,6 +109,11 @@ private:
 
     QToolButton *mResToolButton;
     QToolButton *mFpsToolButton;
+
+    bool mEnableResolutionPresets;
+    bool mEnableResolutionPresetsAuto;
+    bool mEnableFpsPresets;
+    bool mEnableFpsPresetsAuto;
 };
 
 #endif // SCENESETTINGSDIALOG_H

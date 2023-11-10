@@ -29,20 +29,30 @@
 #include "appsupport.h"
 
 SceneSettingsDialog::SceneSettingsDialog(Canvas * const canvas,
-                                           QWidget * const parent) :
-    SceneSettingsDialog(canvas->prp_getName(),
-                         canvas->getCanvasWidth(),
-                         canvas->getCanvasHeight(),
-                         canvas->getFrameRange(),
-                         canvas->getFps(),
-                         canvas->getBgColorAnimator(),
-                         parent) {
+                                         QWidget * const parent)
+    : SceneSettingsDialog(canvas->prp_getName(),
+                          canvas->getCanvasWidth(),
+                          canvas->getCanvasHeight(),
+                          canvas->getFrameRange(),
+                          canvas->getFps(),
+                          canvas->getBgColorAnimator(),
+                          parent)
+{
     mTargetCanvas = canvas;
 }
 
 SceneSettingsDialog::SceneSettingsDialog(const QString &defName,
-                                           QWidget * const parent) :
-    SceneSettingsDialog(defName, 1920, 1080, {0, 300}, 30., nullptr, parent) {}
+                                         QWidget * const parent)
+    : SceneSettingsDialog(defName,
+                          1920,
+                          1080,
+                          {0, 300},
+                          30.,
+                          nullptr,
+                          parent)
+{
+
+}
 
 SceneSettingsDialog::SceneSettingsDialog(const QString &name,
                                            const int width,
@@ -50,8 +60,17 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
                                            const FrameRange& range,
                                            const qreal fps,
                                            ColorAnimator * const bg,
-                                           QWidget * const parent) :
-    QDialog(parent) {
+                                           QWidget * const parent)
+    : QDialog(parent)
+{
+    const auto presetsFpsSettings = AppSupport::getFpsPresetStatus();
+    const auto presetsResolutionSettings = AppSupport::getResolutionPresetStatus();
+
+    mEnableFpsPresets = presetsFpsSettings.first;
+    mEnableFpsPresetsAuto = presetsFpsSettings.second;
+    mEnableResolutionPresets = presetsResolutionSettings.first;
+    mEnableResolutionPresetsAuto = presetsResolutionSettings.second;
+
     setWindowTitle(tr("Scene Properties"));
     mMainLayout = new QVBoxLayout(this);
     mMainLayout->setSizeConstraint(QLayout::SetFixedSize);
@@ -59,7 +78,7 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
     setLayout(mMainLayout);
 
     mNameLayout = new QHBoxLayout();
-    mNameEditLabel = new QLabel("Name: ", this);
+    mNameEditLabel = new QLabel(tr("Name"), this);
     mNameEdit = new QLineEdit(name, this);
     connect(mNameEdit, &QLineEdit::textChanged,
             this, &SceneSettingsDialog::validate);
@@ -67,12 +86,12 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
     mNameLayout->addWidget(mNameEdit);
     mMainLayout->addLayout(mNameLayout);
 
-    mWidthLabel = new QLabel("Width:", this);
+    mWidthLabel = new QLabel(tr("Width"), this);
     mWidthSpinBox = new QSpinBox(this);
     mWidthSpinBox->setRange(1, 9999);
     mWidthSpinBox->setValue(width);
 
-    mHeightLabel = new QLabel("Height:", this);
+    mHeightLabel = new QLabel(tr("Height"), this);
     mHeightSpinBox = new QSpinBox(this);
     mHeightSpinBox->setRange(1, 9999);
     mHeightSpinBox->setValue(height);
@@ -82,6 +101,8 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
     mResToolButton->setPopupMode(QToolButton::InstantPopup);
     mResToolButton->setObjectName("ToolButton");
     mResToolButton->setIcon(QIcon::fromTheme("dots"));
+    mResToolButton->setVisible(mEnableResolutionPresets);
+    mResToolButton->setEnabled(mEnableResolutionPresets);
 
     mSizeLayout = new QHBoxLayout();
     mSizeLayout->addWidget(mWidthLabel);
@@ -91,7 +112,7 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
     mSizeLayout->addWidget(mResToolButton);
     mMainLayout->addLayout(mSizeLayout);
 
-    mFrameRangeLabel = new QLabel("Duration:", this);
+    mFrameRangeLabel = new QLabel(tr("Duration"), this);
     mMinFrameSpin = new QSpinBox(this);
     mMinFrameSpin->setRange(0, 999999);
     mMinFrameSpin->setValue(range.fMin);
@@ -101,8 +122,8 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
     mMaxFrameSpin->setValue(range.fMax);
 
     mTypeTime = new QComboBox(this);
-    mTypeTime->addItem("Frames");
-    mTypeTime->addItem("Seconds");
+    mTypeTime->addItem(tr("Frames"), "Frames");
+    mTypeTime->addItem(tr("Seconds"), "Seconds");
 
     mFrameRangeLayout = new QHBoxLayout();
     mFrameRangeLayout->addWidget(mFrameRangeLabel);
@@ -117,8 +138,10 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
     mFpsToolButton->setPopupMode(QToolButton::InstantPopup);
     mFpsToolButton->setObjectName("ToolButton");
     mFpsToolButton->setIcon(QIcon::fromTheme("dots"));
+    mFpsToolButton->setVisible(mEnableFpsPresets);
+    mFpsToolButton->setEnabled(mEnableFpsPresets);
 
-    mFPSLabel = new QLabel("Fps:", this);
+    mFPSLabel = new QLabel(tr("Fps"), this);
     mFPSSpinBox = new QDoubleSpinBox(this);
     mFPSSpinBox->setLocale(QLocale(QLocale::English,
                                    QLocale::UnitedStates));
@@ -132,7 +155,7 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
     mFPSLayout->addWidget(mFpsToolButton);
     mMainLayout->addLayout(mFPSLayout);
 
-    mBgColorLabel = new QLabel("Background:", this);
+    mBgColorLabel = new QLabel(tr("Background"), this);
     mBgColorButton = new ColorAnimatorButton(bg, this);
     if (!bg) { mBgColorButton->setColor(Qt::black); }
 
@@ -145,8 +168,8 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
     mErrorLabel->setObjectName("errorLabel");
     mMainLayout->addWidget(mErrorLabel);
 
-    mOkButton = new QPushButton("Ok", this);
-    mCancelButton = new QPushButton("Cancel", this);
+    mOkButton = new QPushButton(tr("Ok"), this);
+    mCancelButton = new QPushButton(tr("Cancel"), this);
     mButtonsLayout = new QHBoxLayout();
     mMainLayout->addLayout(mButtonsLayout);
     mButtonsLayout->addWidget(mOkButton);
@@ -187,10 +210,11 @@ QString SceneSettingsDialog::getCanvasName() const {
     return mNameEdit->text();
 }
 
-FrameRange SceneSettingsDialog::getFrameRange() const {
+FrameRange SceneSettingsDialog::getFrameRange() const
+{
     FrameRange range;
-    const QString typetime = mTypeTime->currentText();
-    if(typetime == "Frames") {
+    const QString typetime = mTypeTime->currentData().toString();
+    if (typetime == "Frames") {
         range = {mMinFrameSpin->value(), mMaxFrameSpin->value()};
     } else {
         const int maxFrame = mMaxFrameSpin->value();
@@ -209,6 +233,7 @@ qreal SceneSettingsDialog::getFps() const {
 
 void SceneSettingsDialog::populateFpsPresets()
 {
+    if (!mEnableFpsPresets) { return; }
     QStringList presets = AppSupport::getFpsPresets();
 
     QMap<double, QString> m;
@@ -226,6 +251,7 @@ void SceneSettingsDialog::populateFpsPresets()
 
 void SceneSettingsDialog::populateResPresets()
 {
+    if (!mEnableResolutionPresets) { return; }
     const auto presets = AppSupport::getResolutionPresets();
     for (const auto &preset : presets) {
         const auto act = new QAction(QString("%1 x %2")
@@ -240,15 +266,19 @@ void SceneSettingsDialog::populateResPresets()
     }
 }
 
-void SceneSettingsDialog::applySettingsToCanvas(Canvas * const canvas) const {
-    if(!canvas) return;
+void SceneSettingsDialog::applySettingsToCanvas(Canvas * const canvas) const
+{
+    if (!canvas) { return; }
     canvas->prp_setNameAction(getCanvasName());
     canvas->setCanvasSize(getCanvasWidth(), getCanvasHeight());
     canvas->setFps(getFps());
     canvas->setFrameRange(getFrameRange());
-    AppSupport::saveFpsPreset(getFps());
-    AppSupport::saveResolutionPreset(getCanvasWidth(), getCanvasHeight());
-    if(canvas != mTargetCanvas) {
+    if (mEnableFpsPresets &&
+        mEnableFpsPresetsAuto) { AppSupport::saveFpsPreset(getFps()); }
+    if (mEnableResolutionPresets &&
+        mEnableResolutionPresetsAuto) { AppSupport::saveResolutionPreset(getCanvasWidth(),
+                                                                         getCanvasHeight()); }
+    if (canvas != mTargetCanvas) {
         canvas->getBgColorAnimator()->setColor(mBgColorButton->color());
     }
 }
