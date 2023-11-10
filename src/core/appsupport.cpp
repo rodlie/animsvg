@@ -447,6 +447,17 @@ bool AppSupport::removeFpsPreset(const double value)
     return true;
 }
 
+QPair<int, int> AppSupport::getFpsPresetStatus()
+{
+    QPair<int, int> status;
+    QSettings settings;
+    settings.beginGroup("presets");
+    status.first = settings.value("EnableFPS").toBool();
+    status.second = settings.value("EnableFPSAuto").toBool();
+    settings.endGroup();
+    return status;
+}
+
 const QStringList AppSupport::getResolutionPresetsList()
 {
     QStringList presets;
@@ -519,4 +530,15 @@ bool AppSupport::removeResolutionPreset(const int w,
     settings.setValue("resolution", presets);
     settings.endGroup();
     return true;
+}
+
+QPair<int, int> AppSupport::getResolutionPresetStatus()
+{
+    QPair<int, int> status;
+    QSettings settings;
+    settings.beginGroup("presets");
+    status.first = settings.value("EnableResolutions").toBool();
+    status.second = settings.value("EnableResolutionsAuto").toBool();
+    settings.endGroup();
+    return status;
 }
