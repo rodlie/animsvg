@@ -469,8 +469,10 @@ const QList<QPair<int, int> > AppSupport::getResolutionPresets()
     for (auto &v: presets) {
         auto res = v.split("x");
         if (res.count() != 2) { continue; }
-        l.append(QPair<int, int>(res.at(0).trimmed().toInt(),
-                                 res.at(1).trimmed().toInt()));
+        const auto val = QPair<int, int>(res.at(0).trimmed().toInt(),
+                                         res.at(1).trimmed().toInt());
+        if (l.contains(val) || val.first <= 0 || val.second <= 0) { continue; }
+        l.append(val);
     }
     std::sort(l.begin(), l.end());
     return l;
@@ -480,7 +482,10 @@ void AppSupport::saveResolutionPresets(const QList<QPair<int, int> > &presets)
 {
     QStringList list;
     for (const auto &preset: presets) {
-        list << QString("%1x%2").arg(preset.first).arg(preset.second);
+        if (preset.first <= 0 || preset.second <= 0) { continue; }
+        const auto val = QString("%1x%2").arg(preset.first).arg(preset.second);
+        if (list.contains(val)) { continue; }
+        list << val;
     }
     QSettings settings;
     settings.beginGroup("presets");
