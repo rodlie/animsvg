@@ -93,13 +93,13 @@ public:
     static void saveFpsPresets(const QStringList &presets);
     static void saveFpsPreset(const double value);
     static bool removeFpsPreset(const double value);
-    static QPair<int, int> getFpsPresetStatus();
+    static QPair<bool, bool> getFpsPresetStatus();
     static const QStringList getResolutionPresetsList();
     static const QList<QPair<int, int>> getResolutionPresets();
     static void saveResolutionPresets(const QList<QPair<int, int>> &presets);
     static void saveResolutionPreset(const int w, const int h);
     static bool removeResolutionPreset(const int w, const int h);
-    static QPair<int, int> getResolutionPresetStatus();
+    static QPair<bool, bool> getResolutionPresetStatus();
 };
 
 #endif // APPSUPPORT_H
