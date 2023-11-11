@@ -100,6 +100,7 @@ int main(int argc, char *argv[])
     QApplication::setApplicationVersion(AppSupport::getAppVersion());
 
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     QApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
 
