@@ -452,8 +452,8 @@ QPair<bool, bool> AppSupport::getFpsPresetStatus()
     QPair<bool, bool> status;
     QSettings settings;
     settings.beginGroup("presets");
-    status.first = settings.value("EnableFPS").toBool();
-    status.second = settings.value("EnableFPSAuto").toBool();
+    status.first = settings.value("EnableFPS", true).toBool();
+    status.second = settings.value("EnableFPSAuto", true).toBool();
     settings.endGroup();
     return status;
 }
@@ -537,8 +537,8 @@ QPair<bool, bool> AppSupport::getResolutionPresetStatus()
     QPair<bool, bool> status;
     QSettings settings;
     settings.beginGroup("presets");
-    status.first = settings.value("EnableResolutions").toBool();
-    status.second = settings.value("EnableResolutionsAuto").toBool();
+    status.first = settings.value("EnableResolutions", true).toBool();
+    status.second = settings.value("EnableResolutionsAuto", true).toBool();
     settings.endGroup();
     return status;
 }
