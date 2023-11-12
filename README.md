@@ -37,23 +37,3 @@ Friction is a fork of [enve](https://github.com/MaurycyLiebner/enve). Copyright 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 **This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the [GNU General Public License](LICENSE.md) for more details.**
-
-Friction includes several [icons](https://github.com/Shrinks99/blender-icons) from Blender. These icons are released under a [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license.
-
-## Contributors
-
-### Friction
-
-* Ole-André Rodlie *(@rodlie)*
-* sanjuchopracool *(@sanjuchopracool)*
-
-### enve
-
-* Maurycy Liebner *(@MaurycyLiebner)*
-* Alex Kiryanov *(@AlexKiryanov)*
-* Poren Chiang *(@rschiang)*
-* goyalyashpal *(@goyalyashpal)*
-* eszlari *(@eszlari)*
-* Alexandre Prokoudine *(@prokoudine)*
-* nabbisen *(@nabbisen)*
-* luzpaz *(@luzpaz)*
