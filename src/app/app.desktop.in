@@ -5,5 +5,5 @@ Icon=@FRICTION_NAME@
 Comment=@PROJECT_DESCRIPTION@
 Terminal=false
 Type=Application
-Categories=Graphics;Video;
+Categories=Graphics;
 MimeType=application/x-@FRICTION_NAME@;
