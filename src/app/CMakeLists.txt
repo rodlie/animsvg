@@ -522,8 +522,6 @@ if(${USE_SKIA_SYSTEM_LIBS})
         ${ICU_LIBRARIES}
         ${HARFBUZZ_LIBRARIES}
     )
-else()
-    target_link_libraries(${PROJECT_NAME} PRIVATE sharpyuv)
 endif()
 
 if(APPLE)
