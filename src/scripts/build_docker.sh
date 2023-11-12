@@ -59,10 +59,6 @@ FRICTION_DIR="${FRICTION_ROOT}/friction"
 FRICTION_SRC_DIR="${FRICTION_DIR}/src"
 FRICTION_OUT_DIR="/snapshots"
 
-# if [ "${REL}" = 1 ]; then
-#     FRICTION_OUT_DIR="/releases"
-# fi
-
 FRICTION_DIST="${FRICTION_OUT_DIR}/distfiles"
 FRICTION_BRANCH=${FRICTION_BRANCH:-""}
 FRICTION_COMMIT=${FRICTION_COMMIT:-""}
@@ -80,7 +76,7 @@ elif [ "${FRICTION_TAG}" != "" ]; then
 fi
 
 GPERF_V="4df0b85"
-SKIA_V="72dd4c3cb3"
+SKIA_V="5ae542b872"
 
 SF_NET_SRC="https://sourceforge.net/projects/friction/files/source"
 

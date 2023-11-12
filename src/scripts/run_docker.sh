@@ -40,11 +40,7 @@ elif [ "${REL}" = 1 ]; then
     SNAP=0
 fi
 
-MOUNT_DIR="releases"
-if [ "${SNAP}" = 1 ]; then
-    MOUNT_DIR="snapshots"
-fi
-
+MOUNT_DIR="snapshots"
 SF_NET_SRC="https://sourceforge.net/projects/friction/files/source"
 
 DOCKER_MOUNT="-t --mount type=bind,source=${CWD}/${MOUNT_DIR},target=/${MOUNT_DIR}"
@@ -60,13 +56,10 @@ if [ "${TAG}" != "" ]; then
 fi
 DOCKER="${DOCKER} ${DOCKER_MOUNT}"
 
-FRICTION_DIST="${CWD}/releases/distfiles"
-if [ "${SNAP}" = 1 ]; then
-    FRICTION_DIST="${CWD}/snapshots/distfiles"
-fi
+FRICTION_DIST="${CWD}/snapshots/distfiles"
 
 GPERF_V="4df0b85"
-SKIA_V="72dd4c3cb3"
+SKIA_V="5ae542b872"
 
 if [ ! -d "${FRICTION_DIST}" ]; then
     mkdir -p ${FRICTION_DIST}
