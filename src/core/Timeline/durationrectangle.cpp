@@ -193,19 +193,24 @@ void DurationRectangle::draw(QPainter * const p,
                              const QRect& drawRect,
                              const qreal fps,
                              const qreal pixelsPerFrame,
-                             const FrameRange &absFrameRange) {
+                             const FrameRange &absFrameRange)
+{
     const int clampedMin = qMax(absFrameRange.fMin, getMinAbsFrame());
     const int firstRelDrawFrame = clampedMin - absFrameRange.fMin;
     const int clampedMax = qMin(absFrameRange.fMax, getMaxAbsFrame());
     const int lastRelDrawFrame = clampedMax - absFrameRange.fMin;
     const int drawFrameSpan = lastRelDrawFrame - firstRelDrawFrame + 1;
 
-    if(drawFrameSpan < 1) return;
+    if (drawFrameSpan < 1) { return; }
 
-    const QRect durRect(qFloor(firstRelDrawFrame*pixelsPerFrame), drawRect.y(),
-                        qCeil(drawFrameSpan*pixelsPerFrame), drawRect.height());
+    const QRect durRect(qFloor((firstRelDrawFrame + 0.5) * pixelsPerFrame),
+                        drawRect.y(),
+                        qCeil((drawFrameSpan - 1.0) * pixelsPerFrame),
+                        drawRect.height());
 
-    const int rectStartFrame = absFrameRange.fMin - mValue;
+    // why are we drawing cache handlers here?
+    Q_UNUSED(fps)
+    /*const int rectStartFrame = absFrameRange.fMin - mValue;
     const int rectEndFrame = absFrameRange.fMax - mValue;
     if(mRasterCacheHandler && mSoundCacheHandler) {
         const int soundHeight = drawRect.height()/3;
@@ -234,24 +239,25 @@ void DurationRectangle::draw(QPainter * const p,
                                                 rectStartFrame,
                                                 rectEndFrame, fps,
                                                 durRect.right());
-    }
+    }*/
 
     QColor fillColor;
     const auto& sett = eSettings::instance();
-    if(isSelected()) fillColor = sett.fSelectedVisibilityRangeColor;
-    else fillColor = sett.fVisibilityRangeColor;
+    if (isSelected()) { fillColor = sett.fSelectedVisibilityRangeColor; }
+    else { fillColor = sett.fVisibilityRangeColor; }
 
     p->fillRect(durRect.adjusted(0, 1, 0, -1), fillColor);
-    if(mHovered) {
+    if (mHovered) {
         p->setPen(QPen(Qt::white, .5));
         p->drawRect(durRect);
     }
 
-    if(mMinFrame.isHovered()) p->setPen(QPen(Qt::white));
-    else p->setPen(QPen(Qt::black));
+    if (mMinFrame.isHovered()) { p->setPen(QPen(Qt::white)); }
+    else { p->setPen(QPen(Qt::black)); }
     p->drawLine(durRect.topLeft(), durRect.bottomLeft());
-    if(mMaxFrame.isHovered()) p->setPen(QPen(Qt::white));
-    else p->setPen(QPen(Qt::black));
+
+    if (mMaxFrame.isHovered()) { p->setPen(QPen(Qt::white)); }
+    else { p->setPen(QPen(Qt::black)); }
     p->drawLine(durRect.topRight(), durRect.bottomRight());
 
 //    p->setPen(Qt::black);
@@ -259,14 +265,15 @@ void DurationRectangle::draw(QPainter * const p,
     //p->drawRect(drawRect);
 }
 
-TimelineMovable *DurationRectangle::getMovableAt(
-        const int pressX, const qreal pixelsPerFrame,
-        const int minViewedFrame) {
-    const qreal startX = (getMinAbsFrame() - minViewedFrame)*pixelsPerFrame;
-    const qreal endX = (getMaxAbsFrame() - minViewedFrame + 1)*pixelsPerFrame;
-    if(qAbs(pressX - startX) < 5) return &mMinFrame;
-    else if(qAbs(pressX - endX) < 5) return &mMaxFrame;
-    else if(pressX > startX && pressX < endX) return this;
+TimelineMovable *DurationRectangle::getMovableAt(const int pressX,
+                                                 const qreal pixelsPerFrame,
+                                                 const int minViewedFrame)
+{
+    const qreal startX = ((getMinAbsFrame() - minViewedFrame) + 0.5) * pixelsPerFrame;
+    const qreal endX = ((getMaxAbsFrame() - minViewedFrame + 1) - 0.5) * pixelsPerFrame;
+    if (qAbs(pressX - startX) < 5) { return &mMinFrame; }
+    else if (qAbs(pressX - endX) < 5) { return &mMaxFrame; }
+    else if (pressX > startX && pressX < endX) { return this; }
     return nullptr;
 }
 
