@@ -51,8 +51,9 @@ if(${USE_SKIA_SYSTEM_LIBS})
     pkg_check_modules(FREETYPE REQUIRED freetype2)
     pkg_check_modules(JPEG REQUIRED libjpeg)
     pkg_check_modules(PNG REQUIRED libpng)
-    pkg_check_modules(WEBP REQUIRED libwebpmux)
-    pkg_check_modules(WEBPMUX REQUIRED libwebpdemux)
+    pkg_check_modules(WEBP REQUIRED libwebp)
+    pkg_check_modules(WEBPMUX REQUIRED libwebpmux)
+    pkg_check_modules(WEBPDEMUX REQUIRED libwebpdemux)
     pkg_check_modules(ZLIB REQUIRED zlib)
     pkg_check_modules(ICU REQUIRED icu-i18n)
     pkg_check_modules(HARFBUZZ REQUIRED harfbuzz)
@@ -518,6 +519,7 @@ if(${USE_SKIA_SYSTEM_LIBS})
         ${PNG_LIBRARIES}
         ${WEBP_LIBRARIES}
         ${WEBPMUX_LIBRARIES}
+        ${WEBPDEMUX_LIBRARIES}
         ${ZLIB_LIBRARIES}
         ${ICU_LIBRARIES}
         ${HARFBUZZ_LIBRARIES}
