@@ -50,7 +50,8 @@ AlignWidget QComboBox {
 }
 
 QPushButton::menu-indicator,
-QToolButton#ToolButton::menu-indicator{ width: 0px; }
+QToolButton#ToolButton::menu-indicator,
+QToolButton#FlatButton::menu-indicator { width: 0px; }
 
 QLineEdit#SearchLine {
     border-radius: 0;
@@ -106,18 +107,21 @@ QPushButton#WelcomeRecentButton:hover {
 }
 
 AlignWidget QPushButton,
-QPushButton#FlatButton {
+QPushButton#FlatButton,
+QToolButton#FlatButton {
     background-color: none;
     border: 0;
     border-radius: 10%;
 }
 
-QPushButton#FlatButton {
+QPushButton#FlatButton,
+QToolButton#FlatButton {
     border-radius: 2%;
 }
 
 QCheckBox::indicator:unchecked:hover,
-QPushButton#FlatButton:hover {
+QPushButton#FlatButton:hover,
+QToolButton#FlatButton:hover {
     background-color: rgb(112, 8, 10);
 }
 

@@ -101,7 +101,7 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
     mResToolButton = new QToolButton(this);
     mResToolButton->setArrowType(Qt::NoArrow);
     mResToolButton->setPopupMode(QToolButton::InstantPopup);
-    mResToolButton->setObjectName("ToolButton");
+    mResToolButton->setObjectName("FlatButton");
     mResToolButton->setIcon(QIcon::fromTheme("dots"));
     mResToolButton->setVisible(mEnableResolutionPresets);
     mResToolButton->setEnabled(mEnableResolutionPresets);
@@ -140,7 +140,7 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
     mFpsToolButton = new QToolButton(this);
     mFpsToolButton->setArrowType(Qt::NoArrow);
     mFpsToolButton->setPopupMode(QToolButton::InstantPopup);
-    mFpsToolButton->setObjectName("ToolButton");
+    mFpsToolButton->setObjectName("FlatButton");
     mFpsToolButton->setIcon(QIcon::fromTheme("dots"));
     mFpsToolButton->setVisible(mEnableFpsPresets);
     mFpsToolButton->setEnabled(mEnableFpsPresets);
