@@ -32,6 +32,8 @@
 
 #include <QLabel>
 
+#include "GUI/global.h"
+
 CanvasSettingsWidget::CanvasSettingsWidget(QWidget* const parent) :
     SettingsWidget(parent) {
 
@@ -73,6 +75,11 @@ CanvasSettingsWidget::CanvasSettingsWidget(QWidget* const parent) :
 
     mRtlSupport = new QCheckBox("RTL language support", this);
     addWidget(mRtlSupport);
+
+    eSizesUI::widget.add(mRtlSupport, [this](const int size) {
+        mRtlSupport->setFixedHeight(size);
+        mRtlSupport->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
+    });
 }
 
 void CanvasSettingsWidget::applySettings() {
