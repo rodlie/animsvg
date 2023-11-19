@@ -113,7 +113,7 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
 
     mDefaultInterfaceScaling = new QCheckBox(this);
     mDefaultInterfaceScaling->setText(tr("Auto"));
-    mDefaultInterfaceScaling->setToolTip(tr("Use scaling reported by the system.\n\nMay not always work as expected."));
+    mDefaultInterfaceScaling->setToolTip(tr("Use scaling reported by the system."));
 
     mScaleContainerLayout->addWidget(mDefaultInterfaceScaling);
 
