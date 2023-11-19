@@ -143,7 +143,6 @@ MainWindow::MainWindow(Document& document,
     , mTimelineWindowAct(nullptr)
     , mRenderWindow(nullptr)
     , mRenderWindowAct(nullptr)
-    , mRenderProgress(nullptr)
 {
     Q_ASSERT(!sInstance);
     sInstance = this;
@@ -233,11 +232,6 @@ MainWindow::MainWindow(Document& document,
                                        this);
     mRenderWidget = new RenderWidget(this);
 
-    connect(mRenderWidget, &RenderWidget::progress,
-            this, &MainWindow::handleRenderProgress);
-    connect(mRenderWidget, &RenderWidget::rendererFinished,
-            this, &MainWindow::handleRenderFinished);
-
     const auto alignWidget = new AlignWidget(this);
     alignWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     connect(alignWidget, &AlignWidget::alignTriggered,
@@ -305,12 +299,6 @@ MainWindow::MainWindow(Document& document,
     mEventFilterDisabled = false;
 
     installEventFilter(this);
-
-    mRenderProgress = new QProgressBar(this);
-    mRenderProgress->setFormat(tr("Render %p%"));
-    mRenderProgress->setMaximumWidth(300);
-    mRenderProgress->setVisible(false);
-    statusBar()->addPermanentWidget(mRenderProgress);
 
     connect(&mAudioHandler, &AudioHandler::deviceChanged,
             this, [this]() { statusBar()->showMessage(tr("Changed audio output: %1")
@@ -1342,18 +1330,6 @@ void MainWindow::openRenderQueueWindow(const bool &focus)
     }
     if (!focus) { return; }
     mRenderWindow->focusWindow();
-}
-
-void MainWindow::handleRenderProgress(int frame, int total)
-{
-    if (!mRenderProgress->isVisible()) { mRenderProgress->setVisible(true); }
-    mRenderProgress->setRange(0, total);
-    mRenderProgress->setValue(frame);
-}
-
-void MainWindow::handleRenderFinished()
-{
-    mRenderProgress->setVisible(false);
 }
 
 void MainWindow::openWelcomeDialog()

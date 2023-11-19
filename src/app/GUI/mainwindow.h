@@ -37,7 +37,6 @@
 #include <QToolBar>
 #include <QComboBox>
 #include <QTimer>
-#include <QProgressBar>
 
 #include "undoredo.h"
 #include "Private/Tasks/taskscheduler.h"
@@ -399,10 +398,6 @@ private:
     Window *mRenderWindow;
     QAction *mRenderWindowAct;
     void openRenderQueueWindow(const bool &focus = true);
-
-    QProgressBar *mRenderProgress;
-    void handleRenderProgress(int frame, int total);
-    void handleRenderFinished();
 
 protected:
     void keyPressEvent(QKeyEvent *event);
