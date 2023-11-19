@@ -121,6 +121,7 @@ void RenderInstanceWidget::iniGUI() {
     QVBoxLayout *outputSettingsLayout = new QVBoxLayout(outputSettingsLabelWidget);
 
     mOutputSettingsProfilesButton = new OutputProfilesListButton(this);
+    mOutputSettingsProfilesButton->setObjectName("FlatButton");
     mOutputSettingsProfilesButton->setFocusPolicy(Qt::NoFocus);
     connect(mOutputSettingsProfilesButton, &OutputProfilesListButton::profileSelected,
             this, &RenderInstanceWidget::outputSettingsProfileSelected);
@@ -145,20 +146,18 @@ void RenderInstanceWidget::iniGUI() {
     mOutputDestinationButton = new QPushButton(QIcon::fromTheme("dots"),
                                                QString(),
                                                this);
+    mOutputDestinationButton->setObjectName("FlatButton");
     mOutputDestinationButton->setFocusPolicy(Qt::NoFocus);
     mOutputDestinationButton->setToolTip(tr("Select output file"));
-    //mOutputDestinationButton->setSizePolicy(QSizePolicy::Preferred,
-      //                                      QSizePolicy::Preferred);
     connect(mOutputDestinationButton, &QPushButton::pressed,
             this, &RenderInstanceWidget::openOutputDestinationDialog);
 
     mPlayButton = new QPushButton(QIcon::fromTheme("play"),
                                             QString(),
                                             this);
+    mPlayButton->setObjectName("FlatButton");
     mPlayButton->setFocusPolicy(Qt::NoFocus);
     mPlayButton->setToolTip(tr("Open in default application"));
-    //mPlayButton->setSizePolicy(QSizePolicy::Preferred,
-      //                        QSizePolicy::Preferred);
     connect(mPlayButton, &QPushButton::pressed,
             this, [this]() {
         QString dst = mOutputDestinationLineEdit->text();

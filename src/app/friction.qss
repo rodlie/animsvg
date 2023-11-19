@@ -105,13 +105,19 @@ QPushButton#WelcomeRecentButton:hover {
     border: 2px solid #ebebeb;
 }
 
-AlignWidget QPushButton {
+AlignWidget QPushButton,
+QPushButton#FlatButton {
     background-color: none;
     border: 0;
     border-radius: 10%;
 }
 
-QCheckBox::indicator:unchecked:hover {
+QPushButton#FlatButton {
+    border-radius: 2%;
+}
+
+QCheckBox::indicator:unchecked:hover,
+QPushButton#FlatButton:hover {
     background-color: rgb(112, 8, 10);
 }
 
