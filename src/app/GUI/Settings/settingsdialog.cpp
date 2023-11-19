@@ -70,6 +70,13 @@ SettingsDialog::SettingsDialog(QWidget * const parent)
     buttonsLayout->addWidget(applyButton);
     buttonsLayout->addWidget(cancelButton);
 
+    restoreButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
+    restoreButton->setFixedHeight(eSizesUI::widget);
+    cancelButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
+    cancelButton->setFixedHeight(eSizesUI::widget);
+    applyButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
+    applyButton->setFixedHeight(eSizesUI::widget);
+
     mainLayout->addLayout(buttonsLayout);
     const auto statusBar = new QStatusBar(this);
     statusBar->setSizeGripEnabled(false);

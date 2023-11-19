@@ -79,6 +79,8 @@ private:
     QLineEdit *mNameLabel;
     QVBoxLayout *mContentLayout = new QVBoxLayout();
     RenderInstanceSettings mSettings;
+    QPushButton *mPlayButton;
+
 signals:
     void duplicate(RenderInstanceSettings&);
 protected:

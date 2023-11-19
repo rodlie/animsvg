@@ -165,6 +165,21 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     connect(mRoundCapStyleButton, &QPushButton::released,
             this, &FillStrokeSettingsWidget::setRoundCapStyleAction);
 
+    eSizesUI::widget.add(mBevelJoinStyleButton, [this](const int size) {
+        mBevelJoinStyleButton->setFixedHeight(size);
+        mBevelJoinStyleButton->setIconSize(QSize(size, size));
+        mMiterJointStyleButton->setFixedHeight(size);
+        mMiterJointStyleButton->setIconSize(QSize(size, size));
+        mRoundJoinStyleButton->setFixedHeight(size);
+        mRoundJoinStyleButton->setIconSize(QSize(size, size));
+        mFlatCapStyleButton->setFixedHeight(size);
+        mFlatCapStyleButton->setIconSize(QSize(size, size));
+        mSquareCapStyleButton->setFixedHeight(size);
+        mSquareCapStyleButton->setIconSize(QSize(size, size));
+        mRoundCapStyleButton->setFixedHeight(size);
+        mRoundCapStyleButton->setIconSize(QSize(size, size));
+    });
+
     mCapStyleLayout->addWidget(new QLabel("Cap:", this));
     mCapStyleLayout->addWidget(mFlatCapStyleButton);
     mCapStyleLayout->addWidget(mSquareCapStyleButton);

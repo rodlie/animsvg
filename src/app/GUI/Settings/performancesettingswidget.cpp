@@ -118,6 +118,15 @@ PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
 
     setupRasterEffectWidgets();
 
+    eSizesUI::widget.add(mCpuThreadsCapCheck, [this](const int size) {
+        mCpuThreadsCapCheck->setFixedHeight(size);
+        mCpuThreadsCapCheck->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
+        mRamMBCapCheck->setFixedHeight(size);
+        mRamMBCapCheck->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
+        mPathGpuAccCheck->setFixedHeight(size);
+        mPathGpuAccCheck->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
+    });
+
     QTimer::singleShot(250, this,
                        &PerformanceSettingsWidget::updateAudioDevices);
     connect(AudioHandler::sInstance, &AudioHandler::deviceChanged,

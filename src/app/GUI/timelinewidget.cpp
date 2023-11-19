@@ -85,7 +85,7 @@ TimelineWidget::TimelineWidget(Document &document,
     mBoxesListMenuBar->addMenu(mSceneChooser);
 
     mCornerMenuBar = new FakeMenuBar(this);
-    mCornerMenuBar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+  //  mCornerMenuBar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     //mCornerMenuBar->setStyleSheet("QMenuBar::item { padding: 1px 0px; }");
 
     const auto iconsDir = eSettings::sIconsDir();

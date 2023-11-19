@@ -34,6 +34,8 @@
 #include <QTreeWidgetItem>
 #include <QHeaderView>
 
+#include "GUI/global.h"
+
 PluginsSettingsWidget::PluginsSettingsWidget(QWidget *parent)
     : SettingsWidget(parent)
     , mShaderPath(nullptr)
@@ -57,6 +59,8 @@ PluginsSettingsWidget::PluginsSettingsWidget(QWidget *parent)
                                                    QString(),
                                                    this);
     mShaderPathButton->setFocusPolicy(Qt::NoFocus);
+    mShaderPathButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
+    mShaderPathButton->setFixedSize(QSize(eSizesUI::widget, eSizesUI::widget));
 
     mShaderLayout->addWidget(mShaderLabel);
     mShaderLayout->addWidget(mShaderPath);

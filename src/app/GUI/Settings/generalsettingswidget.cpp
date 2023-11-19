@@ -29,6 +29,10 @@
 #include <QLabel>
 #include <QGroupBox>
 
+#include "Private/esettings.h"
+#include "GUI/global.h"
+#include "labeledslider.h"
+
 #include "../mainwindow.h"
 
 GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
@@ -36,6 +40,8 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     , mAutoBackup(nullptr)
     , mAutoSave(nullptr)
     , mAutoSaveTimer(nullptr)
+    , mDefaultInterfaceScaling(nullptr)
+    , mInterfaceScaling(nullptr)
 {
     const auto mGeneralWidget = new QWidget(this);
     mGeneralWidget->setContentsMargins(0, 0, 0, 0);
@@ -83,8 +89,51 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
 
     mGeneralLayout->addWidget(mAutoSaveWidget);
 
+    const auto mScaleWidget = new QGroupBox(this);
+    mScaleWidget->setTitle(tr("Interface Scaling"));
+    mScaleWidget->setContentsMargins(0, 0, 0, 0);
+    const auto mScaleLayout = new QVBoxLayout(mScaleWidget);
+
+    const auto mScaleContainer = new QWidget(this);
+    mScaleContainer->setContentsMargins(0, 0, 0, 0);
+    const auto mScaleContainerLayout = new QHBoxLayout(mScaleContainer);
+    mScaleLayout->addWidget(mScaleContainer);
+
+    mInterfaceScaling = new QSlider(Qt::Horizontal, this);
+    mInterfaceScaling->setRange(50, 150);
+    mScaleContainerLayout->addWidget(mInterfaceScaling);
+
+    const auto mScaleLabel = new QLabel(this);
+    connect(mInterfaceScaling, &QSlider::valueChanged,
+            mScaleLabel, [mScaleLabel](const int value) {
+        mScaleLabel->setText(QString("%1 %").arg(value));
+    });
+    emit mInterfaceScaling->valueChanged(100);
+    mScaleContainerLayout->addWidget(mScaleLabel);
+
+    mDefaultInterfaceScaling = new QCheckBox(this);
+    mDefaultInterfaceScaling->setText(tr("Auto"));
+    mDefaultInterfaceScaling->setToolTip(tr("Use scaling reported by the system.\n\nMay not always work as expected."));
+
+    mScaleContainerLayout->addWidget(mDefaultInterfaceScaling);
+
+    const auto infoLabel = new QLabel(this);
+    infoLabel->setText(tr("Changes here will require a restart of Friction."));
+    mScaleLayout->addWidget(infoLabel);
+
+    mGeneralLayout->addWidget(mScaleWidget);
+
     mGeneralLayout->addStretch();
     addWidget(mGeneralWidget);
+
+    eSizesUI::widget.add(mAutoBackup, [this](const int size) {
+        mAutoBackup->setFixedSize(QSize(size, size));
+        mAutoBackup->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
+        mAutoSave->setFixedSize(QSize(size, size));
+        mAutoSave->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
+        mDefaultInterfaceScaling->setFixedHeight(size);
+        mDefaultInterfaceScaling->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
+    });
 }
 
 void GeneralSettingsWidget::applySettings()
@@ -99,6 +148,11 @@ void GeneralSettingsWidget::applySettings()
                             "AutoSaveTimeout",
                             (mAutoSaveTimer->value() * 60) * 1000);
     MainWindow::sGetInstance()->updateAutoSaveBackupState();
+
+    mSett.fDefaultInterfaceScaling = mDefaultInterfaceScaling->isChecked();
+    mSett.fInterfaceScaling = mInterfaceScaling->value() * 0.01;
+    eSizesUI::font.updateSize();
+    eSizesUI::widget.updateSize();
 }
 
 void GeneralSettingsWidget::updateSettings(bool restore)
@@ -114,4 +168,7 @@ void GeneralSettingsWidget::updateSettings(bool restore)
                                                         300000).toInt();
     if (ms < 60000) { ms = 60000; }
     mAutoSaveTimer->setValue((ms / 1000) / 60);
+
+    mDefaultInterfaceScaling->setChecked(mSett.fDefaultInterfaceScaling);
+    mInterfaceScaling->setValue(mDefaultInterfaceScaling->isChecked() ? 100 : 100 * mSett.fInterfaceScaling);
 }
