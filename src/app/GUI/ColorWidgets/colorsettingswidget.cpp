@@ -348,6 +348,7 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
     aLayout->addWidget(aSpin);
 
     mPickingButton = new QPushButton(QIcon::fromTheme("pick"), QString(), this);
+    mPickingButton->setObjectName("FlatButton");
     mPickingButton->setToolTip(tr("Pick Color"));
     connect(mPickingButton, &QPushButton::released,
             this, &ColorSettingsWidget::startColorPicking);
