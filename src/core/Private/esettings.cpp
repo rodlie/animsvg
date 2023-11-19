@@ -190,12 +190,17 @@ eSettings::eSettings(const int cpuThreads,
                      reinterpret_cast<int&>(fHddCacheMBCap),
                      "hddCacheMBCap", 0);
 
+    bool defaultScaling = false;
+#ifdef Q_OS_WIN
+    defaultScaling = true;
+#endif
+
     gSettings << std::make_shared<eQrealSetting>(
                      fInterfaceScaling,
                      "interfaceScaling", 1.);
     gSettings << std::make_shared<eBoolSetting>(
                      fDefaultInterfaceScaling,
-                     "defaultInterfaceScaling", false);
+                     "defaultInterfaceScaling", defaultScaling);
 
     gSettings << std::make_shared<eBoolSetting>(
                      fCanvasRtlSupport,
