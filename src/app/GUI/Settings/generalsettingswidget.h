@@ -28,6 +28,7 @@
 
 #include <QCheckBox>
 #include <QSpinBox>
+#include <QSlider>
 
 class GeneralSettingsWidget : public SettingsWidget
 {
@@ -40,6 +41,8 @@ private:
     QCheckBox *mAutoBackup;
     QCheckBox *mAutoSave;
     QSpinBox *mAutoSaveTimer;
+    QCheckBox *mDefaultInterfaceScaling;
+    QSlider *mInterfaceScaling;
 };
 
 #endif // GENERALSETTINGSWIDGET_H

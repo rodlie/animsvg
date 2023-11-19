@@ -135,7 +135,6 @@ FontsWidget::FontsWidget(QWidget *parent)
     connect(mAlignRight, &QPushButton::pressed,
             this, [this]() { emit textAlignmentChanged(Qt::AlignRight); });
 
-
     mAlignTop = new QPushButton(QIcon::fromTheme("alignTop"),
                                 QString(), this);
     mAlignTop->setFocusPolicy(Qt::NoFocus);
@@ -156,6 +155,21 @@ FontsWidget::FontsWidget(QWidget *parent)
     mAlignBottom->setToolTip(tr("Align Text Bottom"));
     connect(mAlignBottom, &QPushButton::pressed,
             this, [this]() { emit textVAlignmentChanged(Qt::AlignBottom); });
+
+    eSizesUI::widget.add(mAlignLeft, [this](const int size) {
+        mAlignLeft->setFixedHeight(size);
+        mAlignLeft->setIconSize(QSize(size, size));
+        mAlignCenter->setFixedHeight(size);
+        mAlignCenter->setIconSize(QSize(size, size));
+        mAlignRight->setFixedHeight(size);
+        mAlignRight->setIconSize(QSize(size, size));
+        mAlignTop->setFixedHeight(size);
+        mAlignTop->setIconSize(QSize(size, size));
+        mAlignVCenter->setFixedHeight(size);
+        mAlignVCenter->setIconSize(QSize(size, size));
+        mAlignBottom->setFixedHeight(size);
+        mAlignBottom->setIconSize(QSize(size, size));
+    });
 
     mTextInput = new QPlainTextEdit(this);
     mTextInput->setFocusPolicy(Qt::ClickFocus);

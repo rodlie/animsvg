@@ -69,7 +69,10 @@ void ClosableContainer::setCheckable(const bool check) {
     if(check) {
         mCheckBox = new QCheckBox(this);
         mCheckBox->setFocusPolicy(Qt::NoFocus);
-        mCheckBox->setFixedSize(eSizesUI::widget, eSizesUI::widget);
+        eSizesUI::widget.add(mCheckBox, [this](const int size) {
+            mCheckBox->setFixedSize(QSize(size, size));
+            mCheckBox->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
+        });
         mMainLayout->insertWidget(0, mCheckBox, 0, Qt::AlignTop);
         mCheckBox->setChecked(true);
     } else {

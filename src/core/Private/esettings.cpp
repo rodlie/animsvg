@@ -193,6 +193,9 @@ eSettings::eSettings(const int cpuThreads,
     gSettings << std::make_shared<eQrealSetting>(
                      fInterfaceScaling,
                      "interfaceScaling", 1.);
+    gSettings << std::make_shared<eBoolSetting>(
+                     fDefaultInterfaceScaling,
+                     "defaultInterfaceScaling", false);
 
     gSettings << std::make_shared<eBoolSetting>(
                      fCanvasRtlSupport,

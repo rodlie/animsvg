@@ -221,6 +221,9 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     });
 
     mToolBar = new QToolBar(this);
+    eSizesUI::widget.add(mToolBar, [this](const int size) {
+        mToolBar->setIconSize(QSize(size, size));
+    });
     mToolBar->setMovable(false);
 
     mRenderProgress = new QProgressBar(this);

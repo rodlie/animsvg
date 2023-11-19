@@ -60,6 +60,7 @@ RenderWidget::RenderWidget(QWidget *parent)
     const auto darkPal= AppSupport::getDarkPalette();
     bottomWidget->setAutoFillBackground(true);
     bottomWidget->setPalette(darkPal);
+    bottomWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     mRenderProgressBar = new QProgressBar(this);
     //mRenderProgressBar->setObjectName(QString::fromUtf8("RenderProgressBar"));
@@ -68,7 +69,7 @@ RenderWidget::RenderWidget(QWidget *parent)
     mRenderProgressBar->setFormat("%p%");
     mRenderProgressBar->setValue(0);
 
-    mStartRenderButton = new QPushButton(QIcon::fromTheme("play"),
+    mStartRenderButton = new QPushButton(QIcon::fromTheme("render_animation"),
                                          tr("Render"),
                                          this);
     mStartRenderButton->setFocusPolicy(Qt::NoFocus);
@@ -108,6 +109,17 @@ RenderWidget::RenderWidget(QWidget *parent)
                                      QSizePolicy::Preferred);
     connect(mClearQueueButton, &QPushButton::pressed,
             this, &RenderWidget::clearRenderQueue);
+
+    eSizesUI::widget.add(mStartRenderButton, [this](const int size) {
+        mStartRenderButton->setIconSize(QSize(size, size));
+        mStartRenderButton->setFixedHeight(size);
+        mStopRenderButton->setIconSize(QSize(size, size));
+        mStopRenderButton->setFixedSize(QSize(size, size));
+        mAddRenderButton->setIconSize(QSize(size, size));
+        mAddRenderButton->setFixedSize(QSize(size, size));
+        mClearQueueButton->setIconSize(QSize(size, size));
+        mClearQueueButton->setFixedSize(QSize(size, size));
+    });
 
     mContWidget = new QWidget(this);
     mContWidget->setContentsMargins(0, 0, 0, 0);

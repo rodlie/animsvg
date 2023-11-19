@@ -30,6 +30,8 @@
 
 #include <QLabel>
 
+#include "GUI/global.h"
+
 TimelineSettingsWidget::TimelineSettingsWidget(QWidget *parent) :
     SettingsWidget(parent) {
     mAlternateRowCheck = new QCheckBox("Alternate row color", this);
@@ -77,6 +79,13 @@ TimelineSettingsWidget::TimelineSettingsWidget(QWidget *parent) :
                  mSelectedVisibilityRangeColor);
     add2HWidgets(new QLabel("Animation range color"),
                  mAnimationRangeColor);
+
+    eSizesUI::widget.add(mAlternateRowCheck, [this](const int size) {
+        mAlternateRowCheck->setFixedHeight(size);
+        mAlternateRowCheck->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
+        mHighlightRowCheck->setFixedHeight(size);
+        mHighlightRowCheck->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
+    });
 }
 
 void TimelineSettingsWidget::applySettings() {

@@ -31,6 +31,8 @@
 #include <QPair>
 #include <QPushButton>
 
+#include "GUI/global.h"
+
 PresetSettingsWidget::PresetSettingsWidget(QWidget *parent)
     : SettingsWidget(parent)
     , mTreeResolutions(nullptr)
@@ -42,6 +44,17 @@ PresetSettingsWidget::PresetSettingsWidget(QWidget *parent)
 {
     setupResolutionPresetWidget();
     setupFpsPresetWidget();
+
+    eSizesUI::widget.add(this, [this](const int size) {
+        mCheckResolutions->setFixedHeight(size);
+        mCheckResolutions->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
+        mCheckResolutionsAuto->setFixedHeight(size);
+        mCheckResolutionsAuto->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
+        mCheckFps->setFixedHeight(size);
+        mCheckFps->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
+        mCheckFpsAuto->setFixedHeight(size);
+        mCheckFpsAuto->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
+    });
 }
 
 void PresetSettingsWidget::applySettings()

@@ -147,19 +147,19 @@ void RenderInstanceWidget::iniGUI() {
                                                this);
     mOutputDestinationButton->setFocusPolicy(Qt::NoFocus);
     mOutputDestinationButton->setToolTip(tr("Select output file"));
-    mOutputDestinationButton->setSizePolicy(QSizePolicy::Preferred,
-                                            QSizePolicy::Preferred);
+    //mOutputDestinationButton->setSizePolicy(QSizePolicy::Preferred,
+      //                                      QSizePolicy::Preferred);
     connect(mOutputDestinationButton, &QPushButton::pressed,
             this, &RenderInstanceWidget::openOutputDestinationDialog);
 
-    const auto playButton = new QPushButton(QIcon::fromTheme("play"),
+    mPlayButton = new QPushButton(QIcon::fromTheme("play"),
                                             QString(),
                                             this);
-    playButton->setFocusPolicy(Qt::NoFocus);
-    playButton->setToolTip(tr("Open in default application"));
-    playButton->setSizePolicy(QSizePolicy::Preferred,
-                              QSizePolicy::Preferred);
-    connect(playButton, &QPushButton::pressed,
+    mPlayButton->setFocusPolicy(Qt::NoFocus);
+    mPlayButton->setToolTip(tr("Open in default application"));
+    //mPlayButton->setSizePolicy(QSizePolicy::Preferred,
+      //                        QSizePolicy::Preferred);
+    connect(mPlayButton, &QPushButton::pressed,
             this, [this]() {
         QString dst = mOutputDestinationLineEdit->text();
         if (QFile::exists(dst)) {
@@ -175,13 +175,25 @@ void RenderInstanceWidget::iniGUI() {
     mOutputDestinationLineEdit->setPlaceholderText(tr("Destination ..."));
     mOutputDestinationLineEdit->setObjectName(QString::fromUtf8("OutputDestinationLineEdit"));
 
+    eSizesUI::widget.add(mOutputSettingsProfilesButton, [this](const int size) {
+        mRenderSettingsButton->setFixedHeight(size);
+        mOutputSettingsButton->setFixedHeight(size);
+        mOutputSettingsProfilesButton->setIconSize(QSize(size, size));
+        mOutputSettingsProfilesButton->setFixedSize(QSize(size, size));
+        mOutputDestinationButton->setIconSize(QSize(size, size));
+        mOutputDestinationButton->setFixedSize(QSize(size, size));
+        mPlayButton->setIconSize(QSize(size, size));
+        mPlayButton->setFixedSize(QSize(size, size));
+        mOutputDestinationLineEdit->setFixedHeight(size);
+    });
+
     QWidget *outputDestinationWidget = new QWidget(this);
     outputDestinationWidget->setContentsMargins(0, 0, 0, 0);
     const auto outputDesinationLayout = new QHBoxLayout(outputDestinationWidget);
     outputDesinationLayout->setMargin(0);
 
     outputDesinationLayout->addWidget(mOutputDestinationButton);
-    outputDesinationLayout->addWidget(playButton);
+    outputDesinationLayout->addWidget(mPlayButton);
     outputDesinationLayout->addWidget(mOutputDestinationLineEdit);
 
     outputSettingsLayout->addWidget(outputDestinationWidget);

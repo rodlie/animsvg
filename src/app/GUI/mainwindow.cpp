@@ -275,14 +275,23 @@ MainWindow::MainWindow(Document& document,
 
     QToolBar *viewerToolBar = new QToolBar(this);
     viewerToolBar->setOrientation(Qt::Vertical);
+    eSizesUI::widget.add(viewerToolBar, [viewerToolBar](const int size) {
+        viewerToolBar->setIconSize(QSize(size, size));
+    });
 
     mViewerNodeBar = new QToolBar(this);
     mViewerNodeBar->setObjectName(QString::fromUtf8("ViewerNodeBar"));
     mViewerNodeBar->setOrientation(Qt::Vertical);
+    eSizesUI::widget.add(mViewerNodeBar, [this](const int size) {
+        mViewerNodeBar->setIconSize(QSize(size, size));
+    });
 
     mViewerDrawBar = new QToolBar(this);
     mViewerDrawBar->setObjectName(QString::fromUtf8("ViewerDrawBar"));
     mViewerDrawBar->setOrientation(Qt::Horizontal);
+    eSizesUI::widget.add(mViewerDrawBar, [this](const int size) {
+        mViewerDrawBar->setIconSize(QSize(size, size));
+    });
 
     setupToolBar();
     setupMenuBar();
@@ -384,6 +393,10 @@ MainWindow::MainWindow(Document& document,
     mTopSideBarWidget->setContentsMargins(frictionMargins);
     mTopSideBarWidget->setMinimumWidth(sideBarMin);
     mTopSideBarWidget->setTabPosition(QTabWidget::South);
+    eSizesUI::widget.add(mTopSideBarWidget, [this](const int size) {
+        mTopSideBarWidget->setIconSize(QSize(size, size));
+    });
+
     mTabColorIndex = mTopSideBarWidget->addTab(mFillStrokeSettings,
                                                QIcon::fromTheme("color"),
                                                tr("Fill and Stroke"));
@@ -416,6 +429,9 @@ MainWindow::MainWindow(Document& document,
     mBottomSideBarWidget->setContentsMargins(frictionMargins);
     mBottomSideBarWidget->setMinimumWidth(sideBarMin);
     mBottomSideBarWidget->setTabPosition(QTabWidget::South);
+    eSizesUI::widget.add(mBottomSideBarWidget, [this](const int size) {
+        mBottomSideBarWidget->setIconSize(QSize(size, size));
+    });
 
     mTabPropertiesIndex = mBottomSideBarWidget->addTab(propertiesWidget,
                                                        QIcon::fromTheme("drawPathAutoChecked"),
@@ -484,8 +500,6 @@ void MainWindow::setupMenuBar()
 {
     mMenuBar = new QMenuBar(nullptr);
     connectAppFont(mMenuBar);
-
-    QList<QAction*> frictionButtonActions;
 
     mFileMenu = mMenuBar->addMenu(tr("File", "MenuBar"));
 
@@ -1203,6 +1217,7 @@ void MainWindow::setupMenuBar()
     const auto frictionButton = new QToolButton(this);
     frictionButton->setObjectName(QString::fromUtf8("ToolButton"));
     frictionButton->setPopupMode(QToolButton::InstantPopup);
+    frictionButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
     frictionButton->setIcon(QIcon::fromTheme("friction"));
     frictionButton->setDefaultAction(aboutAct);
     frictionButton->setToolTip(QString());
@@ -1390,16 +1405,14 @@ void MainWindow::updateSettingsForCurrentCanvas(Canvas* const scene)
 
 void MainWindow::setupToolBar()
 {
-    /*const QSize iconSize(AppSupport::getSettings("ui",
-                                                 "mainToolbarIconSize",
-                                                 QSize(24, 24)).toSize());*/
-
     mToolbar = new QToolBar(tr("Toolbar"), this);
     mToolbar->setObjectName("mainToolbar");
     mToolbar->setFocusPolicy(Qt::NoFocus);
-    //mToolbar->setIconSize(iconSize);
     mToolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     mToolbar->setMovable(false);
+    eSizesUI::widget.add(mToolbar, [this](const int size) {
+        mToolbar->setIconSize(QSize(size, size));
+    });
     addToolBar(mToolbar);
 
     mToolbarActGroup = new QActionGroup(this);

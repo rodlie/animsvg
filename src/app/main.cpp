@@ -26,6 +26,7 @@
 #include <QSurfaceFormat>
 #include <QProcess>
 #include <QDesktopWidget>
+//#include <QScreen>
 
 #ifdef FRICTION_BUNDLE_ROBOTO
 #include <QFontDatabase>
@@ -146,15 +147,13 @@ int main(int argc, char *argv[])
                        HardwareInfo::sRamKB());
 
     OS_FONT = QApplication::font();
-    eSizesUI::font.setEvaluator([]() {
-        double dpi = (qApp->desktop()->logicalDpiX() / 96.0);
-#ifdef FRICTION_BUNDLE_ROBOTO
-#ifdef Q_OS_WIN
-        dpi -= 0.2;
-#else
-        dpi -= 0.1;
-#endif
-#endif
+    eSizesUI::font.setEvaluator([&settings]() {
+        qreal dpi = 1.0;
+        if (!settings.fDefaultInterfaceScaling) {
+            dpi = settings.fInterfaceScaling;
+        } else {
+            dpi = qApp->desktop()->logicalDpiX() / 96.0; //QGuiApplication::primaryScreen()->logicalDotsPerInch() / 96.0
+        }
         qDebug() << "DPI" << dpi;
         const auto fm = QFontMetrics(OS_FONT);
         const qreal scaling = qBound(0.5, dpi, 1.5);

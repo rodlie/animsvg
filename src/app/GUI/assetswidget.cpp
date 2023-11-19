@@ -36,6 +36,8 @@
 #include "FileCacheHandlers/imagesequencecachehandler.h"
 #include "filesourcescache.h"
 
+#include "GUI/global.h"
+
 AssetsTreeWidget::AssetsTreeWidget(QWidget *parent)
     : QTreeWidget(parent)
 {
@@ -50,6 +52,9 @@ AssetsTreeWidget::AssetsTreeWidget(QWidget *parent)
     header()->setSectionResizeMode(QHeaderView::ResizeToContents);
     header()->setStretchLastSection(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
+    eSizesUI::widget.add(this, [this](const int size) {
+        setIconSize(QSize(size, size));
+    });
 }
 
 void AssetsTreeWidget::dropEvent(QDropEvent *event)

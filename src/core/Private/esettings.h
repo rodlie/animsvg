@@ -100,6 +100,7 @@ public:
 
     // ui settings
     qreal fInterfaceScaling;
+    bool fDefaultInterfaceScaling;
 
     // canvas settings
     bool fCanvasRtlSupport;

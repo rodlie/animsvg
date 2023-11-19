@@ -282,7 +282,7 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
 //    mWheelLayout->setAlignment(wheel_triangle_widget, Qt::AlignHCenter);
 
 
-    int spinWidth = 50;
+    int spinWidth = eSizesUI::widget * 3;
     rSpin->setFixedWidth(spinWidth);
     gSpin->setFixedWidth(spinWidth);
     bSpin->setFixedWidth(spinWidth);
@@ -351,6 +351,11 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
     mPickingButton->setToolTip(tr("Pick Color"));
     connect(mPickingButton, &QPushButton::released,
             this, &ColorSettingsWidget::startColorPicking);
+    eSizesUI::widget.add(mPickingButton, [this](const int size) {
+        mPickingButton->setFixedHeight(size);
+        mPickingButton->setIconSize(QSize(size, size));
+    });
+
     mColorLabelLayout->addWidget(mColorLabel);
     mColorLabelLayout->addWidget(mPickingButton);
     mWidgetsLayout->addLayout(mColorLabelLayout);

@@ -28,6 +28,8 @@
 #include "GUI/coloranimatorbutton.h"
 #include "appsupport.h"
 
+#include "GUI/global.h"
+
 SceneSettingsDialog::SceneSettingsDialog(Canvas * const canvas,
                                          QWidget * const parent)
     : SceneSettingsDialog(canvas->prp_getName(),
@@ -103,6 +105,8 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
     mResToolButton->setIcon(QIcon::fromTheme("dots"));
     mResToolButton->setVisible(mEnableResolutionPresets);
     mResToolButton->setEnabled(mEnableResolutionPresets);
+    mResToolButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
+    mResToolButton->setFixedSize(QSize(eSizesUI::widget, eSizesUI::widget));
 
     mSizeLayout = new QHBoxLayout();
     mSizeLayout->addWidget(mWidthLabel);
@@ -140,6 +144,8 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
     mFpsToolButton->setIcon(QIcon::fromTheme("dots"));
     mFpsToolButton->setVisible(mEnableFpsPresets);
     mFpsToolButton->setEnabled(mEnableFpsPresets);
+    mFpsToolButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
+    mFpsToolButton->setFixedSize(QSize(eSizesUI::widget, eSizesUI::widget));
 
     mFPSLabel = new QLabel(tr("Fps"), this);
     mFPSSpinBox = new QDoubleSpinBox(this);
