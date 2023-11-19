@@ -90,6 +90,11 @@ void generateAlphaMesh(QPixmap& alphaMesh,
 
 int main(int argc, char *argv[])
 {
+#ifdef Q_OS_LINUX
+    // Force XCB on Linux
+    qputenv("QT_QPA_PLATFORM", "xcb");
+#endif
+
     std::cout << QString("%1 %2 - %3").arg(AppSupport::getAppDisplayName(),
                                            AppSupport::getAppVersion(),
                                            AppSupport::getAppUrl()).toStdString() << std::endl << "---" << std::endl;
