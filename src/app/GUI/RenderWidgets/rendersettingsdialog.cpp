@@ -11,13 +11,13 @@ RenderSettingsDialog::RenderSettingsDialog(
     mInitialScene(settings.getTargetCanvas()),
     mCurrentScene(mInitialScene),
     mInitialSettings(settings.getRenderSettings()) {
-    setWindowTitle("Render Settings");
+    setWindowTitle(tr("Render Settings"));
 
     const auto mainLayout = new QVBoxLayout(this);
     setLayout(mainLayout);
 
     const auto sceneLay = new QHBoxLayout;
-    mSceneLabel = new QLabel("Scene: ");
+    mSceneLabel = new QLabel(tr("Scene"));
     mSceneCombo = new QComboBox();
     for(const auto& canvas : Document::sInstance->fScenes) {
         mSceneCombo->addItem(canvas->prp_getName());
@@ -39,7 +39,7 @@ RenderSettingsDialog::RenderSettingsDialog(
     mainLayout->addLayout(sceneLay);
 
     const auto resolutionLay = new QHBoxLayout;
-    mResolutionLabel = new QLabel("Resolution: ");
+    mResolutionLabel = new QLabel(tr("Resolution"));
     mResolutionSpin = new QDoubleSpinBox(this);
     mResolutionSpin->setDecimals(2);
     mResolutionSpin->setSuffix(" %");
@@ -50,7 +50,7 @@ RenderSettingsDialog::RenderSettingsDialog(
     mainLayout->addLayout(resolutionLay);
 
     const auto dimLay = new QHBoxLayout;
-    mWidthLabel = new QLabel("Width: ");
+    mWidthLabel = new QLabel(tr("Width"));
     mWidthSpin = new QSpinBox(this);
     mWidthSpin->setRange(1, 9999);
     mWidthSpin->setValue(mInitialSettings.fVideoWidth);
@@ -59,7 +59,7 @@ RenderSettingsDialog::RenderSettingsDialog(
 
     eSizesUI::widget.addSpacing(dimLay);
 
-    mHeightLabel = new QLabel("Height: ");
+    mHeightLabel = new QLabel(tr("Height"));
     mHeightSpin = new QSpinBox(this);
     mHeightSpin->setRange(1, 9999);
     mHeightSpin->setValue(mInitialSettings.fVideoHeight);
@@ -69,10 +69,10 @@ RenderSettingsDialog::RenderSettingsDialog(
     connectDims();
 
     mainLayout->addLayout(dimLay);
-    addSeparator();
+    //addSeparator();
 
     const auto rangeLay = new QHBoxLayout;
-    mFrameRangeLabel = new QLabel("Frame range: ", this);
+    mFrameRangeLabel = new QLabel(tr("Frame range"), this);
     mMinFrameSpin = new QSpinBox(this);
     mMinFrameSpin->setRange(-999999, 999999);
     mMaxFrameSpin = new QSpinBox(this);
@@ -108,18 +108,18 @@ RenderSettingsDialog::RenderSettingsDialog(
     mainLayout->addStretch();
 
     mButtonsLayout = new QHBoxLayout();
-    mOkButton = new QPushButton("Ok", this);
-    mCancelButton = new QPushButton("Cancel", this);
-    mResetButton = new QPushButton("Reset", this);
+    mOkButton = new QPushButton(tr("Ok"), this);
+    mCancelButton = new QPushButton(tr("Cancel"), this);
+    mResetButton = new QPushButton(tr("Reset"), this);
     connect(mOkButton, &QPushButton::released,
             this, &RenderSettingsDialog::accept);
     connect(mCancelButton, &QPushButton::released,
             this, &RenderSettingsDialog::reject);
     connect(mResetButton, &QPushButton::released,
             this, &RenderSettingsDialog::restoreInitialSettings);
-    mButtonsLayout->addWidget(mResetButton, Qt::AlignLeft);
-    mButtonsLayout->addWidget(mCancelButton, Qt::AlignLeft);
     mButtonsLayout->addWidget(mOkButton, Qt::AlignRight);
+    mButtonsLayout->addWidget(mCancelButton, Qt::AlignLeft);
+    mButtonsLayout->addWidget(mResetButton, Qt::AlignLeft);
 
     mainLayout->addLayout(mButtonsLayout);
 }
