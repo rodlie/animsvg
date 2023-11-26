@@ -52,7 +52,7 @@ LayoutHandler::LayoutHandler(Document& document,
     const auto newLayPush = new QPushButton(QIcon::fromTheme("plus"), QString(), mComboWidget);
     newLayPush->setFocusPolicy(Qt::NoFocus);
     newLayPush->setToolTip(tr("Add"));
-    //newLayPush->setObjectName("addCanvasButton");
+    newLayPush->setObjectName("FlatButton");
     eSizesUI::widget.add(newLayPush, [newLayPush](const int size) {
         newLayPush->setFixedSize(QSize(size, size));
         newLayPush->setIconSize(QSize(size, size));
@@ -62,7 +62,7 @@ LayoutHandler::LayoutHandler(Document& document,
     const auto removeLayPush = new QPushButton(QIcon::fromTheme("minus"), QString(), mComboWidget);
     removeLayPush->setFocusPolicy(Qt::NoFocus);
     removeLayPush->setToolTip(tr("Remove"));
-    //removeLayPush->setObjectName("removeCanvasButton");
+    removeLayPush->setObjectName("FlatButton");
     eSizesUI::widget.add(removeLayPush, [removeLayPush](const int size) {
         removeLayPush->setFixedSize(QSize(size, size));
         removeLayPush->setIconSize(QSize(size, size));

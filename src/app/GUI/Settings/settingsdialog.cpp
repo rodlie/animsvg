@@ -54,16 +54,19 @@ SettingsDialog::SettingsDialog(QWidget * const parent)
                                                tr("Restore Defaults"),
                                                this);
     restoreButton->setFocusPolicy(Qt::NoFocus);
+    restoreButton->setObjectName("FlatButton");
 
     const auto cancelButton = new QPushButton(QIcon::fromTheme("cancel"),
                                               tr("Close"),
                                               this);
     cancelButton->setFocusPolicy(Qt::NoFocus);
+    cancelButton->setObjectName("FlatButton");
 
     const auto applyButton = new QPushButton(QIcon::fromTheme("disk_drive"),
                                              tr("Save"),
                                              this);
     applyButton->setFocusPolicy(Qt::NoFocus);
+    applyButton->setObjectName("FlatButton");
 
     buttonsLayout->addWidget(restoreButton);
     buttonsLayout->addStretch();

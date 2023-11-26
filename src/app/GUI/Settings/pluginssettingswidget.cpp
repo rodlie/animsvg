@@ -58,6 +58,7 @@ PluginsSettingsWidget::PluginsSettingsWidget(QWidget *parent)
     const auto mShaderPathButton = new QPushButton(QIcon::fromTheme("dots"),
                                                    QString(),
                                                    this);
+    mShaderPathButton->setObjectName("FlatButton");
     mShaderPathButton->setFocusPolicy(Qt::NoFocus);
     mShaderPathButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
     mShaderPathButton->setFixedSize(QSize(eSizesUI::widget, eSizesUI::widget));
