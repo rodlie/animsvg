@@ -30,6 +30,7 @@
 
 GradientsListWidget::GradientsListWidget(QWidget *parent) :
     ScrollArea(parent) {
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     eSizesUI::widget.add(this, [this](const int size) {
         setFixedHeight(6*size);
         verticalScrollBar()->setSingleStep(size);
@@ -51,9 +52,9 @@ void GradientsListWidget::resizeEvent(QResizeEvent *e) {
     const QSize size = e->size();
     mDisplayedGradients->setMinimumHeight(size.height());
     mDisplayedGradients->updateHeight();
-    /*const int scrollBarWidth = verticalScrollBar()->width();
+    const int scrollBarWidth = verticalScrollBar()->width();
     const int availableWidth = size.width() - scrollBarWidth;
-    mDisplayedGradients->setFixedWidth(availableWidth);*/
+    mDisplayedGradients->setFixedWidth(availableWidth);
 }
 
 void GradientsListWidget::showEvent(QShowEvent *e) {
