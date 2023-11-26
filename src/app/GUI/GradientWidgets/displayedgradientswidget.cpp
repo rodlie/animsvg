@@ -86,6 +86,7 @@ void DisplayedGradientsWidget::updateHeight() {
 
 #include "GUI/ColorWidgets/colorwidgetshaders.h"
 void DisplayedGradientsWidget::paintGL() {
+    qreal pixelRatio = devicePixelRatioF();
     const int nVisible = qMin(mGradients.count() - mTopGradientId,
                               mMaxVisibleGradients);
     int gradY = mDisplayedTop;
@@ -104,7 +105,10 @@ void DisplayedGradientsWidget::paintGL() {
                     eSizesUI::widget/(3.f*xInc), 1.f/3);
         for(int j = (nColors == 1 ? 0 : 1); j < nColors; j++) {
             const QColor color = gradient->getColorAt(j);
-            glViewport(xT, yInverted, qRound(xInc), eSizesUI::widget);
+            glViewport(xT * pixelRatio,
+                       yInverted * pixelRatio,
+                       qRound(xInc * pixelRatio),
+                       eSizesUI::widget * pixelRatio);
 
             glUniform4f(GRADIENT_PROGRAM.fRGBAColor1Loc,
                         lastColor.redF(), lastColor.greenF(),
@@ -117,7 +121,10 @@ void DisplayedGradientsWidget::paintGL() {
             xT += qRound(xInc);
             lastColor = color;
         }
-        glViewport(0, yInverted, width(), eSizesUI::widget);
+        glViewport(0,
+                   yInverted * pixelRatio,
+                   width() * pixelRatio,
+                   eSizesUI::widget * pixelRatio);
         if(gradient == mSelectedGradient) {
             glUseProgram(DOUBLE_BORDER_PROGRAM.fID);
             glUniform2f(DOUBLE_BORDER_PROGRAM.fInnerBorderSizeLoc,

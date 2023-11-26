@@ -54,6 +54,7 @@ void CurrentGradientWidget::setCurrentGradient(Gradient * const gradient) {
 }
 
 void CurrentGradientWidget::paintGL() {
+    qreal pixelRatio = devicePixelRatioF();
     glClearColor(0.3f, 0.3f, 0.3f, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     if(!mGradient) return;
@@ -69,7 +70,10 @@ void CurrentGradientWidget::paintGL() {
     for(int j = 0; j < nColors; j++) {
         const QColor color = mGradient->getColorAt(j);
         const int cWidth = j == nColors - 1 ? width() - colX : xInc;
-        glViewport(colX, 0, cWidth, height());
+        glViewport(colX * pixelRatio,
+                   0,
+                   cWidth * pixelRatio,
+                   height() * pixelRatio);
 
         const bool lightBorder = shouldValPointerBeLightHSV(color.hueF(),
                                                             color.hsvSaturationF(),

@@ -30,6 +30,7 @@
 
 GradientsListWidget::GradientsListWidget(QWidget *parent) :
     ScrollArea(parent) {
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     eSizesUI::widget.add(this, [this](const int size) {
         setFixedHeight(6*size);
         verticalScrollBar()->setSingleStep(size);
