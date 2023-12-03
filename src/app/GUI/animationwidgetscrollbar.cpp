@@ -36,8 +36,12 @@ FrameScrollBar::FrameScrollBar(const int minSpan,
                                const bool range,
                                const bool clamp,
                                const bool bottom,
-                               QWidget *parent) :
-    QWidget(parent) {
+                               QWidget *parent)
+    : QWidget(parent)
+{
+    mDisplayTime = AppSupport::getSettings("ui",
+                                           "DisplayTimecode",
+                                           false).toBool();
     mMinSpan = minSpan;
     mMaxSpan = maxSpan;
     mRange = range;
@@ -54,9 +58,12 @@ qreal FrameScrollBar::posToFrame(int xPos) {
             (qreal(width()) - 2*eSizesUI::widget) + mFrameRange.fMin;
 }
 
-void FrameScrollBar::setCurrentCanvas(Canvas * const canvas) {
+void FrameScrollBar::setCurrentCanvas(Canvas * const canvas)
+{
     mCurrentCanvas = canvas;
-    if (mCurrentCanvas) { mDisplayTime = mCurrentCanvas->getDisplayTimecode(); }
+    //if (mCurrentCanvas) { mDisplayTime = mCurrentCanvas->getDisplayTimecode(); }
+    if (mCurrentCanvas) { mCurrentCanvas->setDisplayTimecode(mDisplayTime); }
+    update();
 }
 
 void FrameScrollBar::paintEvent(QPaintEvent *) {
@@ -239,12 +246,14 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
                 if (mCurrentCanvas) {
                     mCurrentCanvas->setDisplayTimecode(mDisplayTime);
                 }
+                AppSupport::setSettings("ui", "DisplayTimecode", mDisplayTime);
             } else if (selectedAction == timeAction) {
                 mDisplayTime = true;
                 update();
                 if (mCurrentCanvas) {
                     mCurrentCanvas->setDisplayTimecode(mDisplayTime);
                 }
+                AppSupport::setSettings("ui", "DisplayTimecode", mDisplayTime);
             }
         }
         return;
