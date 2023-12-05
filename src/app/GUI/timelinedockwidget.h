@@ -81,6 +81,8 @@ public:
 
     void updateSettingsForCurrentCanvas(Canvas * const canvas);
 
+    void stopPreview();
+
 private:
     void setLoop(const bool loop);
     void interruptPreview();

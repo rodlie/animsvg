@@ -505,3 +505,9 @@ void TimelineDockWidget::updateSettingsForCurrentCanvas(Canvas* const canvas)
     connect(canvas, &Canvas::currentFrameChanged,
             this, &TimelineDockWidget::handleCurrentFrameChanged);
 }
+
+void TimelineDockWidget::stopPreview()
+{
+    const auto state = RenderHandler::sInstance->currentPreviewState();
+    if (state != PreviewState::stopped) { interruptPreview(); }
+}

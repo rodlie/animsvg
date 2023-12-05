@@ -157,6 +157,7 @@ MainWindow::MainWindow(Document& document,
     connect(&mDocument, &Document::documentChanged,
             this, [this]() {
         setFileChangedSinceSaving(true);
+        mTimeline->stopPreview();
     });
     connect(&mDocument, &Document::activeSceneSet,
             this, &MainWindow::updateSettingsForCurrentCanvas);
