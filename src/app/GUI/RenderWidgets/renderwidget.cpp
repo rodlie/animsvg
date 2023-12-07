@@ -66,7 +66,7 @@ RenderWidget::RenderWidget(QWidget *parent)
     //mRenderProgressBar->setObjectName(QString::fromUtf8("RenderProgressBar"));
     setSizePolicy(QSizePolicy::Expanding,
                   QSizePolicy::Expanding);
-    mRenderProgressBar->setFormat("%p%");
+    mRenderProgressBar->setFormat(tr("Idle"));
     mRenderProgressBar->setValue(0);
 
     mStartRenderButton = new QPushButton(QIcon::fromTheme("render_animation"),
@@ -195,6 +195,9 @@ void RenderWidget::addRenderInstanceWidget(RenderInstanceWidget *wid)
 void RenderWidget::setRenderedFrame(const int frame)
 {
     if (!mCurrentRenderedSettings) { return; }
+    if (mRenderProgressBar->format() != "%p%") {
+        mRenderProgressBar->setFormat("%p%");
+    }
     mRenderProgressBar->setValue(frame);
     emit progress(frame, mRenderProgressBar->maximum());
 }
@@ -240,6 +243,7 @@ void RenderWidget::render(RenderInstanceSettings &settings)
             this, [this](const RenderState state) {
         if (state == RenderState::finished) {
             mRenderProgressBar->setValue(mRenderProgressBar->maximum());
+            mRenderProgressBar->setFormat(tr("Idle"));
             emit rendererFinished();
         }
     });
@@ -256,6 +260,7 @@ void RenderWidget::leaveOnlyStartRenderButtonEnabled()
     mStartRenderButton->setEnabled(true);
     mStopRenderButton->setDisabled(true);
     mRenderProgressBar->setValue(0);
+    mRenderProgressBar->setFormat(tr("Idle"));
 
     mAddRenderButton->setEnabled(true);
     mClearQueueButton->setEnabled(true);
@@ -290,6 +295,7 @@ void RenderWidget::render()
 void RenderWidget::stopRendering()
 {
     disableButtons();
+    mRenderProgressBar->setFormat(tr("Idle"));
     emit rendererFinished();
     clearAwaitingRender();
     VideoEncoder::sInterruptEncoding();
