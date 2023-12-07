@@ -46,7 +46,7 @@ if(${USE_ROBOTO})
 endif()
 
 option(USE_SKIA_SYSTEM_LIBS "Use skia (third-party) system libraries on Linux" OFF)
-if(${USE_SKIA_SYSTEM_LIBS})
+if(${USE_SKIA_SYSTEM_LIBS} AND UNIX)
     pkg_check_modules(EXPAT REQUIRED expat)
     pkg_check_modules(FREETYPE REQUIRED freetype2)
     pkg_check_modules(JPEG REQUIRED libjpeg)
@@ -127,7 +127,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia
 )
 
-if(${USE_SKIA_SYSTEM_LIBS})
+if(${USE_SKIA_SYSTEM_LIBS} AND UNIX)
     include_directories(
         ${EXPAT_INCLUDE_DIRS}
         ${FREETYPE_INCLUDE_DIRS}
@@ -148,12 +148,17 @@ if(UNIX)
         set(TCMALLOC "libtcmalloc.so.90")
         configure_file(
             app.desktop.in
-            ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.desktop
+            ${CMAKE_BINARY_DIR}/${PROJECT_FREEDESKTOP}.desktop
             @ONLY
         )
         configure_file(
             meta.xml.in
-            ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.xml
+            ${CMAKE_BINARY_DIR}/meta.xml
+            @ONLY
+        )
+        configure_file(
+            appdata.xml.in
+            ${CMAKE_BINARY_DIR}/appdata.xml
             @ONLY
         )
     endif()
@@ -475,7 +480,7 @@ target_link_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../skia/out/build
 )
 
-if(${USE_SKIA_SYSTEM_LIBS})
+if(${USE_SKIA_SYSTEM_LIBS} AND UNIX)
     target_link_directories(
         ${PROJECT_NAME}
         PRIVATE
@@ -509,7 +514,7 @@ target_link_libraries(
     ${SKIA_LIBRARIES}
 )
 
-if(${USE_SKIA_SYSTEM_LIBS})
+if(${USE_SKIA_SYSTEM_LIBS} AND UNIX)
     target_link_libraries(
         ${PROJECT_NAME}
         PRIVATE
@@ -569,15 +574,25 @@ if(UNIX AND NOT APPLE)
         )
     endif()
     install(FILES
-        ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.desktop
+        ${CMAKE_BINARY_DIR}/${PROJECT_FREEDESKTOP}.desktop
         DESTINATION
         ${CMAKE_INSTALL_DATAROOTDIR}/applications
     )
     install(
         FILES
-        ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.xml
+        ${CMAKE_BINARY_DIR}/appdata.xml
+        DESTINATION
+        ${CMAKE_INSTALL_DATAROOTDIR}/metainfo
+        RENAME
+        ${PROJECT_FREEDESKTOP}.appdata.xml
+    )
+    install(
+        FILES
+        ${CMAKE_BINARY_DIR}/meta.xml
         DESTINATION
         ${CMAKE_INSTALL_DATAROOTDIR}/mime/packages
+        RENAME
+        ${PROJECT_FREEDESKTOP}.xml
     )
     set(HICOLOR_DIRS "16x16;22x22;32x32;48x48;64x64;96x96;128x128;192x192;256x256")
     foreach(HICOLOR_DIR ${HICOLOR_DIRS})
@@ -585,26 +600,34 @@ if(UNIX AND NOT APPLE)
             FILES
             icons/hicolor/${HICOLOR_DIR}/apps/${PROJECT_NAME}.png
             DESTINATION
-            ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${HICOLOR_DIR}/apps/
+            ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${HICOLOR_DIR}/apps
+            RENAME
+            ${PROJECT_FREEDESKTOP}.png
         )
         install(
             FILES
             icons/hicolor/${HICOLOR_DIR}/mimetypes/application-x-${PROJECT_NAME}.png
             DESTINATION
-            ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${HICOLOR_DIR}/mimetypes/
+            ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${HICOLOR_DIR}/mimetypes
+            RENAME
+            application-x-${PROJECT_FREEDESKTOP}.png
         )
     endforeach()
     install(
         FILES
         icons/hicolor/scalable/apps/${PROJECT_NAME}.svg
         DESTINATION
-        ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps/
+        ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps
+        RENAME
+        ${PROJECT_FREEDESKTOP}.svg
     )
     install(
         FILES
         icons/hicolor/scalable/mimetypes/application-x-${PROJECT_NAME}.svg
         DESTINATION
-        ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/mimetypes/
+        ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/mimetypes
+        RENAME
+        application-x-${PROJECT_FREEDESKTOP}.svg
     )
     install(
         FILES

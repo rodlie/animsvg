@@ -1,9 +1,13 @@
 [Desktop Entry]
+Version=1.0
 Name=@FRICTION_DISPLAY_NAME@
-Exec=@FRICTION_NAME@
-Icon=@FRICTION_NAME@
+Exec=@FRICTION_NAME@ %f
+Icon=@PROJECT_FREEDESKTOP@
 Comment=@PROJECT_DESCRIPTION@
+GenericName=@PROJECT_DESCRIPTION@
+StartupNotify=true
 Terminal=false
 Type=Application
 Categories=Graphics;
-MimeType=application/x-@FRICTION_NAME@;
+MimeType=application/x-@PROJECT_FREEDESKTOP@;
+StartupWMClass=@FRICTION_NAME@

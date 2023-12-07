@@ -11,7 +11,7 @@ AutoReq: no
 %global __provides_exclude_from /opt
 
 %description
-Friction is an open-source, vector-based application designed for creating web animations and videos.
+Friction is a powerful and versatile free and open-source motion graphics application that allows you to create stunning vector and raster animations for web and video platforms with ease.
 
 %prep
 %setup -n friction-__FRICTION_VERSION__
@@ -28,8 +28,9 @@ rm -rf %{buildroot}/opt/friction/share/doc
 %defattr(-,root,root,-)
 /opt/friction
 /usr/bin/friction
-/usr/share/applications/friction.desktop
-/usr/share/mime/packages/friction.xml
+/usr/share/applications/__APPID__.desktop
+/usr/share/metainfo/__APPID__.appdata.xml
+/usr/share/mime/packages/__APPID__.xml
 /usr/share/icons/hicolor
 
 %changelog
