@@ -25,6 +25,7 @@ SDK=${SDK:-"/opt/friction"}
 DISTFILES=${DISTFILES:-"/mnt"}
 BUILD=${BUILD:-"${HOME}"}
 VERSION=${VERSION:-""}
+APPID="graphics.friction.Friction"
 FRICTION_PKG=friction-${VERSION}
 
 if [ "${VERSION}" = "" ]; then
@@ -105,11 +106,12 @@ scalable
 
 mkdir -p ${BUILD}/${FRICTION_PKG}/usr/bin
 mkdir -p ${BUILD}/${FRICTION_PKG}/usr/share/mime/packages
-mkdir -p ${BUILD}/${FRICTION_PKG}/usr/share/applications
+mkdir -p ${BUILD}/${FRICTION_PKG}/usr/share/{applications,metainfo}
 
 (cd ${BUILD}/${FRICTION_PKG}/usr/bin; ln -sf ../../opt/friction/bin/friction .)
-(cd ${BUILD}/${FRICTION_PKG}/usr/share/mime/packages ; ln -sf ../../../../opt/friction/share/mime/packages/friction.xml .)
-(cd ${BUILD}/${FRICTION_PKG}/usr/share/applications; ln -sf ../../../opt/friction/share/applications/friction.desktop .)
+(cd ${BUILD}/${FRICTION_PKG}/usr/share/mime/packages ; ln -sf ../../../../opt/friction/share/mime/packages/${APPID}.xml .)
+(cd ${BUILD}/${FRICTION_PKG}/usr/share/applications; ln -sf ../../../opt/friction/share/applications/${APPID}.desktop .)
+(cd ${BUILD}/${FRICTION_PKG}/usr/share/metainfo; ln -sf ../../../opt/friction/share/metainfo/${APPID}.appdata.xml .)
 
 for icon in ${HICOLOR}; do
     ICON_SUFFIX=png
@@ -119,8 +121,8 @@ for icon in ${HICOLOR}; do
     mkdir -p ${BUILD}/${FRICTION_PKG}/usr/share/icons/hicolor/${icon}/{apps,mimetypes}
     ICON_APP_DIR=${BUILD}/${FRICTION_PKG}/usr/share/icons/hicolor/${icon}/apps
     ICON_MIME_DIR=${BUILD}/${FRICTION_PKG}/usr/share/icons/hicolor/${icon}/mimetypes
-    (cd ${ICON_APP_DIR} ; ln -sf ../../../../../../opt/friction/share/icons/hicolor/${icon}/apps/friction.${ICON_SUFFIX} .)
-    (cd ${ICON_MIME_DIR} ; ln -sf ../../../../../../opt/friction/share/icons/hicolor/${icon}/mimetypes/application-x-friction.${ICON_SUFFIX} .)
+    (cd ${ICON_APP_DIR} ; ln -sf ../../../../../../opt/friction/share/icons/hicolor/${icon}/apps/${APPID}.${ICON_SUFFIX} .)
+    (cd ${ICON_MIME_DIR} ; ln -sf ../../../../../../opt/friction/share/icons/hicolor/${icon}/mimetypes/application-x-${APPID}.${ICON_SUFFIX} .)
 done
 
 strip -s ${BUILD}/${FRICTION_PKG}/opt/friction/bin/friction
@@ -135,13 +137,13 @@ if [ ! -d "${HOME}/rpmbuild/SOURCES" ]; then
 fi
 
 mv ${FRICTION_PKG}.tar ${HOME}/rpmbuild/SOURCES/
-cat ${BUILD}/friction/src/scripts/vfxplatform.spec | sed 's/__FRICTION_PKG_VERSION__/'${PKG_VERSION}'/g;s/__FRICTION_VERSION__/'${VERSION}'/g' > rpm.spec
+cat ${BUILD}/friction/src/scripts/vfxplatform.spec | sed 's/__FRICTION_PKG_VERSION__/'${PKG_VERSION}'/g;s/__FRICTION_VERSION__/'${VERSION}'/g;s/__APPID__/'${APPID}'/g' > rpm.spec
 
 # RPM
 rpmbuild -bb rpm.spec
 
 # Portable
-FRICTION_PORTABLE=${FRICTION_PKG}-portable-x86_64
+FRICTION_PORTABLE=${FRICTION_PKG}-linux-X11-x86_64
 FRICTION_PORTABLE_DIR=${BUILD}/${FRICTION_PORTABLE}
 cd ${BUILD}
 rm -f ${FRICTION_PORTABLE_DIR} || true
@@ -181,10 +183,13 @@ xz -9 ${FRICTION_PORTABLE}.tar
 
 # AppImage
 (cd ${FRICTION_PORTABLE_DIR} ;
-ln -sf bin/friction AppRun
-ln -sf share/applications/friction.desktop .
-ln -sf share/icons/hicolor/256x256/apps/friction.png .
-ln -sf share/icons/hicolor/256x256/apps/friction.png .DirIcon
+rm -f friction
+mkdir usr
+mv lib bin plugins share usr/
+ln -sf usr/bin/friction AppRun
+ln -sf usr/share/applications/${APPID}.desktop .
+ln -sf usr/share/icons/hicolor/256x256/apps/${APPID}.png .
+ln -sf usr/share/icons/hicolor/256x256/apps/${APPID}.png .DirIcon
 )
 tar xf ${DISTFILES}/appimagetool.tar.xz
 ARCH=x86_64 ./appimagetool/AppRun ${FRICTION_PORTABLE}

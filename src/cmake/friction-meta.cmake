@@ -20,10 +20,14 @@
 #
 
 set(FRICTION_NAME "friction")
+set(FRICTION_NAME_GENERIC "Motion Graphics")
 set(FRICTION_DISPLAY_NAME "Friction")
 set(PROJECT_COPYRIGHT "Friction contributors")
 set(PROJECT_IDENTIFIER "graphics.friction")
-set(PROJECT_DESCRIPTION "Motion Graphics")
+set(PROJECT_DESCRIPTION "Motion graphics software")
 set(PROJECT_LICENSE "GPLv3+")
 set(PROJECT_HOMEPAGE_URL "https://friction.graphics")
 set(PROJECT_FREEDESKTOP "${PROJECT_IDENTIFIER}.${FRICTION_DISPLAY_NAME}")
+set(PROJECT_BUGTRACKER_URL "https://github.com/friction2d/friction/issues")
+set(PROJECT_HELP_URL "https://friction.graphics/documentation/")
+set(PROJECT_CONTACT "support@friction.graphics")

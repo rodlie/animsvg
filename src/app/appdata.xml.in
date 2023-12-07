@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright Friction contributors -->
+<!-- Copyright @PROJECT_COPYRIGHT@ -->
 <component type="desktop">
   <id>@PROJECT_FREEDESKTOP@</id>
   <launchable type="desktop-id">@PROJECT_FREEDESKTOP@.desktop</launchable>
-  <name>Friction</name>
-  <developer_name>Friction</developer_name>
-  <summary>Motion graphics software</summary>
+  <name>@FRICTION_DISPLAY_NAME@</name>
+  <developer_name>@FRICTION_DISPLAY_NAME@</developer_name>
+  <summary>@PROJECT_DESCRIPTION@</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
   <description>
@@ -24,10 +24,10 @@
       <caption>Friction user interface</caption>
     </screenshot>
   </screenshots>
-  <url type="homepage">https://friction.graphics</url>
-  <url type="bugtracker">https://github.com/friction2d/friction/issues</url>
-  <url type="help">https://friction.graphics/documentation/</url>
-  <update_contact>support@friction.graphics</update_contact>
+  <url type="homepage">@PROJECT_HOMEPAGE_URL@</url>
+  <url type="bugtracker">@PROJECT_BUGTRACKER_URL@</url>
+  <url type="help">@PROJECT_HELP_URL@</url>
+  <update_contact>@PROJECT_CONTACT@</update_contact>
   <content_rating type="oars-1.1"/>
   <keywords>
     <keyword>2d</keyword>
