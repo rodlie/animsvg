@@ -55,6 +55,7 @@ void TaskQue::addTask(const stdsptr<eTask> &task) {
                 case HardwareSupport::cpuOnly:
                     mCpuOnly << task;
                     break;
+            default:;
             }
             break;
         case AccPreference::gpuSoftPreference:
@@ -69,6 +70,7 @@ void TaskQue::addTask(const stdsptr<eTask> &task) {
                 case HardwareSupport::cpuOnly:
                     mCpuOnly << task;
                     break;
+            default:;
             }
             break;
         case AccPreference::defaultPreference:
@@ -85,6 +87,7 @@ void TaskQue::addTask(const stdsptr<eTask> &task) {
                 case HardwareSupport::cpuOnly:
                     mCpuOnly << task;
                     break;
+            default:;
             }
             break;
         case AccPreference::cpuSoftPreference:
@@ -99,6 +102,7 @@ void TaskQue::addTask(const stdsptr<eTask> &task) {
                 case HardwareSupport::cpuOnly:
                     mCpuOnly << task;
                     break;
+            default:;
             }
             break;
         case AccPreference::cpuStrongPreference:
@@ -111,6 +115,7 @@ void TaskQue::addTask(const stdsptr<eTask> &task) {
                 case HardwareSupport::cpuOnly:
                     mCpuOnly << task;
                     break;
+            default:;
             }
             break;
     }

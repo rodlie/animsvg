@@ -26,7 +26,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(UNIX)
-    add_compile_options(-Wall -Wextra)
+    add_compile_options(-Wall -Wextra -Wno-unused-private-field -Wno-deprecated-copy-with-user-provided-copy)
     if(APPLE)
         add_compile_options(-frtti)
     endif()

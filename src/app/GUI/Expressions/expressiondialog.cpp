@@ -462,7 +462,11 @@ ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
     tabGroup->addButton(mBindingsButton, 0);
     tabGroup->addButton(mDefinitionsButon, 1);
     tabGroup->setExclusive(true);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+    connect(tabGroup, qOverload<int, bool>(&QButtonGroup::idToggled),
+#else
     connect(tabGroup, qOverload<int, bool>(&QButtonGroup::buttonToggled),
+#endif
             this, [this](const int id, const bool checked) {
         if(checked) setCurrentTabId(id);
     });

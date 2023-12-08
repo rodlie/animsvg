@@ -336,6 +336,16 @@ int cubicBezierLine(const qCubicSegment2D& seg,
                     QList<QPointF>& result) {
     const QRectF segBB = seg.ptsBoundingRect();
     if(segBB.contains(line.p1()) || segBB.contains(line.p2())) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    } else if(line.intersects(QLineF(segBB.topLeft(), segBB.bottomLeft()),
+                              nullptr) == QLineF::BoundedIntersection) {
+    } else if(line.intersects(QLineF(segBB.topLeft(), segBB.topRight()),
+                              nullptr) == QLineF::BoundedIntersection) {
+    } else if(line.intersects(QLineF(segBB.topRight(), segBB.bottomRight()),
+                              nullptr) == QLineF::BoundedIntersection) {
+    } else if(line.intersects(QLineF(segBB.bottomRight(), segBB.bottomLeft()),
+                              nullptr) == QLineF::BoundedIntersection) {
+#else
     } else if(line.intersect(QLineF(segBB.topLeft(), segBB.bottomLeft()),
                              nullptr) == QLineF::BoundedIntersection) {
     } else if(line.intersect(QLineF(segBB.topLeft(), segBB.topRight()),
@@ -344,6 +354,7 @@ int cubicBezierLine(const qCubicSegment2D& seg,
                              nullptr) == QLineF::BoundedIntersection) {
     } else if(line.intersect(QLineF(segBB.bottomRight(), segBB.bottomLeft()),
                              nullptr) == QLineF::BoundedIntersection) {
+#endif
     } else return 0;
 
     const qreal lX1 = line.x1();
