@@ -1,8 +1,6 @@
 # Friction
 
-Friction is an open-source, vector-based application designed for creating web animations and videos. See [friction.graphics](https://friction.graphics) for more information.
-
-***Friction is beta quality, expect missing and/or broken features.***
+Friction is a powerful and versatile free and open-source motion graphics application that allows you to create stunning vector and raster animations for web and video platforms with ease. See [friction.graphics](https://friction.graphics) for more information.
 
 ## Contribute
 
