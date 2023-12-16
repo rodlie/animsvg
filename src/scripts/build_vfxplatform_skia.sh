@@ -33,7 +33,7 @@ NINJA_V=1.11.1
 GN_V=82d673ac
 UNWIND_V=1.4.0
 GPERF_V=4df0b85
-SKIA_V=4fcb5c225a
+SKIA_V=4c434dbee3
 
 NINJA_BIN=${SDK}/bin/ninja
 GN_BIN=${SDK}/bin/gn
