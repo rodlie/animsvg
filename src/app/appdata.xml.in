@@ -12,7 +12,12 @@
     <p>Friction is a powerful and versatile free and open-source motion graphics application that allows you to create stunning vector and raster animations for web and video platforms with ease.</p>
   </description>
   <releases>
-    <release date="2023-11-20" version="0.9.5-rc1"/>
+    <release date="2023-12-23" version="0.9.5">
+      <description>
+        <p>This release includes new features, fixes and generic improvements.</p>
+      </description>
+      <url>https://friction.graphics/releases/friction-095.html</url>
+    </release>
     <release date="2023-09-04" version="0.9.4">
       <description>
         <p>This release includes several fixes and improvements to the user experience.</p>
