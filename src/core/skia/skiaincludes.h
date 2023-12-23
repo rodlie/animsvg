@@ -33,6 +33,10 @@
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_GCC("-Wattributes")
 
+#ifdef _MSC_VER
+#pragma warning(disable: 5030)
+#endif
+
 #include "skiadefines.h"
 
 #include "include/gpu/GrBackendSurface.h"
@@ -75,6 +79,10 @@ QT_WARNING_DISABLE_GCC("-Wattributes")
 
 #include "src/core/SkStroke.h"
 #include "src/core/SkGeometry.h" // for SkAutoConicToQuads
+
+#ifdef _MSC_VER
+#pragma warning(default: 5030)
+#endif
 
 QT_WARNING_POP
 
