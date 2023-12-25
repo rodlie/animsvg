@@ -151,7 +151,7 @@ const QString AppSupport::getAppUrl()
 
 const QString AppSupport::getAppVersion(bool html)
 {
-    QString version = QString::fromUtf8("0.9.5"); // fallback, should not happen
+    QString version = QString::fromUtf8("0.9.6"); // fallback, should not happen
 #ifdef PROJECT_VERSION
     version = QString::fromUtf8(PROJECT_VERSION);
 #endif
