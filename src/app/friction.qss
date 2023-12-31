@@ -126,3 +126,13 @@ QToolButton#FlatButton:hover {
 }
 
 QTabWidget#ThirdPartyBrowser { border: 0; }
+
+QToolButton#AutoPopupButton,
+QToolButton#AutoPopupButton:focus,
+QToolButton#AutoPopupButton:hover,
+QToolButton#AutoPopupButton:pressed {
+    border: 0;
+    background-color: transparent;
+}
+QToolButton#AutoPopupButton::menu-indicator { width: 0px; }
+QToolButton#AutoPopupButton QMenu { border: 1.5px solid rgb(74, 74, 79); }
