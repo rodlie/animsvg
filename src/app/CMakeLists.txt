@@ -74,8 +74,6 @@ if(APPLE)
     set(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks")
 endif()
 
-option(SHARED_TCMALLOC "Use shared libtcmalloc.so" OFF)
-
 if(WIN32)
     set(QSCINTILLA_LIBRARIES_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../qscintilla/src/release)
     set(QSCINTILLA_LIBRARIES qscintilla2_qt5)
@@ -113,10 +111,8 @@ if(WIN32)
     )
 endif()
 
-if(UNIX AND NOT ${SHARED_TCMALLOC})
-    if(NOT APPLE)
-        pkg_check_modules(UNWIND REQUIRED libunwind)
-    endif()
+if(UNIX AND NOT APPLE)
+    pkg_check_modules(UNWIND REQUIRED libunwind)
 endif()
 
 include_directories(
@@ -141,48 +137,21 @@ if(${USE_SKIA_SYSTEM_LIBS} AND UNIX)
 endif()
 
 if(UNIX)
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/include)
-    if(APPLE)
-        set(TCMALLOC "libtcmalloc.dylib.90")
-    else()
-        set(TCMALLOC "libtcmalloc.so.90")
-        configure_file(
-            app.desktop.in
-            ${CMAKE_BINARY_DIR}/${PROJECT_FREEDESKTOP}.desktop
-            @ONLY
-        )
-        configure_file(
-            meta.xml.in
-            ${CMAKE_BINARY_DIR}/meta.xml
-            @ONLY
-        )
-        configure_file(
-            appdata.xml.in
-            ${CMAKE_BINARY_DIR}/appdata.xml
-            @ONLY
-        )
-    endif()
-    if(${SHARED_TCMALLOC})
-        configure_file(
-            ${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/.libs/${TCMALLOC}
-            ${CMAKE_BINARY_DIR}/${TCMALLOC}
-            COPYONLY
-        )
-    endif()
+    include_directories(${CMAKE_CURRENT_BINARY_DIR}/../gperftools)
     configure_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/COPYING
-        ${CMAKE_BINARY_DIR}/LICENSE-gperftools.md
-        COPYONLY
+        app.desktop.in
+        ${CMAKE_BINARY_DIR}/${PROJECT_FREEDESKTOP}.desktop
+        @ONLY
     )
     configure_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/../skia/LICENSE
-        ${CMAKE_BINARY_DIR}/LICENSE-skia.md
-        COPYONLY
+        meta.xml.in
+        ${CMAKE_BINARY_DIR}/meta.xml
+        @ONLY
     )
     configure_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing/README.md
-        ${CMAKE_BINARY_DIR}/README-easing.md
-        COPYONLY
+        appdata.xml.in
+        ${CMAKE_BINARY_DIR}/appdata.xml
+        @ONLY
     )
 endif()
 
@@ -362,6 +331,7 @@ set(
     GUI/timelinehighlightwidget.h
     GUI/timelinewidget.h
     GUI/timelinewrappernode.h
+    GUI/toolbutton.h
     GUI/triggerlabel.h
     GUI/twocolumnlayout.h
     GUI/welcomedialog.h
@@ -495,14 +465,6 @@ if(${USE_SKIA_SYSTEM_LIBS} AND UNIX)
     )
 endif()
 
-if(UNIX)
-    target_link_directories(
-        ${PROJECT_NAME}
-        PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/../gperftools/.libs
-    )
-endif()
-
 target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
@@ -546,9 +508,9 @@ if(UNIX)
     target_link_libraries(
         ${PROJECT_NAME}
         PRIVATE
-        tcmalloc
+        tcmalloc_static
     )
-    if(NOT ${SHARED_TCMALLOC})
+    if(NOT APPLE)
         target_link_libraries(
             ${PROJECT_NAME}
             PRIVATE
@@ -565,14 +527,6 @@ if(UNIX AND NOT APPLE)
         DESTINATION
         ${CMAKE_INSTALL_BINDIR}
     )
-    if(${SHARED_TCMALLOC})
-        install(
-            FILES
-            ${CMAKE_BINARY_DIR}/${TCMALLOC}
-            DESTINATION
-            ${CMAKE_INSTALL_LIBDIR}
-        )
-    endif()
     install(FILES
         ${CMAKE_BINARY_DIR}/${PROJECT_FREEDESKTOP}.desktop
         DESTINATION
