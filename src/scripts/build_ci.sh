@@ -33,9 +33,6 @@ curl \
 git \
 clang \
 build-essential \
-libtool \
-autoconf \
-automake \
 cmake \
 python3 \
 ninja-build \
@@ -82,13 +79,6 @@ BRANCH=`git rev-parse --abbrev-ref HEAD`
 
 if [ "${BRANCH}" = "main" ]; then
     BRANCH=""
-fi
-
-if [ ! -f "${CWD}/src/gperftools/.libs/libtcmalloc.a" ]; then
-    cd ${CWD}/src/gperftools
-    ./autogen.sh
-    CC=clang CXX=clang++ ./configure --disable-shared
-    make -j${MKJOBS}
 fi
 
 if [ ! -f "${CWD}/src/skia/out/build/libskia.a" ]; then
