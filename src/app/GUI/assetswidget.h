@@ -41,6 +41,7 @@ class AssetsTreeWidget : public QTreeWidget
 {
 public:
     explicit AssetsTreeWidget(QWidget *parent);
+    void addAssets(const QList<QUrl> &urls);
 
 protected:
     void dropEvent(QDropEvent *event);
@@ -69,9 +70,10 @@ public:
     explicit AssetsWidget(QWidget *parent = nullptr);
     void addCacheHandler(FileCacheHandler *handler);
     void removeCacheHandler(FileCacheHandler *handler);
+    void addAssets(const QList<QUrl> &urls);
 
 private:
-    QTreeWidget *mTree;
+    AssetsTreeWidget *mTree;
     QList<FileCacheHandler*> mCacheList;
 };
 

@@ -57,6 +57,28 @@ AssetsTreeWidget::AssetsTreeWidget(QWidget *parent)
     });
 }
 
+void AssetsTreeWidget::addAssets(const QList<QUrl> &urls)
+{
+    for (const QUrl &url : urls) {
+        if (url.isLocalFile()) {
+            const QString urlStr = url.toLocalFile();
+            const QFileInfo fInfo(urlStr);
+            const QString ext = fInfo.suffix();
+            const auto filesHandler = FilesHandler::sInstance;
+            if (fInfo.isDir()) {
+                filesHandler->getFileHandler<ImageSequenceFileHandler>(urlStr);
+            } else if (isSoundExt(ext)) {
+                filesHandler->getFileHandler<SoundFileHandler>(urlStr);
+            } else if (isImageExt(ext) || isLayersExt(ext)) {
+                filesHandler->getFileHandler<ImageFileHandler>(urlStr);
+            } else if (isVideoExt(ext)) {
+                filesHandler->getFileHandler<VideoFileHandler>(urlStr);
+            }
+        }
+    }
+    Document::sInstance->actionFinished();
+}
+
 void AssetsTreeWidget::dropEvent(QDropEvent *event)
 {
     if (event->mimeData()->hasUrls()) {
@@ -193,4 +215,9 @@ void AssetsWidget::removeCacheHandler(FileCacheHandler *handler)
             break;
         }
     }
+}
+
+void AssetsWidget::addAssets(const QList<QUrl> &urls)
+{
+    mTree->addAssets(urls);
 }
