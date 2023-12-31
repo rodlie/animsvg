@@ -53,7 +53,6 @@ if(UNIX AND NOT APPLE)
     if(${STATIC_FFMPEG})
         set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-Bsymbolic")
     endif()
-    add_definitions(-DFRICTION_BUNDLE_GPERFTOOLS)
 endif()
 
 if(NOT WIN32)
@@ -67,7 +66,7 @@ find_package(PkgConfig QUIET)
 find_package(QT NAMES Qt5 COMPONENTS Core REQUIRED)
 find_package(
     Qt${QT_VERSION_MAJOR}
-    5.12
+    5.12.12
     COMPONENTS
     Gui
     Widgets
