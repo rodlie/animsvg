@@ -51,6 +51,9 @@ if(UNIX AND NOT APPLE)
     include(CPack)
 endif()
 
+if(UNIX)
+    add_subdirectory(src/gperftools)
+endif()
 add_subdirectory(src/core)
 add_subdirectory(src/app)
 
