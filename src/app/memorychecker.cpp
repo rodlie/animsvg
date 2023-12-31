@@ -30,7 +30,7 @@
     #include "windowsincludes.h"
 #elif defined(Q_OS_UNIX)
     #include "gperftools/tcmalloc.h"
-    #include "gperftools/malloc_extension.h"
+    #include "../gperftools/include/gperftools/malloc_extension.h"
     #if defined(Q_OS_LINUX)
         #include <sys/sysinfo.h>
         #include <unistd.h>
