@@ -45,7 +45,7 @@ if(${USE_ROBOTO})
     add_definitions(-DFRICTION_BUNDLE_ROBOTO)
 endif()
 
-option(USE_SKIA_SYSTEM_LIBS "Use skia (third-party) system libraries on Linux" OFF)
+option(USE_SKIA_SYSTEM_LIBS "Use skia (third-party) system libraries on Linux" ON)
 if(${USE_SKIA_SYSTEM_LIBS} AND UNIX)
     pkg_check_modules(EXPAT REQUIRED expat)
     pkg_check_modules(FREETYPE REQUIRED freetype2)

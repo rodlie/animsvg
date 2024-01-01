@@ -85,7 +85,6 @@ mkdir build-ci
 cd build-ci
 
 cmake -G Ninja \
--DUSE_SKIA_SYSTEM_LIBS=ON \
 -DCMAKE_BUILD_TYPE=Release \
 -DCMAKE_INSTALL_PREFIX=/usr \
 -DCMAKE_CXX_COMPILER=clang++ \
