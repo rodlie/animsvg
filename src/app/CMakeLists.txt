@@ -120,7 +120,7 @@ include_directories(
     ${QSCINTILLA_INCLUDE_DIRS}
     ${FFMPEG_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/../core
-    ${CMAKE_CURRENT_SOURCE_DIR}/../skia
+    ${CMAKE_CURRENT_SOURCE_DIR}/../engine/skia
 )
 
 if(${USE_SKIA_SYSTEM_LIBS} AND UNIX)
@@ -447,7 +447,7 @@ target_link_directories(
     ${FFMPEG_LIBRARIES_DIRS}
     ${QSCINTILLA_LIBRARIES_DIRS}
     #${QUAZIP_LIBRARIES_DIRS}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../skia/out/build
+    ${CMAKE_CURRENT_BINARY_DIR}/../engine/skia
 )
 
 if(${USE_SKIA_SYSTEM_LIBS} AND UNIX)
