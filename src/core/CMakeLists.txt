@@ -41,7 +41,7 @@ add_definitions(-DCORE_LIBRARY)
 include_directories(
     #${QUAZIP_INCLUDE_DIRS}
     ${FFMPEG_INCLUDE_DIRS}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../skia
+    ${CMAKE_CURRENT_SOURCE_DIR}/../engine/skia
 )
 
 set(
@@ -701,7 +701,7 @@ target_link_directories(
     ${PROJECT_NAME}
     PRIVATE
     ${FFMPEG_LIBRARIES_DIRS}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../skia/out/build
+    ${CMAKE_CURRENT_BINARY_DIR}/../engine/skia
     #${QUAZIP_LIBRARIES_DIRS}
 )
 
