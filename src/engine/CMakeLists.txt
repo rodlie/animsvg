@@ -43,9 +43,9 @@ if(WIN32)
     set(GN_PATH ${SKIA_SRC}/bin/gn.exe)
     set(SKIA_ARGS_EXTRA --ide=vs)
     set(SKIA_BUILD_CMD msbuild all.sln)
-    set(SKIA_UPDATE_CMD python.exe tools\git-sync-deps)
+    set(SKIA_UPDATE_CMD python.exe "tools\\git-sync-deps")
     set(SKIA_ARGS "target_os=\"windows\" host_os=\"win\" current_os=\"win\" target_cpu=\"x64\"")
-    set(SKIA_ARGS "${SKIA_ARGS} clang_win=\"C:\Program Files\LLVM\" cc=\"clang-cl\" cxx=\"clang-cl\"")
+    set(SKIA_ARGS "${SKIA_ARGS} clang_win=\"C:\\Program Files\\LLVM\" cc=\"clang-cl\" cxx=\"clang-cl\"")
     set(SKIA_ARGS "${SKIA_ARGS} extra_cflags=[\"-Wno-error\",\"/MD\",\"/O2\"]")
 else()
     set(GN_PATH ${SKIA_SRC}/bin/gn)
@@ -58,27 +58,31 @@ endif()
 set(SKIA_ARGS "${SKIA_ARGS} is_official_build=true is_debug=false")
 set(SKIA_ARGS "${SKIA_ARGS} skia_enable_pdf=false skia_enable_skottie=false skia_enable_tools=false skia_use_dng_sdk=false")
 set(SKIA_ARGS "${SKIA_ARGS} skia_use_system_expat=${SKIA_ENABLE_EXTERNAL}")
-set(SKIA_ARGS "${SKIA_ARGS} skia_use_system_freetype2=${SKIA_ENABLE_EXTERNAL}")
 set(SKIA_ARGS "${SKIA_ARGS} skia_use_system_libjpeg_turbo=${SKIA_ENABLE_EXTERNAL}")
 set(SKIA_ARGS "${SKIA_ARGS} skia_use_system_libpng=${SKIA_ENABLE_EXTERNAL}")
 set(SKIA_ARGS "${SKIA_ARGS} skia_use_system_libwebp=${SKIA_ENABLE_EXTERNAL}")
 set(SKIA_ARGS "${SKIA_ARGS} skia_use_system_icu=${SKIA_ENABLE_EXTERNAL}")
 set(SKIA_ARGS "${SKIA_ARGS} skia_use_system_harfbuzz=${SKIA_ENABLE_EXTERNAL}")
-#set(SKIA_ARGS "${SKIA_ARGS} skia_use_system_zlib=${SKIA_ENABLE_EXTERNAL}")
+if(WIN32)
+    set(SKIA_ARGS "${SKIA_ARGS} skia_use_system_zlib=${SKIA_ENABLE_EXTERNAL}")
+endif()
+if(UNIX AND NOT APPLE)
+    set(SKIA_ARGS "${SKIA_ARGS} skia_use_system_freetype2=${SKIA_ENABLE_EXTERNAL}")
+endif()
 
 message("-- skia args: ${SKIA_ARGS}")
 
 ExternalProject_Add(
     Engine
-    LIST_SEPARATOR ","
     SOURCE_DIR ${SKIA_SRC}
     BINARY_DIR ${SKIA_BUILD_DIR}
-    DOWNLOAD_COMMAND true
+    DOWNLOAD_COMMAND :
     UPDATE_COMMAND ${SKIA_UPDATE_CMD}
-    PATCH_COMMAND true
+    PATCH_COMMAND :
     CONFIGURE_COMMAND ${GN_PATH} gen --root=${SKIA_SRC} ${SKIA_BUILD_DIR} "--args=${SKIA_ARGS}" ${SKIA_ARGS_EXTRA}
     BUILD_COMMAND ${SKIA_BUILD_CMD}
-    INSTALL_COMMAND true
+    INSTALL_COMMAND :
+    USES_TERMINAL_UPDATE true
     USES_TERMINAL_CONFIGURE true
     USES_TERMINAL_BUILD true
 )
