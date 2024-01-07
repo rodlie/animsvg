@@ -20,6 +20,7 @@
  <file>icons/hicolor/16x16/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/16x16/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/16x16/actions/dots.png</file>
+ <file>icons/hicolor/16x16/actions/downarrow.png</file>
  <file>icons/hicolor/16x16/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/16x16/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/16x16/actions/drawPath.png</file>
@@ -33,6 +34,7 @@
  <file>icons/hicolor/16x16/actions/file_sound.png</file>
  <file>icons/hicolor/16x16/actions/fund.png</file>
  <file>icons/hicolor/16x16/actions/graph.png</file>
+ <file>icons/hicolor/16x16/actions/leftarrow.png</file>
  <file>icons/hicolor/16x16/actions/linked.png</file>
  <file>icons/hicolor/16x16/actions/loop_back.png</file>
  <file>icons/hicolor/16x16/actions/loop_forwards.png</file>
@@ -75,6 +77,7 @@
  <file>icons/hicolor/16x16/actions/render_animation.png</file>
  <file>icons/hicolor/16x16/actions/renderlayers.png</file>
  <file>icons/hicolor/16x16/actions/rewind.png</file>
+ <file>icons/hicolor/16x16/actions/rightarrow.png</file>
  <file>icons/hicolor/16x16/actions/segmentCurve.png</file>
  <file>icons/hicolor/16x16/actions/segmentLine.png</file>
  <file>icons/hicolor/16x16/actions/seq_preview.png</file>
@@ -84,6 +87,8 @@
  <file>icons/hicolor/16x16/actions/stop.png</file>
  <file>icons/hicolor/16x16/actions/textCreate.png</file>
  <file>icons/hicolor/16x16/actions/trash.png</file>
+ <file>icons/hicolor/16x16/actions/uparrow.png</file>
+ <file>icons/hicolor/16x16/actions/x.png</file>
  <file>icons/hicolor/16x16/actions/zoom.png</file>
  <file>icons/hicolor/16x16/apps/friction.png</file>
  <file>icons/hicolor/16x16/mimetypes/application-x-friction.png</file>
@@ -106,6 +111,7 @@
  <file>icons/hicolor/22x22/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/22x22/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/22x22/actions/dots.png</file>
+ <file>icons/hicolor/22x22/actions/downarrow.png</file>
  <file>icons/hicolor/22x22/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/22x22/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/22x22/actions/drawPath.png</file>
@@ -119,6 +125,7 @@
  <file>icons/hicolor/22x22/actions/file_sound.png</file>
  <file>icons/hicolor/22x22/actions/fund.png</file>
  <file>icons/hicolor/22x22/actions/graph.png</file>
+ <file>icons/hicolor/22x22/actions/leftarrow.png</file>
  <file>icons/hicolor/22x22/actions/linked.png</file>
  <file>icons/hicolor/22x22/actions/loop_back.png</file>
  <file>icons/hicolor/22x22/actions/loop_forwards.png</file>
@@ -161,6 +168,7 @@
  <file>icons/hicolor/22x22/actions/render_animation.png</file>
  <file>icons/hicolor/22x22/actions/renderlayers.png</file>
  <file>icons/hicolor/22x22/actions/rewind.png</file>
+ <file>icons/hicolor/22x22/actions/rightarrow.png</file>
  <file>icons/hicolor/22x22/actions/segmentCurve.png</file>
  <file>icons/hicolor/22x22/actions/segmentLine.png</file>
  <file>icons/hicolor/22x22/actions/seq_preview.png</file>
@@ -170,6 +178,8 @@
  <file>icons/hicolor/22x22/actions/stop.png</file>
  <file>icons/hicolor/22x22/actions/textCreate.png</file>
  <file>icons/hicolor/22x22/actions/trash.png</file>
+ <file>icons/hicolor/22x22/actions/uparrow.png</file>
+ <file>icons/hicolor/22x22/actions/x.png</file>
  <file>icons/hicolor/22x22/actions/zoom.png</file>
  <file>icons/hicolor/22x22/apps/friction.png</file>
  <file>icons/hicolor/22x22/mimetypes/application-x-friction.png</file>
@@ -192,6 +202,7 @@
  <file>icons/hicolor/32x32/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/32x32/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/32x32/actions/dots.png</file>
+ <file>icons/hicolor/32x32/actions/downarrow.png</file>
  <file>icons/hicolor/32x32/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/32x32/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/32x32/actions/drawPath.png</file>
@@ -205,6 +216,7 @@
  <file>icons/hicolor/32x32/actions/file_sound.png</file>
  <file>icons/hicolor/32x32/actions/fund.png</file>
  <file>icons/hicolor/32x32/actions/graph.png</file>
+ <file>icons/hicolor/32x32/actions/leftarrow.png</file>
  <file>icons/hicolor/32x32/actions/linked.png</file>
  <file>icons/hicolor/32x32/actions/loop_back.png</file>
  <file>icons/hicolor/32x32/actions/loop_forwards.png</file>
@@ -247,6 +259,7 @@
  <file>icons/hicolor/32x32/actions/render_animation.png</file>
  <file>icons/hicolor/32x32/actions/renderlayers.png</file>
  <file>icons/hicolor/32x32/actions/rewind.png</file>
+ <file>icons/hicolor/32x32/actions/rightarrow.png</file>
  <file>icons/hicolor/32x32/actions/segmentCurve.png</file>
  <file>icons/hicolor/32x32/actions/segmentLine.png</file>
  <file>icons/hicolor/32x32/actions/seq_preview.png</file>
@@ -256,6 +269,8 @@
  <file>icons/hicolor/32x32/actions/stop.png</file>
  <file>icons/hicolor/32x32/actions/textCreate.png</file>
  <file>icons/hicolor/32x32/actions/trash.png</file>
+ <file>icons/hicolor/32x32/actions/uparrow.png</file>
+ <file>icons/hicolor/32x32/actions/x.png</file>
  <file>icons/hicolor/32x32/actions/zoom.png</file>
  <file>icons/hicolor/32x32/apps/friction.png</file>
  <file>icons/hicolor/32x32/mimetypes/application-x-friction.png</file>
@@ -278,6 +293,7 @@
  <file>icons/hicolor/48x48/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/48x48/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/48x48/actions/dots.png</file>
+ <file>icons/hicolor/48x48/actions/downarrow.png</file>
  <file>icons/hicolor/48x48/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/48x48/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/48x48/actions/drawPath.png</file>
@@ -291,6 +307,7 @@
  <file>icons/hicolor/48x48/actions/file_sound.png</file>
  <file>icons/hicolor/48x48/actions/fund.png</file>
  <file>icons/hicolor/48x48/actions/graph.png</file>
+ <file>icons/hicolor/48x48/actions/leftarrow.png</file>
  <file>icons/hicolor/48x48/actions/linked.png</file>
  <file>icons/hicolor/48x48/actions/loop_back.png</file>
  <file>icons/hicolor/48x48/actions/loop_forwards.png</file>
@@ -333,6 +350,7 @@
  <file>icons/hicolor/48x48/actions/render_animation.png</file>
  <file>icons/hicolor/48x48/actions/renderlayers.png</file>
  <file>icons/hicolor/48x48/actions/rewind.png</file>
+ <file>icons/hicolor/48x48/actions/rightarrow.png</file>
  <file>icons/hicolor/48x48/actions/segmentCurve.png</file>
  <file>icons/hicolor/48x48/actions/segmentLine.png</file>
  <file>icons/hicolor/48x48/actions/seq_preview.png</file>
@@ -342,6 +360,8 @@
  <file>icons/hicolor/48x48/actions/stop.png</file>
  <file>icons/hicolor/48x48/actions/textCreate.png</file>
  <file>icons/hicolor/48x48/actions/trash.png</file>
+ <file>icons/hicolor/48x48/actions/uparrow.png</file>
+ <file>icons/hicolor/48x48/actions/x.png</file>
  <file>icons/hicolor/48x48/actions/zoom.png</file>
  <file>icons/hicolor/48x48/apps/friction.png</file>
  <file>icons/hicolor/48x48/mimetypes/application-x-friction.png</file>
@@ -364,6 +384,7 @@
  <file>icons/hicolor/64x64/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/64x64/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/64x64/actions/dots.png</file>
+ <file>icons/hicolor/64x64/actions/downarrow.png</file>
  <file>icons/hicolor/64x64/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/64x64/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/64x64/actions/drawPath.png</file>
@@ -377,6 +398,7 @@
  <file>icons/hicolor/64x64/actions/file_sound.png</file>
  <file>icons/hicolor/64x64/actions/fund.png</file>
  <file>icons/hicolor/64x64/actions/graph.png</file>
+ <file>icons/hicolor/64x64/actions/leftarrow.png</file>
  <file>icons/hicolor/64x64/actions/linked.png</file>
  <file>icons/hicolor/64x64/actions/loop_back.png</file>
  <file>icons/hicolor/64x64/actions/loop_forwards.png</file>
@@ -419,6 +441,7 @@
  <file>icons/hicolor/64x64/actions/render_animation.png</file>
  <file>icons/hicolor/64x64/actions/renderlayers.png</file>
  <file>icons/hicolor/64x64/actions/rewind.png</file>
+ <file>icons/hicolor/64x64/actions/rightarrow.png</file>
  <file>icons/hicolor/64x64/actions/segmentCurve.png</file>
  <file>icons/hicolor/64x64/actions/segmentLine.png</file>
  <file>icons/hicolor/64x64/actions/seq_preview.png</file>
@@ -428,6 +451,8 @@
  <file>icons/hicolor/64x64/actions/stop.png</file>
  <file>icons/hicolor/64x64/actions/textCreate.png</file>
  <file>icons/hicolor/64x64/actions/trash.png</file>
+ <file>icons/hicolor/64x64/actions/uparrow.png</file>
+ <file>icons/hicolor/64x64/actions/x.png</file>
  <file>icons/hicolor/64x64/actions/zoom.png</file>
  <file>icons/hicolor/64x64/apps/friction.png</file>
  <file>icons/hicolor/64x64/mimetypes/application-x-friction.png</file>
@@ -450,6 +475,7 @@
  <file>icons/hicolor/96x96/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/96x96/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/96x96/actions/dots.png</file>
+ <file>icons/hicolor/96x96/actions/downarrow.png</file>
  <file>icons/hicolor/96x96/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/96x96/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/96x96/actions/drawPath.png</file>
@@ -463,6 +489,7 @@
  <file>icons/hicolor/96x96/actions/file_sound.png</file>
  <file>icons/hicolor/96x96/actions/fund.png</file>
  <file>icons/hicolor/96x96/actions/graph.png</file>
+ <file>icons/hicolor/96x96/actions/leftarrow.png</file>
  <file>icons/hicolor/96x96/actions/linked.png</file>
  <file>icons/hicolor/96x96/actions/loop_back.png</file>
  <file>icons/hicolor/96x96/actions/loop_forwards.png</file>
@@ -505,6 +532,7 @@
  <file>icons/hicolor/96x96/actions/render_animation.png</file>
  <file>icons/hicolor/96x96/actions/renderlayers.png</file>
  <file>icons/hicolor/96x96/actions/rewind.png</file>
+ <file>icons/hicolor/96x96/actions/rightarrow.png</file>
  <file>icons/hicolor/96x96/actions/segmentCurve.png</file>
  <file>icons/hicolor/96x96/actions/segmentLine.png</file>
  <file>icons/hicolor/96x96/actions/seq_preview.png</file>
@@ -514,6 +542,8 @@
  <file>icons/hicolor/96x96/actions/stop.png</file>
  <file>icons/hicolor/96x96/actions/textCreate.png</file>
  <file>icons/hicolor/96x96/actions/trash.png</file>
+ <file>icons/hicolor/96x96/actions/uparrow.png</file>
+ <file>icons/hicolor/96x96/actions/x.png</file>
  <file>icons/hicolor/96x96/actions/zoom.png</file>
  <file>icons/hicolor/96x96/apps/friction.png</file>
  <file>icons/hicolor/96x96/mimetypes/application-x-friction.png</file>
@@ -536,6 +566,7 @@
  <file>icons/hicolor/128x128/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/128x128/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/128x128/actions/dots.png</file>
+ <file>icons/hicolor/128x128/actions/downarrow.png</file>
  <file>icons/hicolor/128x128/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/128x128/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/128x128/actions/drawPath.png</file>
@@ -549,6 +580,7 @@
  <file>icons/hicolor/128x128/actions/file_sound.png</file>
  <file>icons/hicolor/128x128/actions/fund.png</file>
  <file>icons/hicolor/128x128/actions/graph.png</file>
+ <file>icons/hicolor/128x128/actions/leftarrow.png</file>
  <file>icons/hicolor/128x128/actions/linked.png</file>
  <file>icons/hicolor/128x128/actions/loop_back.png</file>
  <file>icons/hicolor/128x128/actions/loop_forwards.png</file>
@@ -591,6 +623,7 @@
  <file>icons/hicolor/128x128/actions/render_animation.png</file>
  <file>icons/hicolor/128x128/actions/renderlayers.png</file>
  <file>icons/hicolor/128x128/actions/rewind.png</file>
+ <file>icons/hicolor/128x128/actions/rightarrow.png</file>
  <file>icons/hicolor/128x128/actions/segmentCurve.png</file>
  <file>icons/hicolor/128x128/actions/segmentLine.png</file>
  <file>icons/hicolor/128x128/actions/seq_preview.png</file>
@@ -600,6 +633,8 @@
  <file>icons/hicolor/128x128/actions/stop.png</file>
  <file>icons/hicolor/128x128/actions/textCreate.png</file>
  <file>icons/hicolor/128x128/actions/trash.png</file>
+ <file>icons/hicolor/128x128/actions/uparrow.png</file>
+ <file>icons/hicolor/128x128/actions/x.png</file>
  <file>icons/hicolor/128x128/actions/zoom.png</file>
  <file>icons/hicolor/128x128/apps/friction.png</file>
  <file>icons/hicolor/128x128/mimetypes/application-x-friction.png</file>
@@ -622,6 +657,7 @@
  <file>icons/hicolor/192x192/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/192x192/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/192x192/actions/dots.png</file>
+ <file>icons/hicolor/192x192/actions/downarrow.png</file>
  <file>icons/hicolor/192x192/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/192x192/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/192x192/actions/drawPath.png</file>
@@ -635,6 +671,7 @@
  <file>icons/hicolor/192x192/actions/file_sound.png</file>
  <file>icons/hicolor/192x192/actions/fund.png</file>
  <file>icons/hicolor/192x192/actions/graph.png</file>
+ <file>icons/hicolor/192x192/actions/leftarrow.png</file>
  <file>icons/hicolor/192x192/actions/linked.png</file>
  <file>icons/hicolor/192x192/actions/loop_back.png</file>
  <file>icons/hicolor/192x192/actions/loop_forwards.png</file>
@@ -677,6 +714,7 @@
  <file>icons/hicolor/192x192/actions/render_animation.png</file>
  <file>icons/hicolor/192x192/actions/renderlayers.png</file>
  <file>icons/hicolor/192x192/actions/rewind.png</file>
+ <file>icons/hicolor/192x192/actions/rightarrow.png</file>
  <file>icons/hicolor/192x192/actions/segmentCurve.png</file>
  <file>icons/hicolor/192x192/actions/segmentLine.png</file>
  <file>icons/hicolor/192x192/actions/seq_preview.png</file>
@@ -686,6 +724,8 @@
  <file>icons/hicolor/192x192/actions/stop.png</file>
  <file>icons/hicolor/192x192/actions/textCreate.png</file>
  <file>icons/hicolor/192x192/actions/trash.png</file>
+ <file>icons/hicolor/192x192/actions/uparrow.png</file>
+ <file>icons/hicolor/192x192/actions/x.png</file>
  <file>icons/hicolor/192x192/actions/zoom.png</file>
  <file>icons/hicolor/192x192/apps/friction.png</file>
  <file>icons/hicolor/192x192/mimetypes/application-x-friction.png</file>
@@ -708,6 +748,7 @@
  <file>icons/hicolor/256x256/actions/dissolvedAndNormalNodes.png</file>
  <file>icons/hicolor/256x256/actions/dissolvedNodesOnly.png</file>
  <file>icons/hicolor/256x256/actions/dots.png</file>
+ <file>icons/hicolor/256x256/actions/downarrow.png</file>
  <file>icons/hicolor/256x256/actions/drawPathAutoChecked.png</file>
  <file>icons/hicolor/256x256/actions/drawPathAutoUnchecked.png</file>
  <file>icons/hicolor/256x256/actions/drawPath.png</file>
@@ -721,6 +762,7 @@
  <file>icons/hicolor/256x256/actions/file_sound.png</file>
  <file>icons/hicolor/256x256/actions/fund.png</file>
  <file>icons/hicolor/256x256/actions/graph.png</file>
+ <file>icons/hicolor/256x256/actions/leftarrow.png</file>
  <file>icons/hicolor/256x256/actions/linked.png</file>
  <file>icons/hicolor/256x256/actions/loop_back.png</file>
  <file>icons/hicolor/256x256/actions/loop_forwards.png</file>
@@ -763,6 +805,7 @@
  <file>icons/hicolor/256x256/actions/render_animation.png</file>
  <file>icons/hicolor/256x256/actions/renderlayers.png</file>
  <file>icons/hicolor/256x256/actions/rewind.png</file>
+ <file>icons/hicolor/256x256/actions/rightarrow.png</file>
  <file>icons/hicolor/256x256/actions/segmentCurve.png</file>
  <file>icons/hicolor/256x256/actions/segmentLine.png</file>
  <file>icons/hicolor/256x256/actions/seq_preview.png</file>
@@ -772,6 +815,8 @@
  <file>icons/hicolor/256x256/actions/stop.png</file>
  <file>icons/hicolor/256x256/actions/textCreate.png</file>
  <file>icons/hicolor/256x256/actions/trash.png</file>
+ <file>icons/hicolor/256x256/actions/uparrow.png</file>
+ <file>icons/hicolor/256x256/actions/x.png</file>
  <file>icons/hicolor/256x256/actions/zoom.png</file>
  <file>icons/hicolor/256x256/apps/friction.png</file>
  <file>icons/hicolor/256x256/mimetypes/application-x-friction.png</file>
