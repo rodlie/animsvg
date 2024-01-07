@@ -278,6 +278,7 @@ set(
     GUI/namedcontainer.cpp
     #GUI/BrushWidgets/brushwidget.cpp
     GUI/Settings/labeledslider.cpp
+    GUI/uilayout.cpp
 )
 
 set(
@@ -402,6 +403,7 @@ set(
     #GUI/BrushWidgets/brushwidget.h
     boxtypemenu.h
     GUI/Settings/labeledslider.h
+    GUI/uilayout.h
 )
 
 set(
