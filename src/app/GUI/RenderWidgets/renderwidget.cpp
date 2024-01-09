@@ -29,7 +29,6 @@
 #include "renderinstancewidget.h"
 #include "GUI/BoxesList/OptimalScrollArea/scrollarea.h"
 #include "videoencoder.h"
-#include "ReadWrite/basicreadwrite.h"
 #include "renderhandler.h"
 #include "videoencoder.h"
 #include "appsupport.h"
@@ -47,6 +46,7 @@ RenderWidget::RenderWidget(QWidget *parent)
     , mContLayout(nullptr)
     , mScrollArea(nullptr)
     , mCurrentRenderedSettings(nullptr)
+    , mState(RenderState::none)
 {
     mMainLayout = new QVBoxLayout(this);
     mMainLayout->setMargin(0);
@@ -63,7 +63,6 @@ RenderWidget::RenderWidget(QWidget *parent)
     bottomWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     mRenderProgressBar = new QProgressBar(this);
-    //mRenderProgressBar->setObjectName(QString::fromUtf8("RenderProgressBar"));
     setSizePolicy(QSizePolicy::Expanding,
                   QSizePolicy::Expanding);
     mRenderProgressBar->setFormat(tr("Idle"));
@@ -89,6 +88,7 @@ RenderWidget::RenderWidget(QWidget *parent)
                                      QSizePolicy::Preferred);
     connect(mStopRenderButton, &QPushButton::pressed,
             this, &RenderWidget::stopRendering);
+    mStopRenderButton->setEnabled(false);
 
     mAddRenderButton = new QPushButton(QIcon::fromTheme("plus"),
                                        QString(),
@@ -148,25 +148,25 @@ RenderWidget::RenderWidget(QWidget *parent)
 
     const auto vidEmitter = VideoEncoder::sInstance->getEmitter();
     connect(vidEmitter, &VideoEncoderEmitter::encodingStarted,
-            this, &RenderWidget::leaveOnlyInterruptionButtonsEnabled);
+            this, &RenderWidget::handleRenderStarted);
 
     connect(vidEmitter, &VideoEncoderEmitter::encodingFinished,
-            this, &RenderWidget::leaveOnlyStartRenderButtonEnabled);
+            this, &RenderWidget::handleRenderFinished);
     connect(vidEmitter, &VideoEncoderEmitter::encodingFinished,
             this, &RenderWidget::sendNextForRender);
 
     connect(vidEmitter, &VideoEncoderEmitter::encodingInterrupted,
             this, &RenderWidget::clearAwaitingRender);
     connect(vidEmitter, &VideoEncoderEmitter::encodingInterrupted,
-            this, &RenderWidget::leaveOnlyStartRenderButtonEnabled);
+            this, &RenderWidget::handleRenderInterrupted);
 
     connect(vidEmitter, &VideoEncoderEmitter::encodingFailed,
-            this, &RenderWidget::leaveOnlyStartRenderButtonEnabled);
+            this, &RenderWidget::handleRenderFailed);
     connect(vidEmitter, &VideoEncoderEmitter::encodingFailed,
             this, &RenderWidget::sendNextForRender);
 
     connect(vidEmitter, &VideoEncoderEmitter::encodingStartFailed,
-            this, &RenderWidget::leaveOnlyStartRenderButtonEnabled);
+            this, &RenderWidget::handleRenderFailed);
     connect(vidEmitter, &VideoEncoderEmitter::encodingStartFailed,
             this, &RenderWidget::sendNextForRender);
 }
@@ -192,23 +192,83 @@ void RenderWidget::addRenderInstanceWidget(RenderInstanceWidget *wid)
     mRenderInstanceWidgets << wid;
 }
 
+void RenderWidget::handleRenderState(const RenderState &state)
+{
+    mState = state;
+
+    QString renderStateFormat;
+    switch (mState) {
+    case RenderState::rendering:
+        renderStateFormat = tr("Rendering %p%");
+        break;
+    case RenderState::error:
+        renderStateFormat = tr("Error");
+        break;
+    case RenderState::finished:
+        renderStateFormat = tr("Finished");
+        break;
+    case RenderState::paused:
+        renderStateFormat = tr("Paused %p%");
+        break;
+    case RenderState::waiting:
+        renderStateFormat = tr("Waiting %p%");
+        break;
+    default:
+        renderStateFormat = tr("Idle");
+        break;
+    }
+    bool isIdle = (mState == RenderState::error ||
+                   mState == RenderState::finished ||
+                   mState == RenderState::none);
+    mStartRenderButton->setEnabled(isIdle);
+    mStopRenderButton->setEnabled(!isIdle);
+    mAddRenderButton->setEnabled(isIdle);
+    mRenderProgressBar->setFormat(renderStateFormat);
+    emit renderStateChanged(renderStateFormat, mState);
+
+    if (isIdle) {
+        mRenderProgressBar->setValue(0);
+        emit progress(mRenderProgressBar->maximum(), mRenderProgressBar->maximum());
+    }
+}
+
+void RenderWidget::handleRenderStarted()
+{
+    handleRenderState(RenderState::rendering);
+}
+
+void RenderWidget::handleRenderFinished()
+{
+    handleRenderState(RenderState::finished);
+}
+
+void RenderWidget::handleRenderInterrupted()
+{
+    handleRenderState(RenderState::finished);
+}
+
+void RenderWidget::handleRenderFailed()
+{
+    handleRenderState(RenderState::error);
+}
+
 void RenderWidget::setRenderedFrame(const int frame)
 {
     if (!mCurrentRenderedSettings) { return; }
-    if (mRenderProgressBar->format() != "%p%") {
-        mRenderProgressBar->setFormat("%p%");
-    }
     mRenderProgressBar->setValue(frame);
     emit progress(frame, mRenderProgressBar->maximum());
 }
 
 void RenderWidget::clearRenderQueue()
 {
-    if (mStopRenderButton->isEnabled()) { stopRendering(); }
+    if (mState == RenderState::rendering ||
+        mState == RenderState::paused ||
+        mState == RenderState::waiting) {
+        stopRendering();
+    }
     for (int i = mRenderInstanceWidgets.count() - 1; i >= 0; i--) {
         delete mRenderInstanceWidgets.at(i);
     }
-    leaveOnlyStartRenderButtonEnabled();
 }
 
 void RenderWidget::write(eWriteStream &dst) const
@@ -235,68 +295,31 @@ void RenderWidget::render(RenderInstanceSettings &settings)
     mRenderProgressBar->setRange(renderSettings.fMinFrame,
                                  renderSettings.fMaxFrame);
     mRenderProgressBar->setValue(renderSettings.fMinFrame);
+    handleRenderState(RenderState::waiting);
     mCurrentRenderedSettings = &settings;
     RenderHandler::sInstance->renderFromSettings(&settings);
     connect(&settings, &RenderInstanceSettings::renderFrameChanged,
             this, &RenderWidget::setRenderedFrame);
     connect(&settings, &RenderInstanceSettings::stateChanged,
-            this, [this](const RenderState state) {
-        if (state == RenderState::finished) {
-            mRenderProgressBar->setValue(mRenderProgressBar->maximum());
-            mRenderProgressBar->setFormat(tr("Idle"));
-            emit rendererFinished();
-        }
-    });
-}
-
-void RenderWidget::leaveOnlyInterruptionButtonsEnabled()
-{
-    mStartRenderButton->setDisabled(true);
-    mStopRenderButton->setEnabled(true);
-}
-
-void RenderWidget::leaveOnlyStartRenderButtonEnabled()
-{
-    mStartRenderButton->setEnabled(true);
-    mStopRenderButton->setDisabled(true);
-    mRenderProgressBar->setValue(0);
-    mRenderProgressBar->setFormat(tr("Idle"));
-
-    mAddRenderButton->setEnabled(true);
-    mClearQueueButton->setEnabled(true);
-}
-
-void RenderWidget::disableButtons()
-{
-    mStartRenderButton->setDisabled(true);
-    mStopRenderButton->setDisabled(true);
-    mAddRenderButton->setDisabled(true);
-    mClearQueueButton->setDisabled(true);
-}
-
-void RenderWidget::enableButtons()
-{
-    mStartRenderButton->setEnabled(true);
-    mStopRenderButton->setEnabled(true);
-    mAddRenderButton->setEnabled(true);
-    mClearQueueButton->setEnabled(true);
+            this, &RenderWidget::handleRenderState);
 }
 
 void RenderWidget::render()
 {
+    int c = 0;
     for (RenderInstanceWidget *wid : mRenderInstanceWidgets) {
         if (!wid->isChecked()) { continue; }
         mAwaitingSettings << wid;
         wid->getSettings().setCurrentState(RenderState::waiting);
+        c++;
     }
+    if (c > 0) { handleRenderState(RenderState::waiting); }
+    else { handleRenderState(RenderState::none); }
     sendNextForRender();
 }
 
 void RenderWidget::stopRendering()
 {
-    disableButtons();
-    mRenderProgressBar->setFormat(tr("Idle"));
-    emit rendererFinished();
     clearAwaitingRender();
     VideoEncoder::sInterruptEncoding();
     if (mCurrentRenderedSettings) {
@@ -310,6 +333,7 @@ void RenderWidget::clearAwaitingRender()
     for (RenderInstanceWidget *wid : mAwaitingSettings) {
         wid->getSettings().setCurrentState(RenderState::none);
     }
+    handleRenderState(RenderState::none);
     mAwaitingSettings.clear();
 }
 
@@ -318,7 +342,7 @@ void RenderWidget::sendNextForRender()
     if (mAwaitingSettings.isEmpty()) { return; }
     const auto wid = mAwaitingSettings.takeFirst();
     if (wid->isChecked() && wid->getSettings().getTargetCanvas()) {
-        disableButtons();
+        //disableButtons();
         wid->setDisabled(true);
         render(wid->getSettings());
     } else { sendNextForRender(); }

@@ -31,7 +31,7 @@
 #include <QVBoxLayout>
 #include <QProgressBar>
 #include <QPushButton>
-#include "smartPointers/ememory.h"
+#include "renderinstancesettings.h"
 
 class ScrollArea;
 class Canvas;
@@ -54,7 +54,8 @@ public:
 
 signals:
     void progress(int frame, int total);
-    void rendererFinished();
+    void renderStateChanged(const QString &format,
+                            const RenderState &state);
 
 private:
     void render(RenderInstanceSettings& settings);
@@ -71,12 +72,15 @@ private:
     QList<RenderInstanceWidget*> mRenderInstanceWidgets;
     RenderInstanceSettings *mCurrentRenderedSettings;
     QList<RenderInstanceWidget*> mAwaitingSettings;
+    RenderState mState;
+
+    void handleRenderState(const RenderState &state);
+    void handleRenderStarted();
+    void handleRenderFinished();
+    void handleRenderInterrupted();
+    void handleRenderFailed();
 
 public:
-    void leaveOnlyInterruptionButtonsEnabled();
-    void leaveOnlyStartRenderButtonEnabled();
-    void disableButtons();
-    void enableButtons();
     void render();
     void stopRendering();
     void clearAwaitingRender();
