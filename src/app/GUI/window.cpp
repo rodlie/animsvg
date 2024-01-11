@@ -78,6 +78,12 @@ void Window::keyPressEvent(QKeyEvent *event)
     QDialog::keyPressEvent(event);
 }
 
+void Window::closeEvent(QCloseEvent *event)
+{
+    saveState();
+    QDialog::closeEvent(event);
+}
+
 void Window::loadState(bool visible)
 {
     qDebug() << "load window state" << objectName();

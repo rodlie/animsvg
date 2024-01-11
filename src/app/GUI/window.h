@@ -26,6 +26,7 @@
 
 #include <QDialog>
 #include <QKeyEvent>
+#include <QCloseEvent>
 
 class Window : public QDialog
 {
@@ -44,6 +45,7 @@ public:
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
+    void closeEvent(QCloseEvent *event) override;
 
 private:
     void loadState(bool visible = true);
