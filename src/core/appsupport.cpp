@@ -37,6 +37,7 @@
 #include <QDomElement>
 #include <QDirIterator>
 #include <QtMath>
+#include <QRegularExpression>
 
 AppSupport::AppSupport(QObject *parent)
     : QObject{parent}
@@ -541,4 +542,11 @@ QPair<bool, bool> AppSupport::getResolutionPresetStatus()
     status.second = settings.value("EnableResolutionsAuto", true).toBool();
     settings.endGroup();
     return status;
+}
+
+const QString AppSupport::filterTextAZW(const QString &text)
+{
+    QRegularExpression regex("\\s|\\W");
+    QString output = text;
+    return output.replace(regex, "");
 }
