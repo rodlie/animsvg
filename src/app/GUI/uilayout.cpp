@@ -29,7 +29,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QSettings>
-#include <QRegularExpression>
+#include <QDebug>
 
 UIDock::UIDock(QWidget *parent,
                QWidget *widget,
@@ -42,6 +42,7 @@ UIDock::UIDock(QWidget *parent,
     , mWidget(widget)
     , mLabel(label)
     , mPos(pos)
+    , mIndex(-1)
 {
     setObjectName(mLabel);
 
@@ -129,14 +130,49 @@ UIDock::UIDock(QWidget *parent,
     mainLayout->addWidget(mWidget);
 }
 
+UIDock::~UIDock()
+{
+    writeSettings();
+}
+
 void UIDock::setPosition(const Position &pos)
 {
     mPos = pos;
 }
 
+UIDock::Position UIDock::getPosition()
+{
+    return mPos;
+}
+
+void UIDock::setIndex(const int &index)
+{
+    mIndex = index;
+}
+
+int UIDock::getIndex()
+{
+    return mIndex;
+}
+
 const QString UIDock::getLabel()
 {
     return mLabel;
+}
+
+const QString UIDock::getId()
+{
+    return AppSupport::filterTextAZW(mLabel);
+}
+
+void UIDock::writeSettings()
+{
+    qDebug() << "uidock write settings" << mLabel << mPos << mIndex;
+    QSettings settings;
+    settings.beginGroup("uiLayout");
+    settings.setValue(QString("pos_%1").arg(getId()), mPos);
+    settings.setValue(QString("index_%1").arg(getId()), mIndex);
+    settings.endGroup();
 }
 
 UILayout::UILayout(QWidget *parent)
@@ -170,6 +206,12 @@ UILayout::UILayout(QWidget *parent)
     mMiddle->addWidget(mBottom);
 }
 
+UILayout::~UILayout()
+{
+    updateDocks();
+    writeSettings();
+}
+
 void UILayout::readSettings()
 {
     QSettings settings;
@@ -191,6 +233,7 @@ void UILayout::readSettings()
 
 void UILayout::writeSettings()
 {
+    qDebug() << "uilayout write settings";
     QSettings settings;
     settings.beginGroup("uiLayout");
     settings.setValue("uiMain", saveState());
@@ -202,152 +245,199 @@ void UILayout::writeSettings()
     settings.endGroup();
 }
 
-void UILayout::addDock(const UIDock::Position &pos,
-                       const QString &label,
-                       QWidget *widget,
-                       const bool &showLabel,
-                       const bool &showHeader,
-                       const bool &darkHeader)
+void UILayout::addDocks(std::vector<Item> items)
 {
-    if (!widget) { return; }
+    if (items.size() <= 0) { return; }
+    std::vector<Item> leftDock, rightDock, topDock, bottomDock;
+
+    for (auto item : items) {
+        if (!item.widget) { continue; }
+        qDebug() << "==> new layout item" << item.label;
+
+        QString keyPos = QString("pos_%1").arg(AppSupport::filterTextAZW(item.label));
+        QString keyIndex = QString("index_%1").arg(AppSupport::filterTextAZW(item.label));
+
+        const auto confIndex = AppSupport::getSettings("uiLayout", keyIndex);
+        if (confIndex.isValid()) { item.index = confIndex.toInt(); }
+
+        const auto confPos = AppSupport::getSettings("uiLayout", keyPos);
+        if (confPos.isValid()) { item.pos = confPos.toInt(); }
+
+        qDebug() << "index" << item.index << "pos" << item.pos;
+
+        switch (item.pos) {
+        case UIDock::Position::Left:
+            leftDock.push_back(item);
+            break;
+        case UIDock::Position::Right:
+            rightDock.push_back(item);
+            break;
+        case UIDock::Position::Up:
+            topDock.push_back(item);
+            break;
+        case UIDock::Position::Down:
+            bottomDock.push_back(item);
+            break;
+        }
+    }
+
+    if (leftDock.size() > 0) { std::sort(leftDock.begin(), leftDock.end()); }
+    if (rightDock.size() > 0) { std::sort(rightDock.begin(), rightDock.end()); }
+    if (topDock.size() > 0) { std::sort(topDock.begin(), topDock.end()); }
+    if (bottomDock.size() > 0) { std::sort(bottomDock.begin(), bottomDock.end()); }
+
+    for (const auto &item : leftDock) {
+        qDebug() << "==> left dock" << item.label << item.index;
+        addDock(item);
+    }
+    for (const auto &item : rightDock) {
+        qDebug() << "==> right dock" << item.label << item.index;
+        addDock(item);
+    }
+    for (const auto &item : topDock) {
+        qDebug() << "==> top dock" << item.label << item.index;
+        addDock(item);
+    }
+    for (const auto &item : bottomDock) {
+        qDebug() << "==> bottom dock" << item.label << item.index;
+        addDock(item);
+    }
+
+    updateDocks();
+    readSettings();
+}
+
+void UILayout::addDock(const Item &item)
+{
+    if (!item.widget) { return; }
+    qDebug() << "add dock for real" << item.pos << item.index << item.label << item.showLabel << item.showHeader << item.darkHeader;
     const auto dock = new UIDock(this,
-                                 widget,
-                                 label,
-                                 pos,
-                                 showLabel,
-                                 showHeader,
-                                 darkHeader);
-    int loc = pos;
-    QString id = QString("dock_%1").arg(getIdFromLabel(label));
-    const auto conf = AppSupport::getSettings("uiLayout", id);
-    if (conf.isValid() && conf.toInt() != loc) { loc = conf.toInt(); }
-    switch (loc) {
+                                 item.widget,
+                                 item.label,
+                                 static_cast<UIDock::Position>(item.pos),
+                                 item.showLabel,
+                                 item.showHeader,
+                                 item.darkHeader);
+    switch (item.pos) {
     case UIDock::Position::Left:
         mLeft->addWidget(dock);
-        dock->setPosition(UIDock::Position::Left);
         break;
     case UIDock::Position::Right:
         mRight->addWidget(dock);
-        dock->setPosition(UIDock::Position::Right);
         break;
     case UIDock::Position::Up:
         mTop->addWidget(dock);
-        dock->setPosition(UIDock::Position::Up);
         break;
     case UIDock::Position::Down:
         mBottom->addWidget(dock);
-        dock->setPosition(UIDock::Position::Down);
         break;
     }
-    connect(dock, &UIDock::changePosition,
-            this, [this, dock](const UIDock::Position &pos,
-                               const UIDock::Position &trigger) {
-        int index = -1;
-        int count = -1;
-        switch (pos) {
-        case UIDock::Position::Left:
-            index = mLeft->indexOf(dock);
-            count = mLeft->count();
-            break;
-        case UIDock::Position::Right:
-            index = mRight->indexOf(dock);
-            count = mRight->count();
-            break;
-        case UIDock::Position::Up:
-            index = mTop->indexOf(dock);
-            count = mTop->count();
-            break;
-        case UIDock::Position::Down:
-            index = mBottom->indexOf(dock);
-            count = mBottom->count();
-            break;
-        }
-        if (index < 0 || count <= 0) { return; }
-        QString id = QString("dock_%1").arg(getIdFromLabel(dock->getLabel()));
-        switch (pos) {
-        case UIDock::Position::Left:
-            if (trigger == UIDock::Position::Down && (index + 1) < count) {
-                mLeft->insertWidget(index + 1, dock);
-                AppSupport::setSettings("uiLayout", id, UIDock::Position::Left);
-            } else if (trigger == UIDock::Position::Up && index > 0) {
-                mLeft->insertWidget(index - 1, dock);
-                AppSupport::setSettings("uiLayout", id, UIDock::Position::Left);
-            } else if (trigger == UIDock::Position::Right) {
-                mTop->addWidget(dock);
-                dock->setPosition(UIDock::Position::Up);
-                AppSupport::setSettings("uiLayout", id, UIDock::Position::Up);
-            } else if (trigger == UIDock::Position::Left) {
-                mRight->addWidget(dock);
-                dock->setPosition(UIDock::Position::Right);
-                AppSupport::setSettings("uiLayout", id, UIDock::Position::Right);
-            }
-            break;
-        case UIDock::Position::Right:
-            if (trigger == UIDock::Position::Down && (index + 1) < count) {
-                mRight->insertWidget(index + 1, dock);
-                AppSupport::setSettings("uiLayout", id, UIDock::Position::Right);
-            } else if (trigger == UIDock::Position::Up && index > 0) {
-                mRight->insertWidget(index - 1, dock);
-                AppSupport::setSettings("uiLayout", id, UIDock::Position::Right);
-            } else if (trigger == UIDock::Position::Right) {
-                mLeft->addWidget(dock);
-                dock->setPosition(UIDock::Position::Left);
-                AppSupport::setSettings("uiLayout", id, UIDock::Position::Left);
-            } else if (trigger == UIDock::Position::Left) {
-                mTop->addWidget(dock);
-                dock->setPosition(UIDock::Position::Up);
-                AppSupport::setSettings("uiLayout", id, UIDock::Position::Up);
-            }
-            break;
-        case UIDock::Position::Up:
-            if (trigger == UIDock::Position::Right && (index + 1) < count) {
-                mTop->insertWidget(index + 1, dock);
-                AppSupport::setSettings("uiLayout", id, UIDock::Position::Up);
-            } else if (trigger == UIDock::Position::Right && (index + 1) >= count) {
-                mRight->insertWidget(index + 1, dock);
-                dock->setPosition(UIDock::Position::Right);
-                AppSupport::setSettings("uiLayout", id, UIDock::Position::Right);
-            } else if (trigger == UIDock::Position::Left && index > 0) {
-                mTop->insertWidget(index - 1, dock);
-                AppSupport::setSettings("uiLayout", id, UIDock::Position::Up);
-            } else if (trigger == UIDock::Position::Left && index == 0) {
-                mLeft->insertWidget(index - 1, dock);
-                dock->setPosition(UIDock::Position::Left);
-                AppSupport::setSettings("uiLayout", id, UIDock::Position::Left);
-            } else if (trigger == UIDock::Position::Down) {
-                mBottom->addWidget(dock);
-                dock->setPosition(UIDock::Position::Down);
-                AppSupport::setSettings("uiLayout", id, UIDock::Position::Down);
-            }
-            break;
-        case UIDock::Position::Down:
-            if (trigger == UIDock::Position::Right && (index + 1) < count) {
-                mBottom->insertWidget(index + 1, dock);
-                AppSupport::setSettings("uiLayout", id, UIDock::Position::Down);
-            } else if (trigger == UIDock::Position::Right && (index + 1) >= count) {
-                mRight->insertWidget(index + 1, dock);
-                dock->setPosition(UIDock::Position::Right);
-                AppSupport::setSettings("uiLayout", id, UIDock::Position::Right);
-            } else if (trigger == UIDock::Position::Left && index > 0) {
-                mBottom->insertWidget(index - 1, dock);
-                AppSupport::setSettings("uiLayout", id, UIDock::Position::Down);
-            } else if (trigger == UIDock::Position::Left && index == 0) {
-                mLeft->insertWidget(index - 1, dock);
-                dock->setPosition(UIDock::Position::Left);
-                AppSupport::setSettings("uiLayout", id, UIDock::Position::Left);
-            } else if (trigger == UIDock::Position::Up) {
-                mTop->addWidget(dock);
-                dock->setPosition(UIDock::Position::Up);
-                AppSupport::setSettings("uiLayout", id, UIDock::Position::Up);
-            }
-            break;
-        }
-    });
+    connectDock(dock);
 }
 
-const QString UILayout::getIdFromLabel(const QString &label)
+void UILayout::connectDock(UIDock *dock)
 {
-    QRegularExpression regex("\\s|\\W");
-    QString text = label;
-    return text.replace(regex, "");
+    if (!dock) { return; }
+    connect(dock,
+            &UIDock::changePosition,
+            this,
+            [this, dock](const UIDock::Position &pos,
+                         const UIDock::Position &trigger)
+            {
+                int index = -1;
+                int count = -1;
+                switch (pos) {
+                case UIDock::Position::Left:
+                    index = mLeft->indexOf(dock);
+                    count = mLeft->count();
+                    break;
+                case UIDock::Position::Right:
+                    index = mRight->indexOf(dock);
+                    count = mRight->count();
+                    break;
+                case UIDock::Position::Up:
+                    index = mTop->indexOf(dock);
+                    count = mTop->count();
+                    break;
+                case UIDock::Position::Down:
+                    index = mBottom->indexOf(dock);
+                    count = mBottom->count();
+                    break;
+                }
+                if (index < 0 || count <= 0) { return; }
+                switch (pos) {
+                case UIDock::Position::Left:
+                    if (trigger == UIDock::Position::Down && (index + 1) < count) {
+                        mLeft->insertWidget(index + 1, dock);
+                    } else if (trigger == UIDock::Position::Up && index > 0) {
+                        mLeft->insertWidget(index - 1, dock);
+                    } else if (trigger == UIDock::Position::Right) {
+                        mTop->addWidget(dock);
+                    } else if (trigger == UIDock::Position::Left) {
+                        mRight->addWidget(dock);
+                    }
+                    break;
+                case UIDock::Position::Right:
+                    if (trigger == UIDock::Position::Down && (index + 1) < count) {
+                        mRight->insertWidget(index + 1, dock);
+                    } else if (trigger == UIDock::Position::Up && index > 0) {
+                        mRight->insertWidget(index - 1, dock);
+                    } else if (trigger == UIDock::Position::Right) {
+                        mLeft->addWidget(dock);
+                    } else if (trigger == UIDock::Position::Left) {
+                        mTop->addWidget(dock);
+                    }
+                    break;
+                case UIDock::Position::Up:
+                    if (trigger == UIDock::Position::Right && (index + 1) < count) {
+                        mTop->insertWidget(index + 1, dock);
+                    } else if (trigger == UIDock::Position::Right && (index + 1) >= count) {
+                        mRight->insertWidget(index + 1, dock);
+                    } else if (trigger == UIDock::Position::Left && index > 0) {
+                        mTop->insertWidget(index - 1, dock);
+                    } else if (trigger == UIDock::Position::Left && index == 0) {
+                        mLeft->insertWidget(index - 1, dock);
+                    } else if (trigger == UIDock::Position::Down) {
+                        mBottom->addWidget(dock);
+                    }
+                    break;
+                case UIDock::Position::Down:
+                    if (trigger == UIDock::Position::Right && (index + 1) < count) {
+                        mBottom->insertWidget(index + 1, dock);
+                    } else if (trigger == UIDock::Position::Right && (index + 1) >= count) {
+                        mRight->insertWidget(index + 1, dock);
+                    } else if (trigger == UIDock::Position::Left && index > 0) {
+                        mBottom->insertWidget(index - 1, dock);
+                    } else if (trigger == UIDock::Position::Left && index == 0) {
+                        mLeft->insertWidget(index - 1, dock);
+                    } else if (trigger == UIDock::Position::Up) {
+                        mTop->addWidget(dock);
+                    }
+                    break;
+                }
+                updateDocks();
+            });
+}
+
+void UILayout::updateDock(QSplitter *container,
+                          const UIDock::Position &pos)
+{
+    if (!container) { return; }
+    container->setVisible(container->count() > 0);
+    for (int i = 0; i < container->count(); ++i) {
+        UIDock *dock = qobject_cast<UIDock*>(container->widget(i));
+        if (!dock) { continue; }
+        dock->setPosition(pos);
+        dock->setIndex(container->indexOf(dock));
+        qDebug() << "update dock" << dock->getLabel() << dock->getPosition() << dock->getIndex();
+    }
+}
+
+void UILayout::updateDocks()
+{
+    qDebug() << "==> update docks";
+    updateDock(mLeft, UIDock::Position::Left);
+    updateDock(mRight, UIDock::Position::Right);
+    updateDock(mTop, UIDock::Position::Up);
+    updateDock(mBottom, UIDock::Position::Down);
 }

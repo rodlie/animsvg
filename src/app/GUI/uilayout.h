@@ -26,6 +26,7 @@
 
 #include <QWidget>
 #include <QSplitter>
+#include <vector>
 
 class UIDock : public QWidget
 {
@@ -46,8 +47,13 @@ public:
                     const bool &showLabel = true,
                     const bool &showHeader = true,
                     const bool &darkHeader = false);
+    ~UIDock();
     void setPosition(const Position &pos);
+    Position getPosition();
+    void setIndex(const int &index);
+    int getIndex();
     const QString getLabel();
+    const QString getId();
 
 signals:
     void changePosition(const Position &pos,
@@ -57,6 +63,8 @@ private:
     QWidget *mWidget;
     QString mLabel;
     Position mPos;
+    int mIndex;
+    void writeSettings();
 };
 
 class UILayout : public QSplitter
@@ -64,15 +72,25 @@ class UILayout : public QSplitter
     Q_OBJECT
 
 public:
+    struct Item
+    {
+        int pos = UIDock::Position::Left;
+        int index = -1;
+        QString label;
+        QWidget *widget;
+        bool showLabel = true;
+        bool showHeader = true;
+        bool darkHeader = false;
+        bool operator<(const Item &a) const
+        {
+            return index < a.index;
+        }
+    };
     explicit UILayout(QWidget *parent = nullptr);
+    ~UILayout();
     void readSettings();
     void writeSettings();
-    void addDock(const UIDock::Position &pos,
-                 const QString &label,
-                 QWidget *widget,
-                 const bool &showLabel = true,
-                 const bool &showHeader = true,
-                 const bool &darkHeader = false);
+    void addDocks(std::vector<Item> items);
 
 private:
     QSplitter *mLeft;
@@ -80,8 +98,11 @@ private:
     QSplitter *mRight;
     QSplitter *mTop;
     QSplitter *mBottom;
-
-    const QString getIdFromLabel(const QString &label);
+    void addDock(const Item &item);
+    void connectDock(UIDock *dock);
+    void updateDock(QSplitter *container,
+                    const UIDock::Position &pos);
+    void updateDocks();
 };
 
 #endif // UILAYOUT_H
