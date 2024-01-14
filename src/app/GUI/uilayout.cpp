@@ -31,6 +31,16 @@
 #include <QSettings>
 #include <QDebug>
 
+#define UI_CONF_GROUP "uiLayout"
+#define UI_CONF_KEY_POS "pos_%1"
+#define UI_CONF_KEY_INDEX "index_%1"
+#define UI_CONF_KEY_MAIN "uiMain"
+#define UI_CONF_KEY_LEFT "uiLeft"
+#define UI_CONF_KEY_MIDDLE "uiMiddle"
+#define UI_CONF_KEY_RIGHT "uiRight"
+#define UI_CONF_KEY_TOP "uiTop"
+#define UI_CONF_KEY_BOTTOM "uiBottom"
+
 UIDock::UIDock(QWidget *parent,
                QWidget *widget,
                const QString &label,
@@ -167,11 +177,11 @@ const QString UIDock::getId()
 
 void UIDock::writeSettings()
 {
-    qDebug() << "uidock write settings" << mLabel << mPos << mIndex;
+    qDebug() << "==> write dock conf" << mLabel << mPos << mIndex;
     QSettings settings;
-    settings.beginGroup("uiLayout");
-    settings.setValue(QString("pos_%1").arg(getId()), mPos);
-    settings.setValue(QString("index_%1").arg(getId()), mIndex);
+    settings.beginGroup(UI_CONF_GROUP);
+    settings.setValue(QString(UI_CONF_KEY_POS).arg(getId()), mPos);
+    settings.setValue(QString(UI_CONF_KEY_INDEX).arg(getId()), mIndex);
     settings.endGroup();
 }
 
@@ -215,33 +225,26 @@ UILayout::~UILayout()
 void UILayout::readSettings()
 {
     QSettings settings;
-    settings.beginGroup("uiLayout");
-    restoreState(AppSupport::getSettings("uiLayout",
-                                         "uiMain").toByteArray());
-    mLeft->restoreState(AppSupport::getSettings("uiLayout",
-                                                "uiLeft").toByteArray());
-    mMiddle->restoreState(AppSupport::getSettings("uiLayout",
-                                                  "uiMiddle").toByteArray());
-    mRight->restoreState(AppSupport::getSettings("uiLayout",
-                                                 "uiRight").toByteArray());
-    mTop->restoreState(AppSupport::getSettings("uiLayout",
-                                               "uiTop").toByteArray());
-    mBottom->restoreState(AppSupport::getSettings("uiLayout",
-                                                  "uiBottom").toByteArray());
+    settings.beginGroup(UI_CONF_GROUP);
+    restoreState(settings.value(UI_CONF_KEY_MAIN).toByteArray());
+    mLeft->restoreState(settings.value(UI_CONF_KEY_LEFT).toByteArray());
+    mMiddle->restoreState(settings.value(UI_CONF_KEY_MIDDLE).toByteArray());
+    mRight->restoreState(settings.value(UI_CONF_KEY_RIGHT).toByteArray());
+    mTop->restoreState(settings.value(UI_CONF_KEY_TOP).toByteArray());
+    mBottom->restoreState(settings.value(UI_CONF_KEY_BOTTOM).toByteArray());
     settings.endGroup();
 }
 
 void UILayout::writeSettings()
 {
-    qDebug() << "uilayout write settings";
     QSettings settings;
-    settings.beginGroup("uiLayout");
-    settings.setValue("uiMain", saveState());
-    settings.setValue("uiLeft", mLeft->saveState());
-    settings.setValue("uiMiddle", mMiddle->saveState());
-    settings.setValue("uiRight", mRight->saveState());
-    settings.setValue("uiTop", mTop->saveState());
-    settings.setValue("uiBottom", mBottom->saveState());
+    settings.beginGroup(UI_CONF_GROUP);
+    settings.setValue(UI_CONF_KEY_MAIN, saveState());
+    settings.setValue(UI_CONF_KEY_LEFT, mLeft->saveState());
+    settings.setValue(UI_CONF_KEY_MIDDLE, mMiddle->saveState());
+    settings.setValue(UI_CONF_KEY_RIGHT, mRight->saveState());
+    settings.setValue(UI_CONF_KEY_TOP, mTop->saveState());
+    settings.setValue(UI_CONF_KEY_BOTTOM, mBottom->saveState());
     settings.endGroup();
 }
 
@@ -252,18 +255,15 @@ void UILayout::addDocks(std::vector<Item> items)
 
     for (auto item : items) {
         if (!item.widget) { continue; }
-        qDebug() << "==> new layout item" << item.label;
+        qDebug() << "==> setup new dock" << item.label;
+        QString keyPos = QString(UI_CONF_KEY_POS).arg(AppSupport::filterTextAZW(item.label));
+        QString keyIndex = QString(UI_CONF_KEY_INDEX).arg(AppSupport::filterTextAZW(item.label));
 
-        QString keyPos = QString("pos_%1").arg(AppSupport::filterTextAZW(item.label));
-        QString keyIndex = QString("index_%1").arg(AppSupport::filterTextAZW(item.label));
-
-        const auto confIndex = AppSupport::getSettings("uiLayout", keyIndex);
+        const auto confIndex = AppSupport::getSettings(UI_CONF_GROUP, keyIndex);
         if (confIndex.isValid()) { item.index = confIndex.toInt(); }
 
-        const auto confPos = AppSupport::getSettings("uiLayout", keyPos);
+        const auto confPos = AppSupport::getSettings(UI_CONF_GROUP, keyPos);
         if (confPos.isValid()) { item.pos = confPos.toInt(); }
-
-        qDebug() << "index" << item.index << "pos" << item.pos;
 
         switch (item.pos) {
         case UIDock::Position::Left:
@@ -287,19 +287,19 @@ void UILayout::addDocks(std::vector<Item> items)
     if (bottomDock.size() > 0) { std::sort(bottomDock.begin(), bottomDock.end()); }
 
     for (const auto &item : leftDock) {
-        qDebug() << "==> left dock" << item.label << item.index;
+        qDebug() << "==> add to left dock" << item.label << item.index;
         addDock(item);
     }
     for (const auto &item : rightDock) {
-        qDebug() << "==> right dock" << item.label << item.index;
+        qDebug() << "==> add to right dock" << item.label << item.index;
         addDock(item);
     }
     for (const auto &item : topDock) {
-        qDebug() << "==> top dock" << item.label << item.index;
+        qDebug() << "==> add to top dock" << item.label << item.index;
         addDock(item);
     }
     for (const auto &item : bottomDock) {
-        qDebug() << "==> bottom dock" << item.label << item.index;
+        qDebug() << "==> add to bottom dock" << item.label << item.index;
         addDock(item);
     }
 
@@ -310,7 +310,7 @@ void UILayout::addDocks(std::vector<Item> items)
 void UILayout::addDock(const Item &item)
 {
     if (!item.widget) { return; }
-    qDebug() << "add dock for real" << item.pos << item.index << item.label << item.showLabel << item.showHeader << item.darkHeader;
+    qDebug() << "==> adding dock" << item.label << item.pos << item.index;
     const auto dock = new UIDock(this,
                                  item.widget,
                                  item.label,
@@ -427,19 +427,17 @@ void UILayout::updateDock(QSplitter *container,
                           const UIDock::Position &pos)
 {
     if (!container) { return; }
-    //container->setVisible(container->count() > 0);
     for (int i = 0; i < container->count(); ++i) {
         UIDock *dock = qobject_cast<UIDock*>(container->widget(i));
         if (!dock) { continue; }
         dock->setPosition(pos);
         dock->setIndex(container->indexOf(dock));
-        qDebug() << "update dock" << dock->getLabel() << dock->getPosition() << dock->getIndex();
+        qDebug() << "==> update dock" << dock->getLabel() << dock->getPosition() << dock->getIndex();
     }
 }
 
 void UILayout::updateDocks()
 {
-    qDebug() << "==> update docks";
     updateDock(mLeft, UIDock::Position::Left);
     updateDock(mRight, UIDock::Position::Right);
     updateDock(mTop, UIDock::Position::Up);
