@@ -372,7 +372,7 @@ void UILayout::connectDock(UIDock *dock)
                     } else if (trigger == UIDock::Position::Up && index > 0) {
                         mLeft->insertWidget(index - 1, dock);
                     } else if (trigger == UIDock::Position::Right) {
-                        mTop->addWidget(dock);
+                        mTop->insertWidget(0, dock);
                     } else if (trigger == UIDock::Position::Left) {
                         mRight->addWidget(dock);
                     }
@@ -397,6 +397,8 @@ void UILayout::connectDock(UIDock *dock)
                         mTop->insertWidget(index - 1, dock);
                     } else if (trigger == UIDock::Position::Left && index == 0) {
                         mLeft->insertWidget(index - 1, dock);
+                    } else if (trigger == UIDock::Position::Down && index == 0) {
+                        mBottom->insertWidget(0, dock);
                     } else if (trigger == UIDock::Position::Down) {
                         mBottom->addWidget(dock);
                     }
@@ -410,6 +412,8 @@ void UILayout::connectDock(UIDock *dock)
                         mBottom->insertWidget(index - 1, dock);
                     } else if (trigger == UIDock::Position::Left && index == 0) {
                         mLeft->insertWidget(index - 1, dock);
+                    } else if (trigger == UIDock::Position::Up && index == 0) {
+                        mTop->insertWidget(0, dock);
                     } else if (trigger == UIDock::Position::Up) {
                         mTop->addWidget(dock);
                     }
@@ -423,7 +427,7 @@ void UILayout::updateDock(QSplitter *container,
                           const UIDock::Position &pos)
 {
     if (!container) { return; }
-    container->setVisible(container->count() > 0);
+    //container->setVisible(container->count() > 0);
     for (int i = 0; i < container->count(); ++i) {
         UIDock *dock = qobject_cast<UIDock*>(container->widget(i));
         if (!dock) { continue; }
