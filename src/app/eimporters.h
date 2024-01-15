@@ -32,8 +32,7 @@
 class eXevImporter : public eImporter {
 public:
     bool supports(const QFileInfo& fileInfo) const {
-        Q_UNUSED(fileInfo)
-        return false; //fileInfo.suffix() == "xev";
+        return fileInfo.suffix() == "xev";
     }
 
     qsptr<BoundingBox> import(const QFileInfo& fileInfo,

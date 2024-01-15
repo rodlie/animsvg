@@ -26,10 +26,7 @@
 #ifndef ZIPFILELOADER_H
 #define ZIPFILELOADER_H
 
-// since XEV is experimental we ignore it for now
-// disable enough stuff to avoid quazip depend
-
-//#include <quazipfile.h>
+#include <quazipfile.h>
 
 #include <QDir>
 
@@ -49,8 +46,8 @@ public:
     QString relPathToAbsPath(const QString& relPath) const;
 private:
     QDir mDir;
-    //QuaZip mZip;
-    //QuaZipFile mFile;
+    QuaZip mZip;
+    QuaZipFile mFile;
 };
 
 #endif // ZIPFILELOADER_H
