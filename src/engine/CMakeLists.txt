@@ -52,7 +52,7 @@ else()
     set(SKIA_BUILD_CMD ninja -j${N})
     set(SKIA_UPDATE_CMD true)
     set(SKIA_ARGS "ar=\"${CMAKE_AR}\" cc=\"${CMAKE_C_COMPILER}\" cxx=\"${CMAKE_CXX_COMPILER}\"")
-    set(SKIA_ARGS "${SKIA_ARGS} extra_cflags=[\"-Wno-error\"]")
+    set(SKIA_ARGS "${SKIA_ARGS} extra_cflags=[\"-Wno-error\", \"-Wno-psabi\"]")
 endif()
 
 set(SKIA_ARGS "${SKIA_ARGS} is_official_build=true is_debug=false")

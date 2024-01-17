@@ -1,4 +1,4 @@
-[submodule "src/skia"]
+[submodule "src/engine/skia"]
 	path = src/engine/skia
 	url = https://github.com/friction2d/skia
 [submodule "src/gperftools"]

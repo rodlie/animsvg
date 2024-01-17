@@ -53,6 +53,7 @@ endif()
 
 add_subdirectory(src/engine)
 if(UNIX)
+    option(BUILD_TESTING "Don't build gperftools tests" OFF)
     add_subdirectory(src/gperftools)
 endif()
 add_subdirectory(src/core)
