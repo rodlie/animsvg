@@ -22,29 +22,20 @@ set -e -x
 
 CWD=`pwd`
 
-REL=${REL:-1}
-SNAP=${SNAP:-0}
+REL=${REL:-0}
 BRANCH=${BRANCH:-""}
 COMMIT=${COMMIT:-""}
 TAG=${TAG:-""}
 MKJOBS=${JOBS:-4}
-CLANG=${CLANG:-1}
 
 JAMMY=${JAMMY:-1}
-LUNAR=${LUNAR:-1}
 MANTIC=${MANTIC:-1}
-
-if [ "${SNAP}" = 1 ]; then
-    REL=0
-elif [ "${REL}" = 1 ]; then
-    SNAP=0
-fi
+NOBLE=${NOBLE:-0}
 
 MOUNT_DIR="snapshots"
-SF_NET_SRC="https://sourceforge.net/projects/friction/files/source"
-
 DOCKER_MOUNT="-t --mount type=bind,source=${CWD}/${MOUNT_DIR},target=/${MOUNT_DIR}"
-DOCKER="docker run -e REL=${REL} -e SNAP=${SNAP} -e MKJOBS=${JOBS} -e CLANG=${CLANG}"
+DOCKER="docker run -e REL=${REL} -e MKJOBS=${JOBS}"
+
 if [ "${BRANCH}" != "" ]; then
     DOCKER="${DOCKER} -e FRICTION_BRANCH=${BRANCH}"
 fi
@@ -56,28 +47,12 @@ if [ "${TAG}" != "" ]; then
 fi
 DOCKER="${DOCKER} ${DOCKER_MOUNT}"
 
-FRICTION_DIST="${CWD}/snapshots/distfiles"
-
-GPERF_V="4df0b85"
-SKIA_V="5ae542b872"
-
-if [ ! -d "${FRICTION_DIST}" ]; then
-    mkdir -p ${FRICTION_DIST}
-fi
-
-if [ ! -f "${FRICTION_DIST}/gperftools-${GPERF_V}.tar.xz" ]; then
-    curl -k -L "${SF_NET_SRC}/gperftools-${GPERF_V}.tar.xz/download" --output ${FRICTION_DIST}/gperftools-${GPERF_V}.tar.xz
-fi
-if [ ! -f "${FRICTION_DIST}/skia-${SKIA_V}.tar.xz" ]; then
-    curl -k -L "${SF_NET_SRC}/skia-${SKIA_V}.tar.xz/download" --output ${FRICTION_DIST}/skia-${SKIA_V}.tar.xz
-fi
-
 if [ "${JAMMY}" = 1 ]; then
     $DOCKER friction-jammy
 fi
-if [ "${LUNAR}" = 1 ]; then
-    $DOCKER friction-lunar
-fi
 if [ "${MANTIC}" = 1 ]; then
     $DOCKER friction-mantic
+fi
+if [ "${NOBLE}" = 1 ]; then
+    $DOCKER friction-noble
 fi
