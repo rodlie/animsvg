@@ -23,7 +23,6 @@ set -e -x
 source /opt/rh/devtoolset-7/enable
 gcc -v
 
-CWD=`pwd`
 SDK=${SDK:-"/opt/friction"}
 SRC=${SDK}/src
 DIST=${DIST:-"/mnt"}
@@ -206,4 +205,4 @@ if [ ! -f "${SDK}/lib/libqscintilla2_friction_qt5.so" ]; then
     cp -a Qsci ${SDK}/include/
 fi # qscintilla
 
-echo "SDK DONE"
+echo "SDK PART 2 DONE"

@@ -14,6 +14,10 @@ RUN rm -f /usr/include/pnglibconf.h
 RUN sed -i '/.private/d' /usr/lib64/pkgconfig/freetype2.pc
 RUN echo "source scl_source enable devtoolset-7" >> /root/.bashrc
 
-# COPY build_vfxplatform*.sh /
-# COPY vfxplatform.spec /
-# CMD [ "bash", "./build_vfxplatform.sh" ]
+COPY build_vfxplatform.sh /root/
+COPY build_vfxplatform_sdk01.sh /root/
+COPY build_vfxplatform_sdk02.sh /root/
+COPY build_vfxplatform_sdk03.sh /root/
+COPY build_vfxplatform_package.sh /root/
+COPY build_vfxplatform_friction.sh /root/
+CMD [ "bash", "./root/build_vfxplatform.sh" ]

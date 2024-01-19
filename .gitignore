@@ -18,5 +18,5 @@ build-*
 *.diff
 *.patch
 ffmpeg
-
 *.7z
+distfiles

@@ -20,7 +20,6 @@
 
 set -e -x
 
-CWD=${CWD:-`pwd`}
 SDK=${SDK:-"/opt/friction"}
 DISTFILES=${DISTFILES:-"/mnt"}
 BUILD=${BUILD:-"${HOME}"}

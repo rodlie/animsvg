@@ -23,7 +23,6 @@ set -e -x
 source /opt/rh/llvm-toolset-7.0/enable
 clang -v
 
-CWD=${CWD:-`pwd`}
 SDK=${SDK:-"/opt/friction"}
 BUILD=${BUILD:-"${HOME}"}
 
@@ -59,21 +58,11 @@ if [ ! -d "${BUILD}/friction" ]; then
         git clone https://github.com/friction2d/friction
         cd friction
         git checkout ${CHECKOUT}
-        git submodule update -i --recursive docs
+        git submodule update -i --recursive
     )
 fi
 
 cd ${BUILD}/friction
-
-if [ ! -d "src/skia/out" ]; then
-    mv src/skia src/skia.orig
-    ln -sf ${SDK}/skia src/skia
-fi
-
-if [ ! -d "src/gperftools/.libs" ]; then
-    mv src/gperftools src/gperftools.orig
-    ln -sf ${SDK}/gperftools src/gperftools
-fi
 
 rm -rf build-vfxplatform || true
 mkdir build-vfxplatform && cd build-vfxplatform
