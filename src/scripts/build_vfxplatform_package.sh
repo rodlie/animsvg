@@ -144,6 +144,7 @@ cat ${BUILD}/friction/src/scripts/vfxplatform.spec | sed 's/__FRICTION_PKG_VERSI
 
 # RPM
 rpmbuild -bb rpm.spec
+cp -a ${HOME}/rpmbuild/RPMS/*/*.rpm ${DISTFILES}/builds/
 
 # Portable
 FRICTION_PORTABLE=${FRICTION_PKG}-linux-X11-x86_64
