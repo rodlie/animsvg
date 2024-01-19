@@ -72,11 +72,16 @@ if [ "${REL}" != 1 ]; then
     REL_STATUS="OFF"
 fi
 
+# workaround for gperftools (until I fix it)
+cp -a ${SDK}/include/libunw* /usr/include/
+cp -a ${SDK}/lib/libunw* /usr/lib64/
+
 cmake -GNinja \
 -DCMAKE_INSTALL_PREFIX=${SDK} \
 -DCMAKE_PREFIX_PATH=${SDK} \
 -DCMAKE_BUILD_TYPE=Release \
 -DLINUX_DEPLOY=ON \
+-DUSE_SKIA_SYSTEM_LIBS=OFF \
 -DFRICTION_OFFICIAL_RELEASE=${REL_STATUS} \
 -DQSCINTILLA_INCLUDE_DIRS=${SDK}/include \
 -DQSCINTILLA_LIBRARIES_DIRS=${SDK}/lib \

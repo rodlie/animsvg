@@ -38,6 +38,10 @@ if [ ! -d "${BUILD}/${FRICTION_PKG}" ]; then
     exit 1
 fi
 
+if [ ! -d "${DISTFILES}/builds" ]; then
+    mkdir -p ${DISTFILES}/builds
+fi
+
 export PATH="${SDK}/bin:${PATH}"
 export PKG_CONFIG_PATH="${SDK}/lib/pkgconfig"
 export LD_LIBRARY_PATH="${SDK}/lib:${LD_LIBRARY_PATH}"
@@ -179,6 +183,7 @@ done
 cd ${BUILD}
 tar cvf ${FRICTION_PORTABLE}.tar ${FRICTION_PORTABLE}
 xz -9 ${FRICTION_PORTABLE}.tar
+cp -a ${FRICTION_PORTABLE}.tar.xz ${DISTFILES}/builds/
 
 # AppImage
 (cd ${FRICTION_PORTABLE_DIR} ;
@@ -192,5 +197,6 @@ ln -sf usr/share/icons/hicolor/256x256/apps/${APPID}.png .DirIcon
 )
 tar xf ${DISTFILES}/appimagetool.tar.xz
 ARCH=x86_64 ./appimagetool/AppRun ${FRICTION_PORTABLE}
+cp -a *.AppImage ${DISTFILES}/builds/
 
 echo "PKG DONE"
