@@ -26,7 +26,6 @@
 
 #include <QLabel>
 #include <QPushButton>
-#include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QSettings>
 #include <QDebug>
@@ -49,18 +48,17 @@ UIDock::UIDock(QWidget *parent,
                const bool &showHeader,
                const bool &darkHeader)
     : QWidget{parent}
-    , mWidget(widget)
+    , mLayout(nullptr)
     , mLabel(label)
     , mPos(pos)
     , mIndex(-1)
 {
     setObjectName(mLabel);
-
     setContentsMargins(0, 0, 0, 0);
-    const auto mainLayout = new QVBoxLayout(this);
-    mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->setMargin(0);
-    mainLayout->setSpacing(0);
+    mLayout = new QVBoxLayout(this);
+    mLayout->setContentsMargins(0, 0, 0, 0);
+    mLayout->setMargin(0);
+    mLayout->setSpacing(0);
 
     if (showHeader) {
         const auto headerWidget = new QWidget(this);
@@ -126,7 +124,7 @@ UIDock::UIDock(QWidget *parent,
         headerLayout->addWidget(upButton);
         headerLayout->addWidget(downButton);
 
-        mainLayout->addWidget(headerWidget);
+        mLayout->addWidget(headerWidget);
 
         connect(leftButton, &QPushButton::clicked,
                 this, [this]() { emit changePosition(mPos, Position::Left); });
@@ -137,7 +135,7 @@ UIDock::UIDock(QWidget *parent,
         connect(downButton, &QPushButton::clicked,
                 this, [this]() { emit changePosition(mPos, Position::Down); });
     }
-    mainLayout->addWidget(mWidget);
+    mLayout->addWidget(widget);
 }
 
 UIDock::~UIDock()
@@ -173,6 +171,11 @@ const QString UIDock::getLabel()
 const QString UIDock::getId()
 {
     return AppSupport::filterTextAZW(mLabel);
+}
+
+void UIDock::addWidget(QWidget *widget)
+{
+    mLayout->addWidget(widget);
 }
 
 void UIDock::writeSettings()
@@ -313,6 +316,12 @@ void UILayout::setDockVisible(const QString &label,
     emit updateDockVisibility(label, visible);
 }
 
+void UILayout::addDockWidget(const QString &label, QWidget *widget)
+{
+    if (!widget) { return; }
+    emit updateDockWidget(label, widget);
+}
+
 void UILayout::addDock(const Item &item)
 {
     if (!item.widget) { return; }
@@ -350,6 +359,16 @@ void UILayout::connectDock(UIDock *dock)
             [dock](const QString &label,
                    bool visible) {
                 if (dock->getLabel() == label) { dock->setVisible(visible); }
+            });
+    connect(this,
+            &UILayout::updateDockWidget,
+            this,
+            [dock](const QString &label,
+                   QWidget *widget) {
+                if (dock->getLabel() == label) {
+                    dock->addWidget(widget);
+                    dock->setVisible(true);
+                }
             });
     connect(dock,
             &UIDock::changePosition,
