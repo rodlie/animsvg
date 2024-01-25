@@ -307,6 +307,12 @@ void UILayout::addDocks(std::vector<Item> items)
     readSettings();
 }
 
+void UILayout::setDockVisible(const QString &label,
+                              bool visible)
+{
+    emit updateDockVisibility(label, visible);
+}
+
 void UILayout::addDock(const Item &item)
 {
     if (!item.widget) { return; }
@@ -338,6 +344,13 @@ void UILayout::addDock(const Item &item)
 void UILayout::connectDock(UIDock *dock)
 {
     if (!dock) { return; }
+    connect(this,
+            &UILayout::updateDockVisibility,
+            this,
+            [dock](const QString &label,
+                   bool visible) {
+                if (dock->getLabel() == label) { dock->setVisible(visible); }
+            });
     connect(dock,
             &UIDock::changePosition,
             this,

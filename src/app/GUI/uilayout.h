@@ -91,6 +91,12 @@ public:
     void readSettings();
     void writeSettings();
     void addDocks(std::vector<Item> items);
+    void setDockVisible(const QString &label,
+                        bool visible);
+
+signals:
+    void updateDockVisibility(const QString &label,
+                              bool visible);
 
 private:
     QSplitter *mLeft;
