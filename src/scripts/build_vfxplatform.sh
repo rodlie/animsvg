@@ -35,7 +35,9 @@ SDK_TAR="${DISTFILES}/friction-vfxplatform-sdk-${SDK_VERSION}.tar"
 
 # Build SDK
 if [ ! -d "${SDK}" ]; then
-    mkdir -p ${SDK}
+    mkdir -p "${SDK}/lib"
+    mkdir -p "${SDK}/bin"
+    (cd "${SDK}"; ln -sf lib lib64)
 fi
 if [ -f "${SDK_TAR}.xz" ]; then
 (cd ${SDK}/.. ; tar xf ${SDK_TAR}.xz )
