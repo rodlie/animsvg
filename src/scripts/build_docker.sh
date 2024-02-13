@@ -23,7 +23,7 @@
 set -e -x
 clang++ --version
 cmake --version
-python --version
+python3 --version
 qmake-qt5 --version || qmake --version
 env
 cat /etc/os-release

@@ -30,7 +30,7 @@ MKJOBS=${JOBS:-4}
 
 JAMMY=${JAMMY:-1}
 MANTIC=${MANTIC:-1}
-NOBLE=${NOBLE:-0}
+NOBLE=${NOBLE:-1}
 
 MOUNT_DIR="snapshots"
 DOCKER_MOUNT="-t --mount type=bind,source=${CWD}/${MOUNT_DIR},target=/${MOUNT_DIR}"
@@ -48,11 +48,14 @@ fi
 DOCKER="${DOCKER} ${DOCKER_MOUNT}"
 
 if [ "${JAMMY}" = 1 ]; then
+    (cd ${CWD}/src/scripts; docker build -t friction-jammy -f Dockerfile.jammy .)
     $DOCKER friction-jammy
 fi
 if [ "${MANTIC}" = 1 ]; then
+    (cd ${CWD}/src/scripts; docker build -t friction-mantic -f Dockerfile.mantic .)
     $DOCKER friction-mantic
 fi
 if [ "${NOBLE}" = 1 ]; then
+    (cd ${CWD}/src/scripts; docker build -t friction-noble -f Dockerfile.noble .)
     $DOCKER friction-noble
 fi
