@@ -127,7 +127,7 @@ bool ContainerBox::SWT_dropInto(const int index, const QMimeData * const data) {
                 if(isAncestor(box)) continue;
             }
             if (const auto box = enve_cast<InternalLinkGroupBox*>(iObj)) {
-                if (box->isLink()) { continue; }
+                if (enve_cast<ContainerBox*>(box->getFinalTarget()) == this) { continue; }
             }
             insertContained((dropId++) - ca_getNumberOfChildren(),
                             iObj->ref<eBoxOrSound>());
