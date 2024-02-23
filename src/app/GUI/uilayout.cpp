@@ -229,6 +229,7 @@ void UILayout::readSettings()
 {
     QSettings settings;
     settings.beginGroup(UI_CONF_GROUP);
+    bool firstrun = settings.value(UI_CONF_KEY_MAIN).isNull();
     restoreState(settings.value(UI_CONF_KEY_MAIN).toByteArray());
     mLeft->restoreState(settings.value(UI_CONF_KEY_LEFT).toByteArray());
     mMiddle->restoreState(settings.value(UI_CONF_KEY_MIDDLE).toByteArray());
@@ -236,6 +237,10 @@ void UILayout::readSettings()
     mTop->restoreState(settings.value(UI_CONF_KEY_TOP).toByteArray());
     mBottom->restoreState(settings.value(UI_CONF_KEY_BOTTOM).toByteArray());
     settings.endGroup();
+
+    if (firstrun) {
+        setSizes({300, 1024, 300});
+    }
 }
 
 void UILayout::writeSettings()
