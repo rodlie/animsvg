@@ -57,6 +57,15 @@ void ColorLabel::setAlpha(const qreal alpha_t) {
     update();
 }
 
+void ColorLabel::addBookmark()
+{
+    const QColor col = QColor::fromHsvF(qreal(mHue),
+                                        qreal(mSaturation),
+                                        qreal(mValue),
+                                        mAlpha);
+    Document::sInstance->addBookmarkColor(col);
+}
+
 void ColorLabel::paintGL() {
     qreal pixelRatio = devicePixelRatioF();
     glClear(GL_COLOR_BUFFER_BIT);

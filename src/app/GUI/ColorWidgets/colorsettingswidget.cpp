@@ -34,6 +34,9 @@
 #include "GUI/global.h"
 #include "GUI/actionbutton.h"
 #include "GUI/ColorWidgets/savedcolorswidget.h"
+#include "appsupport.h"
+
+#include <QShortcut>
 
 void ColorSettingsWidget::updateWidgetTargets()
 {
@@ -274,6 +277,13 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
     mColorLabel = new ColorLabel(this);
     mColorLabel->setSizePolicy(QSizePolicy::Expanding,
                                QSizePolicy::Expanding);
+
+    const auto book = new QShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                         "colorBookmark",
+                                                                         "B").toString()),
+                                    this);
+    connect(book, &QShortcut::activated,
+            mColorLabel, &ColorLabel::addBookmark);
 
 //    mWheelWidget->setLayout(mWheelLayout);
 //    mWheelLayout->setAlignment(Qt::AlignTop);
