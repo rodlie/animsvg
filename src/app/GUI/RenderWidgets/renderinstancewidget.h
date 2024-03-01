@@ -60,6 +60,8 @@ public:
 
     void write(eWriteStream &dst) const;
     void read(eReadStream &src);
+    void updateRenderSettings();
+
 protected:
     void mousePressEvent(QMouseEvent* e);
 private:

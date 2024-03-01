@@ -289,6 +289,13 @@ void RenderWidget::read(eReadStream &src)
     }
 }
 
+void RenderWidget::updateRenderSettings()
+{
+    for (const auto &wid: mRenderInstanceWidgets) {
+        wid->updateRenderSettings();
+    }
+}
+
 void RenderWidget::render(RenderInstanceSettings &settings)
 {
     const RenderSettings &renderSettings = settings.getRenderSettings();
