@@ -20,3 +20,4 @@ build-*
 ffmpeg
 *.7z
 distfiles
+backup
