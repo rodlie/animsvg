@@ -53,11 +53,11 @@ RenderWidget::RenderWidget(QWidget *parent)
     mMainLayout->setSpacing(0);
     setLayout(mMainLayout);
 
-    QWidget *bottomWidget = new QWidget(this);
+    const auto bottomWidget = new QWidget(this);
     bottomWidget->setContentsMargins(0, 0, 0, 0);
     const auto bottomLayout = new QHBoxLayout(bottomWidget);
 
-    const auto darkPal= AppSupport::getDarkPalette();
+    const auto darkPal = AppSupport::getDarkPalette();
     bottomWidget->setAutoFillBackground(true);
     bottomWidget->setPalette(darkPal);
     bottomWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -137,8 +137,8 @@ RenderWidget::RenderWidget(QWidget *parent)
     mScrollArea->setWidgetResizable(true);
     mScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    bottomLayout->addWidget(mRenderProgressBar);
     bottomLayout->addWidget(mStartRenderButton);
+    bottomLayout->addWidget(mRenderProgressBar);
     bottomLayout->addWidget(mStopRenderButton);
     bottomLayout->addWidget(mAddRenderButton);
     bottomLayout->addWidget(mClearQueueButton);

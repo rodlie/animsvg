@@ -404,6 +404,7 @@ set(
     boxtypemenu.h
     GUI/Settings/labeledslider.h
     GUI/uilayout.h
+    GUI/vlabel.h
 )
 
 set(
