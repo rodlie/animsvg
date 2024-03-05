@@ -42,6 +42,10 @@ QToolBar#ViewerDrawBar,
     background-color: rgb(33, 33, 38);
 }
 
+QToolBar::separator {
+    border-color: none;
+}
+
 QComboBox#blendModeCombo,
 QWidget#menuBarWidget QPushButton,
 QLineEdit#SearchLine,
