@@ -1043,7 +1043,9 @@ void MainWindow::setupMenuBar()
             this, [this](bool triggered) {
         if (mTimelineWindowAct->isChecked()) {
             openTimelineWindow();
-        } else { mTimeline->setVisible(triggered); }
+        } else {
+            mUI->setDockVisible(tr("Timeline"), triggered);
+        }
     });
 
     mTimelineWindowAct = mViewMenu->addAction(tr("Timeline Window"));
@@ -1066,8 +1068,10 @@ void MainWindow::setupMenuBar()
     connect(mRenderWindowAct, &QAction::triggered,
             this, [this](bool triggered) {
         if (!triggered) {
-            statusBar()->showMessage(tr("Restart Friction to apply"), 5000);
-            // TODO: move widget from window to main ui without restart
+            mTabQueueIndex = mTabProperties->addTab(mRenderWidget,
+                                                    QIcon::fromTheme("render_animation"),
+                                                    tr("Queue"));
+            mRenderWindow->deleteLater();
         } else {
             openRenderQueueWindow();
         }
