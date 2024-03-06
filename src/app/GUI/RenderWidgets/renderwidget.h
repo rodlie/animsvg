@@ -51,6 +51,7 @@ public:
     void clearRenderQueue();
     void write(eWriteStream& dst) const;
     void read(eReadStream& src);
+    void updateRenderSettings();
 
 signals:
     void progress(int frame, int total);

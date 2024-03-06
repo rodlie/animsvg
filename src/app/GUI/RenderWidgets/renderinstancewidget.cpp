@@ -26,6 +26,7 @@
 #include "renderinstancewidget.h"
 #include "GUI/global.h"
 #include <QMenu>
+#include "canvas.h"
 #include "outputsettingsdialog.h"
 #include "outputsettingsprofilesdialog.h"
 #include "outputsettingsdisplaywidget.h"
@@ -387,6 +388,15 @@ void RenderInstanceWidget::read(eReadStream &src) {
     mSettings.read(src);
     bool checked; src >> checked;
     setChecked(checked);
+}
+
+void RenderInstanceWidget::updateRenderSettings()
+{
+    const RenderSettings &renderSettings = mSettings.getRenderSettings();
+    mRenderSettingsDisplayWidget->setRenderSettings(mSettings.getTargetCanvas(),
+                                                    renderSettings);
+    const auto label = mSettings.getTargetCanvas()->prp_getName();
+    if (!label.isEmpty()) { mNameLabel->setText(label); }
 }
 
 #include "Private/esettings.h"
