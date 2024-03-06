@@ -279,6 +279,7 @@ set(
     #GUI/BrushWidgets/brushwidget.cpp
     GUI/Settings/labeledslider.cpp
     GUI/uilayout.cpp
+    GUI/toolbox.cpp
 )
 
 set(

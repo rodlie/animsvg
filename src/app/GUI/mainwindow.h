@@ -21,6 +21,8 @@
 #
 */
 
+// Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -31,7 +33,6 @@
 #include <QActionGroup>
 #include <QStackedWidget>
 #include <QToolBox>
-#include <QSplitter>
 #include <QToolButton>
 #include <QLabel>
 #include <QToolBar>
@@ -53,6 +54,8 @@
 #include "GUI/qdoubleslider.h"
 #include "window.h"
 #include "GUI/aboutwidget.h"
+#include "GUI/uilayout.h"
+#include "GUI/toolbutton.h"
 
 class VideoEncoder;
 class RenderWidget;
@@ -202,8 +205,8 @@ private:
     //CentralWidget *mCentralWidget;
     QStackedWidget *mStackWidget;
 
-    QTabWidget *mTopSideBarWidget;
-    QTabWidget *mBottomSideBarWidget;
+    QTabWidget *mTabColorText;
+    QTabWidget *mTabProperties;
 
     void openWelcomeDialog();
     void closeWelcomeDialog();
@@ -261,21 +264,24 @@ private:
 
     //QStatusBar* mStatusBar;
     //UsageWidget* mUsageWidget = nullptr;
+
+    QStackedWidget *mToolBoxStack;
+    int mToolBoxMainIndex;
+    int mToolBoxNodesIndex;
+    int mToolBoxDrawIndex;
+
     QToolBar *mToolbar;
 
-    QActionGroup *mToolbarActGroup;
-    QActionGroup *mToolBarNodeGroup;
+    ToolButton *mToolBoxButton;
 
-    QToolBar *mViewerNodeBar;
-    QToolBar *mViewerDrawBar;
+    QActionGroup *mToolBoxGroupMain;
+    QActionGroup *mToolBoxGroupNodes;
 
-    QSplitter *mSplitterMain;
-    QSplitter *mSplitterLeft;
-    QSplitter *mSplitterRight;
-    QSplitter *mSplitterLeftTop;
-    QSplitter *mSplitterLeftBottom;
-    QSplitter *mSplitterRightTop;
-    QSplitter *mSplitterRightBottom;
+    QToolBar *mToolBoxMain;
+    QToolBar *mToolBoxNodes;
+    QToolBar *mToolBoxDraw;
+
+    UILayout *mUI;
 
     QAction *mSaveAct;
 
@@ -318,9 +324,7 @@ private:
 
     QAction *mDrawPathAuto;
     QDoubleSlider *mDrawPathSmooth;
-    QAction *mDrawPathSmoothAct;
     QDoubleSlider *mDrawPathMaxError;
-    QAction *mDrawPathMaxErrorAct;
 
     QMenuBar *mMenuBar;
     QMenu *mFileMenu;
@@ -378,7 +382,11 @@ private:
     QAction* addSlider(const QString &name,
                        QDoubleSlider* const slider,
                        QToolBar* const toolBar);
-    void setupDrawPathSpins();
+
+    void setupToolBox();
+    void setupToolBoxMain();
+    void setupToolBoxNodes();
+    void setupToolBoxDraw();
 
     bool mBackupOnSave;
     bool mAutoSave;

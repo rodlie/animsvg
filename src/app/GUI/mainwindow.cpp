@@ -21,6 +21,8 @@
 #
 */
 
+// Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
+
 #include "mainwindow.h"
 #include "canvas.h"
 #include <QKeyEvent>
@@ -82,6 +84,7 @@
 #include "appsupport.h"
 
 #include "GUI/assetswidget.h"
+#include "vlabel.h"
 
 MainWindow *MainWindow::sInstance = nullptr;
 
@@ -100,11 +103,22 @@ MainWindow::MainWindow(Document& document,
     , mWelcomeDialog(nullptr)
     //, mCentralWidget(nullptr)
     , mStackWidget(nullptr)
-    , mTopSideBarWidget(nullptr)
-    , mBottomSideBarWidget(nullptr)
+    , mTabColorText(nullptr)
+    , mTabProperties(nullptr)
     , mTimeline(nullptr)
     , mRenderWidget(nullptr)
+    , mToolBoxStack(nullptr)
+    , mToolBoxMainIndex(0)
+    , mToolBoxNodesIndex(0)
+    , mToolBoxDrawIndex(0)
     , mToolbar(nullptr)
+    , mToolBoxButton(nullptr)
+    , mToolBoxGroupMain(nullptr)
+    , mToolBoxGroupNodes(nullptr)
+    , mToolBoxMain(nullptr)
+    , mToolBoxNodes(nullptr)
+    , mToolBoxDraw(nullptr)
+    , mUI(nullptr)
     //, mFillStrokeSettingsDockBar(nullptr)
     //, mTimelineDockBar(nullptr)
     //, mSelectedObjectDockBar(nullptr)
@@ -119,7 +133,6 @@ MainWindow::MainWindow(Document& document,
     , mFontWidgetAct(nullptr)
     , mDrawPathAuto(nullptr)
     , mDrawPathSmooth(nullptr)
-    , mDrawPathSmoothAct(nullptr)
     , mDrawPathMaxError(nullptr)
     , mDocument(document)
     , mActions(actions)
@@ -147,10 +160,10 @@ MainWindow::MainWindow(Document& document,
     Q_ASSERT(!sInstance);
     sInstance = this;
 
-    //ImportHandler::sInstance->addImporter<eXevImporter>(); // not supported yet
+    //ImportHandler::sInstance->addImporter<eXevImporter>(); // not supported yet, see own branch
     ImportHandler::sInstance->addImporter<evImporter>();
     ImportHandler::sInstance->addImporter<eSvgImporter>();
-    //ImportHandler::sInstance->addImporter<eOraImporter>(); // removed
+    //ImportHandler::sInstance->addImporter<eOraImporter>(); // removed, will be added back soonish
 
     connect(&mDocument, &Document::evFilePathChanged,
             this, &MainWindow::updateTitle);
@@ -169,12 +182,13 @@ MainWindow::MainWindow(Document& document,
             this, &MainWindow::closeWelcomeDialog);
     connect(&mDocument, &Document::openTextEditor,
             this, [this] () {
-        mTopSideBarWidget->setCurrentIndex(mTabTextIndex);
+        mTabColorText->setCurrentIndex(mTabTextIndex);
         mFontWidget->setTextFocus();
     });
 
     //const auto iconDir = eSettings::sIconsDir();
     setWindowIcon(QIcon::fromTheme(AppSupport::getAppName()));
+    setMinimumSize(1024, 576);
     /*const auto downArr = iconDir + "/down-arrow.png";
     const auto upArr = iconDir + "/up-arrow.png";
     const auto dockClose = iconDir + "/dockClose.png";
@@ -268,29 +282,9 @@ MainWindow::MainWindow(Document& document,
 
     const auto assets = new AssetsWidget(this);
 
-    QToolBar *viewerToolBar = new QToolBar(this);
-    viewerToolBar->setOrientation(Qt::Vertical);
-    eSizesUI::widget.add(viewerToolBar, [viewerToolBar](const int size) {
-        viewerToolBar->setIconSize(QSize(size, size));
-    });
-
-    mViewerNodeBar = new QToolBar(this);
-    mViewerNodeBar->setObjectName(QString::fromUtf8("ViewerNodeBar"));
-    mViewerNodeBar->setOrientation(Qt::Vertical);
-    eSizesUI::widget.add(mViewerNodeBar, [this](const int size) {
-        mViewerNodeBar->setIconSize(QSize(size, size));
-    });
-
-    mViewerDrawBar = new QToolBar(this);
-    mViewerDrawBar->setObjectName(QString::fromUtf8("ViewerDrawBar"));
-    mViewerDrawBar->setOrientation(Qt::Horizontal);
-    eSizesUI::widget.add(mViewerDrawBar, [this](const int size) {
-        mViewerDrawBar->setIconSize(QSize(size, size));
-    });
-
+    setupToolBox();
     setupToolBar();
     setupMenuBar();
-    setupDrawPathSpins();
 
     connectToolBarActions();
 
@@ -340,22 +334,6 @@ MainWindow::MainWindow(Document& document,
     statusBar()->addPermanentWidget(layoutComboLabel);
     statusBar()->addPermanentWidget(mLayoutHandler->comboWidget());
 
-    viewerToolBar->addActions(mToolbarActGroup->actions());
-
-    QWidget *spacerWidget1 = new QWidget(this);
-    spacerWidget1->setSizePolicy(QSizePolicy::Minimum,
-                                 QSizePolicy::Expanding);
-    viewerToolBar->addWidget(spacerWidget1);
-    viewerToolBar->addAction(mLocalPivotAct);
-
-    mViewerNodeBar->addActions(mToolBarNodeGroup->actions());
-
-    QWidget *spacerWidget2 = new QWidget(this);
-    spacerWidget2->setSizePolicy(QSizePolicy::Minimum,
-                                 QSizePolicy::Expanding);
-    mViewerNodeBar->addWidget(spacerWidget2);
-    mViewerNodeBar->addWidget(mNodeVisibility);
-
     QWidget *fontWidget = new QWidget(this);
     fontWidget->setAutoFillBackground(true);
     fontWidget->setPalette(AppSupport::getNotSoDarkPalette());
@@ -366,32 +344,36 @@ MainWindow::MainWindow(Document& document,
     QMargins frictionMargins(0, 0, 0, 0);
     int frictionSpacing = 0;
 
-    const auto darkPal= AppSupport::getDarkPalette();
+    const auto darkPal = AppSupport::getDarkPalette();
     mObjectSettingsScrollArea->setAutoFillBackground(true);
     mObjectSettingsScrollArea->setPalette(darkPal);
 
-    QWidget *frictionTopWidget = new QWidget(this);
-    frictionTopWidget->setContentsMargins(frictionMargins);
-
-    QHBoxLayout *frictionTopLayout = new QHBoxLayout(frictionTopWidget);
-    frictionTopLayout->setContentsMargins(frictionMargins);
-    frictionTopLayout->setSpacing(frictionSpacing);
-
-    mTopSideBarWidget = new QTabWidget(this);
-    mTopSideBarWidget->tabBar()->setFocusPolicy(Qt::NoFocus);
-    mTopSideBarWidget->setContentsMargins(frictionMargins);
-    mTopSideBarWidget->setMinimumWidth(sideBarMin);
-    mTopSideBarWidget->setTabPosition(QTabWidget::South);
-    eSizesUI::widget.add(mTopSideBarWidget, [this](const int size) {
-        mTopSideBarWidget->setIconSize(QSize(size, size));
+    // setup "Fill and Stroke" and "Text and Font" tab
+    mTabColorText = new QTabWidget(this);
+    mTabColorText->tabBar()->setFocusPolicy(Qt::NoFocus);
+    mTabColorText->setContentsMargins(frictionMargins);
+    mTabColorText->setMinimumWidth(sideBarMin);
+    mTabColorText->setTabPosition(QTabWidget::South);
+    eSizesUI::widget.add(mTabColorText, [this](const int size) {
+        mTabColorText->setIconSize(QSize(size, size));
     });
 
-    mTabColorIndex = mTopSideBarWidget->addTab(mFillStrokeSettings,
-                                               QIcon::fromTheme("color"),
-                                               tr("Fill and Stroke"));
-    mTabTextIndex = mTopSideBarWidget->addTab(fontWidget,
-                                              QIcon::fromTheme("textCreate"),
-                                              tr("Text and Font"));
+    mTabColorIndex = mTabColorText->addTab(mFillStrokeSettings,
+                                           QIcon::fromTheme("color"),
+                                           tr("Fill and Stroke"));
+    mTabTextIndex = mTabColorText->addTab(fontWidget,
+                                          QIcon::fromTheme("textCreate"),
+                                          tr("Text and Font"));
+
+    // setup "Properties", "Assets", "Queue" tab
+    mTabProperties = new QTabWidget(this);
+    mTabProperties->tabBar()->setFocusPolicy(Qt::NoFocus);
+    mTabProperties->setContentsMargins(frictionMargins);
+    mTabProperties->setMinimumWidth(sideBarMin);
+    mTabProperties->setTabPosition(QTabWidget::South);
+    eSizesUI::widget.add(mTabProperties, [this](const int size) {
+        mTabProperties->setIconSize(QSize(size, size));
+    });
 
     QWidget *propertiesWidget = new QWidget(this);
     QVBoxLayout *propertiesLayout = new QVBoxLayout(propertiesWidget);
@@ -401,75 +383,72 @@ MainWindow::MainWindow(Document& document,
     propertiesLayout->addWidget(mObjectSettingsScrollArea);
     propertiesLayout->addWidget(alignWidget);
 
-    QWidget *viewerWidget = new QWidget(this);
+    mTabPropertiesIndex = mTabProperties->addTab(propertiesWidget,
+                                                 QIcon::fromTheme("drawPathAutoChecked"),
+                                                 tr("Properties"));
+    mTabAssetsIndex = mTabProperties->addTab(assets,
+                                             QIcon::fromTheme("asset_manager"),
+                                             tr("Assets"));
+    mTabQueueIndex = mTabProperties->addTab(mRenderWidget,
+                                            QIcon::fromTheme("render_animation"),
+                                            tr("Queue"));
+
+    // setup toolbox and viewer
+    const auto viewerWidget = new QWidget(this);
     viewerWidget->setContentsMargins(frictionMargins);
-    QVBoxLayout *viewerLayout = new QVBoxLayout(viewerWidget);
+    viewerWidget->setSizePolicy(QSizePolicy::Expanding,
+                                QSizePolicy::Expanding);
+    const auto viewerLayout = new QHBoxLayout(viewerWidget);
     viewerLayout->setContentsMargins(frictionMargins);
-    viewerLayout->setSpacing(frictionSpacing);
+    viewerLayout->setSpacing(0);
+
+    const auto toolBoxWidget = new QWidget(this);
+    toolBoxWidget->setSizePolicy(QSizePolicy::Fixed,
+                                 QSizePolicy::Expanding);
+    toolBoxWidget->setContentsMargins(0, 0, 0, 0);
+    const auto toolBoxLayout = new QVBoxLayout(toolBoxWidget);
+    toolBoxLayout->setContentsMargins(0, 0, 0, 0);
+    toolBoxLayout->setSpacing(0);
+
+    toolBoxLayout->addWidget(mToolBoxButton);
+    toolBoxLayout->addWidget(mToolBoxStack);
+
+    viewerLayout->addWidget(toolBoxWidget);
     viewerLayout->addWidget(mStackWidget);
-    viewerLayout->addWidget(mViewerDrawBar);
 
-    frictionTopLayout->addWidget(viewerToolBar);
-    frictionTopLayout->addWidget(mViewerNodeBar);
-    frictionTopLayout->addWidget(viewerWidget);
-
-    mBottomSideBarWidget = new QTabWidget(this);
-    mBottomSideBarWidget->tabBar()->setFocusPolicy(Qt::NoFocus);
-    mBottomSideBarWidget->setContentsMargins(frictionMargins);
-    mBottomSideBarWidget->setMinimumWidth(sideBarMin);
-    mBottomSideBarWidget->setTabPosition(QTabWidget::South);
-    eSizesUI::widget.add(mBottomSideBarWidget, [this](const int size) {
-        mBottomSideBarWidget->setIconSize(QSize(size, size));
-    });
-
-    mTabPropertiesIndex = mBottomSideBarWidget->addTab(propertiesWidget,
-                                                       QIcon::fromTheme("drawPathAutoChecked"),
-                                                       tr("Properties"));
-    mTabAssetsIndex = mBottomSideBarWidget->addTab(assets,
-                                                   QIcon::fromTheme("asset_manager"),
-                                                   tr("Assets"));
-    mTabQueueIndex = mBottomSideBarWidget->addTab(mRenderWidget,
-                                                  QIcon::fromTheme("render_animation"),
-                                                  tr("Queue"));
-
-    mSplitterMain = new QSplitter(this);
-
-    mSplitterLeft = new QSplitter(this);
-    mSplitterRight = new QSplitter(this);
-
-    mSplitterLeftTop = new QSplitter(this);
-    mSplitterLeftBottom = new QSplitter(this);
-
-    mSplitterRightTop = new QSplitter(this);
-    mSplitterRightBottom = new QSplitter(this);
-
-    mSplitterMain->setOrientation(Qt::Horizontal);
-
-    mSplitterLeft->setOrientation(Qt::Vertical);
-    mSplitterRight->setOrientation(Qt::Vertical);
-
-    mSplitterLeftTop->setOrientation(Qt::Horizontal);
-    mSplitterLeftBottom->setOrientation(Qt::Horizontal);
-
-    mSplitterRightTop->setOrientation(Qt::Horizontal);
-    mSplitterRightBottom->setOrientation(Qt::Horizontal);
-
-    mSplitterMain->addWidget(mSplitterLeft);
-    mSplitterMain->addWidget(mSplitterRight);
-
-    mSplitterLeft->addWidget(mSplitterLeftTop);
-    mSplitterLeft->addWidget(mSplitterLeftBottom);
-
-    mSplitterRight->addWidget(mSplitterRightTop);
-    mSplitterRight->addWidget(mSplitterRightBottom);
-
-    mSplitterLeftTop->addWidget(frictionTopWidget);
-    mSplitterLeftBottom->addWidget(mTimeline);
-
-    mSplitterRightTop->addWidget(mTopSideBarWidget);
-    mSplitterRightBottom->addWidget(mBottomSideBarWidget);
-
-    setCentralWidget(mSplitterMain);
+    // final layout
+    mUI = new UILayout(this);
+    std::vector<UILayout::Item> docks;
+    docks.push_back({UIDock::Position::Up,
+                     -1,
+                     tr("Viewer"),
+                     viewerWidget,
+                     false,
+                     false,
+                     false});
+    docks.push_back({UIDock::Position::Down,
+                     -1,
+                     tr("Timeline"),
+                     mTimeline,
+                     false,
+                     false,
+                     false});
+    docks.push_back({UIDock::Position::Right,
+                     -1,
+                     tr("Color and Text"),
+                     mTabColorText,
+                     false,
+                     true,
+                     false});
+    docks.push_back({UIDock::Position::Right,
+                     -1,
+                     tr("Properties"),
+                     mTabProperties,
+                     false,
+                     true,
+                     false});
+    mUI->addDocks(docks);
+    setCentralWidget(mUI);
 
     readSettings(openProject);
 }
@@ -694,7 +673,7 @@ void MainWindow::setupMenuBar()
     mViewMenu = mMenuBar->addMenu(tr("View", "MenuBar"));
 
     //auto mToolsMenu = mMenuBar->addMenu(tr("Tools", "MenuBar"));
-    //mToolsMenu->addActions(mToolbarActGroup->actions());
+    //mToolsMenu->addActions(mToolBoxGroupMain->actions());
 
     mObjectMenu = mMenuBar->addMenu(tr("Object", "MenuBar"));
 
@@ -1072,8 +1051,8 @@ void MainWindow::setupMenuBar()
     connect(mTimelineWindowAct, &QAction::triggered,
             this, [this](bool triggered) {
         if (!triggered) {
-            statusBar()->showMessage(tr("Restart Friction to apply"), 5000);
-            // TODO: move widget from window to main ui without restart
+            mUI->addDockWidget(tr("Timeline"), mTimeline);
+            mTimelineWindow->deleteLater();
         } else {
             openTimelineWindow();
         }
@@ -1236,46 +1215,6 @@ QAction *MainWindow::addSlider(const QString &name,
     return toolBar->addWidget(widget);
 }
 
-void MainWindow::setupDrawPathSpins()
-{
-    mDocument.fDrawPathManual = false;
-    mDrawPathAuto = new QAction(mDocument.fDrawPathManual ? QIcon::fromTheme("drawPathAutoUnchecked") : QIcon::fromTheme("drawPathAutoChecked"),
-                                tr("Automatic/Manual Fitting"),
-                                this);
-    connect(mDrawPathAuto, &QAction::triggered,
-            this, [this]() {
-        mDocument.fDrawPathManual = !mDocument.fDrawPathManual;
-        qDebug() << "manual fitting?" << mDocument.fDrawPathManual;
-        mDrawPathMaxErrorAct->setDisabled(mDocument.fDrawPathManual);
-        mDrawPathAuto->setIcon(mDocument.fDrawPathManual ? QIcon::fromTheme("drawPathAutoUnchecked") : QIcon::fromTheme("drawPathAutoChecked"));
-    });
-    mViewerDrawBar->addAction(mDrawPathAuto);
-
-    mDrawPathMaxError = new QDoubleSlider(1, 200, 1, this);
-    mDrawPathMaxError->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
-    mDrawPathMaxError->setNumberDecimals(0);
-    mDrawPathMaxError->setDisplayedValue(mDocument.fDrawPathMaxError);
-    connect(mDrawPathMaxError, &QDoubleSlider::valueEdited,
-            this, [this](const qreal value) {
-        mDocument.fDrawPathMaxError = qFloor(value);
-    });
-    mDrawPathMaxErrorAct = addSlider(tr("Max Error"),
-                                     mDrawPathMaxError,
-                                     mViewerDrawBar);
-
-    mDrawPathSmooth = new QDoubleSlider(1, 200, 1, this);
-    mDrawPathSmooth->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
-    mDrawPathSmooth->setNumberDecimals(0);
-    mDrawPathSmooth->setDisplayedValue(mDocument.fDrawPathSmooth);
-    connect(mDrawPathSmooth, &QDoubleSlider::valueEdited,
-            this, [this](const qreal value) {
-        mDocument.fDrawPathSmooth = qFloor(value);
-    });
-    mDrawPathSmoothAct = addSlider(tr("Smooth"),
-                                   mDrawPathSmooth,
-                                   mViewerDrawBar);
-}
-
 void MainWindow::checkAutoSaveTimer()
 {
     qDebug() << "check auto save timer" << mAutoSave << mAutoSaveTimeout;
@@ -1312,6 +1251,7 @@ void MainWindow::openTimelineWindow()
                                      true,
                                      true,
                                      true);
+        mUI->setDockVisible(tr("Timeline"), false);
     }
     mTimelineWindow->focusWindow();
 }
@@ -1319,7 +1259,7 @@ void MainWindow::openTimelineWindow()
 void MainWindow::openRenderQueueWindow(const bool &focus)
 {
     if (!mRenderWindow) {
-        mBottomSideBarWidget->removeTab(mTabQueueIndex);
+        mTabProperties->removeTab(mTabQueueIndex);
         mRenderWidget->setVisible(true);
         mRenderWindow = new Window(this,
                                    mRenderWidget,
@@ -1347,7 +1287,7 @@ void MainWindow::addCanvasToRenderQue()
 {
     if (!mDocument.fActiveScene) { return; }
     if (mRenderWindowAct->isChecked()) { openRenderQueueWindow(); }
-    else { mBottomSideBarWidget->setCurrentIndex(mTabQueueIndex); }
+    else { mTabProperties->setCurrentIndex(mTabQueueIndex); }
     mRenderWidget->createNewRenderInstanceWidgetForCanvas(mDocument.fActiveScene);
 }
 
@@ -1392,373 +1332,18 @@ void MainWindow::setupToolBar()
     });
     addToolBar(mToolbar);
 
-    mToolbarActGroup = new QActionGroup(this);
-    mToolBarNodeGroup = new QActionGroup(this);
 
-    // boxTransform
-    QAction *boxTransformAct = new QAction(QIcon::fromTheme("boxTransform"),
-                                           tr("Object"),
-                                           this);
-    boxTransformAct->setCheckable(true);
-    boxTransformAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                      "boxTransform",
-                                                                      "F1").toString()));
-    connect(boxTransformAct,
-            &QAction::triggered,
-            this,
-            [boxTransformAct, this]() {
-        if (boxTransformAct->isChecked()) { mActions.setMovePathMode(); }
-    });
-    connect(&mDocument,
-            &Document::canvasModeSet,
-            this,
-            [this, boxTransformAct]() {
-        if (mDocument.fCanvasMode == CanvasMode::boxTransform) {
-            boxTransformAct->setChecked(true);
-        }
-    });
-    boxTransformAct->setChecked(true); // default
-    mToolbarActGroup->addAction(boxTransformAct);
 
-    // pointTransform
-    QAction *pointTransformAct = new QAction(QIcon::fromTheme("pointTransform"),
-                                                              tr("Point"),
-                                                              this);
-    pointTransformAct->setCheckable(true);
-    pointTransformAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                        "pointTransform",
-                                                                        "F2").toString()));
-    connect(pointTransformAct,
-            &QAction::triggered,
-            this,
-            [pointTransformAct, this]() {
-        if (pointTransformAct->isChecked()) { mActions.setMovePointMode(); }
-    });
-    connect(&mDocument,
-            &Document::canvasModeSet,
-            this,
-            [this, pointTransformAct]() {
-        if (mDocument.fCanvasMode == CanvasMode::pointTransform) {
-            pointTransformAct->setChecked(true);
-        }
-    });
-    mToolbarActGroup->addAction(pointTransformAct);
-
-    // addPointMode
-    QAction *addPointModeAct = new QAction(QIcon::fromTheme("pathCreate"),
-                                                            tr("Add Path"),
-                                                            this);
-    addPointModeAct->setCheckable(true);
-    addPointModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                      "pathCreate",
-                                                                      "F3").toString()));
-    connect(addPointModeAct,
-            &QAction::triggered,
-            this,
-            [addPointModeAct, this]() {
-        if (addPointModeAct->isChecked()) { mActions.setAddPointMode(); }
-    });
-    connect(&mDocument,
-            &Document::canvasModeSet,
-            this,
-            [this, addPointModeAct]() {
-        if (mDocument.fCanvasMode == CanvasMode::pathCreate) {
-            addPointModeAct->setChecked(true);
-        }
-    });
-    mToolbarActGroup->addAction(addPointModeAct);
-
-    // drawPathMode
-    QAction *drawPathModeAct = new QAction(QIcon::fromTheme("drawPath"),
-                                                            tr("Draw Path"),
-                                                            this);
-    drawPathModeAct->setCheckable(true);
-    drawPathModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                      "drawPath",
-                                                                      "F4").toString()));
-    connect(drawPathModeAct,
-            &QAction::triggered,
-            this,
-            [drawPathModeAct, this]() {
-        if (drawPathModeAct->isChecked()) { mActions.setDrawPathMode(); }
-    });
-    connect(&mDocument,
-            &Document::canvasModeSet,
-            this,
-            [this, drawPathModeAct]() {
-        if (mDocument.fCanvasMode == CanvasMode::drawPath) {
-            drawPathModeAct->setChecked(true);
-        }
-    });
-    mToolbarActGroup->addAction(drawPathModeAct);
-
-    // paintMode
-    /*QAction *paintModeAct = new QAction(QIcon::fromTheme("paint"),
-                                                         tr("Paint"),
-                                                         this);
-    paintModeAct->setCheckable(true);
-    paintModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                   "paintMode",
-                                                                   "F5").toString()));
-    connect(paintModeAct,
-            &QAction::triggered,
-            this,
-            [paintModeAct, this]() {
-        if (paintModeAct->isChecked()) { mActions.setPaintMode(); }
-    });
-    connect(&mDocument,
-            &Document::canvasModeSet,
-            this,
-            [this, paintModeAct]() {
-        if (mDocument.fCanvasMode == CanvasMode::paint) {
-            paintModeAct->setChecked(true);
-        }
-    });
-    mToolbarActGroup->addAction(paintModeAct);*/
-
-    // circleMode
-    QAction *circleModeAct = new QAction(QIcon::fromTheme("circleCreate"),
-                                                          tr("Add Circle"),
-                                                          this);
-    circleModeAct->setCheckable(true);
-    circleModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                    "circleMode",
-                                                                    "F5").toString()));
-    connect(circleModeAct,
-            &QAction::triggered,
-            this,
-            [circleModeAct, this]() {
-        if (circleModeAct->isChecked()) { mActions.setCircleMode(); }
-    });
-    connect(&mDocument,
-            &Document::canvasModeSet,
-            this,
-            [this, circleModeAct]() {
-        if (mDocument.fCanvasMode == CanvasMode::circleCreate) {
-            circleModeAct->setChecked(true);
-        }
-    });
-    mToolbarActGroup->addAction(circleModeAct);
-
-    // rectangleMode
-    QAction *rectModeAct = new QAction(QIcon::fromTheme("rectCreate"),
-                                                        tr("Add Rectangle"),
-                                                        this);
-    rectModeAct->setCheckable(true);
-    rectModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                  "rectMode",
-                                                                  "F6").toString()));
-    connect(rectModeAct,
-            &QAction::triggered,
-            this,
-            [rectModeAct, this]() {
-        if (rectModeAct->isChecked()) { mActions.setRectangleMode(); }
-    });
-    connect(&mDocument,
-            &Document::canvasModeSet,
-            this,
-            [this, rectModeAct]() {
-        if (mDocument.fCanvasMode == CanvasMode::rectCreate) {
-            rectModeAct->setChecked(true);
-        }
-    });
-    mToolbarActGroup->addAction(rectModeAct);
-
-    // textMode
-    QAction *textModeAct = new QAction(QIcon::fromTheme("textCreate"),
-                                                        tr("Add Text"),
-                                                        this);
-    textModeAct->setCheckable(true);
-    textModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                  "textMode",
-                                                                  "F7").toString()));
-    connect(textModeAct,
-            &QAction::triggered,
-            this,
-            [textModeAct, this]() {
-        if (textModeAct->isChecked()) { mActions.setTextMode(); }
-    });
-    connect(&mDocument,
-            &Document::canvasModeSet,
-            this,
-            [this, textModeAct]() {
-        if (mDocument.fCanvasMode == CanvasMode::textCreate) {
-            mTopSideBarWidget->setCurrentIndex(mTabTextIndex);
-            textModeAct->setChecked(true);
-        }
-    });
-    mToolbarActGroup->addAction(textModeAct);
-
-    // nullMode
-    QAction *nullModeAct = new QAction(QIcon::fromTheme("nullCreate"),
-                                                        tr("Add Null Object"),
-                                                        this);
-    nullModeAct->setCheckable(true);
-    nullModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                  "nullMode",
-                                                                  "F8").toString()));
-    connect(nullModeAct,
-            &QAction::triggered,
-            this,
-            [nullModeAct, this]() {
-        if (nullModeAct->isChecked()) { mActions.setNullMode(); }
-    });
-    connect(&mDocument,
-            &Document::canvasModeSet,
-            this,
-            [this, nullModeAct]() {
-        if (mDocument.fCanvasMode == CanvasMode::nullCreate) {
-            nullModeAct->setChecked(true);
-        }
-    });
-    mToolbarActGroup->addAction(nullModeAct);
-
-    // pickMode
-    QAction *pickModeAct = new QAction(QIcon::fromTheme("pick"),
-                                                        tr("Pick"),
-                                                        this);
-    pickModeAct->setCheckable(true);
-    pickModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                  "pickMode",
-                                                                  "F9").toString()));
-    connect(pickModeAct,
-            &QAction::triggered,
-            this,
-            [pickModeAct, this]() {
-        if (pickModeAct->isChecked()) { mActions.setPickPaintSettingsMode(); }
-    });
-    connect(&mDocument,
-            &Document::canvasModeSet,
-            this,
-            [this, pickModeAct]() {
-        if (mDocument.fCanvasMode == CanvasMode::pickFillStroke) {
-            pickModeAct->setChecked(true);
-        }
-    });
-    mToolbarActGroup->addAction(pickModeAct);
-
-    // pivot
-    mLocalPivotAct = new QAction(mDocument.fLocalPivot ? QIcon::fromTheme("pivotLocal") : QIcon::fromTheme("pivotGlobal"),
-                                 tr("Pivot Global / Local"),
-                                 this);
-    connect(mLocalPivotAct, &QAction::triggered,
-            this, [this]() {
-        mDocument.fLocalPivot = !mDocument.fLocalPivot;
-        for (const auto& scene : mDocument.fScenes) { scene->updatePivot(); }
-        Document::sInstance->actionFinished();
-        mLocalPivotAct->setIcon(mDocument.fLocalPivot ? QIcon::fromTheme("pivotLocal") : QIcon::fromTheme("pivotGlobal"));
-    });
 
     // add toolbar group actions
     //mToolBar->addSeparator();
-    //mToolBar->addActions(mToolbarActGroup->actions());
+    //mToolBar->addActions(mToolBoxGroupMain->actions());
 
     // spacer
     /*QWidget* spacer1 = new QWidget(this);
     spacer1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     mToolBar->addWidget(spacer1);*/
 
-    // nodeConnect
-    mActionConnectPointsAct = new QAction(QIcon::fromTheme("nodeConnect"),
-                                          tr("Connect Nodes"),
-                                          this);
-    connect(mActionConnectPointsAct, &QAction::triggered,
-            this, [this]() { mActions.connectPointsSlot(); });
-    mToolBarNodeGroup->addAction(mActionConnectPointsAct);
-
-    // nodeDisconnect
-    mActionDisconnectPointsAct = new QAction(QIcon::fromTheme("nodeDisconnect"),
-                                             tr("Disconnect Nodes"),
-                                             this);
-    connect(mActionDisconnectPointsAct, &QAction::triggered,
-            this, [this]() { mActions.disconnectPointsSlot(); });
-    mToolBarNodeGroup->addAction(mActionDisconnectPointsAct);
-
-    // nodeMerge
-    mActionMergePointsAct = new QAction(QIcon::fromTheme("nodeMerge"),
-                                        tr("Merge Nodes"),
-                                        this);
-    connect(mActionMergePointsAct, &QAction::triggered,
-            this, [this]() { mActions.mergePointsSlot(); });
-    mToolBarNodeGroup->addAction(mActionMergePointsAct);
-
-    // nodeNew
-    mActionNewNodeAct = new QAction(QIcon::fromTheme("nodeNew"),
-                                        tr("New Node"),
-                                        this);
-    connect(mActionNewNodeAct, &QAction::triggered,
-            this, [this]() { mActions.subdivideSegments(); });
-    mToolBarNodeGroup->addAction(mActionNewNodeAct);
-
-    // nodeSymmetric
-    mActionSymmetricPointCtrlsAct = new QAction(QIcon::fromTheme("nodeSymmetric"),
-                                                tr("Symmetric Nodes"),
-                                                this);
-    connect(mActionSymmetricPointCtrlsAct, &QAction::triggered,
-            this, [this]() { mActions.makePointCtrlsSymmetric(); });
-    mToolBarNodeGroup->addAction(mActionSymmetricPointCtrlsAct);
-
-    // nodeSmooth
-    mActionSmoothPointCtrlsAct = new QAction(QIcon::fromTheme("nodeSmooth"),
-                                             tr("Smooth Nodes"),
-                                             this);
-    connect(mActionSmoothPointCtrlsAct, &QAction::triggered,
-            this, [this]() { mActions.makePointCtrlsSmooth(); });
-    mToolBarNodeGroup->addAction(mActionSmoothPointCtrlsAct);
-
-    // nodeCorner
-    mActionCornerPointCtrlsAct = new QAction(QIcon::fromTheme("nodeCorner"),
-                                             tr("Corner Nodes"),
-                                             this);
-    connect(mActionCornerPointCtrlsAct, &QAction::triggered,
-            this, [this]() { mActions.makePointCtrlsCorner(); });
-    mToolBarNodeGroup->addAction(mActionCornerPointCtrlsAct);
-
-    //mSeparator2 = mToolBar->addSeparator();
-
-    // segmentLine
-    mActionLineAct = new QAction(QIcon::fromTheme("segmentLine"),
-                                 tr("Make Segment Line"),
-                                 this);
-    connect(mActionLineAct, &QAction::triggered,
-            this, [this]() { mActions.makeSegmentLine(); });
-    mToolBarNodeGroup->addAction(mActionLineAct);
-
-    // segmentCurve
-    mActionCurveAct = new QAction(QIcon::fromTheme("segmentCurve"),
-                                 tr("Make Segment Curve"),
-                                 this);
-    connect(mActionCurveAct, &QAction::triggered,
-            this, [this]() { mActions.makeSegmentCurve(); });
-    mToolBarNodeGroup->addAction(mActionCurveAct);
-
-    // nodeVisibility
-    mNodeVisibility = new QToolButton(this);
-    mNodeVisibility->setObjectName(QString::fromUtf8("ToolButton"));
-    mNodeVisibility->setPopupMode(QToolButton::InstantPopup);
-    QAction *nodeVisibilityAction1 = new QAction(QIcon::fromTheme("dissolvedAndNormalNodes"),
-                                                 tr("Dissolved and normal nodes"),
-                                                 this);
-    nodeVisibilityAction1->setData(0);
-    QAction *nodeVisibilityAction2 = new QAction(QIcon::fromTheme("dissolvedNodesOnly"),
-                                                 tr("Dissolved nodes only"),
-                                                 this);
-    nodeVisibilityAction2->setData(1);
-    QAction *nodeVisibilityAction3 = new QAction(QIcon::fromTheme("normalNodesOnly"),
-                                                 tr("Normal nodes only"),
-                                                 this);
-    nodeVisibilityAction3->setData(2);
-    mNodeVisibility->addAction(nodeVisibilityAction1);
-    mNodeVisibility->addAction(nodeVisibilityAction2);
-    mNodeVisibility->addAction(nodeVisibilityAction3);
-    mNodeVisibility->setDefaultAction(nodeVisibilityAction1);
-    connect(mNodeVisibility, &QToolButton::triggered,
-            this, [this](QAction *act) {
-            qDebug() << "set node visibility" << act->data().toInt();
-            mNodeVisibility->setDefaultAction(act);
-            mDocument.fNodeVisibility = static_cast<NodeVisiblity>(act->data().toInt());
-            Document::sInstance->actionFinished();
-    });
 
     // fontWidget
     //mFontWidget = new FontsWidget(this);
@@ -1779,9 +1364,6 @@ void MainWindow::setupToolBar()
 
     // add toolbar
     //addToolBar(mToolBar);
-
-    // set default mode
-    mDocument.setCanvasMode(CanvasMode::boxTransform);
 }
 
 void MainWindow::connectToolBarActions()
@@ -1808,25 +1390,16 @@ void MainWindow::updateCanvasModeButtonsChecked()
     const CanvasMode mode = mDocument.fCanvasMode;
     //mCentralWidget->setCanvasMode(mode);
 
-    //const bool boxMode = mode == CanvasMode::boxTransform;
+
     //mFontWidgetAct->setVisible(boxMode);
 
+    const bool boxMode = mode == CanvasMode::boxTransform;
     const bool pointMode = mode == CanvasMode::pointTransform;
+    const bool drawMode = mode == CanvasMode::drawPath;
 
-    mViewerDrawBar->setVisible(mode == CanvasMode::drawPath);
-    mViewerNodeBar->setVisible(pointMode);
-    mActionConnectPointsAct->setVisible(pointMode);
-    mActionDisconnectPointsAct->setVisible(pointMode);
-    mActionMergePointsAct->setVisible(pointMode);
-    mActionNewNodeAct->setVisible(pointMode);
-    mActionSymmetricPointCtrlsAct->setVisible(pointMode);
-    mActionSmoothPointCtrlsAct->setVisible(pointMode);
-    mActionCornerPointCtrlsAct->setVisible(pointMode);
-    mActionLineAct->setVisible(pointMode);
-    mActionCurveAct->setVisible(pointMode);
-
-    mLocalPivotAct->setVisible(mode == CanvasMode::pointTransform ||
-                               mode == CanvasMode::boxTransform);
+    mToolBoxButton->setVisible(pointMode || drawMode);
+    mToolBoxStack->setCurrentIndex(drawMode ? mToolBoxDrawIndex : (pointMode ? mToolBoxNodesIndex : mToolBoxMainIndex));
+    mLocalPivotAct->setVisible(pointMode || boxMode);
 
     //const bool paintMode = mode == CanvasMode::paint;
     //mActionNewEmptyPaintFrameAct->setVisible(paintMode);
@@ -2056,24 +1629,12 @@ bool MainWindow::processKeyEvent(QKeyEvent *event)
 
 void MainWindow::readSettings(const QString &openProject)
 {
+    mUI->readSettings();
     restoreState(AppSupport::getSettings("ui",
                                          "state").toByteArray());
     restoreGeometry(AppSupport::getSettings("ui",
                                             "geometry").toByteArray());
-    mSplitterMain->restoreState(AppSupport::getSettings("ui",
-                                                        "SplitterMain").toByteArray());
-    mSplitterLeft->restoreState(AppSupport::getSettings("ui",
-                                                        "SplitterLeft").toByteArray());
-    mSplitterRight->restoreState(AppSupport::getSettings("ui",
-                                                        "SplitterRight").toByteArray());
-    mSplitterLeftTop->restoreState(AppSupport::getSettings("ui",
-                                                        "SplitterLeftTop").toByteArray());
-    mSplitterLeftBottom->restoreState(AppSupport::getSettings("ui",
-                                                        "SplitterLeftBottom").toByteArray());
-    mSplitterRightTop->restoreState(AppSupport::getSettings("ui",
-                                                        "SplitterRightTop").toByteArray());
-    mSplitterRightBottom->restoreState(AppSupport::getSettings("ui",
-                                                        "SplitterRightBottom").toByteArray());
+
     bool isMax = AppSupport::getSettings("ui",
                                          "maximized",
                                          false).toBool();
@@ -2119,13 +1680,6 @@ void MainWindow::writeSettings()
 {
     AppSupport::setSettings("ui", "state", saveState());
     AppSupport::setSettings("ui", "geometry", saveGeometry());
-    AppSupport::setSettings("ui", "SplitterMain", mSplitterMain->saveState());
-    AppSupport::setSettings("ui", "SplitterLeft", mSplitterLeft->saveState());
-    AppSupport::setSettings("ui", "SplitterRight", mSplitterRight->saveState());
-    AppSupport::setSettings("ui", "SplitterLeftTop", mSplitterLeftTop->saveState());
-    AppSupport::setSettings("ui", "SplitterLeftBottom", mSplitterLeftBottom->saveState());
-    AppSupport::setSettings("ui", "SplitterRightTop", mSplitterRightTop->saveState());
-    AppSupport::setSettings("ui", "SplitterRightBottom", mSplitterRightBottom->saveState());
     AppSupport::setSettings("ui", "maximized", isMaximized());
     AppSupport::setSettings("ui", "fullScreen", isFullScreen());
 }
@@ -2416,7 +1970,7 @@ void MainWindow::openRendererWindow()
         addCanvasToRenderQue();
     } else {
         if (mRenderWindowAct->isChecked()) { openRenderQueueWindow(); }
-        else { mBottomSideBarWidget->setCurrentIndex(mTabQueueIndex); }
+        else { mTabProperties->setCurrentIndex(mTabQueueIndex); }
     }
 }
 
