@@ -37,6 +37,8 @@ public:
     void setLastColorHSV(GLfloat h, GLfloat s, GLfloat v);
     void mousePressEvent(QMouseEvent *e);
     void setAlpha(const qreal alpha_t);
+    void addBookmark();
+
 private:
     void paintGL();
     qreal mAlpha = 1;

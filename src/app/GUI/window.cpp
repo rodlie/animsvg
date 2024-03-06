@@ -60,7 +60,7 @@ Window::Window(QWidget *parent,
 
 Window::~Window()
 {
-    saveState();
+    //saveState();
 }
 
 void Window::focusWindow()
@@ -80,6 +80,7 @@ void Window::keyPressEvent(QKeyEvent *event)
 
 void Window::closeEvent(QCloseEvent *event)
 {
+    qDebug() << "closed window" << objectName();
     saveState();
     QDialog::closeEvent(event);
 }

@@ -34,6 +34,7 @@ git \
 clang \
 build-essential \
 cmake \
+python3 \
 ninja-build \
 libfontconfig1-dev \
 libfreetype-dev \

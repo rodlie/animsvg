@@ -111,6 +111,7 @@ void MainWindow::loadEVFile(const QString &path) {
     }
     file.close();
     addRecentFile(path);
+    mRenderWidget->updateRenderSettings();
 }
 
 void MainWindow::saveToFile(const QString &path,

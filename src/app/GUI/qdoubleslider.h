@@ -53,7 +53,8 @@ public:
     QDoubleSlider(const qreal minVal,
                   const qreal maxVal,
                   const qreal prefferedStep,
-                  QWidget * const parent = nullptr);
+                  QWidget * const parent = nullptr,
+                  bool autoAdjust = true);
     QDoubleSlider(const QString& name,
                   const qreal minVal,
                   const qreal maxVal,
@@ -147,6 +148,7 @@ private:
     QPoint mGlobalPressPos;
     qreal mLastValue;
     bool mShowValueSlider = true;
+    bool mAutoAdjustWidth = true;
 };
 
 #endif // QDOUBLESLIDER_H

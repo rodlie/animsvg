@@ -26,6 +26,7 @@
 
 #include <QWidget>
 #include <QSplitter>
+#include <QVBoxLayout>
 #include <vector>
 
 class UIDock : public QWidget
@@ -54,13 +55,14 @@ public:
     int getIndex();
     const QString getLabel();
     const QString getId();
+    void addWidget(QWidget *widget);
 
 signals:
     void changePosition(const Position &pos,
                         const Position &trigger);
 
 private:
-    QWidget *mWidget;
+    QVBoxLayout *mLayout;
     QString mLabel;
     Position mPos;
     int mIndex;
@@ -91,6 +93,16 @@ public:
     void readSettings();
     void writeSettings();
     void addDocks(std::vector<Item> items);
+    void setDockVisible(const QString &label,
+                        bool visible);
+    void addDockWidget(const QString &label,
+                       QWidget *widget);
+
+signals:
+    void updateDockVisibility(const QString &label,
+                              bool visible);
+    void updateDockWidget(const QString &label,
+                          QWidget *widget);
 
 private:
     QSplitter *mLeft;

@@ -5,11 +5,11 @@
   <launchable type="desktop-id">@PROJECT_FREEDESKTOP@.desktop</launchable>
   <name>@FRICTION_DISPLAY_NAME@</name>
   <developer_name>@FRICTION_DISPLAY_NAME@</developer_name>
-  <summary>@PROJECT_DESCRIPTION@</summary>
+  <summary>@PROJECT_SUMMARY@</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
   <description>
-    <p>Friction is a powerful and versatile free and open-source motion graphics application that allows you to create stunning vector and raster animations for web and video platforms with ease.</p>
+    <p>@PROJECT_DESCRIPTION@</p>
   </description>
   <releases>
     <release date="2023-12-24" version="0.9.5">

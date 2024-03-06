@@ -1641,6 +1641,9 @@ void MainWindow::setupToolBar()
     mLocalPivotAct = new QAction(mDocument.fLocalPivot ? QIcon::fromTheme("pivotLocal") : QIcon::fromTheme("pivotGlobal"),
                                  tr("Pivot Global / Local"),
                                  this);
+    mLocalPivotAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                     "localPivot",
+                                                                     "P").toString()));
     connect(mLocalPivotAct, &QAction::triggered,
             this, [this]() {
         mDocument.fLocalPivot = !mDocument.fLocalPivot;

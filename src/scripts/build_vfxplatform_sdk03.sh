@@ -23,7 +23,6 @@ set -e -x
 source /opt/rh/devtoolset-7/enable
 gcc -v
 
-CWD=`pwd`
 SDK=${SDK:-"/opt/friction"}
 SRC=${SDK}/src
 DIST=${DIST:-"/mnt/mxe/pkg"}
@@ -318,4 +317,4 @@ if [ ! -f "${SDK}/lib/pkgconfig/libavcodec.pc" ]; then
      make install
 fi # ffmpeg
 
-echo "FFMPEG DONE"
+echo "SDK PART 3 DONE"

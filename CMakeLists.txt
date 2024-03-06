@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.12)
 project(friction.graphics)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/src/cmake")
@@ -31,13 +31,13 @@ if(UNIX AND NOT APPLE)
     set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
     set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
     set(CPACK_PACKAGE_NAME ${FRICTION_NAME})
-    set(CPACK_PACKAGE_DESCRIPTION ${PROJECT_DESCRIPTION})
+    set(CPACK_PACKAGE_DESCRIPTION ${PROJECT_SUMMARY})
     set(CPACK_PACKAGE_VENDOR ${PROJECT_COPYRIGHT})
     set(CPACK_STRIP_FILES TRUE)
 
     set(CPACK_RPM_SPEC_MORE_DEFINE "%define _build_id_links none")
     set(CPACK_RPM_PACKAGE_LICENSE ${PROJECT_LICENSE})
-    set(CPACK_RPM_PACKAGE_SUMMARY ${PROJECT_DESCRIPTION})
+    set(CPACK_RPM_PACKAGE_SUMMARY ${PROJECT_SUMMARY})
     set(CPACK_RPM_PACKAGE_DESCRIPTION ${PROJECT_DESCRIPTION})
     set(CPACK_RPM_PACKAGE_URL ${PROJECT_HOMEPAGE_URL})
     set(CPACK_RPM_FILE_NAME "${FRICTION_NAME}.rpm")
@@ -53,6 +53,7 @@ endif()
 
 add_subdirectory(src/engine)
 if(UNIX)
+    option(BUILD_TESTING "Don't build gperftools tests" OFF)
     add_subdirectory(src/gperftools)
 endif()
 add_subdirectory(src/core)

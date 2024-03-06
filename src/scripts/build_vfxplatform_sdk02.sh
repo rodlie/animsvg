@@ -23,14 +23,13 @@ set -e -x
 source /opt/rh/devtoolset-7/enable
 gcc -v
 
-CWD=`pwd`
 SDK=${SDK:-"/opt/friction"}
 SRC=${SDK}/src
 DIST=${DIST:-"/mnt"}
 JOBS=${JOBS:-4}
 
 XKBCOMMON_V=0.7.1
-QT_V=5.12.12
+QT_V=5.15.12 #5.12.12
 QSCINTILLA_V=2.14.1
 PELF_V=0.17.0
 CMAKE_V=3.26.3
@@ -102,13 +101,14 @@ fi # libxkbcommon
 if [ ! -f "${QMAKE_BIN}" ]; then
     cd ${SRC}
     QT_SRC="qt-everywhere-src-${QT_V}"
+    QT_TAR_SRC="qt-everywhere-opensource-src-${QT_V}"
     rm -rf ${QT_SRC} || true
-    tar xf ${DIST}/${QT_SRC}.tar.xz
+    tar xf ${DIST}/${QT_TAR_SRC}.tar.xz
     cd ${QT_SRC}
-    (cd qtbase ; patch -p1 < ${DIST}/hidpi.patch)
+    #(cd qtbase ; patch -p1 < ${DIST}/hidpi.patch)
     ./configure \
     -prefix ${SDK} \
-    -c++std c++11 \
+    -c++std c++17 \
     -qtlibinfix Friction \
     -opengl desktop \
     -release \
@@ -122,7 +122,11 @@ if [ ! -f "${QMAKE_BIN}" ]; then
     -system-freetype \
     -qt-pcre \
     -qt-zlib \
-    -qt-xcb \
+    -xkbcommon \
+    -xcb \
+    -xcb-xlib \
+    -qpa xcb \
+    -bundled-xcb-xinput \
     -qt-libpng \
     -no-mtdev \
     -no-syslog \
@@ -167,8 +171,10 @@ if [ ! -f "${QMAKE_BIN}" ]; then
     -skip qtgamepad \
     -skip qtgraphicaleffects \
     -skip qtlocation \
+    -skip qtlottie \
     -skip qtnetworkauth \
     -skip qtpurchasing \
+    -skip qtquick3d \
     -skip qtquickcontrols \
     -skip qtquickcontrols2 \
     -skip qtremoteobjects \
@@ -206,4 +212,4 @@ if [ ! -f "${SDK}/lib/libqscintilla2_friction_qt5.so" ]; then
     cp -a Qsci ${SDK}/include/
 fi # qscintilla
 
-echo "SDK DONE"
+echo "SDK PART 2 DONE"

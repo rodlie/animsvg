@@ -1,4 +1,4 @@
-FROM ubuntu:mantic
+FROM ubuntu:noble
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update -y

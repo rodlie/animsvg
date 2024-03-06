@@ -20,7 +20,6 @@
 
 set -e -x
 
-CWD=${CWD:-`pwd`}
 SDK=${SDK:-"/opt/friction"}
 DISTFILES=${DISTFILES:-"/mnt"}
 BUILD=${BUILD:-"${HOME}"}
@@ -37,6 +36,10 @@ PKG_VERSION=`echo ${VERSION} | sed 's/-/./g'`
 if [ ! -d "${BUILD}/${FRICTION_PKG}" ]; then
     echo "Missing Friction build"
     exit 1
+fi
+
+if [ ! -d "${DISTFILES}/builds" ]; then
+    mkdir -p ${DISTFILES}/builds
 fi
 
 export PATH="${SDK}/bin:${PATH}"
@@ -141,6 +144,7 @@ cat ${BUILD}/friction/src/scripts/vfxplatform.spec | sed 's/__FRICTION_PKG_VERSI
 
 # RPM
 rpmbuild -bb rpm.spec
+cp -a ${HOME}/rpmbuild/RPMS/*/*.rpm ${DISTFILES}/builds/
 
 # Portable
 FRICTION_PORTABLE=${FRICTION_PKG}-linux-X11-x86_64
@@ -180,6 +184,7 @@ done
 cd ${BUILD}
 tar cvf ${FRICTION_PORTABLE}.tar ${FRICTION_PORTABLE}
 xz -9 ${FRICTION_PORTABLE}.tar
+cp -a ${FRICTION_PORTABLE}.tar.xz ${DISTFILES}/builds/
 
 # AppImage
 (cd ${FRICTION_PORTABLE_DIR} ;
@@ -193,5 +198,6 @@ ln -sf usr/share/icons/hicolor/256x256/apps/${APPID}.png .DirIcon
 )
 tar xf ${DISTFILES}/appimagetool.tar.xz
 ARCH=x86_64 ./appimagetool/AppRun ${FRICTION_PORTABLE}
+cp -a *.AppImage ${DISTFILES}/builds/
 
 echo "PKG DONE"

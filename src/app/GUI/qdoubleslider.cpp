@@ -92,7 +92,9 @@ void SliderEdit::lineEditingFinished() {
 
 QDoubleSlider::QDoubleSlider(const qreal minVal, const qreal maxVal,
                              const qreal prefferedStep,
-                             QWidget * const parent) : QWidget(parent) {
+                             QWidget * const parent,
+                             bool autoAdjust) : QWidget(parent) {
+    mAutoAdjustWidth = autoAdjust;
     mMinValue = minVal;
     mMaxValue = maxVal;
     mPrefferedValueStep = prefferedStep;
@@ -142,7 +144,7 @@ void QDoubleSlider::setValueSliderVisible(const bool valueSliderVisible) {
 
 void QDoubleSlider::setNameVisible(const bool nameVisible) {
     mShowName = nameVisible;
-    fitWidthToContent();
+    if (mAutoAdjustWidth) { fitWidthToContent(); }
 }
 
 void QDoubleSlider::setName(const QString &name) {
@@ -152,7 +154,7 @@ void QDoubleSlider::setName(const QString &name) {
 
 void QDoubleSlider::setNumberDecimals(const int decimals) {
     mDecimals = decimals;
-    fitWidthToContent();
+    if (mAutoAdjustWidth) { fitWidthToContent(); }
     updateValueString();
 }
 
@@ -172,7 +174,7 @@ void QDoubleSlider::setValueRange(const qreal min, const qreal max) {
     mMinValue = min;
     mMaxValue = max;
     setDisplayedValue(clamped(mValue));
-    fitWidthToContent();
+    if (mAutoAdjustWidth) { fitWidthToContent(); }
 }
 
 void QDoubleSlider::paint(QPainter * const p, const bool enabled) {
