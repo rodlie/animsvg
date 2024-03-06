@@ -35,6 +35,7 @@
 struct eSetting
 {
     eSetting(const QString& name) : fName(name) {}
+    virtual ~eSetting() = default;
 
     virtual bool setValueString(const QString& value) = 0;
     virtual void writeValue() const = 0;
