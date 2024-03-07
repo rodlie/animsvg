@@ -39,14 +39,11 @@
 #include <QComboBox>
 #include <QTimer>
 
-#include "undoredo.h"
 #include "Private/Tasks/taskscheduler.h"
-#include "effectsloader.h"
 #include "Private/document.h"
 #include "audiohandler.h"
 #include "actions.h"
 #include "layouthandler.h"
-#include "Private/esettings.h"
 #include "renderhandler.h"
 #include "fileshandler.h"
 #include "ekeyfilter.h"
@@ -379,9 +376,9 @@ private:
     QComboBox *mResolutionComboBox;
     void setResolutionText(QString text);
 
-    QAction* addSlider(const QString &name,
+    /*QAction* addSlider(const QString &name,
                        QDoubleSlider* const slider,
-                       QToolBar* const toolBar);
+                       QToolBar* const toolBar);*/
 
     void setupToolBox();
     void setupToolBoxMain();

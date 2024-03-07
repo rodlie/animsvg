@@ -40,40 +40,27 @@
 #include <QMargins>
 #include <iostream>
 
-#include "GUI/ColorWidgets/colorsettingswidget.h"
 #include "GUI/edialogs.h"
 #include "timelinedockwidget.h"
-#include "Private/Tasks/taskexecutor.h"
-#include "qdoubleslider.h"
 #include "canvaswindow.h"
 #include "GUI/BoxesList/boxscrollwidget.h"
 #include "clipboardcontainer.h"
 #include "GUI/BoxesList/OptimalScrollArea/scrollarea.h"
 #include "GUI/BoxesList/boxscroller.h"
 #include "GUI/RenderWidgets/renderwidget.h"
-#include "actionbutton.h"
 #include "fontswidget.h"
 #include "GUI/global.h"
 #include "filesourcescache.h"
-//#include "filesourcelist.h"
-#include "videoencoder.h"
 #include "fillstrokesettings.h"
 #include "editablecombobox.h"
 
 #include "Sound/soundcomposition.h"
 #include "GUI/BoxesList/boxsinglewidget.h"
 #include "memoryhandler.h"
-#include "Animators/gradient.h"
-#include "GUI/GradientWidgets/gradientwidget.h"
 #include "GUI/Dialogs/scenesettingsdialog.h"
-#include "ShaderEffects/shadereffectprogram.h"
 #include "importhandler.h"
-#include "ColorWidgets/bookmarkedcolors.h"
 #include "GUI/edialogs.h"
-#include "GUI/dialogsinterface.h"
-//#include "closesignalingdockwidget.h"
 #include "eimporters.h"
-//#include "ColorWidgets/paintcolorwidget.h"
 #include "Dialogs/exportsvgdialog.h"
 #include "alignwidget.h"
 #include "welcomedialog.h"
@@ -84,7 +71,6 @@
 #include "appsupport.h"
 
 #include "GUI/assetswidget.h"
-#include "vlabel.h"
 
 MainWindow *MainWindow::sInstance = nullptr;
 
@@ -186,36 +172,8 @@ MainWindow::MainWindow(Document& document,
         mFontWidget->setTextFocus();
     });
 
-    //const auto iconDir = eSettings::sIconsDir();
     setWindowIcon(QIcon::fromTheme(AppSupport::getAppName()));
     setMinimumSize(1024, 576);
-    /*const auto downArr = iconDir + "/down-arrow.png";
-    const auto upArr = iconDir + "/up-arrow.png";
-    const auto dockClose = iconDir + "/dockClose.png";
-    const auto dockMaximize = iconDir + "/dockMaximize.png";
-
-    const QString iconSS =
-            "QComboBox::down-arrow { image: url(" + downArr + "); }"
-            "QScrollBar::sub-line { image: url(" + upArr + "); }"
-            "QScrollBar::add-line { image: url(" + downArr + "); }"
-            "QDockWidget {"
-                "titlebar-close-icon: url(" + dockClose + ");"
-                "titlebar-normal-icon: url(" + dockMaximize + ");"
-            "}";*/
-
-    /*QFile customSS(eSettings::sSettingsDir() + "/stylesheet.qss");
-    if(customSS.exists()) {
-        if(customSS.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            setStyleSheet(customSS.readAll());
-            customSS.close();
-        }
-    } else {
-        QFile file(":/styles/stylesheet.qss");
-        if(file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            setStyleSheet(file.readAll() + iconSS);
-            file.close();
-        }
-    }*/
 
     mAutoSaveTimer = new QTimer(this);
     connect (mAutoSaveTimer, &QTimer::timeout,
@@ -276,10 +234,6 @@ MainWindow::MainWindow(Document& document,
     connect(mObjectSettingsScrollArea, &ScrollArea::widthChanged,
             mObjectSettingsWidget, &BoxScrollWidget::setWidth);
 
-    /*const auto fsl = new FileSourceList(this);
-    connect(fsl, &FileSourceList::doubleClicked,
-            this, &MainWindow::importFile);*/
-
     const auto assets = new AssetsWidget(this);
 
     setupToolBox();
@@ -309,7 +263,7 @@ MainWindow::MainWindow(Document& document,
     mStackIndexScene = mStackWidget->addWidget(mLayoutHandler->sceneLayout());
     mStackIndexWelcome = mStackWidget->addWidget(mWelcomeDialog);
 
-    QLabel *resolutionLabel = new QLabel(tr("Resolution"), this);
+    const auto resolutionLabel = new QLabel(tr("Resolution"), this);
     resolutionLabel->setContentsMargins(5, 0, 5, 0);
     statusBar()->addPermanentWidget(resolutionLabel);
 
@@ -329,16 +283,16 @@ MainWindow::MainWindow(Document& document,
             this, &MainWindow::setResolutionText);
     statusBar()->addPermanentWidget(mResolutionComboBox);
 
-    QLabel *layoutComboLabel = new QLabel(tr("Layout"), this);
+    const auto layoutComboLabel = new QLabel(tr("Layout"), this);
     layoutComboLabel->setContentsMargins(5, 0, 5, 0);
     statusBar()->addPermanentWidget(layoutComboLabel);
     statusBar()->addPermanentWidget(mLayoutHandler->comboWidget());
 
-    QWidget *fontWidget = new QWidget(this);
+    const auto fontWidget = new QWidget(this);
     fontWidget->setAutoFillBackground(true);
     fontWidget->setPalette(AppSupport::getNotSoDarkPalette());
 
-    QVBoxLayout *fontLayout = new QVBoxLayout(fontWidget);
+    const auto fontLayout = new QVBoxLayout(fontWidget);
     fontLayout->addWidget(mFontWidget);
 
     QMargins frictionMargins(0, 0, 0, 0);
@@ -375,8 +329,8 @@ MainWindow::MainWindow(Document& document,
         mTabProperties->setIconSize(QSize(size, size));
     });
 
-    QWidget *propertiesWidget = new QWidget(this);
-    QVBoxLayout *propertiesLayout = new QVBoxLayout(propertiesWidget);
+    const auto propertiesWidget = new QWidget(this);
+    const auto propertiesLayout = new QVBoxLayout(propertiesWidget);
     propertiesLayout->setContentsMargins(frictionMargins);
     propertiesLayout->setSpacing(frictionSpacing);
 
@@ -482,11 +436,11 @@ void MainWindow::setupMenuBar()
                                               this, qOverload<>(&MainWindow::openFile),
                                               Qt::CTRL + Qt::Key_O);
 
-    QToolButton *loadToolBtn = new QToolButton(this);
+    const auto loadToolBtn = new QToolButton(this);
     loadToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
     loadToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     loadToolBtn->setFocusPolicy(Qt::NoFocus);
-    QMenu *loadToolMenu = new QMenu(this);
+    const auto loadToolMenu = new QMenu(this);
     loadToolBtn->setMenu(loadToolMenu);
 
     mToolbar->addWidget(loadToolBtn);
@@ -520,11 +474,11 @@ void MainWindow::setupMenuBar()
                          tr("Revert", "MenuBar_File"),
                          this, &MainWindow::revert);
 
-    QToolButton *saveToolBtn = new QToolButton(this);
+    const auto saveToolBtn = new QToolButton(this);
     saveToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
     saveToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     saveToolBtn->setFocusPolicy(Qt::NoFocus);
-    QMenu *saveToolMenu = new QMenu(this);
+    const auto saveToolMenu = new QMenu(this);
     saveToolBtn->setMenu(saveToolMenu);
     mToolbar->addWidget(saveToolBtn);
 
@@ -837,13 +791,13 @@ void MainWindow::setupMenuBar()
 
 //    mEffectsMenu->addAction("Blur");
 
-    QToolButton *sceneToolBtn = new QToolButton(this);
+    const auto sceneToolBtn = new QToolButton(this);
     sceneToolBtn->setText(tr("Scene"));
     sceneToolBtn->setIcon(QIcon::fromTheme("sequence"));
     sceneToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
     sceneToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     sceneToolBtn->setFocusPolicy(Qt::NoFocus);
-    QMenu *sceneToolMenu = new QMenu(this);
+    const auto sceneToolMenu = new QMenu(this);
     sceneToolBtn->setMenu(sceneToolMenu);
     mToolbar->addWidget(sceneToolBtn);
 
@@ -907,8 +861,6 @@ void MainWindow::setupMenuBar()
         if (!cwTarget) { return; }
         cwTarget->zoomOutView();
     });
-
-
 
     mFitViewAction = zoomMenu->addAction(tr("Fit to Canvas", "MenuBar_View_Zoom"));
     mFitViewAction->setShortcut(QKeySequence("Ctrl+0"));
@@ -1181,7 +1133,7 @@ void MainWindow::setupMenuBar()
     setMenuBar(mMenuBar);
 
     // spacer
-    QWidget* spacer = new QWidget(this);
+    const auto spacer = new QWidget(this);
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     mToolbar->addWidget(spacer);
 
@@ -1204,7 +1156,7 @@ void MainWindow::setResolutionText(QString text)
     setResolutionValue(res);
 }
 
-QAction *MainWindow::addSlider(const QString &name,
+/*QAction *MainWindow::addSlider(const QString &name,
                                QDoubleSlider * const slider,
                                QToolBar * const toolBar)
 {
@@ -1217,7 +1169,7 @@ QAction *MainWindow::addSlider(const QString &name,
     layout->addWidget(label);
     layout->addWidget(slider);
     return toolBar->addWidget(widget);
-}
+}*/
 
 void MainWindow::checkAutoSaveTimer()
 {
@@ -2036,8 +1988,8 @@ void MainWindow::addRecentFile(const QString &recent)
 
 void MainWindow::readRecentFiles()
 {
-    QStringList files = AppSupport::getSettings("files",
-                                                "recentSaved").toStringList();
+    const auto files = AppSupport::getSettings("files",
+                                               "recentSaved").toStringList();
     for (const auto &file : files) { mRecentFiles.append(file); }
 }
 
