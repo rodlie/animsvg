@@ -201,6 +201,11 @@ ln -sf usr/share/applications/${APPID}.desktop .
 ln -sf usr/share/icons/hicolor/256x256/apps/${APPID}.png .
 ln -sf usr/share/icons/hicolor/256x256/apps/${APPID}.png .DirIcon
 )
+if [ ! -f "${DISTFILES}/appimagetool.tar.xz" ]; then
+    (cd ${DISTFILES} ;
+        wget https://download.friction.graphics/distfiles/misc/appimagetool.tar.xz
+    )
+fi
 tar xf ${DISTFILES}/appimagetool.tar.xz
 ARCH=x86_64 ./appimagetool/AppRun ${FRICTION_PORTABLE}
 cp -a *.AppImage ${DISTFILES}/builds/
