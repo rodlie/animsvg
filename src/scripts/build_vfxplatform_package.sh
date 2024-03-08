@@ -26,6 +26,8 @@ BUILD=${BUILD:-"${HOME}"}
 VERSION=${VERSION:-""}
 APPID="graphics.friction.Friction"
 FRICTION_PKG=friction-${VERSION}
+PKG_RPM=${PKG_RPM:-1}
+PKG_APP=${PKG_APP:-1}
 
 if [ "${VERSION}" = "" ]; then
     echo "Missing version"
@@ -132,6 +134,8 @@ strip -s ${BUILD}/${FRICTION_PKG}/opt/friction/bin/friction
 strip -s ${BUILD}/${FRICTION_PKG}/opt/friction/lib/*so*
 strip -s ${BUILD}/${FRICTION_PKG}/opt/friction/plugins/*/*.so
 
+# RPM
+if [ "${PKG_RPM}" = 1 ]; then
 cd ${BUILD}
 tar cvf ${FRICTION_PKG}.tar ${FRICTION_PKG}
 
@@ -142,9 +146,9 @@ fi
 mv ${FRICTION_PKG}.tar ${HOME}/rpmbuild/SOURCES/
 cat ${BUILD}/friction/src/scripts/vfxplatform.spec | sed 's/__FRICTION_PKG_VERSION__/'${PKG_VERSION}'/g;s/__FRICTION_VERSION__/'${VERSION}'/g;s/__APPID__/'${APPID}'/g' > rpm.spec
 
-# RPM
 rpmbuild -bb rpm.spec
 cp -a ${HOME}/rpmbuild/RPMS/*/*.rpm ${DISTFILES}/builds/
+fi
 
 # Portable
 FRICTION_PORTABLE=${FRICTION_PKG}-linux-X11-x86_64
@@ -187,6 +191,7 @@ xz -9 ${FRICTION_PORTABLE}.tar
 cp -a ${FRICTION_PORTABLE}.tar.xz ${DISTFILES}/builds/
 
 # AppImage
+if [ "${PKG_APP}" = 1 ]; then
 (cd ${FRICTION_PORTABLE_DIR} ;
 rm -f friction
 mkdir usr
@@ -199,5 +204,6 @@ ln -sf usr/share/icons/hicolor/256x256/apps/${APPID}.png .DirIcon
 tar xf ${DISTFILES}/appimagetool.tar.xz
 ARCH=x86_64 ./appimagetool/AppRun ${FRICTION_PORTABLE}
 cp -a *.AppImage ${DISTFILES}/builds/
+fi
 
-echo "PKG DONE"
+echo "FRICTION PACKAGE DONE"
