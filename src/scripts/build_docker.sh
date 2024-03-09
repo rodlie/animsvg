@@ -101,6 +101,8 @@ CMAKE_EXTRA="${CMAKE_EXTRA} -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clan
 if [ "${REL}" = 1 ]; then
     cmake -G Ninja \
     -DFRICTION_OFFICIAL_RELEASE=ON \
+    -DGIT_COMMIT=${COMMIT} \
+    -DGIT_BRANCH=${BRANCH} \
     ${CMAKE_EXTRA} ..
     VERSION=`cat version.txt`
 else
