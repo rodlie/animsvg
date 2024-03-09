@@ -23,17 +23,24 @@
      borderopacity="1.0"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
+     inkscape:pagecheckerboard="true"
      showgrid="false"
-     inkscape:zoom="68.943101"
-     inkscape:cx="4.7357893"
-     inkscape:cy="6.1427466"
+     inkscape:zoom="49.36484"
+     inkscape:cx="3.7476066"
+     inkscape:cy="4.3451979"
      inkscape:window-width="1920"
-     inkscape:window-height="1016"
+     inkscape:window-height="1026"
      inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg1500" />
+     inkscape:current-layer="svg1500"
+     showguides="true"
+     inkscape:guide-bbox="true">
+    <sodipodi:guide
+       position="2.1491153,1.3793905"
+       orientation="1,0"
+       id="guide1992" />
+  </sodipodi:namedview>
   <defs
      id="defs1494" />
   <metadata
@@ -48,8 +55,8 @@
     </rdf:RDF>
   </metadata>
   <path
-     id="rect6603"
-     style="color:#000000;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.153243;stroke-opacity:0.234202;-inkscape-stroke:none"
-     d="M 1.9980469 1.9980469 L 1.9980469 8.0019531 L 8.0019531 8.0019531 L 8.0019531 1.9980469 L 7.7246094 1.9980469 L 1.9980469 1.9980469 z M 2.5527344 2.5527344 L 4.5507812 2.5527344 L 4.5507812 7.4472656 L 2.5527344 7.4472656 L 2.5527344 2.5527344 z M 5.4492188 2.5527344 L 7.4472656 2.5527344 L 7.4472656 7.4472656 L 5.4492188 7.4472656 L 5.4492188 2.5527344 z "
+     id="path2568"
+     style="fill:#ffffff;fill-opacity:1;stroke-width:0.145948"
+     d="M 2.859375 1.8515625 C 2.191251 1.8728975 1.8515625 2.2261557 1.8515625 2.9121094 L 1.8515625 7.0878906 C 1.8515625 7.7959711 2.214285 8.1484375 2.9257812 8.1484375 L 4.0839844 8.1484375 L 4.0839844 1.8515625 L 2.9257812 1.8515625 C 2.903547 1.8515625 2.8809274 1.8508743 2.859375 1.8515625 z M 5.9160156 1.8515625 L 5.9160156 8.1484375 L 7.078125 8.1484375 C 7.793037 8.1484375 8.1484375 7.7925416 8.1484375 7.0878906 L 8.1484375 2.9121094 C 8.1484375 2.2074582 7.7930358 1.8515625 7.078125 1.8515625 L 5.9160156 1.8515625 z "
      transform="scale(0.26458334)" />
 </svg>

@@ -37,7 +37,7 @@ public:
         QPushButton(parent) {
         eSizesUI::widget.add(this, [this](const int size) {
             setFixedHeight(size);
-            setIconSize(QSize(size, size));
+            //setIconSize(QSize(size, size));
         });
         //setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         setObjectName("QActionButton");
