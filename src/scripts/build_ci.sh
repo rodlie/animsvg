@@ -73,7 +73,7 @@ fi
 
 CWD=`pwd`
 MKJOBS=${MKJOBS:-4}
-COMMIT=`git rev-parse --short HEAD`
+COMMIT=`git rev-parse --short=8 HEAD`
 BRANCH=`git rev-parse --abbrev-ref HEAD`
 
 if [ "${BRANCH}" = "main" ]; then

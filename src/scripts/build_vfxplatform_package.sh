@@ -40,8 +40,8 @@ if [ ! -d "${BUILD}/${FRICTION_PKG}" ]; then
     exit 1
 fi
 
-if [ ! -d "${DISTFILES}/builds" ]; then
-    mkdir -p ${DISTFILES}/builds
+if [ ! -d "${DISTFILES}/builds/${VERSION}" ]; then
+    mkdir -p ${DISTFILES}/builds/${VERSION}
 fi
 
 export PATH="${SDK}/bin:${PATH}"
@@ -147,7 +147,7 @@ mv ${FRICTION_PKG}.tar ${HOME}/rpmbuild/SOURCES/
 cat ${BUILD}/friction/src/scripts/vfxplatform.spec | sed 's/__FRICTION_PKG_VERSION__/'${PKG_VERSION}'/g;s/__FRICTION_VERSION__/'${VERSION}'/g;s/__APPID__/'${APPID}'/g' > rpm.spec
 
 rpmbuild -bb rpm.spec
-cp -a ${HOME}/rpmbuild/RPMS/*/*.rpm ${DISTFILES}/builds/
+cp -a ${HOME}/rpmbuild/RPMS/*/*.rpm ${DISTFILES}/builds/${VERSION}/
 fi
 
 # Portable
@@ -188,7 +188,7 @@ done
 cd ${BUILD}
 tar cvf ${FRICTION_PORTABLE}.tar ${FRICTION_PORTABLE}
 xz -9 ${FRICTION_PORTABLE}.tar
-cp -a ${FRICTION_PORTABLE}.tar.xz ${DISTFILES}/builds/
+cp -a ${FRICTION_PORTABLE}.tar.xz ${DISTFILES}/builds/${VERSION}/
 
 # AppImage
 if [ "${PKG_APP}" = 1 ]; then
@@ -208,7 +208,7 @@ if [ ! -f "${DISTFILES}/appimagetool.tar.xz" ]; then
 fi
 tar xf ${DISTFILES}/appimagetool.tar.xz
 ARCH=x86_64 ./appimagetool/AppRun ${FRICTION_PORTABLE}
-cp -a *.AppImage ${DISTFILES}/builds/
+cp -a *.AppImage ${DISTFILES}/builds/${VERSION}/
 fi
 
 echo "FRICTION PACKAGE DONE"

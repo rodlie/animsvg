@@ -37,13 +37,13 @@ if [ "${DISTRO_ID}" != "ubuntu" ]; then
     exit 1
 fi
 
-DISTRO_VERSION_ID=`cat /etc/os-release | sed '/^VERSION_ID=/!d;s/VERSION_ID=//;s/"//g'`
-DID="${DISTRO_ID}${DISTRO_VERSION_ID}"
+DISTRO_VERSION_ID=`cat /etc/os-release | sed '/^VERSION_CODENAME=/!d;s/VERSION_CODENAME=//;s/"//g;'`
+DID="${DISTRO_ID}-${DISTRO_VERSION_ID}"
 
 FRICTION_ROOT="/friction.graphics"
 FRICTION_DIR="${FRICTION_ROOT}/friction"
 FRICTION_SRC_DIR="${FRICTION_DIR}/src"
-FRICTION_OUT_DIR="/snapshots"
+FRICTION_OUT_DIR="/distfiles/builds"
 
 FRICTION_BRANCH=${FRICTION_BRANCH:-""}
 FRICTION_COMMIT=${FRICTION_COMMIT:-""}
@@ -79,12 +79,12 @@ if [ ! -d "${FRICTION_SRC_DIR}" ]; then
     if [ "${FRICTION_TAG}" != "" ]; then
         (cd friction; git checkout tags/${FRICTION_TAG})
     fi
-    #(cd friction; git submodule update -i docs)
+    (cd friction; git submodule update -i --recursive)
 fi
 
 cd ${FRICTION_DIR}
 
-COMMIT=`git rev-parse --short HEAD`
+COMMIT=`git rev-parse --short=8 HEAD`
 BRANCH=`git rev-parse --abbrev-ref HEAD`
 VERSION="dev"
 
@@ -109,7 +109,7 @@ else
     -DGIT_BRANCH=${BRANCH} \
     ${CMAKE_EXTRA} ..
     VERSION=`cat version.txt`
-    VERSION="${VERSION}-dev-${COMMIT}"
+    VERSION="${VERSION}-${BRANCH}-${COMMIT}"
 fi
 cmake --build .
 

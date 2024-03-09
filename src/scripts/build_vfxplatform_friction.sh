@@ -78,7 +78,7 @@ cp -a ${SDK}/lib/libunw* /usr/lib64/
 
 CMAKE_EXTRA=""
 
-GIT_COMMIT=`git rev-parse --short HEAD`
+GIT_COMMIT=`git rev-parse --short=8 HEAD`
 GIT_BRANCH=`git rev-parse --abbrev-ref HEAD`
 
 if [ "${REL}" != 1 ]; then
