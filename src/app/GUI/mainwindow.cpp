@@ -70,7 +70,7 @@
 #include "Settings/settingsdialog.h"
 #include "appsupport.h"
 
-#include "GUI/assetswidget.h"
+#include "widgets/assetswidget.h"
 
 MainWindow *MainWindow::sInstance = nullptr;
 

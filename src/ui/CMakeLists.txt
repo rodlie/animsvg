@@ -38,6 +38,7 @@ set(
     SOURCES
     widgets/actionbutton.cpp
     widgets/alignwidget.cpp
+    widgets/assetswidget.cpp
     widgets/buttonbase.cpp
 )
 
@@ -46,6 +47,7 @@ set(
     ui_global.h
     widgets/actionbutton.h
     widgets/alignwidget.h
+    widgets/assetswidget.h
     widgets/buttonbase.h
 )
 

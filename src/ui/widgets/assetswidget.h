@@ -24,6 +24,8 @@
 #ifndef ASSETSWIDGET_H
 #define ASSETSWIDGET_H
 
+#include "ui_global.h"
+
 #include <QObject>
 #include <QWidget>
 #include <QList>
@@ -37,7 +39,7 @@
 #include "FileCacheHandlers/filecachehandler.h"
 #include "fileshandler.h"
 
-class AssetsTreeWidget : public QTreeWidget
+class UI_EXPORT AssetsTreeWidget : public QTreeWidget
 {
 public:
     explicit AssetsTreeWidget(QWidget *parent);

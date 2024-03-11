@@ -187,7 +187,6 @@ set(
     GUI/Settings/presetsettingswidget.cpp
     GUI/aboutwidget.cpp
     GUI/audiohandler.cpp
-    GUI/assetswidget.cpp
     GUI/bookmarkedwidget.cpp
     GUI/buttonslist.cpp
     GUI/canvasbasewrappernode.cpp
@@ -309,7 +308,6 @@ set(
     GUI/Settings/presetsettingswidget.h
     GUI/aboutwidget.h
     GUI/audiohandler.h
-    GUI/assetswidget.h
     GUI/bookmarkedwidget.h
     GUI/buttonslist.h
     GUI/canvasbasewrappernode.h
