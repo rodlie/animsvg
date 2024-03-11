@@ -30,7 +30,7 @@
 #include "qrealanimatorvalueslider.h"
 #include "GUI/ColorWidgets/colorsettingswidget.h"
 #include "GUI/canvaswindow.h"
-#include "actionbutton.h"
+#include "widgets/actionbutton.h"
 #include "qdoubleslider.h"
 //#include "segment1deditor.h"
 #include "namedcontainer.h"

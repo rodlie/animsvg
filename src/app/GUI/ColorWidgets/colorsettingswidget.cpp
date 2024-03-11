@@ -32,7 +32,7 @@
 #include "colorhelpers.h"
 #include "colorlabel.h"
 #include "GUI/global.h"
-#include "GUI/actionbutton.h"
+#include "widgets/actionbutton.h"
 #include "GUI/ColorWidgets/savedcolorswidget.h"
 #include "appsupport.h"
 

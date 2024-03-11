@@ -23,31 +23,34 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef ALIGNWIDGET_H
-#define ALIGNWIDGET_H
+#ifndef BUTTONBASE_H
+#define BUTTONBASE_H
+
+#include "ui_global.h"
 
 #include <QWidget>
-#include <QComboBox>
 
-#include "canvas.h"
-
-class AlignWidget : public QWidget
+class UI_EXPORT ButtonBase : public QWidget
 {
     Q_OBJECT
-
 public:
-    explicit AlignWidget(QWidget* const parent = nullptr);
+    explicit ButtonBase(const QString &toolTip,
+                        QWidget *parent = nullptr);
+    void setCurrentIcon(const QImage &icon);
+protected:
+    void mouseReleaseEvent(QMouseEvent *) final;
+    void mousePressEvent(QMouseEvent *) final;
+    void enterEvent(QEvent *) final;
+    void leaveEvent(QEvent *) final;
 
-signals:
-    void alignTriggered(const Qt::Alignment,
-                        const AlignPivot,
-                        const AlignRelativeTo);
+    void paintEvent(QPaintEvent *) final;
 
+    virtual void toggle() {}
 private:
-    void triggerAlign(const Qt::Alignment align);
-
-    QComboBox *mAlignPivot;
-    QComboBox *mRelativeTo;
+    bool mHover = false;
+    const QImage* mCurrentIcon = nullptr;
+signals:
+    void released();
+    void pressed();
 };
-
-#endif // ALIGNWIDGET_H
+#endif // BUTTONBASE_H

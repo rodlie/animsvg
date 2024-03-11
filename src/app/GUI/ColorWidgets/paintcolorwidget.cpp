@@ -29,7 +29,7 @@
 #include "colorlabel.h"
 #include "colorpickingwidget.h"
 #include "GUI/mainwindow.h"
-#include "GUI/actionbutton.h"
+#include "widgets/actionbutton.h"
 #include <QWindow>
 
 #include <QVBoxLayout>

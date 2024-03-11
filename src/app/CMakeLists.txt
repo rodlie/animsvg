@@ -120,6 +120,7 @@ include_directories(
     ${QSCINTILLA_INCLUDE_DIRS}
     ${FFMPEG_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/../core
+    ${CMAKE_CURRENT_SOURCE_DIR}/../ui
     ${CMAKE_CURRENT_SOURCE_DIR}/../engine/skia
 )
 
@@ -185,11 +186,9 @@ set(
     GUI/Settings/pluginssettingswidget.cpp
     GUI/Settings/presetsettingswidget.cpp
     GUI/aboutwidget.cpp
-    GUI/alignwidget.cpp
     GUI/audiohandler.cpp
     GUI/assetswidget.cpp
     GUI/bookmarkedwidget.cpp
-    GUI/buttonbase.cpp
     GUI/buttonslist.cpp
     GUI/canvasbasewrappernode.cpp
     GUI/canvaswindowevents.cpp
@@ -253,7 +252,6 @@ set(
     videoencoder.cpp
     GUI/RenderWidgets/outputsettingsprofilesdialog.cpp
     GUI/RenderWidgets/outputsettingsdisplaywidget.cpp
-    GUI/actionbutton.cpp
     GUI/animationdockwidget.cpp
     GUI/animationwidgetscrollbar.cpp
     GUI/canvaswindow.cpp
@@ -310,11 +308,9 @@ set(
     GUI/Settings/pluginssettingswidget.h
     GUI/Settings/presetsettingswidget.h
     GUI/aboutwidget.h
-    GUI/alignwidget.h
     GUI/audiohandler.h
     GUI/assetswidget.h
     GUI/bookmarkedwidget.h
-    GUI/buttonbase.h
     GUI/buttonslist.h
     GUI/canvasbasewrappernode.h
     GUI/canvaswrappernode.h
@@ -377,7 +373,6 @@ set(
     videoencoder.h
     GUI/RenderWidgets/outputsettingsprofilesdialog.h
     GUI/RenderWidgets/outputsettingsdisplaywidget.h
-    GUI/actionbutton.h
     GUI/animationdockwidget.h
     GUI/animationwidgetscrollbar.h
     GUI/canvaswindow.h
@@ -471,6 +466,7 @@ target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
     ${PROJECT_NAME}core
+    ${PROJECT_NAME}ui
     ${QT_LIBRARIES}
     #${QUAZIP_LIBRARIES}
     ${QSCINTILLA_LIBRARIES}

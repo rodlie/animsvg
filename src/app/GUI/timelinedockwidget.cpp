@@ -38,7 +38,7 @@
 #include "canvas.h"
 #include "animationdockwidget.h"
 #include "widgetstack.h"
-#include "actionbutton.h"
+#include "widgets/actionbutton.h"
 #include "timelinewidget.h"
 #include "animationwidgetscrollbar.h"
 #include "renderinstancesettings.h"

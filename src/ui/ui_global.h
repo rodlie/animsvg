@@ -23,19 +23,15 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef ACTIONBUTTON_H
-#define ACTIONBUTTON_H
+#ifndef UI_GLOBAL_H
+#define UI_GLOBAL_H
 
-#include "buttonbase.h"
+#include <QtCore/qglobal.h>
 
-class ActionButton : public ButtonBase {
-    Q_OBJECT
-public:
-    explicit ActionButton(const QString &icon,
-                          const QString &toolTip,
-                          QWidget *parent = nullptr);
-private:
-    QImage mIcon;
-};
+#if defined(UI_LIBRARY)
+#  define UI_EXPORT Q_DECL_EXPORT
+#else
+#  define UI_EXPORT Q_DECL_IMPORT
+#endif
 
-#endif // ACTIONBUTTON_H
+#endif // UI_GLOBAL_H

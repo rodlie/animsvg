@@ -27,7 +27,7 @@
 
 #include "GUI/global.h"
 #include "keysview.h"
-#include "actionbutton.h"
+#include "widgets/actionbutton.h"
 #include "Private/esettings.h"
 
 AnimationDockWidget::AnimationDockWidget(QWidget *parent,

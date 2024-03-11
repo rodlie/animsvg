@@ -31,7 +31,8 @@
 ActionButton::ActionButton(const QString &icon,
                            const QString &toolTip,
                            QWidget *parent) :
-    ButtonBase(toolTip, parent) {
+    ButtonBase(toolTip, parent)
+{
     eSizesUI::widget.add(this, [this, icon](int) {
         mIcon.load(eSettings::sIconsDir() + "/" + icon);
         setCurrentIcon(mIcon);

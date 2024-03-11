@@ -62,7 +62,7 @@
 #include "GUI/edialogs.h"
 #include "eimporters.h"
 #include "Dialogs/exportsvgdialog.h"
-#include "alignwidget.h"
+#include "widgets/alignwidget.h"
 #include "welcomedialog.h"
 #include "Boxes/textbox.h"
 #include "noshortcutaction.h"
