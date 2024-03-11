@@ -30,6 +30,7 @@
 #include <QPainter>
 #include <QLabel>
 
+#include "toolbutton.h"
 #include "appsupport.h"
 
 WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
@@ -80,11 +81,13 @@ WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
                               QSizePolicy::Expanding);
     connect(openButton, &QPushButton::released, openFunc);
 
-    const auto recentButton = new QPushButton(tr("Open Recent"), this);
+    const auto recentButton = new ToolButton(this, true);
+    const auto recentDefaultAct = new QAction(tr("Open Recent"), this);
+    recentButton->setDefaultAction(recentDefaultAct);
     recentButton->setSizePolicy(QSizePolicy::Preferred,
                                 QSizePolicy::Preferred);
     recentButton->setContentsMargins(0, 0, 0, 0);
-    recentButton->setObjectName("WelcomeRecentButton");
+    recentButton->setObjectName("FlatButton");
     recentButton->setMenu(recentMenu);
 
     thisLay->addWidget(mainWid, 0, Qt::AlignHCenter | Qt::AlignVCenter);
