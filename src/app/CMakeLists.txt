@@ -208,7 +208,6 @@ set(
     GUI/timelinehighlightwidget.cpp
     GUI/timelinewidget.cpp
     GUI/timelinewrappernode.cpp
-    GUI/triggerlabel.cpp
     GUI/twocolumnlayout.cpp
     GUI/welcomedialog.cpp
     GUI/widgetstack.cpp
@@ -334,7 +333,6 @@ set(
     GUI/timelinewidget.h
     GUI/timelinewrappernode.h
     GUI/toolbutton.h
-    GUI/triggerlabel.h
     GUI/twocolumnlayout.h
     GUI/welcomedialog.h
     GUI/widgetstack.h
