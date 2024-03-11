@@ -24,12 +24,14 @@
 #ifndef UILAYOUT_H
 #define UILAYOUT_H
 
+#include "ui_global.h"
+
 #include <QWidget>
 #include <QSplitter>
 #include <QVBoxLayout>
 #include <vector>
 
-class UIDock : public QWidget
+class UI_EXPORT UIDock : public QWidget
 {
     Q_OBJECT
 
@@ -69,7 +71,7 @@ private:
     void writeSettings();
 };
 
-class UILayout : public QSplitter
+class UI_EXPORT UILayout : public QSplitter
 {
     Q_OBJECT
 

@@ -30,7 +30,7 @@
 #include <QPainter>
 #include <QLabel>
 
-#include "toolbutton.h"
+#include "widgets/toolbutton.h"
 #include "appsupport.h"
 
 WelcomeDialog::WelcomeDialog(QMenu *recentMenu,

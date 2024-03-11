@@ -274,7 +274,6 @@ set(
     GUI/namedcontainer.cpp
     #GUI/BrushWidgets/brushwidget.cpp
     GUI/Settings/labeledslider.cpp
-    GUI/uilayout.cpp
     GUI/toolbox.cpp
 )
 
@@ -326,7 +325,6 @@ set(
     GUI/timelinehighlightwidget.h
     GUI/timelinewidget.h
     GUI/timelinewrappernode.h
-    GUI/toolbutton.h
     GUI/twocolumnlayout.h
     GUI/welcomedialog.h
     GUI/widgetstack.h
@@ -395,8 +393,6 @@ set(
     #GUI/BrushWidgets/brushwidget.h
     boxtypemenu.h
     GUI/Settings/labeledslider.h
-    GUI/uilayout.h
-    GUI/vlabel.h
 )
 
 set(

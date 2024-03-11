@@ -51,8 +51,8 @@
 #include "GUI/qdoubleslider.h"
 #include "window.h"
 #include "GUI/aboutwidget.h"
-#include "GUI/uilayout.h"
-#include "GUI/toolbutton.h"
+#include "widgets/uilayout.h"
+#include "widgets/toolbutton.h"
 
 class VideoEncoder;
 class RenderWidget;

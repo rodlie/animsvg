@@ -24,7 +24,7 @@
 #include "mainwindow.h"
 
 #include "appsupport.h"
-#include "vlabel.h"
+#include "widgets/vlabel.h"
 
 void MainWindow::setupToolBox()
 {

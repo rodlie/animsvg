@@ -24,11 +24,13 @@
 #ifndef VLABEL_H
 #define VLABEL_H
 
+#include "ui_global.h"
+
 #include <QLabel>
 #include <QStylePainter>
 #include <QPaintEvent>
 
-class VLabel : public QLabel
+class UI_EXPORT VLabel : public QLabel
 {
     Q_OBJECT
 

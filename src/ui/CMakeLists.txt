@@ -40,6 +40,7 @@ set(
     widgets/alignwidget.cpp
     widgets/assetswidget.cpp
     widgets/buttonbase.cpp
+    widgets/uilayout.cpp
 )
 
 set(
@@ -49,6 +50,9 @@ set(
     widgets/alignwidget.h
     widgets/assetswidget.h
     widgets/buttonbase.h
+    widgets/toolbutton.h
+    widgets/uilayout.h
+    widgets/vlabel.h
 )
 
 if(NOT WIN32)

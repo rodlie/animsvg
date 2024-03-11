@@ -24,6 +24,8 @@
 #ifndef TOOLBUTTON_H
 #define TOOLBUTTON_H
 
+#include "ui_global.h"
+
 #include <QToolButton>
 #include <QEvent>
 #include <QDropEvent>
@@ -33,7 +35,7 @@
 #include <QList>
 #include <QUrl>
 
-class ToolButton : public QToolButton
+class UI_EXPORT ToolButton : public QToolButton
 {
     Q_OBJECT
 public:
