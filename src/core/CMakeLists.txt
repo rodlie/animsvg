@@ -286,7 +286,6 @@ set(
     swt_abstraction.cpp
     swt_rulescollection.cpp
     texteffect.cpp
-    texteffectcaller.cpp
     transformvalues.cpp
     undoredo.cpp
     exceptions.cpp
@@ -613,7 +612,6 @@ set(
     swt_abstraction.h
     swt_rulescollection.h
     texteffect.h
-    texteffectcaller.h
     transformvalues.h
     undoredo.h
     exceptions.h
