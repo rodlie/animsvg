@@ -290,7 +290,6 @@ set(
     undoredo.cpp
     exceptions.cpp
     glhelpers.cpp
-    skia/skimagecopy.cpp
     skia/skqtconversions.cpp
     pointhelpers.cpp
     simplemath.cpp
@@ -618,7 +617,6 @@ set(
     glhelpers.h
     skia/skiadefines.h
     skia/skiaincludes.h
-    skia/skimagecopy.h
     skia/skqtconversions.h
     pointhelpers.h
     simplemath.h
