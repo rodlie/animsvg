@@ -52,7 +52,7 @@
 #include "GUI/global.h"
 #include "filesourcescache.h"
 #include "fillstrokesettings.h"
-#include "editablecombobox.h"
+#include "widgets/editablecombobox.h"
 
 #include "Sound/soundcomposition.h"
 #include "GUI/BoxesList/boxsinglewidget.h"

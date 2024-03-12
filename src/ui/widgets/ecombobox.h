@@ -23,16 +23,28 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef EDITABLECOMBOBOX_H
-#define EDITABLECOMBOBOX_H
+#ifndef ECOMBOBOX_H
+#define ECOMBOBOX_H
+
+#include "ui_global.h"
 
 #include <QComboBox>
 
-class EditableComboBox : public QComboBox
+class UI_EXPORT eComboBox : public QComboBox
 {
 public:
-    EditableComboBox(QWidget* const parent,
-                     bool clickFocus = false);
+    using QComboBox::QComboBox;
+
+    enum class WheelMode {
+        enabled, disabled, enabledWithCtrl
+    };
+
+    void setWheelMode(const WheelMode mode)
+    { mWheelMode = mode; }
+protected:
+    void wheelEvent(QWheelEvent *e) override;
+private:
+    WheelMode mWheelMode = WheelMode::enabled;
 };
 
-#endif // EDITABLECOMBOBOX_H
+#endif // ECOMBOBOX_H

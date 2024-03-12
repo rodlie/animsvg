@@ -25,7 +25,7 @@
 
 #include "layouthandler.h"
 #include "Private/document.h"
-#include "editablecombobox.h"
+#include "widgets/editablecombobox.h"
 
 #include <QPushButton>
 

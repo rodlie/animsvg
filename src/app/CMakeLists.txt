@@ -194,8 +194,6 @@ set(
     GUI/canvaswrappernode.cpp
     GUI/changewidthwidget.cpp
     #GUI/closesignalingdockwidget.cpp
-    GUI/ecombobox.cpp
-    GUI/editablecombobox.cpp
     GUI/ekeyfilter.cpp
     GUI/ewidgetsimpl.cpp
     GUI/fakemenubar.cpp
@@ -313,8 +311,6 @@ set(
     GUI/canvaswrappernode.h
     GUI/changewidthwidget.h
     #GUI/closesignalingdockwidget.h
-    GUI/ecombobox.h
-    GUI/editablecombobox.h
     GUI/ekeyfilter.h
     GUI/ewidgetsimpl.h
     GUI/fakemenubar.h

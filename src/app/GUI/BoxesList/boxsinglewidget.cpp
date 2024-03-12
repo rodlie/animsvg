@@ -84,7 +84,7 @@ bool BoxSingleWidget::sStaticPixmapsLoaded = false;
 #include "PathEffects/patheffectcollection.h"
 #include "Sound/esoundobjectbase.h"
 
-#include "GUI/ecombobox.h"
+#include "widgets/ecombobox.h"
 
 #include <QApplication>
 #include <QDrag>

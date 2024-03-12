@@ -39,6 +39,8 @@ set(
     widgets/actionbutton.cpp
     widgets/alignwidget.cpp
     widgets/assetswidget.cpp
+    widgets/ecombobox.cpp
+    widgets/editablecombobox.cpp
     widgets/buttonbase.cpp
     widgets/uilayout.cpp
 )
@@ -50,6 +52,8 @@ set(
     widgets/alignwidget.h
     widgets/assetswidget.h
     widgets/buttonbase.h
+    widgets/ecombobox.h
+    widgets/editablecombobox.h
     widgets/toolbutton.h
     widgets/uilayout.h
     widgets/vlabel.h
