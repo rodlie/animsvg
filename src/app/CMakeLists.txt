@@ -269,7 +269,6 @@ set(
     #GUI/BrushWidgets/brushselectionwidget.cpp
     GUI/flowlayout.cpp
     GUI/ColorWidgets/colorwidgetshaders.cpp
-    GUI/namedcontainer.cpp
     #GUI/BrushWidgets/brushwidget.cpp
     GUI/Settings/labeledslider.cpp
     GUI/toolbox.cpp
@@ -385,7 +384,6 @@ set(
     #GUI/BrushWidgets/brushselectionwidget.h
     GUI/flowlayout.h
     GUI/ColorWidgets/colorwidgetshaders.h
-    GUI/namedcontainer.h
     #GUI/BrushWidgets/brushwidget.h
     boxtypemenu.h
     GUI/Settings/labeledslider.h
