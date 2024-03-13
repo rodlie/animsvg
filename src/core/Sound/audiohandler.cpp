@@ -24,7 +24,7 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "audiohandler.h"
-#include "Sound/soundcomposition.h"
+#include "soundcomposition.h"
 #include "appsupport.h"
 
 #include <iostream>

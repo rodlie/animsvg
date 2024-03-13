@@ -26,7 +26,7 @@
 #ifndef RENDERHANDLER_H
 #define RENDERHANDLER_H
 #include "framerange.h"
-#include "GUI/audiohandler.h"
+#include "Sound/audiohandler.h"
 #include "smartPointers/ememory.h"
 #include "CacheHandlers/usepointer.h"
 #include "CacheHandlers/cachecontainer.h"

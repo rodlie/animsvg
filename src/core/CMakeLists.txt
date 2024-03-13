@@ -209,6 +209,7 @@ set(
     ShaderEffects/shadereffectprogram.cpp
     ShaderEffects/shadervaluehandler.cpp
     ShaderEffects/uniformspecifiercreator.cpp
+    Sound/audiohandler.cpp
     Sound/eindependentsound.cpp
     Sound/esound.cpp
     Sound/esoundlink.cpp
@@ -528,6 +529,7 @@ set(
     ShaderEffects/shadereffectprogram.h
     ShaderEffects/shadervaluehandler.h
     ShaderEffects/uniformspecifiercreator.h
+    Sound/audiohandler.h
     Sound/eindependentsound.h
     Sound/esound.h
     Sound/esoundlink.h

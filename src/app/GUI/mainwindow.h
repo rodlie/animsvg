@@ -41,7 +41,7 @@
 
 #include "Private/Tasks/taskscheduler.h"
 #include "Private/document.h"
-#include "audiohandler.h"
+#include "Sound/audiohandler.h"
 #include "actions.h"
 #include "layouthandler.h"
 #include "renderhandler.h"

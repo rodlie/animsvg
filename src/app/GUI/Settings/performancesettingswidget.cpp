@@ -4,7 +4,7 @@
 #include "hardwareinfo.h"
 #include "GUI/global.h"
 
-#include "../audiohandler.h"
+#include "Sound/audiohandler.h"
 #include "appsupport.h"
 
 #include <QTimer>

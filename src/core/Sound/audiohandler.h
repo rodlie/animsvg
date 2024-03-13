@@ -26,12 +26,14 @@
 #ifndef AUDIOHANDLER_H
 #define AUDIOHANDLER_H
 
+#include "core_global.h"
+
 #include <QAudioOutput>
 #include <QDebug>
 
-struct eSoundSettingsData;
+struct CORE_EXPORT eSoundSettingsData;
 
-class AudioHandler : public QObject
+class CORE_EXPORT AudioHandler : public QObject
 {
     Q_OBJECT
 public:
