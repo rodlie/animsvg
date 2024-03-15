@@ -36,6 +36,7 @@ include_directories(
 
 set(
     SOURCES
+    dialogs/exportsvgdialog.cpp
     dialogs/scenesettingsdialog.cpp
     optimalscrollarena/minimalscrollwidget.cpp
     optimalscrollarena/scrollarea.cpp
@@ -63,6 +64,7 @@ set(
 set(
     HEADERS
     ui_global.h
+    dialogs/exportsvgdialog.h
     dialogs/scenesettingsdialog.h
     optimalscrollarena/minimalscrollwidget.h
     optimalscrollarena/scrollarea.h

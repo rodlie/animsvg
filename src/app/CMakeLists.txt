@@ -168,7 +168,6 @@ set(
     GUI/Dialogs/applyexpressiondialog.cpp
     GUI/Dialogs/dialogsinterfaceimpl.cpp
     GUI/Dialogs/durationrectsettingsdialog.cpp
-    GUI/Dialogs/exportsvgdialog.cpp
     GUI/Expressions/expressiondialog.cpp
     GUI/Expressions/expressioneditor.cpp
     GUI/Expressions/expressionhighlighter.cpp
@@ -263,7 +262,6 @@ set(
     GUI/Dialogs/applyexpressiondialog.h
     GUI/Dialogs/dialogsinterfaceimpl.h
     GUI/Dialogs/durationrectsettingsdialog.h
-    GUI/Dialogs/exportsvgdialog.h
     GUI/Expressions/expressiondialog.h
     GUI/Expressions/expressioneditor.h
     GUI/Expressions/expressionhighlighter.h

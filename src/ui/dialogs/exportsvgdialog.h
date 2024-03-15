@@ -22,6 +22,8 @@
 #ifndef EXPORTSVGDIALOG_H
 #define EXPORTSVGDIALOG_H
 
+#include "ui_global.h"
+
 #include <QDialog>
 #include <QSpinBox>
 #include <QCheckBox>
@@ -31,7 +33,7 @@
 class SceneChooser;
 class ComplexTask;
 
-class ExportSvgDialog : public QDialog
+class UI_EXPORT ExportSvgDialog : public QDialog
 {
 public:
     ExportSvgDialog(QWidget* const parent = nullptr);

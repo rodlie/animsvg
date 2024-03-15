@@ -61,7 +61,7 @@
 #include "importhandler.h"
 #include "GUI/edialogs.h"
 #include "eimporters.h"
-#include "Dialogs/exportsvgdialog.h"
+#include "dialogs/exportsvgdialog.h"
 #include "widgets/alignwidget.h"
 #include "welcomedialog.h"
 #include "Boxes/textbox.h"
