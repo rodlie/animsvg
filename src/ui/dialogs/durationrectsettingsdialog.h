@@ -23,27 +23,37 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef APPLYEXPRESSIONDIALOG_H
-#define APPLYEXPRESSIONDIALOG_H
+#ifndef DURATIONRECTSETTINGSDIALOG_H
+#define DURATIONRECTSETTINGSDIALOG_H
+
+#include "ui_global.h"
 
 #include <QDialog>
+#include <QSpinBox>
+#include <QLabel>
+#include <QPushButton>
+#include "Timeline/durationrectangle.h"
 
-#include <QDoubleSpinBox>
+class QHBoxLayout;
+class QVBoxLayout;
+class TwoColumnLayout;
 
-#include "Animators/qrealanimator.h"
-
-class ApplyExpressionDialog : public QDialog {
+class UI_EXPORT DurationRectSettingsDialog : public QDialog
+{
 public:
-    ApplyExpressionDialog(QrealAnimator* const target,
-                          QWidget * const parent = nullptr);
+    DurationRectSettingsDialog(DurationRectangle* const target,
+                               QWidget *parent = nullptr);
+
+    int getMinFrame() const;
+    int getMaxFrame() const;
+    int getShift() const;
 
 private:
-    QrealAnimator* const mTarget;
+    DurationRectangle* const mTarget;
 
-    QSpinBox* mFirstFrame;
-    QSpinBox* mLastFrame;
-
-    QDoubleSpinBox* mAccuracy;
+    QSpinBox *mShiftSpinBox;
+    QSpinBox *mMinFrameSpinBox;
+    QSpinBox *mMaxFrameSpinBox;
 };
 
-#endif // APPLYEXPRESSIONDIALOG_H
+#endif // DURATIONRECTSETTINGSDIALOG_H

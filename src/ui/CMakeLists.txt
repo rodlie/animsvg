@@ -36,6 +36,8 @@ include_directories(
 
 set(
     SOURCES
+    dialogs/applyexpressiondialog.cpp
+    dialogs/durationrectsettingsdialog.cpp
     dialogs/exportsvgdialog.cpp
     dialogs/scenesettingsdialog.cpp
     optimalscrollarena/minimalscrollwidget.cpp
@@ -64,6 +66,8 @@ set(
 set(
     HEADERS
     ui_global.h
+    dialogs/applyexpressiondialog.h
+    dialogs/durationrectsettingsdialog.h
     dialogs/exportsvgdialog.h
     dialogs/scenesettingsdialog.h
     optimalscrollarena/minimalscrollwidget.h

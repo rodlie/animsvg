@@ -36,7 +36,6 @@
 #include "GUI/global.h"
 #include "pointhelpers.h"
 #include "canvaswindow.h"
-#include "GUI/Dialogs/durationrectsettingsdialog.h"
 #include <QApplication>
 #include "clipboardcontainer.h"
 #include "Animators/qrealpoint.h"
