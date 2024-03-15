@@ -36,9 +36,9 @@
 #include "GUI/mainwindow.h"
 #include "GUI/Expressions/expressiondialog.h"
 #include "GUI/Dialogs/durationrectsettingsdialog.h"
-#include "GUI/Dialogs/animationtopaintdialog.h"
+//#include "GUI/Dialogs/animationtopaintdialog.h"
 #include "GUI/Dialogs/applyexpressiondialog.h"
-#include "GUI/Dialogs/scenesettingsdialog.h"
+#include "dialogs/scenesettingsdialog.h"
 
 DialogsInterfaceImpl DialogsInterfaceImpl::sInstance;
 

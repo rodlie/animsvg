@@ -36,6 +36,7 @@ include_directories(
 
 set(
     SOURCES
+    dialogs/scenesettingsdialog.cpp
     widgets/actionbutton.cpp
     widgets/alignwidget.cpp
     widgets/assetswidget.cpp
@@ -56,6 +57,7 @@ set(
 set(
     HEADERS
     ui_global.h
+    dialogs/scenesettingsdialog.h
     widgets/actionbutton.h
     widgets/alignwidget.h
     widgets/assetswidget.h

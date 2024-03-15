@@ -57,7 +57,7 @@
 #include "Sound/soundcomposition.h"
 #include "GUI/BoxesList/boxsinglewidget.h"
 #include "memoryhandler.h"
-#include "GUI/Dialogs/scenesettingsdialog.h"
+#include "dialogs/scenesettingsdialog.h"
 #include "importhandler.h"
 #include "GUI/edialogs.h"
 #include "eimporters.h"

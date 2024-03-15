@@ -165,12 +165,11 @@ set(
     #GUI/BrushWidgets/brushlabel.cpp
     GUI/ColorWidgets/bookmarkedcolors.cpp
     GUI/ColorWidgets/paintcolorwidget.cpp
-    GUI/Dialogs/animationtopaintdialog.cpp
+    #GUI/Dialogs/animationtopaintdialog.cpp
     GUI/Dialogs/applyexpressiondialog.cpp
     GUI/Dialogs/dialogsinterfaceimpl.cpp
     GUI/Dialogs/durationrectsettingsdialog.cpp
     GUI/Dialogs/exportsvgdialog.cpp
-    GUI/Dialogs/scenesettingsdialog.cpp
     GUI/Expressions/expressiondialog.cpp
     GUI/Expressions/expressioneditor.cpp
     GUI/Expressions/expressionhighlighter.cpp
@@ -267,12 +266,11 @@ set(
     #GUI/BrushWidgets/brushlabel.h
     GUI/ColorWidgets/bookmarkedcolors.h
     GUI/ColorWidgets/paintcolorwidget.h
-    GUI/Dialogs/animationtopaintdialog.h
+    #GUI/Dialogs/animationtopaintdialog.h
     GUI/Dialogs/applyexpressiondialog.h
     GUI/Dialogs/dialogsinterfaceimpl.h
     GUI/Dialogs/durationrectsettingsdialog.h
     GUI/Dialogs/exportsvgdialog.h
-    GUI/Dialogs/scenesettingsdialog.h
     GUI/Expressions/expressiondialog.h
     GUI/Expressions/expressioneditor.h
     GUI/Expressions/expressionhighlighter.h

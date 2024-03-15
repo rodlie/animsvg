@@ -26,6 +26,8 @@
 #ifndef SCENESETTINGSDIALOG_H
 #define SCENESETTINGSDIALOG_H
 
+#include "ui_global.h"
+
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -38,13 +40,13 @@
 #include "smartPointers/ememory.h"
 #include "framerange.h"
 
-
 class Document;
 class Canvas;
 class ColorAnimator;
 class ColorAnimatorButton;
 
-class SceneSettingsDialog : public QDialog {
+class UI_EXPORT SceneSettingsDialog : public QDialog
+{
 public:
     SceneSettingsDialog(Canvas * const canvas,
                          QWidget * const parent = nullptr);
@@ -70,6 +72,7 @@ public:
     void applySettingsToCanvas(Canvas * const canvas) const;
 
     static void sNewSceneDialog(Document &document, QWidget * const parent);
+
 private:
     bool validate();
 
