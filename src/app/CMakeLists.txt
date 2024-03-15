@@ -111,10 +111,6 @@ if(WIN32)
     )
 endif()
 
-if(UNIX AND NOT APPLE)
-    pkg_check_modules(UNWIND REQUIRED libunwind)
-endif()
-
 include_directories(
     #${QUAZIP_INCLUDE_DIRS}
     ${QSCINTILLA_INCLUDE_DIRS}
@@ -137,8 +133,8 @@ if(${USE_SKIA_SYSTEM_LIBS} AND UNIX)
     )
 endif()
 
-if(UNIX)
-    include_directories(${CMAKE_CURRENT_BINARY_DIR}/../gperftools)
+if(UNIX AND NOT APPLE)
+    include_directories(${GPERF_INCLUDES_DIRS})
     configure_file(
         app.desktop.in
         ${CMAKE_BINARY_DIR}/${PROJECT_FREEDESKTOP}.desktop
@@ -438,22 +434,12 @@ if(APPLE)
     )
 endif()
 
-if(UNIX)
+if(UNIX AND NOT APPLE)
     target_link_libraries(
         ${PROJECT_NAME}
         PRIVATE
-        tcmalloc_static
+        ${GPERF_LIBRARIES}
     )
-    if(NOT APPLE)
-        target_link_libraries(
-            ${PROJECT_NAME}
-            PRIVATE
-            ${UNWIND_LIBRARIES}
-        )
-    endif()
-endif()
-
-if(UNIX AND NOT APPLE)
     include(GNUInstallDirs)
     install(
         TARGETS
