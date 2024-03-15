@@ -24,7 +24,7 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "durationrectsettingsdialog.h"
-#include "../twocolumnlayout.h"
+#include "widgets/twocolumnlayout.h"
 
 #include <QDialogButtonBox>
 

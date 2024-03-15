@@ -34,7 +34,7 @@
 #include <QGroupBox>
 #include <QCheckBox>
 #include "renderinstancesettings.h"
-#include "GUI/twocolumnlayout.h"
+#include "widgets/twocolumnlayout.h"
 #define COMPLIENCE FF_COMPLIANCE_NORMAL
 
 class OutputSettingsDialog : public QDialog {

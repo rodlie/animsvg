@@ -27,7 +27,7 @@
 #include "canvas.h"
 #include "svgexporter.h"
 #include "GUI/edialogs.h"
-#include "GUI/twocolumnlayout.h"
+#include "widgets/twocolumnlayout.h"
 #include "appsupport.h"
 
 #include <QVBoxLayout>

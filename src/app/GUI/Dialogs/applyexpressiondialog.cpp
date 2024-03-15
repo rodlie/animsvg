@@ -28,7 +28,7 @@
 #include <QDialogButtonBox>
 #include <QLabel>
 
-#include "GUI/twocolumnlayout.h"
+#include "widgets/twocolumnlayout.h"
 #include "GUI/global.h"
 #include "canvas.h"
 #include "Private/document.h"

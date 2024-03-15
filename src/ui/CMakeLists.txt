@@ -42,6 +42,7 @@ set(
     widgets/ecombobox.cpp
     widgets/editablecombobox.cpp
     widgets/buttonbase.cpp
+    widgets/twocolumnlayout.cpp
     widgets/uilayout.cpp
 )
 
@@ -55,6 +56,7 @@ set(
     widgets/ecombobox.h
     widgets/editablecombobox.h
     widgets/toolbutton.h
+    widgets/twocolumnlayout.h
     widgets/uilayout.h
     widgets/vlabel.h
 )

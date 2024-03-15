@@ -25,8 +25,13 @@
 
 #ifndef TWOCOLUMNLAYOUT_H
 #define TWOCOLUMNLAYOUT_H
+
+#include "ui_global.h"
+
 #include <QHBoxLayout>
-class TwoColumnLayout : public QHBoxLayout {
+
+class UI_EXPORT TwoColumnLayout : public QHBoxLayout
+{
 public:
     TwoColumnLayout();
 
@@ -34,8 +39,8 @@ public:
     void addWidgetToSecondColumn(QWidget *wid);
     void addPair(QWidget *column1, QWidget *column2);
     void addPair(QWidget *column1, QLayout *column2);
-
     void addSpacing(const int size);
+
 protected:
     QVBoxLayout *mLayout1 = nullptr;
     QVBoxLayout *mLayout2 = nullptr;
