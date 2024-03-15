@@ -345,6 +345,8 @@ set(
     zipfilesaver.cpp
     outputsettings.cpp
     rendersettings.cpp
+    renderinstancesettings.cpp
+    videoencoder.cpp
 )
 
 set(
@@ -677,6 +679,8 @@ set(
     zipfilesaver.h
     outputsettings.h
     rendersettings.h
+    renderinstancesettings.h
+    videoencoder.h
 )
 
 if(NOT WIN32)

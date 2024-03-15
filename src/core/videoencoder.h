@@ -25,6 +25,9 @@
 
 #ifndef VIDEOENCODER_H
 #define VIDEOENCODER_H
+
+#include "core_global.h"
+
 #include <QString>
 #include <QList>
 #include "skia/skiaincludes.h"
@@ -33,6 +36,7 @@
 #include "framerange.h"
 #include "CacheHandlers/samples.h"
 #include "Sound/esoundsettings.h"
+
 extern "C" {
     #include <libavcodec/avcodec.h>
     #include <libavformat/avformat.h>
@@ -43,9 +47,10 @@ extern "C" {
     #include <libavutil/mathematics.h>
     #include <libavutil/opt.h>
 }
+
 class SceneFrameContainer;
 
-class SoundIterator {
+class CORE_EXPORT SoundIterator {
 public:
     SoundIterator() {}
 
@@ -153,7 +158,7 @@ private:
     QList<stdsptr<Samples>> mSamples;
 };
 
-typedef struct OutputStream {
+typedef struct CORE_EXPORT OutputStream {
     // pts of the next frame that will be generated
     int64_t fNextPts;
 
@@ -165,7 +170,7 @@ typedef struct OutputStream {
     struct SwrContext *fSwrCtx = nullptr;
 } OutputStream;
 
-class VideoEncoderEmitter : public QObject {
+class CORE_EXPORT VideoEncoderEmitter : public QObject {
     Q_OBJECT
 public:
     VideoEncoderEmitter() {}
@@ -178,7 +183,7 @@ signals:
     void encodingFailed();
 };
 
-class VideoEncoder : public eHddTask {
+class CORE_EXPORT VideoEncoder : public eHddTask {
     e_OBJECT
 protected:
     VideoEncoder();

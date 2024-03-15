@@ -26,6 +26,8 @@
 #ifndef RENDERINSTANCESETTINGS_H
 #define RENDERINSTANCESETTINGS_H
 
+#include "core_global.h"
+
 #include "outputsettings.h"
 #include "rendersettings.h"
 #include "smartPointers/ememory.h"
@@ -34,7 +36,7 @@
 
 class Canvas;
 
-enum class RenderState {
+enum class CORE_EXPORT RenderState {
     none,
     error,
     finished,
@@ -43,7 +45,7 @@ enum class RenderState {
     waiting
 };
 
-class RenderInstanceSettings : public QObject {
+class CORE_EXPORT RenderInstanceSettings : public QObject {
     Q_OBJECT
 public:
     RenderInstanceSettings(Canvas* canvas);

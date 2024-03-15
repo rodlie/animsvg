@@ -235,7 +235,6 @@ set(
     memoryhandler.cpp
     GUI/RenderWidgets/renderwidget.cpp
     GUI/RenderWidgets/renderinstancewidget.cpp
-    renderinstancesettings.cpp
     GUI/GradientWidgets/gradientslistwidget.cpp
     GUI/GradientWidgets/displayedgradientswidget.cpp
     GUI/GradientWidgets/currentgradientwidget.cpp
@@ -243,7 +242,6 @@ set(
     GUI/BoxesList/boxtargetwidget.cpp
     GUI/BoxesList/OptimalScrollArea/minimalscrollwidget.cpp
     GUI/BoxesList/boxscrollarea.cpp
-    videoencoder.cpp
     GUI/RenderWidgets/outputsettingsprofilesdialog.cpp
     GUI/RenderWidgets/outputsettingsdisplaywidget.cpp
     GUI/animationdockwidget.cpp
@@ -347,7 +345,6 @@ set(
     memoryhandler.h
     GUI/RenderWidgets/renderwidget.h
     GUI/RenderWidgets/renderinstancewidget.h
-    renderinstancesettings.h
     GUI/GradientWidgets/gradientslistwidget.h
     GUI/GradientWidgets/displayedgradientswidget.h
     GUI/GradientWidgets/currentgradientwidget.h
@@ -355,7 +352,6 @@ set(
     GUI/BoxesList/boxtargetwidget.h
     GUI/BoxesList/OptimalScrollArea/minimalscrollwidget.h
     GUI/BoxesList/boxscrollarea.h
-    videoencoder.h
     GUI/RenderWidgets/outputsettingsprofilesdialog.h
     GUI/RenderWidgets/outputsettingsdisplaywidget.h
     GUI/animationdockwidget.h
