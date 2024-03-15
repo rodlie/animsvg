@@ -374,7 +374,6 @@ set(
     GUI/flowlayout.h
     GUI/ColorWidgets/colorwidgetshaders.h
     #GUI/BrushWidgets/brushwidget.h
-    boxtypemenu.h
     GUI/Settings/labeledslider.h
 )
 
