@@ -258,7 +258,6 @@ set(
     GUI/glwindow.cpp
     GUI/fontswidget.cpp
     #GUI/filesourcelist.cpp
-    GUI/customfpsdialog.cpp
     GUI/fillstrokesettings.cpp
     #GUI/BrushWidgets/brushselectionwidget.cpp
     GUI/ColorWidgets/colorwidgetshaders.cpp
@@ -353,7 +352,6 @@ set(
     GUI/animationdockwidget.h
     GUI/animationwidgetscrollbar.h
     GUI/canvaswindow.h
-    GUI/customfpsdialog.h
     #GUI/filesourcelist.h
     GUI/fillstrokesettings.h
     GUI/fontswidget.h
