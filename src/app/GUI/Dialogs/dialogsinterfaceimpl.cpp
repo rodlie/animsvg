@@ -31,7 +31,7 @@
 #include <QLabel>
 #include <QStatusBar>
 
-#include "../buttonslist.h"
+#include "widgets/buttonslist.h"
 #include "GUI/global.h"
 #include "GUI/mainwindow.h"
 #include "GUI/Expressions/expressiondialog.h"

@@ -39,10 +39,14 @@ set(
     widgets/actionbutton.cpp
     widgets/alignwidget.cpp
     widgets/assetswidget.cpp
+    widgets/bookmarkedwidget.cpp
+    widgets/buttonbase.cpp
+    widgets/buttonslist.cpp
+    widgets/changewidthwidget.cpp
     widgets/ecombobox.cpp
     widgets/editablecombobox.cpp
+    widgets/fakemenubar.cpp
     widgets/flowlayout.cpp
-    widgets/buttonbase.cpp
     widgets/twocolumnlayout.cpp
     widgets/uilayout.cpp
 )
@@ -53,9 +57,13 @@ set(
     widgets/actionbutton.h
     widgets/alignwidget.h
     widgets/assetswidget.h
+    widgets/bookmarkedwidget.h
     widgets/buttonbase.h
+    widgets/buttonslist.h
+    widgets/changewidthwidget.h
     widgets/ecombobox.h
     widgets/editablecombobox.h
+    widgets/fakemenubar.h
     widgets/flowlayout.h
     widgets/toolbutton.h
     widgets/twocolumnlayout.h

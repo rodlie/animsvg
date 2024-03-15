@@ -186,16 +186,12 @@ set(
     GUI/Settings/pluginssettingswidget.cpp
     GUI/Settings/presetsettingswidget.cpp
     GUI/aboutwidget.cpp
-    GUI/bookmarkedwidget.cpp
-    GUI/buttonslist.cpp
     GUI/canvasbasewrappernode.cpp
     GUI/canvaswindowevents.cpp
     GUI/canvaswrappernode.cpp
-    GUI/changewidthwidget.cpp
     #GUI/closesignalingdockwidget.cpp
     GUI/ekeyfilter.cpp
     GUI/ewidgetsimpl.cpp
-    GUI/fakemenubar.cpp
     GUI/layouthandler.cpp
     GUI/scenechooser.cpp
     GUI/timelinebasewrappernode.cpp
@@ -295,15 +291,11 @@ set(
     GUI/Settings/pluginssettingswidget.h
     GUI/Settings/presetsettingswidget.h
     GUI/aboutwidget.h
-    GUI/bookmarkedwidget.h
-    GUI/buttonslist.h
     GUI/canvasbasewrappernode.h
     GUI/canvaswrappernode.h
-    GUI/changewidthwidget.h
     #GUI/closesignalingdockwidget.h
     GUI/ekeyfilter.h
     GUI/ewidgetsimpl.h
-    GUI/fakemenubar.h
     GUI/layouthandler.h
     GUI/scenechooser.h
     GUI/timelinebasewrappernode.h

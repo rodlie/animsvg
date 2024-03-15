@@ -41,7 +41,7 @@
 #include "GUI/global.h"
 #include "canvas.h"
 #include "scenechooser.h"
-#include "changewidthwidget.h"
+#include "widgets/changewidthwidget.h"
 #include "timelinehighlightwidget.h"
 
 TimelineWidget::TimelineWidget(Document &document,

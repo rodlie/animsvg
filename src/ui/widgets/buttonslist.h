@@ -22,10 +22,13 @@
 #ifndef BUTTONSLIST_H
 #define BUTTONSLIST_H
 
+#include "ui_global.h"
+
 #include <QWidget>
 #include <functional>
 
-class ButtonsList : public QWidget {
+class UI_EXPORT ButtonsList : public QWidget
+{
 public:
     using Trigger = std::function<void()>;
     using TextTrigger = std::pair<QString, Trigger>;

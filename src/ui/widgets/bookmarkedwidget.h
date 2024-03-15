@@ -23,38 +23,41 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef CHANGEWIDTHWIDGET_H
-#define CHANGEWIDTHWIDGET_H
+#ifndef BOOKMARKEDWIDGET_H
+#define BOOKMARKEDWIDGET_H
+
+#include "ui_global.h"
+
 #include <QWidget>
+#include <QPushButton>
 
-class ChangeWidthWidget : public QWidget {
-    Q_OBJECT
+class UI_EXPORT BookmarkedWidget : public QWidget
+{
 public:
-    ChangeWidthWidget(QWidget *parent = nullptr);
+    explicit BookmarkedWidget(const bool vertical,
+                              const int dimension,
+                              QWidget *parent = nullptr);
 
-    void updatePos();
+    void addWidget(QWidget* const wid);
+    void removeWidget(QWidget* const wid);
+    QWidget* getWidget(const int id) const;
+    int count() const
+    { return mWidgets.count(); }
+    void updateSize();
 
-    void paintEvent(QPaintEvent *);
+protected:
+    void resizeEvent(QResizeEvent *event);
 
-    void mouseMoveEvent(QMouseEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *);
-
-    void enterEvent(QEvent *);
-
-    void leaveEvent(QEvent *);
-    int getCurrentWidth() {
-        return mCurrentWidth;
-    }
-
-signals:
-    void widthSet(int);
 private:
-    bool mHover = false;
-    bool mPressed = false;
-    int mCurrentWidth = 400;
-    int mPressX;
+    void updateLayout();
+
+    const bool mVertical;
+    const int mDimension;
+    QPushButton* mUpArrow;
+    QPushButton* mDownArrow;
+    QList<QWidget*> mWidgets;
+    int mFirstViewed = 0;
+    int mLastViewed = 0;
 };
 
-
-#endif // CHANGEWIDTHWIDGET_H
+#endif // BOOKMARKEDWIDGET_H

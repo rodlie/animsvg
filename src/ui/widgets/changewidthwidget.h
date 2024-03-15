@@ -23,27 +23,44 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef FAKEMENUBAR_H
-#define FAKEMENUBAR_H
+#ifndef CHANGEWIDTHWIDGET_H
+#define CHANGEWIDTHWIDGET_H
 
-#include <QHBoxLayout>
-#include <QMenu>
+#include "ui_global.h"
 
-class FakeMenuBar : public QWidget {
+#include <QWidget>
+
+class UI_EXPORT ChangeWidthWidget : public QWidget
+{
+    Q_OBJECT
+
 public:
-    explicit FakeMenuBar(QWidget* const parent = nullptr);
+    ChangeWidthWidget(QWidget *parent = nullptr);
 
-    void addSeparator();
+    void updatePos();
 
-    QMenu* addMenu(const QString& title);
-    QMenu* addMenu(const QIcon& icon, const QString& title);
-    void addMenu(QMenu * const menu);
+    void paintEvent(QPaintEvent *);
 
-    QAction* addAction(const QString& title);
-    QAction* addAction(const QIcon& icon, const QString& title);
-    void addAction(QAction * const action);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *);
+
+    void enterEvent(QEvent *);
+
+    void leaveEvent(QEvent *);
+    int getCurrentWidth() {
+        return mCurrentWidth;
+    }
+
+signals:
+    void widthSet(int);
+
 private:
-    QHBoxLayout* mActsLayout;
+    bool mHover = false;
+    bool mPressed = false;
+    int mCurrentWidth = 400;
+    int mPressX;
 };
 
-#endif // FAKEMENUBAR_H
+
+#endif // CHANGEWIDTHWIDGET_H

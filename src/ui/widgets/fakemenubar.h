@@ -23,22 +23,30 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef BOOKMARKEDCOLORS_H
-#define BOOKMARKEDCOLORS_H
+#ifndef FAKEMENUBAR_H
+#define FAKEMENUBAR_H
 
-#include "widgets/bookmarkedwidget.h"
+#include "ui_global.h"
 
-class BookmarkedColors : public BookmarkedWidget
+#include <QHBoxLayout>
+#include <QMenu>
+
+class UI_EXPORT FakeMenuBar : public QWidget
 {
-    Q_OBJECT
 public:
-    BookmarkedColors(const bool vertical,
-                     const int dimension,
-                     QWidget* const parent);
+    explicit FakeMenuBar(QWidget* const parent = nullptr);
 
-    void setCurrentColor(const QColor& color);
-    void addColor(const QColor& color);
-    void removeColor(const QColor& color);
+    void addSeparator();
+
+    QMenu* addMenu(const QString& title);
+    QMenu* addMenu(const QIcon& icon, const QString& title);
+    void addMenu(QMenu * const menu);
+
+    QAction* addAction(const QString& title);
+    QAction* addAction(const QIcon& icon, const QString& title);
+    void addAction(QAction * const action);
+private:
+    QHBoxLayout* mActsLayout;
 };
 
-#endif // BOOKMARKEDCOLORS_H
+#endif // FAKEMENUBAR_H

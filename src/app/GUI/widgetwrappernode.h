@@ -29,7 +29,7 @@
 #include <QMenuBar>
 #include "Private/esettings.h"
 #include "wrappernode.h"
-#include "fakemenubar.h"
+#include "widgets/fakemenubar.h"
 
 class StackWrapperMenu : public FakeMenuBar {
     friend class StackWidgetWrapper;
