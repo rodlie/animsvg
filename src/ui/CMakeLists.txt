@@ -41,6 +41,7 @@ set(
     widgets/assetswidget.cpp
     widgets/ecombobox.cpp
     widgets/editablecombobox.cpp
+    widgets/flowlayout.cpp
     widgets/buttonbase.cpp
     widgets/twocolumnlayout.cpp
     widgets/uilayout.cpp
@@ -55,6 +56,7 @@ set(
     widgets/buttonbase.h
     widgets/ecombobox.h
     widgets/editablecombobox.h
+    widgets/flowlayout.h
     widgets/toolbutton.h
     widgets/twocolumnlayout.h
     widgets/uilayout.h

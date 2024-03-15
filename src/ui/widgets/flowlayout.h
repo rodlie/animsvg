@@ -25,11 +25,15 @@
 
 #ifndef FLOWLAYOUT_H
 #define FLOWLAYOUT_H
+
+#include "ui_global.h"
+
 #include <QLayout>
 #include <QRect>
 #include <QStyle>
 
-class FlowLayout : public QLayout {
+class UI_EXPORT FlowLayout : public QLayout
+{
 public:
     explicit FlowLayout(QWidget *parent,
                         const int margin = -1,

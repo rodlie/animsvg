@@ -261,7 +261,6 @@ set(
     GUI/customfpsdialog.cpp
     GUI/fillstrokesettings.cpp
     #GUI/BrushWidgets/brushselectionwidget.cpp
-    GUI/flowlayout.cpp
     GUI/ColorWidgets/colorwidgetshaders.cpp
     #GUI/BrushWidgets/brushwidget.cpp
     GUI/Settings/labeledslider.cpp
@@ -369,7 +368,6 @@ set(
     GUI/qrealpointvaluedialog.h
     GUI/renderoutputwidget.h
     #GUI/BrushWidgets/brushselectionwidget.h
-    GUI/flowlayout.h
     GUI/ColorWidgets/colorwidgetshaders.h
     #GUI/BrushWidgets/brushwidget.h
     GUI/Settings/labeledslider.h
