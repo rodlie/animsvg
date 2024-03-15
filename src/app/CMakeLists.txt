@@ -256,7 +256,6 @@ set(
     #GUI/BrushWidgets/brushselectionwidget.cpp
     GUI/ColorWidgets/colorwidgetshaders.cpp
     #GUI/BrushWidgets/brushwidget.cpp
-    GUI/Settings/labeledslider.cpp
     GUI/toolbox.cpp
 )
 
@@ -356,7 +355,6 @@ set(
     #GUI/BrushWidgets/brushselectionwidget.h
     GUI/ColorWidgets/colorwidgetshaders.h
     #GUI/BrushWidgets/brushwidget.h
-    GUI/Settings/labeledslider.h
 )
 
 set(

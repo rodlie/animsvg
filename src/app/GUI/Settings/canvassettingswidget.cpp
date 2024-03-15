@@ -26,7 +26,7 @@
 #include "canvassettingswidget.h"
 
 #include "Private/esettings.h"
-#include "labeledslider.h"
+#include "widgets/labeledslider.h"
 #include "GUI/coloranimatorbutton.h"
 #include "widgets/twocolumnlayout.h"
 

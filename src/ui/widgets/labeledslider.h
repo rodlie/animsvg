@@ -26,15 +26,19 @@
 #ifndef LABELEDSLIDER_H
 #define LABELEDSLIDER_H
 
+#include "ui_global.h"
+
 #include <QSlider>
 #include <QHBoxLayout>
 
-class LabeledSlider : public QHBoxLayout {
+class UI_EXPORT LabeledSlider : public QHBoxLayout
+{
 public:
     explicit LabeledSlider(const QString& suffix,
                            QWidget *parent = nullptr);
 
     QSlider* slider() const { return mSlider; }
+
 private:
     QSlider* mSlider;
 };
