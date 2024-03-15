@@ -333,7 +333,6 @@ set(
     eimporters.h
     iconloader.h
     renderhandler.h
-    keypoint.h
     GUI/BoxesList/OptimalScrollArea/scrollarea.h
     GUI/BoxesList/OptimalScrollArea/scrollwidget.h
     GUI/BoxesList/OptimalScrollArea/scrollwidgetvisiblepart.h
