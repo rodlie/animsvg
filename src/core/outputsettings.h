@@ -23,6 +23,8 @@
 #ifndef OUTPUTSETTINGS_H
 #define OUTPUTSETTINGS_H
 
+#include "core_global.h"
+
 #include <QString>
 #include "Private/esettings.h"
 #include "smartPointers/ememory.h"
@@ -38,7 +40,7 @@ extern "C" {
     #include <libavutil/opt.h>
 }
 
-struct OutputSettings
+struct CORE_EXPORT OutputSettings
 {
     static const std::map<int, QString> sSampleFormatNames;
     static QString sGetChannelsLayoutName(const uint64_t &layout);
@@ -62,7 +64,7 @@ struct OutputSettings
     int fAudioBitrate = 0;
 };
 
-class OutputSettingsProfile : public SelfRef
+class CORE_EXPORT OutputSettingsProfile : public SelfRef
 {
     Q_OBJECT
     e_OBJECT

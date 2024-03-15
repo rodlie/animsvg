@@ -26,6 +26,8 @@
 #ifndef RENDERSETTINGS_H
 #define RENDERSETTINGS_H
 
+#include "core_global.h"
+
 #include <QPointF>
 #include "ReadWrite/basicreadwrite.h"
 
@@ -39,7 +41,7 @@ extern "C" {
     #include <libavutil/opt.h>
 }
 
-struct RenderSettings {
+struct CORE_EXPORT RenderSettings {
     void write(eWriteStream& dst) const;
     void read(eReadStream& src);
 

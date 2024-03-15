@@ -223,9 +223,7 @@ set(
     eimporters.cpp
     evfileio.cpp
     iconloader.cpp
-    outputsettings.cpp
     renderhandler.cpp
-    rendersettings.cpp
     GUI/BoxesList/OptimalScrollArea/scrollarea.cpp
     GUI/BoxesList/OptimalScrollArea/scrollwidget.cpp
     GUI/BoxesList/OptimalScrollArea/scrollwidgetvisiblepart.cpp
@@ -336,9 +334,7 @@ set(
     effectsloader.h
     eimporters.h
     iconloader.h
-    outputsettings.h
     renderhandler.h
-    rendersettings.h
     keypoint.h
     GUI/BoxesList/OptimalScrollArea/scrollarea.h
     GUI/BoxesList/OptimalScrollArea/scrollwidget.h

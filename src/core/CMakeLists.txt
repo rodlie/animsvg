@@ -343,6 +343,8 @@ set(
     wrappedint.cpp
     zipfileloader.cpp
     zipfilesaver.cpp
+    outputsettings.cpp
+    rendersettings.cpp
 )
 
 set(
@@ -673,6 +675,8 @@ set(
     windowsincludes.h
     zipfileloader.h
     zipfilesaver.h
+    outputsettings.h
+    rendersettings.h
 )
 
 if(NOT WIN32)
