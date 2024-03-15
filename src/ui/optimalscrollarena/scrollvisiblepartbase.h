@@ -25,11 +25,16 @@
 
 #ifndef SCROLLVISIBLEPARTBASE_H
 #define SCROLLVISIBLEPARTBASE_H
+
+#include "ui_global.h"
+
 class MinimalScrollWidget;
 class SingleWidget;
+
 #include <QWidget>
 
-class ScrollVisiblePartBase : public QWidget {
+class UI_EXPORT ScrollVisiblePartBase : public QWidget
+{
 public:
     ScrollVisiblePartBase(MinimalScrollWidget * const parent);
 
@@ -62,8 +67,10 @@ public:
 
     const QList<QWidget*>& widgets() const
     { return mSingleWidgets; }
+
 protected:
     bool event(QEvent* event);
+
 private:
     void postUpdateEvent();
 

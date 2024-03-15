@@ -26,17 +26,20 @@
 #ifndef MINIMALSCROLLWIDGET_H
 #define MINIMALSCROLLWIDGET_H
 
+#include "ui_global.h"
 
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QtMath>
 #include <functional>
+
 class SingleWidget;
 class ScrollVisiblePartBase;
 class ScrollArea;
 
-class MinimalScrollWidget : public QWidget {
+class UI_EXPORT MinimalScrollWidget : public QWidget
+{
     Q_OBJECT
 public:
     explicit MinimalScrollWidget(ScrollVisiblePartBase * const visiblePart,
@@ -51,9 +54,11 @@ public:
     void setWidth(const int width);
 
     int minHeight() const;
+
 protected:
     ScrollVisiblePartBase* visiblePartWidget() const
     { return mVisiblePartWidget; }
+
 private:
     ScrollVisiblePartBase * const mVisiblePartWidget;
     ScrollArea * const mParentScrollArea;

@@ -26,7 +26,7 @@
 #ifndef BOXSCROLLWIDGET_H
 #define BOXSCROLLWIDGET_H
 
-#include "OptimalScrollArea/scrollwidget.h"
+#include "optimalscrollarena/scrollwidget.h"
 #include "GUI/keyfocustarget.h"
 class BoxScroller;
 class ScrollArea;

@@ -29,7 +29,6 @@
 #include "singlewidget.h"
 #include "scrollwidget.h"
 #include "singlewidgettarget.h"
-#include "GUI/mainwindow.h"
 #include "GUI/global.h"
 
 int ScrollWidgetVisiblePart::sNextId = 0;

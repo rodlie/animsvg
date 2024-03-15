@@ -45,7 +45,7 @@
 #include "canvaswindow.h"
 #include "GUI/BoxesList/boxscrollwidget.h"
 #include "clipboardcontainer.h"
-#include "GUI/BoxesList/OptimalScrollArea/scrollarea.h"
+#include "optimalscrollarena/scrollarea.h"
 #include "GUI/BoxesList/boxscroller.h"
 #include "GUI/RenderWidgets/renderwidget.h"
 #include "fontswidget.h"

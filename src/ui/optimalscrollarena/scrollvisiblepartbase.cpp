@@ -29,8 +29,8 @@
 #include "singlewidget.h"
 #include "scrollwidget.h"
 #include "singlewidgettarget.h"
-#include "GUI/mainwindow.h"
 #include "GUI/global.h"
+#include <QApplication>
 
 ScrollVisiblePartBase::ScrollVisiblePartBase(
         MinimalScrollWidget * const parent) {

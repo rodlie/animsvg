@@ -26,12 +26,15 @@
 #ifndef SCROLLWIDGET_H
 #define SCROLLWIDGET_H
 
+#include "ui_global.h"
+
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QLabel>
 #include "minimalscrollwidget.h"
 #include "smartPointers/ememory.h"
 #include "swt_rulescollection.h"
+
 class SingleWidget;
 class ScrollWidgetVisiblePart;
 class SWT_Abstraction;
@@ -42,8 +45,10 @@ enum class SWT_BoxRule : short;
 enum class SWT_Target : short;
 enum class SWT_Type : short;
 
-class ScrollWidget : public MinimalScrollWidget {
+class UI_EXPORT ScrollWidget : public MinimalScrollWidget
+{
     Q_OBJECT
+
 public:
     explicit ScrollWidget(ScrollWidgetVisiblePart* const visiblePart,
                           ScrollArea * const parent);
@@ -74,9 +79,11 @@ public:
 
     void updateVisible();
     const QList<QWidget*> &visibleWidgets();
+
 protected:
     ScrollWidgetVisiblePart* visiblePartWidget() const
     { return mVisiblePartWidget; }
+
 private:
     void updateAbstraction();
     void updateHeightAfterScrollAreaResize(const int parentHeight);

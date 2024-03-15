@@ -26,6 +26,8 @@
 #ifndef SCROLLWIDGETVISIBLEPART_H
 #define SCROLLWIDGETVISIBLEPART_H
 
+#include "ui_global.h"
+
 #include "scrollvisiblepartbase.h"
 #include <QWidget>
 #include <QVBoxLayout>
@@ -33,11 +35,14 @@
 #include <memory>
 #include "smartPointers/ememory.h"
 #include "singlewidgettarget.h"
+
 class ScrollWidget;
 class SingleWidgetTarget;
 
-class ScrollWidgetVisiblePart : public ScrollVisiblePartBase {
+class UI_EXPORT ScrollWidgetVisiblePart : public ScrollVisiblePartBase
+{
     Q_OBJECT
+
 public:
     ScrollWidgetVisiblePart(ScrollWidget * const parent);
 
@@ -71,6 +76,7 @@ public:
 
     SWT_Abstraction* getMainAbstration() const
     { return mMainAbstraction; }
+
 private:
     void setupUpdateFuncs();
     void scheduleSearchUpdate();

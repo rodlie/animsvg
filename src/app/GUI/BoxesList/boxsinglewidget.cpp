@@ -26,7 +26,7 @@
 #include "boxsinglewidget.h"
 #include "swt_abstraction.h"
 #include "singlewidgettarget.h"
-#include "OptimalScrollArea/scrollwidgetvisiblepart.h"
+#include "optimalscrollarena/scrollwidgetvisiblepart.h"
 #include "GUI/ColorWidgets/colorsettingswidget.h"
 
 #include "Boxes/containerbox.h"

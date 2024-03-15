@@ -159,7 +159,6 @@ endif()
 set(
     SOURCES
     main.cpp
-    GUI/BoxesList/OptimalScrollArea/scrollvisiblepartbase.cpp
     GUI/BoxesList/boxscroller.cpp
     #GUI/BrushWidgets/bookmarkedbrushes.cpp
     #GUI/BrushWidgets/brushlabel.cpp
@@ -217,10 +216,6 @@ set(
     evfileio.cpp
     iconloader.cpp
     renderhandler.cpp
-    GUI/BoxesList/OptimalScrollArea/scrollarea.cpp
-    GUI/BoxesList/OptimalScrollArea/scrollwidget.cpp
-    GUI/BoxesList/OptimalScrollArea/scrollwidgetvisiblepart.cpp
-    GUI/BoxesList/OptimalScrollArea/singlewidget.cpp
     GUI/BoxesList/boxsinglewidget.cpp
     GUI/BoxesList/boxscrollwidget.cpp
     GUI/BoxesList/boolpropertywidget.cpp
@@ -233,7 +228,6 @@ set(
     GUI/GradientWidgets/currentgradientwidget.cpp
     GUI/RenderWidgets/closablecontainer.cpp
     GUI/BoxesList/boxtargetwidget.cpp
-    GUI/BoxesList/OptimalScrollArea/minimalscrollwidget.cpp
     GUI/BoxesList/boxscrollarea.cpp
     GUI/RenderWidgets/outputsettingsprofilesdialog.cpp
     GUI/RenderWidgets/outputsettingsdisplaywidget.cpp
@@ -260,7 +254,6 @@ set(
 
 set(
     HEADERS
-    GUI/BoxesList/OptimalScrollArea/scrollvisiblepartbase.h
     GUI/BoxesList/boxscroller.h
     #GUI/BrushWidgets/bookmarkedbrushes.h
     #GUI/BrushWidgets/brushlabel.h
@@ -315,10 +308,6 @@ set(
     eimporters.h
     iconloader.h
     renderhandler.h
-    GUI/BoxesList/OptimalScrollArea/scrollarea.h
-    GUI/BoxesList/OptimalScrollArea/scrollwidget.h
-    GUI/BoxesList/OptimalScrollArea/scrollwidgetvisiblepart.h
-    GUI/BoxesList/OptimalScrollArea/singlewidget.h
     GUI/BoxesList/boxsinglewidget.h
     GUI/BoxesList/boxscrollwidget.h
     GUI/BoxesList/boolpropertywidget.h
@@ -331,7 +320,6 @@ set(
     GUI/GradientWidgets/currentgradientwidget.h
     GUI/RenderWidgets/closablecontainer.h
     GUI/BoxesList/boxtargetwidget.h
-    GUI/BoxesList/OptimalScrollArea/minimalscrollwidget.h
     GUI/BoxesList/boxscrollarea.h
     GUI/RenderWidgets/outputsettingsprofilesdialog.h
     GUI/RenderWidgets/outputsettingsdisplaywidget.h

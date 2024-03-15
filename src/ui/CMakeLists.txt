@@ -37,6 +37,12 @@ include_directories(
 set(
     SOURCES
     dialogs/scenesettingsdialog.cpp
+    optimalscrollarena/minimalscrollwidget.cpp
+    optimalscrollarena/scrollarea.cpp
+    optimalscrollarena/scrollvisiblepartbase.cpp
+    optimalscrollarena/scrollwidget.cpp
+    optimalscrollarena/scrollwidgetvisiblepart.cpp
+    optimalscrollarena/singlewidget.cpp
     widgets/actionbutton.cpp
     widgets/alignwidget.cpp
     widgets/assetswidget.cpp
@@ -58,6 +64,12 @@ set(
     HEADERS
     ui_global.h
     dialogs/scenesettingsdialog.h
+    optimalscrollarena/minimalscrollwidget.h
+    optimalscrollarena/scrollarea.h
+    optimalscrollarena/scrollvisiblepartbase.h
+    optimalscrollarena/scrollwidget.h
+    optimalscrollarena/scrollwidgetvisiblepart.h
+    optimalscrollarena/singlewidget.h
     widgets/actionbutton.h
     widgets/alignwidget.h
     widgets/assetswidget.h

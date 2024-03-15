@@ -25,7 +25,7 @@
 
 #ifndef BOXSCROLLAREA_H
 #define BOXSCROLLAREA_H
-#include "OptimalScrollArea/scrollarea.h"
+#include "optimalscrollarena/scrollarea.h"
 
 class BoxScrollArea : public ScrollArea {
 public:
