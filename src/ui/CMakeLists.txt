@@ -47,6 +47,7 @@ set(
     widgets/editablecombobox.cpp
     widgets/fakemenubar.cpp
     widgets/flowlayout.cpp
+    widgets/scenechooser.cpp
     widgets/twocolumnlayout.cpp
     widgets/uilayout.cpp
 )
@@ -65,6 +66,7 @@ set(
     widgets/editablecombobox.h
     widgets/fakemenubar.h
     widgets/flowlayout.h
+    widgets/scenechooser.h
     widgets/toolbutton.h
     widgets/twocolumnlayout.h
     widgets/uilayout.h

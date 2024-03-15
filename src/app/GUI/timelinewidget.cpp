@@ -40,7 +40,7 @@
 #include "animationdockwidget.h"
 #include "GUI/global.h"
 #include "canvas.h"
-#include "scenechooser.h"
+#include "widgets/scenechooser.h"
 #include "widgets/changewidthwidget.h"
 #include "timelinehighlightwidget.h"
 

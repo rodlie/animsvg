@@ -22,7 +22,7 @@
 #include "exportsvgdialog.h"
 
 #include "Private/document.h"
-#include "GUI/scenechooser.h"
+#include "widgets/scenechooser.h"
 #include "GUI/global.h"
 #include "canvas.h"
 #include "svgexporter.h"
