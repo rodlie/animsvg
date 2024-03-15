@@ -134,7 +134,7 @@ if(${USE_SKIA_SYSTEM_LIBS} AND UNIX)
 endif()
 
 if(UNIX AND NOT APPLE)
-    include_directories(${GPERF_INCLUDES_DIRS})
+    include_directories(${GPERF_INCLUDE_DIRS})
     configure_file(
         app.desktop.in
         ${CMAKE_BINARY_DIR}/${PROJECT_FREEDESKTOP}.desktop

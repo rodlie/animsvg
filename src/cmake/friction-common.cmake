@@ -107,7 +107,7 @@ else()
             fontconfig
             ${OPENGL_LIBRARY})
         pkg_check_modules(UNWIND REQUIRED libunwind)
-        set(GPERF_INCLUDES_DIRS ${CMAKE_CURRENT_BINARY_DIR}/../gperftools ${UNWIND_INCLUDE_DIRS})
+        set(GPERF_INCLUDE_DIRS ${CMAKE_CURRENT_BINARY_DIR}/../gperftools ${UNWIND_INCLUDE_DIRS})
         set(GPERF_LIBRARIES tcmalloc_static ${UNWIND_LIBRARIES})
     endif()
 endif()
