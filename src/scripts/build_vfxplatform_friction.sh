@@ -76,6 +76,11 @@ fi
 cp -a ${SDK}/include/libunw* /usr/include/
 cp -a ${SDK}/lib/libunw* /usr/lib64/
 
+CMAKE_EXTRA=""
+
+GIT_COMMIT=`git rev-parse --short=8 HEAD`
+GIT_BRANCH=`git rev-parse --abbrev-ref HEAD`
+
 cmake -GNinja \
 -DCMAKE_INSTALL_PREFIX=${SDK} \
 -DCMAKE_PREFIX_PATH=${SDK} \
@@ -88,12 +93,13 @@ cmake -GNinja \
 -DQSCINTILLA_LIBRARIES=qscintilla2_friction_qt5 \
 -DCMAKE_CXX_COMPILER=clang++ \
 -DCMAKE_C_COMPILER=clang \
+-DGIT_COMMIT=${GIT_COMMIT} \
+-DGIT_BRANCH=${GIT_BRANCH} \
 ..
 
 VERSION=`cat version.txt`
 if [ "${REL}" != 1 ]; then
-    GIT=`git rev-parse --short HEAD`
-    VERSION="${VERSION}-dev-${GIT}"
+    VERSION="${VERSION}-${GIT_BRANCH}-${GIT_COMMIT}"
 fi
 
 cmake --build .

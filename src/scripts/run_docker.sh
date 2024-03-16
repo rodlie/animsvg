@@ -26,15 +26,15 @@ REL=${REL:-0}
 BRANCH=${BRANCH:-""}
 COMMIT=${COMMIT:-""}
 TAG=${TAG:-""}
-MKJOBS=${JOBS:-4}
+MKJOBS=${MKJOBS:-4}
 
 JAMMY=${JAMMY:-1}
 MANTIC=${MANTIC:-1}
 NOBLE=${NOBLE:-1}
 
-MOUNT_DIR="snapshots"
+MOUNT_DIR="distfiles"
 DOCKER_MOUNT="-t --mount type=bind,source=${CWD}/${MOUNT_DIR},target=/${MOUNT_DIR}"
-DOCKER="docker run -e REL=${REL} -e MKJOBS=${JOBS}"
+DOCKER="docker run -e REL=${REL} -e MKJOBS=${MKJOBS}"
 
 if [ "${BRANCH}" != "" ]; then
     DOCKER="${DOCKER} -e FRICTION_BRANCH=${BRANCH}"

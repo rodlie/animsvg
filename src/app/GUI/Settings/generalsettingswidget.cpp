@@ -31,7 +31,6 @@
 
 #include "Private/esettings.h"
 #include "GUI/global.h"
-#include "labeledslider.h"
 
 #include "../mainwindow.h"
 

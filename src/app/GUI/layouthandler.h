@@ -29,7 +29,7 @@
 #include "timelinebasewrappernode.h"
 #include "canvasbasewrappernode.h"
 #include "canvas.h"
-#include "audiohandler.h"
+#include "Sound/audiohandler.h"
 #include "XML/runtimewriteid.h"
 #include <QStackedWidget>
 

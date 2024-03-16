@@ -31,14 +31,14 @@
 #include <QLabel>
 #include <QStatusBar>
 
-#include "../buttonslist.h"
+#include "widgets/buttonslist.h"
 #include "GUI/global.h"
 #include "GUI/mainwindow.h"
 #include "GUI/Expressions/expressiondialog.h"
-#include "GUI/Dialogs/durationrectsettingsdialog.h"
-#include "GUI/Dialogs/animationtopaintdialog.h"
-#include "GUI/Dialogs/applyexpressiondialog.h"
-#include "GUI/Dialogs/scenesettingsdialog.h"
+#include "dialogs/durationrectsettingsdialog.h"
+//#include "GUI/Dialogs/animationtopaintdialog.h"
+#include "dialogs/applyexpressiondialog.h"
+#include "dialogs/scenesettingsdialog.h"
 
 DialogsInterfaceImpl DialogsInterfaceImpl::sInstance;
 

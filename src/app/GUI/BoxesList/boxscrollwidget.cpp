@@ -24,7 +24,7 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "boxscrollwidget.h"
-#include "GUI/BoxesList/OptimalScrollArea/scrollarea.h"
+#include "optimalscrollarena/scrollarea.h"
 #include "Boxes/boundingbox.h"
 #include "boxscroller.h"
 #include "GUI/canvaswindow.h"

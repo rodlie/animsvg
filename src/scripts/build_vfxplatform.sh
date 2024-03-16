@@ -32,6 +32,15 @@ MKJOBS=${MKJOBS:-4}
 SDK_VERSION=${SDK_VERSION:-""}
 ONLY_SDK=${ONLY_SDK:-0}
 SDK_TAR="${DISTFILES}/friction-vfxplatform-sdk-${SDK_VERSION}.tar"
+BUILD_RPM=${REL}
+DOWNLOAD_SDK=${DOWNLOAD_SDK:-0}
+
+# Download SDK
+if [ "${DOWNLOAD_SDK}" = 1 ] && [ ! -f "${SDK_TAR}.xz" ]; then
+    (cd ${DISTFILES} ;
+        wget https://download.friction.graphics/distfiles/vfxplatform/friction-vfxplatform-sdk-${SDK_VERSION}.tar.xz
+    )
+fi
 
 # Build SDK
 if [ ! -d "${SDK}" ]; then
@@ -69,8 +78,9 @@ ${BUILD}/build_vfxplatform_friction.sh
 # Get Friction version
 VERSION=`cat ${BUILD}/friction/build-vfxplatform/version.txt`
 if [ "${REL}" != 1 ]; then
-    GIT=`(cd ${BUILD}/friction ; git rev-parse --short HEAD)`
-    VERSION="${VERSION}-dev-${GIT}"
+    GIT_COMMIT=`(cd ${BUILD}/friction ; git rev-parse --short=8 HEAD)`
+    GIT_BRANCH=`(cd ${BUILD}/friction ; git rev-parse --abbrev-ref HEAD)`
+    VERSION="${VERSION}-${GIT_BRANCH}-${GIT_COMMIT}"
 fi
 
 # Package Friction
@@ -78,4 +88,5 @@ SDK=${SDK} \
 DISTFILES=${DISTFILES} \
 BUILD=${BUILD} \
 VERSION=${VERSION} \
+PKG_RPM=${BUILD_RPM} \
 ${BUILD}/build_vfxplatform_package.sh

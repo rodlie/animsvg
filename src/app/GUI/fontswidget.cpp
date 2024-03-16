@@ -31,7 +31,7 @@
 #include <QIntValidator>
 #include <QLabel>
 
-#include "editablecombobox.h"
+#include "widgets/editablecombobox.h"
 
 FontsWidget::FontsWidget(QWidget *parent)
     : QWidget(parent)

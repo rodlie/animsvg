@@ -33,7 +33,7 @@ message("-- ffmpeg libraries: ${FFMPEG_LIBRARIES_DIRS} ${FFMPEG_LIBRARIES}")
 message("-- skia libraries: ${SKIA_LIBRARIES}")
 
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
-add_definitions(-DPROJECT_GIT="${GIT_COMMIT}")
+add_definitions(-DPROJECT_COMMIT="${GIT_COMMIT}")
 add_definitions(-DPROJECT_BRANCH="${GIT_BRANCH}")
 
 add_definitions(-DCORE_LIBRARY)
@@ -209,6 +209,7 @@ set(
     ShaderEffects/shadereffectprogram.cpp
     ShaderEffects/shadervaluehandler.cpp
     ShaderEffects/uniformspecifiercreator.cpp
+    Sound/audiohandler.cpp
     Sound/eindependentsound.cpp
     Sound/esound.cpp
     Sound/esoundlink.cpp
@@ -286,12 +287,10 @@ set(
     swt_abstraction.cpp
     swt_rulescollection.cpp
     texteffect.cpp
-    texteffectcaller.cpp
     transformvalues.cpp
     undoredo.cpp
     exceptions.cpp
     glhelpers.cpp
-    skia/skimagecopy.cpp
     skia/skqtconversions.cpp
     pointhelpers.cpp
     simplemath.cpp
@@ -344,6 +343,10 @@ set(
     wrappedint.cpp
     zipfileloader.cpp
     zipfilesaver.cpp
+    outputsettings.cpp
+    rendersettings.cpp
+    renderinstancesettings.cpp
+    videoencoder.cpp
 )
 
 set(
@@ -530,6 +533,7 @@ set(
     ShaderEffects/shadereffectprogram.h
     ShaderEffects/shadervaluehandler.h
     ShaderEffects/uniformspecifiercreator.h
+    Sound/audiohandler.h
     Sound/eindependentsound.h
     Sound/esound.h
     Sound/esoundlink.h
@@ -613,14 +617,12 @@ set(
     swt_abstraction.h
     swt_rulescollection.h
     texteffect.h
-    texteffectcaller.h
     transformvalues.h
     undoredo.h
     exceptions.h
     glhelpers.h
     skia/skiadefines.h
     skia/skiaincludes.h
-    skia/skimagecopy.h
     skia/skqtconversions.h
     pointhelpers.h
     simplemath.h
@@ -675,6 +677,10 @@ set(
     windowsincludes.h
     zipfileloader.h
     zipfilesaver.h
+    outputsettings.h
+    rendersettings.h
+    renderinstancesettings.h
+    videoencoder.h
 )
 
 if(NOT WIN32)

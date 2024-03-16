@@ -26,7 +26,7 @@
 #include "renderoutputwidget.h"
 
 #include "GUI/edialogs.h"
-#include "editablecombobox.h"
+#include "widgets/editablecombobox.h"
 
 #include <QLineEdit>
 #include <QDir>

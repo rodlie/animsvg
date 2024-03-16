@@ -30,6 +30,7 @@
 #include <QPainter>
 #include <QLabel>
 
+#include "widgets/toolbutton.h"
 #include "appsupport.h"
 
 WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
@@ -57,7 +58,7 @@ WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
                                          "<p style=\"margin: 0; padding: 0;\"><img src=\":/icons/hicolor/%2x%2/apps/%4.png\" width=\"%2\" height=\"%2\"></p>"
                                          "<h1 style=\"font-weight: normal; margin-top: 0; padding-top: 0;\">%3<br><span style=\"font-size: large;\">%1</span></h1>"
                                          "</div>")
-                                        .arg(AppSupport::getAppVersion(false),
+                                        .arg(AppSupport::getAppVersion(),
                                              QString::number(logoSize),
                                              AppSupport::getAppDisplayName(),
                                              AppSupport::getAppName()));
@@ -80,11 +81,13 @@ WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
                               QSizePolicy::Expanding);
     connect(openButton, &QPushButton::released, openFunc);
 
-    const auto recentButton = new QPushButton(tr("Open Recent"), this);
+    const auto recentButton = new ToolButton(this, true);
+    const auto recentDefaultAct = new QAction(tr("Open Recent"), this);
+    recentButton->setDefaultAction(recentDefaultAct);
     recentButton->setSizePolicy(QSizePolicy::Preferred,
                                 QSizePolicy::Preferred);
     recentButton->setContentsMargins(0, 0, 0, 0);
-    recentButton->setObjectName("WelcomeRecentButton");
+    recentButton->setObjectName("FlatButton");
     recentButton->setMenu(recentMenu);
 
     thisLay->addWidget(mainWid, 0, Qt::AlignHCenter | Qt::AlignVCenter);

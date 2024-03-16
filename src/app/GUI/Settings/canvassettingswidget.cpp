@@ -26,9 +26,9 @@
 #include "canvassettingswidget.h"
 
 #include "Private/esettings.h"
-#include "labeledslider.h"
+#include "widgets/labeledslider.h"
 #include "GUI/coloranimatorbutton.h"
-#include "GUI/twocolumnlayout.h"
+#include "widgets/twocolumnlayout.h"
 
 #include <QLabel>
 

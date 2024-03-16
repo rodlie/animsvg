@@ -46,7 +46,6 @@
 #include "smartPointers/ememory.h"
 #include "framerange.h"
 #include "timelinebasewrappernode.h"
-#include "triggerlabel.h"
 #include "qdoubleslider.h"
 #include "renderhandler.h"
 

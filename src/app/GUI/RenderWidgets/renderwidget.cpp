@@ -27,7 +27,7 @@
 #include "canvas.h"
 #include "GUI/global.h"
 #include "renderinstancewidget.h"
-#include "GUI/BoxesList/OptimalScrollArea/scrollarea.h"
+#include "optimalscrollarena/scrollarea.h"
 #include "videoencoder.h"
 #include "renderhandler.h"
 #include "videoencoder.h"
