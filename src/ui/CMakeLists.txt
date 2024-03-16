@@ -121,11 +121,18 @@ set_target_properties(
     ${PROJECT_VERSION_MAJOR}
 )
 
+target_link_directories(
+    ${PROJECT_NAME}
+    PRIVATE
+    ${FFMPEG_LIBRARIES_DIRS}
+    ${CMAKE_CURRENT_BINARY_DIR}/../engine/skia
+)
+
 target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
     frictioncore
     ${QT_LIBRARIES}
     ${SKIA_LIBRARIES}
-    ${FFMPEG_LIBRARIES_DIRS}
+    ${FFMPEG_LIBRARIES}
 )
