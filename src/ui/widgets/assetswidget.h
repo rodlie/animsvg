@@ -51,7 +51,7 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event);
 };
 
-class AssetsWidgetItem : public QTreeWidgetItem
+class UI_EXPORT AssetsWidgetItem : public QTreeWidgetItem
 {
 public:
     explicit AssetsWidgetItem(QTreeWidget *parent = nullptr,
@@ -64,7 +64,7 @@ private:
                   bool missing);
 };
 
-class AssetsWidget : public QWidget
+class UI_EXPORT AssetsWidget : public QWidget
 {
     Q_OBJECT
 
