@@ -40,11 +40,6 @@ if(${WIN_DEPLOY})
     add_definitions(-DWIN_DEPLOY)
 endif()
 
-option(USE_ROBOTO "Use Roboto font" OFF)
-if(${USE_ROBOTO})
-    add_definitions(-DFRICTION_BUNDLE_ROBOTO)
-endif()
-
 option(USE_SKIA_SYSTEM_LIBS "Use skia (third-party) system libraries on Linux" ON)
 if(${USE_SKIA_SYSTEM_LIBS} AND UNIX)
     pkg_check_modules(EXPAT REQUIRED expat)
@@ -347,10 +342,6 @@ elseif(${WIN_DEPLOY})
     list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs_win.qrc)
 else()
     list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs.qrc)
-endif()
-
-if(${USE_ROBOTO})
-    list(APPEND RESOURCES fonts.qrc)
 endif()
 
 add_executable(
