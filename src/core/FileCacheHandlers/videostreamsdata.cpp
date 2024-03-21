@@ -117,7 +117,9 @@ void VideoStreamsData::open(const char * const path) {
 
     fCodecContext = avcodec_alloc_context3(vidCodec);
     if(!fCodecContext) RuntimeThrow("Error allocating AVCodecContext");
-    fCodecContext->thread_count = QThread::idealThreadCount() - 1;
+    int maxThreads = QThread::idealThreadCount() - 1;
+    // we set max threads to 16, beyond that ffmpeg will complain and there might be issues
+    fCodecContext->thread_count = maxThreads > 16 ? 16 : maxThreads;
     if(avcodec_parameters_to_context(fCodecContext, vidCodecPars) < 0) {
         RuntimeThrow("Failed to copy codec params to codec context");
     }
