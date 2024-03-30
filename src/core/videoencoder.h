@@ -213,6 +213,8 @@ public:
 
     static VideoEncoder *sInstance;
 
+    static bool isValidProfile(const AVCodec *codec, int profile);
+
     static void sInterruptEncoding();
     static bool sStartEncoding(RenderInstanceSettings *settings);
     static void sAddCacheContainerToEncoder(const stdsptr<SceneFrameContainer> &cont);

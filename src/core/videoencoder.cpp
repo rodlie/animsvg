@@ -65,6 +65,75 @@ void VideoEncoder::allAudioProvided() {
     if(getState() < eTaskState::qued || getState() > eTaskState::processing) queTask();
 }
 
+bool VideoEncoder::isValidProfile(const AVCodec *codec,
+                                  int profile)
+{
+    if (profile < 0 || !codec) { return false; }
+    switch (codec->id) {
+    case AV_CODEC_ID_H264:
+        switch (profile) {
+        case FF_PROFILE_H264_BASELINE:
+        case FF_PROFILE_H264_MAIN:
+        case FF_PROFILE_H264_HIGH:
+            return true;
+        default:;
+        }
+        break;
+    case AV_CODEC_ID_PRORES:
+        switch (profile) {
+        case FF_PROFILE_PRORES_PROXY:
+        case FF_PROFILE_PRORES_LT:
+        case FF_PROFILE_PRORES_STANDARD:
+        case FF_PROFILE_PRORES_HQ:
+        case FF_PROFILE_PRORES_4444:
+        case FF_PROFILE_PRORES_XQ:
+            return true;
+        default:;
+        }
+        break;
+    case AV_CODEC_ID_AV1:
+        switch (profile) {
+        case FF_PROFILE_AV1_MAIN:
+        case FF_PROFILE_AV1_HIGH:
+        case FF_PROFILE_AV1_PROFESSIONAL:
+            return true;
+        default:;
+        }
+        break;
+    case AV_CODEC_ID_VP9:
+        switch (profile) {
+        case FF_PROFILE_VP9_0:
+        case FF_PROFILE_VP9_1:
+        case FF_PROFILE_VP9_2:
+        case FF_PROFILE_VP9_3:
+            return true;
+        default:;
+        }
+        break;
+    case AV_CODEC_ID_MPEG4:
+        switch (profile) {
+        case FF_PROFILE_MPEG4_SIMPLE:
+        case FF_PROFILE_MPEG4_CORE:
+        case FF_PROFILE_MPEG4_MAIN:
+            return true;
+        default:;
+        }
+        break;
+    case AV_CODEC_ID_VC1:
+        switch (profile) {
+        case FF_PROFILE_VC1_SIMPLE:
+        case FF_PROFILE_VC1_MAIN:
+        case FF_PROFILE_VC1_COMPLEX:
+        case FF_PROFILE_VC1_ADVANCED:
+            return true;
+        default:;
+        }
+        break;
+    default:;
+    }
+    return false;
+}
+
 static AVFrame *allocPicture(enum AVPixelFormat pix_fmt,
                              const int width, const int height) {
     AVFrame * const picture = av_frame_alloc();
@@ -132,8 +201,8 @@ static void addVideoStream(OutputStream * const ost,
     ost->fStream->time_base = renSettings.fTimeBase;
     c->time_base       = ost->fStream->time_base;
 
-    // set video codec profile (if any)
-    if (outSettings.fVideoProfile >= 0) {
+    if (VideoEncoder::isValidProfile(codec,
+                                     outSettings.fVideoProfile)) {
         c->profile = outSettings.fVideoProfile;
     }
 
