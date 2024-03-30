@@ -253,7 +253,8 @@ void OutputSettingsProfile::load(const QString &path)
                                                          .toUtf8()
                                                          .data());
             mSettings.fVideoBitrate = profile.value(QString::fromUtf8("video_bitrate")).toInt();
-            mSettings.fVideoProfile = profile.value(QString::fromUtf8("video_profile")).toInt();
+            mSettings.fVideoProfile = profile.value(QString::fromUtf8("video_profile"),
+                                                    FF_PROFILE_UNKNOWN).toInt();
         }
         mSettings.fAudioEnabled = profileAudioEnabled;
         if (mSettings.fAudioEnabled) {
