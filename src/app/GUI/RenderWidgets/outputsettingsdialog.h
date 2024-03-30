@@ -68,6 +68,7 @@ protected:
     void updateAvailableAudioChannelLayouts();
 
     void restoreInitialSettings();
+    void restoreVideoProfileSettings();
 
     void setShowAllFormatsAndCodecs(const bool bT) {
         if(mShowAllFormatsAndCodecs == bT) return;

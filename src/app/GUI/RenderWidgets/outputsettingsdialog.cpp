@@ -672,6 +672,9 @@ void OutputSettingsDialog::restoreInitialSettings() {
     } else {
         mBitrateSpinBox->setValue(currentBitrate/1000000.);
     }
+
+    restoreVideoProfileSettings();
+
     const bool noVideoCodecs = mVideoCodecsComboBox->count() == 0;
     mVideoGroupBox->setChecked(mInitialSettings.fVideoEnabled &&
                                !noVideoCodecs);
@@ -743,6 +746,17 @@ void OutputSettingsDialog::restoreInitialSettings() {
     const bool noAudioCodecs = mAudioCodecsComboBox->count() == 0;
     mAudioGroupBox->setChecked(mInitialSettings.fAudioEnabled &&
                                !noAudioCodecs);
+}
+
+void OutputSettingsDialog::restoreVideoProfileSettings()
+{
+    if (mVideoProfileComboBox->count() < 2) { return; }
+    for (int i = 0; i < mVideoProfileComboBox->count(); ++i) {
+        if (mVideoProfileComboBox->itemData(i).toInt() == mInitialSettings.fVideoProfile) {
+            mVideoProfileComboBox->setCurrentIndex(i);
+            break;
+        }
+    }
 }
 
 
