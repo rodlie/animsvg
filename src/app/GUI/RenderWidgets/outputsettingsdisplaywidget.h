@@ -75,13 +75,10 @@ private:
             switch (profile) {
             case FF_PROFILE_H264_BASELINE:
                 return tr("Baseline");
-                break;
             case FF_PROFILE_H264_MAIN:
                 return tr("Main");
-                break;
             case FF_PROFILE_H264_HIGH:
                 return tr("High");
-                break;
             default:;
             }
             break;
@@ -89,22 +86,16 @@ private:
             switch (profile) {
             case FF_PROFILE_PRORES_PROXY:
                 return tr("Proxy");
-                break;
             case FF_PROFILE_PRORES_LT:
                 return tr("LT");
-                break;
             case FF_PROFILE_PRORES_STANDARD:
                 return tr("Standard");
-                break;
             case FF_PROFILE_PRORES_HQ:
                 return tr("HQ");
-                break;
             case FF_PROFILE_PRORES_4444:
                 return tr("4444");
-                break;
             case FF_PROFILE_PRORES_XQ:
                 return tr("XQ");
-                break;
             default:;
             }
             break;
@@ -112,13 +103,10 @@ private:
             switch (profile) {
             case FF_PROFILE_AV1_MAIN:
                 return tr("Main");
-                break;
             case FF_PROFILE_AV1_HIGH:
                 return tr("High");
-                break;
             case FF_PROFILE_AV1_PROFESSIONAL:
                 return tr("Professional");
-                break;
             default:;
             }
             break;
@@ -126,16 +114,12 @@ private:
             switch (profile) {
             case FF_PROFILE_VP9_0:
                 return tr("0");
-                break;
             case FF_PROFILE_VP9_1:
                 return tr("1");
-                break;
             case FF_PROFILE_VP9_2:
                 return tr("2");
-                break;
             case FF_PROFILE_VP9_3:
                 return tr("3");
-                break;
             default:;
             }
             break;
@@ -143,13 +127,10 @@ private:
             switch (profile) {
             case FF_PROFILE_MPEG4_SIMPLE:
                 return tr("Simple");
-                break;
             case FF_PROFILE_MPEG4_CORE:
                 return tr("Core");
-                break;
             case FF_PROFILE_MPEG4_MAIN:
                 return tr("Main");
-                break;
             default:;
             }
             break;
@@ -157,16 +138,12 @@ private:
             switch (profile) {
             case FF_PROFILE_VC1_SIMPLE:
                 return tr("Simple");
-                break;
             case FF_PROFILE_VC1_MAIN:
                 return tr("Main");
-                break;
             case FF_PROFILE_VC1_COMPLEX:
                 return tr("Complex");
-                break;
             case FF_PROFILE_VC1_ADVANCED:
                 return tr("Advanced");
-                break;
             default:;
             }
             break;
@@ -174,6 +151,7 @@ private:
         }
         return QString();
     }
+
     void setVideoCodecText(const QString &txt,
                            const AVCodec *codec,
                            int profile)
