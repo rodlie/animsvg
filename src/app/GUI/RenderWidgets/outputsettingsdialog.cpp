@@ -30,7 +30,7 @@
 OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
                                            QWidget *parent) :
     QDialog(parent), mInitialSettings(settings) {
-    setWindowTitle("Output Settings");
+    setWindowTitle(tr("Output Settings"));
 
     mSupportedFormats = {
         FormatCodecs(QList<AVCodecID>() << AV_CODEC_ID_PNG << AV_CODEC_ID_TIFF << AV_CODEC_ID_MJPEG << AV_CODEC_ID_LJPEG,
@@ -74,18 +74,18 @@ OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
     setLayout(mMainLayout);
 
     mOutputFormatsLayout = new QHBoxLayout();
-    mOutputFormatsLabel = new QLabel("Format:", this);
+    mOutputFormatsLabel = new QLabel(tr("Format"), this);
     mOutputFormatsComboBox = new QComboBox(this);
     mOutputFormatsLayout->addWidget(mOutputFormatsLabel);
     mOutputFormatsLayout->addWidget(mOutputFormatsComboBox);
 
-    mVideoGroupBox = new QGroupBox("Video", this);
+    mVideoGroupBox = new QGroupBox(tr("Video"), this);
     mVideoGroupBox->setCheckable(true);
     mVideoGroupBox->setChecked(true);
     mVideoSettingsLayout = new TwoColumnLayout();
-    mVideoCodecsLabel = new QLabel("Codec:", this);
-    mPixelFormatsLabel = new QLabel("Pixel format:", this);
-    mBitrateLabel = new QLabel("Bitrate:", this);
+    mVideoCodecsLabel = new QLabel(tr("Codec"), this);
+    mPixelFormatsLabel = new QLabel(tr("Pixel format"), this);
+    mBitrateLabel = new QLabel(tr("Bitrate"), this);
 
     mVideoCodecsComboBox = new QComboBox(this);
     mPixelFormatsComboBox = new QComboBox(this);
@@ -105,14 +105,14 @@ OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
     mVideoSettingsLayout->addPair(mBitrateLabel,
                                   mBitrateSpinBox);
 
-    mAudioGroupBox = new QGroupBox("Audio", this);
+    mAudioGroupBox = new QGroupBox(tr("Audio"), this);
     mAudioGroupBox->setCheckable(true);
     mAudioSettingsLayout = new TwoColumnLayout();
-    mAudioCodecsLabel = new QLabel("Codec:", this);
-    mSampleRateLabel = new QLabel("Sample rate:", this);
-    mSampleFormatsLabel = new QLabel("Sample format:", this);
-    mAudioBitrateLabel = new QLabel("Bitrate:", this);
-    mAudioChannelLayoutLabel = new QLabel("Channels:", this);
+    mAudioCodecsLabel = new QLabel(tr("Codec"), this);
+    mSampleRateLabel = new QLabel(tr("Sample rate"), this);
+    mSampleFormatsLabel = new QLabel(tr("Sample format"), this);
+    mAudioBitrateLabel = new QLabel(tr("Bitrate"), this);
+    mAudioChannelLayoutLabel = new QLabel(tr("Channels"), this);
 
     mAudioCodecsComboBox = new QComboBox(this);
     mSampleRateComboBox = new QComboBox(this);
@@ -132,7 +132,7 @@ OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
                                   mAudioChannelLayoutsComboBox);
 
     mShowLayout = new QHBoxLayout();
-    mShowLabel = new QLabel("Show all formats and codecs", this);
+    mShowLabel = new QLabel(tr("Show all formats and codecs"), this);
     mShowAllFormatsAndCodecsCheckBox = new QCheckBox(this);
     connect(mShowAllFormatsAndCodecsCheckBox, &QCheckBox::toggled,
             this, &OutputSettingsDialog::setShowAllFormatsAndCodecs);
@@ -142,9 +142,9 @@ OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
     mShowLayout->setAlignment(Qt::AlignRight);
 
     mButtonsLayout = new QHBoxLayout();
-    mOkButton = new QPushButton("Ok", this);
-    mCancelButton = new QPushButton("Cancel", this);
-    mResetButton = new QPushButton("Reset", this);
+    mOkButton = new QPushButton(tr("Ok"), this);
+    mCancelButton = new QPushButton(tr("Cancel"), this);
+    mResetButton = new QPushButton(tr("Reset"), this);
     connect(mOkButton, &QPushButton::released,
             this, &OutputSettingsDialog::accept);
     connect(mCancelButton, &QPushButton::released,
