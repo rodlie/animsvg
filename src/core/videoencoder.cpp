@@ -132,6 +132,11 @@ static void addVideoStream(OutputStream * const ost,
     ost->fStream->time_base = renSettings.fTimeBase;
     c->time_base       = ost->fStream->time_base;
 
+    // set video codec profile (if any)
+    if (outSettings.fVideoProfile >= 0) {
+        c->profile = outSettings.fVideoProfile;
+    }
+
     c->gop_size      = 12; /* emit one intra frame every twelve frames at most */
     c->pix_fmt       = outSettings.fVideoPixelFormat;//RGBA;
     if(c->codec_id == AV_CODEC_ID_MPEG2VIDEO) {

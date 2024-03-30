@@ -21,6 +21,7 @@
 */
 
 #include "outputsettings.h"
+#include "ReadWrite/evformat.h"
 #include "appsupport.h"
 
 QList<qsptr<OutputSettingsProfile>> OutputSettingsProfile::sOutputProfiles;
@@ -116,6 +117,7 @@ void OutputSettings::write(eWriteStream &dst) const
     dst << (fVideoCodec ? fVideoCodec->id : -1);
     dst.write(&fVideoPixelFormat, sizeof(AVPixelFormat));
     dst << fVideoBitrate;
+    dst << fVideoProfile;
 
     dst << fAudioEnabled;
     dst << (fAudioCodec ? fAudioCodec->id : -1);
@@ -137,6 +139,9 @@ void OutputSettings::read(eReadStream &src)
     fVideoCodec = avcodec_find_encoder(avVideoCodecId);
     src.read(&fVideoPixelFormat, sizeof(AVPixelFormat));
     src >> fVideoBitrate;
+    if (src.evFileVersion() >= EvFormat::codecProfile) {
+        src >> fVideoProfile;
+    }
 
     src >> fAudioEnabled;
     int audioCodecId; src >> audioCodecId;
@@ -178,6 +183,8 @@ void OutputSettingsProfile::save()
                          av_get_pix_fmt_name(mSettings.fVideoPixelFormat));
         profile.setValue(QString::fromUtf8("video_bitrate"),
                          mSettings.fVideoBitrate);
+        profile.setValue(QString::fromUtf8("video_profile"),
+                         mSettings.fVideoProfile);
     }
     profile.setValue(QString::fromUtf8("audio_enabled"),
                      mSettings.fAudioEnabled);
@@ -246,6 +253,7 @@ void OutputSettingsProfile::load(const QString &path)
                                                          .toUtf8()
                                                          .data());
             mSettings.fVideoBitrate = profile.value(QString::fromUtf8("video_bitrate")).toInt();
+            mSettings.fVideoProfile = profile.value(QString::fromUtf8("video_profile")).toInt();
         }
         mSettings.fAudioEnabled = profileAudioEnabled;
         if (mSettings.fAudioEnabled) {

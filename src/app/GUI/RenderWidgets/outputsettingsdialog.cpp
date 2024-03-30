@@ -93,8 +93,13 @@ OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
     mBitrateSpinBox->setRange(0.1, 100.);
     mBitrateSpinBox->setSuffix(" Mbps");
 
+    mVideoProfileLabel = new QLabel(tr("Profile"), this);
+    mVideoProfileComboBox = new QComboBox(this);
+
     mVideoSettingsLayout->addPair(mVideoCodecsLabel,
                                   mVideoCodecsComboBox);
+    mVideoSettingsLayout->addPair(mVideoProfileLabel,
+                                  mVideoProfileComboBox);
     mVideoSettingsLayout->addPair(mPixelFormatsLabel,
                                   mPixelFormatsComboBox);
     mVideoSettingsLayout->addPair(mBitrateLabel,
@@ -161,8 +166,10 @@ OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
     eSizesUI::widget.addSpacing(mMainLayout);
     mMainLayout->addLayout(mButtonsLayout);
 
-    connect(mVideoCodecsComboBox, &QComboBox::currentTextChanged,
-            this, &OutputSettingsDialog::updateAvailablePixelFormats);
+    connect(mVideoCodecsComboBox, &QComboBox::currentTextChanged, [this]() {
+        updateAvailablePixelFormats();
+        updateAvailableVideoProfiles();
+    });
 
     connect(mAudioCodecsComboBox, &QComboBox::currentTextChanged, [this]() {
         updateAvailableSampleFormats();
@@ -200,6 +207,7 @@ OutputSettings OutputSettingsDialog::getSettings() {
     }
     settings.fVideoPixelFormat = currentPixelFormat;
     settings.fVideoBitrate = qRound(mBitrateSpinBox->value()*1000000);
+    settings.fVideoProfile = mVideoProfileComboBox->currentData().toInt();
 
     settings.fAudioEnabled = mAudioGroupBox->isChecked();
     const AVCodec *currentAudioCodec = nullptr;
@@ -483,6 +491,56 @@ void OutputSettingsDialog::updateAvailableSampleFormats() {
 
     if(mSampleFormatsComboBox->findText(lastSet)) {
         mSampleFormatsComboBox->setCurrentText(lastSet);
+    }
+}
+
+void OutputSettingsDialog::updateAvailableVideoProfiles()
+{
+    mVideoProfileComboBox->clear();
+    mVideoProfileComboBox->addItem(tr("Default"), FF_PROFILE_UNKNOWN);
+
+    const AVCodec *currentCodec = nullptr;
+    if (mVideoCodecsComboBox->count() > 0) {
+        currentCodec = mVideoCodecsList.at(mVideoCodecsComboBox->currentIndex());
+    }
+    if (!currentCodec) { return; }
+    switch (currentCodec->id) {
+    case AV_CODEC_ID_H264:
+        mVideoProfileComboBox->addItem(tr("Baseline"), FF_PROFILE_H264_BASELINE);
+        mVideoProfileComboBox->addItem(tr("Main"), FF_PROFILE_H264_MAIN);
+        mVideoProfileComboBox->addItem(tr("High"), FF_PROFILE_H264_HIGH);
+        break;
+    case AV_CODEC_ID_PRORES:
+        mVideoProfileComboBox->addItem(tr("Proxy"), FF_PROFILE_PRORES_PROXY);
+        mVideoProfileComboBox->addItem(tr("LT"), FF_PROFILE_PRORES_LT);
+        mVideoProfileComboBox->addItem(tr("Standard"), FF_PROFILE_PRORES_STANDARD);
+        mVideoProfileComboBox->addItem(tr("HQ"), FF_PROFILE_PRORES_HQ);
+        mVideoProfileComboBox->addItem(tr("4444"), FF_PROFILE_PRORES_4444);
+        mVideoProfileComboBox->addItem(tr("XQ"), FF_PROFILE_PRORES_XQ);
+        break;
+    case AV_CODEC_ID_AV1:
+        mVideoProfileComboBox->addItem(tr("Main"), FF_PROFILE_AV1_MAIN);
+        mVideoProfileComboBox->addItem(tr("High"), FF_PROFILE_AV1_HIGH);
+        mVideoProfileComboBox->addItem(tr("Professional"), FF_PROFILE_AV1_PROFESSIONAL);
+        break;
+    case AV_CODEC_ID_VP9:
+        mVideoProfileComboBox->addItem(tr("0"), FF_PROFILE_VP9_0);
+        mVideoProfileComboBox->addItem(tr("1"), FF_PROFILE_VP9_1);
+        mVideoProfileComboBox->addItem(tr("2"), FF_PROFILE_VP9_2);
+        mVideoProfileComboBox->addItem(tr("3"), FF_PROFILE_VP9_3);
+        break;
+    case AV_CODEC_ID_MPEG4:
+        mVideoProfileComboBox->addItem(tr("Simple"), FF_PROFILE_MPEG4_SIMPLE);
+        mVideoProfileComboBox->addItem(tr("Core"), FF_PROFILE_MPEG4_CORE);
+        mVideoProfileComboBox->addItem(tr("Main"), FF_PROFILE_MPEG4_MAIN);
+        break;
+    case AV_CODEC_ID_VC1:
+        mVideoProfileComboBox->addItem(tr("Simple"), FF_PROFILE_VC1_SIMPLE);
+        mVideoProfileComboBox->addItem(tr("Main"), FF_PROFILE_VC1_MAIN);
+        mVideoProfileComboBox->addItem(tr("Complex"), FF_PROFILE_VC1_COMPLEX);
+        mVideoProfileComboBox->addItem(tr("Advanced"), FF_PROFILE_VC1_ADVANCED);
+        break;
+    default:;
     }
 }
 
