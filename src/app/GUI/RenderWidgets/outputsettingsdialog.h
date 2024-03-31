@@ -63,10 +63,12 @@ protected:
     void updateAvailableAudioCodecs();
     void updateAvailableSampleRates();
     void updateAvailableSampleFormats();
+    void updateAvailableVideoProfiles();
     void updateAvailableAudioBitrates();
     void updateAvailableAudioChannelLayouts();
 
     void restoreInitialSettings();
+    void restoreVideoProfileSettings();
 
     void setShowAllFormatsAndCodecs(const bool bT) {
         if(mShowAllFormatsAndCodecs == bT) return;
@@ -99,6 +101,8 @@ protected:
     QComboBox *mPixelFormatsComboBox = nullptr;
     QLabel *mBitrateLabel = nullptr;
     QDoubleSpinBox *mBitrateSpinBox = nullptr;
+    QLabel *mVideoProfileLabel = nullptr;
+    QComboBox *mVideoProfileComboBox = nullptr;
 
     QGroupBox *mAudioGroupBox = nullptr;
     TwoColumnLayout *mAudioSettingsLayout = nullptr;

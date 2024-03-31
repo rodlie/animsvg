@@ -55,6 +55,7 @@ struct CORE_EXPORT OutputSettings
     const AVCodec *fVideoCodec = nullptr;
     AVPixelFormat fVideoPixelFormat = AV_PIX_FMT_NONE;
     int fVideoBitrate = 0;
+    int fVideoProfile = FF_PROFILE_UNKNOWN;
 
     bool fAudioEnabled = false;
     const AVCodec *fAudioCodec = nullptr;

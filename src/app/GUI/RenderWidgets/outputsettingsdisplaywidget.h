@@ -66,6 +66,104 @@ private:
         mVideoCodecLabel->setText("<b>Video codec:</b><br>" + txt);
     }
 
+    const QString getVideoProfileName(const AVCodec *codec,
+                                      int profile)
+    {
+        if (profile < 0 || !codec) { return QString(); }
+        switch (codec->id) {
+        case AV_CODEC_ID_H264:
+            switch (profile) {
+            case FF_PROFILE_H264_BASELINE:
+                return tr("Baseline");
+            case FF_PROFILE_H264_MAIN:
+                return tr("Main");
+            case FF_PROFILE_H264_HIGH:
+                return tr("High");
+            default:;
+            }
+            break;
+        case AV_CODEC_ID_PRORES:
+            switch (profile) {
+            case FF_PROFILE_PRORES_PROXY:
+                return tr("Proxy");
+            case FF_PROFILE_PRORES_LT:
+                return tr("LT");
+            case FF_PROFILE_PRORES_STANDARD:
+                return tr("Standard");
+            case FF_PROFILE_PRORES_HQ:
+                return tr("HQ");
+            case FF_PROFILE_PRORES_4444:
+                return tr("4444");
+            case FF_PROFILE_PRORES_XQ:
+                return tr("XQ");
+            default:;
+            }
+            break;
+        case AV_CODEC_ID_AV1:
+            switch (profile) {
+            case FF_PROFILE_AV1_MAIN:
+                return tr("Main");
+            case FF_PROFILE_AV1_HIGH:
+                return tr("High");
+            case FF_PROFILE_AV1_PROFESSIONAL:
+                return tr("Professional");
+            default:;
+            }
+            break;
+        case AV_CODEC_ID_VP9:
+            switch (profile) {
+            case FF_PROFILE_VP9_0:
+                return tr("0");
+            case FF_PROFILE_VP9_1:
+                return tr("1");
+            case FF_PROFILE_VP9_2:
+                return tr("2");
+            case FF_PROFILE_VP9_3:
+                return tr("3");
+            default:;
+            }
+            break;
+        case AV_CODEC_ID_MPEG4:
+            switch (profile) {
+            case FF_PROFILE_MPEG4_SIMPLE:
+                return tr("Simple");
+            case FF_PROFILE_MPEG4_CORE:
+                return tr("Core");
+            case FF_PROFILE_MPEG4_MAIN:
+                return tr("Main");
+            default:;
+            }
+            break;
+        case AV_CODEC_ID_VC1:
+            switch (profile) {
+            case FF_PROFILE_VC1_SIMPLE:
+                return tr("Simple");
+            case FF_PROFILE_VC1_MAIN:
+                return tr("Main");
+            case FF_PROFILE_VC1_COMPLEX:
+                return tr("Complex");
+            case FF_PROFILE_VC1_ADVANCED:
+                return tr("Advanced");
+            default:;
+            }
+            break;
+        default:;
+        }
+        return QString();
+    }
+
+    void setVideoCodecText(const QString &txt,
+                           const AVCodec *codec,
+                           int profile)
+    {
+        QString label = "<b>%1:</b><br>%2";
+        QString profileName = getVideoProfileName(codec, profile);
+        if (!profileName.isEmpty()) {
+            label.append(QString(" (%1)").arg(profileName));
+        }
+        mVideoCodecLabel->setText(label.arg(tr("Video codec"), txt));
+    }
+
     void setPixelFormatText(const QString &txt) {
         mVideoPixelFormatLabel->setText("<b>Pixel format:</b><br>" + txt);
     }
