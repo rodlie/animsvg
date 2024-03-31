@@ -134,6 +134,30 @@ strip -s ${BUILD}/${FRICTION_PKG}/opt/friction/bin/friction
 strip -s ${BUILD}/${FRICTION_PKG}/opt/friction/lib/*so*
 strip -s ${BUILD}/${FRICTION_PKG}/opt/friction/plugins/*/*.so
 
+echo "[Paths]" > ${BUILD}/${FRICTION_PKG}/opt/friction/bin/qt.conf
+echo "Prefix = .." >> ${BUILD}/${FRICTION_PKG}/opt/friction/bin/qt.conf
+echo "Plugins = plugins" >> ${BUILD}/${FRICTION_PKG}/opt/friction/bin/qt.conf
+
+(cd ${BUILD}/${FRICTION_PKG}/opt/friction/bin ; patchelf --set-rpath '$ORIGIN/../lib' friction)
+(cd ${BUILD}/${FRICTION_PKG}/opt/friction/lib ;
+for so in *.so*; do
+    patchelf --set-rpath '$ORIGIN' ${so}
+done
+)
+
+PLUGS="
+audio
+generic
+platforminputcontexts
+platforms
+xcbglintegrations
+"
+for pdir in ${PLUGS}; do
+    for so in ${BUILD}/${FRICTION_PKG}/opt/friction/plugins/${pdir}/*.so; do
+        patchelf --set-rpath '$ORIGIN/../../lib' ${so}
+    done
+done
+
 # RPM
 if [ "${PKG_RPM}" = 1 ]; then
 cd ${BUILD}
@@ -161,29 +185,7 @@ rm -rf usr
 mv opt/friction/* .
 rm -rf opt share/doc
 ln -sf bin/friction .
-echo "[Paths]" > bin/qt.conf
-echo "Prefix = .." >> bin/qt.conf
-echo "Plugins = plugins" >> bin/qt.conf
 )
-(cd ${FRICTION_PORTABLE_DIR}/bin ; patchelf --set-rpath '$ORIGIN/../lib' friction)
-(cd ${FRICTION_PORTABLE_DIR}/lib ;
-for so in *.so*; do
-    patchelf --set-rpath '$ORIGIN' ${so}
-done
-)
-
-PLUGS="
-audio
-generic
-platforminputcontexts
-platforms
-xcbglintegrations
-"
-for pdir in ${PLUGS}; do
-    for so in ${FRICTION_PORTABLE_DIR}/plugins/${pdir}/*.so; do
-        patchelf --set-rpath '$ORIGIN/../../lib' ${so}
-    done
-done
 
 cd ${BUILD}
 tar cvf ${FRICTION_PORTABLE}.tar ${FRICTION_PORTABLE}
