@@ -26,12 +26,14 @@
 #ifndef SETTINGSWIDGET_H
 #define SETTINGSWIDGET_H
 
+#include "ui_global.h"
+
 #include <QWidget>
 #include <QVBoxLayout>
 
 class eSettings;
 
-class SettingsWidget : public QWidget {
+class UI_EXPORT SettingsWidget : public QWidget {
     Q_OBJECT
 public:
     explicit SettingsWidget(QWidget *parent = nullptr);

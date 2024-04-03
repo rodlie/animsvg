@@ -46,6 +46,7 @@ set(
     dialogs/durationrectsettingsdialog.cpp
     dialogs/exportsvgdialog.cpp
     dialogs/scenesettingsdialog.cpp
+    misc/noshortcutaction.cpp
     optimalscrollarena/minimalscrollwidget.cpp
     optimalscrollarena/scrollarea.cpp
     optimalscrollarena/scrollvisiblepartbase.cpp
@@ -59,6 +60,7 @@ set(
     widgets/bookmarkedwidget.cpp
     widgets/buttonbase.cpp
     widgets/buttonslist.cpp
+    widgets/canvassettingswidget.cpp
     widgets/changewidthwidget.cpp
     widgets/ecombobox.cpp
     widgets/editablecombobox.cpp
@@ -66,7 +68,9 @@ set(
     widgets/flowlayout.cpp
     widgets/glwindow.cpp
     widgets/labeledslider.cpp
+    widgets/performancesettingswidget.cpp
     widgets/scenechooser.cpp
+    widgets/settingswidget.cpp
     widgets/twocolumnlayout.cpp
     widgets/uilayout.cpp
     widgets/welcomedialog.cpp
@@ -82,6 +86,7 @@ set(
     dialogs/durationrectsettingsdialog.h
     dialogs/exportsvgdialog.h
     dialogs/scenesettingsdialog.h
+    misc/noshortcutaction.h
     optimalscrollarena/minimalscrollwidget.h
     optimalscrollarena/scrollarea.h
     optimalscrollarena/scrollvisiblepartbase.h
@@ -95,6 +100,7 @@ set(
     widgets/bookmarkedwidget.h
     widgets/buttonbase.h
     widgets/buttonslist.h
+    widgets/canvassettingswidget.h
     widgets/changewidthwidget.h
     widgets/ecombobox.h
     widgets/editablecombobox.h
@@ -102,7 +108,9 @@ set(
     widgets/flowlayout.h
     widgets/glwindow.h
     widgets/labeledslider.h
+    widgets/performancesettingswidget.h
     widgets/scenechooser.h
+    widgets/settingswidget.h
     widgets/toolbutton.h
     widgets/twocolumnlayout.h
     widgets/uilayout.h

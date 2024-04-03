@@ -25,9 +25,12 @@
 
 #ifndef NOSHORTCUTACTION_H
 #define NOSHORTCUTACTION_H
+
+#include "ui_global.h"
+
 #include <QAction>
 
-class NoShortcutAction : public QAction {
+class UI_EXPORT NoShortcutAction : public QAction {
 public:
     template <typename T1, typename T2>
     NoShortcutAction(const QString &text,

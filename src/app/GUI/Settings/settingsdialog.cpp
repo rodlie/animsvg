@@ -7,8 +7,8 @@
 #include "appsupport.h"
 
 #include "generalsettingswidget.h"
-#include "performancesettingswidget.h"
-#include "canvassettingswidget.h"
+#include "widgets/performancesettingswidget.h"
+#include "widgets/canvassettingswidget.h"
 #include "timelinesettingswidget.h"
 #include "pluginssettingswidget.h"
 #include "presetsettingswidget.h"

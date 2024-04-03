@@ -26,7 +26,9 @@
 #ifndef CANVASSETTINGSWIDGET_H
 #define CANVASSETTINGSWIDGET_H
 
-#include "settingswidget.h"
+#include "ui_global.h"
+
+#include "widgets/settingswidget.h"
 
 #include <QDoubleSpinBox>
 #include <QCheckBox>
@@ -34,7 +36,7 @@
 class ColorAnimatorButton;
 class QSlider;
 
-class CanvasSettingsWidget : public SettingsWidget {
+class UI_EXPORT CanvasSettingsWidget : public SettingsWidget {
 public:
     explicit CanvasSettingsWidget(QWidget* const parent = nullptr);
 

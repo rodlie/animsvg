@@ -65,7 +65,7 @@
 #include "widgets/alignwidget.h"
 #include "widgets/welcomedialog.h"
 #include "Boxes/textbox.h"
-#include "noshortcutaction.h"
+#include "misc/noshortcutaction.h"
 #include "efiltersettings.h"
 #include "Settings/settingsdialog.h"
 #include "appsupport.h"

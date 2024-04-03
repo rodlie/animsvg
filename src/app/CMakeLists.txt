@@ -163,11 +163,8 @@ set(
     GUI/RenderWidgets/outputsettingsdialog.cpp
     GUI/RenderWidgets/rendersettingsdialog.cpp
     GUI/RenderWidgets/rendersettingsdisplaywidget.cpp
-    GUI/Settings/canvassettingswidget.cpp
     GUI/Settings/generalsettingswidget.cpp
-    GUI/Settings/performancesettingswidget.cpp
     GUI/Settings/settingsdialog.cpp
-    GUI/Settings/settingswidget.cpp
     GUI/Settings/timelinesettingswidget.cpp
     GUI/Settings/pluginssettingswidget.cpp
     GUI/Settings/presetsettingswidget.cpp
@@ -220,7 +217,6 @@ set(
     GUI/graphboxeslist.cpp
     GUI/keysview.cpp
     GUI/mainwindow.cpp
-    GUI/noshortcutaction.cpp
     GUI/keyfocustarget.cpp
     GUI/qrealpointvaluedialog.cpp
     GUI/renderoutputwidget.cpp
@@ -249,11 +245,8 @@ set(
     GUI/RenderWidgets/outputsettingsdialog.h
     GUI/RenderWidgets/rendersettingsdialog.h
     GUI/RenderWidgets/rendersettingsdisplaywidget.h
-    GUI/Settings/canvassettingswidget.h
     GUI/Settings/generalsettingswidget.h
-    GUI/Settings/performancesettingswidget.h
     GUI/Settings/settingsdialog.h
-    GUI/Settings/settingswidget.h
     GUI/Settings/timelinesettingswidget.h
     GUI/Settings/pluginssettingswidget.h
     GUI/Settings/presetsettingswidget.h
@@ -308,7 +301,6 @@ set(
     GUI/window.h
     GUI/qdoubleslider.h
     GUI/qrealanimatorvalueslider.h
-    GUI/noshortcutaction.h
     GUI/qrealpointvaluedialog.h
     GUI/renderoutputwidget.h
     #GUI/BrushWidgets/brushselectionwidget.h

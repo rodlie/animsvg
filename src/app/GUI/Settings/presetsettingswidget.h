@@ -24,7 +24,7 @@
 #ifndef PRESETSETTINGSWIDGET_H
 #define PRESETSETTINGSWIDGET_H
 
-#include "settingswidget.h"
+#include "widgets/settingswidget.h"
 
 #include <QTreeWidget>
 #include <QCheckBox>
