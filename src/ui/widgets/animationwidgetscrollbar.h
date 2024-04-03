@@ -26,12 +26,16 @@
 #ifndef ANIMATiONWIDGETSCROLLBAR_H
 #define ANIMATiONWIDGETSCROLLBAR_H
 
+#include "ui_global.h"
+
 #include <QWidget>
 #include "smartPointers/ememory.h"
 #include "canvas.h"
+
 class HddCachableCacheHandler;
 
-class FrameScrollBar : public QWidget {
+class UI_EXPORT FrameScrollBar : public QWidget
+{
     Q_OBJECT
 public:
     explicit FrameScrollBar(const int minSpan,

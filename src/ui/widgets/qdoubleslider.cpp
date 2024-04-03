@@ -27,9 +27,10 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QJSEngine>
+#include <QApplication>
 
+#include "Private/document.h"
 #include "pointhelpers.h"
-#include "mainwindow.h"
 #include "GUI/global.h"
 
 SliderEdit::SliderEdit(QWidget* const parent) :

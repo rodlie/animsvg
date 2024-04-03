@@ -26,7 +26,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include "mainwindow.h"
-#include "qrealpointvaluedialog.h"
+#include "dialogs/qrealpointvaluedialog.h"
 #include "keysview.h"
 #include "Animators/qrealpoint.h"
 #include "GUI/global.h"

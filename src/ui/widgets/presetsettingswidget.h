@@ -24,12 +24,14 @@
 #ifndef PRESETSETTINGSWIDGET_H
 #define PRESETSETTINGSWIDGET_H
 
+#include "ui_global.h"
+
 #include "widgets/settingswidget.h"
 
 #include <QTreeWidget>
 #include <QCheckBox>
 
-class PresetSettingsWidget : public SettingsWidget
+class UI_EXPORT PresetSettingsWidget : public SettingsWidget
 {
 public:
     explicit PresetSettingsWidget(QWidget *parent = nullptr);

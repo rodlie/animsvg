@@ -31,7 +31,7 @@
 #include "GUI/ColorWidgets/colorsettingswidget.h"
 #include "GUI/canvaswindow.h"
 #include "widgets/actionbutton.h"
-#include "qdoubleslider.h"
+#include "widgets/qdoubleslider.h"
 //#include "segment1deditor.h"
 #include <QDockWidget>
 #include "paintsettingsapplier.h"

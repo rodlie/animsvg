@@ -45,8 +45,11 @@ set(
     dialogs/applyexpressiondialog.cpp
     dialogs/durationrectsettingsdialog.cpp
     dialogs/exportsvgdialog.cpp
+    dialogs/qrealpointvaluedialog.cpp
+    dialogs/renderoutputwidget.cpp
     dialogs/scenesettingsdialog.cpp
     misc/noshortcutaction.cpp
+    misc/keyfocustarget.cpp
     optimalscrollarena/minimalscrollwidget.cpp
     optimalscrollarena/scrollarea.cpp
     optimalscrollarena/scrollvisiblepartbase.cpp
@@ -56,6 +59,7 @@ set(
     widgets/aboutwidget.cpp
     widgets/actionbutton.cpp
     widgets/alignwidget.cpp
+    widgets/animationwidgetscrollbar.cpp
     widgets/assetswidget.cpp
     widgets/bookmarkedwidget.cpp
     widgets/buttonbase.cpp
@@ -69,6 +73,8 @@ set(
     widgets/glwindow.cpp
     widgets/labeledslider.cpp
     widgets/performancesettingswidget.cpp
+    widgets/presetsettingswidget.cpp
+    widgets/qdoubleslider.cpp
     widgets/scenechooser.cpp
     widgets/settingswidget.cpp
     widgets/twocolumnlayout.cpp
@@ -85,8 +91,11 @@ set(
     dialogs/applyexpressiondialog.h
     dialogs/durationrectsettingsdialog.h
     dialogs/exportsvgdialog.h
+    dialogs/qrealpointvaluedialog.h
+    dialogs/renderoutputwidget.h
     dialogs/scenesettingsdialog.h
     misc/noshortcutaction.h
+    misc/keyfocustarget.h
     optimalscrollarena/minimalscrollwidget.h
     optimalscrollarena/scrollarea.h
     optimalscrollarena/scrollvisiblepartbase.h
@@ -96,6 +105,7 @@ set(
     widgets/aboutwidget.h
     widgets/actionbutton.h
     widgets/alignwidget.h
+    widgets/animationwidgetscrollbar.h
     widgets/assetswidget.h
     widgets/bookmarkedwidget.h
     widgets/buttonbase.h
@@ -109,6 +119,8 @@ set(
     widgets/glwindow.h
     widgets/labeledslider.h
     widgets/performancesettingswidget.h
+    widgets/presetsettingswidget.h
+    widgets/qdoubleslider.h
     widgets/scenechooser.h
     widgets/settingswidget.h
     widgets/toolbutton.h

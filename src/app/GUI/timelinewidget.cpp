@@ -27,7 +27,7 @@
 #include <QStackedLayout>
 
 #include "timelinewidget.h"
-#include "animationwidgetscrollbar.h"
+#include "widgets/animationwidgetscrollbar.h"
 #include "mainwindow.h"
 #include "timelinedockwidget.h"
 #include "GUI/BoxesList/boxsinglewidget.h"

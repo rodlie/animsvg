@@ -26,6 +26,8 @@
 #ifndef RENDEROUTPUTWIDGET_H
 #define RENDEROUTPUTWIDGET_H
 
+#include "ui_global.h"
+
 #include <QDialog>
 #include <QLabel>
 #include <QPushButton>
@@ -33,7 +35,7 @@
 #include <QComboBox>
 #include <QSpinBox>
 
-class RenderOutputWidget : public QDialog {
+class UI_EXPORT RenderOutputWidget : public QDialog {
     Q_OBJECT
 public:
     explicit RenderOutputWidget(const int canvasWidth,

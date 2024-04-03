@@ -25,13 +25,16 @@
 
 #ifndef QREALPOINTVALUEDIALOG_H
 #define QREALPOINTVALUEDIALOG_H
+
+#include "ui_global.h"
+
 #include "Animators/qrealanimator.h"
 #include <QDialog>
 #include <QDoubleSpinBox>
 #include <QHBoxLayout>
 #include <QPushButton>
 
-class QrealPointValueDialog : public QDialog {
+class UI_EXPORT QrealPointValueDialog : public QDialog {
     Q_OBJECT
 public:
     QrealPointValueDialog(QrealPoint *point, QWidget *parent);

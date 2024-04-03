@@ -26,11 +26,13 @@
 #ifndef QDOUBLESLIDER_H
 #define QDOUBLESLIDER_H
 
+#include "ui_global.h"
+
 #include <QWidget>
 #include <QLineEdit>
 #include <QDoubleValidator>
 
-class SliderEdit : public QLineEdit {
+class UI_EXPORT SliderEdit : public QLineEdit {
     Q_OBJECT
 public:
     SliderEdit(QWidget* const parent);
@@ -47,7 +49,7 @@ private:
     bool mCanceled = false;
 };
 
-class QDoubleSlider : public QWidget {
+class UI_EXPORT QDoubleSlider : public QWidget {
     Q_OBJECT
 public:
     QDoubleSlider(const qreal minVal,

@@ -29,7 +29,7 @@
 #include <QWidget>
 #include <QPointer>
 #include <QApplication>
-#include "keyfocustarget.h"
+#include "misc/keyfocustarget.h"
 #include "smartPointers/ememory.h"
 #include "framerange.h"
 #include "conncontextobjlist.h"

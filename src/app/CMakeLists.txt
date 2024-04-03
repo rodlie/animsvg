@@ -167,7 +167,6 @@ set(
     GUI/Settings/settingsdialog.cpp
     GUI/Settings/timelinesettingswidget.cpp
     GUI/Settings/pluginssettingswidget.cpp
-    GUI/Settings/presetsettingswidget.cpp
     GUI/canvasbasewrappernode.cpp
     GUI/canvaswindowevents.cpp
     GUI/canvaswrappernode.cpp
@@ -212,15 +211,10 @@ set(
     GUI/RenderWidgets/outputsettingsprofilesdialog.cpp
     GUI/RenderWidgets/outputsettingsdisplaywidget.cpp
     GUI/animationdockwidget.cpp
-    GUI/animationwidgetscrollbar.cpp
     GUI/canvaswindow.cpp
     GUI/graphboxeslist.cpp
     GUI/keysview.cpp
     GUI/mainwindow.cpp
-    GUI/keyfocustarget.cpp
-    GUI/qrealpointvaluedialog.cpp
-    GUI/renderoutputwidget.cpp
-    GUI/qdoubleslider.cpp
     GUI/qrealanimatorvalueslider.cpp
     GUI/fontswidget.cpp
     GUI/fillstrokesettings.cpp
@@ -249,7 +243,6 @@ set(
     GUI/Settings/settingsdialog.h
     GUI/Settings/timelinesettingswidget.h
     GUI/Settings/pluginssettingswidget.h
-    GUI/Settings/presetsettingswidget.h
     GUI/canvasbasewrappernode.h
     GUI/canvaswrappernode.h
     #GUI/closesignalingdockwidget.h
@@ -291,18 +284,13 @@ set(
     GUI/RenderWidgets/outputsettingsprofilesdialog.h
     GUI/RenderWidgets/outputsettingsdisplaywidget.h
     GUI/animationdockwidget.h
-    GUI/animationwidgetscrollbar.h
     GUI/canvaswindow.h
     GUI/fillstrokesettings.h
     GUI/fontswidget.h
-    GUI/keyfocustarget.h
     GUI/keysview.h
     GUI/mainwindow.h
     GUI/window.h
-    GUI/qdoubleslider.h
     GUI/qrealanimatorvalueslider.h
-    GUI/qrealpointvaluedialog.h
-    GUI/renderoutputwidget.h
     #GUI/BrushWidgets/brushselectionwidget.h
     GUI/ColorWidgets/colorwidgetshaders.h
     #GUI/BrushWidgets/brushwidget.h

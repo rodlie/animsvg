@@ -29,7 +29,7 @@
 #include <QWidget>
 #include "widgets/glwindow.h"
 #include "singlewidgettarget.h"
-#include "keyfocustarget.h"
+#include "misc/keyfocustarget.h"
 #include "smartPointers/ememory.h"
 #include "canvas.h"
 

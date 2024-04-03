@@ -48,7 +48,7 @@
 #include "fileshandler.h"
 #include "ekeyfilter.h"
 #include "GUI/RenderWidgets/renderwidget.h"
-#include "GUI/qdoubleslider.h"
+#include "widgets/qdoubleslider.h"
 #include "window.h"
 #include "widgets/aboutwidget.h"
 #include "widgets/uilayout.h"

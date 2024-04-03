@@ -25,10 +25,13 @@
 
 #ifndef KEYFOCUSTARGET_H
 #define KEYFOCUSTARGET_H
+
+#include "ui_global.h"
+
 #include <QKeyEvent>
 #include <QWidget>
 
-class KeyFocusTarget {
+class UI_EXPORT KeyFocusTarget {
 public:
     KeyFocusTarget();
     virtual ~KeyFocusTarget();

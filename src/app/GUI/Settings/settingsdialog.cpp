@@ -11,7 +11,7 @@
 #include "widgets/canvassettingswidget.h"
 #include "timelinesettingswidget.h"
 #include "pluginssettingswidget.h"
-#include "presetsettingswidget.h"
+#include "widgets/presetsettingswidget.h"
 
 #include <QVBoxLayout>
 #include <QPushButton>
