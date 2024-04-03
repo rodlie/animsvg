@@ -63,7 +63,7 @@
 #include "eimporters.h"
 #include "dialogs/exportsvgdialog.h"
 #include "widgets/alignwidget.h"
-#include "welcomedialog.h"
+#include "widgets/welcomedialog.h"
 #include "Boxes/textbox.h"
 #include "noshortcutaction.h"
 #include "efiltersettings.h"

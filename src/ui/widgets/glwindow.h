@@ -23,22 +23,41 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef WELCOMEDIALOG_H
-#define WELCOMEDIALOG_H
+#ifndef GLWINDOW_H
+#define GLWINDOW_H
 
-#include <QWidget>
-#include <QMenu>
-#include <functional>
+#include "ui_global.h"
 
-class WelcomeDialog : public QWidget
-{
+#include <QOpenGLWidget>
+#include "glhelpers.h"
+#include <string>
+
+#include "skia/skiaincludes.h"
+
+#include <QResizeEvent>
+#include <QOpenGLPaintDevice>
+
+struct ShaderEffectCreator;
+struct ShaderEffectProgram;
+
+class UI_EXPORT GLWindow : public QOpenGLWidget, protected QGL33 {
 public:
-    WelcomeDialog(QMenu *recentMenu,
-                  const std::function<void()> &newFunc,
-                  const std::function<void()> &openFunc,
-                  QWidget * const parent = nullptr);
+    GLWindow(QWidget * const parent = nullptr);
 protected:
-    void paintEvent(QPaintEvent *);
+    virtual void renderSk(SkCanvas * const canvas) = 0;
+    void resizeGL(int, int) final;
+    void initializeGL() final;
+    void paintGL() final;
+    void showEvent(QShowEvent *e);
+
+    void initialize();
+    void bindSkia(const int w, const int h);
+    void updateFix();
+
+    bool mRebind = false;
+    sk_sp<GrContext> mGrContext;
+    sk_sp<SkSurface> mSurface;
+    SkCanvas *mCanvas = nullptr;
 };
 
-#endif // WELCOMEDIALOG_H
+#endif // GLWINDOW_H

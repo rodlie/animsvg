@@ -26,19 +26,21 @@
 #ifndef WIDGETWRAPPERNODE_H
 #define WIDGETWRAPPERNODE_H
 
+#include "ui_global.h"
+
 #include <QMenuBar>
 #include "Private/esettings.h"
-#include "wrappernode.h"
+#include "widgets/wrappernode.h"
 #include "widgets/fakemenubar.h"
 
-class StackWrapperMenu : public FakeMenuBar {
+class UI_EXPORT StackWrapperMenu : public FakeMenuBar {
     friend class StackWidgetWrapper;
 protected:
     explicit StackWrapperMenu();
 };
 
 class WidgetWrapperCornerMenu;
-class WidgetWrapperNode : public QWidget, public WrapperNode {
+class UI_EXPORT WidgetWrapperNode : public QWidget, public WrapperNode {
 public:
     WidgetWrapperNode(const WidgetCreator& creator);
 
@@ -62,7 +64,7 @@ private:
     QVBoxLayout* mLayout;
 };
 
-class WidgetWrapperCornerMenu : public FakeMenuBar {
+class UI_EXPORT WidgetWrapperCornerMenu : public FakeMenuBar {
 public:
     WidgetWrapperCornerMenu(WidgetWrapperNode* const target)
     {

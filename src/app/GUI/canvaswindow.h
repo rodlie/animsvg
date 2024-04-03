@@ -27,7 +27,7 @@
 #define CANVASWINDOW_H
 
 #include <QWidget>
-#include "glwindow.h"
+#include "widgets/glwindow.h"
 #include "singlewidgettarget.h"
 #include "keyfocustarget.h"
 #include "smartPointers/ememory.h"

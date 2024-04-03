@@ -171,7 +171,6 @@ set(
     GUI/Settings/timelinesettingswidget.cpp
     GUI/Settings/pluginssettingswidget.cpp
     GUI/Settings/presetsettingswidget.cpp
-    GUI/aboutwidget.cpp
     GUI/canvasbasewrappernode.cpp
     GUI/canvaswindowevents.cpp
     GUI/canvaswrappernode.cpp
@@ -184,8 +183,6 @@ set(
     GUI/timelinehighlightwidget.cpp
     GUI/timelinewidget.cpp
     GUI/timelinewrappernode.cpp
-    GUI/welcomedialog.cpp
-    GUI/widgetstack.cpp
     GUI/ColorWidgets/colorlabel.cpp
     GUI/ColorWidgets/colorsettingswidget.cpp
     GUI/ColorWidgets/colorvaluerect.cpp
@@ -196,9 +193,7 @@ set(
     GUI/ColorWidgets/savedcolorswidget.cpp
     GUI/GradientWidgets/gradientwidget.cpp
     GUI/ColorWidgets/glwidget.cpp
-    GUI/widgetwrappernode.cpp
     GUI/window.cpp
-    GUI/wrappernode.cpp
     effectsloader.cpp
     eimporters.cpp
     evfileio.cpp
@@ -231,7 +226,6 @@ set(
     GUI/renderoutputwidget.cpp
     GUI/qdoubleslider.cpp
     GUI/qrealanimatorvalueslider.cpp
-    GUI/glwindow.cpp
     GUI/fontswidget.cpp
     GUI/fillstrokesettings.cpp
     #GUI/BrushWidgets/brushselectionwidget.cpp
@@ -263,7 +257,6 @@ set(
     GUI/Settings/timelinesettingswidget.h
     GUI/Settings/pluginssettingswidget.h
     GUI/Settings/presetsettingswidget.h
-    GUI/aboutwidget.h
     GUI/canvasbasewrappernode.h
     GUI/canvaswrappernode.h
     #GUI/closesignalingdockwidget.h
@@ -275,8 +268,6 @@ set(
     GUI/timelinehighlightwidget.h
     GUI/timelinewidget.h
     GUI/timelinewrappernode.h
-    GUI/welcomedialog.h
-    GUI/widgetstack.h
     GUI/ColorWidgets/colorlabel.h
     GUI/ColorWidgets/colorsettingswidget.h
     GUI/ColorWidgets/colorvaluerect.h
@@ -287,8 +278,6 @@ set(
     GUI/ColorWidgets/savedcolorswidget.h
     GUI/GradientWidgets/gradientwidget.h
     GUI/ColorWidgets/glwidget.h
-    GUI/widgetwrappernode.h
-    GUI/wrappernode.h
     effectsloader.h
     eimporters.h
     iconloader.h
@@ -319,7 +308,6 @@ set(
     GUI/window.h
     GUI/qdoubleslider.h
     GUI/qrealanimatorvalueslider.h
-    GUI/glwindow.h
     GUI/noshortcutaction.h
     GUI/qrealpointvaluedialog.h
     GUI/renderoutputwidget.h

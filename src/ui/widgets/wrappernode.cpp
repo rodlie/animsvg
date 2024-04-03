@@ -24,7 +24,7 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "wrappernode.h"
-#include "widgetwrappernode.h"
+#include "widgets/widgetwrappernode.h"
 #include "exceptions.h"
 
 WrapperNode* createForType(const WrapperNodeType type,

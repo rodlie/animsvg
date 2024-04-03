@@ -21,22 +21,26 @@
 #
 */
 
-#ifndef ABOUTWIDGET_H
-#define ABOUTWIDGET_H
+// Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
+
+#ifndef WELCOMEDIALOG_H
+#define WELCOMEDIALOG_H
+
+#include "ui_global.h"
 
 #include <QWidget>
+#include <QMenu>
+#include <functional>
 
-class AboutWidget : public QWidget
+class UI_EXPORT WelcomeDialog : public QWidget
 {
-    Q_OBJECT
 public:
-    struct AboutWidgetTab {
-        QString title;
-        QString path;
-        bool html = true;
-    };
-    explicit AboutWidget(QWidget *parent = nullptr);
-
+    WelcomeDialog(QMenu *recentMenu,
+                  const std::function<void()> &newFunc,
+                  const std::function<void()> &openFunc,
+                  QWidget * const parent = nullptr);
+protected:
+    void paintEvent(QPaintEvent *);
 };
 
-#endif // ABOUTWIDGET_H
+#endif // WELCOMEDIALOG_H

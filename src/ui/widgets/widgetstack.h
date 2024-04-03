@@ -26,6 +26,8 @@
 #ifndef WIDGETSTACK_H
 #define WIDGETSTACK_H
 
+#include "ui_global.h"
+
 #include <QWidget>
 #include <QPainter>
 #include <QMouseEvent>
@@ -63,7 +65,7 @@ bool gReplaceWidget(QWidget * const from, QWidget * const to,
                     bool * const centralWid = nullptr);
 
 template <STACK_TMPL_DEFS>
-class StackResizerBase {
+class UI_EXPORT StackResizerBase {
 protected:
     StackResizerBase() {}
 
@@ -154,7 +156,7 @@ private:
     QWidget *mNextWidget = nullptr;
 };
 
-class VStackResizer : public QWidget, public StackResizerBase<V_STACK_TMPL> {
+class UI_EXPORT VStackResizer : public QWidget, public StackResizerBase<V_STACK_TMPL> {
     Q_OBJECT
 public:
     VStackResizer(QWidget * const parent) : QWidget(parent) {
@@ -198,7 +200,7 @@ signals:
     void finishedChanging();
 };
 
-class HStackResizer : public QWidget, public StackResizerBase<H_STACK_TMPL> {
+class UI_EXPORT HStackResizer : public QWidget, public StackResizerBase<H_STACK_TMPL> {
     Q_OBJECT
 public:
     HStackResizer(QWidget * const parent) : QWidget(parent) {
@@ -243,7 +245,7 @@ signals:
 };
 
 template <STACK_TMPL_DEFS>
-class WidgetStackBase {
+class UI_EXPORT WidgetStackBase {
 public:
     virtual ~WidgetStackBase() {
         for(int i = 0; i < mWidgets.count();) {
@@ -417,7 +419,7 @@ private:
 struct VSplitStackItem;
 struct HSplitStackItem;
 
-class VWidgetStack : public QWidget, public WidgetStackBase<V_STACK_TMPL> {
+class UI_EXPORT VWidgetStack : public QWidget, public WidgetStackBase<V_STACK_TMPL> {
 public:
     VWidgetStack(QWidget * const parent = nullptr);
 protected:
@@ -426,7 +428,7 @@ protected:
     }
 };
 
-class HWidgetStack : public QWidget, public WidgetStackBase<H_STACK_TMPL> {
+class UI_EXPORT HWidgetStack : public QWidget, public WidgetStackBase<H_STACK_TMPL> {
 public:
     HWidgetStack(QWidget * const parent = nullptr);
 protected:

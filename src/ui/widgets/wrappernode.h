@@ -26,15 +26,17 @@
 #ifndef WRAPPERNODE_H
 #define WRAPPERNODE_H
 
+#include "ui_global.h"
+
 #include <QBoxLayout>
 #include <QtCore>
 #include <QDomElement>
 #include "smartPointers/ememory.h"
-#include "widgetstack.h"
+#include "widgets/widgetstack.h"
 #include "ReadWrite/basicreadwrite.h"
 #include "XML/runtimewriteid.h"
 
-enum class WrapperNodeType {
+enum class UI_EXPORT WrapperNodeType {
     base,
     widget,
     splitH,
@@ -47,7 +49,7 @@ class WidgetWrapperNode;
 class Canvas;
 class XevReadBoxesHandler;
 
-class WrapperNode {
+class UI_EXPORT WrapperNode {
 public:
     typedef std::function<WidgetWrapperNode*(Canvas*)> WidgetCreator;
     WrapperNode(const WrapperNodeType type,
@@ -85,7 +87,7 @@ protected:
     virtual QString tagNameXEV() const = 0;
 };
 
-class ParentWrapperNode : public WrapperNode {
+class UI_EXPORT ParentWrapperNode : public WrapperNode {
 protected:
     using WrapperNode::WrapperNode;
 public:
@@ -95,7 +97,7 @@ public:
                               WrapperNode* const with) = 0;
 };
 
-class BaseWrapperNode : public QWidget, public ParentWrapperNode {
+class UI_EXPORT BaseWrapperNode : public QWidget, public ParentWrapperNode {
 public:
     BaseWrapperNode(const QString& tagName, const WidgetCreator& creator) :
         ParentWrapperNode(WrapperNodeType::base, creator),
@@ -165,7 +167,7 @@ private:
     }
 };
 
-class SplitWrapperNode : public ParentWrapperNode {
+class UI_EXPORT SplitWrapperNode : public ParentWrapperNode {
 protected:
     using ParentWrapperNode::ParentWrapperNode;
 public:
@@ -226,7 +228,7 @@ protected:
     }
 };
 
-class VWidgetStackNode : public VWidgetStack, public SplitWrapperNode {
+class UI_EXPORT VWidgetStackNode : public VWidgetStack, public SplitWrapperNode {
 public:
     VWidgetStackNode(const WidgetCreator& creator) :
         SplitWrapperNode(WrapperNodeType::splitV, creator) {}
@@ -274,7 +276,7 @@ protected:
     QString tagNameXEV() const { return "VSplit"; };
 };
 
-class HWidgetStackNode : public HWidgetStack, public SplitWrapperNode {
+class UI_EXPORT HWidgetStackNode : public HWidgetStack, public SplitWrapperNode {
 public:
     HWidgetStackNode(const WidgetCreator& creator) :
         SplitWrapperNode(WrapperNodeType::splitH, creator) {}

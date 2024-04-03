@@ -25,7 +25,7 @@
 
 #ifndef CANVASWRAPPERNODE_H
 #define CANVASWRAPPERNODE_H
-#include "widgetwrappernode.h"
+#include "widgets/widgetwrappernode.h"
 #include "canvaswindow.h"
 
 class CanvasWrapperMenuBar;

@@ -52,6 +52,7 @@ set(
     optimalscrollarena/scrollwidget.cpp
     optimalscrollarena/scrollwidgetvisiblepart.cpp
     optimalscrollarena/singlewidget.cpp
+    widgets/aboutwidget.cpp
     widgets/actionbutton.cpp
     widgets/alignwidget.cpp
     widgets/assetswidget.cpp
@@ -63,10 +64,15 @@ set(
     widgets/editablecombobox.cpp
     widgets/fakemenubar.cpp
     widgets/flowlayout.cpp
+    widgets/glwindow.cpp
     widgets/labeledslider.cpp
     widgets/scenechooser.cpp
     widgets/twocolumnlayout.cpp
     widgets/uilayout.cpp
+    widgets/welcomedialog.cpp
+    widgets/widgetstack.cpp
+    widgets/widgetwrappernode.cpp
+    widgets/wrappernode.cpp
 )
 
 set(
@@ -82,6 +88,7 @@ set(
     optimalscrollarena/scrollwidget.h
     optimalscrollarena/scrollwidgetvisiblepart.h
     optimalscrollarena/singlewidget.h
+    widgets/aboutwidget.h
     widgets/actionbutton.h
     widgets/alignwidget.h
     widgets/assetswidget.h
@@ -93,12 +100,17 @@ set(
     widgets/editablecombobox.h
     widgets/fakemenubar.h
     widgets/flowlayout.h
+    widgets/glwindow.h
     widgets/labeledslider.h
     widgets/scenechooser.h
     widgets/toolbutton.h
     widgets/twocolumnlayout.h
     widgets/uilayout.h
     widgets/vlabel.h
+    widgets/welcomedialog.h
+    widgets/widgetstack.h
+    widgets/widgetwrappernode.h
+    widgets/wrappernode.h
 )
 
 if(NOT WIN32)

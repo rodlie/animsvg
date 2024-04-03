@@ -50,7 +50,7 @@
 #include "GUI/RenderWidgets/renderwidget.h"
 #include "GUI/qdoubleslider.h"
 #include "window.h"
-#include "GUI/aboutwidget.h"
+#include "widgets/aboutwidget.h"
 #include "widgets/uilayout.h"
 #include "widgets/toolbutton.h"
 
