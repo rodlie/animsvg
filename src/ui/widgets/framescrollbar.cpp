@@ -23,7 +23,7 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#include "animationwidgetscrollbar.h"
+#include "framescrollbar.h"
 #include <QMouseEvent>
 #include <QPainter>
 #include "GUI/global.h"

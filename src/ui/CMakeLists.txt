@@ -59,7 +59,7 @@ set(
     widgets/aboutwidget.cpp
     widgets/actionbutton.cpp
     widgets/alignwidget.cpp
-    widgets/animationwidgetscrollbar.cpp
+    widgets/framescrollbar.cpp
     widgets/assetswidget.cpp
     widgets/bookmarkedwidget.cpp
     widgets/buttonbase.cpp
@@ -105,7 +105,7 @@ set(
     widgets/aboutwidget.h
     widgets/actionbutton.h
     widgets/alignwidget.h
-    widgets/animationwidgetscrollbar.h
+    widgets/framescrollbar.h
     widgets/assetswidget.h
     widgets/bookmarkedwidget.h
     widgets/buttonbase.h

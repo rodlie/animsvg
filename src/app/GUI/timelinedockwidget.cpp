@@ -40,7 +40,7 @@
 #include "widgets/widgetstack.h"
 #include "widgets/actionbutton.h"
 #include "timelinewidget.h"
-#include "widgets/animationwidgetscrollbar.h"
+#include "widgets/framescrollbar.h"
 #include "renderinstancesettings.h"
 #include "layouthandler.h"
 #include "memoryhandler.h"
