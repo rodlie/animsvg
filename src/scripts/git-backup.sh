@@ -3,7 +3,7 @@ set -e -x
 
 CWD=`pwd`
 DIR=${CWD}/backup
-DATE=`date +%s`
+DATE=`date +%Y%m%d%H%M`
 URL=https://github.com/friction2d
 BACKUP_DIR=${DIR}/friction-git-backup-${DATE}
 REPOS="
@@ -14,6 +14,7 @@ gperftools
 sfntly
 friction-shader-plugins
 mxe
+friction-examples
 "
 
 mkdir -p ${BACKUP_DIR}

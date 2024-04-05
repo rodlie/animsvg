@@ -189,8 +189,8 @@ ln -sf bin/friction .
 
 cd ${BUILD}
 tar cvf ${FRICTION_PORTABLE}.tar ${FRICTION_PORTABLE}
-xz -9 ${FRICTION_PORTABLE}.tar
-cp -a ${FRICTION_PORTABLE}.tar.xz ${DISTFILES}/builds/${VERSION}/
+bzip2 -9 ${FRICTION_PORTABLE}.tar
+cp -a ${FRICTION_PORTABLE}.tar.bz2 ${DISTFILES}/builds/${VERSION}/
 
 # AppImage
 if [ "${PKG_APP}" = 1 ]; then
@@ -203,12 +203,12 @@ ln -sf usr/share/applications/${APPID}.desktop .
 ln -sf usr/share/icons/hicolor/256x256/apps/${APPID}.png .
 ln -sf usr/share/icons/hicolor/256x256/apps/${APPID}.png .DirIcon
 )
-if [ ! -f "${DISTFILES}/appimagetool.tar.xz" ]; then
+if [ ! -f "${DISTFILES}/appimagetool.tar.bz2" ]; then
     (cd ${DISTFILES} ;
-        wget https://download.friction.graphics/distfiles/misc/appimagetool.tar.xz
+        wget https://download.friction.graphics/distfiles/misc/appimagetool.tar.bz2
     )
 fi
-tar xf ${DISTFILES}/appimagetool.tar.xz
+tar xf ${DISTFILES}/appimagetool.tar.bz2
 ARCH=x86_64 ./appimagetool/AppRun ${FRICTION_PORTABLE}
 cp -a *.AppImage ${DISTFILES}/builds/${VERSION}/
 fi
