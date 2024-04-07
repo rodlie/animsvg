@@ -29,7 +29,6 @@
 #include <QWidget>
 #include <QTabWidget>
 #include <QPushButton>
-#include <QTabBar>
 #include <QPen>
 #include <QGradient>
 #include <QDebug>
@@ -37,6 +36,7 @@
 #include <QPainterPathStroker>
 #include <QLabel>
 #include <QHBoxLayout>
+
 #include "Animators/coloranimator.h"
 #include "Animators/paintsettingsanimator.h"
 #include "paintsettingsapplier.h"
@@ -44,26 +44,25 @@
 #include "Paint/brushcontexedwrapper.h"
 
 class GradientWidget;
-class MainWindow;
-class CanvasWindow;
 class ColorSettingsWidget;
 class QrealAnimatorValueSlider;
 class ActionButton;
 class Segment1DEditor;
-class QDockWidget;
 class ColorSetting;
 class Document;
-//class BrushLabel;
 
-class FillStrokeSettingsWidget : public QTabWidget {
+class FillStrokeSettingsWidget : public QWidget
+{
     Q_OBJECT
     typedef qCubicSegment1DAnimator::Action SegAction;
+
 public:
     explicit FillStrokeSettingsWidget(Document& document,
                                       QWidget * const parent = nullptr);
 
     void setCurrentBox(BoundingBox * const box);
     void clearAll();
+
 private:
     void setDisplayedBrush(SimpleBrushWrapper* const brush);
     void setCurrentSettings(PaintSettingsAnimator *fillPaintSettings,
@@ -118,14 +117,11 @@ private:
     void updateCurrentSettings();
     void applyGradient();
 
-
     void connectGradient();
     void disconnectGradient();
 
     void setJoinStyle(const SkPaint::Join joinStyle);
     void setCapStyle(const SkPaint::Cap capStyle);
-
-    //
 
     PaintType getCurrentPaintTypeVal();
 
@@ -137,90 +133,61 @@ private:
 
     Gradient *getCurrentGradientVal();
 
-    GradientType getCurrentGradientTypeVal() const {
-        if(mTarget == PaintSetting::FILL) return mCurrentFillGradientType;
-        else return mCurrentStrokeGradientType;
-    }
+    GradientType getCurrentGradientTypeVal() const;
 
     void setCurrentGradientVal(Gradient *gradient);
     void setCurrentGradientTypeVal(const GradientType type);
 
     Document& mDocument;
-    MainWindow *mMainWindow;
-    bool mTransormStarted = false;
-    PaintSetting::Target mTarget = PaintSetting::FILL;
+    PaintSetting::Target mTarget;
 
     qptr<ColorAnimator> mCurrentFillColorAnimator;
     qptr<ColorAnimator> mCurrentStrokeColorAnimator;
-    PaintType mCurrentFillPaintType = NOPAINT;
-    PaintType mCurrentStrokePaintType = NOPAINT;
+    PaintType mCurrentFillPaintType;
+    PaintType mCurrentStrokePaintType;
     QColor mCurrentFillColor;
     QColor mCurrentStrokeColor;
 
-    GradientType mCurrentStrokeGradientType = GradientType::LINEAR;
-    GradientType mCurrentFillGradientType = GradientType::LINEAR;
+    GradientType mCurrentStrokeGradientType;
+    GradientType mCurrentFillGradientType;
 
     qptr<Gradient> mCurrentStrokeGradient;
     qptr<Gradient> mCurrentFillGradient;
     SkPaint::Cap mCurrentCapStyle;
     SkPaint::Join mCurrentJoinStyle;
     qreal mCurrentStrokeWidth;
-    //
 
-    void setBrushPaintType();
     void setNoPaintType();
     void setFlatPaintType();
     void setGradientPaintType();
 
-    QVBoxLayout *mMainLayout = new QVBoxLayout();
-
-    QHBoxLayout *mTargetLayout = new QHBoxLayout();
     QPushButton *mFillTargetButton;
     QPushButton *mStrokeTargetButton;
 
-    QHBoxLayout *mColorTypeLayout;
-    QPushButton *mFillNoneButton = nullptr;
-    QPushButton *mFillFlatButton = nullptr;
-    QPushButton *mFillGradientButton = nullptr;
-    //QPushButton *mFillBrushButton = nullptr;
+    QPushButton *mFillNoneButton;
+    QPushButton *mFillFlatButton;
+    QPushButton *mFillGradientButton;
 
     QWidget *mStrokeSettingsWidget;
-    QWidget* mStrokeJoinCapWidget;
-    QVBoxLayout *mStrokeSettingsLayout = new QVBoxLayout();
+    QWidget *mStrokeJoinCapWidget;
 
-    QHBoxLayout *mJoinStyleLayout = new QHBoxLayout();
     QPushButton *mBevelJoinStyleButton;
     QPushButton *mMiterJointStyleButton;
     QPushButton *mRoundJoinStyleButton;
 
-    QHBoxLayout *mCapStyleLayout = new QHBoxLayout();
     QPushButton *mFlatCapStyleButton;
     QPushButton *mSquareCapStyleButton;
     QPushButton *mRoundCapStyleButton;
 
-    //QHBoxLayout *mLineWidthLayout = new QHBoxLayout();
-    //QLabel *mLineWidthLabel = new QLabel("Width:");
     QrealAnimatorValueSlider *mLineWidthSpin;
 
     ColorSettingsWidget *mColorsSettingsWidget;
 
     GradientWidget *mGradientWidget;
 
-    QHBoxLayout *mGradientTypeLayout;
     QPushButton *mLinearGradientButton;
     QPushButton *mRadialGradientButton;
     QWidget *mGradientTypeWidget;
-
-    QWidget *mFillAndStrokeWidget;
-
-    //BrushLabel* mBrushLabel;
-    //BrushSelectionWidget* mBrushSelectionWidget;
-
-    /*QWidget* mBrushSettingsWidget;
-    Segment1DEditor* mBrushWidthCurveEditor;
-    Segment1DEditor* mBrushPressureCurveEditor;
-    Segment1DEditor* mBrushSpacingCurveEditor;
-    Segment1DEditor* mBrushTimeCurveEditor;*/
 
     ConnContextQPtr<BoundingBox> mCurrentBox;
 };

@@ -24,40 +24,47 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "gradientslistwidget.h"
+
 #include <QScrollBar>
 #include <QResizeEvent>
+
 #include "displayedgradientswidget.h"
 
-GradientsListWidget::GradientsListWidget(QWidget *parent) :
-    ScrollArea(parent) {
+GradientsListWidget::GradientsListWidget(QWidget *parent)
+    : ScrollArea(parent)
+{
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     eSizesUI::widget.add(this, [this](const int size) {
-        setFixedHeight(6*size);
+        setFixedHeight(6 * size);
         verticalScrollBar()->setSingleStep(size);
     });
     mDisplayedGradients = new DisplayedGradientsWidget(this);
     setWidget(mDisplayedGradients);
 }
 
-DisplayedGradientsWidget *GradientsListWidget::getList() {
+DisplayedGradientsWidget *GradientsListWidget::getList()
+{
     return mDisplayedGradients;
 }
 
-void GradientsListWidget::scrollContentsBy(int dx, int dy) {
+void GradientsListWidget::scrollContentsBy(int dx, int dy)
+{
     mDisplayedGradients->incTop(dy);
     QScrollArea::scrollContentsBy(dx, dy);
 }
 
-void GradientsListWidget::resizeEvent(QResizeEvent *e) {
+void GradientsListWidget::resizeEvent(QResizeEvent *e)
+{
     const QSize size = e->size();
     mDisplayedGradients->setMinimumHeight(size.height());
     mDisplayedGradients->updateHeight();
     const int scrollBarWidth = verticalScrollBar()->width();
-    const int availableWidth = size.width() - scrollBarWidth;
+    const int availableWidth = size.width() - (scrollBarWidth / 2);
     mDisplayedGradients->setFixedWidth(availableWidth);
 }
 
-void GradientsListWidget::showEvent(QShowEvent *e) {
+void GradientsListWidget::showEvent(QShowEvent *e)
+{
     Q_UNUSED(e)
     mDisplayedGradients->update();
     return ScrollArea::showEvent(e);

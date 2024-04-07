@@ -27,19 +27,20 @@
 #define GRADIENTSLISTWIDGET_H
 
 #include "optimalscrollarena/scrollarea.h"
+
 class GradientWidget;
 class DisplayedGradientsWidget;
 
-class GradientsListWidget : public ScrollArea {
+class GradientsListWidget : public ScrollArea
+{
 public:
     explicit GradientsListWidget(QWidget *parent = nullptr);
-
     DisplayedGradientsWidget *getList();
+
 protected:
     void scrollContentsBy(int dx, int dy);
     void resizeEvent(QResizeEvent *e);
     void showEvent(QShowEvent *e);
-
     DisplayedGradientsWidget *mDisplayedGradients;
 };
 

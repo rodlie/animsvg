@@ -27,27 +27,39 @@
 #include <QMouseEvent>
 #include <QMenu>
 #include <QAction>
-#include "colorhelpers.h"
-#include "GUI/mainwindow.h"
+
 #include "GUI/GradientWidgets/displayedgradientswidget.h"
 #include "Animators/gradient.h"
 
-GradientWidget::GradientWidget(QWidget * const parent) :
-    QWidget(parent) {
-    eSizesUI::widget.add(this, [this](const int size) {
-        const qreal mult = (3 + mNumberVisibleGradients + 0.5);
-        setFixedHeight(qRound(mult*size));
-    });
-    mMainLayout = new QVBoxLayout(this);
+GradientWidget::GradientWidget(QWidget * const parent)
+    : QWidget(parent)
+    , mGradientsListWidget(nullptr)
+    , mCurrentGradientWidget(nullptr)
+    , mReordering(false)
+    , mFirstMove(false)
+    , mNumberVisibleGradients(6)
+    , mHalfHeight(64)
+    , mQuorterHeight(32)
+    , mCurrentGradient(nullptr)
+    , mCurrentColor(nullptr)
+    , mCurrentColorId(0)
+    , mCenterGradientId(1)
+{
+    setContentsMargins(0, 0, 0, 0);
+
+    const auto mMainLayout = new QVBoxLayout(this);
     mMainLayout->setMargin(0);
-    mMainLayout->setSpacing(0);
-    mMainLayout->setAlignment(Qt::AlignTop);
+
     mGradientsListWidget = new GradientsListWidget(this);
     mCurrentGradientWidget = new CurrentGradientWidget(this);
+
     mMainLayout->addWidget(mGradientsListWidget);
-    eSizesUI::widget.addHalfSpacing(mMainLayout);
     mMainLayout->addWidget(mCurrentGradientWidget);
-    setLayout(mMainLayout);
+
+    /*eSizesUI::widget.add(this, [this](const int size) {
+        const qreal mult = (3 + mNumberVisibleGradients + 0.5);
+        setFixedHeight(qRound(mult*size));
+    });*/
 
     const auto list = mGradientsListWidget->getList();
     connect(list, &DisplayedGradientsWidget::triggered,
@@ -63,27 +75,32 @@ GradientWidget::GradientWidget(QWidget * const parent) :
             this, &GradientWidget::selectedColorChanged);
 }
 
-void GradientWidget::clearAll() {
+void GradientWidget::clearAll()
+{
     mCurrentGradient = nullptr;
     mCenterGradientId = 1;
     mCurrentColorId = 0;
 }
 
-void GradientWidget::setCurrentGradient(Gradient *gradient) {
-    if(mCurrentGradient == gradient) return;
+void GradientWidget::setCurrentGradient(Gradient *gradient)
+{
+    if (mCurrentGradient == gradient) { return; }
     mCurrentGradient = gradient;
     emit selectionChanged(gradient);
 }
 
-Gradient *GradientWidget::getCurrentGradient() {
+Gradient *GradientWidget::getCurrentGradient()
+{
     return mCurrentGradient;
 }
 
-ColorAnimator *GradientWidget::getColorAnimator() {
+ColorAnimator *GradientWidget::getColorAnimator()
+{
     return mCurrentGradientWidget->getColorAnimator();
 }
 
-void GradientWidget::showEvent(QShowEvent *e) {
+void GradientWidget::showEvent(QShowEvent *e)
+{
     Q_UNUSED(e)
     mCurrentGradientWidget->update();
     return QWidget::showEvent(e);

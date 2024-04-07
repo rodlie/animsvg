@@ -25,14 +25,18 @@
 
 #ifndef GRADIENTWIDGET_H
 #define GRADIENTWIDGET_H
-#include "GUI/fillstrokesettings.h"
+
 #include <QComboBox>
 #include <QScrollArea>
+#include <QVBoxLayout>
+
 #include "GUI/GradientWidgets/gradientslistwidget.h"
 #include "GUI/GradientWidgets/currentgradientwidget.h"
 
-class GradientWidget : public QWidget {
+class GradientWidget : public QWidget
+{
     Q_OBJECT
+
 public:
     GradientWidget(QWidget * const parent);
 
@@ -41,28 +45,30 @@ public:
     ColorAnimator *getColorAnimator();
 
     void clearAll();
+
 signals:
     void selectionChanged(Gradient*);
     void selectedColorChanged(ColorAnimator*);
     void triggered(Gradient *gradient);
+
 protected:
     void showEvent(QShowEvent *e);
+
 private:
-    QVBoxLayout *mMainLayout;
     GradientsListWidget *mGradientsListWidget;
     CurrentGradientWidget *mCurrentGradientWidget;
 
-    bool mReordering = false;
-    bool mFirstMove = false;
+    bool mReordering;
+    bool mFirstMove;
 
-    int mNumberVisibleGradients = 6;
-    int mHalfHeight = 64;
-    int mQuorterHeight = 32;
+    int mNumberVisibleGradients;
+    int mHalfHeight;
+    int mQuorterHeight;
 
-    Gradient *mCurrentGradient = nullptr;
-    ColorAnimator *mCurrentColor = nullptr;
-    int mCurrentColorId = 0;
-    int mCenterGradientId = 1;
+    Gradient *mCurrentGradient;
+    ColorAnimator *mCurrentColor;
+    int mCurrentColorId;
+    int mCenterGradientId;
 };
 
 #endif // GRADIENTWIDGET_H

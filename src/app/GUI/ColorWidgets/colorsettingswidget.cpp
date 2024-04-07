@@ -269,7 +269,12 @@ void ColorSettingsWidget::startColorPicking() {
     });
 }
 
-ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
+ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
+    : QWidget(parent)
+{
+    setContentsMargins(0, 0, 0, 0);
+    mWidgetsLayout->setMargin(0);
+
     mColorModeCombo = new QComboBox(this);
     mWidgetsLayout->setAlignment(Qt::AlignTop);
     setLayout(mWidgetsLayout);
