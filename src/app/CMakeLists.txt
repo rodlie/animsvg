@@ -151,11 +151,7 @@ set(
     SOURCES
     main.cpp
     GUI/BoxesList/boxscroller.cpp
-    #GUI/BrushWidgets/bookmarkedbrushes.cpp
-    #GUI/BrushWidgets/brushlabel.cpp
     GUI/ColorWidgets/bookmarkedcolors.cpp
-    GUI/ColorWidgets/paintcolorwidget.cpp
-    #GUI/Dialogs/animationtopaintdialog.cpp
     GUI/Dialogs/dialogsinterfaceimpl.cpp
     GUI/Expressions/expressiondialog.cpp
     GUI/Expressions/expressioneditor.cpp
@@ -170,7 +166,6 @@ set(
     GUI/canvasbasewrappernode.cpp
     GUI/canvaswindowevents.cpp
     GUI/canvaswrappernode.cpp
-    #GUI/closesignalingdockwidget.cpp
     GUI/ekeyfilter.cpp
     GUI/ewidgetsimpl.cpp
     GUI/layouthandler.cpp
@@ -218,20 +213,14 @@ set(
     GUI/qrealanimatorvalueslider.cpp
     GUI/fontswidget.cpp
     GUI/fillstrokesettings.cpp
-    #GUI/BrushWidgets/brushselectionwidget.cpp
     GUI/ColorWidgets/colorwidgetshaders.cpp
-    #GUI/BrushWidgets/brushwidget.cpp
     GUI/toolbox.cpp
 )
 
 set(
     HEADERS
     GUI/BoxesList/boxscroller.h
-    #GUI/BrushWidgets/bookmarkedbrushes.h
-    #GUI/BrushWidgets/brushlabel.h
     GUI/ColorWidgets/bookmarkedcolors.h
-    GUI/ColorWidgets/paintcolorwidget.h
-    #GUI/Dialogs/animationtopaintdialog.h
     GUI/Dialogs/dialogsinterfaceimpl.h
     GUI/Expressions/expressiondialog.h
     GUI/Expressions/expressioneditor.h
@@ -245,7 +234,6 @@ set(
     GUI/Settings/pluginssettingswidget.h
     GUI/canvasbasewrappernode.h
     GUI/canvaswrappernode.h
-    #GUI/closesignalingdockwidget.h
     GUI/ekeyfilter.h
     GUI/ewidgetsimpl.h
     GUI/layouthandler.h
@@ -291,9 +279,7 @@ set(
     GUI/mainwindow.h
     GUI/window.h
     GUI/qrealanimatorvalueslider.h
-    #GUI/BrushWidgets/brushselectionwidget.h
     GUI/ColorWidgets/colorwidgetshaders.h
-    #GUI/BrushWidgets/brushwidget.h
 )
 
 set(
