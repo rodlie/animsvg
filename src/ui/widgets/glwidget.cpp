@@ -23,25 +23,31 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef GRADIENTSLISTWIDGET_H
-#define GRADIENTSLISTWIDGET_H
+#include "glwidget.h"
 
-#include "optimalscrollarena/scrollarea.h"
+#include "colorhelpers.h"
+#include "GUI/global.h"
+#include "Animators/paintsettingsanimator.h"
 
-class GradientWidget;
-class DisplayedGradientsWidget;
-
-class GradientsListWidget : public ScrollArea
+GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent)
 {
-public:
-    explicit GradientsListWidget(QWidget *parent = nullptr);
-    DisplayedGradientsWidget *getList();
+//    setFormat(QSurfaceFormat::defaultFormat());
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    setMinimumSize(eSizesUI::widget, eSizesUI::widget);
+}
 
-protected:
-    void scrollContentsBy(int dx, int dy);
-    void resizeEvent(QResizeEvent *e);
-    void showEvent(QShowEvent *e);
-    DisplayedGradientsWidget *mDisplayedGradients;
-};
+void GLWidget::initializeGL()
+{
+    if (!initializeOpenGLFunctions()) {
+        RuntimeThrow(tr("Initializing OpenGL 3.3 failed."));
+    }
 
-#endif // GRADIENTSLISTWIDGET_H
+    glClearColor(0, 0, 0, 1);
+
+    // Set blending
+    glEnable(GL_BLEND);
+    glDisable(GL_DEPTH_TEST);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    iniPlainVShaderVAO(this, mPlainSquareVAO);
+}

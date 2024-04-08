@@ -25,7 +25,8 @@
 
 #ifndef COLORWIDGET_H
 #define COLORWIDGET_H
-#include "glwidget.h"
+
+#include "widgets/glwidget.h"
 #include "colorhelpers.h"
 
 class ColorWidget : public GLWidget {

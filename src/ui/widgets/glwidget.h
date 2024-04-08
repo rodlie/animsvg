@@ -23,27 +23,36 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#include "glwidget.h"
+#ifndef GLWIDGET_H
+#define GLWIDGET_H
+
+#include "ui_global.h"
+
+#include <QOpenGLWidget>
+
 #include "colorhelpers.h"
-#include "GUI/global.h"
-#include "Animators/paintsettingsanimator.h"
+#include "skia/skiaincludes.h"
+#include "glhelpers.h"
 
-GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
-//    setFormat(QSurfaceFormat::defaultFormat());
-    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    setMinimumSize(eSizesUI::widget, eSizesUI::widget);
-}
+class SceneBoundGradient;
 
-void GLWidget::initializeGL() {
-    if(!initializeOpenGLFunctions())
-        RuntimeThrow("Initializing OpenGL 3.3 functions failed. "
-                     "Make sure your GPU supports OpenGL 3.3.");
+class UI_EXPORT GLWidget : public QOpenGLWidget, protected QGL33
+{
+public:
+    GLWidget(QWidget *parent);
+    ~GLWidget() {
+        if (mPlainSquareVAO) {
+            makeCurrent();
+            glDeleteVertexArrays(1, &mPlainSquareVAO);
+            doneCurrent();
+        }
+    }
 
-    glClearColor(0, 0, 0, 1);
-    //Set blending
-    glEnable(GL_BLEND);
-    glDisable(GL_DEPTH_TEST);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+private:
+    void initializeGL();
 
-    iniPlainVShaderVAO(this, mPlainSquareVAO);
-}
+protected:
+    GLuint mPlainSquareVAO = 0;
+};
+
+#endif // GLWIDGET_H

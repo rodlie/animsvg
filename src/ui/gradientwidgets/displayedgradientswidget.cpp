@@ -24,8 +24,9 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "displayedgradientswidget.h"
+
 #include <QPainter>
-#include "GUI/GradientWidgets/gradientwidget.h"
+
 #include "Animators/gradient.h"
 #include "Private/document.h"
 #include "canvas.h"
@@ -84,7 +85,7 @@ void DisplayedGradientsWidget::updateHeight() {
     setFixedHeight(qMax(minimumHeight(), (mGradients.count() + 1)*eSizesUI::widget));
 }
 
-#include "GUI/ColorWidgets/colorwidgetshaders.h"
+#include "widgets/colorwidgetshaders.h"
 void DisplayedGradientsWidget::paintGL() {
     qreal pixelRatio = devicePixelRatioF();
     const int nVisible = qMin(mGradients.count() - mTopGradientId,

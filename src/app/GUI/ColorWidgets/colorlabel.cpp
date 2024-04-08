@@ -30,7 +30,7 @@
 #include <QWidget>
 #include <QMenu>
 #include "Private/document.h"
-#include "colorwidgetshaders.h"
+#include "widgets/colorwidgetshaders.h"
 
 ColorLabel::ColorLabel(QWidget *parent) : ColorWidget(parent) {
     //setMinimumSize(80, 20);

@@ -26,14 +26,16 @@
 #ifndef GRADIENTWIDGET_H
 #define GRADIENTWIDGET_H
 
+#include "ui_global.h"
+
 #include <QComboBox>
 #include <QScrollArea>
 #include <QVBoxLayout>
 
-#include "GUI/GradientWidgets/gradientslistwidget.h"
-#include "GUI/GradientWidgets/currentgradientwidget.h"
+#include "gradientwidgets/gradientslistwidget.h"
+#include "gradientwidgets/currentgradientwidget.h"
 
-class GradientWidget : public QWidget
+class UI_EXPORT GradientWidget : public QWidget
 {
     Q_OBJECT
 

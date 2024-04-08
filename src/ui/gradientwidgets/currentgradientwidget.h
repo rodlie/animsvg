@@ -26,14 +26,19 @@
 #ifndef CURRENTGRADIENTWIDGET_H
 #define CURRENTGRADIENTWIDGET_H
 
-#include "GUI/ColorWidgets/glwidget.h"
+#include "ui_global.h"
+
+#include "widgets/glwidget.h"
 #include "conncontextptr.h"
+
 class GradientWidget;
 class ColorAnimator;
 class Gradient;
 
-class CurrentGradientWidget : public GLWidget {
+class UI_EXPORT CurrentGradientWidget : public GLWidget
+{
     Q_OBJECT
+
 public:
     explicit CurrentGradientWidget(QWidget *parent = nullptr);
 
@@ -43,6 +48,7 @@ public:
     void setCurrentColorId(const int id);
 
     ColorAnimator *getColorAnimator();
+
 protected:
     void paintGL();
 
@@ -50,8 +56,10 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void leaveEvent(QEvent *);
+
 signals:
     void selectedColorChanged(ColorAnimator*);
+
 private:
     void updateCurrentColor();
     int getColorIdAtX(const int x);

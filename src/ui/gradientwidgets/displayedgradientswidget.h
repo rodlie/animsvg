@@ -26,16 +26,21 @@
 #ifndef DISPLACYEDGRADIENTSWIDGET_H
 #define DISPLACYEDGRADIENTSWIDGET_H
 
-#include "GUI/ColorWidgets/glwidget.h"
+#include "ui_global.h"
+
+#include "widgets/glwidget.h"
 #include "GUI/global.h"
 #include "conncontextobjlist.h"
 #include "conncontextptr.h"
+
 class Gradient;
 class GradientWidget;
 class Canvas;
 
-class DisplayedGradientsWidget : public GLWidget {
+class UI_EXPORT DisplayedGradientsWidget : public GLWidget
+{
     Q_OBJECT
+
 public:
     explicit DisplayedGradientsWidget(QWidget *parent = nullptr);
 
@@ -50,15 +55,18 @@ public:
     void removeGradient(Gradient* const gradient);
 
     void updateHeight();
+
 signals:
     void selectionChanged(Gradient*);
     void triggered(Gradient*);
+
 protected:
     void paintGL();
 
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void leaveEvent(QEvent *);
+
 private:
     void updateTopGradientId();
     void gradientContextMenuReq(const int gradId, const QPoint &globalPos);

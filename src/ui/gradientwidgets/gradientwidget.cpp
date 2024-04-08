@@ -28,7 +28,7 @@
 #include <QMenu>
 #include <QAction>
 
-#include "GUI/GradientWidgets/displayedgradientswidget.h"
+#include "gradientwidgets/displayedgradientswidget.h"
 #include "Animators/gradient.h"
 
 GradientWidget::GradientWidget(QWidget * const parent)

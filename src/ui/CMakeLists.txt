@@ -48,6 +48,10 @@ set(
     dialogs/qrealpointvaluedialog.cpp
     dialogs/renderoutputwidget.cpp
     dialogs/scenesettingsdialog.cpp
+    gradientwidgets/currentgradientwidget.cpp
+    gradientwidgets/displayedgradientswidget.cpp
+    gradientwidgets/gradientslistwidget.cpp
+    gradientwidgets/gradientwidget.cpp
     misc/noshortcutaction.cpp
     misc/keyfocustarget.cpp
     optimalscrollarena/minimalscrollwidget.cpp
@@ -66,10 +70,12 @@ set(
     widgets/buttonslist.cpp
     widgets/canvassettingswidget.cpp
     widgets/changewidthwidget.cpp
+    widgets/colorwidgetshaders.cpp
     widgets/ecombobox.cpp
     widgets/editablecombobox.cpp
     widgets/fakemenubar.cpp
     widgets/flowlayout.cpp
+    widgets/glwidget.cpp
     widgets/glwindow.cpp
     widgets/labeledslider.cpp
     widgets/performancesettingswidget.cpp
@@ -94,6 +100,10 @@ set(
     dialogs/qrealpointvaluedialog.h
     dialogs/renderoutputwidget.h
     dialogs/scenesettingsdialog.h
+    gradientwidgets/currentgradientwidget.h
+    gradientwidgets/displayedgradientswidget.h
+    gradientwidgets/gradientslistwidget.h
+    gradientwidgets/gradientwidget.h
     misc/noshortcutaction.h
     misc/keyfocustarget.h
     optimalscrollarena/minimalscrollwidget.h
@@ -112,10 +122,12 @@ set(
     widgets/buttonslist.h
     widgets/canvassettingswidget.h
     widgets/changewidthwidget.h
+    widgets/colorwidgetshaders.h
     widgets/ecombobox.h
     widgets/editablecombobox.h
     widgets/fakemenubar.h
     widgets/flowlayout.h
+    widgets/glwidget.h
     widgets/glwindow.h
     widgets/labeledslider.h
     widgets/performancesettingswidget.h

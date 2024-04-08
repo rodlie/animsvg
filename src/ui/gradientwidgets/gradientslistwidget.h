@@ -23,28 +23,27 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef GLWIDGET_H
-#define GLWIDGET_H
-#include <QOpenGLWidget>
-#include "colorhelpers.h"
-#include "skia/skiaincludes.h"
-#include "glhelpers.h"
-class SceneBoundGradient;
+#ifndef GRADIENTSLISTWIDGET_H
+#define GRADIENTSLISTWIDGET_H
 
-class GLWidget : public QOpenGLWidget, protected QGL33 {
+#include "ui_global.h"
+
+#include "optimalscrollarena/scrollarea.h"
+
+class GradientWidget;
+class DisplayedGradientsWidget;
+
+class UI_EXPORT GradientsListWidget : public ScrollArea
+{
 public:
-    GLWidget(QWidget *parent);
-    ~GLWidget() {
-        if(mPlainSquareVAO) {
-            makeCurrent();
-            glDeleteVertexArrays(1, &mPlainSquareVAO);
-            doneCurrent();
-        }
-    }
-private:
-    void initializeGL();
+    explicit GradientsListWidget(QWidget *parent = nullptr);
+    DisplayedGradientsWidget *getList();
+
 protected:
-    GLuint mPlainSquareVAO = 0;
+    void scrollContentsBy(int dx, int dy);
+    void resizeEvent(QResizeEvent *e);
+    void showEvent(QShowEvent *e);
+    DisplayedGradientsWidget *mDisplayedGradients;
 };
 
-#endif // GLWIDGET_H
+#endif // GRADIENTSLISTWIDGET_H

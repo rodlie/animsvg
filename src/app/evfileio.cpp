@@ -54,7 +54,7 @@
 #include "Animators/qrealkey.h"
 #include "GUI/mainwindow.h"
 #include "GUI/canvaswindow.h"
-#include "GUI/GradientWidgets/gradientwidget.h"
+#include "gradientwidgets/gradientwidget.h"
 #include <QMessageBox>
 #include "PathEffects/patheffectsinclude.h"
 #include "ReadWrite/basicreadwrite.h"

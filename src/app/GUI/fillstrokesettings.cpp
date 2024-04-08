@@ -24,7 +24,7 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "fillstrokesettings.h"
-#include "GUI/GradientWidgets/gradientwidget.h"
+#include "gradientwidgets/gradientwidget.h"
 #include "canvas.h"
 #include "qrealanimatorvalueslider.h"
 #include "GUI/ColorWidgets/colorsettingswidget.h"

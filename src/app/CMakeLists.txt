@@ -178,12 +178,9 @@ set(
     GUI/ColorWidgets/colorsettingswidget.cpp
     GUI/ColorWidgets/colorvaluerect.cpp
     GUI/ColorWidgets/colorwidget.cpp
-    GUI/ColorWidgets/h_wheel_sv_triangle.cpp
     GUI/ColorWidgets/colorpickingwidget.cpp
     GUI/ColorWidgets/savedcolorbutton.cpp
     GUI/ColorWidgets/savedcolorswidget.cpp
-    GUI/GradientWidgets/gradientwidget.cpp
-    GUI/ColorWidgets/glwidget.cpp
     GUI/window.cpp
     effectsloader.cpp
     eimporters.cpp
@@ -197,9 +194,6 @@ set(
     memoryhandler.cpp
     GUI/RenderWidgets/renderwidget.cpp
     GUI/RenderWidgets/renderinstancewidget.cpp
-    GUI/GradientWidgets/gradientslistwidget.cpp
-    GUI/GradientWidgets/displayedgradientswidget.cpp
-    GUI/GradientWidgets/currentgradientwidget.cpp
     GUI/RenderWidgets/closablecontainer.cpp
     GUI/BoxesList/boxtargetwidget.cpp
     GUI/BoxesList/boxscrollarea.cpp
@@ -213,7 +207,6 @@ set(
     GUI/qrealanimatorvalueslider.cpp
     GUI/fontswidget.cpp
     GUI/fillstrokesettings.cpp
-    GUI/ColorWidgets/colorwidgetshaders.cpp
     GUI/toolbox.cpp
 )
 
@@ -246,12 +239,9 @@ set(
     GUI/ColorWidgets/colorsettingswidget.h
     GUI/ColorWidgets/colorvaluerect.h
     GUI/ColorWidgets/colorwidget.h
-    GUI/ColorWidgets/h_wheel_sv_triangle.h
     GUI/ColorWidgets/colorpickingwidget.h
     GUI/ColorWidgets/savedcolorbutton.h
     GUI/ColorWidgets/savedcolorswidget.h
-    GUI/GradientWidgets/gradientwidget.h
-    GUI/ColorWidgets/glwidget.h
     effectsloader.h
     eimporters.h
     iconloader.h
@@ -263,9 +253,6 @@ set(
     memoryhandler.h
     GUI/RenderWidgets/renderwidget.h
     GUI/RenderWidgets/renderinstancewidget.h
-    GUI/GradientWidgets/gradientslistwidget.h
-    GUI/GradientWidgets/displayedgradientswidget.h
-    GUI/GradientWidgets/currentgradientwidget.h
     GUI/RenderWidgets/closablecontainer.h
     GUI/BoxesList/boxtargetwidget.h
     GUI/BoxesList/boxscrollarea.h
@@ -279,7 +266,6 @@ set(
     GUI/mainwindow.h
     GUI/window.h
     GUI/qrealanimatorvalueslider.h
-    GUI/ColorWidgets/colorwidgetshaders.h
 )
 
 set(

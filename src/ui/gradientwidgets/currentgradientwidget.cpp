@@ -24,11 +24,11 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "currentgradientwidget.h"
-#include "GUI/GradientWidgets/gradientwidget.h"
 #include "GUI/global.h"
-#include "GUI/ColorWidgets/colorwidgetshaders.h"
+#include "widgets/colorwidgetshaders.h"
 #include "Animators/gradient.h"
 #include "Private/document.h"
+
 #include <QMouseEvent>
 
 CurrentGradientWidget::CurrentGradientWidget(QWidget *parent) :

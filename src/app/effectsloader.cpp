@@ -29,7 +29,7 @@
 #include <QFileSystemModel>
 #include <iostream>
 
-#include "GUI/ColorWidgets/colorwidgetshaders.h"
+#include "widgets/colorwidgetshaders.h"
 #include "ShaderEffects/shadereffectcreator.h"
 #include "PathEffects/custompatheffect.h"
 #include "PathEffects/custompatheffectcreator.h"

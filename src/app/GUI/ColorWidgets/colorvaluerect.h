@@ -26,7 +26,7 @@
 #ifndef COLORVALUERECT_H
 #define COLORVALUERECT_H
 #include "colorwidget.h"
-#include "colorwidgetshaders.h"
+#include "widgets/colorwidgetshaders.h"
 
 class ColorValueRect : public ColorWidget {
     Q_OBJECT
