@@ -7,5 +7,18 @@
         <file alias="noisefadeeffect.frag">RasterEffects/noisefadeeffect.frag</file>
         <file alias="colorizeeffect.frag">RasterEffects/colorizeeffect.frag</file>
         <file alias="brightnesscontrasteffect.frag">RasterEffects/brightnesscontrasteffect.frag</file>
+        <file alias="alpha.frag">colorshaders/alpha.frag</file>
+        <file alias="blue.frag">colorshaders/blue.frag</file>
+        <file alias="border.frag">colorshaders/border.frag</file>
+        <file alias="doubleborder.frag">colorshaders/doubleborder.frag</file>
+        <file alias="gradient.frag">colorshaders/gradient.frag</file>
+        <file alias="green.frag">colorshaders/green.frag</file>
+        <file alias="hsl_saturation.frag">colorshaders/hsl_saturation.frag</file>
+        <file alias="hsv_saturation.frag">colorshaders/hsv_saturation.frag</file>
+        <file alias="hue.frag">colorshaders/hue.frag</file>
+        <file alias="lightness.frag">colorshaders/lightness.frag</file>
+        <file alias="plain.frag">colorshaders/plain.frag</file>
+        <file alias="red.frag">colorshaders/red.frag</file>
+        <file alias="value.frag">colorshaders/value.frag</file>
     </qresource>
 </RCC>

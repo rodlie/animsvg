@@ -133,7 +133,7 @@ void iniGradientProgram(QGL33 * const gl, const QString& colorShadersPath) {
 }
 
 void iniColorPrograms(QGL33 * const gl) {
-    const QString colorShadersPath = ":/colorwidgetshaders/";
+    const QString colorShadersPath = ":/shaders/";
 
     try {
         iniColorProgram(gl, HUE_PROGRAM, GL_PLAIN_VERT,
