@@ -28,8 +28,7 @@
 #include <QMouseEvent>
 #include <QDebug>
 #include <QPainter>
-#include "GUI/mainwindow.h"
-#include "GUI/global.h"
+#include "Private/document.h"
 
 ColorValueRect::ColorValueRect(const ColorProgram& program,
                                QWidget * const parent) :

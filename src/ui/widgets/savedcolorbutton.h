@@ -23,25 +23,45 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef COLORLABEL_H
-#define COLORLABEL_H
+#ifndef SAVEDCOLORBUTTON_H
+#define SAVEDCOLORBUTTON_H
 
-#include "colorwidget.h"
+#include "ui_global.h"
 
+#include <QWidget>
+#include <QMouseEvent>
+#include "colorhelpers.h"
 
-class ColorLabel : public ColorWidget {
+class UI_EXPORT SavedColorButton : public QWidget
+{
     Q_OBJECT
+
 public:
-    explicit ColorLabel(QWidget *parent = nullptr);
-    void saveCurrentColorAsLast();
-    void setLastColorHSV(GLfloat h, GLfloat s, GLfloat v);
+    explicit SavedColorButton(const QColor& colorT,
+                              QWidget *parent = nullptr);
+    const QColor& getColor() const
+    { return mColor; }
+    void setSelected(const bool selected);
+
+protected:
+    void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *e);
-    void setAlpha(const qreal alpha_t);
-    void addBookmark();
+    void enterEvent(QEvent*) {
+        mHovered = true;
+        update();
+    }
+    void leaveEvent(QEvent*) {
+        mHovered = false;
+        update();
+    }
 
 private:
-    void paintGL();
-    qreal mAlpha = 1;
+    bool mHovered = false;
+    bool mSelected = false;
+    QColor mColor;
+
+signals:
+    void selected(QColor);
 };
 
-#endif // COLORLABEL_H
+#endif // SAVEDCOLORBUTTON_H

@@ -24,7 +24,7 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "bookmarkedcolors.h"
-#include "savedcolorbutton.h"
+#include "widgets/savedcolorbutton.h"
 #include "Private/document.h"
 
 BookmarkedColors::BookmarkedColors(const bool vertical,

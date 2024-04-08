@@ -151,7 +151,6 @@ set(
     SOURCES
     main.cpp
     GUI/BoxesList/boxscroller.cpp
-    GUI/ColorWidgets/bookmarkedcolors.cpp
     GUI/Dialogs/dialogsinterfaceimpl.cpp
     GUI/Expressions/expressiondialog.cpp
     GUI/Expressions/expressioneditor.cpp
@@ -174,13 +173,8 @@ set(
     GUI/timelinehighlightwidget.cpp
     GUI/timelinewidget.cpp
     GUI/timelinewrappernode.cpp
-    GUI/ColorWidgets/colorlabel.cpp
     GUI/ColorWidgets/colorsettingswidget.cpp
-    GUI/ColorWidgets/colorvaluerect.cpp
-    GUI/ColorWidgets/colorwidget.cpp
     GUI/ColorWidgets/colorpickingwidget.cpp
-    GUI/ColorWidgets/savedcolorbutton.cpp
-    GUI/ColorWidgets/savedcolorswidget.cpp
     GUI/window.cpp
     effectsloader.cpp
     eimporters.cpp
@@ -213,7 +207,6 @@ set(
 set(
     HEADERS
     GUI/BoxesList/boxscroller.h
-    GUI/ColorWidgets/bookmarkedcolors.h
     GUI/Dialogs/dialogsinterfaceimpl.h
     GUI/Expressions/expressiondialog.h
     GUI/Expressions/expressioneditor.h
@@ -235,13 +228,8 @@ set(
     GUI/timelinehighlightwidget.h
     GUI/timelinewidget.h
     GUI/timelinewrappernode.h
-    GUI/ColorWidgets/colorlabel.h
     GUI/ColorWidgets/colorsettingswidget.h
-    GUI/ColorWidgets/colorvaluerect.h
-    GUI/ColorWidgets/colorwidget.h
     GUI/ColorWidgets/colorpickingwidget.h
-    GUI/ColorWidgets/savedcolorbutton.h
-    GUI/ColorWidgets/savedcolorswidget.h
     effectsloader.h
     eimporters.h
     iconloader.h

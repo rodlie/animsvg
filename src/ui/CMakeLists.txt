@@ -65,11 +65,15 @@ set(
     widgets/alignwidget.cpp
     widgets/framescrollbar.cpp
     widgets/assetswidget.cpp
+    widgets/bookmarkedcolors.cpp
     widgets/bookmarkedwidget.cpp
     widgets/buttonbase.cpp
     widgets/buttonslist.cpp
     widgets/canvassettingswidget.cpp
     widgets/changewidthwidget.cpp
+    widgets/colorlabel.cpp
+    widgets/colorvaluerect.cpp
+    widgets/colorwidget.cpp
     widgets/colorwidgetshaders.cpp
     widgets/ecombobox.cpp
     widgets/editablecombobox.cpp
@@ -81,6 +85,8 @@ set(
     widgets/performancesettingswidget.cpp
     widgets/presetsettingswidget.cpp
     widgets/qdoubleslider.cpp
+    widgets/savedcolorbutton.cpp
+    widgets/savedcolorswidget.cpp
     widgets/scenechooser.cpp
     widgets/settingswidget.cpp
     widgets/twocolumnlayout.cpp
@@ -117,11 +123,15 @@ set(
     widgets/alignwidget.h
     widgets/framescrollbar.h
     widgets/assetswidget.h
+    widgets/bookmarkedcolors.h
     widgets/bookmarkedwidget.h
     widgets/buttonbase.h
     widgets/buttonslist.h
     widgets/canvassettingswidget.h
     widgets/changewidthwidget.h
+    widgets/colorlabel.h
+    widgets/colorvaluerect.h
+    widgets/colorwidget.h
     widgets/colorwidgetshaders.h
     widgets/ecombobox.h
     widgets/editablecombobox.h
@@ -133,6 +143,8 @@ set(
     widgets/performancesettingswidget.h
     widgets/presetsettingswidget.h
     widgets/qdoubleslider.h
+    widgets/savedcolorbutton.h
+    widgets/savedcolorswidget.h
     widgets/scenechooser.h
     widgets/settingswidget.h
     widgets/toolbutton.h

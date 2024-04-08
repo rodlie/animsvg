@@ -23,22 +23,32 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef BOOKMARKEDCOLORS_H
-#define BOOKMARKEDCOLORS_H
+#ifndef COLORWIDGET_H
+#define COLORWIDGET_H
 
-#include "widgets/bookmarkedwidget.h"
+#include "ui_global.h"
 
-class BookmarkedColors : public BookmarkedWidget
+#include "widgets/glwidget.h"
+#include "colorhelpers.h"
+
+class UI_EXPORT ColorWidget : public GLWidget
 {
     Q_OBJECT
-public:
-    BookmarkedColors(const bool vertical,
-                     const int dimension,
-                     QWidget* const parent);
 
-    void setCurrentColor(const QColor& color);
-    void addColor(const QColor& color);
-    void removeColor(const QColor& color);
+public:
+    ColorWidget(QWidget *parent = nullptr);
+
+    void setColor(const QColor& color);
+    void setColor(const qreal h, const qreal s, const qreal v);
+
+protected:
+    bool mValueBlocked = false;
+
+    GLfloat mHslSaturatonTmp = -1; // HSL saturation saved when changing lightness
+
+    GLfloat mHue = 0;
+    GLfloat mSaturation = 0;
+    GLfloat mValue = 0;
 };
 
-#endif // BOOKMARKEDCOLORS_H
+#endif // COLORWIDGET_H

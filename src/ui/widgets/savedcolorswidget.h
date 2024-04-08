@@ -23,27 +23,35 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef COLORWIDGET_H
-#define COLORWIDGET_H
+#ifndef SAVEDCOLORSWIDGET_H
+#define SAVEDCOLORSWIDGET_H
 
-#include "widgets/glwidget.h"
+#include "ui_global.h"
+
+#include <QWidget>
+
+#include "widgets/flowlayout.h"
 #include "colorhelpers.h"
 
-class ColorWidget : public GLWidget {
+class SavedColorButton;
+
+class UI_EXPORT SavedColorsWidget : public QWidget
+{
     Q_OBJECT
+
 public:
-    ColorWidget(QWidget *parent = nullptr);
+    explicit SavedColorsWidget(QWidget *parent = nullptr);
 
+    void addColor(const QColor& color);
+    void removeColor(const QColor& color);
     void setColor(const QColor& color);
-    void setColor(const qreal h, const qreal s, const qreal v);
-protected:
-    bool mValueBlocked = false;
 
-    GLfloat mHslSaturatonTmp = -1; // HSL saturation saved when changing lightness
+private:
+    FlowLayout *mMainLayout = nullptr;
+    QList<SavedColorButton*> mButtons;
 
-    GLfloat mHue = 0;
-    GLfloat mSaturation = 0;
-    GLfloat mValue = 0;
+signals:
+    void colorSet(QColor);
 };
 
-#endif // COLORWIDGET_H
+#endif // SAVEDCOLORSWIDGET_H

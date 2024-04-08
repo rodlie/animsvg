@@ -23,28 +23,24 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef SAVEDCOLORSWIDGET_H
-#define SAVEDCOLORSWIDGET_H
+#ifndef BOOKMARKEDCOLORS_H
+#define BOOKMARKEDCOLORS_H
 
-#include <QWidget>
-#include "widgets/flowlayout.h"
-#include "colorhelpers.h"
+#include "ui_global.h"
 
-class SavedColorButton;
+#include "widgets/bookmarkedwidget.h"
 
-class SavedColorsWidget : public QWidget {
+class UI_EXPORT BookmarkedColors : public BookmarkedWidget
+{
     Q_OBJECT
 public:
-    explicit SavedColorsWidget(QWidget *parent = nullptr);
+    BookmarkedColors(const bool vertical,
+                     const int dimension,
+                     QWidget* const parent);
 
+    void setCurrentColor(const QColor& color);
     void addColor(const QColor& color);
     void removeColor(const QColor& color);
-    void setColor(const QColor& color);
-private:
-    FlowLayout *mMainLayout = nullptr;
-    QList<SavedColorButton*> mButtons;
-signals:
-    void colorSet(QColor);
 };
 
-#endif // SAVEDCOLORSWIDGET_H
+#endif // BOOKMARKEDCOLORS_H
