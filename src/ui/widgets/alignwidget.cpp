@@ -30,6 +30,7 @@
 #include <QPushButton>
 
 #include "GUI/global.h"
+#include "Private/esettings.h"
 
 AlignWidget::AlignWidget(QWidget* const parent)
     : QWidget(parent)
@@ -67,12 +68,9 @@ AlignWidget::AlignWidget(QWidget* const parent)
     mainLayout->addLayout(buttonsLay);
     mainLayout->addStretch();
 
-    int buttonSize = eSizesUI::widget;
-
     const auto leftButton = new QPushButton(this);
     leftButton->setFocusPolicy(Qt::NoFocus);
     leftButton->setIcon(QIcon::fromTheme("pivot-align-left"));
-    leftButton->setIconSize(QSize(buttonSize, buttonSize));
     leftButton->setToolTip(tr("Align Left"));
     connect(leftButton, &QPushButton::pressed, this, [this]() {
         triggerAlign(Qt::AlignLeft);
@@ -82,7 +80,6 @@ AlignWidget::AlignWidget(QWidget* const parent)
     const auto hCenterButton = new QPushButton(this);
     hCenterButton->setFocusPolicy(Qt::NoFocus);
     hCenterButton->setIcon(QIcon::fromTheme("pivot-align-hcenter"));
-    hCenterButton->setIconSize(QSize(buttonSize, buttonSize));
     hCenterButton->setToolTip(tr("Align Horizontal Center"));
     connect(hCenterButton, &QPushButton::pressed, this, [this]() {
         triggerAlign(Qt::AlignHCenter);
@@ -92,7 +89,6 @@ AlignWidget::AlignWidget(QWidget* const parent)
     const auto rightButton = new QPushButton(this);
     rightButton->setFocusPolicy(Qt::NoFocus);
     rightButton->setIcon(QIcon::fromTheme("pivot-align-right"));
-    rightButton->setIconSize(QSize(buttonSize, buttonSize));
     rightButton->setToolTip(tr("Align Right"));
     connect(rightButton, &QPushButton::pressed, this, [this]() {
         triggerAlign(Qt::AlignRight);
@@ -102,7 +98,6 @@ AlignWidget::AlignWidget(QWidget* const parent)
     const auto topButton = new QPushButton(this);
     topButton->setFocusPolicy(Qt::NoFocus);
     topButton->setIcon(QIcon::fromTheme("pivot-align-top"));
-    topButton->setIconSize(QSize(buttonSize, buttonSize));
     topButton->setToolTip(tr("Align Top"));
     connect(topButton, &QPushButton::pressed, this, [this]() {
         triggerAlign(Qt::AlignTop);
@@ -112,7 +107,6 @@ AlignWidget::AlignWidget(QWidget* const parent)
     const auto vCenterButton = new QPushButton(this);
     vCenterButton->setFocusPolicy(Qt::NoFocus);
     vCenterButton->setIcon(QIcon::fromTheme("pivot-align-vcenter"));
-    vCenterButton->setIconSize(QSize(buttonSize, buttonSize));
     vCenterButton->setToolTip(tr("Align Vertical Center"));
     connect(vCenterButton, &QPushButton::pressed, this, [this]() {
         triggerAlign(Qt::AlignVCenter);
@@ -122,12 +116,21 @@ AlignWidget::AlignWidget(QWidget* const parent)
     const auto bottomButton = new QPushButton(this);
     bottomButton->setFocusPolicy(Qt::NoFocus);
     bottomButton->setIcon(QIcon::fromTheme("pivot-align-bottom"));
-    bottomButton->setIconSize(QSize(buttonSize, buttonSize));
     bottomButton->setToolTip(tr("Align Bottom"));
     connect(bottomButton, &QPushButton::pressed, this, [this]() {
         triggerAlign(Qt::AlignBottom);
     });
     buttonsLay->addWidget(bottomButton);
+
+    if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+        int buttonSize = eSizesUI::widget;
+        leftButton->setIconSize(QSize(buttonSize, buttonSize));
+        hCenterButton->setIconSize(QSize(buttonSize, buttonSize));
+        rightButton->setIconSize(QSize(buttonSize, buttonSize));
+        topButton->setIconSize(QSize(buttonSize, buttonSize));
+        vCenterButton->setIconSize(QSize(buttonSize, buttonSize));
+        bottomButton->setIconSize(QSize(buttonSize, buttonSize));
+    }
 }
 
 void AlignWidget::triggerAlign(const Qt::Alignment align)

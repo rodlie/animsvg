@@ -266,17 +266,19 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     // adjust sizes
     eSizesUI::widget.add(mBevelJoinStyleButton, [this](const int size) {
         mBevelJoinStyleButton->setFixedHeight(size);
-        mBevelJoinStyleButton->setIconSize(QSize(size, size));
         mMiterJointStyleButton->setFixedHeight(size);
-        mMiterJointStyleButton->setIconSize(QSize(size, size));
         mRoundJoinStyleButton->setFixedHeight(size);
-        mRoundJoinStyleButton->setIconSize(QSize(size, size));
         mFlatCapStyleButton->setFixedHeight(size);
-        mFlatCapStyleButton->setIconSize(QSize(size, size));
         mSquareCapStyleButton->setFixedHeight(size);
-        mSquareCapStyleButton->setIconSize(QSize(size, size));
         mRoundCapStyleButton->setFixedHeight(size);
-        mRoundCapStyleButton->setIconSize(QSize(size, size));
+        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+            mBevelJoinStyleButton->setIconSize(QSize(size, size));
+            mMiterJointStyleButton->setIconSize(QSize(size, size));
+            mRoundJoinStyleButton->setIconSize(QSize(size, size));
+            mFlatCapStyleButton->setIconSize(QSize(size, size));
+            mSquareCapStyleButton->setIconSize(QSize(size, size));
+            mRoundCapStyleButton->setIconSize(QSize(size, size));
+        }
     });
 
     // layout

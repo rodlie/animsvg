@@ -31,13 +31,17 @@
 #include <QPushButton>
 #include <QFrame>
 
+#include "Private/esettings.h"
+
 class QActionButton : public QPushButton {
 public:
     explicit QActionButton(QWidget *parent = nullptr) :
         QPushButton(parent) {
         eSizesUI::widget.add(this, [this](const int size) {
             setFixedHeight(size);
-            //setIconSize(QSize(size, size));
+            if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+                setIconSize(QSize(size, size));
+            }
         });
         //setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         setObjectName("QActionButton");

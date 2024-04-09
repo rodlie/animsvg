@@ -222,7 +222,9 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
 
     mToolBar = new QToolBar(this);
     eSizesUI::widget.add(mToolBar, [this](const int size) {
-        mToolBar->setIconSize(QSize(size, size));
+        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+            mToolBar->setIconSize(QSize(size, size));
+        }
     });
     mToolBar->setMovable(false);
 

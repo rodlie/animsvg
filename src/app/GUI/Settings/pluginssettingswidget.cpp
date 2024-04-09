@@ -35,6 +35,7 @@
 #include <QHeaderView>
 
 #include "GUI/global.h"
+#include "Private/esettings.h"
 
 PluginsSettingsWidget::PluginsSettingsWidget(QWidget *parent)
     : SettingsWidget(parent)
@@ -60,7 +61,9 @@ PluginsSettingsWidget::PluginsSettingsWidget(QWidget *parent)
                                                    this);
     mShaderPathButton->setObjectName("FlatButton");
     mShaderPathButton->setFocusPolicy(Qt::NoFocus);
-    mShaderPathButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
+    if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+        mShaderPathButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
+    }
     mShaderPathButton->setFixedSize(QSize(eSizesUI::widget, eSizesUI::widget));
 
     mShaderLayout->addWidget(mShaderLabel);

@@ -369,7 +369,9 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
             this, &ColorSettingsWidget::startColorPicking);
     eSizesUI::widget.add(mPickingButton, [this](const int size) {
         mPickingButton->setFixedHeight(size);
-        mPickingButton->setIconSize(QSize(size, size));
+        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+            mPickingButton->setIconSize(QSize(size, size));
+        }
     });
 
     mColorLabelLayout->addWidget(mColorLabel);

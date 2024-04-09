@@ -53,7 +53,9 @@ AssetsTreeWidget::AssetsTreeWidget(QWidget *parent)
     header()->setStretchLastSection(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
     eSizesUI::widget.add(this, [this](const int size) {
-        setIconSize(QSize(size, size));
+        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+            setIconSize(QSize(size, size));
+        }
     });
 }
 

@@ -152,6 +152,7 @@ int main(int argc, char *argv[])
         } else {
             dpi = qApp->desktop()->logicalDpiX() / 96.0; //QGuiApplication::primaryScreen()->logicalDotsPerInch() / 96.0
         }
+        settings.fCurrentInterfaceDPI = dpi;
         qDebug() << "DPI" << dpi;
         const auto fm = QFontMetrics(OS_FONT);
         const qreal scaling = qBound(0.5, dpi, 1.5);
