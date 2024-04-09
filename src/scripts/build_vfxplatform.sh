@@ -32,13 +32,13 @@ MKJOBS=${MKJOBS:-4}
 SDK_VERSION=${SDK_VERSION:-""}
 ONLY_SDK=${ONLY_SDK:-0}
 SDK_TAR="${DISTFILES}/friction-vfxplatform-sdk-${SDK_VERSION}.tar"
-BUILD_RPM=${BUILD_RPM:-1}
 DOWNLOAD_SDK=${DOWNLOAD_SDK:-0}
+TAR_VERSION=${TAR_VERSION:-""}
 
 # Download SDK
-if [ "${DOWNLOAD_SDK}" = 1 ] && [ ! -f "${SDK_TAR}.xz" ]; then
+if [ "${DOWNLOAD_SDK}" = 1 ] && [ ! -f "${SDK_TAR}.bz2" ]; then
     (cd ${DISTFILES} ;
-        wget https://download.friction.graphics/distfiles/vfxplatform/friction-vfxplatform-sdk-${SDK_VERSION}.tar.xz
+        wget https://download.friction.graphics/distfiles/vfxplatform/friction-vfxplatform-sdk-${SDK_VERSION}.tar.bz2
     )
 fi
 
@@ -48,8 +48,8 @@ if [ ! -d "${SDK}" ]; then
     mkdir -p "${SDK}/bin"
     (cd "${SDK}"; ln -sf lib lib64)
 fi
-if [ -f "${SDK_TAR}.xz" ]; then
-(cd ${SDK}/.. ; tar xf ${SDK_TAR}.xz )
+if [ -f "${SDK_TAR}.bz2" ]; then
+(cd ${SDK}/.. ; tar xf ${SDK_TAR}.bz2 )
 else
 SDK=${SDK} DISTFILES=${DISTFILES} MKJOBS=${MKJOBS} ${BUILD}/build_vfxplatform_sdk01.sh
 SDK=${SDK} DISTFILES=${DISTFILES} MKJOBS=${MKJOBS} ${BUILD}/build_vfxplatform_sdk02.sh
@@ -57,7 +57,7 @@ SDK=${SDK} DISTFILES=${DISTFILES} MKJOBS=${MKJOBS} ${BUILD}/build_vfxplatform_sd
 (cd ${SDK}/.. ;
     rm -rf friction/src
     tar cvvf ${SDK_TAR} friction
-    xz -9 ${SDK_TAR}
+    bzip2 -9 ${SDK_TAR}
 )
 fi
 
@@ -73,14 +73,17 @@ REL=${REL} \
 BRANCH=${BRANCH} \
 COMMIT=${COMMIT} \
 TAG=${TAG} \
+TAR_VERSION=${TAR_VERSION} \
 ${BUILD}/build_vfxplatform_friction.sh
 
 # Get Friction version
 VERSION=`cat ${BUILD}/friction/build-vfxplatform/version.txt`
 if [ "${REL}" != 1 ]; then
     GIT_COMMIT=`(cd ${BUILD}/friction ; git rev-parse --short=8 HEAD)`
-    GIT_BRANCH=`(cd ${BUILD}/friction ; git rev-parse --abbrev-ref HEAD)`
-    VERSION="${VERSION}-${GIT_BRANCH}-${GIT_COMMIT}"
+    VERSION="${VERSION}-${GIT_COMMIT}"
+fi
+if [ "${TAR_VERSION}" != "" ]; then
+    VERSION=${TAR_VERSION}
 fi
 
 # Package Friction
@@ -88,5 +91,4 @@ SDK=${SDK} \
 DISTFILES=${DISTFILES} \
 BUILD=${BUILD} \
 VERSION=${VERSION} \
-PKG_RPM=${BUILD_RPM} \
 ${BUILD}/build_vfxplatform_package.sh

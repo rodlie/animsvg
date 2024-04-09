@@ -30,6 +30,7 @@ REL=${REL:-1}
 BRANCH=${BRANCH:-""}
 COMMIT=${COMMIT:-""}
 TAG=${TAG:-""}
+TAR_VERSION=${TAR_VERSION:-""}
 
 export PATH="${SDK}/bin:${PATH}"
 export PKG_CONFIG_PATH="${SDK}/lib/pkgconfig"
@@ -99,7 +100,7 @@ cmake -GNinja \
 
 VERSION=`cat version.txt`
 if [ "${REL}" != 1 ]; then
-    VERSION="${VERSION}-${GIT_BRANCH}-${GIT_COMMIT}"
+    VERSION="${VERSION}-${GIT_COMMIT}"
 fi
 
 cmake --build .

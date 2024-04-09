@@ -46,7 +46,7 @@
 #include "smartPointers/ememory.h"
 #include "framerange.h"
 #include "timelinebasewrappernode.h"
-#include "qdoubleslider.h"
+#include "widgets/qdoubleslider.h"
 #include "renderhandler.h"
 
 class FrameScrollBar;

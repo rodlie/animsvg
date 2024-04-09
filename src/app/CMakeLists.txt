@@ -151,11 +151,6 @@ set(
     SOURCES
     main.cpp
     GUI/BoxesList/boxscroller.cpp
-    #GUI/BrushWidgets/bookmarkedbrushes.cpp
-    #GUI/BrushWidgets/brushlabel.cpp
-    GUI/ColorWidgets/bookmarkedcolors.cpp
-    GUI/ColorWidgets/paintcolorwidget.cpp
-    #GUI/Dialogs/animationtopaintdialog.cpp
     GUI/Dialogs/dialogsinterfaceimpl.cpp
     GUI/Expressions/expressiondialog.cpp
     GUI/Expressions/expressioneditor.cpp
@@ -163,19 +158,13 @@ set(
     GUI/RenderWidgets/outputsettingsdialog.cpp
     GUI/RenderWidgets/rendersettingsdialog.cpp
     GUI/RenderWidgets/rendersettingsdisplaywidget.cpp
-    GUI/Settings/canvassettingswidget.cpp
     GUI/Settings/generalsettingswidget.cpp
-    GUI/Settings/performancesettingswidget.cpp
     GUI/Settings/settingsdialog.cpp
-    GUI/Settings/settingswidget.cpp
     GUI/Settings/timelinesettingswidget.cpp
     GUI/Settings/pluginssettingswidget.cpp
-    GUI/Settings/presetsettingswidget.cpp
-    GUI/aboutwidget.cpp
     GUI/canvasbasewrappernode.cpp
     GUI/canvaswindowevents.cpp
     GUI/canvaswrappernode.cpp
-    #GUI/closesignalingdockwidget.cpp
     GUI/ekeyfilter.cpp
     GUI/ewidgetsimpl.cpp
     GUI/layouthandler.cpp
@@ -184,21 +173,9 @@ set(
     GUI/timelinehighlightwidget.cpp
     GUI/timelinewidget.cpp
     GUI/timelinewrappernode.cpp
-    GUI/welcomedialog.cpp
-    GUI/widgetstack.cpp
-    GUI/ColorWidgets/colorlabel.cpp
     GUI/ColorWidgets/colorsettingswidget.cpp
-    GUI/ColorWidgets/colorvaluerect.cpp
-    GUI/ColorWidgets/colorwidget.cpp
-    GUI/ColorWidgets/h_wheel_sv_triangle.cpp
     GUI/ColorWidgets/colorpickingwidget.cpp
-    GUI/ColorWidgets/savedcolorbutton.cpp
-    GUI/ColorWidgets/savedcolorswidget.cpp
-    GUI/GradientWidgets/gradientwidget.cpp
-    GUI/ColorWidgets/glwidget.cpp
-    GUI/widgetwrappernode.cpp
     GUI/window.cpp
-    GUI/wrappernode.cpp
     effectsloader.cpp
     eimporters.cpp
     evfileio.cpp
@@ -211,43 +188,25 @@ set(
     memoryhandler.cpp
     GUI/RenderWidgets/renderwidget.cpp
     GUI/RenderWidgets/renderinstancewidget.cpp
-    GUI/GradientWidgets/gradientslistwidget.cpp
-    GUI/GradientWidgets/displayedgradientswidget.cpp
-    GUI/GradientWidgets/currentgradientwidget.cpp
     GUI/RenderWidgets/closablecontainer.cpp
     GUI/BoxesList/boxtargetwidget.cpp
     GUI/BoxesList/boxscrollarea.cpp
     GUI/RenderWidgets/outputsettingsprofilesdialog.cpp
     GUI/RenderWidgets/outputsettingsdisplaywidget.cpp
     GUI/animationdockwidget.cpp
-    GUI/animationwidgetscrollbar.cpp
     GUI/canvaswindow.cpp
     GUI/graphboxeslist.cpp
     GUI/keysview.cpp
     GUI/mainwindow.cpp
-    GUI/noshortcutaction.cpp
-    GUI/keyfocustarget.cpp
-    GUI/qrealpointvaluedialog.cpp
-    GUI/renderoutputwidget.cpp
-    GUI/qdoubleslider.cpp
     GUI/qrealanimatorvalueslider.cpp
-    GUI/glwindow.cpp
     GUI/fontswidget.cpp
     GUI/fillstrokesettings.cpp
-    #GUI/BrushWidgets/brushselectionwidget.cpp
-    GUI/ColorWidgets/colorwidgetshaders.cpp
-    #GUI/BrushWidgets/brushwidget.cpp
     GUI/toolbox.cpp
 )
 
 set(
     HEADERS
     GUI/BoxesList/boxscroller.h
-    #GUI/BrushWidgets/bookmarkedbrushes.h
-    #GUI/BrushWidgets/brushlabel.h
-    GUI/ColorWidgets/bookmarkedcolors.h
-    GUI/ColorWidgets/paintcolorwidget.h
-    #GUI/Dialogs/animationtopaintdialog.h
     GUI/Dialogs/dialogsinterfaceimpl.h
     GUI/Expressions/expressiondialog.h
     GUI/Expressions/expressioneditor.h
@@ -255,18 +214,12 @@ set(
     GUI/RenderWidgets/outputsettingsdialog.h
     GUI/RenderWidgets/rendersettingsdialog.h
     GUI/RenderWidgets/rendersettingsdisplaywidget.h
-    GUI/Settings/canvassettingswidget.h
     GUI/Settings/generalsettingswidget.h
-    GUI/Settings/performancesettingswidget.h
     GUI/Settings/settingsdialog.h
-    GUI/Settings/settingswidget.h
     GUI/Settings/timelinesettingswidget.h
     GUI/Settings/pluginssettingswidget.h
-    GUI/Settings/presetsettingswidget.h
-    GUI/aboutwidget.h
     GUI/canvasbasewrappernode.h
     GUI/canvaswrappernode.h
-    #GUI/closesignalingdockwidget.h
     GUI/ekeyfilter.h
     GUI/ewidgetsimpl.h
     GUI/layouthandler.h
@@ -275,20 +228,8 @@ set(
     GUI/timelinehighlightwidget.h
     GUI/timelinewidget.h
     GUI/timelinewrappernode.h
-    GUI/welcomedialog.h
-    GUI/widgetstack.h
-    GUI/ColorWidgets/colorlabel.h
     GUI/ColorWidgets/colorsettingswidget.h
-    GUI/ColorWidgets/colorvaluerect.h
-    GUI/ColorWidgets/colorwidget.h
-    GUI/ColorWidgets/h_wheel_sv_triangle.h
     GUI/ColorWidgets/colorpickingwidget.h
-    GUI/ColorWidgets/savedcolorbutton.h
-    GUI/ColorWidgets/savedcolorswidget.h
-    GUI/GradientWidgets/gradientwidget.h
-    GUI/ColorWidgets/glwidget.h
-    GUI/widgetwrappernode.h
-    GUI/wrappernode.h
     effectsloader.h
     eimporters.h
     iconloader.h
@@ -300,32 +241,19 @@ set(
     memoryhandler.h
     GUI/RenderWidgets/renderwidget.h
     GUI/RenderWidgets/renderinstancewidget.h
-    GUI/GradientWidgets/gradientslistwidget.h
-    GUI/GradientWidgets/displayedgradientswidget.h
-    GUI/GradientWidgets/currentgradientwidget.h
     GUI/RenderWidgets/closablecontainer.h
     GUI/BoxesList/boxtargetwidget.h
     GUI/BoxesList/boxscrollarea.h
     GUI/RenderWidgets/outputsettingsprofilesdialog.h
     GUI/RenderWidgets/outputsettingsdisplaywidget.h
     GUI/animationdockwidget.h
-    GUI/animationwidgetscrollbar.h
     GUI/canvaswindow.h
     GUI/fillstrokesettings.h
     GUI/fontswidget.h
-    GUI/keyfocustarget.h
     GUI/keysview.h
     GUI/mainwindow.h
     GUI/window.h
-    GUI/qdoubleslider.h
     GUI/qrealanimatorvalueslider.h
-    GUI/glwindow.h
-    GUI/noshortcutaction.h
-    GUI/qrealpointvaluedialog.h
-    GUI/renderoutputwidget.h
-    #GUI/BrushWidgets/brushselectionwidget.h
-    GUI/ColorWidgets/colorwidgetshaders.h
-    #GUI/BrushWidgets/brushwidget.h
 )
 
 set(

@@ -111,7 +111,7 @@ else
     -DGIT_BRANCH=${BRANCH} \
     ${CMAKE_EXTRA} ..
     VERSION=`cat version.txt`
-    VERSION="${VERSION}-${BRANCH}-${COMMIT}"
+    VERSION="${VERSION}-${COMMIT}"
 fi
 cmake --build .
 

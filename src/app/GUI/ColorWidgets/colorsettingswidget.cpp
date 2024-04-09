@@ -30,10 +30,10 @@
 #include <QMenu>
 #include "GUI/ColorWidgets/colorpickingwidget.h"
 #include "colorhelpers.h"
-#include "colorlabel.h"
+#include "widgets/colorlabel.h"
 #include "GUI/global.h"
 #include "widgets/actionbutton.h"
-#include "GUI/ColorWidgets/savedcolorswidget.h"
+#include "widgets/savedcolorswidget.h"
 #include "appsupport.h"
 
 #include <QShortcut>
@@ -269,7 +269,12 @@ void ColorSettingsWidget::startColorPicking() {
     });
 }
 
-ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
+ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
+    : QWidget(parent)
+{
+    setContentsMargins(0, 0, 0, 0);
+    mWidgetsLayout->setMargin(0);
+
     mColorModeCombo = new QComboBox(this);
     mWidgetsLayout->setAlignment(Qt::AlignTop);
     setLayout(mWidgetsLayout);

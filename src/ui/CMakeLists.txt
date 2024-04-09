@@ -45,28 +45,56 @@ set(
     dialogs/applyexpressiondialog.cpp
     dialogs/durationrectsettingsdialog.cpp
     dialogs/exportsvgdialog.cpp
+    dialogs/qrealpointvaluedialog.cpp
+    dialogs/renderoutputwidget.cpp
     dialogs/scenesettingsdialog.cpp
+    gradientwidgets/currentgradientwidget.cpp
+    gradientwidgets/displayedgradientswidget.cpp
+    gradientwidgets/gradientslistwidget.cpp
+    gradientwidgets/gradientwidget.cpp
+    misc/noshortcutaction.cpp
+    misc/keyfocustarget.cpp
     optimalscrollarena/minimalscrollwidget.cpp
     optimalscrollarena/scrollarea.cpp
     optimalscrollarena/scrollvisiblepartbase.cpp
     optimalscrollarena/scrollwidget.cpp
     optimalscrollarena/scrollwidgetvisiblepart.cpp
     optimalscrollarena/singlewidget.cpp
+    widgets/aboutwidget.cpp
     widgets/actionbutton.cpp
     widgets/alignwidget.cpp
+    widgets/framescrollbar.cpp
     widgets/assetswidget.cpp
+    widgets/bookmarkedcolors.cpp
     widgets/bookmarkedwidget.cpp
     widgets/buttonbase.cpp
     widgets/buttonslist.cpp
+    widgets/canvassettingswidget.cpp
     widgets/changewidthwidget.cpp
+    widgets/colorlabel.cpp
+    widgets/colorvaluerect.cpp
+    widgets/colorwidget.cpp
+    widgets/colorwidgetshaders.cpp
     widgets/ecombobox.cpp
     widgets/editablecombobox.cpp
     widgets/fakemenubar.cpp
     widgets/flowlayout.cpp
+    widgets/glwidget.cpp
+    widgets/glwindow.cpp
     widgets/labeledslider.cpp
+    widgets/performancesettingswidget.cpp
+    widgets/presetsettingswidget.cpp
+    widgets/qdoubleslider.cpp
+    widgets/savedcolorbutton.cpp
+    widgets/savedcolorswidget.cpp
     widgets/scenechooser.cpp
+    widgets/settingswidget.cpp
     widgets/twocolumnlayout.cpp
     widgets/uilayout.cpp
+    widgets/welcomedialog.cpp
+    widgets/widgetstack.cpp
+    widgets/widgetwrappernode.cpp
+    widgets/wrappernode.cpp
 )
 
 set(
@@ -75,30 +103,58 @@ set(
     dialogs/applyexpressiondialog.h
     dialogs/durationrectsettingsdialog.h
     dialogs/exportsvgdialog.h
+    dialogs/qrealpointvaluedialog.h
+    dialogs/renderoutputwidget.h
     dialogs/scenesettingsdialog.h
+    gradientwidgets/currentgradientwidget.h
+    gradientwidgets/displayedgradientswidget.h
+    gradientwidgets/gradientslistwidget.h
+    gradientwidgets/gradientwidget.h
+    misc/noshortcutaction.h
+    misc/keyfocustarget.h
     optimalscrollarena/minimalscrollwidget.h
     optimalscrollarena/scrollarea.h
     optimalscrollarena/scrollvisiblepartbase.h
     optimalscrollarena/scrollwidget.h
     optimalscrollarena/scrollwidgetvisiblepart.h
     optimalscrollarena/singlewidget.h
+    widgets/aboutwidget.h
     widgets/actionbutton.h
     widgets/alignwidget.h
+    widgets/framescrollbar.h
     widgets/assetswidget.h
+    widgets/bookmarkedcolors.h
     widgets/bookmarkedwidget.h
     widgets/buttonbase.h
     widgets/buttonslist.h
+    widgets/canvassettingswidget.h
     widgets/changewidthwidget.h
+    widgets/colorlabel.h
+    widgets/colorvaluerect.h
+    widgets/colorwidget.h
+    widgets/colorwidgetshaders.h
     widgets/ecombobox.h
     widgets/editablecombobox.h
     widgets/fakemenubar.h
     widgets/flowlayout.h
+    widgets/glwidget.h
+    widgets/glwindow.h
     widgets/labeledslider.h
+    widgets/performancesettingswidget.h
+    widgets/presetsettingswidget.h
+    widgets/qdoubleslider.h
+    widgets/savedcolorbutton.h
+    widgets/savedcolorswidget.h
     widgets/scenechooser.h
+    widgets/settingswidget.h
     widgets/toolbutton.h
     widgets/twocolumnlayout.h
     widgets/uilayout.h
     widgets/vlabel.h
+    widgets/welcomedialog.h
+    widgets/widgetstack.h
+    widgets/widgetwrappernode.h
+    widgets/wrappernode.h
 )
 
 if(NOT WIN32)

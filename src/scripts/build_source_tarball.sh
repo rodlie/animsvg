@@ -66,8 +66,8 @@ cd ${BUILD_DIR}/friction-${VERSION}
 # no symlinks please
 rm -f src/engine/skia/third_party/externals/harfbuzz/README
 
-# remote git anything
-find . \( -name ".git" -o -name ".gitignore" -o -name ".gitmodules" -o -name ".gitattributes" \) -exec rm -rf -- {} +
+# remove git anything
+find . \( -name ".git" -o -name ".github" -o -name ".gitignore" -o -name ".gitmodules" -o -name ".gitattributes" \) -exec rm -rf -- {} +
 
 cd ${BUILD_DIR}
 tar cvvf friction-${VERSION}.tar friction-${VERSION}
