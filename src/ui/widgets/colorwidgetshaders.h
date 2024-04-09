@@ -25,9 +25,12 @@
 
 #ifndef COLORWIDGETSHADERS_H
 #define COLORWIDGETSHADERS_H
+
+#include "ui_global.h"
+
 #include "glhelpers.h"
 
-struct ColorProgram {
+struct UI_EXPORT ColorProgram {
     GLuint fID;
     GLint fHSVColorLoc;
     GLint fRGBColorLoc;
@@ -39,26 +42,26 @@ struct ColorProgram {
     GLint fMeshSizeLoc;
 };
 
-struct PlainColorProgram {
+struct UI_EXPORT PlainColorProgram {
     GLuint fID;
     GLint fRGBAColorLoc;
     GLint fMeshSizeLoc;
 };
 
-struct GradientProgram {
+struct UI_EXPORT GradientProgram {
     GLuint fID;
     GLint fRGBAColor1Loc;
     GLint fRGBAColor2Loc;
     GLint fMeshSizeLoc;
 };
 
-struct BorderProgram {
+struct UI_EXPORT BorderProgram {
     GLuint fID;
     GLint fBorderSizeLoc;
     GLint fBorderColorLoc;
 };
 
-struct DoubleBorderProgram {
+struct UI_EXPORT DoubleBorderProgram {
     GLuint fID;
     GLint fInnerBorderSizeLoc;
     GLint fInnerBorderColorLoc;
@@ -66,25 +69,25 @@ struct DoubleBorderProgram {
     GLint fOuterBorderColorLoc;
 };
 
-extern ColorProgram HUE_PROGRAM;
-extern ColorProgram HSV_SATURATION_PROGRAM;
-extern ColorProgram VALUE_PROGRAM;
+extern UI_EXPORT ColorProgram HUE_PROGRAM;
+extern UI_EXPORT ColorProgram HSV_SATURATION_PROGRAM;
+extern UI_EXPORT ColorProgram VALUE_PROGRAM;
 
-extern ColorProgram HSL_SATURATION_PROGRAM;
-extern ColorProgram LIGHTNESS_PROGRAM;
+extern UI_EXPORT ColorProgram HSL_SATURATION_PROGRAM;
+extern UI_EXPORT ColorProgram LIGHTNESS_PROGRAM;
 
-extern ColorProgram RED_PROGRAM;
-extern ColorProgram GREEN_PROGRAM;
-extern ColorProgram BLUE_PROGRAM;
+extern UI_EXPORT ColorProgram RED_PROGRAM;
+extern UI_EXPORT ColorProgram GREEN_PROGRAM;
+extern UI_EXPORT ColorProgram BLUE_PROGRAM;
 
-extern ColorProgram ALPHA_PROGRAM;
+extern UI_EXPORT ColorProgram ALPHA_PROGRAM;
 
-extern PlainColorProgram PLAIN_PROGRAM;
-extern GradientProgram GRADIENT_PROGRAM;
+extern UI_EXPORT PlainColorProgram PLAIN_PROGRAM;
+extern UI_EXPORT GradientProgram GRADIENT_PROGRAM;
 
-extern BorderProgram BORDER_PROGRAM;
-extern DoubleBorderProgram DOUBLE_BORDER_PROGRAM;
+extern UI_EXPORT BorderProgram BORDER_PROGRAM;
+extern UI_EXPORT DoubleBorderProgram DOUBLE_BORDER_PROGRAM;
 
-extern void iniColorPrograms(QGL33 * const gl);
+extern UI_EXPORT void iniColorPrograms(QGL33 * const gl);
 
 #endif // COLORWIDGETSHADERS_H
