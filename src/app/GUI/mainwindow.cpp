@@ -94,11 +94,11 @@ MainWindow::MainWindow(Document& document,
     , mTimeline(nullptr)
     , mRenderWidget(nullptr)
     , mToolBoxStack(nullptr)
+    , mToolBoxExtraStack(nullptr)
     , mToolBoxMainIndex(0)
     , mToolBoxNodesIndex(0)
     , mToolBoxDrawIndex(0)
     , mToolbar(nullptr)
-    , mToolBoxButton(nullptr)
     , mToolBoxGroupMain(nullptr)
     , mToolBoxGroupNodes(nullptr)
     , mToolBoxMain(nullptr)
@@ -364,11 +364,20 @@ MainWindow::MainWindow(Document& document,
     toolBoxLayout->setContentsMargins(0, 0, 0, 0);
     toolBoxLayout->setSpacing(0);
 
-    toolBoxLayout->addWidget(mToolBoxButton);
+    const auto toolBoxExtraWidget = new QWidget(this);
+    toolBoxExtraWidget->setSizePolicy(QSizePolicy::Fixed,
+                                      QSizePolicy::Expanding);
+    toolBoxExtraWidget->setContentsMargins(0, 0, 0, 0);
+    const auto toolBoxExtraLayout = new QVBoxLayout(toolBoxExtraWidget);
+    toolBoxExtraLayout->setContentsMargins(0, 0, 0, 0);
+    toolBoxExtraLayout->setSpacing(0);
+
     toolBoxLayout->addWidget(mToolBoxStack);
+    toolBoxExtraLayout->addWidget(mToolBoxExtraStack);
 
     viewerLayout->addWidget(toolBoxWidget);
     viewerLayout->addWidget(mStackWidget);
+    viewerLayout->addWidget(toolBoxExtraWidget);
 
     // final layout
     mUI = new UILayout(this);
@@ -1353,9 +1362,11 @@ void MainWindow::updateCanvasModeButtonsChecked()
     const bool pointMode = mode == CanvasMode::pointTransform;
     const bool drawMode = mode == CanvasMode::drawPath;
 
-    mToolBoxButton->setVisible(pointMode || drawMode);
-    mToolBoxStack->setCurrentIndex(drawMode ? mToolBoxDrawIndex : (pointMode ? mToolBoxNodesIndex : mToolBoxMainIndex));
-    mLocalPivotAct->setVisible(pointMode || boxMode);
+    //mToolBoxStack->setCurrentIndex(drawMode ? mToolBoxDrawIndex : (pointMode ? mToolBoxNodesIndex : mToolBoxMainIndex));
+    mToolBoxExtraStack->setCurrentIndex(drawMode ? mToolBoxDrawIndex : mToolBoxNodesIndex);
+    mToolBoxNodes->setEnabled(pointMode);
+    mToolBoxDraw->setEnabled(drawMode);
+    mLocalPivotAct->setEnabled(pointMode || boxMode);
 
     //const bool paintMode = mode == CanvasMode::paint;
     //mActionNewEmptyPaintFrameAct->setVisible(paintMode);

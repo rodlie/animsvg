@@ -263,13 +263,12 @@ private:
     //UsageWidget* mUsageWidget = nullptr;
 
     QStackedWidget *mToolBoxStack;
+    QStackedWidget *mToolBoxExtraStack;
     int mToolBoxMainIndex;
     int mToolBoxNodesIndex;
     int mToolBoxDrawIndex;
 
     QToolBar *mToolbar;
-
-    ToolButton *mToolBoxButton;
 
     QActionGroup *mToolBoxGroupMain;
     QActionGroup *mToolBoxGroupNodes;

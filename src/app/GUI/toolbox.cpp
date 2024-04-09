@@ -28,40 +28,28 @@
 
 void MainWindow::setupToolBox()
 {
-    mToolBoxButton = new ToolButton(this, true);
-    mToolBoxButton->setPopupMode(QToolButton::InstantPopup);
-    mToolBoxButton->setIcon(QIcon::fromTheme("friction"));
-    mToolBoxButton->setToolTip(QString());
-    mToolBoxButton->setFocusPolicy(Qt::NoFocus);
-    mToolBoxButton->setObjectName(QString::fromUtf8("ToolButton"));
-    mToolBoxButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-
     mToolBoxStack = new QStackedWidget(this);
     mToolBoxStack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+
+    mToolBoxExtraStack = new QStackedWidget(this);
+    mToolBoxExtraStack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
 
     setupToolBoxMain();
     setupToolBoxNodes();
     setupToolBoxDraw();
 
     eSizesUI::widget.add(mToolBoxMain, [this](const int size) {
-        mToolBoxButton->setIconSize(QSize(size, size));
         mToolBoxMain->setIconSize(QSize(size, size));
         mToolBoxNodes->setIconSize(QSize(size, size));
         mToolBoxDraw->setIconSize(QSize(size, size));
     });
 
     mToolBoxMainIndex = mToolBoxStack->addWidget(mToolBoxMain);
-    mToolBoxNodesIndex = mToolBoxStack->addWidget(mToolBoxNodes);
-    mToolBoxDrawIndex = mToolBoxStack->addWidget(mToolBoxDraw);
-    mToolBoxStack->setCurrentIndex(mToolBoxMainIndex);
+    mToolBoxNodesIndex = mToolBoxExtraStack->addWidget(mToolBoxNodes);
+    mToolBoxDrawIndex = mToolBoxExtraStack->addWidget(mToolBoxDraw);
 
-    mToolBoxButton->addActions(mToolBoxGroupMain->actions());
-    for (const auto &toolAct : mToolBoxGroupMain->actions()) {
-        connect(toolAct, &QAction::triggered,
-                this, [this, toolAct](const auto &checked) {
-                    if (checked) { mToolBoxButton->setDefaultAction(toolAct); }
-                });
-    }
+    mToolBoxStack->setCurrentIndex(mToolBoxMainIndex);
+    mToolBoxExtraStack->setCurrentIndex(mToolBoxNodesIndex);
 
     // set default
     mDocument.setCanvasMode(CanvasMode::boxTransform);
