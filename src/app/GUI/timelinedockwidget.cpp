@@ -37,10 +37,10 @@
 #include "canvaswindow.h"
 #include "canvas.h"
 #include "animationdockwidget.h"
-#include "widgetstack.h"
-#include "actionbutton.h"
+#include "widgets/widgetstack.h"
+#include "widgets/actionbutton.h"
 #include "timelinewidget.h"
-#include "animationwidgetscrollbar.h"
+#include "widgets/framescrollbar.h"
 #include "renderinstancesettings.h"
 #include "layouthandler.h"
 #include "memoryhandler.h"
@@ -222,7 +222,9 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
 
     mToolBar = new QToolBar(this);
     eSizesUI::widget.add(mToolBar, [this](const int size) {
-        mToolBar->setIconSize(QSize(size, size));
+        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+            mToolBar->setIconSize(QSize(size, size));
+        }
     });
     mToolBar->setMovable(false);
 

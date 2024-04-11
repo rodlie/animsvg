@@ -29,7 +29,7 @@
 #include <QWidget>
 #include <QHBoxLayout>
 //#include "h_wheel_sv_triangle.h"
-#include "colorvaluerect.h"
+#include "widgets/colorvaluerect.h"
 #include <QTabWidget>
 #include <QLabel>
 #include <QPushButton>

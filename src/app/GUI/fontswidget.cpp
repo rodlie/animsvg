@@ -31,7 +31,7 @@
 #include <QIntValidator>
 #include <QLabel>
 
-#include "editablecombobox.h"
+#include "widgets/editablecombobox.h"
 
 FontsWidget::FontsWidget(QWidget *parent)
     : QWidget(parent)
@@ -158,17 +158,19 @@ FontsWidget::FontsWidget(QWidget *parent)
 
     eSizesUI::widget.add(mAlignLeft, [this](const int size) {
         mAlignLeft->setFixedHeight(size);
-        mAlignLeft->setIconSize(QSize(size, size));
         mAlignCenter->setFixedHeight(size);
-        mAlignCenter->setIconSize(QSize(size, size));
         mAlignRight->setFixedHeight(size);
-        mAlignRight->setIconSize(QSize(size, size));
         mAlignTop->setFixedHeight(size);
-        mAlignTop->setIconSize(QSize(size, size));
         mAlignVCenter->setFixedHeight(size);
-        mAlignVCenter->setIconSize(QSize(size, size));
         mAlignBottom->setFixedHeight(size);
-        mAlignBottom->setIconSize(QSize(size, size));
+        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+            mAlignLeft->setIconSize(QSize(size, size));
+            mAlignCenter->setIconSize(QSize(size, size));
+            mAlignRight->setIconSize(QSize(size, size));
+            mAlignTop->setIconSize(QSize(size, size));
+            mAlignVCenter->setIconSize(QSize(size, size));
+            mAlignBottom->setIconSize(QSize(size, size));
+        }
     });
 
     mTextInput = new QPlainTextEdit(this);

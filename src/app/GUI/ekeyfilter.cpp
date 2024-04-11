@@ -25,7 +25,7 @@
 
 #include "ekeyfilter.h"
 #include "mainwindow.h"
-#include "keyfocustarget.h"
+#include "misc/keyfocustarget.h"
 
 eKeyFilter::eKeyFilter(MainWindow * const window) :
     QObject(window), mMainWindow(window) {}

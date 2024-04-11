@@ -30,7 +30,7 @@
 OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
                                            QWidget *parent) :
     QDialog(parent), mInitialSettings(settings) {
-    setWindowTitle("Output Settings");
+    setWindowTitle(tr("Output Settings"));
 
     mSupportedFormats = {
         FormatCodecs(QList<AVCodecID>() << AV_CODEC_ID_PNG << AV_CODEC_ID_TIFF << AV_CODEC_ID_MJPEG << AV_CODEC_ID_LJPEG,
@@ -74,18 +74,18 @@ OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
     setLayout(mMainLayout);
 
     mOutputFormatsLayout = new QHBoxLayout();
-    mOutputFormatsLabel = new QLabel("Format:", this);
+    mOutputFormatsLabel = new QLabel(tr("Format"), this);
     mOutputFormatsComboBox = new QComboBox(this);
     mOutputFormatsLayout->addWidget(mOutputFormatsLabel);
     mOutputFormatsLayout->addWidget(mOutputFormatsComboBox);
 
-    mVideoGroupBox = new QGroupBox("Video", this);
+    mVideoGroupBox = new QGroupBox(tr("Video"), this);
     mVideoGroupBox->setCheckable(true);
     mVideoGroupBox->setChecked(true);
     mVideoSettingsLayout = new TwoColumnLayout();
-    mVideoCodecsLabel = new QLabel("Codec:", this);
-    mPixelFormatsLabel = new QLabel("Pixel format:", this);
-    mBitrateLabel = new QLabel("Bitrate:", this);
+    mVideoCodecsLabel = new QLabel(tr("Codec"), this);
+    mPixelFormatsLabel = new QLabel(tr("Pixel format"), this);
+    mBitrateLabel = new QLabel(tr("Bitrate"), this);
 
     mVideoCodecsComboBox = new QComboBox(this);
     mPixelFormatsComboBox = new QComboBox(this);
@@ -93,21 +93,26 @@ OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
     mBitrateSpinBox->setRange(0.1, 100.);
     mBitrateSpinBox->setSuffix(" Mbps");
 
+    mVideoProfileLabel = new QLabel(tr("Profile"), this);
+    mVideoProfileComboBox = new QComboBox(this);
+
     mVideoSettingsLayout->addPair(mVideoCodecsLabel,
                                   mVideoCodecsComboBox);
+    mVideoSettingsLayout->addPair(mVideoProfileLabel,
+                                  mVideoProfileComboBox);
     mVideoSettingsLayout->addPair(mPixelFormatsLabel,
                                   mPixelFormatsComboBox);
     mVideoSettingsLayout->addPair(mBitrateLabel,
                                   mBitrateSpinBox);
 
-    mAudioGroupBox = new QGroupBox("Audio", this);
+    mAudioGroupBox = new QGroupBox(tr("Audio"), this);
     mAudioGroupBox->setCheckable(true);
     mAudioSettingsLayout = new TwoColumnLayout();
-    mAudioCodecsLabel = new QLabel("Codec:", this);
-    mSampleRateLabel = new QLabel("Sample rate:", this);
-    mSampleFormatsLabel = new QLabel("Sample format:", this);
-    mAudioBitrateLabel = new QLabel("Bitrate:", this);
-    mAudioChannelLayoutLabel = new QLabel("Channels:", this);
+    mAudioCodecsLabel = new QLabel(tr("Codec"), this);
+    mSampleRateLabel = new QLabel(tr("Sample rate"), this);
+    mSampleFormatsLabel = new QLabel(tr("Sample format"), this);
+    mAudioBitrateLabel = new QLabel(tr("Bitrate"), this);
+    mAudioChannelLayoutLabel = new QLabel(tr("Channels"), this);
 
     mAudioCodecsComboBox = new QComboBox(this);
     mSampleRateComboBox = new QComboBox(this);
@@ -127,7 +132,7 @@ OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
                                   mAudioChannelLayoutsComboBox);
 
     mShowLayout = new QHBoxLayout();
-    mShowLabel = new QLabel("Show all formats and codecs", this);
+    mShowLabel = new QLabel(tr("Show all formats and codecs"), this);
     mShowAllFormatsAndCodecsCheckBox = new QCheckBox(this);
     connect(mShowAllFormatsAndCodecsCheckBox, &QCheckBox::toggled,
             this, &OutputSettingsDialog::setShowAllFormatsAndCodecs);
@@ -137,9 +142,9 @@ OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
     mShowLayout->setAlignment(Qt::AlignRight);
 
     mButtonsLayout = new QHBoxLayout();
-    mOkButton = new QPushButton("Ok", this);
-    mCancelButton = new QPushButton("Cancel", this);
-    mResetButton = new QPushButton("Reset", this);
+    mOkButton = new QPushButton(tr("Ok"), this);
+    mCancelButton = new QPushButton(tr("Cancel"), this);
+    mResetButton = new QPushButton(tr("Reset"), this);
     connect(mOkButton, &QPushButton::released,
             this, &OutputSettingsDialog::accept);
     connect(mCancelButton, &QPushButton::released,
@@ -161,8 +166,10 @@ OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
     eSizesUI::widget.addSpacing(mMainLayout);
     mMainLayout->addLayout(mButtonsLayout);
 
-    connect(mVideoCodecsComboBox, &QComboBox::currentTextChanged,
-            this, &OutputSettingsDialog::updateAvailablePixelFormats);
+    connect(mVideoCodecsComboBox, &QComboBox::currentTextChanged, [this]() {
+        updateAvailablePixelFormats();
+        updateAvailableVideoProfiles();
+    });
 
     connect(mAudioCodecsComboBox, &QComboBox::currentTextChanged, [this]() {
         updateAvailableSampleFormats();
@@ -200,6 +207,7 @@ OutputSettings OutputSettingsDialog::getSettings() {
     }
     settings.fVideoPixelFormat = currentPixelFormat;
     settings.fVideoBitrate = qRound(mBitrateSpinBox->value()*1000000);
+    settings.fVideoProfile = mVideoProfileComboBox->currentData().toInt();
 
     settings.fAudioEnabled = mAudioGroupBox->isChecked();
     const AVCodec *currentAudioCodec = nullptr;
@@ -486,6 +494,56 @@ void OutputSettingsDialog::updateAvailableSampleFormats() {
     }
 }
 
+void OutputSettingsDialog::updateAvailableVideoProfiles()
+{
+    mVideoProfileComboBox->clear();
+    mVideoProfileComboBox->addItem(tr("Default"), FF_PROFILE_UNKNOWN);
+
+    const AVCodec *currentCodec = nullptr;
+    if (mVideoCodecsComboBox->count() > 0) {
+        currentCodec = mVideoCodecsList.at(mVideoCodecsComboBox->currentIndex());
+    }
+    if (!currentCodec) { return; }
+    switch (currentCodec->id) {
+    case AV_CODEC_ID_H264:
+        mVideoProfileComboBox->addItem(tr("Baseline"), FF_PROFILE_H264_BASELINE);
+        mVideoProfileComboBox->addItem(tr("Main"), FF_PROFILE_H264_MAIN);
+        mVideoProfileComboBox->addItem(tr("High"), FF_PROFILE_H264_HIGH);
+        break;
+    case AV_CODEC_ID_PRORES:
+        mVideoProfileComboBox->addItem(tr("Proxy"), FF_PROFILE_PRORES_PROXY);
+        mVideoProfileComboBox->addItem(tr("LT"), FF_PROFILE_PRORES_LT);
+        mVideoProfileComboBox->addItem(tr("Standard"), FF_PROFILE_PRORES_STANDARD);
+        mVideoProfileComboBox->addItem(tr("HQ"), FF_PROFILE_PRORES_HQ);
+        mVideoProfileComboBox->addItem(tr("4444"), FF_PROFILE_PRORES_4444);
+        mVideoProfileComboBox->addItem(tr("XQ"), FF_PROFILE_PRORES_XQ);
+        break;
+    case AV_CODEC_ID_AV1:
+        mVideoProfileComboBox->addItem(tr("Main"), FF_PROFILE_AV1_MAIN);
+        mVideoProfileComboBox->addItem(tr("High"), FF_PROFILE_AV1_HIGH);
+        mVideoProfileComboBox->addItem(tr("Professional"), FF_PROFILE_AV1_PROFESSIONAL);
+        break;
+    case AV_CODEC_ID_VP9:
+        mVideoProfileComboBox->addItem(tr("0"), FF_PROFILE_VP9_0);
+        mVideoProfileComboBox->addItem(tr("1"), FF_PROFILE_VP9_1);
+        mVideoProfileComboBox->addItem(tr("2"), FF_PROFILE_VP9_2);
+        mVideoProfileComboBox->addItem(tr("3"), FF_PROFILE_VP9_3);
+        break;
+    case AV_CODEC_ID_MPEG4:
+        mVideoProfileComboBox->addItem(tr("Simple"), FF_PROFILE_MPEG4_SIMPLE);
+        mVideoProfileComboBox->addItem(tr("Core"), FF_PROFILE_MPEG4_CORE);
+        mVideoProfileComboBox->addItem(tr("Main"), FF_PROFILE_MPEG4_MAIN);
+        break;
+    case AV_CODEC_ID_VC1:
+        mVideoProfileComboBox->addItem(tr("Simple"), FF_PROFILE_VC1_SIMPLE);
+        mVideoProfileComboBox->addItem(tr("Main"), FF_PROFILE_VC1_MAIN);
+        mVideoProfileComboBox->addItem(tr("Complex"), FF_PROFILE_VC1_COMPLEX);
+        mVideoProfileComboBox->addItem(tr("Advanced"), FF_PROFILE_VC1_ADVANCED);
+        break;
+    default:;
+    }
+}
+
 void OutputSettingsDialog::updateAvailableAudioBitrates() {
     const auto lastSet = mAudioBitrateComboBox->currentData();
     mAudioBitrateComboBox->clear();
@@ -614,6 +672,9 @@ void OutputSettingsDialog::restoreInitialSettings() {
     } else {
         mBitrateSpinBox->setValue(currentBitrate/1000000.);
     }
+
+    restoreVideoProfileSettings();
+
     const bool noVideoCodecs = mVideoCodecsComboBox->count() == 0;
     mVideoGroupBox->setChecked(mInitialSettings.fVideoEnabled &&
                                !noVideoCodecs);
@@ -685,6 +746,17 @@ void OutputSettingsDialog::restoreInitialSettings() {
     const bool noAudioCodecs = mAudioCodecsComboBox->count() == 0;
     mAudioGroupBox->setChecked(mInitialSettings.fAudioEnabled &&
                                !noAudioCodecs);
+}
+
+void OutputSettingsDialog::restoreVideoProfileSettings()
+{
+    if (mVideoProfileComboBox->count() < 2) { return; }
+    for (int i = 0; i < mVideoProfileComboBox->count(); ++i) {
+        if (mVideoProfileComboBox->itemData(i).toInt() == mInitialSettings.fVideoProfile) {
+            mVideoProfileComboBox->setCurrentIndex(i);
+            break;
+        }
+    }
 }
 
 

@@ -21,6 +21,8 @@
 #
 */
 
+// Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -31,28 +33,26 @@
 #include <QActionGroup>
 #include <QStackedWidget>
 #include <QToolBox>
-#include <QSplitter>
 #include <QToolButton>
 #include <QLabel>
 #include <QToolBar>
 #include <QComboBox>
 #include <QTimer>
 
-#include "undoredo.h"
 #include "Private/Tasks/taskscheduler.h"
-#include "effectsloader.h"
 #include "Private/document.h"
-#include "audiohandler.h"
+#include "Sound/audiohandler.h"
 #include "actions.h"
 #include "layouthandler.h"
-#include "Private/esettings.h"
 #include "renderhandler.h"
 #include "fileshandler.h"
 #include "ekeyfilter.h"
 #include "GUI/RenderWidgets/renderwidget.h"
-#include "GUI/qdoubleslider.h"
+#include "widgets/qdoubleslider.h"
 #include "window.h"
-#include "GUI/aboutwidget.h"
+#include "widgets/aboutwidget.h"
+#include "widgets/uilayout.h"
+#include "widgets/toolbutton.h"
 
 class VideoEncoder;
 class RenderWidget;
@@ -202,8 +202,8 @@ private:
     //CentralWidget *mCentralWidget;
     QStackedWidget *mStackWidget;
 
-    QTabWidget *mTopSideBarWidget;
-    QTabWidget *mBottomSideBarWidget;
+    QTabWidget *mTabColorText;
+    QTabWidget *mTabProperties;
 
     void openWelcomeDialog();
     void closeWelcomeDialog();
@@ -261,21 +261,23 @@ private:
 
     //QStatusBar* mStatusBar;
     //UsageWidget* mUsageWidget = nullptr;
+
+    QStackedWidget *mToolBoxStack;
+    QStackedWidget *mToolBoxExtraStack;
+    int mToolBoxMainIndex;
+    int mToolBoxNodesIndex;
+    int mToolBoxDrawIndex;
+
     QToolBar *mToolbar;
 
-    QActionGroup *mToolbarActGroup;
-    QActionGroup *mToolBarNodeGroup;
+    QActionGroup *mToolBoxGroupMain;
+    QActionGroup *mToolBoxGroupNodes;
 
-    QToolBar *mViewerNodeBar;
-    QToolBar *mViewerDrawBar;
+    QToolBar *mToolBoxMain;
+    QToolBar *mToolBoxNodes;
+    QToolBar *mToolBoxDraw;
 
-    QSplitter *mSplitterMain;
-    QSplitter *mSplitterLeft;
-    QSplitter *mSplitterRight;
-    QSplitter *mSplitterLeftTop;
-    QSplitter *mSplitterLeftBottom;
-    QSplitter *mSplitterRightTop;
-    QSplitter *mSplitterRightBottom;
+    UILayout *mUI;
 
     QAction *mSaveAct;
 
@@ -318,9 +320,7 @@ private:
 
     QAction *mDrawPathAuto;
     QDoubleSlider *mDrawPathSmooth;
-    QAction *mDrawPathSmoothAct;
     QDoubleSlider *mDrawPathMaxError;
-    QAction *mDrawPathMaxErrorAct;
 
     QMenuBar *mMenuBar;
     QMenu *mFileMenu;
@@ -375,10 +375,14 @@ private:
     QComboBox *mResolutionComboBox;
     void setResolutionText(QString text);
 
-    QAction* addSlider(const QString &name,
+    /*QAction* addSlider(const QString &name,
                        QDoubleSlider* const slider,
-                       QToolBar* const toolBar);
-    void setupDrawPathSpins();
+                       QToolBar* const toolBar);*/
+
+    void setupToolBox();
+    void setupToolBoxMain();
+    void setupToolBoxNodes();
+    void setupToolBoxDraw();
 
     bool mBackupOnSave;
     bool mAutoSave;

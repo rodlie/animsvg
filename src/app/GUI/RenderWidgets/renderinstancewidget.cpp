@@ -178,13 +178,15 @@ void RenderInstanceWidget::iniGUI() {
     eSizesUI::widget.add(mOutputSettingsProfilesButton, [this](const int size) {
         mRenderSettingsButton->setFixedHeight(size);
         mOutputSettingsButton->setFixedHeight(size);
-        mOutputSettingsProfilesButton->setIconSize(QSize(size, size));
         mOutputSettingsProfilesButton->setFixedSize(QSize(size, size));
-        mOutputDestinationButton->setIconSize(QSize(size, size));
         mOutputDestinationButton->setFixedSize(QSize(size, size));
-        mPlayButton->setIconSize(QSize(size, size));
         mPlayButton->setFixedSize(QSize(size, size));
         mOutputDestinationLineEdit->setFixedHeight(size);
+        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+            mOutputSettingsProfilesButton->setIconSize(QSize(size, size));
+            mOutputDestinationButton->setIconSize(QSize(size, size));
+            mPlayButton->setIconSize(QSize(size, size));
+        }
     });
 
     QWidget *outputDestinationWidget = new QWidget(this);

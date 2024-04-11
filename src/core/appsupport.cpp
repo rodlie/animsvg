@@ -150,33 +150,39 @@ const QString AppSupport::getAppUrl()
     return QString::fromUtf8("https://friction.graphics");
 }
 
-const QString AppSupport::getAppVersion(bool html)
+const QString AppSupport::getAppVersion()
 {
-    QString version = QString::fromUtf8("0.9.6"); // fallback, should not happen
-#ifdef PROJECT_VERSION
-    version = QString::fromUtf8(PROJECT_VERSION);
-#endif
+    QString version = QString::fromUtf8(PROJECT_VERSION);
 #ifndef PROJECT_OFFICIAL
     version.append("-dev");
 #endif
-    QString git;
-#ifdef PROJECT_GIT
-    git = QString::fromUtf8(PROJECT_GIT);
-#endif
-    QString branch;
-#ifdef PROJECT_BRANCH
-    branch = QString::fromUtf8(PROJECT_BRANCH);
-#endif
-    if (!branch.isEmpty()) {
-        version.append(QString::fromUtf8(" %1").arg(branch));
-    }
-    if (!git.isEmpty()) {
-        if (branch.isEmpty()) { version.append(QString::fromUtf8(" ")); }
-        else { version.append(QString::fromUtf8("/")); }
-        version.append(html ? QString::fromUtf8("<a href=\"%2/%1\">%1</a>").arg(git,
-                                                                                getAppCommitUrl()) : git);
-    }
     return version;
+}
+
+const QString AppSupport::getAppBuildInfo(bool html)
+{
+#if defined(PROJECT_COMMIT) && defined(PROJECT_BRANCH)
+    const auto commit = QString::fromUtf8(PROJECT_COMMIT);
+    const auto branch = QString::fromUtf8(PROJECT_BRANCH);
+    if (commit.isEmpty() || branch.isEmpty()) { return QString(); }
+    if (!html) {
+        return QString("%1 %2 %3 %4.").arg(tr("Built from"),
+                                           commit,
+                                           tr("on"),
+                                           branch);
+    } else {
+        return QString("%1 <a href=\"%5/%2\">%2</a> %3 <a href=\"%6/%4\">%4</a>.")
+                      .arg(tr("Built from"),
+                           commit,
+                           tr("on"),
+                           branch,
+                           getAppCommitUrl(),
+                           getAppBranchUrl());
+    }
+#else
+    Q_UNUSED(html)
+#endif
+    return QString();
 }
 
 const QString AppSupport::getAppDesc()
@@ -207,6 +213,11 @@ const QString AppSupport::getAppLatestReleaseUrl()
 const QString AppSupport::getAppCommitUrl()
 {
     return QString::fromUtf8("https://github.com/friction2d/friction/commit");
+}
+
+const QString AppSupport::getAppBranchUrl()
+{
+    return QString::fromUtf8("https://github.com/friction2d/friction/tree");
 }
 
 const QString AppSupport::getAppConfigPath()

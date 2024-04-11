@@ -87,7 +87,9 @@ void OutputSettingsDisplayWidget::setOutputSettings(const OutputSettings &settin
     if(!settings.fVideoCodec) {
         setVideoCodecText("-");
     } else {
-        setVideoCodecText(QString(settings.fVideoCodec->name));
+        setVideoCodecText(QString(settings.fVideoCodec->name),
+                          settings.fVideoCodec,
+                          settings.fVideoProfile);
     }
     const char *pixelFormat = av_get_pix_fmt_name(settings.fVideoPixelFormat);
     if(!pixelFormat) {

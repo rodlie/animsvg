@@ -40,11 +40,6 @@ if(${WIN_DEPLOY})
     add_definitions(-DWIN_DEPLOY)
 endif()
 
-option(USE_ROBOTO "Use Roboto font" OFF)
-if(${USE_ROBOTO})
-    add_definitions(-DFRICTION_BUNDLE_ROBOTO)
-endif()
-
 option(USE_SKIA_SYSTEM_LIBS "Use skia (third-party) system libraries on Linux" ON)
 if(${USE_SKIA_SYSTEM_LIBS} AND UNIX)
     pkg_check_modules(EXPAT REQUIRED expat)
@@ -111,15 +106,12 @@ if(WIN32)
     )
 endif()
 
-if(UNIX AND NOT APPLE)
-    pkg_check_modules(UNWIND REQUIRED libunwind)
-endif()
-
 include_directories(
     ${QUAZIP_INCLUDE_DIRS}
     ${QSCINTILLA_INCLUDE_DIRS}
     ${FFMPEG_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/../core
+    ${CMAKE_CURRENT_SOURCE_DIR}/../ui
     ${CMAKE_CURRENT_SOURCE_DIR}/../engine/skia
 )
 
@@ -136,8 +128,8 @@ if(${USE_SKIA_SYSTEM_LIBS} AND UNIX)
     )
 endif()
 
-if(UNIX)
-    include_directories(${CMAKE_CURRENT_BINARY_DIR}/../gperftools)
+if(UNIX AND NOT APPLE)
+    include_directories(${GPERF_INCLUDE_DIRS})
     configure_file(
         app.desktop.in
         ${CMAKE_BINARY_DIR}/${PROJECT_FREEDESKTOP}.desktop
@@ -158,84 +150,37 @@ endif()
 set(
     SOURCES
     main.cpp
-    GUI/BoxesList/OptimalScrollArea/scrollvisiblepartbase.cpp
     GUI/BoxesList/boxscroller.cpp
-    #GUI/BrushWidgets/bookmarkedbrushes.cpp
-    #GUI/BrushWidgets/brushlabel.cpp
-    GUI/ColorWidgets/bookmarkedcolors.cpp
-    GUI/ColorWidgets/paintcolorwidget.cpp
-    GUI/Dialogs/animationtopaintdialog.cpp
-    GUI/Dialogs/applyexpressiondialog.cpp
     GUI/Dialogs/dialogsinterfaceimpl.cpp
-    GUI/Dialogs/durationrectsettingsdialog.cpp
-    GUI/Dialogs/exportsvgdialog.cpp
-    GUI/Dialogs/scenesettingsdialog.cpp
     GUI/Expressions/expressiondialog.cpp
     GUI/Expressions/expressioneditor.cpp
     GUI/Expressions/expressionhighlighter.cpp
     GUI/RenderWidgets/outputsettingsdialog.cpp
     GUI/RenderWidgets/rendersettingsdialog.cpp
     GUI/RenderWidgets/rendersettingsdisplaywidget.cpp
-    GUI/Settings/canvassettingswidget.cpp
     GUI/Settings/generalsettingswidget.cpp
-    GUI/Settings/performancesettingswidget.cpp
     GUI/Settings/settingsdialog.cpp
-    GUI/Settings/settingswidget.cpp
     GUI/Settings/timelinesettingswidget.cpp
     GUI/Settings/pluginssettingswidget.cpp
-    GUI/Settings/presetsettingswidget.cpp
-    GUI/aboutwidget.cpp
-    GUI/alignwidget.cpp
-    GUI/audiohandler.cpp
-    GUI/assetswidget.cpp
-    GUI/bookmarkedwidget.cpp
-    GUI/buttonbase.cpp
-    GUI/buttonslist.cpp
     GUI/canvasbasewrappernode.cpp
     GUI/canvaswindowevents.cpp
     GUI/canvaswrappernode.cpp
-    GUI/changewidthwidget.cpp
-    #GUI/closesignalingdockwidget.cpp
-    GUI/ecombobox.cpp
-    GUI/editablecombobox.cpp
     GUI/ekeyfilter.cpp
     GUI/ewidgetsimpl.cpp
-    GUI/fakemenubar.cpp
     GUI/layouthandler.cpp
-    GUI/scenechooser.cpp
     GUI/timelinebasewrappernode.cpp
     GUI/timelinedockwidget.cpp
     GUI/timelinehighlightwidget.cpp
     GUI/timelinewidget.cpp
     GUI/timelinewrappernode.cpp
-    GUI/triggerlabel.cpp
-    GUI/twocolumnlayout.cpp
-    GUI/welcomedialog.cpp
-    GUI/widgetstack.cpp
-    GUI/ColorWidgets/colorlabel.cpp
     GUI/ColorWidgets/colorsettingswidget.cpp
-    GUI/ColorWidgets/colorvaluerect.cpp
-    GUI/ColorWidgets/colorwidget.cpp
-    GUI/ColorWidgets/h_wheel_sv_triangle.cpp
     GUI/ColorWidgets/colorpickingwidget.cpp
-    GUI/ColorWidgets/savedcolorbutton.cpp
-    GUI/ColorWidgets/savedcolorswidget.cpp
-    GUI/GradientWidgets/gradientwidget.cpp
-    GUI/ColorWidgets/glwidget.cpp
-    GUI/widgetwrappernode.cpp
     GUI/window.cpp
-    GUI/wrappernode.cpp
     effectsloader.cpp
     eimporters.cpp
     evfileio.cpp
     iconloader.cpp
-    outputsettings.cpp
     renderhandler.cpp
-    rendersettings.cpp
-    GUI/BoxesList/OptimalScrollArea/scrollarea.cpp
-    GUI/BoxesList/OptimalScrollArea/scrollwidget.cpp
-    GUI/BoxesList/OptimalScrollArea/scrollwidgetvisiblepart.cpp
-    GUI/BoxesList/OptimalScrollArea/singlewidget.cpp
     GUI/BoxesList/boxsinglewidget.cpp
     GUI/BoxesList/boxscrollwidget.cpp
     GUI/BoxesList/boolpropertywidget.cpp
@@ -243,123 +188,52 @@ set(
     memoryhandler.cpp
     GUI/RenderWidgets/renderwidget.cpp
     GUI/RenderWidgets/renderinstancewidget.cpp
-    renderinstancesettings.cpp
-    GUI/GradientWidgets/gradientslistwidget.cpp
-    GUI/GradientWidgets/displayedgradientswidget.cpp
-    GUI/GradientWidgets/currentgradientwidget.cpp
     GUI/RenderWidgets/closablecontainer.cpp
     GUI/BoxesList/boxtargetwidget.cpp
-    GUI/BoxesList/OptimalScrollArea/minimalscrollwidget.cpp
     GUI/BoxesList/boxscrollarea.cpp
-    videoencoder.cpp
     GUI/RenderWidgets/outputsettingsprofilesdialog.cpp
     GUI/RenderWidgets/outputsettingsdisplaywidget.cpp
-    GUI/actionbutton.cpp
     GUI/animationdockwidget.cpp
-    GUI/animationwidgetscrollbar.cpp
     GUI/canvaswindow.cpp
     GUI/graphboxeslist.cpp
     GUI/keysview.cpp
     GUI/mainwindow.cpp
-    GUI/noshortcutaction.cpp
-    GUI/keyfocustarget.cpp
-    GUI/qrealpointvaluedialog.cpp
-    GUI/renderoutputwidget.cpp
-    GUI/qdoubleslider.cpp
     GUI/qrealanimatorvalueslider.cpp
-    GUI/glwindow.cpp
     GUI/fontswidget.cpp
-    #GUI/filesourcelist.cpp
-    GUI/customfpsdialog.cpp
     GUI/fillstrokesettings.cpp
-    #GUI/BrushWidgets/brushselectionwidget.cpp
-    GUI/flowlayout.cpp
-    GUI/ColorWidgets/colorwidgetshaders.cpp
-    GUI/namedcontainer.cpp
-    #GUI/BrushWidgets/brushwidget.cpp
-    GUI/Settings/labeledslider.cpp
-    GUI/uilayout.cpp
+    GUI/toolbox.cpp
 )
 
 set(
     HEADERS
-    GUI/BoxesList/OptimalScrollArea/scrollvisiblepartbase.h
     GUI/BoxesList/boxscroller.h
-    #GUI/BrushWidgets/bookmarkedbrushes.h
-    #GUI/BrushWidgets/brushlabel.h
-    GUI/ColorWidgets/bookmarkedcolors.h
-    GUI/ColorWidgets/paintcolorwidget.h
-    GUI/Dialogs/animationtopaintdialog.h
-    GUI/Dialogs/applyexpressiondialog.h
     GUI/Dialogs/dialogsinterfaceimpl.h
-    GUI/Dialogs/durationrectsettingsdialog.h
-    GUI/Dialogs/exportsvgdialog.h
-    GUI/Dialogs/scenesettingsdialog.h
     GUI/Expressions/expressiondialog.h
     GUI/Expressions/expressioneditor.h
     GUI/Expressions/expressionhighlighter.h
     GUI/RenderWidgets/outputsettingsdialog.h
     GUI/RenderWidgets/rendersettingsdialog.h
     GUI/RenderWidgets/rendersettingsdisplaywidget.h
-    GUI/Settings/canvassettingswidget.h
     GUI/Settings/generalsettingswidget.h
-    GUI/Settings/performancesettingswidget.h
     GUI/Settings/settingsdialog.h
-    GUI/Settings/settingswidget.h
     GUI/Settings/timelinesettingswidget.h
     GUI/Settings/pluginssettingswidget.h
-    GUI/Settings/presetsettingswidget.h
-    GUI/aboutwidget.h
-    GUI/alignwidget.h
-    GUI/audiohandler.h
-    GUI/assetswidget.h
-    GUI/bookmarkedwidget.h
-    GUI/buttonbase.h
-    GUI/buttonslist.h
     GUI/canvasbasewrappernode.h
     GUI/canvaswrappernode.h
-    GUI/changewidthwidget.h
-    #GUI/closesignalingdockwidget.h
-    GUI/ecombobox.h
-    GUI/editablecombobox.h
     GUI/ekeyfilter.h
     GUI/ewidgetsimpl.h
-    GUI/fakemenubar.h
     GUI/layouthandler.h
-    GUI/scenechooser.h
     GUI/timelinebasewrappernode.h
     GUI/timelinedockwidget.h
     GUI/timelinehighlightwidget.h
     GUI/timelinewidget.h
     GUI/timelinewrappernode.h
-    GUI/toolbutton.h
-    GUI/triggerlabel.h
-    GUI/twocolumnlayout.h
-    GUI/welcomedialog.h
-    GUI/widgetstack.h
-    GUI/ColorWidgets/colorlabel.h
     GUI/ColorWidgets/colorsettingswidget.h
-    GUI/ColorWidgets/colorvaluerect.h
-    GUI/ColorWidgets/colorwidget.h
-    GUI/ColorWidgets/h_wheel_sv_triangle.h
     GUI/ColorWidgets/colorpickingwidget.h
-    GUI/ColorWidgets/savedcolorbutton.h
-    GUI/ColorWidgets/savedcolorswidget.h
-    GUI/GradientWidgets/gradientwidget.h
-    GUI/ColorWidgets/glwidget.h
-    GUI/widgetwrappernode.h
-    GUI/wrappernode.h
     effectsloader.h
     eimporters.h
     iconloader.h
-    outputsettings.h
     renderhandler.h
-    rendersettings.h
-    keypoint.h
-    GUI/BoxesList/OptimalScrollArea/scrollarea.h
-    GUI/BoxesList/OptimalScrollArea/scrollwidget.h
-    GUI/BoxesList/OptimalScrollArea/scrollwidgetvisiblepart.h
-    GUI/BoxesList/OptimalScrollArea/singlewidget.h
     GUI/BoxesList/boxsinglewidget.h
     GUI/BoxesList/boxscrollwidget.h
     GUI/BoxesList/boolpropertywidget.h
@@ -367,44 +241,19 @@ set(
     memoryhandler.h
     GUI/RenderWidgets/renderwidget.h
     GUI/RenderWidgets/renderinstancewidget.h
-    renderinstancesettings.h
-    GUI/GradientWidgets/gradientslistwidget.h
-    GUI/GradientWidgets/displayedgradientswidget.h
-    GUI/GradientWidgets/currentgradientwidget.h
     GUI/RenderWidgets/closablecontainer.h
     GUI/BoxesList/boxtargetwidget.h
-    GUI/BoxesList/OptimalScrollArea/minimalscrollwidget.h
     GUI/BoxesList/boxscrollarea.h
-    videoencoder.h
     GUI/RenderWidgets/outputsettingsprofilesdialog.h
     GUI/RenderWidgets/outputsettingsdisplaywidget.h
-    GUI/actionbutton.h
     GUI/animationdockwidget.h
-    GUI/animationwidgetscrollbar.h
     GUI/canvaswindow.h
-    GUI/customfpsdialog.h
-    #GUI/filesourcelist.h
     GUI/fillstrokesettings.h
     GUI/fontswidget.h
-    GUI/keyfocustarget.h
     GUI/keysview.h
     GUI/mainwindow.h
     GUI/window.h
-    GUI/qdoubleslider.h
     GUI/qrealanimatorvalueslider.h
-    GUI/glwindow.h
-    GUI/noshortcutaction.h
-    GUI/qrealpointvaluedialog.h
-    GUI/renderoutputwidget.h
-    #GUI/BrushWidgets/brushselectionwidget.h
-    GUI/flowlayout.h
-    GUI/ColorWidgets/colorwidgetshaders.h
-    GUI/namedcontainer.h
-    #GUI/BrushWidgets/brushwidget.h
-    boxtypemenu.h
-    GUI/Settings/labeledslider.h
-    GUI/uilayout.h
-    GUI/vlabel.h
 )
 
 set(
@@ -421,10 +270,6 @@ elseif(${WIN_DEPLOY})
     list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs_win.qrc)
 else()
     list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs.qrc)
-endif()
-
-if(${USE_ROBOTO})
-    list(APPEND RESOURCES fonts.qrc)
 endif()
 
 add_executable(
@@ -472,6 +317,7 @@ target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
     ${PROJECT_NAME}core
+    ${PROJECT_NAME}ui
     ${QT_LIBRARIES}
     ${QUAZIP_LIBRARIES}
     ${QSCINTILLA_LIBRARIES}
@@ -507,22 +353,12 @@ if(APPLE)
     )
 endif()
 
-if(UNIX)
+if(UNIX AND NOT APPLE)
     target_link_libraries(
         ${PROJECT_NAME}
         PRIVATE
-        tcmalloc_static
+        ${GPERF_LIBRARIES}
     )
-    if(NOT APPLE)
-        target_link_libraries(
-            ${PROJECT_NAME}
-            PRIVATE
-            ${UNWIND_LIBRARIES}
-        )
-    endif()
-endif()
-
-if(UNIX AND NOT APPLE)
     include(GNUInstallDirs)
     install(
         TARGETS

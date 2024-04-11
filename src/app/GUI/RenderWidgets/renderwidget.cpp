@@ -27,7 +27,7 @@
 #include "canvas.h"
 #include "GUI/global.h"
 #include "renderinstancewidget.h"
-#include "GUI/BoxesList/OptimalScrollArea/scrollarea.h"
+#include "optimalscrollarena/scrollarea.h"
 #include "videoencoder.h"
 #include "renderhandler.h"
 #include "videoencoder.h"
@@ -115,14 +115,16 @@ RenderWidget::RenderWidget(QWidget *parent)
             this, &RenderWidget::clearRenderQueue);
 
     eSizesUI::widget.add(mStartRenderButton, [this](const int size) {
-        mStartRenderButton->setIconSize(QSize(size, size));
         mStartRenderButton->setFixedHeight(size);
-        mStopRenderButton->setIconSize(QSize(size, size));
         mStopRenderButton->setFixedSize(QSize(size, size));
-        mAddRenderButton->setIconSize(QSize(size, size));
         mAddRenderButton->setFixedSize(QSize(size, size));
-        mClearQueueButton->setIconSize(QSize(size, size));
         mClearQueueButton->setFixedSize(QSize(size, size));
+        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+            mStartRenderButton->setIconSize(QSize(size, size));
+            mStopRenderButton->setIconSize(QSize(size, size));
+            mAddRenderButton->setIconSize(QSize(size, size));
+            mClearQueueButton->setIconSize(QSize(size, size));
+        }
     });
 
     mContWidget = new QWidget(this);

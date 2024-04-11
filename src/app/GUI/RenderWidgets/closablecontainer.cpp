@@ -36,7 +36,9 @@ ClosableContainer::ClosableContainer(QWidget *parent) : QWidget(parent) {
     mContentArrow->setObjectName("FlatButton");
     mContentArrow->setCheckable(true);
     mContentArrow->setFixedSize(eSizesUI::widget, eSizesUI::widget);
-    mContentArrow->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
+    if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+        mContentArrow->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
+    }
     connect(mContentArrow, &QPushButton::toggled,
             this, &ClosableContainer::setContentVisible);
 

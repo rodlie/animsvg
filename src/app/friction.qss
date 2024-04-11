@@ -35,11 +35,15 @@ QPushButton#QActionButton:checked
 }
 
 QToolBar#animationDockWidget,
-QToolBar#ViewerNodeBar,
-QToolBar#ViewerDrawBar,
+/*QToolBar#ViewerNodeBar,
+QToolBar#ViewerDrawBar,*/
 #darkWidget
 {
     background-color: rgb(33, 33, 38);
+}
+
+QToolBar::separator {
+    border-color: none;
 }
 
 QComboBox#blendModeCombo,

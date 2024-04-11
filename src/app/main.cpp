@@ -28,10 +28,6 @@
 #include <QDesktopWidget>
 //#include <QScreen>
 
-#ifdef FRICTION_BUNDLE_ROBOTO
-#include <QFontDatabase>
-#endif
-
 #include "hardwareinfo.h"
 #include "Private/esettings.h"
 #include "GUI/ewidgetsimpl.h"
@@ -116,11 +112,6 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     setlocale(LC_NUMERIC, "C");
 
-#ifdef FRICTION_BUNDLE_ROBOTO
-    int fid = QFontDatabase::addApplicationFont(":/fonts/Roboto-Medium.ttf");
-    QApplication::setFont(QFontDatabase::applicationFontFamilies(fid).at(0));
-#endif
-
 #ifdef Q_OS_WIN
 // we ship a custom build of Qt 5.12.12 (with this feature backported) on Windows, so ignore this check
 // #if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
@@ -161,6 +152,7 @@ int main(int argc, char *argv[])
         } else {
             dpi = qApp->desktop()->logicalDpiX() / 96.0; //QGuiApplication::primaryScreen()->logicalDotsPerInch() / 96.0
         }
+        settings.fCurrentInterfaceDPI = dpi;
         qDebug() << "DPI" << dpi;
         const auto fm = QFontMetrics(OS_FONT);
         const qreal scaling = qBound(0.5, dpi, 1.5);

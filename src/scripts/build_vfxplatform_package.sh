@@ -26,6 +26,8 @@ BUILD=${BUILD:-"${HOME}"}
 VERSION=${VERSION:-""}
 APPID="graphics.friction.Friction"
 FRICTION_PKG=friction-${VERSION}
+PKG_RPM=${PKG_RPM:-1}
+PKG_APP=${PKG_APP:-1}
 
 if [ "${VERSION}" = "" ]; then
     echo "Missing version"
@@ -38,8 +40,8 @@ if [ ! -d "${BUILD}/${FRICTION_PKG}" ]; then
     exit 1
 fi
 
-if [ ! -d "${DISTFILES}/builds" ]; then
-    mkdir -p ${DISTFILES}/builds
+if [ ! -d "${DISTFILES}/builds/${VERSION}" ]; then
+    mkdir -p ${DISTFILES}/builds/${VERSION}
 fi
 
 export PATH="${SDK}/bin:${PATH}"
@@ -132,37 +134,12 @@ strip -s ${BUILD}/${FRICTION_PKG}/opt/friction/bin/friction
 strip -s ${BUILD}/${FRICTION_PKG}/opt/friction/lib/*so*
 strip -s ${BUILD}/${FRICTION_PKG}/opt/friction/plugins/*/*.so
 
-cd ${BUILD}
-tar cvf ${FRICTION_PKG}.tar ${FRICTION_PKG}
+echo "[Paths]" > ${BUILD}/${FRICTION_PKG}/opt/friction/bin/qt.conf
+echo "Prefix = .." >> ${BUILD}/${FRICTION_PKG}/opt/friction/bin/qt.conf
+echo "Plugins = plugins" >> ${BUILD}/${FRICTION_PKG}/opt/friction/bin/qt.conf
 
-if [ ! -d "${HOME}/rpmbuild/SOURCES" ]; then
-    mkdir -p ${HOME}/rpmbuild/SOURCES
-fi
-
-mv ${FRICTION_PKG}.tar ${HOME}/rpmbuild/SOURCES/
-cat ${BUILD}/friction/src/scripts/vfxplatform.spec | sed 's/__FRICTION_PKG_VERSION__/'${PKG_VERSION}'/g;s/__FRICTION_VERSION__/'${VERSION}'/g;s/__APPID__/'${APPID}'/g' > rpm.spec
-
-# RPM
-rpmbuild -bb rpm.spec
-cp -a ${HOME}/rpmbuild/RPMS/*/*.rpm ${DISTFILES}/builds/
-
-# Portable
-FRICTION_PORTABLE=${FRICTION_PKG}-linux-X11-x86_64
-FRICTION_PORTABLE_DIR=${BUILD}/${FRICTION_PORTABLE}
-cd ${BUILD}
-rm -f ${FRICTION_PORTABLE_DIR} || true
-mv ${BUILD}/${FRICTION_PKG} ${FRICTION_PORTABLE_DIR}
-(cd ${FRICTION_PORTABLE_DIR} ;
-rm -rf usr
-mv opt/friction/* .
-rm -rf opt share/doc
-ln -sf bin/friction .
-echo "[Paths]" > bin/qt.conf
-echo "Prefix = .." >> bin/qt.conf
-echo "Plugins = plugins" >> bin/qt.conf
-)
-(cd ${FRICTION_PORTABLE_DIR}/bin ; patchelf --set-rpath '$ORIGIN/../lib' friction)
-(cd ${FRICTION_PORTABLE_DIR}/lib ;
+(cd ${BUILD}/${FRICTION_PKG}/opt/friction/bin ; patchelf --set-rpath '$ORIGIN/../lib' friction)
+(cd ${BUILD}/${FRICTION_PKG}/opt/friction/lib ;
 for so in *.so*; do
     patchelf --set-rpath '$ORIGIN' ${so}
 done
@@ -176,17 +153,47 @@ platforms
 xcbglintegrations
 "
 for pdir in ${PLUGS}; do
-    for so in ${FRICTION_PORTABLE_DIR}/plugins/${pdir}/*.so; do
+    for so in ${BUILD}/${FRICTION_PKG}/opt/friction/plugins/${pdir}/*.so; do
         patchelf --set-rpath '$ORIGIN/../../lib' ${so}
     done
 done
 
+# RPM
+if [ "${PKG_RPM}" = 1 ]; then
+cd ${BUILD}
+tar cvf ${FRICTION_PKG}.tar ${FRICTION_PKG}
+
+if [ ! -d "${HOME}/rpmbuild/SOURCES" ]; then
+    mkdir -p ${HOME}/rpmbuild/SOURCES
+fi
+
+mv ${FRICTION_PKG}.tar ${HOME}/rpmbuild/SOURCES/
+cat ${BUILD}/friction/src/scripts/vfxplatform.spec | sed 's/__FRICTION_PKG_VERSION__/'${PKG_VERSION}'/g;s/__FRICTION_VERSION__/'${VERSION}'/g;s/__APPID__/'${APPID}'/g' > rpm.spec
+
+rpmbuild -bb rpm.spec
+cp -a ${HOME}/rpmbuild/RPMS/*/*.rpm ${DISTFILES}/builds/${VERSION}/
+fi
+
+# Portable
+FRICTION_PORTABLE=${FRICTION_PKG}-linux-X11-x86_64
+FRICTION_PORTABLE_DIR=${BUILD}/${FRICTION_PORTABLE}
+cd ${BUILD}
+rm -f ${FRICTION_PORTABLE_DIR} || true
+mv ${BUILD}/${FRICTION_PKG} ${FRICTION_PORTABLE_DIR}
+(cd ${FRICTION_PORTABLE_DIR} ;
+rm -rf usr
+mv opt/friction/* .
+rm -rf opt share/doc
+ln -sf bin/friction .
+)
+
 cd ${BUILD}
 tar cvf ${FRICTION_PORTABLE}.tar ${FRICTION_PORTABLE}
-xz -9 ${FRICTION_PORTABLE}.tar
-cp -a ${FRICTION_PORTABLE}.tar.xz ${DISTFILES}/builds/
+bzip2 -9 ${FRICTION_PORTABLE}.tar
+cp -a ${FRICTION_PORTABLE}.tar.bz2 ${DISTFILES}/builds/${VERSION}/
 
 # AppImage
+if [ "${PKG_APP}" = 1 ]; then
 (cd ${FRICTION_PORTABLE_DIR} ;
 rm -f friction
 mkdir usr
@@ -196,8 +203,14 @@ ln -sf usr/share/applications/${APPID}.desktop .
 ln -sf usr/share/icons/hicolor/256x256/apps/${APPID}.png .
 ln -sf usr/share/icons/hicolor/256x256/apps/${APPID}.png .DirIcon
 )
-tar xf ${DISTFILES}/appimagetool.tar.xz
+if [ ! -f "${DISTFILES}/appimagetool.tar.bz2" ]; then
+    (cd ${DISTFILES} ;
+        wget https://download.friction.graphics/distfiles/misc/appimagetool.tar.bz2
+    )
+fi
+tar xf ${DISTFILES}/appimagetool.tar.bz2
 ARCH=x86_64 ./appimagetool/AppRun ${FRICTION_PORTABLE}
-cp -a *.AppImage ${DISTFILES}/builds/
+cp -a *.AppImage ${DISTFILES}/builds/${VERSION}/
+fi
 
-echo "PKG DONE"
+echo "FRICTION PACKAGE DONE"

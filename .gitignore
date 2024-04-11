@@ -21,3 +21,4 @@ ffmpeg
 *.7z
 distfiles
 backup
+CHANGES.md

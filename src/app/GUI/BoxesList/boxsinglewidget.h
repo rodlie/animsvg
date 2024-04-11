@@ -26,7 +26,7 @@
 #ifndef BOXSINGLEWIDGET_H
 #define BOXSINGLEWIDGET_H
 
-#include "OptimalScrollArea/singlewidget.h"
+#include "optimalscrollarena/singlewidget.h"
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QPushButton>

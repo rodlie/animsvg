@@ -25,9 +25,11 @@
 
 #ifndef QREALANIMATORVALUESLIDER_H
 #define QREALANIMATORVALUESLIDER_H
-#include "qdoubleslider.h"
+
+#include "widgets/qdoubleslider.h"
 #include "smartPointers/ememory.h"
 #include "conncontextptr.h"
+
 class QrealAnimator;
 
 class QrealAnimatorValueSlider : public QDoubleSlider {

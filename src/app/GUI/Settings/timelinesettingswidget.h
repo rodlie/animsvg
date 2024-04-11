@@ -26,7 +26,7 @@
 #ifndef TIMELINESETTINGSWIDGET_H
 #define TIMELINESETTINGSWIDGET_H
 
-#include "settingswidget.h"
+#include "widgets/settingswidget.h"
 
 #include <QCheckBox>
 
