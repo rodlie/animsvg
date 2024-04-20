@@ -79,6 +79,15 @@ const QPalette AppSupport::getDarkPalette()
     return pal;
 }
 
+const QPalette AppSupport::getDarkerPalette()
+{
+    QPalette pal = QPalette();
+    pal.setColor(QPalette::Window, QColor(25, 25, 25));
+    pal.setColor(QPalette::Base, QColor(25, 25, 25));
+    pal.setColor(QPalette::Button, QColor(25, 25, 25));
+    return pal;
+}
+
 const QPalette AppSupport::getNotSoDarkPalette()
 {
     QPalette pal = QPalette();

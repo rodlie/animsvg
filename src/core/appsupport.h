@@ -50,6 +50,7 @@ public:
     explicit AppSupport(QObject *parent = nullptr);
     static void setupTheme();
     static const QPalette getDarkPalette();
+    static const QPalette getDarkerPalette();
     static const QPalette getNotSoDarkPalette();
     static QVariant getSettings(const QString &group,
                                 const QString &key,
