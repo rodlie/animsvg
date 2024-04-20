@@ -48,7 +48,6 @@ QToolBar::separator {
 
 QComboBox#blendModeCombo,
 QWidget#menuBarWidget QPushButton,
-QLineEdit#SearchLine,
 AlignWidget QComboBox {
     background-color: rgb(23, 23, 28);
 }
@@ -62,6 +61,7 @@ QLineEdit#SearchLine {
     border: 0;
 }
 
+QLineEdit#SearchLine,
 BoxScrollWidget,
 BoxScroller {
     background-color: transparent;
@@ -131,6 +131,7 @@ QToolButton#FlatButton:hover {
 
 QTabWidget#ThirdPartyBrowser { border: 0; }
 
+QWidget#TimelineMenu QPushButton,
 QToolButton#AutoPopupButton,
 QToolButton#AutoPopupButton:focus,
 QToolButton#AutoPopupButton:hover,
