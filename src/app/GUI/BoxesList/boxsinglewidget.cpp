@@ -803,7 +803,9 @@ void BoxSingleWidget::paintEvent(QPaintEvent *) {
 
     const QRect textRect(nameX, 0, width() - nameX - eSizesUI::widget, eSizesUI::widget);
     const QString& name = prop->prp_getName();
-    p.drawText(textRect, name, QTextOption(Qt::AlignVCenter));
+    QTextOption opts(Qt::AlignVCenter);
+    opts.setWrapMode(QTextOption::NoWrap);
+    p.drawText(textRect, name, opts);
     if(mSelected) {
         p.setBrush(Qt::NoBrush);
         p.setPen(QPen(Qt::lightGray));
