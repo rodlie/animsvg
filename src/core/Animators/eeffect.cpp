@@ -24,21 +24,43 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "eeffect.h"
+#include "ReadWrite/evformat.h"
+#include "GUI/propertynamedialog.h"
+#include "typemenu.h"
 
 eEffect::eEffect(const QString &name) :
     StaticComplexAnimator(name) {
     ca_setDisabledWhenEmpty(false);
 }
 
-void eEffect::prp_writeProperty_impl(eWriteStream& dst) const {
-    StaticComplexAnimator::prp_writeProperty_impl(dst);
-    dst << mVisible;
+void eEffect::prp_setupTreeViewMenu(PropertyMenu * const menu)
+{
+    StaticComplexAnimator::prp_setupTreeViewMenu(menu);
+    const auto parentWidget = menu->getParentWidget();
+    menu->addPlainAction(tr("Rename"), [this, parentWidget]() {
+        PropertyNameDialog::sRenameProperty(this, parentWidget);
+    });
 }
 
-void eEffect::prp_readProperty_impl(eReadStream& src) {
+void eEffect::prp_writeProperty_impl(eWriteStream& dst) const
+{
+    StaticComplexAnimator::prp_writeProperty_impl(dst);
+    dst << mVisible;
+    dst << prp_getName();
+}
+
+void eEffect::prp_readProperty_impl(eReadStream& src)
+{
     StaticComplexAnimator::prp_readProperty_impl(src);
-    bool visible; src >> visible;
+    bool visible;
+    src >> visible;
     setVisible(visible);
+
+    if (src.evFileVersion() >= EvFormat::effectCustomName) {
+        QString name;
+        src >> name;
+        prp_setName(name);
+    }
 }
 
 void eEffect::switchVisible() {
