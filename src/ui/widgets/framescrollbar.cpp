@@ -105,19 +105,9 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     const qreal inc = mDrawFrameInc*pixPerFrame;
     const int minMod = minFrame%mDrawFrameInc;
     qreal xL = (-minMod + (mRange ? 0. : 0.5))*pixPerFrame + x0;
-    qreal xxL = xL;
     int currentFrame = minFrame - minMod;
     const qreal threeFourthsHeight = height()*0.75;
     const qreal maxX = width() + eSizesUI::widget;
-
-    // draw minor ticks
-    if (!mRange) {
-        p.setPen(QPen(Qt::white, 2));
-        while (xxL < maxX) {
-            p.drawLine(QPointF(xxL, threeFourthsHeight + 2), QPointF(xxL, height()));
-            xxL += inc/5;
-        }
-    }
 
     // draw handle
     QRectF handleRect;
@@ -129,7 +119,7 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     handleRect.setLeft(handleLeft);
     handleRect.setTop(mBottom ? 2 : 0);
     handleRect.setWidth(mBottom ? handleWidth : handleFixedWidth);
-    handleRect.setBottom(mBottom ? 6 : height()/2);
+    handleRect.setBottom(mBottom ? 6 : height()/3);
     if (mRange) { p.fillRect(handleRect, col); }
     else { // triangle
         QPainterPath path;
@@ -140,11 +130,34 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         p.fillPath(path, QColor(180, 0, 0));
     }
 
-    p.setPen(QPen(Qt::white, 2));
-
-    // draw main ticks
+    // ticks
     if (!mRange) {
-        while(xL < maxX) {
+        // draw minor
+        // copy pasta (ish) from keysview.cpp
+        // in order to line up ticks properly
+        p.setPen(QPen(Qt::darkGray, 2));
+        p.translate(eSizesUI::widget/2, 0);
+        qreal xT = pixPerFrame*0.5;
+        int iInc = 1;
+        bool mult5 = true;
+        while (iInc*pixPerFrame < eSizesUI::widget/2) {
+            if (mult5) { iInc *= 5; }
+            else { iInc *= 2; }
+        }
+        int mMinFrame = mFrameRange.fMin;
+        int mMaxFrame = mFrameRange.fMax;
+        mMinFrame += qCeil((-xT)/pixPerFrame);
+        mMinFrame = mMinFrame - mMinFrame%iInc - 1;
+        mMaxFrame += qFloor((width() - 40 - xT)/pixPerFrame) - mMaxFrame%iInc;
+        for (int i = mMinFrame; i <= mMaxFrame; i += iInc) {
+            const qreal xTT = xT + (i - mFrameRange.fMin + 1)*pixPerFrame;
+            p.drawLine(QPointF(xTT, threeFourthsHeight + 4), QPointF(xTT, height()));
+        }
+
+        // draw main
+        p.setPen(QPen(Qt::white, 2));
+        p.translate(-(eSizesUI::widget/2), 0);
+        while (xL < maxX) {
             p.drawLine(QPointF(xL, threeFourthsHeight + 2), QPointF(xL, height()));
             QString drawValue = QString::number(currentFrame);
             if (mDisplayTime && mFps > 0) {
