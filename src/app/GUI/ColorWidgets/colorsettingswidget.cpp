@@ -275,7 +275,11 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     setContentsMargins(0, 0, 0, 0);
     mWidgetsLayout->setMargin(0);
 
+    mTabWidget->setFocusPolicy(Qt::NoFocus);
+
     mColorModeCombo = new QComboBox(this);
+    mColorModeCombo->setFocusPolicy(Qt::NoFocus);
+
     mWidgetsLayout->setAlignment(Qt::AlignTop);
     setLayout(mWidgetsLayout);
 
@@ -363,6 +367,7 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     aLayout->addWidget(aSpin);
 
     mPickingButton = new QPushButton(QIcon::fromTheme("pick"), QString(), this);
+    mPickingButton->setFocusPolicy(Qt::NoFocus);
     mPickingButton->setObjectName("FlatButton");
     mPickingButton->setToolTip(tr("Pick Color"));
     connect(mPickingButton, &QPushButton::released,
@@ -389,6 +394,7 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     hexLayout = new QHBoxLayout;
     hexLayout->addWidget(new QLabel("Hex", this));
     mHexEdit = new QLineEdit("#FF000000", this);
+    mHexEdit->setFocusPolicy(Qt::ClickFocus);
     hexLayout->addWidget(mHexEdit);
     mRGBLayout->addLayout(hexLayout);
 
