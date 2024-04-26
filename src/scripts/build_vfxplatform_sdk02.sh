@@ -26,10 +26,10 @@ gcc -v
 SDK=${SDK:-"/opt/friction"}
 SRC=${SDK}/src
 DIST=${DIST:-"/mnt"}
-JOBS=${JOBS:-4}
+MKJOBS=${MKJOBS:-32}
 
 XKBCOMMON_V=0.7.1
-QT_V=5.15.12 #5.12.12
+QT_V=5.15.13
 QSCINTILLA_V=2.14.1
 PELF_V=0.17.0
 CMAKE_V=3.26.3
@@ -69,7 +69,7 @@ if [ ! -f "${PELF_BIN}" ]; then
     tar xf ${DIST}/${PELF_SRC}.tar.bz2
     cd ${PELF_SRC}
     ./configure ${COMMON_CONFIGURE}
-    make -j${JOBS}
+    make -j${MKJOBS}
     make install
 fi # patchelf
 
@@ -81,7 +81,7 @@ if [ ! -f "${CMAKE_BIN}" ]; then
     tar xf ${DIST}/mxe/pkg/${CMAKE_SRC}.tar.gz
     cd ${CMAKE_SRC}
     ./configure ${COMMON_CONFIGURE} -- -DCMAKE_USE_OPENSSL=OFF
-    make -j${JOBS}
+    make -j${MKJOBS}
     make install
 fi # cmake
 
@@ -93,7 +93,7 @@ if [ ! -f "${SDK}/lib/pkgconfig/xkbcommon.pc" ]; then
     tar xf ${DIST}/${XKB_SRC}.tar.xz
     cd ${XKB_SRC}
     ./configure ${DEFAULT_CONFIGURE} --disable-docs
-    make -j${JOBS}
+    make -j${MKJOBS}
     make install
 fi # libxkbcommon
 
@@ -194,7 +194,7 @@ if [ ! -f "${QMAKE_BIN}" ]; then
     -skip qtx11extras \
     -skip qtxmlpatterns \
     -skip qttools
-    make -j${JOBS}
+    make -j${MKJOBS}
     make install
 fi # qt
 
@@ -207,7 +207,7 @@ if [ ! -f "${SDK}/lib/libqscintilla2_friction_qt5.so" ]; then
     cd ${QSC_SRC}/src
     sed -i 's/qscintilla2_qt/qscintilla2_friction_qt/g' qscintilla.pro
     ${SDK}/bin/qmake CONFIG+=release
-    make -j${JOBS}
+    make -j${MKJOBS}
     cp -a libqscintilla2_friction_qt5* ${SDK}/lib/
     cp -a Qsci ${SDK}/include/
 fi # qscintilla

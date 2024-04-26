@@ -26,7 +26,7 @@ gcc -v
 SDK=${SDK:-"/opt/friction"}
 SRC=${SDK}/src
 DIST=${DIST:-"/mnt/mxe/pkg"}
-JOBS=${JOBS:-4}
+MKJOBS=${MKJOBS:-32}
 
 # Keep in sync with https://github.com/friction2d/mxe
 ZLIB_V=1.2.13
@@ -74,7 +74,7 @@ if [ ! -f "${SDK}/bin/nasm" ]; then
     tar xf ${DIST}/${NASM_SRC}.tar.xz
     cd ${NASM_SRC}
     ./configure ${COMMON_CONFIGURE}
-    make -j${JOBS}
+    make -j${MKJOBS}
     make install
 fi # nasm
 
@@ -99,7 +99,7 @@ if [ ! -f "${SDK}/lib/libz.so" ]; then
     tar xf ${DIST}/${ZLIB_SRC}.tar.xz
     cd ${ZLIB_SRC}
     ./configure ${COMMON_CONFIGURE}
-    make -j${JOBS}
+    make -j${MKJOBS}
     make install
 fi # zlib
 
@@ -114,7 +114,7 @@ if [ ! -f "${SDK}/lib/libmp3lame.so" ]; then
     CXXFLAGS="${DEFAULT_CFLAGS}" \
     LDFLAGS="${DEFAULT_LDFLAGS}" \
     ./configure ${DEFAULT_CONFIGURE} --disable-frontend --disable-gtktest --with-fileio=lame --enable-nasm
-    make -j${JOBS}
+    make -j${MKJOBS}
     make install
 fi # lame
 
@@ -129,7 +129,7 @@ if [ ! -f "${SDK}/lib/libvpx.so" ]; then
     CXXFLAGS="${DEFAULT_CFLAGS}" \
     LDFLAGS="${DEFAULT_LDFLAGS}" \
     ./configure ${DEFAULT_CONFIGURE} --disable-examples --disable-install-docs
-    make -j${JOBS}
+    make -j${MKJOBS}
     make install
 fi # libvpx
 
@@ -144,7 +144,7 @@ if [ ! -f "${SDK}/lib/libogg.so" ]; then
     CXXFLAGS="${DEFAULT_CFLAGS}" \
     LDFLAGS="${DEFAULT_LDFLAGS}" \
     ./configure ${DEFAULT_CONFIGURE}
-    make -j${JOBS}
+    make -j${MKJOBS}
     make install
 fi # libogg
 
@@ -159,7 +159,7 @@ if [ ! -f "${SDK}/lib/libvorbis.so" ]; then
     CXXFLAGS="${DEFAULT_CFLAGS}" \
     LDFLAGS="${DEFAULT_LDFLAGS}" \
     ./configure ${DEFAULT_CONFIGURE}
-    make -j${JOBS}
+    make -j${MKJOBS}
     make install
 fi # libvorbis
 
@@ -174,7 +174,7 @@ if [ ! -f "${SDK}/lib/libtheora.so" ]; then
     CXXFLAGS="${DEFAULT_CFLAGS}" \
     LDFLAGS="${DEFAULT_LDFLAGS}" \
     ./configure ${DEFAULT_CONFIGURE} --disable-examples --disable-sdltest
-    make -j${JOBS}
+    make -j${MKJOBS}
     make install
 fi # libtheora
 
@@ -188,7 +188,7 @@ if [ ! -f "${SDK}/lib/libxvidcore.so" ]; then
     CXXFLAGS="${DEFAULT_CFLAGS}" \
     LDFLAGS="${DEFAULT_LDFLAGS}" \
     ./configure ${COMMON_CONFIGURE}
-    make -j${JOBS}
+    make -j${MKJOBS}
     make install
 fi # xvidcore
 
@@ -203,7 +203,7 @@ if [ ! -f "${SDK}/lib/liblsmash.so" ]; then
     CXXFLAGS="${DEFAULT_CFLAGS}" \
     LDFLAGS="${DEFAULT_LDFLAGS}" \
     ./configure ${DEFAULT_CONFIGURE}
-    make -j${JOBS}
+    make -j${MKJOBS}
     make install
 fi # liblsmash
 
@@ -218,7 +218,7 @@ if [ ! -f "${SDK}/lib/libx264.so" ]; then
     CXXFLAGS="${DEFAULT_CFLAGS}" \
     LDFLAGS="${DEFAULT_LDFLAGS}" \
     ./configure ${COMMON_CONFIGURE} --enable-shared --disable-lavf --disable-swscale --disable-opencl --disable-cli
-    make -j${JOBS}
+    make -j${MKJOBS}
     make install
 fi # x264
 
@@ -238,7 +238,7 @@ if [ ! -f "${SDK}/lib/libx265.so" ]; then
     -DCMAKE_BUILD_TYPE=Release \
     -DENABLE_SHARED=ON \
     -DENABLE_CLI=OFF ..
-    make -j${JOBS}
+    make -j${MKJOBS}
     make install
     rm ${SDK}/lib/libx265.a
 fi # x265
@@ -266,7 +266,7 @@ if [ ! -f "${SDK}/lib/libaom.so" ]; then
     -DCONFIG_AV1_HIGHBITDEPTH=0 \
     -DCONFIG_WEBM_IO=0 \
     -DBUILD_SHARED_LIBS=ON ..
-    make -j${JOBS}
+    make -j${MKJOBS}
     make install
     rm ${SDK}/lib/libaom.a
 fi # aom
@@ -313,7 +313,7 @@ if [ ! -f "${SDK}/lib/pkgconfig/libavcodec.pc" ]; then
     --enable-libaom \
     --enable-libx265 \
     --enable-libxvid
-     make -j${JOBS}
+     make -j${MKJOBS}
      make install
 fi # ffmpeg
 

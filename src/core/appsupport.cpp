@@ -181,9 +181,9 @@ const QString AppSupport::getAppBuildInfo(bool html)
                                            branch);
     } else {
         return QString("%1 <a href=\"%5/%2\">%2</a> %3 <a href=\"%6/%4\">%4</a>.")
-                      .arg(tr("Built from"),
+                      .arg(tr("Built from commit"),
                            commit,
-                           tr("on"),
+                           tr("on branch"),
                            branch,
                            getAppCommitUrl(),
                            getAppBranchUrl());
