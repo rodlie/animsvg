@@ -106,7 +106,7 @@ if [ ! -f "${SDK}/lib/pkgconfig/libunwind.pc" ]; then
     cd ${SRC}
     UNWIND_SRC=libunwind-${UNWIND_V}
     rm -rf ${UNWIND_SRC} || true
-    tar xf ${DIST}/${UNWIND_SRC}.tar.gz
+    tar xf ${DIST}/linux/${UNWIND_SRC}.tar.gz
     cd ${UNWIND_SRC}
     CC=clang CXX=clang++ ./configure ${DEFAULT_CONFIGURE} --disable-minidebuginfo --disable-tests
     make -j${MKJOBS}
