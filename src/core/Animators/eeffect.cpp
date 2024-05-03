@@ -59,7 +59,7 @@ void eEffect::prp_readProperty_impl(eReadStream& src)
     if (src.evFileVersion() >= EvFormat::effectCustomName) {
         QString name;
         src >> name;
-        prp_setName(name);
+        if (!name.isEmpty()) { prp_setName(name); }
     }
 }
 
