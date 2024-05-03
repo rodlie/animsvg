@@ -88,17 +88,18 @@ int main(int argc, char *argv[])
 {
 #ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
-    // Set proper window title bar color on Windows
+    // Set window title bar color based on dark/light theme
     // https://www.qt.io/blog/dark-mode-on-windows-11-with-qt-6.5
+    // https://learn.microsoft.com/en-us/answers/questions/1161597/how-to-detect-windows-application-dark-mode
     QSettings registry("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
                        QSettings::NativeFormat);
-    if (registry.value("AppsUseLightTheme").toInt() == 0) { qputenv("QT_QPA_PLATFORM",
-                                                                    "windows:darkmode=1"); }
+    if (registry.value("AppsUseLightTheme", 0).toInt() == 0) { qputenv("QT_QPA_PLATFORM",
+                                                                       "windows:darkmode=1"); }
 #endif
 #endif
 
 #ifdef Q_OS_LINUX
-    // Force XCB on Linux
+    // Force XCB on Linux until we support Wayland
     qputenv("QT_QPA_PLATFORM", "xcb");
 #endif
 
