@@ -34,10 +34,6 @@ add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 
 if(${LINUX_DEPLOY})
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
-    add_definitions(-DLINUX_DEPLOY)
-endif()
-if(${WIN_DEPLOY})
-    add_definitions(-DWIN_DEPLOY)
 endif()
 
 option(USE_SKIA_SYSTEM_LIBS "Use skia (third-party) system libraries on Linux" ON)
@@ -263,14 +259,6 @@ set(
     hicolor.qrc
     ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing.qrc
 )
-
-if(${LINUX_DEPLOY})
-    list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs_lin.qrc)
-elseif(${WIN_DEPLOY})
-    list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs_win.qrc)
-else()
-    list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs.qrc)
-endif()
 
 add_executable(
     ${PROJECT_NAME}

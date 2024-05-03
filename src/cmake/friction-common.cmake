@@ -28,6 +28,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 option(LINUX_DEPLOY "Linux Deploy" OFF)
 option(WIN_DEPLOY "Windows Deploy" OFF)
 
+if(${LINUX_DEPLOY})
+    add_definitions(-DLINUX_DEPLOY)
+endif()
+if(${WIN_DEPLOY})
+    add_definitions(-DWIN_DEPLOY)
+endif()
+
 if(UNIX AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     message(FATAL_ERROR "Only Clang is supported.")
 elseif(WIN32 AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
