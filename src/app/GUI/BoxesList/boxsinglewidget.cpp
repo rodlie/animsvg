@@ -571,9 +571,9 @@ void BoxSingleWidget::loadStaticPixmaps() {
     UNLOCKED_PIXMAP = new QPixmap(iconsDir + "/unlocked_v2.png");
     MUTED_PIXMAP = new QPixmap(iconsDir + "/muted.png");
     UNMUTED_PIXMAP = new QPixmap(iconsDir + "/unmuted.png");
-    ANIMATOR_RECORDING = new QPixmap(iconsDir + "/recording_v2.png");
-    ANIMATOR_NOT_RECORDING = new QPixmap(iconsDir + "/notRecording_v2.png");
-    ANIMATOR_DESCENDANT_RECORDING = new QPixmap(iconsDir + "/childRecording_v2.png");
+    ANIMATOR_RECORDING = new QPixmap(iconsDir + "/recording.png");
+    ANIMATOR_NOT_RECORDING = new QPixmap(iconsDir + "/notRecording.png");
+    ANIMATOR_DESCENDANT_RECORDING = new QPixmap(iconsDir + "/childRecording.png");
     C_PIXMAP = new QPixmap(iconsDir + "/c.png");
     G_PIXMAP = new QPixmap(iconsDir + "/g.png");
     CG_PIXMAP = new QPixmap(iconsDir + "/cg.png");
