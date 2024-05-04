@@ -561,24 +561,24 @@ void BoxSingleWidget::setTargetAbstraction(SWT_Abstraction *abs) {
 void BoxSingleWidget::loadStaticPixmaps() {
     if(sStaticPixmapsLoaded) return;
     const auto iconsDir = eSettings::sIconsDir();
-    VISIBLE_PIXMAP = new QPixmap(iconsDir + "/visible.png");
-    INVISIBLE_PIXMAP = new QPixmap(iconsDir + "/hidden.png");
-    BOX_CHILDREN_VISIBLE = new QPixmap(iconsDir + "/childrenVisible.png");
-    BOX_CHILDREN_HIDDEN = new QPixmap(iconsDir + "/childrenHidden.png");
-    ANIMATOR_CHILDREN_VISIBLE = new QPixmap(iconsDir + "/childrenVisibleSmall.png");
-    ANIMATOR_CHILDREN_HIDDEN = new QPixmap(iconsDir + "/childrenHiddenSmall.png");
-    LOCKED_PIXMAP = new QPixmap(iconsDir + "/locked.png");
-    UNLOCKED_PIXMAP = new QPixmap(iconsDir + "/unlocked.png");
+    VISIBLE_PIXMAP = new QPixmap(iconsDir + "/visible_v2.png");
+    INVISIBLE_PIXMAP = new QPixmap(iconsDir + "/hidden_v2.png");
+    BOX_CHILDREN_VISIBLE = new QPixmap(iconsDir + "/childrenVisible_v2.png");
+    BOX_CHILDREN_HIDDEN = new QPixmap(iconsDir + "/childrenHidden_v2.png");
+    ANIMATOR_CHILDREN_VISIBLE = new QPixmap(iconsDir + "/childrenVisibleSmall_v2.png");
+    ANIMATOR_CHILDREN_HIDDEN = new QPixmap(iconsDir + "/childrenHiddenSmall_v2.png");
+    LOCKED_PIXMAP = new QPixmap(iconsDir + "/locked_v2.png");
+    UNLOCKED_PIXMAP = new QPixmap(iconsDir + "/unlocked_v2.png");
     MUTED_PIXMAP = new QPixmap(iconsDir + "/muted.png");
     UNMUTED_PIXMAP = new QPixmap(iconsDir + "/unmuted.png");
-    ANIMATOR_RECORDING = new QPixmap(iconsDir + "/recording.png");
-    ANIMATOR_NOT_RECORDING = new QPixmap(iconsDir + "/notRecording.png");
-    ANIMATOR_DESCENDANT_RECORDING = new QPixmap(iconsDir + "/childRecording.png");
+    ANIMATOR_RECORDING = new QPixmap(iconsDir + "/recording_v2.png");
+    ANIMATOR_NOT_RECORDING = new QPixmap(iconsDir + "/notRecording_v2.png");
+    ANIMATOR_DESCENDANT_RECORDING = new QPixmap(iconsDir + "/childRecording_v2.png");
     C_PIXMAP = new QPixmap(iconsDir + "/c.png");
     G_PIXMAP = new QPixmap(iconsDir + "/g.png");
     CG_PIXMAP = new QPixmap(iconsDir + "/cg.png");
     GRAPH_PROPERTY = new QPixmap(iconsDir + "/graphProperty.png");
-    PROMOTE_TO_LAYER_PIXMAP = new QPixmap(iconsDir + "/promoteToLayer.png");
+    PROMOTE_TO_LAYER_PIXMAP = new QPixmap(iconsDir + "/promoteToLayer_v2.png");
     sStaticPixmapsLoaded = true;
 }
 

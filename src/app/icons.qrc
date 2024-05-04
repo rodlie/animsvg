@@ -55,5 +55,17 @@
         <file>icons/unmuted.svg</file>
         <file>icons/up-arrow.svg</file>
         <file>icons/visible.svg</file>
+        <file>icons/promoteToLayer_v2.svg</file>
+        <file>icons/hidden_v2.svg</file>
+        <file>icons/visible_v2.svg</file>
+        <file>icons/locked_v2.svg</file>
+        <file>icons/unlocked_v2.svg</file>
+        <file>icons/childrenHidden_v2.svg</file>
+        <file>icons/childrenVisible_v2.svg</file>
+        <file>icons/childrenHiddenSmall_v2.svg</file>
+        <file>icons/childrenVisibleSmall_v2.svg</file>
+        <file>icons/notRecording_v2.svg</file>
+        <file>icons/recording_v2.svg</file>
+        <file>icons/childRecording_v2.svg</file>
     </qresource>
 </RCC>
