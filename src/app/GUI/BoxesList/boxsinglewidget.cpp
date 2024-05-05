@@ -562,43 +562,24 @@ void BoxSingleWidget::loadStaticPixmaps()
 {
     if (sStaticPixmapsLoaded) { return; }
     const auto iconsDir = eSettings::sIconsDir();
-    const auto iconSize = eSizesUI::widget.size();
-
-    VISIBLE_PIXMAP = new QPixmap(QIcon(":/icons/visible_v2.svg").pixmap(iconSize,
-                                                                        iconSize));
-    INVISIBLE_PIXMAP = new QPixmap(QIcon(":/icons/hidden_v2.svg").pixmap(iconSize,
-                                                                         iconSize));
-    BOX_CHILDREN_VISIBLE = new QPixmap(QIcon(":/icons/childrenVisible_v2.svg").pixmap(iconSize,
-                                                                                      iconSize));
-    BOX_CHILDREN_HIDDEN = new QPixmap(QIcon(":/icons/childrenHidden_v2.svg").pixmap(iconSize,
-                                                                                    iconSize));
-    ANIMATOR_CHILDREN_VISIBLE = new QPixmap(QIcon(":/icons/childrenVisibleSmall_v2.svg").pixmap(iconSize,
-                                                                                                iconSize));
-    ANIMATOR_CHILDREN_HIDDEN = new QPixmap(QIcon(":/icons/childrenHiddenSmall_v2.svg").pixmap(iconSize,
-                                                                                              iconSize));
-    LOCKED_PIXMAP = new QPixmap(QIcon(":/icons/locked_v2.svg").pixmap(iconSize,
-                                                                      iconSize));
-    UNLOCKED_PIXMAP = new QPixmap(QIcon(":/icons/unlocked_v2.svg").pixmap(iconSize,
-                                                                          iconSize));
-    MUTED_PIXMAP = new QPixmap(QIcon(":/icons/muted.svg").pixmap(iconSize,
-                                                                 iconSize));
-    UNMUTED_PIXMAP = new QPixmap(QIcon(":/icons/unmuted.svg").pixmap(iconSize,
-                                                                     iconSize));
-    ANIMATOR_RECORDING = new QPixmap(QIcon(":/icons/recording.svg").pixmap(iconSize,
-                                                                           iconSize));
-    ANIMATOR_NOT_RECORDING = new QPixmap(QIcon(":/icons/notRecording.svg").pixmap(iconSize,
-                                                                                  iconSize));
-    ANIMATOR_DESCENDANT_RECORDING = new QPixmap(QIcon(":/icons/childRecording.svg").pixmap(iconSize,
-                                                                                           iconSize));
-    C_PIXMAP = new QPixmap(QIcon(":/icons/c.svg").pixmap(iconSize,
-                                                         iconSize));
-    G_PIXMAP = new QPixmap(QIcon(":/icons/g.svg").pixmap(iconSize,
-                                                         iconSize));
-    CG_PIXMAP = new QPixmap(QIcon(":/icons/cg.svg").pixmap(iconSize,
-                                                           iconSize));
+    VISIBLE_PIXMAP = new QPixmap(":/icons/visible_v2.svg");
+    INVISIBLE_PIXMAP = new QPixmap(":/icons/hidden_v2.svg");
+    BOX_CHILDREN_VISIBLE = new QPixmap(":/icons/childrenVisible_v2.svg");
+    BOX_CHILDREN_HIDDEN = new QPixmap(":/icons/childrenHidden_v2.svg");
+    ANIMATOR_CHILDREN_VISIBLE = new QPixmap(":/icons/childrenVisibleSmall_v2.svg");
+    ANIMATOR_CHILDREN_HIDDEN = new QPixmap(":/icons/childrenHiddenSmall_v2.svg");
+    LOCKED_PIXMAP = new QPixmap(":/icons/locked_v2.svg");
+    UNLOCKED_PIXMAP = new QPixmap(":/icons/unlocked_v2.svg");
+    MUTED_PIXMAP = new QPixmap(":/icons/muted.svg");
+    UNMUTED_PIXMAP = new QPixmap(":/icons/unmuted.svg");
+    ANIMATOR_RECORDING = new QPixmap(":/icons/recording.svg");
+    ANIMATOR_NOT_RECORDING = new QPixmap(":/icons/notRecording.svg");
+    ANIMATOR_DESCENDANT_RECORDING = new QPixmap(":/icons/childRecording.svg");
+    C_PIXMAP = new QPixmap(":/icons/c.svg");
+    G_PIXMAP = new QPixmap(":/icons/g.svg");
+    CG_PIXMAP = new QPixmap(":/icons/cg.svg");
     GRAPH_PROPERTY = new QPixmap(":/icons/noInterpolation/graphProperty.png"); // TODO svg
-    PROMOTE_TO_LAYER_PIXMAP = new QPixmap(QIcon(":/icons/promoteToLayer_v2.svg").pixmap(iconSize,
-                                                                                        iconSize));
+    PROMOTE_TO_LAYER_PIXMAP = new QPixmap(":/icons/promoteToLayer_v2.svg");
     sStaticPixmapsLoaded = true;
 }
 
