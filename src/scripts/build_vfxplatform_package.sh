@@ -78,6 +78,7 @@ cp ${SDK}/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so 
 cp ${SDK}/plugins/platforms/libqoffscreen.so ${PLUG_DIR}/platforms/
 cp ${SDK}/plugins/platforms/libqxcb.so ${PLUG_DIR}/platforms/
 cp ${SDK}/plugins/xcbglintegrations/libqxcb-glx-integration.so ${PLUG_DIR}/xcbglintegrations/
+cp ${SDK}/plugins/imageformats/libqsvg.so ${PLUG_DIR}/imageformats/
 
 for so in ${PLUG_DIR}/*/*.so; do
     DEPENDS=`ldd ${so} | awk '{print $3}'`
@@ -152,6 +153,7 @@ generic
 platforminputcontexts
 platforms
 xcbglintegrations
+imageformats
 "
 for pdir in ${PLUGS}; do
     for so in ${BUILD}/${FRICTION_PKG}/opt/friction/plugins/${pdir}/*.so; do
