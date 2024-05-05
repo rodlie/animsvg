@@ -185,7 +185,7 @@ MainWindow::MainWindow(Document& document,
         stylesheet.close();
     }
 
-    BoxSingleWidget::loadStaticPixmaps(); // TODO: remove when everything is QIcon
+    BoxSingleWidget::loadStaticPixmaps();
 
     mDocument.setPath("");
 

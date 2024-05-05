@@ -69,19 +69,17 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     connect(&mDocument, &Document::selectedPaintSettingsChanged,
             this, &FillStrokeSettingsWidget::updateCurrentSettings);
 
-    const auto iconsDir = eSettings::sIconsDir(); // remove when new icons have been added
-
     // main buttons
-    mFillTargetButton = new QPushButton(QIcon(iconsDir + "/properties_fill.png"),
-                                        tr("Fill"), this);
-    mStrokeTargetButton = new QPushButton(QIcon(iconsDir + "/properties_stroke_paint.png"),
-                                          tr("Stroke"), this);
-    mFillNoneButton = new QPushButton(QIcon(iconsDir + "/fill_none.png"),
-                                      tr("None"), this);
-    mFillFlatButton = new QPushButton(QIcon(iconsDir + "/fill_flat.png"),
-                                      tr("Flat"), this);
-    mFillGradientButton = new QPushButton(QIcon(iconsDir + "/fill_gradient.png"),
-                                          tr("Gradient"), this);
+    mFillTargetButton = new QPushButton(QIcon(":/icons/noInterpolation/properties_fill.png"),
+                                        tr("Fill"), this); // TODO: svg
+    mStrokeTargetButton = new QPushButton(QIcon(":/icons/noInterpolation/properties_stroke_paint.png"),
+                                          tr("Stroke"), this); // TODO svg
+    mFillNoneButton = new QPushButton(QIcon(":/icons/fill_none.svg").pixmap(10, 10),
+                                      tr("None"), this); // use 10x10 workaround until everything is svg
+    mFillFlatButton = new QPushButton(QIcon(":/icons/noInterpolation/fill_flat.png"),
+                                      tr("Flat"), this); // TODO: svg
+    mFillGradientButton = new QPushButton(QIcon(":/icons/noInterpolation/fill_gradient.png"),
+                                          tr("Gradient"), this); // TODO: svg
 
     mFillTargetButton->setCheckable(true);
     mFillNoneButton->setCheckable(true);
@@ -155,11 +153,11 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     mJoinStyleWidget->setContentsMargins(0, 0, 0, 0);
     mJoinStyleLayout->setMargin(0);
 
-    mBevelJoinStyleButton = new QPushButton(QIcon(iconsDir + "/joinBevel.png"),
+    mBevelJoinStyleButton = new QPushButton(QIcon(":/icons/joinBevel.svg"),
                                             QString(), this);
-    mMiterJointStyleButton = new QPushButton(QIcon(iconsDir + "/joinMiter.png"),
+    mMiterJointStyleButton = new QPushButton(QIcon(":/icons/joinMiter.svg"),
                                              QString(), this);
-    mRoundJoinStyleButton = new QPushButton(QIcon(iconsDir + "/joinRound.png"),
+    mRoundJoinStyleButton = new QPushButton(QIcon(":/icons/joinRound.svg"),
                                             QString(), this);
 
     mBevelJoinStyleButton->setToolTip(tr("Bevel"));
@@ -194,11 +192,11 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     mCapStyleWidget->setContentsMargins(0, 0, 0, 0);
     mCapStyleLayout->setMargin(0);
 
-    mFlatCapStyleButton = new QPushButton(QIcon(iconsDir + "/capFlat.png"),
+    mFlatCapStyleButton = new QPushButton(QIcon(":/icons/capFlat.svg"),
                                           QString(), this);
-    mSquareCapStyleButton = new QPushButton(QIcon(iconsDir + "/capSquare.png"),
+    mSquareCapStyleButton = new QPushButton(QIcon(":/icons/capSquare.svg"),
                                             QString(), this);
-    mRoundCapStyleButton = new QPushButton(QIcon(iconsDir + "/capRound.png"),
+    mRoundCapStyleButton = new QPushButton(QIcon(":/icons/capRound.svg"),
                                            QString(), this);
 
     mFlatCapStyleButton->setToolTip(tr("Flat"));
@@ -236,10 +234,10 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     mGradientTypeWidget->setContentsMargins(0, 0, 0, 0);
     mGradientTypeLayout->setMargin(0);
 
-    mLinearGradientButton = new QPushButton(QIcon(iconsDir + "/fill_gradient.png"),
-                                            tr("Linear"), this);
-    mRadialGradientButton = new QPushButton(QIcon(iconsDir + "/fill_gradient_radial.png"),
-                                            tr("Radial"), this);
+    mLinearGradientButton = new QPushButton(QIcon(":/icons/noInterpolation/fill_gradient.png"),
+                                            tr("Linear"), this); // TODO svg
+    mRadialGradientButton = new QPushButton(QIcon(":/icons/noInterpolation/fill_gradient_radial.png"),
+                                            tr("Radial"), this); // TODO svg
 
     mLinearGradientButton->setCheckable(true);
     mRadialGradientButton->setCheckable(true);

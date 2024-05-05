@@ -558,27 +558,28 @@ void BoxSingleWidget::setTargetAbstraction(SWT_Abstraction *abs) {
     updateFillTypeBoxVisible();
 }
 
-void BoxSingleWidget::loadStaticPixmaps() {
-    if(sStaticPixmapsLoaded) return;
+void BoxSingleWidget::loadStaticPixmaps()
+{
+    if (sStaticPixmapsLoaded) { return; }
     const auto iconsDir = eSettings::sIconsDir();
-    VISIBLE_PIXMAP = new QPixmap(iconsDir + "/visible_v2.png");
-    INVISIBLE_PIXMAP = new QPixmap(iconsDir + "/hidden_v2.png");
-    BOX_CHILDREN_VISIBLE = new QPixmap(iconsDir + "/childrenVisible_v2.png");
-    BOX_CHILDREN_HIDDEN = new QPixmap(iconsDir + "/childrenHidden_v2.png");
-    ANIMATOR_CHILDREN_VISIBLE = new QPixmap(iconsDir + "/childrenVisibleSmall_v2.png");
-    ANIMATOR_CHILDREN_HIDDEN = new QPixmap(iconsDir + "/childrenHiddenSmall_v2.png");
-    LOCKED_PIXMAP = new QPixmap(iconsDir + "/locked_v2.png");
-    UNLOCKED_PIXMAP = new QPixmap(iconsDir + "/unlocked_v2.png");
-    MUTED_PIXMAP = new QPixmap(iconsDir + "/muted.png");
-    UNMUTED_PIXMAP = new QPixmap(iconsDir + "/unmuted.png");
-    ANIMATOR_RECORDING = new QPixmap(iconsDir + "/recording.png");
-    ANIMATOR_NOT_RECORDING = new QPixmap(iconsDir + "/notRecording.png");
-    ANIMATOR_DESCENDANT_RECORDING = new QPixmap(iconsDir + "/childRecording.png");
-    C_PIXMAP = new QPixmap(iconsDir + "/c.png");
-    G_PIXMAP = new QPixmap(iconsDir + "/g.png");
-    CG_PIXMAP = new QPixmap(iconsDir + "/cg.png");
-    GRAPH_PROPERTY = new QPixmap(iconsDir + "/graphProperty.png");
-    PROMOTE_TO_LAYER_PIXMAP = new QPixmap(iconsDir + "/promoteToLayer_v2.png");
+    VISIBLE_PIXMAP = new QPixmap(":/icons/visible_v2.svg");
+    INVISIBLE_PIXMAP = new QPixmap(":/icons/hidden_v2.svg");
+    BOX_CHILDREN_VISIBLE = new QPixmap(":/icons/childrenVisible_v2.svg");
+    BOX_CHILDREN_HIDDEN = new QPixmap(":/icons/childrenHidden_v2.svg");
+    ANIMATOR_CHILDREN_VISIBLE = new QPixmap(":/icons/childrenVisibleSmall_v2.svg");
+    ANIMATOR_CHILDREN_HIDDEN = new QPixmap(":/icons/childrenHiddenSmall_v2.svg");
+    LOCKED_PIXMAP = new QPixmap(":/icons/locked_v2.svg");
+    UNLOCKED_PIXMAP = new QPixmap(":/icons/unlocked_v2.svg");
+    MUTED_PIXMAP = new QPixmap(":/icons/muted.svg");
+    UNMUTED_PIXMAP = new QPixmap(":/icons/unmuted.svg");
+    ANIMATOR_RECORDING = new QPixmap(":/icons/recording.svg");
+    ANIMATOR_NOT_RECORDING = new QPixmap(":/icons/notRecording.svg");
+    ANIMATOR_DESCENDANT_RECORDING = new QPixmap(":/icons/childRecording.svg");
+    C_PIXMAP = new QPixmap(":/icons/c.svg");
+    G_PIXMAP = new QPixmap(":/icons/g.svg");
+    CG_PIXMAP = new QPixmap(":/icons/cg.svg");
+    GRAPH_PROPERTY = new QPixmap(":/icons/noInterpolation/graphProperty.png"); // TODO svg
+    PROMOTE_TO_LAYER_PIXMAP = new QPixmap(":/icons/promoteToLayer_v2.svg");
     sStaticPixmapsLoaded = true;
 }
 

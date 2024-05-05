@@ -36,7 +36,6 @@
 #include "memoryhandler.h"
 #include "ShaderEffects/shadereffectprogram.h"
 #include "videoencoder.h"
-#include "iconloader.h"
 #include "appsupport.h"
 
 #ifdef Q_OS_WIN
@@ -216,14 +215,6 @@ int main(int argc, char *argv[])
     }
 
     eFilterSettings filterSettings;
-
-    // remove when we have moved over to QIcon:
-    QDir(eSettings::sSettingsDir()).mkpath(eSettings::sIconsDir());
-
-    // remove when we have moved over to QIcon:
-    eSizesUI::button.add([](const int size) {
-        IconLoader::generateAll(eSizesUI::widget, size);
-    });
 
     eWidgetsImpl widImpl;
     ImportHandler importHandler;

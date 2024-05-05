@@ -43,11 +43,8 @@ BookmarkedWidget::BookmarkedWidget(const bool vertical,
         mDownArrow->setFixedHeight(dimension);
     }
 
-    const auto iconDir = eSettings::sIconsDir();
-    const auto downArr = iconDir + "/down-arrow.png";
-    const auto upArr = iconDir + "/up-arrow.png";
-    mUpArrow->setIcon(QIcon(upArr));
-    mDownArrow->setIcon(QIcon(downArr));
+    mUpArrow->setIcon(QIcon::fromTheme("uparrow"));
+    mDownArrow->setIcon(QIcon::fromTheme("downarrow"));
 
     connect(mUpArrow, &QPushButton::pressed, this, [this]() {
         if(mFirstViewed == 0) return;
