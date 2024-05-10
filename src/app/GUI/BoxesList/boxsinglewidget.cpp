@@ -110,44 +110,49 @@ bool BoxSingleWidget::sStaticPixmapsLoaded = false;
 #include <QMenu>
 #include <QInputDialog>
 
-eComboBox* createCombo(QWidget* const parent) {
+eComboBox* createCombo(QWidget* const parent)
+{
     const auto result = new eComboBox(parent);
     result->setWheelMode(eComboBox::WheelMode::enabledWithCtrl);
     result->setFocusPolicy(Qt::NoFocus);
     return result;
 }
 
-BoxSingleWidget::BoxSingleWidget(BoxScroller * const parent) :
-    SingleWidget(parent), mParent(parent) {
+BoxSingleWidget::BoxSingleWidget(BoxScroller * const parent)
+    : SingleWidget(parent)
+    , mParent(parent)
+{
     mMainLayout = new QHBoxLayout(this);
     setLayout(mMainLayout);
     mMainLayout->setSpacing(0);
     mMainLayout->setContentsMargins(0, 0, 0, 0);
     mMainLayout->setAlignment(Qt::AlignLeft);
 
-    mRecordButton = new PixmapActionButton(this);
-    mRecordButton->setPixmapChooser([this]() {
-        if(!mTarget) return static_cast<QPixmap*>(nullptr);
+    mRecordButton = new IconActionButton(this);
+    mRecordButton->setIconChooser([this]() {
+        if (!mTarget) { return static_cast<QIcon*>(nullptr); }
         const auto target = mTarget->getTarget();
-        if(enve_cast<eBoxOrSound*>(target)) {
-            return static_cast<QPixmap*>(nullptr);
-        } else if(const auto asCAnim = enve_cast<ComplexAnimator*>(target)) {
-            if(asCAnim->anim_isRecording()) {
-                return BoxSingleWidget::ANIMATOR_RECORDING;
+        if (enve_cast<eBoxOrSound*>(target)) {
+            return static_cast<QIcon*>(nullptr);
+        } else if (const auto asCAnim = enve_cast<ComplexAnimator*>(target)) {
+            if (asCAnim->anim_isRecording()) {
+                return BoxSingleWidget::ANIMATOR_RECORDING_ICON;
             } else {
-                if(asCAnim->anim_isDescendantRecording()) {
-                    return BoxSingleWidget::ANIMATOR_DESCENDANT_RECORDING;
-                } else return BoxSingleWidget::ANIMATOR_NOT_RECORDING;
+                if (asCAnim->anim_isDescendantRecording()) {
+                    return BoxSingleWidget::ANIMATOR_DESCENDANT_RECORDING_ICON;
+                }
+                return BoxSingleWidget::ANIMATOR_NOT_RECORDING_ICON;
             }
-        } else if(const auto asAnim = enve_cast<Animator*>(target)) {
-            if(asAnim->anim_isRecording()) {
-                return BoxSingleWidget::ANIMATOR_RECORDING;
-            } else return BoxSingleWidget::ANIMATOR_NOT_RECORDING;
-        } else return static_cast<QPixmap*>(nullptr);
+        } else if (const auto asAnim = enve_cast<Animator*>(target)) {
+            if (asAnim->anim_isRecording()) {
+                return BoxSingleWidget::ANIMATOR_RECORDING_ICON;
+            }
+            return BoxSingleWidget::ANIMATOR_NOT_RECORDING_ICON;
+        } else { return static_cast<QIcon*>(nullptr); }
     });
 
     mMainLayout->addWidget(mRecordButton);
-    connect(mRecordButton, &BoxesListActionButton::pressed,
+    connect(mRecordButton, &BoxesListIconActionButton::pressed,
             this, &BoxSingleWidget::switchRecordingAction);
 
     mContentButton = new PixmapActionButton(this);

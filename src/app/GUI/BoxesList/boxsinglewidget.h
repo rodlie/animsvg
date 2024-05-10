@@ -157,7 +157,7 @@ private:
     bool mDragPressPos = false;
     QPoint mDragStartPos;
 
-    PixmapActionButton *mRecordButton;
+    IconActionButton *mRecordButton;
     PixmapActionButton *mContentButton;
     IconActionButton *mVisibleButton;
     PixmapActionButton *mLockedButton;
