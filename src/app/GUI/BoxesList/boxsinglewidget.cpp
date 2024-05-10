@@ -155,25 +155,28 @@ BoxSingleWidget::BoxSingleWidget(BoxScroller * const parent)
     connect(mRecordButton, &BoxesListIconActionButton::pressed,
             this, &BoxSingleWidget::switchRecordingAction);
 
-    mContentButton = new PixmapActionButton(this);
-    mContentButton->setPixmapChooser([this]() {
-        if(!mTarget) return static_cast<QPixmap*>(nullptr);
-        if(mTarget->childrenCount() == 0)
-            return static_cast<QPixmap*>(nullptr);
+    mContentButton = new IconActionButton(this);
+    mContentButton->setIconChooser([this]() {
+        if (!mTarget) { return static_cast<QIcon*>(nullptr); }
+        if (mTarget->childrenCount() == 0) {
+            return static_cast<QIcon*>(nullptr);
+        }
         const auto target = mTarget->getTarget();
-        if(enve_cast<eBoxOrSound*>(target)) {
-            if(mTarget->contentVisible()) {
-                return BoxSingleWidget::BOX_CHILDREN_VISIBLE;
-            } else return BoxSingleWidget::BOX_CHILDREN_HIDDEN;
+        if (enve_cast<eBoxOrSound*>(target)) {
+            if (mTarget->contentVisible()) {
+                return BoxSingleWidget::BOX_CHILDREN_VISIBLE_ICON;
+            }
+            return BoxSingleWidget::BOX_CHILDREN_HIDDEN_ICON;
         } else {
-            if(mTarget->contentVisible()) {
-                return BoxSingleWidget::ANIMATOR_CHILDREN_VISIBLE;
-            } else return BoxSingleWidget::ANIMATOR_CHILDREN_HIDDEN;
+            if (mTarget->contentVisible()) {
+                return BoxSingleWidget::ANIMATOR_CHILDREN_VISIBLE_ICON;
+            }
+            return BoxSingleWidget::ANIMATOR_CHILDREN_HIDDEN_ICON;
         }
     });
 
     mMainLayout->addWidget(mContentButton);
-    connect(mContentButton, &BoxesListActionButton::pressed,
+    connect(mContentButton, &BoxesListIconActionButton::pressed,
             this, &BoxSingleWidget::switchContentVisibleAction);
 
     mVisibleButton = new IconActionButton(this);

@@ -158,7 +158,7 @@ private:
     QPoint mDragStartPos;
 
     IconActionButton *mRecordButton;
-    PixmapActionButton *mContentButton;
+    IconActionButton *mContentButton;
     IconActionButton *mVisibleButton;
     PixmapActionButton *mLockedButton;
     PixmapActionButton *mHwSupportButton;
