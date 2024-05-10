@@ -41,8 +41,6 @@ class QrealAnimatorValueSlider;
 class TimelineMovable;
 class Key;
 class BoxTargetWidget;
-class BoxesListActionButton;
-class PixmapActionButton;
 class BoolPropertyWidget;
 class ComboBoxProperty;
 class ColorAnimator;
@@ -55,25 +53,6 @@ public:
     explicit BoxSingleWidget(BoxScroller * const parent);
 
     void setTargetAbstraction(SWT_Abstraction *abs);
-
-    static QPixmap* VISIBLE_PIXMAP;
-    static QPixmap* INVISIBLE_PIXMAP;
-    static QPixmap* BOX_CHILDREN_VISIBLE;
-    static QPixmap* BOX_CHILDREN_HIDDEN;
-    static QPixmap* ANIMATOR_CHILDREN_VISIBLE;
-    static QPixmap* ANIMATOR_CHILDREN_HIDDEN;
-    static QPixmap* LOCKED_PIXMAP;
-    static QPixmap* UNLOCKED_PIXMAP;
-    static QPixmap* MUTED_PIXMAP;
-    static QPixmap* UNMUTED_PIXMAP;
-    static QPixmap* ANIMATOR_RECORDING;
-    static QPixmap* ANIMATOR_NOT_RECORDING;
-    static QPixmap* ANIMATOR_DESCENDANT_RECORDING;
-    static QPixmap* C_PIXMAP;
-    static QPixmap* G_PIXMAP;
-    static QPixmap* CG_PIXMAP;
-    static QPixmap* GRAPH_PROPERTY;
-    static QPixmap* PROMOTE_TO_LAYER_PIXMAP;
 
     static QIcon* VISIBLE_ICON;
     static QIcon* INVISIBLE_ICON;

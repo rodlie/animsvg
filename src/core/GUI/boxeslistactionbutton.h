@@ -32,11 +32,10 @@
 
 #include <functional>
 
-#include <QDebug>
 #include <QPaintEvent>
 #include <QPushButton>
 
-// LEGACY:
+// LEGACY (remove before v1)
 class CORE_EXPORT BoxesListActionButton : public QWidget {
     Q_OBJECT
 public:
@@ -65,7 +64,7 @@ private:
     std::function<QPixmap*()> mPixmapChooser;
 };
 
-// REFACTOR:
+// NEW
 class CORE_EXPORT BoxesListIconActionButton : public QPushButton
 {
     Q_OBJECT

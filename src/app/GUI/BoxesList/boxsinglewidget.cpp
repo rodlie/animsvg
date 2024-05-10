@@ -53,25 +53,6 @@
 
 #include "typemenu.h"
 
-QPixmap* BoxSingleWidget::VISIBLE_PIXMAP;
-QPixmap* BoxSingleWidget::INVISIBLE_PIXMAP;
-QPixmap* BoxSingleWidget::BOX_CHILDREN_VISIBLE;
-QPixmap* BoxSingleWidget::BOX_CHILDREN_HIDDEN;
-QPixmap* BoxSingleWidget::ANIMATOR_CHILDREN_VISIBLE;
-QPixmap* BoxSingleWidget::ANIMATOR_CHILDREN_HIDDEN;
-QPixmap* BoxSingleWidget::LOCKED_PIXMAP;
-QPixmap* BoxSingleWidget::UNLOCKED_PIXMAP;
-QPixmap* BoxSingleWidget::MUTED_PIXMAP;
-QPixmap* BoxSingleWidget::UNMUTED_PIXMAP;
-QPixmap* BoxSingleWidget::ANIMATOR_RECORDING;
-QPixmap* BoxSingleWidget::ANIMATOR_NOT_RECORDING;
-QPixmap* BoxSingleWidget::ANIMATOR_DESCENDANT_RECORDING;
-QPixmap* BoxSingleWidget::C_PIXMAP;
-QPixmap* BoxSingleWidget::G_PIXMAP;
-QPixmap* BoxSingleWidget::CG_PIXMAP;
-QPixmap* BoxSingleWidget::GRAPH_PROPERTY;
-QPixmap* BoxSingleWidget::PROMOTE_TO_LAYER_PIXMAP;
-
 QIcon* BoxSingleWidget::VISIBLE_ICON;
 QIcon* BoxSingleWidget::INVISIBLE_ICON;
 QIcon* BoxSingleWidget::BOX_CHILDREN_VISIBLE_ICON;
@@ -591,25 +572,6 @@ void BoxSingleWidget::setTargetAbstraction(SWT_Abstraction *abs) {
 void BoxSingleWidget::loadStaticPixmaps()
 {
     if (sStaticPixmapsLoaded) { return; }
-    const auto iconsDir = eSettings::sIconsDir();
-    VISIBLE_PIXMAP = new QPixmap(":/icons/visible_v2.svg");
-    INVISIBLE_PIXMAP = new QPixmap(":/icons/hidden_v2.svg");
-    BOX_CHILDREN_VISIBLE = new QPixmap(":/icons/childrenVisible_v2.svg");
-    BOX_CHILDREN_HIDDEN = new QPixmap(":/icons/childrenHidden_v2.svg");
-    ANIMATOR_CHILDREN_VISIBLE = new QPixmap(":/icons/childrenVisibleSmall_v2.svg");
-    ANIMATOR_CHILDREN_HIDDEN = new QPixmap(":/icons/childrenHiddenSmall_v2.svg");
-    LOCKED_PIXMAP = new QPixmap(":/icons/locked_v2.svg");
-    UNLOCKED_PIXMAP = new QPixmap(":/icons/unlocked_v2.svg");
-    MUTED_PIXMAP = new QPixmap(":/icons/muted.svg");
-    UNMUTED_PIXMAP = new QPixmap(":/icons/unmuted.svg");
-    ANIMATOR_RECORDING = new QPixmap(":/icons/recording.svg");
-    ANIMATOR_NOT_RECORDING = new QPixmap(":/icons/notRecording.svg");
-    ANIMATOR_DESCENDANT_RECORDING = new QPixmap(":/icons/childRecording.svg");
-    C_PIXMAP = new QPixmap(":/icons/c.svg");
-    G_PIXMAP = new QPixmap(":/icons/g.svg");
-    CG_PIXMAP = new QPixmap(":/icons/cg.svg");
-    GRAPH_PROPERTY = new QPixmap(":/icons/noInterpolation/graphProperty.png"); // TODO svg
-    PROMOTE_TO_LAYER_PIXMAP = new QPixmap(":/icons/promoteToLayer_v2.svg");
 
     VISIBLE_ICON = new QIcon(":/icons/visible_v2.svg");
     INVISIBLE_ICON = new QIcon(":/icons/hidden_v2.svg");
@@ -633,26 +595,9 @@ void BoxSingleWidget::loadStaticPixmaps()
     sStaticPixmapsLoaded = true;
 }
 
-void BoxSingleWidget::clearStaticPixmaps() {
-    if(!sStaticPixmapsLoaded) return;
-    delete VISIBLE_PIXMAP;
-    delete INVISIBLE_PIXMAP;
-    delete BOX_CHILDREN_VISIBLE;
-    delete BOX_CHILDREN_HIDDEN;
-    delete ANIMATOR_CHILDREN_VISIBLE;
-    delete ANIMATOR_CHILDREN_HIDDEN;
-    delete LOCKED_PIXMAP;
-    delete UNLOCKED_PIXMAP;
-    delete MUTED_PIXMAP;
-    delete UNMUTED_PIXMAP;
-    delete ANIMATOR_RECORDING;
-    delete ANIMATOR_NOT_RECORDING;
-    delete ANIMATOR_DESCENDANT_RECORDING;
-    delete PROMOTE_TO_LAYER_PIXMAP;
-    delete C_PIXMAP;
-    delete G_PIXMAP;
-    delete CG_PIXMAP;
-    delete GRAPH_PROPERTY;
+void BoxSingleWidget::clearStaticPixmaps()
+{
+    if (!sStaticPixmapsLoaded) { return; }
 
     delete VISIBLE_ICON;
     delete INVISIBLE_ICON;
@@ -846,8 +791,8 @@ void BoxSingleWidget::paintEvent(QPaintEvent *) {
                                 keysView->sGetAnimatorColor(id) :
                                 QColor(Qt::black);
                     const QRect visRect(mVisibleButton->pos(),
-                                        GRAPH_PROPERTY->size());
-                    const int adj = qRound(4*qreal(GRAPH_PROPERTY->width())/20);
+                                        mVisibleButton->size());
+                    const int adj = qRound(4*qreal(mVisibleButton->width())/20);
                     p.fillRect(visRect.adjusted(adj, adj, -adj, -adj), color);
                 }
             }
