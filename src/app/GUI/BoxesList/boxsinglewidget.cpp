@@ -72,6 +72,25 @@ QPixmap* BoxSingleWidget::CG_PIXMAP;
 QPixmap* BoxSingleWidget::GRAPH_PROPERTY;
 QPixmap* BoxSingleWidget::PROMOTE_TO_LAYER_PIXMAP;
 
+QIcon* BoxSingleWidget::VISIBLE_ICON;
+QIcon* BoxSingleWidget::INVISIBLE_ICON;
+QIcon* BoxSingleWidget::BOX_CHILDREN_VISIBLE_ICON;
+QIcon* BoxSingleWidget::BOX_CHILDREN_HIDDEN_ICON;
+QIcon* BoxSingleWidget::ANIMATOR_CHILDREN_VISIBLE_ICON;
+QIcon* BoxSingleWidget::ANIMATOR_CHILDREN_HIDDEN_ICON;
+QIcon* BoxSingleWidget::LOCKED_ICON;
+QIcon* BoxSingleWidget::UNLOCKED_ICON;
+QIcon* BoxSingleWidget::MUTED_ICON;
+QIcon* BoxSingleWidget::UNMUTED_ICON;
+QIcon* BoxSingleWidget::ANIMATOR_RECORDING_ICON;
+QIcon* BoxSingleWidget::ANIMATOR_NOT_RECORDING_ICON;
+QIcon* BoxSingleWidget::ANIMATOR_DESCENDANT_RECORDING_ICON;
+QIcon* BoxSingleWidget::C_ICON;
+QIcon* BoxSingleWidget::G_ICON;
+QIcon* BoxSingleWidget::CG_ICON;
+QIcon* BoxSingleWidget::GRAPH_PROPERTY_ICON;
+QIcon* BoxSingleWidget::PROMOTE_TO_LAYER_ICON;
+
 bool BoxSingleWidget::sStaticPixmapsLoaded = false;
 
 #include "GUI/global.h"
@@ -152,31 +171,32 @@ BoxSingleWidget::BoxSingleWidget(BoxScroller * const parent) :
     connect(mContentButton, &BoxesListActionButton::pressed,
             this, &BoxSingleWidget::switchContentVisibleAction);
 
-    mVisibleButton = new PixmapActionButton(this);
-    mVisibleButton->setPixmapChooser([this]() {
-        if(!mTarget) return static_cast<QPixmap*>(nullptr);
+    mVisibleButton = new IconActionButton(this);
+    mVisibleButton->setIconChooser([this]() {
+        if (!mTarget) { return static_cast<QIcon*>(nullptr); }
         const auto target = mTarget->getTarget();
-        if(const auto ebos = enve_cast<eBoxOrSound*>(target)) {
-            if(enve_cast<eSound*>(target)) {
-                if(ebos->isVisible()) {
-                    return BoxSingleWidget::UNMUTED_PIXMAP;
-                } else return BoxSingleWidget::MUTED_PIXMAP;
-            } else if(ebos->isVisible()) {
-                return BoxSingleWidget::VISIBLE_PIXMAP;
-            } else return BoxSingleWidget::INVISIBLE_PIXMAP;
-        } else if(const auto eEff = enve_cast<eEffect*>(target)) {
-            if(eEff->isVisible()) {
-                return BoxSingleWidget::VISIBLE_PIXMAP;
-            } else return BoxSingleWidget::INVISIBLE_PIXMAP;
-        } else if(enve_cast<GraphAnimator*>(target)) {
+        if (const auto ebos = enve_cast<eBoxOrSound*>(target)) {
+            if (enve_cast<eSound*>(target)) {
+                if (ebos->isVisible()) {
+                    return BoxSingleWidget::UNMUTED_ICON;
+                } else { return BoxSingleWidget::MUTED_ICON; }
+            } else if (ebos->isVisible()) {
+                return BoxSingleWidget::VISIBLE_ICON;
+            } else { return BoxSingleWidget::INVISIBLE_ICON; }
+        } else if (const auto eEff = enve_cast<eEffect*>(target)) {
+            if (eEff->isVisible()) {
+                return BoxSingleWidget::VISIBLE_ICON;
+            } else { return BoxSingleWidget::INVISIBLE_ICON; }
+        } else if (enve_cast<GraphAnimator*>(target)) {
             const auto bsvt = static_cast<BoxScroller*>(mParent);
             const auto keysView = bsvt->getKeysView();
-            if(keysView) return BoxSingleWidget::GRAPH_PROPERTY;
-            return static_cast<QPixmap*>(nullptr);
-        } else return static_cast<QPixmap*>(nullptr);
+            if (keysView) { return BoxSingleWidget::GRAPH_PROPERTY_ICON; }
+            return static_cast<QIcon*>(nullptr);
+        } else { return static_cast<QIcon*>(nullptr); }
     });
+
     mMainLayout->addWidget(mVisibleButton);
-    connect(mVisibleButton, &BoxesListActionButton::pressed,
+    connect(mVisibleButton, &BoxesListIconActionButton::pressed,
             this, &BoxSingleWidget::switchBoxVisibleAction);
 
     mLockedButton = new PixmapActionButton(this);
@@ -580,6 +600,26 @@ void BoxSingleWidget::loadStaticPixmaps()
     CG_PIXMAP = new QPixmap(":/icons/cg.svg");
     GRAPH_PROPERTY = new QPixmap(":/icons/noInterpolation/graphProperty.png"); // TODO svg
     PROMOTE_TO_LAYER_PIXMAP = new QPixmap(":/icons/promoteToLayer_v2.svg");
+
+    VISIBLE_ICON = new QIcon(":/icons/visible_v2.svg");
+    INVISIBLE_ICON = new QIcon(":/icons/hidden_v2.svg");
+    BOX_CHILDREN_VISIBLE_ICON = new QIcon(":/icons/childrenVisible_v2.svg");
+    BOX_CHILDREN_HIDDEN_ICON = new QIcon(":/icons/childrenHidden_v2.svg");
+    ANIMATOR_CHILDREN_VISIBLE_ICON = new QIcon(":/icons/childrenVisibleSmall_v2.svg");
+    ANIMATOR_CHILDREN_HIDDEN_ICON = new QIcon(":/icons/childrenHiddenSmall_v2.svg");
+    LOCKED_ICON = new QIcon(":/icons/locked_v2.svg");
+    UNLOCKED_ICON = new QIcon(":/icons/unlocked_v2.svg");
+    MUTED_ICON = new QIcon(":/icons/muted.svg");
+    UNMUTED_ICON = new QIcon(":/icons/unmuted.svg");
+    ANIMATOR_RECORDING_ICON = new QIcon(":/icons/recording.svg");
+    ANIMATOR_NOT_RECORDING_ICON = new QIcon(":/icons/notRecording.svg");
+    ANIMATOR_DESCENDANT_RECORDING_ICON = new QIcon(":/icons/childRecording.svg");
+    C_ICON = new QIcon(":/icons/c.svg");
+    G_ICON = new QIcon(":/icons/g.svg");
+    CG_ICON = new QIcon(":/icons/cg.svg");
+    GRAPH_PROPERTY_ICON = new QIcon(":/icons/noInterpolation/graphProperty.png"); // TODO svg
+    PROMOTE_TO_LAYER_ICON = new QIcon(":/icons/promoteToLayer_v2.svg");
+
     sStaticPixmapsLoaded = true;
 }
 
@@ -603,6 +643,25 @@ void BoxSingleWidget::clearStaticPixmaps() {
     delete G_PIXMAP;
     delete CG_PIXMAP;
     delete GRAPH_PROPERTY;
+
+    delete VISIBLE_ICON;
+    delete INVISIBLE_ICON;
+    delete BOX_CHILDREN_VISIBLE_ICON;
+    delete BOX_CHILDREN_HIDDEN_ICON;
+    delete ANIMATOR_CHILDREN_VISIBLE_ICON;
+    delete ANIMATOR_CHILDREN_HIDDEN_ICON;
+    delete LOCKED_ICON;
+    delete UNLOCKED_ICON;
+    delete MUTED_ICON;
+    delete UNMUTED_ICON;
+    delete ANIMATOR_RECORDING_ICON;
+    delete ANIMATOR_NOT_RECORDING_ICON;
+    delete ANIMATOR_DESCENDANT_RECORDING_ICON;
+    delete PROMOTE_TO_LAYER_ICON;
+    delete C_ICON;
+    delete G_ICON;
+    delete CG_ICON;
+    delete GRAPH_PROPERTY_ICON;
 }
 
 void BoxSingleWidget::mousePressEvent(QMouseEvent *event) {

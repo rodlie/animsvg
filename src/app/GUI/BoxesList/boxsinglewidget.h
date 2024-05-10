@@ -26,6 +26,7 @@
 #ifndef BOXSINGLEWIDGET_H
 #define BOXSINGLEWIDGET_H
 
+#include "GUI/boxeslistactionbutton.h"
 #include "optimalscrollarena/singlewidget.h"
 #include <QLabel>
 #include <QHBoxLayout>
@@ -73,6 +74,25 @@ public:
     static QPixmap* CG_PIXMAP;
     static QPixmap* GRAPH_PROPERTY;
     static QPixmap* PROMOTE_TO_LAYER_PIXMAP;
+
+    static QIcon* VISIBLE_ICON;
+    static QIcon* INVISIBLE_ICON;
+    static QIcon* BOX_CHILDREN_VISIBLE_ICON;
+    static QIcon* BOX_CHILDREN_HIDDEN_ICON;
+    static QIcon* ANIMATOR_CHILDREN_VISIBLE_ICON;
+    static QIcon* ANIMATOR_CHILDREN_HIDDEN_ICON;
+    static QIcon* LOCKED_ICON;
+    static QIcon* UNLOCKED_ICON;
+    static QIcon* MUTED_ICON;
+    static QIcon* UNMUTED_ICON;
+    static QIcon* ANIMATOR_RECORDING_ICON;
+    static QIcon* ANIMATOR_NOT_RECORDING_ICON;
+    static QIcon* ANIMATOR_DESCENDANT_RECORDING_ICON;
+    static QIcon* C_ICON;
+    static QIcon* G_ICON;
+    static QIcon* CG_ICON;
+    static QIcon* GRAPH_PROPERTY_ICON;
+    static QIcon* PROMOTE_TO_LAYER_ICON;
 
     static bool sStaticPixmapsLoaded;
     static void loadStaticPixmaps();
@@ -139,7 +159,7 @@ private:
 
     PixmapActionButton *mRecordButton;
     PixmapActionButton *mContentButton;
-    PixmapActionButton *mVisibleButton;
+    IconActionButton *mVisibleButton;
     PixmapActionButton *mLockedButton;
     PixmapActionButton *mHwSupportButton;
     ColorAnimatorButton *mColorButton;
