@@ -148,7 +148,8 @@ BoxSingleWidget::BoxSingleWidget(BoxScroller * const parent)
                 return BoxSingleWidget::ANIMATOR_RECORDING_ICON;
             }
             return BoxSingleWidget::ANIMATOR_NOT_RECORDING_ICON;
-        } else { return static_cast<QIcon*>(nullptr); }
+        }
+        return static_cast<QIcon*>(nullptr);
     });
 
     mMainLayout->addWidget(mRecordButton);
@@ -185,62 +186,63 @@ BoxSingleWidget::BoxSingleWidget(BoxScroller * const parent)
         const auto target = mTarget->getTarget();
         if (const auto ebos = enve_cast<eBoxOrSound*>(target)) {
             if (enve_cast<eSound*>(target)) {
-                if (ebos->isVisible()) {
-                    return BoxSingleWidget::UNMUTED_ICON;
-                } else { return BoxSingleWidget::MUTED_ICON; }
-            } else if (ebos->isVisible()) {
-                return BoxSingleWidget::VISIBLE_ICON;
-            } else { return BoxSingleWidget::INVISIBLE_ICON; }
+                if (ebos->isVisible()) { return BoxSingleWidget::UNMUTED_ICON; }
+                return BoxSingleWidget::MUTED_ICON;
+            } else if (ebos->isVisible()) { return BoxSingleWidget::VISIBLE_ICON; }
+            return BoxSingleWidget::INVISIBLE_ICON;
         } else if (const auto eEff = enve_cast<eEffect*>(target)) {
-            if (eEff->isVisible()) {
-                return BoxSingleWidget::VISIBLE_ICON;
-            } else { return BoxSingleWidget::INVISIBLE_ICON; }
+            if (eEff->isVisible()) { return BoxSingleWidget::VISIBLE_ICON; }
+            return BoxSingleWidget::INVISIBLE_ICON;
         } else if (enve_cast<GraphAnimator*>(target)) {
             const auto bsvt = static_cast<BoxScroller*>(mParent);
             const auto keysView = bsvt->getKeysView();
             if (keysView) { return BoxSingleWidget::GRAPH_PROPERTY_ICON; }
             return static_cast<QIcon*>(nullptr);
-        } else { return static_cast<QIcon*>(nullptr); }
+        }
+        return static_cast<QIcon*>(nullptr);
     });
 
     mMainLayout->addWidget(mVisibleButton);
     connect(mVisibleButton, &BoxesListIconActionButton::pressed,
             this, &BoxSingleWidget::switchBoxVisibleAction);
 
-    mLockedButton = new PixmapActionButton(this);
-    mLockedButton->setPixmapChooser([this]() {
-        if(!mTarget) return static_cast<QPixmap*>(nullptr);
+    mLockedButton = new IconActionButton(this);
+    mLockedButton->setIconChooser([this]() {
+        if (!mTarget) { return static_cast<QIcon*>(nullptr); }
         const auto target = mTarget->getTarget();
-        if(const auto box = enve_cast<BoundingBox*>(target)) {
-            if(box->isLocked()) {
-                return BoxSingleWidget::LOCKED_PIXMAP;
-            } else return BoxSingleWidget::UNLOCKED_PIXMAP;
-        } else return static_cast<QPixmap*>(nullptr);
+        if (const auto box = enve_cast<BoundingBox*>(target)) {
+            if (box->isLocked()) { return BoxSingleWidget::LOCKED_ICON; }
+            return BoxSingleWidget::UNLOCKED_ICON;
+        }
+        return static_cast<QIcon*>(nullptr);
     });
 
     mMainLayout->addWidget(mLockedButton);
-    connect(mLockedButton, &BoxesListActionButton::pressed,
+    connect(mLockedButton, &BoxesListIconActionButton::pressed,
             this, &BoxSingleWidget::switchBoxLockedAction);
 
-    mHwSupportButton = new PixmapActionButton(this);
-    // mHwSupportButton->setToolTip(gSingleLineTooltip("GPU/CPU Processing"));
-    mHwSupportButton->setPixmapChooser([this]() {
-        if(!mTarget) return static_cast<QPixmap*>(nullptr);
+    mHwSupportButton = new IconActionButton(this);
+    mHwSupportButton->setToolTip(tr("Adjust GPU/CPU Processing"));
+    mHwSupportButton->setIconChooser([this]() {
+        if (!mTarget) { return static_cast<QIcon*>(nullptr); }
         const auto target = mTarget->getTarget();
-        if(const auto rEff = enve_cast<RasterEffect*>(target)) {
-            if(rEff->instanceHwSupport() == HardwareSupport::cpuOnly) {
-                return BoxSingleWidget::C_PIXMAP;
-            } else if(rEff->instanceHwSupport() == HardwareSupport::gpuOnly) {
-                return BoxSingleWidget::G_PIXMAP;
-            } else return BoxSingleWidget::CG_PIXMAP;
-        } else return static_cast<QPixmap*>(nullptr);
+        if (const auto rEff = enve_cast<RasterEffect*>(target)) {
+            if (rEff->instanceHwSupport() == HardwareSupport::cpuOnly) {
+                return BoxSingleWidget::C_ICON;
+            } else if (rEff->instanceHwSupport() == HardwareSupport::gpuOnly) {
+                return BoxSingleWidget::G_ICON;
+            }
+            return BoxSingleWidget::CG_ICON;
+        }
+        return static_cast<QIcon*>(nullptr);
     });
 
     mMainLayout->addWidget(mHwSupportButton);
-    connect(mHwSupportButton, &BoxesListActionButton::pressed, this, [this]() {
-        if(!mTarget) return;
+#pragma message("FIXME: HwSupportButton might segfault if shader effect")
+    connect(mHwSupportButton, &BoxesListIconActionButton::pressed, this, [this]() {
+        if (!mTarget) { return; }
         const auto target = mTarget->getTarget();
-        if(const auto rEff = enve_cast<RasterEffect*>(target)) {
+        if (const auto rEff = enve_cast<RasterEffect*>(target)) {
             rEff->switchInstanceHwSupport();
             Document::sInstance->actionFinished();
         }
@@ -250,21 +252,21 @@ BoxSingleWidget::BoxSingleWidget(BoxScroller * const parent)
     mMainLayout->addWidget(mFillWidget);
     mFillWidget->setObjectName("transparentWidget");
 
-    mPromoteToLayerButton = new PixmapActionButton(this);
-    // mHwSupportButton->setToolTip(gSingleLineTooltip("GPU/CPU Processing"));
-    mPromoteToLayerButton->setPixmapChooser([this]() {
+    mPromoteToLayerButton = new IconActionButton(this);
+    mPromoteToLayerButton->setToolTip(tr("Promote to Layer"));
+    mPromoteToLayerButton->setIconChooser([this]() {
         const auto targetGroup = getPromoteTargetGroup();
-        if(targetGroup) {
-            return BoxSingleWidget::PROMOTE_TO_LAYER_PIXMAP;
-        } else return static_cast<QPixmap*>(nullptr);
+        if (targetGroup) {
+            return BoxSingleWidget::PROMOTE_TO_LAYER_ICON;
+        }
+        return static_cast<QIcon*>(nullptr);
     });
-    mPromoteToLayerButton->setToolTip("Promote to Layer");
 
     mMainLayout->addWidget(mPromoteToLayerButton);
-    connect(mPromoteToLayerButton, &BoxesListActionButton::pressed,
+    connect(mPromoteToLayerButton, &BoxesListIconActionButton::pressed,
             this, [this]() {
         const auto targetGroup = getPromoteTargetGroup();
-        if(targetGroup) {
+        if (targetGroup) {
             targetGroup->promoteToLayer();
             Document::sInstance->actionFinished();
         }

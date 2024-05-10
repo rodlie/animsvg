@@ -28,6 +28,7 @@
 
 #include "../core_global.h"
 #include "GUI/global.h"
+#include "Private/esettings.h"
 
 #include <functional>
 
@@ -74,6 +75,9 @@ public:
         setObjectName("FlatButton");
         eSizesUI::widget.add(this, [this](const int size) {
             setFixedSize(size, size);
+            //if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+                setIconSize(QSize(size, size));
+            //}
         });
     }
 };

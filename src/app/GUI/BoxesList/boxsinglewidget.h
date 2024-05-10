@@ -160,8 +160,8 @@ private:
     IconActionButton *mRecordButton;
     IconActionButton *mContentButton;
     IconActionButton *mVisibleButton;
-    PixmapActionButton *mLockedButton;
-    PixmapActionButton *mHwSupportButton;
+    IconActionButton *mLockedButton;
+    IconActionButton *mHwSupportButton;
     ColorAnimatorButton *mColorButton;
     BoxTargetWidget *mBoxTargetWidget;
 
@@ -171,7 +171,7 @@ private:
     QrealAnimatorValueSlider *mValueSlider;
     QrealAnimatorValueSlider *mSecondValueSlider;
 
-    PixmapActionButton *mPromoteToLayerButton;
+    IconActionButton *mPromoteToLayerButton;
     eComboBox *mPropertyComboBox;
     eComboBox *mBlendModeCombo;
     eComboBox *mPathBlendModeCombo;
