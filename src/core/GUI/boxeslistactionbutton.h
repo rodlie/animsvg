@@ -71,6 +71,7 @@ class CORE_EXPORT BoxesListIconActionButton : public QPushButton
 public:
     BoxesListIconActionButton(QWidget *parent = nullptr) : QPushButton(parent)
     {
+        setFocusPolicy(Qt::NoFocus);
         setObjectName("FlatButton");
         eSizesUI::widget.add(this, [this](const int size) {
             setFixedSize(size, size);
