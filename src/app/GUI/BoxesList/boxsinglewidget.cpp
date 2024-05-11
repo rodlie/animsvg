@@ -575,22 +575,22 @@ void BoxSingleWidget::loadStaticPixmaps()
 
     VISIBLE_ICON = new QIcon(QIcon::fromTheme("visible"));
     INVISIBLE_ICON = new QIcon(QIcon::fromTheme("hidden"));
-    BOX_CHILDREN_VISIBLE_ICON = new QIcon(":/icons/childrenVisible_v2.svg");
-    BOX_CHILDREN_HIDDEN_ICON = new QIcon(":/icons/childrenHidden_v2.svg");
-    ANIMATOR_CHILDREN_VISIBLE_ICON = new QIcon(":/icons/childrenVisibleSmall_v2.svg");
-    ANIMATOR_CHILDREN_HIDDEN_ICON = new QIcon(":/icons/childrenHiddenSmall_v2.svg");
+    BOX_CHILDREN_VISIBLE_ICON = new QIcon(QIcon::fromTheme("visible-child"));
+    BOX_CHILDREN_HIDDEN_ICON = new QIcon(QIcon::fromTheme("hidden-child"));
+    ANIMATOR_CHILDREN_VISIBLE_ICON = new QIcon(QIcon::fromTheme("visible-child-small"));
+    ANIMATOR_CHILDREN_HIDDEN_ICON = new QIcon(QIcon::fromTheme("hidden-child-small"));
     LOCKED_ICON = new QIcon(QIcon::fromTheme("locked"));
     UNLOCKED_ICON = new QIcon(QIcon::fromTheme("unlocked"));
-    MUTED_ICON = new QIcon(":/icons/muted.svg");
-    UNMUTED_ICON = new QIcon(":/icons/unmuted.svg");
-    ANIMATOR_RECORDING_ICON = new QIcon(":/icons/recording.svg");
-    ANIMATOR_NOT_RECORDING_ICON = new QIcon(":/icons/notRecording.svg");
-    ANIMATOR_DESCENDANT_RECORDING_ICON = new QIcon(":/icons/childRecording.svg");
-    C_ICON = new QIcon(":/icons/c.svg");
-    G_ICON = new QIcon(":/icons/g.svg");
-    CG_ICON = new QIcon(":/icons/cg.svg");
-    GRAPH_PROPERTY_ICON = new QIcon(":/icons/noInterpolation/graphProperty.png"); // TODO svg
-    PROMOTE_TO_LAYER_ICON = new QIcon(":/icons/promoteToLayer_v2.svg");
+    MUTED_ICON = new QIcon(QIcon::fromTheme("muted"));
+    UNMUTED_ICON = new QIcon(QIcon::fromTheme("unmuted"));
+    ANIMATOR_RECORDING_ICON = new QIcon(QIcon::fromTheme("record"));
+    ANIMATOR_NOT_RECORDING_ICON = new QIcon(QIcon::fromTheme("norecord"));
+    ANIMATOR_DESCENDANT_RECORDING_ICON = new QIcon(QIcon::fromTheme("record-child"));
+    C_ICON = new QIcon(QIcon::fromTheme("cpu-active"));
+    G_ICON = new QIcon(QIcon::fromTheme("gpu-active"));
+    CG_ICON = new QIcon(QIcon::fromTheme("cpu-gpu"));
+    GRAPH_PROPERTY_ICON = new QIcon(":/icons/noInterpolation/graphProperty.png"); // TODO
+    PROMOTE_TO_LAYER_ICON = new QIcon(QIcon::fromTheme("layer"));
 
     sStaticPixmapsLoaded = true;
 }
