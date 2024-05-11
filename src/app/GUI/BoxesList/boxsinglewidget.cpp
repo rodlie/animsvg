@@ -573,14 +573,14 @@ void BoxSingleWidget::loadStaticPixmaps()
 {
     if (sStaticPixmapsLoaded) { return; }
 
-    VISIBLE_ICON = new QIcon(":/icons/visible_v2.svg");
-    INVISIBLE_ICON = new QIcon(":/icons/hidden_v2.svg");
+    VISIBLE_ICON = new QIcon(QIcon::fromTheme("visible"));
+    INVISIBLE_ICON = new QIcon(QIcon::fromTheme("hidden"));
     BOX_CHILDREN_VISIBLE_ICON = new QIcon(":/icons/childrenVisible_v2.svg");
     BOX_CHILDREN_HIDDEN_ICON = new QIcon(":/icons/childrenHidden_v2.svg");
     ANIMATOR_CHILDREN_VISIBLE_ICON = new QIcon(":/icons/childrenVisibleSmall_v2.svg");
     ANIMATOR_CHILDREN_HIDDEN_ICON = new QIcon(":/icons/childrenHiddenSmall_v2.svg");
-    LOCKED_ICON = new QIcon(":/icons/locked_v2.svg");
-    UNLOCKED_ICON = new QIcon(":/icons/unlocked_v2.svg");
+    LOCKED_ICON = new QIcon(QIcon::fromTheme("locked"));
+    UNLOCKED_ICON = new QIcon(QIcon::fromTheme("unlocked"));
     MUTED_ICON = new QIcon(":/icons/muted.svg");
     UNMUTED_ICON = new QIcon(":/icons/unmuted.svg");
     ANIMATOR_RECORDING_ICON = new QIcon(":/icons/recording.svg");

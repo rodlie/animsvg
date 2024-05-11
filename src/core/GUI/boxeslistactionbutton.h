@@ -74,9 +74,9 @@ public:
         setObjectName("FlatButton");
         eSizesUI::widget.add(this, [this](const int size) {
             setFixedSize(size, size);
-            //if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+            if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
                 setIconSize(QSize(size, size));
-            //}
+            }
         });
     }
 };
