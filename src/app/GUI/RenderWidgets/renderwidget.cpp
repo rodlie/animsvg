@@ -229,8 +229,9 @@ void RenderWidget::handleRenderState(const RenderState &state)
     emit renderStateChanged(renderStateFormat, mState);
 
     if (isIdle) {
-        mRenderProgressBar->setValue(0);
         emit progress(mRenderProgressBar->maximum(), mRenderProgressBar->maximum());
+        mRenderProgressBar->setValue(0);
+        mRenderProgressBar->setRange(0, 100);
     }
 }
 
