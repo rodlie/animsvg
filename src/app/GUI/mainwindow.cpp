@@ -629,6 +629,12 @@ void MainWindow::setupMenuBar()
         m->clearMemory();
         mTimeline->update();
     }, QKeySequence(tr("Ctrl+R")));
+    mEditMenu->addSeparator();
+    mEditMenu->addAction(tr("Clear Recent Files"), [this]() {
+        mRecentFiles.clear();
+        writeRecentFiles();
+        updateRecentMenu();
+    });
 
 //    mSelectSameMenu = mEditMenu->addMenu("Select Same");
 //    mSelectSameMenu->addAction("Fill and Stroke");
