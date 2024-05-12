@@ -38,6 +38,7 @@
  <file>icons/hicolor/16x16/actions/file_new.png</file>
  <file>icons/hicolor/16x16/actions/file_sound.png</file>
  <file>icons/hicolor/16x16/actions/fill_none.png</file>
+ <file>icons/hicolor/16x16/actions/filter.png</file>
  <file>icons/hicolor/16x16/actions/fund.png</file>
  <file>icons/hicolor/16x16/actions/gpu-active.png</file>
  <file>icons/hicolor/16x16/actions/graph.png</file>
@@ -153,6 +154,7 @@
  <file>icons/hicolor/22x22/actions/file_new.png</file>
  <file>icons/hicolor/22x22/actions/file_sound.png</file>
  <file>icons/hicolor/22x22/actions/fill_none.png</file>
+ <file>icons/hicolor/22x22/actions/filter.png</file>
  <file>icons/hicolor/22x22/actions/fund.png</file>
  <file>icons/hicolor/22x22/actions/gpu-active.png</file>
  <file>icons/hicolor/22x22/actions/graph.png</file>
@@ -268,6 +270,7 @@
  <file>icons/hicolor/32x32/actions/file_new.png</file>
  <file>icons/hicolor/32x32/actions/file_sound.png</file>
  <file>icons/hicolor/32x32/actions/fill_none.png</file>
+ <file>icons/hicolor/32x32/actions/filter.png</file>
  <file>icons/hicolor/32x32/actions/fund.png</file>
  <file>icons/hicolor/32x32/actions/gpu-active.png</file>
  <file>icons/hicolor/32x32/actions/graph.png</file>
@@ -383,6 +386,7 @@
  <file>icons/hicolor/48x48/actions/file_new.png</file>
  <file>icons/hicolor/48x48/actions/file_sound.png</file>
  <file>icons/hicolor/48x48/actions/fill_none.png</file>
+ <file>icons/hicolor/48x48/actions/filter.png</file>
  <file>icons/hicolor/48x48/actions/fund.png</file>
  <file>icons/hicolor/48x48/actions/gpu-active.png</file>
  <file>icons/hicolor/48x48/actions/graph.png</file>
@@ -498,6 +502,7 @@
  <file>icons/hicolor/64x64/actions/file_new.png</file>
  <file>icons/hicolor/64x64/actions/file_sound.png</file>
  <file>icons/hicolor/64x64/actions/fill_none.png</file>
+ <file>icons/hicolor/64x64/actions/filter.png</file>
  <file>icons/hicolor/64x64/actions/fund.png</file>
  <file>icons/hicolor/64x64/actions/gpu-active.png</file>
  <file>icons/hicolor/64x64/actions/graph.png</file>
@@ -613,6 +618,7 @@
  <file>icons/hicolor/96x96/actions/file_new.png</file>
  <file>icons/hicolor/96x96/actions/file_sound.png</file>
  <file>icons/hicolor/96x96/actions/fill_none.png</file>
+ <file>icons/hicolor/96x96/actions/filter.png</file>
  <file>icons/hicolor/96x96/actions/fund.png</file>
  <file>icons/hicolor/96x96/actions/gpu-active.png</file>
  <file>icons/hicolor/96x96/actions/graph.png</file>
@@ -728,6 +734,7 @@
  <file>icons/hicolor/128x128/actions/file_new.png</file>
  <file>icons/hicolor/128x128/actions/file_sound.png</file>
  <file>icons/hicolor/128x128/actions/fill_none.png</file>
+ <file>icons/hicolor/128x128/actions/filter.png</file>
  <file>icons/hicolor/128x128/actions/fund.png</file>
  <file>icons/hicolor/128x128/actions/gpu-active.png</file>
  <file>icons/hicolor/128x128/actions/graph.png</file>
@@ -843,6 +850,7 @@
  <file>icons/hicolor/192x192/actions/file_new.png</file>
  <file>icons/hicolor/192x192/actions/file_sound.png</file>
  <file>icons/hicolor/192x192/actions/fill_none.png</file>
+ <file>icons/hicolor/192x192/actions/filter.png</file>
  <file>icons/hicolor/192x192/actions/fund.png</file>
  <file>icons/hicolor/192x192/actions/gpu-active.png</file>
  <file>icons/hicolor/192x192/actions/graph.png</file>
@@ -958,6 +966,7 @@
  <file>icons/hicolor/256x256/actions/file_new.png</file>
  <file>icons/hicolor/256x256/actions/file_sound.png</file>
  <file>icons/hicolor/256x256/actions/fill_none.png</file>
+ <file>icons/hicolor/256x256/actions/filter.png</file>
  <file>icons/hicolor/256x256/actions/fund.png</file>
  <file>icons/hicolor/256x256/actions/gpu-active.png</file>
  <file>icons/hicolor/256x256/actions/graph.png</file>

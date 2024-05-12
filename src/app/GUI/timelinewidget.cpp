@@ -76,8 +76,8 @@ TimelineWidget::TimelineWidget(Document &document,
 
     const auto iconsDir = eSettings::sIconsDir();
 
-    QMenu * const settingsMenu = mCornerMenuBar->addMenu(QIcon::fromTheme("dots"),
-                                                         tr("Settings"));
+    QMenu * const settingsMenu = mCornerMenuBar->addMenu(QIcon::fromTheme("filter"),
+                                                         tr("Filters"));
     QMenu * const objectsMenu = settingsMenu->addMenu(tr("State"));
 
     const auto ruleActionAdder = [this, objectsMenu](
