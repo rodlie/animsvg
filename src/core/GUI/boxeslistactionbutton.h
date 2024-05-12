@@ -27,9 +27,15 @@
 #define BOXESLISTACTIONBUTTON_H
 
 #include "../core_global.h"
+#include "GUI/global.h"
+#include "Private/esettings.h"
 
-#include <QWidget>
+#include <functional>
 
+#include <QPaintEvent>
+#include <QPushButton>
+
+// LEGACY (remove before v1)
 class CORE_EXPORT BoxesListActionButton : public QWidget {
     Q_OBJECT
 public:
@@ -43,7 +49,7 @@ protected:
 signals:
     void pressed();
 };
-#include <functional>
+
 class CORE_EXPORT PixmapActionButton : public BoxesListActionButton {
 public:
     PixmapActionButton(QWidget * const parent = nullptr) :
@@ -58,5 +64,43 @@ private:
     std::function<QPixmap*()> mPixmapChooser;
 };
 
+// NEW
+class CORE_EXPORT BoxesListIconActionButton : public QPushButton
+{
+    Q_OBJECT
+public:
+    BoxesListIconActionButton(QWidget *parent = nullptr) : QPushButton(parent)
+    {
+        setFocusPolicy(Qt::NoFocus);
+        setObjectName("FlatButton");
+        eSizesUI::widget.add(this, [this](const int size) {
+            setFixedSize(size, size);
+            if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+                setIconSize(QSize(size, size));
+            }
+        });
+    }
+};
+
+class CORE_EXPORT IconActionButton : public BoxesListIconActionButton
+{
+public:
+    IconActionButton(QWidget *parent = nullptr) : BoxesListIconActionButton(parent) {}
+    void setIconChooser(const std::function<QIcon*()>& func)
+    {
+        mIconChooser = func;
+    }
+protected:
+    void paintEvent(QPaintEvent *event)
+    {
+        if (!mIconChooser) { return; }
+        const auto ico = mIconChooser();
+        if (!ico) { return; }
+        setIcon(*ico);
+        BoxesListIconActionButton::paintEvent(event);
+    }
+private:
+    std::function<QIcon*()> mIconChooser;
+};
 
 #endif // BOXESLISTACTIONBUTTON_H

@@ -53,24 +53,24 @@
 
 #include "typemenu.h"
 
-QPixmap* BoxSingleWidget::VISIBLE_PIXMAP;
-QPixmap* BoxSingleWidget::INVISIBLE_PIXMAP;
-QPixmap* BoxSingleWidget::BOX_CHILDREN_VISIBLE;
-QPixmap* BoxSingleWidget::BOX_CHILDREN_HIDDEN;
-QPixmap* BoxSingleWidget::ANIMATOR_CHILDREN_VISIBLE;
-QPixmap* BoxSingleWidget::ANIMATOR_CHILDREN_HIDDEN;
-QPixmap* BoxSingleWidget::LOCKED_PIXMAP;
-QPixmap* BoxSingleWidget::UNLOCKED_PIXMAP;
-QPixmap* BoxSingleWidget::MUTED_PIXMAP;
-QPixmap* BoxSingleWidget::UNMUTED_PIXMAP;
-QPixmap* BoxSingleWidget::ANIMATOR_RECORDING;
-QPixmap* BoxSingleWidget::ANIMATOR_NOT_RECORDING;
-QPixmap* BoxSingleWidget::ANIMATOR_DESCENDANT_RECORDING;
-QPixmap* BoxSingleWidget::C_PIXMAP;
-QPixmap* BoxSingleWidget::G_PIXMAP;
-QPixmap* BoxSingleWidget::CG_PIXMAP;
-QPixmap* BoxSingleWidget::GRAPH_PROPERTY;
-QPixmap* BoxSingleWidget::PROMOTE_TO_LAYER_PIXMAP;
+QIcon* BoxSingleWidget::VISIBLE_ICON;
+QIcon* BoxSingleWidget::INVISIBLE_ICON;
+QIcon* BoxSingleWidget::BOX_CHILDREN_VISIBLE_ICON;
+QIcon* BoxSingleWidget::BOX_CHILDREN_HIDDEN_ICON;
+QIcon* BoxSingleWidget::ANIMATOR_CHILDREN_VISIBLE_ICON;
+QIcon* BoxSingleWidget::ANIMATOR_CHILDREN_HIDDEN_ICON;
+QIcon* BoxSingleWidget::LOCKED_ICON;
+QIcon* BoxSingleWidget::UNLOCKED_ICON;
+QIcon* BoxSingleWidget::MUTED_ICON;
+QIcon* BoxSingleWidget::UNMUTED_ICON;
+QIcon* BoxSingleWidget::ANIMATOR_RECORDING_ICON;
+QIcon* BoxSingleWidget::ANIMATOR_NOT_RECORDING_ICON;
+QIcon* BoxSingleWidget::ANIMATOR_DESCENDANT_RECORDING_ICON;
+QIcon* BoxSingleWidget::C_ICON;
+QIcon* BoxSingleWidget::G_ICON;
+QIcon* BoxSingleWidget::CG_ICON;
+QIcon* BoxSingleWidget::GRAPH_PROPERTY_ICON;
+QIcon* BoxSingleWidget::PROMOTE_TO_LAYER_ICON;
 
 bool BoxSingleWidget::sStaticPixmapsLoaded = false;
 
@@ -91,128 +91,139 @@ bool BoxSingleWidget::sStaticPixmapsLoaded = false;
 #include <QMenu>
 #include <QInputDialog>
 
-eComboBox* createCombo(QWidget* const parent) {
+eComboBox* createCombo(QWidget* const parent)
+{
     const auto result = new eComboBox(parent);
     result->setWheelMode(eComboBox::WheelMode::enabledWithCtrl);
     result->setFocusPolicy(Qt::NoFocus);
     return result;
 }
 
-BoxSingleWidget::BoxSingleWidget(BoxScroller * const parent) :
-    SingleWidget(parent), mParent(parent) {
+BoxSingleWidget::BoxSingleWidget(BoxScroller * const parent)
+    : SingleWidget(parent)
+    , mParent(parent)
+{
     mMainLayout = new QHBoxLayout(this);
     setLayout(mMainLayout);
     mMainLayout->setSpacing(0);
     mMainLayout->setContentsMargins(0, 0, 0, 0);
     mMainLayout->setAlignment(Qt::AlignLeft);
 
-    mRecordButton = new PixmapActionButton(this);
-    mRecordButton->setPixmapChooser([this]() {
-        if(!mTarget) return static_cast<QPixmap*>(nullptr);
+    mRecordButton = new IconActionButton(this);
+    mRecordButton->setIconChooser([this]() {
+        if (!mTarget) { return static_cast<QIcon*>(nullptr); }
         const auto target = mTarget->getTarget();
-        if(enve_cast<eBoxOrSound*>(target)) {
-            return static_cast<QPixmap*>(nullptr);
-        } else if(const auto asCAnim = enve_cast<ComplexAnimator*>(target)) {
-            if(asCAnim->anim_isRecording()) {
-                return BoxSingleWidget::ANIMATOR_RECORDING;
+        if (enve_cast<eBoxOrSound*>(target)) {
+            return static_cast<QIcon*>(nullptr);
+        } else if (const auto asCAnim = enve_cast<ComplexAnimator*>(target)) {
+            if (asCAnim->anim_isRecording()) {
+                return BoxSingleWidget::ANIMATOR_RECORDING_ICON;
             } else {
-                if(asCAnim->anim_isDescendantRecording()) {
-                    return BoxSingleWidget::ANIMATOR_DESCENDANT_RECORDING;
-                } else return BoxSingleWidget::ANIMATOR_NOT_RECORDING;
+                if (asCAnim->anim_isDescendantRecording()) {
+                    return BoxSingleWidget::ANIMATOR_DESCENDANT_RECORDING_ICON;
+                }
+                return BoxSingleWidget::ANIMATOR_NOT_RECORDING_ICON;
             }
-        } else if(const auto asAnim = enve_cast<Animator*>(target)) {
-            if(asAnim->anim_isRecording()) {
-                return BoxSingleWidget::ANIMATOR_RECORDING;
-            } else return BoxSingleWidget::ANIMATOR_NOT_RECORDING;
-        } else return static_cast<QPixmap*>(nullptr);
+        } else if (const auto asAnim = enve_cast<Animator*>(target)) {
+            if (asAnim->anim_isRecording()) {
+                return BoxSingleWidget::ANIMATOR_RECORDING_ICON;
+            }
+            return BoxSingleWidget::ANIMATOR_NOT_RECORDING_ICON;
+        }
+        return static_cast<QIcon*>(nullptr);
     });
 
     mMainLayout->addWidget(mRecordButton);
-    connect(mRecordButton, &BoxesListActionButton::pressed,
+    connect(mRecordButton, &BoxesListIconActionButton::pressed,
             this, &BoxSingleWidget::switchRecordingAction);
 
-    mContentButton = new PixmapActionButton(this);
-    mContentButton->setPixmapChooser([this]() {
-        if(!mTarget) return static_cast<QPixmap*>(nullptr);
-        if(mTarget->childrenCount() == 0)
-            return static_cast<QPixmap*>(nullptr);
+    mContentButton = new IconActionButton(this);
+    mContentButton->setIconChooser([this]() {
+        if (!mTarget) { return static_cast<QIcon*>(nullptr); }
+        if (mTarget->childrenCount() == 0) {
+            return static_cast<QIcon*>(nullptr);
+        }
         const auto target = mTarget->getTarget();
-        if(enve_cast<eBoxOrSound*>(target)) {
-            if(mTarget->contentVisible()) {
-                return BoxSingleWidget::BOX_CHILDREN_VISIBLE;
-            } else return BoxSingleWidget::BOX_CHILDREN_HIDDEN;
+        if (enve_cast<eBoxOrSound*>(target)) {
+            if (mTarget->contentVisible()) {
+                return BoxSingleWidget::BOX_CHILDREN_VISIBLE_ICON;
+            }
+            return BoxSingleWidget::BOX_CHILDREN_HIDDEN_ICON;
         } else {
-            if(mTarget->contentVisible()) {
-                return BoxSingleWidget::ANIMATOR_CHILDREN_VISIBLE;
-            } else return BoxSingleWidget::ANIMATOR_CHILDREN_HIDDEN;
+            if (mTarget->contentVisible()) {
+                return BoxSingleWidget::ANIMATOR_CHILDREN_VISIBLE_ICON;
+            }
+            return BoxSingleWidget::ANIMATOR_CHILDREN_HIDDEN_ICON;
         }
     });
 
     mMainLayout->addWidget(mContentButton);
-    connect(mContentButton, &BoxesListActionButton::pressed,
+    connect(mContentButton, &BoxesListIconActionButton::pressed,
             this, &BoxSingleWidget::switchContentVisibleAction);
 
-    mVisibleButton = new PixmapActionButton(this);
-    mVisibleButton->setPixmapChooser([this]() {
-        if(!mTarget) return static_cast<QPixmap*>(nullptr);
+    mVisibleButton = new IconActionButton(this);
+    mVisibleButton->setIconChooser([this]() {
+        if (!mTarget) { return static_cast<QIcon*>(nullptr); }
         const auto target = mTarget->getTarget();
-        if(const auto ebos = enve_cast<eBoxOrSound*>(target)) {
-            if(enve_cast<eSound*>(target)) {
-                if(ebos->isVisible()) {
-                    return BoxSingleWidget::UNMUTED_PIXMAP;
-                } else return BoxSingleWidget::MUTED_PIXMAP;
-            } else if(ebos->isVisible()) {
-                return BoxSingleWidget::VISIBLE_PIXMAP;
-            } else return BoxSingleWidget::INVISIBLE_PIXMAP;
-        } else if(const auto eEff = enve_cast<eEffect*>(target)) {
-            if(eEff->isVisible()) {
-                return BoxSingleWidget::VISIBLE_PIXMAP;
-            } else return BoxSingleWidget::INVISIBLE_PIXMAP;
-        } else if(enve_cast<GraphAnimator*>(target)) {
+        if (const auto ebos = enve_cast<eBoxOrSound*>(target)) {
+            if (enve_cast<eSound*>(target)) {
+                if (ebos->isVisible()) { return BoxSingleWidget::UNMUTED_ICON; }
+                return BoxSingleWidget::MUTED_ICON;
+            } else if (ebos->isVisible()) { return BoxSingleWidget::VISIBLE_ICON; }
+            return BoxSingleWidget::INVISIBLE_ICON;
+        } else if (const auto eEff = enve_cast<eEffect*>(target)) {
+            if (eEff->isVisible()) { return BoxSingleWidget::VISIBLE_ICON; }
+            return BoxSingleWidget::INVISIBLE_ICON;
+        } else if (enve_cast<GraphAnimator*>(target)) {
             const auto bsvt = static_cast<BoxScroller*>(mParent);
             const auto keysView = bsvt->getKeysView();
-            if(keysView) return BoxSingleWidget::GRAPH_PROPERTY;
-            return static_cast<QPixmap*>(nullptr);
-        } else return static_cast<QPixmap*>(nullptr);
+            if (keysView) { return BoxSingleWidget::GRAPH_PROPERTY_ICON; }
+            return static_cast<QIcon*>(nullptr);
+        }
+        return static_cast<QIcon*>(nullptr);
     });
+
     mMainLayout->addWidget(mVisibleButton);
-    connect(mVisibleButton, &BoxesListActionButton::pressed,
+    connect(mVisibleButton, &BoxesListIconActionButton::pressed,
             this, &BoxSingleWidget::switchBoxVisibleAction);
 
-    mLockedButton = new PixmapActionButton(this);
-    mLockedButton->setPixmapChooser([this]() {
-        if(!mTarget) return static_cast<QPixmap*>(nullptr);
+    mLockedButton = new IconActionButton(this);
+    mLockedButton->setIconChooser([this]() {
+        if (!mTarget) { return static_cast<QIcon*>(nullptr); }
         const auto target = mTarget->getTarget();
-        if(const auto box = enve_cast<BoundingBox*>(target)) {
-            if(box->isLocked()) {
-                return BoxSingleWidget::LOCKED_PIXMAP;
-            } else return BoxSingleWidget::UNLOCKED_PIXMAP;
-        } else return static_cast<QPixmap*>(nullptr);
+        if (const auto box = enve_cast<BoundingBox*>(target)) {
+            if (box->isLocked()) { return BoxSingleWidget::LOCKED_ICON; }
+            return BoxSingleWidget::UNLOCKED_ICON;
+        }
+        return static_cast<QIcon*>(nullptr);
     });
 
     mMainLayout->addWidget(mLockedButton);
-    connect(mLockedButton, &BoxesListActionButton::pressed,
+    connect(mLockedButton, &BoxesListIconActionButton::pressed,
             this, &BoxSingleWidget::switchBoxLockedAction);
 
-    mHwSupportButton = new PixmapActionButton(this);
-    // mHwSupportButton->setToolTip(gSingleLineTooltip("GPU/CPU Processing"));
-    mHwSupportButton->setPixmapChooser([this]() {
-        if(!mTarget) return static_cast<QPixmap*>(nullptr);
+    mHwSupportButton = new IconActionButton(this);
+    mHwSupportButton->setToolTip(tr("Adjust GPU/CPU Processing"));
+    mHwSupportButton->setIconChooser([this]() {
+        if (!mTarget) { return static_cast<QIcon*>(nullptr); }
         const auto target = mTarget->getTarget();
-        if(const auto rEff = enve_cast<RasterEffect*>(target)) {
-            if(rEff->instanceHwSupport() == HardwareSupport::cpuOnly) {
-                return BoxSingleWidget::C_PIXMAP;
-            } else if(rEff->instanceHwSupport() == HardwareSupport::gpuOnly) {
-                return BoxSingleWidget::G_PIXMAP;
-            } else return BoxSingleWidget::CG_PIXMAP;
-        } else return static_cast<QPixmap*>(nullptr);
+        if (const auto rEff = enve_cast<RasterEffect*>(target)) {
+            if (rEff->instanceHwSupport() == HardwareSupport::cpuOnly) {
+                return BoxSingleWidget::C_ICON;
+            } else if (rEff->instanceHwSupport() == HardwareSupport::gpuOnly) {
+                return BoxSingleWidget::G_ICON;
+            }
+            return BoxSingleWidget::CG_ICON;
+        }
+        return static_cast<QIcon*>(nullptr);
     });
 
     mMainLayout->addWidget(mHwSupportButton);
-    connect(mHwSupportButton, &BoxesListActionButton::pressed, this, [this]() {
-        if(!mTarget) return;
+#pragma message("FIXME: HwSupportButton might segfault if shader effect")
+    connect(mHwSupportButton, &BoxesListIconActionButton::pressed, this, [this]() {
+        if (!mTarget) { return; }
         const auto target = mTarget->getTarget();
-        if(const auto rEff = enve_cast<RasterEffect*>(target)) {
+        if (const auto rEff = enve_cast<RasterEffect*>(target)) {
             rEff->switchInstanceHwSupport();
             Document::sInstance->actionFinished();
         }
@@ -222,21 +233,21 @@ BoxSingleWidget::BoxSingleWidget(BoxScroller * const parent) :
     mMainLayout->addWidget(mFillWidget);
     mFillWidget->setObjectName("transparentWidget");
 
-    mPromoteToLayerButton = new PixmapActionButton(this);
-    // mHwSupportButton->setToolTip(gSingleLineTooltip("GPU/CPU Processing"));
-    mPromoteToLayerButton->setPixmapChooser([this]() {
+    mPromoteToLayerButton = new IconActionButton(this);
+    mPromoteToLayerButton->setToolTip(tr("Promote to Layer"));
+    mPromoteToLayerButton->setIconChooser([this]() {
         const auto targetGroup = getPromoteTargetGroup();
-        if(targetGroup) {
-            return BoxSingleWidget::PROMOTE_TO_LAYER_PIXMAP;
-        } else return static_cast<QPixmap*>(nullptr);
+        if (targetGroup) {
+            return BoxSingleWidget::PROMOTE_TO_LAYER_ICON;
+        }
+        return static_cast<QIcon*>(nullptr);
     });
-    mPromoteToLayerButton->setToolTip("Promote to Layer");
 
     mMainLayout->addWidget(mPromoteToLayerButton);
-    connect(mPromoteToLayerButton, &BoxesListActionButton::pressed,
+    connect(mPromoteToLayerButton, &BoxesListIconActionButton::pressed,
             this, [this]() {
         const auto targetGroup = getPromoteTargetGroup();
-        if(targetGroup) {
+        if (targetGroup) {
             targetGroup->promoteToLayer();
             Document::sInstance->actionFinished();
         }
@@ -558,50 +569,54 @@ void BoxSingleWidget::setTargetAbstraction(SWT_Abstraction *abs) {
     updateFillTypeBoxVisible();
 }
 
-void BoxSingleWidget::loadStaticPixmaps() {
-    if(sStaticPixmapsLoaded) return;
-    const auto iconsDir = eSettings::sIconsDir();
-    VISIBLE_PIXMAP = new QPixmap(iconsDir + "/visible_v2.png");
-    INVISIBLE_PIXMAP = new QPixmap(iconsDir + "/hidden_v2.png");
-    BOX_CHILDREN_VISIBLE = new QPixmap(iconsDir + "/childrenVisible_v2.png");
-    BOX_CHILDREN_HIDDEN = new QPixmap(iconsDir + "/childrenHidden_v2.png");
-    ANIMATOR_CHILDREN_VISIBLE = new QPixmap(iconsDir + "/childrenVisibleSmall_v2.png");
-    ANIMATOR_CHILDREN_HIDDEN = new QPixmap(iconsDir + "/childrenHiddenSmall_v2.png");
-    LOCKED_PIXMAP = new QPixmap(iconsDir + "/locked_v2.png");
-    UNLOCKED_PIXMAP = new QPixmap(iconsDir + "/unlocked_v2.png");
-    MUTED_PIXMAP = new QPixmap(iconsDir + "/muted.png");
-    UNMUTED_PIXMAP = new QPixmap(iconsDir + "/unmuted.png");
-    ANIMATOR_RECORDING = new QPixmap(iconsDir + "/recording.png");
-    ANIMATOR_NOT_RECORDING = new QPixmap(iconsDir + "/notRecording.png");
-    ANIMATOR_DESCENDANT_RECORDING = new QPixmap(iconsDir + "/childRecording.png");
-    C_PIXMAP = new QPixmap(iconsDir + "/c.png");
-    G_PIXMAP = new QPixmap(iconsDir + "/g.png");
-    CG_PIXMAP = new QPixmap(iconsDir + "/cg.png");
-    GRAPH_PROPERTY = new QPixmap(iconsDir + "/graphProperty.png");
-    PROMOTE_TO_LAYER_PIXMAP = new QPixmap(iconsDir + "/promoteToLayer_v2.png");
+void BoxSingleWidget::loadStaticPixmaps()
+{
+    if (sStaticPixmapsLoaded) { return; }
+
+    VISIBLE_ICON = new QIcon(QIcon::fromTheme("visible"));
+    INVISIBLE_ICON = new QIcon(QIcon::fromTheme("hidden"));
+    BOX_CHILDREN_VISIBLE_ICON = new QIcon(QIcon::fromTheme("visible-child"));
+    BOX_CHILDREN_HIDDEN_ICON = new QIcon(QIcon::fromTheme("hidden-child"));
+    ANIMATOR_CHILDREN_VISIBLE_ICON = new QIcon(QIcon::fromTheme("visible-child-small"));
+    ANIMATOR_CHILDREN_HIDDEN_ICON = new QIcon(QIcon::fromTheme("hidden-child-small"));
+    LOCKED_ICON = new QIcon(QIcon::fromTheme("locked"));
+    UNLOCKED_ICON = new QIcon(QIcon::fromTheme("unlocked"));
+    MUTED_ICON = new QIcon(QIcon::fromTheme("muted"));
+    UNMUTED_ICON = new QIcon(QIcon::fromTheme("unmuted"));
+    ANIMATOR_RECORDING_ICON = new QIcon(QIcon::fromTheme("record"));
+    ANIMATOR_NOT_RECORDING_ICON = new QIcon(QIcon::fromTheme("norecord"));
+    ANIMATOR_DESCENDANT_RECORDING_ICON = new QIcon(QIcon::fromTheme("record-child"));
+    C_ICON = new QIcon(QIcon::fromTheme("cpu-active"));
+    G_ICON = new QIcon(QIcon::fromTheme("gpu-active"));
+    CG_ICON = new QIcon(QIcon::fromTheme("cpu-gpu"));
+    GRAPH_PROPERTY_ICON = new QIcon(":/icons/noInterpolation/graphProperty.png"); // TODO
+    PROMOTE_TO_LAYER_ICON = new QIcon(QIcon::fromTheme("layer"));
+
     sStaticPixmapsLoaded = true;
 }
 
-void BoxSingleWidget::clearStaticPixmaps() {
-    if(!sStaticPixmapsLoaded) return;
-    delete VISIBLE_PIXMAP;
-    delete INVISIBLE_PIXMAP;
-    delete BOX_CHILDREN_VISIBLE;
-    delete BOX_CHILDREN_HIDDEN;
-    delete ANIMATOR_CHILDREN_VISIBLE;
-    delete ANIMATOR_CHILDREN_HIDDEN;
-    delete LOCKED_PIXMAP;
-    delete UNLOCKED_PIXMAP;
-    delete MUTED_PIXMAP;
-    delete UNMUTED_PIXMAP;
-    delete ANIMATOR_RECORDING;
-    delete ANIMATOR_NOT_RECORDING;
-    delete ANIMATOR_DESCENDANT_RECORDING;
-    delete PROMOTE_TO_LAYER_PIXMAP;
-    delete C_PIXMAP;
-    delete G_PIXMAP;
-    delete CG_PIXMAP;
-    delete GRAPH_PROPERTY;
+void BoxSingleWidget::clearStaticPixmaps()
+{
+    if (!sStaticPixmapsLoaded) { return; }
+
+    delete VISIBLE_ICON;
+    delete INVISIBLE_ICON;
+    delete BOX_CHILDREN_VISIBLE_ICON;
+    delete BOX_CHILDREN_HIDDEN_ICON;
+    delete ANIMATOR_CHILDREN_VISIBLE_ICON;
+    delete ANIMATOR_CHILDREN_HIDDEN_ICON;
+    delete LOCKED_ICON;
+    delete UNLOCKED_ICON;
+    delete MUTED_ICON;
+    delete UNMUTED_ICON;
+    delete ANIMATOR_RECORDING_ICON;
+    delete ANIMATOR_NOT_RECORDING_ICON;
+    delete ANIMATOR_DESCENDANT_RECORDING_ICON;
+    delete PROMOTE_TO_LAYER_ICON;
+    delete C_ICON;
+    delete G_ICON;
+    delete CG_ICON;
+    delete GRAPH_PROPERTY_ICON;
 }
 
 void BoxSingleWidget::mousePressEvent(QMouseEvent *event) {
@@ -776,8 +791,8 @@ void BoxSingleWidget::paintEvent(QPaintEvent *) {
                                 keysView->sGetAnimatorColor(id) :
                                 QColor(Qt::black);
                     const QRect visRect(mVisibleButton->pos(),
-                                        GRAPH_PROPERTY->size());
-                    const int adj = qRound(4*qreal(GRAPH_PROPERTY->width())/20);
+                                        mVisibleButton->size());
+                    const int adj = qRound(4*qreal(mVisibleButton->width())/20);
                     p.fillRect(visRect.adjusted(adj, adj, -adj, -adj), color);
                 }
             }

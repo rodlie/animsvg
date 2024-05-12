@@ -175,7 +175,6 @@ set(
     effectsloader.cpp
     eimporters.cpp
     evfileio.cpp
-    iconloader.cpp
     renderhandler.cpp
     GUI/BoxesList/boxsinglewidget.cpp
     GUI/BoxesList/boxscrollwidget.cpp
@@ -228,7 +227,6 @@ set(
     GUI/ColorWidgets/colorpickingwidget.h
     effectsloader.h
     eimporters.h
-    iconloader.h
     renderhandler.h
     GUI/BoxesList/boxsinglewidget.h
     GUI/BoxesList/boxscrollwidget.h

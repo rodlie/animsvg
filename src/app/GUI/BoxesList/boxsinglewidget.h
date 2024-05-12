@@ -26,6 +26,7 @@
 #ifndef BOXSINGLEWIDGET_H
 #define BOXSINGLEWIDGET_H
 
+#include "GUI/boxeslistactionbutton.h"
 #include "optimalscrollarena/singlewidget.h"
 #include <QLabel>
 #include <QHBoxLayout>
@@ -40,8 +41,6 @@ class QrealAnimatorValueSlider;
 class TimelineMovable;
 class Key;
 class BoxTargetWidget;
-class BoxesListActionButton;
-class PixmapActionButton;
 class BoolPropertyWidget;
 class ComboBoxProperty;
 class ColorAnimator;
@@ -55,24 +54,24 @@ public:
 
     void setTargetAbstraction(SWT_Abstraction *abs);
 
-    static QPixmap* VISIBLE_PIXMAP;
-    static QPixmap* INVISIBLE_PIXMAP;
-    static QPixmap* BOX_CHILDREN_VISIBLE;
-    static QPixmap* BOX_CHILDREN_HIDDEN;
-    static QPixmap* ANIMATOR_CHILDREN_VISIBLE;
-    static QPixmap* ANIMATOR_CHILDREN_HIDDEN;
-    static QPixmap* LOCKED_PIXMAP;
-    static QPixmap* UNLOCKED_PIXMAP;
-    static QPixmap* MUTED_PIXMAP;
-    static QPixmap* UNMUTED_PIXMAP;
-    static QPixmap* ANIMATOR_RECORDING;
-    static QPixmap* ANIMATOR_NOT_RECORDING;
-    static QPixmap* ANIMATOR_DESCENDANT_RECORDING;
-    static QPixmap* C_PIXMAP;
-    static QPixmap* G_PIXMAP;
-    static QPixmap* CG_PIXMAP;
-    static QPixmap* GRAPH_PROPERTY;
-    static QPixmap* PROMOTE_TO_LAYER_PIXMAP;
+    static QIcon* VISIBLE_ICON;
+    static QIcon* INVISIBLE_ICON;
+    static QIcon* BOX_CHILDREN_VISIBLE_ICON;
+    static QIcon* BOX_CHILDREN_HIDDEN_ICON;
+    static QIcon* ANIMATOR_CHILDREN_VISIBLE_ICON;
+    static QIcon* ANIMATOR_CHILDREN_HIDDEN_ICON;
+    static QIcon* LOCKED_ICON;
+    static QIcon* UNLOCKED_ICON;
+    static QIcon* MUTED_ICON;
+    static QIcon* UNMUTED_ICON;
+    static QIcon* ANIMATOR_RECORDING_ICON;
+    static QIcon* ANIMATOR_NOT_RECORDING_ICON;
+    static QIcon* ANIMATOR_DESCENDANT_RECORDING_ICON;
+    static QIcon* C_ICON;
+    static QIcon* G_ICON;
+    static QIcon* CG_ICON;
+    static QIcon* GRAPH_PROPERTY_ICON;
+    static QIcon* PROMOTE_TO_LAYER_ICON;
 
     static bool sStaticPixmapsLoaded;
     static void loadStaticPixmaps();
@@ -137,11 +136,11 @@ private:
     bool mDragPressPos = false;
     QPoint mDragStartPos;
 
-    PixmapActionButton *mRecordButton;
-    PixmapActionButton *mContentButton;
-    PixmapActionButton *mVisibleButton;
-    PixmapActionButton *mLockedButton;
-    PixmapActionButton *mHwSupportButton;
+    IconActionButton *mRecordButton;
+    IconActionButton *mContentButton;
+    IconActionButton *mVisibleButton;
+    IconActionButton *mLockedButton;
+    IconActionButton *mHwSupportButton;
     ColorAnimatorButton *mColorButton;
     BoxTargetWidget *mBoxTargetWidget;
 
@@ -151,7 +150,7 @@ private:
     QrealAnimatorValueSlider *mValueSlider;
     QrealAnimatorValueSlider *mSecondValueSlider;
 
-    PixmapActionButton *mPromoteToLayerButton;
+    IconActionButton *mPromoteToLayerButton;
     eComboBox *mPropertyComboBox;
     eComboBox *mBlendModeCombo;
     eComboBox *mPathBlendModeCombo;
