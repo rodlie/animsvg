@@ -1986,6 +1986,7 @@ void MainWindow::updateRecentMenu()
     mRecentMenu->clear();
     for (const auto &path : mRecentFiles) {
         QFileInfo info(path);
+        if (!info.exists()) { continue; }
         mRecentMenu->addAction(QIcon::fromTheme("friction"), info.baseName(), [path, this]() {
             openFile(path);
         });
