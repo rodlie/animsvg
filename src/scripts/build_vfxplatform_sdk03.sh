@@ -42,7 +42,7 @@ LSMASH_V=2.14.5
 X264_V=20180806-2245
 X265_V=3.5
 AOM_V=3.6.1
-FFMPEG_V=4.4.4
+FFMPEG_V=4.2.9
 
 export PATH="${SDK}/bin:${PATH}"
 export PKG_CONFIG_PATH="${SDK}/lib/pkgconfig"
