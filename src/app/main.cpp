@@ -27,6 +27,9 @@
 #include <QProcess>
 #include <QDesktopWidget>
 //#include <QScreen>
+#include <QMessageBox>
+
+#include <libavutil/ffversion.h>
 
 #include "hardwareinfo.h"
 #include "Private/esettings.h"
@@ -280,6 +283,12 @@ int main(int argc, char *argv[])
     RenderHandler renderHandler(document, audioHandler,
                                 *videoEncoder, memoryHandler);
     std::cout << "Render handler initialized" << std::endl;
+
+    if (avformat_version() >= 3812708) {
+        QMessageBox::critical(nullptr,
+                              QObject::tr("Unsupported FFmpeg version"),
+                              QObject::tr("Friction is built against an unsupported FFmpeg version. Use at own risk and don't report any issues upstream."));
+    }
 
     const QString openProject = argc > 1 ? argv[1] : QString();
     MainWindow w(document,
