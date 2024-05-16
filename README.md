@@ -1,6 +1,6 @@
 # Friction
 
-Friction is a powerful and versatile motion graphics application that allows you to create stunning vector and raster animations for web and video platforms with ease. See [friction.graphics](https://friction.graphics) for more information.
+[Friction](https://friction.graphics) is a powerful and versatile motion graphics application that allows you to create stunning vector and raster animations for web and video platforms with ease.
 
 ## Contribute
 
@@ -22,7 +22,7 @@ A new stable branch is cut from `main` on each `X` or `Y` release and is maintai
 
 The next `Z` release usually comes from the latest stable branch (`vX.Y`).
 
-Breaking features under development should be kept in it's own branch until ready to be merged with `main`.
+Features under development should be kept in it's own branch until ready to be merged with `main`.
 
 ## Build
 
@@ -35,7 +35,6 @@ Generic build instructions.
 * python3
 * cmake *(3.12+)*
 * clang *(7+)*
-* MSVC 2017 *(Windows)*
 * Qt *(5.15)*
     * Gui
     * Widgets
@@ -54,12 +53,28 @@ Generic build instructions.
 * expat
 * harfbuzz
 * freetype
-* fontconfig
+* fontconfig *(Linux)*
 * libjpeg-turbo
 * libpng
 * libwebp
 * zlib
 * icu
+
+#### Windows
+
+Special requirements for Windows:
+
+* [Visual Studio 2017 Build Tools](https://aka.ms/vs/15/release/vs_buildtools.exe)
+* `git` must be available in `PATH`
+* `cmake` must be available in `PATH`
+* `python3` must be available in `PATH`
+* [LLVM](https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.7/LLVM-15.0.7-win64.exe) installed to default location
+* Qt 5.15.13 libraries and headers in `friction\src\qt`
+  * See [configure_qt5.bat](src/scripts/configure_qt5.bat) and [build_qt5.bat](src/scripts/build_qt5.bat)
+* QScintilla 2.14.1 libraries and headers in `friction\src\qscintilla`
+  * See [build_qscintilla.bat](src/scripts/build_qscintilla.bat)
+* FFmpeg 4.2.9 libraries and headers in `friction\src\ffmpeg`
+  * See [build_mxe_ffmpeg.sh](src/scripts/build_mxe_ffmpeg.sh) and [mxe](https://github.com/friction2d/mxe)
 
 ### Get
 
@@ -67,7 +82,7 @@ Generic build instructions.
 git clone --recurse-submodules https://github.com/friction2d/friction
 ```
 
-or download a release tarball *(friction-VERSION.tar.bz2)*.
+Or download a release tarball *(friction-VERSION.tar.bz2)*.
 
 ### Build
 
@@ -101,8 +116,6 @@ cmake --build .
 ## License
 
 Copyright &copy; Friction [contributors](https://github.com/friction2d/friction/graphs/contributors).
-
-Friction is a fork of [enve](https://github.com/MaurycyLiebner/enve). enve is copyright &copy; [Maurycy Liebner](https://github.com/MaurycyLiebner).
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
