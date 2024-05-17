@@ -10,7 +10,7 @@ It's always preferred to submit PR's against the `main` branch. If your feature 
 
 ## Branches and versions
 
-Friction uses `X.Y.Z` version numbers and `X.Y` branches.
+Friction uses `X.Y.Z` version numbers and `vX.Y` branches.
 
 * `X` = Major
 * `Y` = Minor
@@ -18,11 +18,9 @@ Friction uses `X.Y.Z` version numbers and `X.Y` branches.
 
 Branch `main` is always the current branch for the next `X` or `Y` release. The `main` branch should not be considered stable, but usable.
 
-A new stable branch is cut from `main` on each `X` or `Y` release and is maintained until a new stable branch is created.
+A new stable branch is cut from `main` on each `X` or `Y` release and is maintained until a new stable branch is created. The next `Z` (patch) release comes from the latest stable branch (`vX.Y`).
 
-The next `Z` release usually comes from the latest stable branch (`vX.Y`).
-
-Features under development should be kept in it's own branch until ready to be merged with `main`.
+Bug and security fixes to `main` will be backported to active stable branches when possible (and within reason).
 
 ## Build
 
