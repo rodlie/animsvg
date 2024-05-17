@@ -4,7 +4,7 @@
 
 ## Contribute
 
-We accept any contributions (in form of a PR). Before submitting a PR it's recommended that you communicate with the developers first (in `Issues` or `Discussions`). Someone might already be working on the same feature/issue, or for some reason the feature is not wanted.
+We accept any contributions (in form of a PR). Before submitting a PR it's recommended that you communicate with the developers first (in [issues](https://github.com/friction2d/friction/issues) or [discussions](https://github.com/friction2d/friction/discussions)). Someone might already be working on the same feature/issue, or for some reason the feature is not wanted.
 
 It's always preferred to submit PR's against the `main` branch. If your feature is experimental, a new branch could be made available for further development before entering `main`.
 
@@ -28,9 +28,9 @@ Features under development should be kept in it's own branch until ready to be m
 
 Generic build instructions.
 
-### Requirements
+### Requirements on Linux
 
-* pkg-config *(Linux)*
+* pkg-config
 * ninja
 * python3
 * cmake *(3.12+)*
@@ -49,20 +49,18 @@ Generic build instructions.
     * libavutil
     * libswscale
     * libswresample
-* libunwind *(Linux)*
+* libunwind
 * expat
 * harfbuzz
 * freetype
-* fontconfig *(Linux)*
+* fontconfig
 * libjpeg-turbo
 * libpng
 * libwebp
 * zlib
 * icu
 
-#### Windows
-
-Special requirements for Windows:
+### Requirements on Windows
 
 * [Visual Studio 2017 Build Tools](https://aka.ms/vs/15/release/vs_buildtools.exe)
 * `git` must be available in `PATH`
@@ -84,15 +82,11 @@ git clone --recurse-submodules https://github.com/friction2d/friction
 
 Or download a release tarball *(friction-VERSION.tar.bz2)*.
 
-### Build
+### Build on Linux
 
 ```
-cd friction
 mkdir build
 cd build
-```
-
-```
 cmake -G Ninja \
 -DCMAKE_BUILD_TYPE=Release \
 -DCMAKE_INSTALL_PREFIX=/usr \
@@ -104,13 +98,31 @@ Note that on some configurations you may need to specify `qscintilla` paths:
 ```
 -DQSCINTILLA_INCLUDE_DIRS=<PATH_TO_QSCINTILLA_INCLUDE_DIR> \
 -DQSCINTILLA_LIBRARIES_DIRS=<PATH_TO_LIBS> \
--DQSCINTILLA_LIBRARIES=<QSCINTILLA_LIBRARY_NAME>
+-DQSCINTILLA_LIBRARIES=<QSCINTILLA_LIBRARY_NAME> \
 ```
 
 Now build:
 
 ```
-cmake --build .
+cmake --build . --config Release
+```
+
+### Build on Windows
+
+All requirements must be installed in the correct folders, this is an example and should be adjusted to fit your enviroment.
+
+```
+call "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\Common7\Tools\VsDevCmd.bat"
+
+set QT_DIR=%cd%\src\qt
+set PATH=C:\Python;%ProgramFiles%\CMake\bin;%ProgramFiles%\Git\bin;%QT_DIR%\bin;%PATH%
+
+mkdir build
+cd build
+
+cmake -G "Visual Studio 15 2017" -A x64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=%QT_DIR%
+
+cmake --build . --config Release
 ```
 
 ## License
