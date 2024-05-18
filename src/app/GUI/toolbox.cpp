@@ -416,6 +416,7 @@ void MainWindow::setupToolBoxNodes()
     mNodeVisibility = new QToolButton(this);
     mNodeVisibility->setObjectName(QString::fromUtf8("ToolButton"));
     mNodeVisibility->setPopupMode(QToolButton::InstantPopup);
+    mNodeVisibility->setFocusPolicy(Qt::NoFocus);
     QAction *nodeVisibilityAction1 = new QAction(QIcon::fromTheme("dissolvedAndNormalNodes"),
                                                  tr("Dissolved and normal nodes"),
                                                  this);
