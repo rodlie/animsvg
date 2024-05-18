@@ -157,18 +157,10 @@ set(
     widgets/wrappernode.h
 )
 
-if(${LINUX_DEPLOY})
-    list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs_lin.qrc)
-elseif(${WIN_DEPLOY})
-    list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs_win.qrc)
-else()
-    list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs.qrc)
-endif()
-
 if(NOT WIN32)
-    add_library(${PROJECT_NAME} STATIC ${HEADERS} ${SOURCES} ${RESOURCES})
+    add_library(${PROJECT_NAME} STATIC ${HEADERS} ${SOURCES})
 else()
-    add_library(${PROJECT_NAME} SHARED ${HEADERS} ${SOURCES} ${RESOURCES})
+    add_library(${PROJECT_NAME} SHARED ${HEADERS} ${SOURCES})
 endif()
 
 set_target_properties(

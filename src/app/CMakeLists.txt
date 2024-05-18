@@ -257,6 +257,13 @@ set(
     hicolor.qrc
     ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing.qrc
 )
+if(${LINUX_DEPLOY})
+    list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs_lin.qrc)
+elseif(${WIN_DEPLOY})
+    list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs_win.qrc)
+else()
+    list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs.qrc)
+endif()
 
 add_executable(
     ${PROJECT_NAME}
