@@ -177,6 +177,8 @@ cd ${BUILD}
 rm -f ${FRICTION_PORTABLE_DIR} || true
 mv ${BUILD}/${FRICTION_PKG} ${FRICTION_PORTABLE_DIR}
 (cd ${FRICTION_PORTABLE_DIR} ;
+cp ${BUILD}/friction/src/scripts/desktop_integration.sh .
+chmod +x desktop_integration.sh
 rm -rf usr
 mv opt/friction/* .
 rm -rf opt share/doc
@@ -189,6 +191,7 @@ cp -a ${FRICTION_PORTABLE}.tar.bz2 ${DISTFILES}/builds/${VERSION}/
 
 # AppImage
 (cd ${FRICTION_PORTABLE_DIR} ;
+rm -f desktop_integration.sh
 rm -f friction
 mkdir usr
 mv lib bin plugins share usr/
