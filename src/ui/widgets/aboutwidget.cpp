@@ -114,7 +114,7 @@ AboutWidget::AboutWidget(QWidget *parent)
     QStringList parties;
     parties << "friction";
 #if defined LINUX_DEPLOY
-    parties << "skia_bundle" << "qt"  << "qscintilla" << "ffmpeg" << "unwind" << "xcb" << "xkbcommon";
+    parties << "skia_bundle" << "gperftools" << "qt"  << "qscintilla" << "ffmpeg" << "unwind" << "xcb" << "xkbcommon";
 #elif defined WIN_DEPLOY
     parties << "skia_bundle" << "qt"  << "qscintilla" << "ffmpeg_win";
 #else
