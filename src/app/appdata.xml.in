@@ -12,9 +12,15 @@
     <p>@PROJECT_DESCRIPTION@</p>
   </description>
   <releases>
+    <release date="2024-05-30" version="0.9.6-rc1">
+      <description>
+        <p>Friction 0.9.6 Release Candidate.</p>
+      </description>
+      <url>https://github.com/friction2d/friction/releases/tag/v0.9.6-rc1</url>
+    </release>
     <release date="2024-04-27" version="0.9.6-beta1">
       <description>
-        <p>This beta includes several changes to the user interface and some additional new features.</p>
+        <p>Friction 0.9.6 Beta.</p>
       </description>
       <url>https://github.com/friction2d/friction/releases/tag/v0.9.6-beta1</url>
     </release>
@@ -51,7 +57,7 @@
   </releases>
   <screenshots>
     <screenshot type="default">
-      <image>https://friction.graphics/assets/screenshots/096/friction-096-beta1.jpg</image>
+      <image>https://friction.graphics/assets/screenshots/096/friction-096-screenshot.jpg</image>
       <caption>Friction user interface</caption>
     </screenshot>
   </screenshots>
