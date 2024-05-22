@@ -28,7 +28,10 @@ HICOLOR_DIR="${CWD}/src/app/icons/hicolor"
 HICOLOR_SVG="${HICOLOR_DIR}/scalable"
 HICOLOR_SIZES="
 16
+17
+20
 22
+24
 32
 48
 64
@@ -81,6 +84,8 @@ for W in $HICOLOR_SIZES; do
             ACT="Actions"
         elif [ "${C}" = "apps" ]; then
             ACT="Applications"
+        elif [ "${C}" = "mimetypes" ]; then
+            ACT="MimeTypes"
         else
             ACT="Unknown"
         fi

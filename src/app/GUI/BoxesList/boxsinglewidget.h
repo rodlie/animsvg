@@ -54,27 +54,27 @@ public:
 
     void setTargetAbstraction(SWT_Abstraction *abs);
 
-    static QIcon* VISIBLE_ICON;
-    static QIcon* INVISIBLE_ICON;
-    static QIcon* BOX_CHILDREN_VISIBLE_ICON;
-    static QIcon* BOX_CHILDREN_HIDDEN_ICON;
-    static QIcon* ANIMATOR_CHILDREN_VISIBLE_ICON;
-    static QIcon* ANIMATOR_CHILDREN_HIDDEN_ICON;
-    static QIcon* LOCKED_ICON;
-    static QIcon* UNLOCKED_ICON;
-    static QIcon* MUTED_ICON;
-    static QIcon* UNMUTED_ICON;
-    static QIcon* ANIMATOR_RECORDING_ICON;
-    static QIcon* ANIMATOR_NOT_RECORDING_ICON;
-    static QIcon* ANIMATOR_DESCENDANT_RECORDING_ICON;
-    static QIcon* C_ICON;
-    static QIcon* G_ICON;
-    static QIcon* CG_ICON;
-    static QIcon* GRAPH_PROPERTY_ICON;
-    static QIcon* PROMOTE_TO_LAYER_ICON;
+    static QPixmap* VISIBLE_ICON;
+    static QPixmap* INVISIBLE_ICON;
+    static QPixmap* BOX_CHILDREN_VISIBLE_ICON;
+    static QPixmap* BOX_CHILDREN_HIDDEN_ICON;
+    static QPixmap* ANIMATOR_CHILDREN_VISIBLE_ICON;
+    static QPixmap* ANIMATOR_CHILDREN_HIDDEN_ICON;
+    static QPixmap* LOCKED_ICON;
+    static QPixmap* UNLOCKED_ICON;
+    static QPixmap* MUTED_ICON;
+    static QPixmap* UNMUTED_ICON;
+    static QPixmap* ANIMATOR_RECORDING_ICON;
+    static QPixmap* ANIMATOR_NOT_RECORDING_ICON;
+    static QPixmap* ANIMATOR_DESCENDANT_RECORDING_ICON;
+    static QPixmap* C_ICON;
+    static QPixmap* G_ICON;
+    static QPixmap* CG_ICON;
+    static QPixmap* GRAPH_PROPERTY_ICON;
+    static QPixmap* PROMOTE_TO_LAYER_ICON;
 
     static bool sStaticPixmapsLoaded;
-    static void loadStaticPixmaps();
+    static void loadStaticPixmaps(int iconSize);
     static void clearStaticPixmaps();
 
     void prp_drawTimelineControls(QPainter * const p,
@@ -136,11 +136,11 @@ private:
     bool mDragPressPos = false;
     QPoint mDragStartPos;
 
-    IconActionButton *mRecordButton;
-    IconActionButton *mContentButton;
-    IconActionButton *mVisibleButton;
-    IconActionButton *mLockedButton;
-    IconActionButton *mHwSupportButton;
+    PixmapActionButton *mRecordButton;
+    PixmapActionButton *mContentButton;
+    PixmapActionButton *mVisibleButton;
+    PixmapActionButton *mLockedButton;
+    PixmapActionButton *mHwSupportButton;
     ColorAnimatorButton *mColorButton;
     BoxTargetWidget *mBoxTargetWidget;
 
@@ -150,7 +150,7 @@ private:
     QrealAnimatorValueSlider *mValueSlider;
     QrealAnimatorValueSlider *mSecondValueSlider;
 
-    IconActionButton *mPromoteToLayerButton;
+    PixmapActionButton *mPromoteToLayerButton;
     eComboBox *mPropertyComboBox;
     eComboBox *mBlendModeCombo;
     eComboBox *mPathBlendModeCombo;

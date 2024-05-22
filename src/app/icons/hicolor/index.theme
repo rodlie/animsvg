@@ -21,7 +21,7 @@ SmallSizes=16
 PanelDefault=32
 PanelSizes=16,32
 
-Directories=16x16/actions,16x16/apps,22x22/actions,22x22/apps,32x32/actions,32x32/apps,48x48/actions,48x48/apps,64x64/actions,64x64/apps,96x96/actions,96x96/apps,128x128/actions,128x128/apps,192x192/actions,192x192/apps,256x256/actions,256x256/apps,
+Directories=16x16/actions,16x16/apps,16x16/mimetypes,17x17/actions,17x17/apps,17x17/mimetypes,20x20/actions,20x20/apps,20x20/mimetypes,22x22/actions,22x22/apps,22x22/mimetypes,24x24/actions,24x24/apps,24x24/mimetypes,32x32/actions,32x32/apps,32x32/mimetypes,48x48/actions,48x48/apps,48x48/mimetypes,64x64/actions,64x64/apps,64x64/mimetypes,96x96/actions,96x96/apps,96x96/mimetypes,128x128/actions,128x128/apps,128x128/mimetypes,192x192/actions,192x192/apps,192x192/mimetypes,256x256/actions,256x256/apps,256x256/mimetypes,
 
 [16x16/actions]
 Context=Actions
@@ -31,6 +31,41 @@ Type=Fixed
 [16x16/apps]
 Context=Applications
 Size=16
+Type=Fixed
+
+[16x16/mimetypes]
+Context=MimeTypes
+Size=16
+Type=Fixed
+
+[17x17/actions]
+Context=Actions
+Size=17
+Type=Fixed
+
+[17x17/apps]
+Context=Applications
+Size=17
+Type=Fixed
+
+[17x17/mimetypes]
+Context=MimeTypes
+Size=17
+Type=Fixed
+
+[20x20/actions]
+Context=Actions
+Size=20
+Type=Fixed
+
+[20x20/apps]
+Context=Applications
+Size=20
+Type=Fixed
+
+[20x20/mimetypes]
+Context=MimeTypes
+Size=20
 Type=Fixed
 
 [22x22/actions]
@@ -43,6 +78,26 @@ Context=Applications
 Size=22
 Type=Fixed
 
+[22x22/mimetypes]
+Context=MimeTypes
+Size=22
+Type=Fixed
+
+[24x24/actions]
+Context=Actions
+Size=24
+Type=Fixed
+
+[24x24/apps]
+Context=Applications
+Size=24
+Type=Fixed
+
+[24x24/mimetypes]
+Context=MimeTypes
+Size=24
+Type=Fixed
+
 [32x32/actions]
 Context=Actions
 Size=32
@@ -50,6 +105,11 @@ Type=Fixed
 
 [32x32/apps]
 Context=Applications
+Size=32
+Type=Fixed
+
+[32x32/mimetypes]
+Context=MimeTypes
 Size=32
 Type=Fixed
 
@@ -63,6 +123,11 @@ Context=Applications
 Size=48
 Type=Fixed
 
+[48x48/mimetypes]
+Context=MimeTypes
+Size=48
+Type=Fixed
+
 [64x64/actions]
 Context=Actions
 Size=64
@@ -70,6 +135,11 @@ Type=Fixed
 
 [64x64/apps]
 Context=Applications
+Size=64
+Type=Fixed
+
+[64x64/mimetypes]
+Context=MimeTypes
 Size=64
 Type=Fixed
 
@@ -83,6 +153,11 @@ Context=Applications
 Size=96
 Type=Fixed
 
+[96x96/mimetypes]
+Context=MimeTypes
+Size=96
+Type=Fixed
+
 [128x128/actions]
 Context=Actions
 Size=128
@@ -90,6 +165,11 @@ Type=Fixed
 
 [128x128/apps]
 Context=Applications
+Size=128
+Type=Fixed
+
+[128x128/mimetypes]
+Context=MimeTypes
 Size=128
 Type=Fixed
 
@@ -103,6 +183,11 @@ Context=Applications
 Size=192
 Type=Fixed
 
+[192x192/mimetypes]
+Context=MimeTypes
+Size=192
+Type=Fixed
+
 [256x256/actions]
 Context=Actions
 Size=256
@@ -110,6 +195,11 @@ Type=Fixed
 
 [256x256/apps]
 Context=Applications
+Size=256
+Type=Fixed
+
+[256x256/mimetypes]
+Context=MimeTypes
 Size=256
 Type=Fixed
 

@@ -185,7 +185,7 @@ MainWindow::MainWindow(Document& document,
         stylesheet.close();
     }
 
-    BoxSingleWidget::loadStaticPixmaps();
+    BoxSingleWidget::loadStaticPixmaps(eSizesUI::widget);
 
     mDocument.setPath("");
 
