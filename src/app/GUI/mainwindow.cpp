@@ -179,12 +179,6 @@ MainWindow::MainWindow(Document& document,
     connect (mAutoSaveTimer, &QTimer::timeout,
              this, &MainWindow::checkAutoSaveTimer);
 
-    QFile stylesheet(QString::fromUtf8(":/styles/%1.qss").arg(AppSupport::getAppName()));
-    if (stylesheet.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        setStyleSheet(stylesheet.readAll());
-        stylesheet.close();
-    }
-
     BoxSingleWidget::loadStaticPixmaps(eSizesUI::widget);
 
     mDocument.setPath("");
@@ -268,6 +262,7 @@ MainWindow::MainWindow(Document& document,
     statusBar()->addPermanentWidget(resolutionLabel);
 
     mResolutionComboBox = new EditableComboBox(this);
+    mResolutionComboBox->setMinimumWidth(100);
     mResolutionComboBox->setFocusPolicy(Qt::ClickFocus);
     mResolutionComboBox->addItem("100 %");
     mResolutionComboBox->addItem("75 %");
