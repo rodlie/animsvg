@@ -262,6 +262,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mToolBar->addWidget(mFrameEndSpin);
 
     mMainLayout->addWidget(mToolBar);
+    mMainLayout->addSpacing(2);
 
     mPlayFromBeginningButton->setEnabled(false);
     mPlayButton->setEnabled(false);
