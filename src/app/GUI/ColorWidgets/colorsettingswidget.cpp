@@ -278,6 +278,7 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     mTabWidget->setFocusPolicy(Qt::NoFocus);
 
     mColorModeCombo = new QComboBox(this);
+    mColorModeCombo->setMinimumWidth(60);
     mColorModeCombo->setFocusPolicy(Qt::NoFocus);
 
     mWidgetsLayout->setAlignment(Qt::AlignTop);
