@@ -117,7 +117,7 @@ public:
 
     void setCanvasMode(const CanvasMode mode);
 
-    Canvas * createNewScene();
+    Canvas * createNewScene(const bool emitCreated = true);
     bool removeScene(const qsptr<Canvas>& scene);
     bool removeScene(const int id);
 
