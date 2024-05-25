@@ -570,7 +570,7 @@ void GraphAnimator::graph_saveSVG(SvgExporter& exp,
                     }
                     const int prevRelFrame = prevKey->getRelFrame();
                     const qreal t = (prevRelFrame - relRange.fMin)/div;
-                    keyTimes << QString::number(t);
+                    keyTimes << QString::number(t).replace("-", "");
                     values << valueGetter(prevRelFrame);
                 }
                 const auto xSeg = getGraphXSegment(prevKey, nextKey);
@@ -595,7 +595,7 @@ void GraphAnimator::graph_saveSVG(SvgExporter& exp,
                                      arg(xKeySplines.c2()).arg(yC2);
                     const qreal relFrame = subSeg.first.p1();
                     const qreal t = (relFrame - relRange.fMin)/div;
-                    keyTimes << QString::number(t);
+                    keyTimes << QString::number(t).replace("-", "");
                     values << valueGetter(relFrame);
                 }
                 if(nextKeyRelFrame >= visRange.fMax) break;
@@ -606,6 +606,11 @@ void GraphAnimator::graph_saveSVG(SvgExporter& exp,
             keySplines << ks.arg(0).arg(0).arg(1).arg(1);
             keyTimes << QString::number(1);
             values << valueGetter(visRange.fMax);
+        }
+
+        // https://github.com/friction2d/friction/issues/165
+        if (parent.tagName() == "path" && !parent.hasAttribute("d")) {
+            parent.setAttribute("d", "M0 0");
         }
 
         anim.setAttribute("calcMode", "spline");
