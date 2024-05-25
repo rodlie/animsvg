@@ -18,6 +18,10 @@
 #
 */
 
+QMenu::item:disabled {
+    background: transparent;
+}
+
 QStatusBar::item,
 QToolBar
 {
