@@ -510,15 +510,12 @@ void MainWindow::setupMenuBar()
                                                   tr("Save Backup", "MenuBar_File"),
                                                   this, &MainWindow::saveBackup);
 
-    const auto exportMenu = mFileMenu->addMenu(QIcon::fromTheme("output"),
-                                               tr("Export", "MenuBar_File"));
-
-    const auto exportSvgAct = exportMenu->addAction(QIcon::fromTheme("seq_preview"),
-                                                    tr("Web Animation (SVG + SMIL)", "MenuBar_File"),
-                                                    this, &MainWindow::exportSVG,
-                                                    QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                                         "exportSVG",
-                                                                                         "Shift+F12").toString()));
+    const auto exportSvgAct = mFileMenu->addAction(QIcon::fromTheme("seq_preview"),
+                                                   tr("Export SVG", "MenuBar_File"),
+                                                   this, &MainWindow::exportSVG,
+                                                   QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                                        "exportSVG",
+                                                                                        "Shift+F12").toString()));
     saveToolBtn->setDefaultAction(mSaveAct);
     saveToolMenu->addAction(saveAsAct);
     saveToolMenu->addAction(saveBackAct);
@@ -1148,6 +1145,8 @@ void MainWindow::setupMenuBar()
     mToolbar->addAction(QIcon::fromTheme("render_animation"),
                         tr("Render"),
                         this, &MainWindow::openRendererWindow);
+
+    mToolbar->addAction(exportSvgAct);
 
     setMenuBar(mMenuBar);
 
