@@ -12,7 +12,13 @@
     <p>@PROJECT_DESCRIPTION@</p>
   </description>
   <releases>
-    <release date="2024-05-30" version="0.9.6-rc1">
+    <release date="2024-05-26" version="0.9.6-rc2">
+      <description>
+        <p>Friction 0.9.6 Release Candidate 2.</p>
+      </description>
+      <url>https://github.com/friction2d/friction/releases/tag/v0.9.6-rc2</url>
+    </release>
+    <release date="2024-05-20" version="0.9.6-rc1">
       <description>
         <p>Friction 0.9.6 Release Candidate.</p>
       </description>
