@@ -65,7 +65,7 @@ Generic build instructions.
 * `cmake` must be available in `PATH`
 * `python3` must be available in `PATH`
 * [LLVM](https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.7/LLVM-15.0.7-win64.exe) installed to default location
-* Qt 5.15.13 libraries and headers in `friction\src\qt`
+* Qt 5.15.14 libraries and headers in `friction\src\qt`
   * See [configure_qt5.bat](src/scripts/configure_qt5.bat) and [build_qt5.bat](src/scripts/build_qt5.bat)
 * QScintilla 2.14.1 libraries and headers in `friction\src\qscintilla`
   * See [build_qscintilla.bat](src/scripts/build_qscintilla.bat)
