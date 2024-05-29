@@ -314,6 +314,25 @@ bool BoundingBox::hasBlendEffects() const {
     return mBlendEffectCollection->ca_hasChildren();
 }
 
+const QStringList BoundingBox::checkRasterEffectsForSVGSupport()
+{
+    QStringList result;
+    const int totalEffects = mRasterEffectsAnimators->ca_getNumberOfChildren();
+    for (int i = 0; i < totalEffects; ++i) {
+        const auto effect = enve_cast<RasterEffect*>(mRasterEffectsAnimators->getChild(i));
+        if (!effect) { continue; }
+        if (!effect->isVisible()) { continue; }
+        bool isSafeForSVG = false;
+        if (const auto blur = enve_cast<BlurEffect*>(effect)) {
+            isSafeForSVG = true;
+        } else if (const auto shadow = enve_cast<ShadowEffect*>(effect)) {
+            isSafeForSVG = true;
+        }
+        if (!isSafeForSVG) { result.append(effect->prp_getName()); }
+    }
+    return result;
+}
+
 void BoundingBox::applyTransformEffects(
         const qreal relFrame,
         qreal& pivotX, qreal& pivotY,
