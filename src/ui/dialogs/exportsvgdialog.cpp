@@ -36,8 +36,10 @@
 #include <QPushButton>
 #include <QMenuBar>
 #include <QDesktopServices>
+#include <QPlainTextEdit>
 
-ExportSvgDialog::ExportSvgDialog(QWidget* const parent)
+ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
+                                 const QString &warnings)
     : QDialog(parent)
 {
     setWindowTitle(tr("Export SVG"));
@@ -86,7 +88,7 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent)
 
     // image options
     QLabel *mImageFormatLabel = new QLabel(tr("Raster Format:"), this);
-    mImageFormatLabel->setToolTip(tr("Image format for raster elements contained in the scene"));
+    mImageFormatLabel->setToolTip(tr("Image format used for raster elements (images/videos) contained in the scene"));
     mImageFormat = new QComboBox(this);
     mImageFormat->setToolTip(mImageFormatLabel->toolTip());
     mImageFormat->addItem(tr("PNG"));
@@ -124,16 +126,16 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent)
     QHBoxLayout *mImageOptionsLayout = new QHBoxLayout(mImageOptions);
     mImageOptionsLayout->setContentsMargins(0, 0, 0, 0);
 
-    mImageOptionsLayout->addWidget(mImageFormatLabel);
     mImageOptionsLayout->addWidget(mImageFormat);
     mImageOptionsLayout->addWidget(mImageQuality);
+    twoColLayout->addPair(mImageFormatLabel, mImageOptions);
 
     // settings layout
     settingsLayout->addLayout(twoColLayout);
-    settingsLayout->addWidget(mImageOptions);
     settingsLayout->addWidget(mBackground);
     settingsLayout->addWidget(mFixedSize);
     settingsLayout->addWidget(mLoop);
+    settingsLayout->addStretch();
 
     connect(mFirstFrame, qOverload<int>(&QSpinBox::valueChanged),
             mLastFrame, &QSpinBox::setMinimum);
@@ -168,9 +170,21 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent)
 
     connect(buttons, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
+    if (!warnings.isEmpty()) {
+        const auto warnWidget = new QPlainTextEdit(this);
+        warnWidget->setSizePolicy(QSizePolicy::Expanding,
+                                  QSizePolicy::Expanding);
+        warnWidget->setMinimumHeight(100);
+        warnWidget->setMinimumWidth(500);
+        warnWidget->setReadOnly(true);
+        warnWidget->setPlainText(warnings);
+        settingsLayout->addWidget(warnWidget);
+    }
+
     settingsLayout->addWidget(buttons, 0, Qt::AlignBottom);
 
     mPreviewButton = new QPushButton(tr("Preview"), this);
+    mPreviewButton->setIcon(QIcon::fromTheme("seq_preview"));
     mPreviewButton->setObjectName("SVGPreviewButton");
     buttons->addButton(mPreviewButton, QDialogButtonBox::ActionRole);
     connect(mPreviewButton, &QPushButton::released, this, [this]() {
@@ -195,11 +209,12 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent)
 
     const auto settingsWidget = new QWidget(this);
     settingsWidget->setLayout(settingsLayout);
-    settingsWidget->setSizePolicy(QSizePolicy::Fixed,
+    settingsWidget->setSizePolicy(QSizePolicy::Expanding,
                                   QSizePolicy::MinimumExpanding);
 
-    const auto mainLayout = new QHBoxLayout(this);
+    const auto mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(settingsWidget);
+
     setLayout(mainLayout);
 }
 
