@@ -23,6 +23,8 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
+#include "Boxes/svglinkbox.h"
+#include "Boxes/videobox.h"
 #include "canvas.h"
 #include "MovablePoints/pathpivot.h"
 #include "PathEffects/patheffectsinclude.h"
@@ -483,6 +485,61 @@ void Canvas::clearBoxesSelectionList() {
     mSelectedBoxes.clear();
     emit selectedPaintSettingsChanged();
     emit objectSelectionChanged();
+}
+
+const QString Canvas::checkForUnsupportedBoxSVG(BoundingBox * const box)
+{
+    QString result;
+    if (!box) { return result; }
+    qDebug() << "check" << box->prp_getName() << "for SVG support";
+    if (box->hasTransformEffects()) {
+        result.append(QString("- %1 => %2 : %3\n").arg(prp_getName(),
+                                                       box->prp_getName(),
+                                                       tr("Transform effects are unsupported")));
+    }
+    if (box->hasEnabledBlendEffects()) {
+        result.append(QString("- %1 => %2 : %3\n").arg(prp_getName(),
+                                                       box->prp_getName(),
+                                                       tr("Blend effects are unsupported")));
+    }
+    const auto rasterEffects = box->checkRasterEffectsForSVGSupport();
+    if (rasterEffects.size() > 0) {
+        result.append(QString("- %1 => %2 : %3 %4\n").arg(prp_getName(),
+                                                          box->prp_getName(),
+                                                          rasterEffects.join(", "),
+                                                          tr("is unsupported")));
+    }
+    if (const auto bbox = enve_cast<TextBox*>(box)) {
+        if (bbox->hasTextEffects()) {
+            result.append(QString("- %1 => %2 : %3\n").arg(prp_getName(),
+                                                           box->prp_getName(),
+                                                           tr("Text effects are unsupported")));
+        }
+        result.append(QString("- %1 => %2 : %3\n").arg(prp_getName(),
+                                                       box->prp_getName(),
+                                                       tr("For best compatibility convert text to path")));
+    }
+    return result;
+}
+
+const QString Canvas::checkForUnsupportedBoxesSVG(const QList<BoundingBox *> boxes)
+{
+    QString result;
+    for (const auto &box : boxes) {
+        if (!box->isVisible()) { continue; }
+        if (const auto bbox = enve_cast<ContainerBox*>(box)) {
+            const auto warnings = checkForUnsupportedBoxesSVG(bbox->getContainedBoxes());
+            if (!warnings.isEmpty()) { result.append(warnings); }
+        }
+        const auto warnings = checkForUnsupportedBoxSVG(box);
+        if (!warnings.isEmpty()) { result.append(warnings); }
+    }
+    return result;
+}
+
+const QString Canvas::checkForUnsupportedSVG()
+{
+    return checkForUnsupportedBoxesSVG(getContainedBoxes());
 }
 
 void Canvas::applyCurrentTransformToSelected() {
