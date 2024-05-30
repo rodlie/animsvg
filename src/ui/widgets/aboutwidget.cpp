@@ -47,7 +47,7 @@ AboutWidget::AboutWidget(QWidget *parent)
                                       "</div>").arg(AppSupport::getAppVersion(),
                                                     QString::number(96),
                                                     AppSupport::getAppDisplayName(),
-                                                    AppSupport::getAppName());
+                                                    AppSupport::getAppID());
     const auto buildInfo = AppSupport::getAppBuildInfo(true);
     if (!buildInfo.isEmpty()) {
         label.append(buildInfo);

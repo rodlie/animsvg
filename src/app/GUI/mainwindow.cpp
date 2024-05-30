@@ -1133,7 +1133,7 @@ void MainWindow::setupMenuBar()
 
     const auto help = mMenuBar->addMenu(tr("Help", "MenuBar"));
 
-    const auto aboutAct = help->addAction(QIcon::fromTheme("friction"),
+    const auto aboutAct = help->addAction(QIcon::fromTheme(AppSupport::getAppID()),
                                           tr("About", "MenuBar_Help"),
                                           this,
                                           &MainWindow::openAboutWindow);
@@ -1162,7 +1162,7 @@ void MainWindow::setupMenuBar()
     if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
         frictionButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
     }
-    frictionButton->setIcon(QIcon::fromTheme("friction"));
+    frictionButton->setIcon(QIcon::fromTheme(AppSupport::getAppID()));
     frictionButton->setDefaultAction(aboutAct);
     frictionButton->setToolTip(QString());
     frictionButton->setFocusPolicy(Qt::NoFocus);
@@ -1992,7 +1992,7 @@ void MainWindow::updateRecentMenu()
     for (const auto &path : mRecentFiles) {
         QFileInfo info(path);
         if (!info.exists()) { continue; }
-        mRecentMenu->addAction(QIcon::fromTheme("friction"), info.baseName(), [path, this]() {
+        mRecentMenu->addAction(QIcon::fromTheme(AppSupport::getAppID()), info.baseName(), [path, this]() {
             openFile(path);
         });
     }

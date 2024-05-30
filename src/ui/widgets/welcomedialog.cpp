@@ -60,7 +60,7 @@ WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
                                         .arg(AppSupport::getAppVersion(),
                                              QString::number(logoSize),
                                              AppSupport::getAppDisplayName(),
-                                             AppSupport::getAppName()));
+                                             AppSupport::getAppID()));
 
     const auto buttonWid = new QWidget(this);
     buttonWid->setContentsMargins(0, 0, 0, 0);
