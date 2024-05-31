@@ -523,7 +523,7 @@ void MainWindow::setupMenuBar()
     saveToolMenu->addSeparator();
 
     mFileMenu->addSeparator();
-    mFileMenu->addAction(QIcon::fromTheme("cancel"),
+    mFileMenu->addAction(QIcon::fromTheme("dialog-cancel"),
                          tr("Close", "MenuBar_File"),
                          this, &MainWindow::closeProject,
                          QKeySequence(tr("Ctrl+W")));
