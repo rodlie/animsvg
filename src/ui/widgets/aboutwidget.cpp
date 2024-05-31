@@ -127,7 +127,7 @@ AboutWidget::AboutWidget(QWidget *parent)
         parties << "gperftools";
     #endif
 #endif
-    parties << "blender";
+    parties << "icons";
 
     for (const auto &doc: parties) {
         QFile file(doc == "friction" ? QString(":/docs/LICENSE") : QString(":/docs/3rdparty/%1.html").arg(doc));
