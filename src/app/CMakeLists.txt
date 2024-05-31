@@ -253,7 +253,6 @@ set(
 set(
     RESOURCES
     resources.qrc
-    icons.qrc
     icons/hicolor.qrc
     ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing.qrc
 )
