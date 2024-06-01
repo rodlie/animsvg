@@ -1803,9 +1803,19 @@ void MainWindow::saveBackup()
     }
 }
 
+const QString MainWindow::checkBeforeExportSVG()
+{
+    QStringList result;
+    for (const auto& scene : mDocument.fScenes) {
+        const auto warnings = scene->checkForUnsupportedSVG();
+        if (!warnings.isEmpty()) { result.append(warnings); }
+    }
+    return result.join("");
+}
+
 void MainWindow::exportSVG()
 {
-    const auto dialog = new ExportSvgDialog(this);
+    const auto dialog = new ExportSvgDialog(this, checkBeforeExportSVG());
     dialog->show();
     dialog->setAttribute(Qt::WA_DeleteOnClose);
 }

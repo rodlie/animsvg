@@ -419,6 +419,8 @@ public:
     bool hasEnabledBlendEffects() const
     { return blendEffectsEnabled() && hasBlendEffects(); }
 
+    const QStringList checkRasterEffectsForSVGSupport();
+
     void applyTransformEffects(const qreal relFrame,
                                qreal& pivotX, qreal& pivotY,
                                qreal& posX, qreal& posY,
