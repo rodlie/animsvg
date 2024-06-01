@@ -217,6 +217,9 @@ public:
     void removeBoxFromSelection(BoundingBox* const box);
     void clearBoxesSelection();
     void clearBoxesSelectionList();
+    const QString checkForUnsupportedBoxSVG(BoundingBox* const box);
+    const QString checkForUnsupportedBoxesSVG(const QList<BoundingBox*> boxes);
+    const QString checkForUnsupportedSVG();
 
     void addPointToSelection(MovablePoint * const point);
     void removePointFromSelection(MovablePoint * const point);
