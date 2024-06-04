@@ -70,16 +70,11 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
             this, &FillStrokeSettingsWidget::updateCurrentSettings);
 
     // main buttons
-    mFillTargetButton = new QPushButton(QIcon(":/icons/noInterpolation/properties_fill.png"),
-                                        tr("Fill"), this); // TODO: svg
-    mStrokeTargetButton = new QPushButton(QIcon(":/icons/noInterpolation/properties_stroke_paint.png"),
-                                          tr("Stroke"), this); // TODO svg
-    mFillNoneButton = new QPushButton(QIcon::fromTheme("fill_none").pixmap(10, 10),
-                                      tr("None"), this);
-    mFillFlatButton = new QPushButton(QIcon(":/icons/noInterpolation/fill_flat.png"),
-                                      tr("Flat"), this); // TODO: svg
-    mFillGradientButton = new QPushButton(QIcon(":/icons/noInterpolation/fill_gradient.png"),
-                                          tr("Gradient"), this); // TODO: svg
+    mFillTargetButton = new QPushButton(QIcon::fromTheme("fill_flat_2"), tr("Fill"), this);
+    mStrokeTargetButton = new QPushButton(QIcon::fromTheme("stroke_flat_2"), tr("Stroke"), this);
+    mFillNoneButton = new QPushButton(QIcon::fromTheme("fill_none_2"), tr("None"), this);
+    mFillFlatButton = new QPushButton(QIcon::fromTheme("fill_flat_2"), tr("Flat"), this);
+    mFillGradientButton = new QPushButton(QIcon::fromTheme("fill_gradient_2"), tr("Gradient"), this);
 
     mFillTargetButton->setCheckable(true);
     mFillNoneButton->setCheckable(true);
@@ -234,10 +229,8 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     mGradientTypeWidget->setContentsMargins(0, 0, 0, 0);
     mGradientTypeLayout->setMargin(0);
 
-    mLinearGradientButton = new QPushButton(QIcon(":/icons/noInterpolation/fill_gradient.png"),
-                                            tr("Linear"), this); // TODO svg
-    mRadialGradientButton = new QPushButton(QIcon(":/icons/noInterpolation/fill_gradient_radial.png"),
-                                            tr("Radial"), this); // TODO svg
+    mLinearGradientButton = new QPushButton(QIcon::fromTheme("fill_gradient_2"), tr("Linear"), this);
+    mRadialGradientButton = new QPushButton(QIcon::fromTheme("fill_gradient_radial_2"), tr("Radial"), this);
 
     mLinearGradientButton->setCheckable(true);
     mRadialGradientButton->setCheckable(true);
@@ -276,6 +269,13 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
             mFlatCapStyleButton->setIconSize(QSize(size, size));
             mSquareCapStyleButton->setIconSize(QSize(size, size));
             mRoundCapStyleButton->setIconSize(QSize(size, size));
+            mFillTargetButton->setIconSize(QSize(size, size));
+            mStrokeTargetButton->setIconSize(QSize(size, size));
+            mFillNoneButton->setIconSize(QSize(size, size));
+            mFillFlatButton->setIconSize(QSize(size, size));
+            mFillGradientButton->setIconSize(QSize(size, size));
+            mLinearGradientButton->setIconSize(QSize(size, size));
+            mRadialGradientButton->setIconSize(QSize(size, size));
         }
     });
 

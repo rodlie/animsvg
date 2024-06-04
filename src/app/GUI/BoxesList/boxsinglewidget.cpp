@@ -598,7 +598,7 @@ void BoxSingleWidget::loadStaticPixmaps(int iconSize)
     C_ICON = new QPixmap(QIcon::fromTheme("cpu-active").pixmap(iconSize, iconSize));
     G_ICON = new QPixmap(QIcon::fromTheme("gpu-active").pixmap(iconSize, iconSize));
     CG_ICON = new QPixmap(QIcon::fromTheme("cpu-gpu").pixmap(iconSize, iconSize));
-    GRAPH_PROPERTY_ICON = new QPixmap(QIcon(":/icons/noInterpolation/graphProperty.png").pixmap(iconSize, iconSize)); // TODO
+    GRAPH_PROPERTY_ICON = new QPixmap(QIcon::fromTheme("graph_property_2").pixmap(iconSize, iconSize));
     PROMOTE_TO_LAYER_ICON = new QPixmap(QIcon::fromTheme("layer").pixmap(iconSize, iconSize));
 
     sStaticPixmapsLoaded = true;

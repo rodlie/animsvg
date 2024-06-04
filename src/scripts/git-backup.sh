@@ -15,6 +15,7 @@ sfntly
 friction-shader-plugins
 mxe
 friction-examples
+friction-icon-theme
 "
 
 mkdir -p ${BACKUP_DIR}
