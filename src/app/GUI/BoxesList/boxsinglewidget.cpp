@@ -219,10 +219,10 @@ BoxSingleWidget::BoxSingleWidget(BoxScroller * const parent)
     });
 
     mMainLayout->addWidget(mHwSupportButton);
-#pragma message("FIXME: HwSupportButton might segfault if shader effect")
     connect(mHwSupportButton, &BoxesListActionButton::pressed, this, [this]() {
         if (!mTarget) { return; }
         const auto target = mTarget->getTarget();
+        if (const auto sEff = enve_cast<ShaderEffect*>(target)) { return; }
         if (const auto rEff = enve_cast<RasterEffect*>(target)) {
             rEff->switchInstanceHwSupport();
             Document::sInstance->actionFinished();
