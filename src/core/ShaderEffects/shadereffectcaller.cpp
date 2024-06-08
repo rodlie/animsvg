@@ -57,31 +57,36 @@ void ShaderEffectCaller::processGpu(QGL33 * const gl,
     renderTools.swapTextures();
 }
 
+void ShaderEffectCaller::calc(const ShaderEffect *pEff,
+                              const qreal relFrame,
+                              const qreal resolution,
+                              const qreal influence)
+{
+    if (!pEff) { return; }
+    QJSValueList setterArgs;
+    UniformSpecifiers& uniSpecs = mUniformSpecifiers;
+    const int argsCount = mProgram.fPropUniLocs.count();
+    for (int i = 0; i < argsCount; i++) {
+        const GLint loc = mProgram.fPropUniLocs.at(i);
+        const auto prop = pEff->ca_getChildAt(i);
+        const auto& uniformC = mProgram.fPropUniCreators.at(i);
+        uniformC->create(getJSEngine(), loc, prop, relFrame,
+                         resolution, influence,
+                         setterArgs, uniSpecs);
+    }
+    mEngine->setValues(setterArgs);
+    const int valsCount = mProgram.fValueHandlers.count();
+    for (int i = 0; i < valsCount; i++) {
+        const GLint loc = mProgram.fValueLocs.at(i);
+        const auto& value = mProgram.fValueHandlers.at(i);
+        uniSpecs << value->create(loc, &getJSEngine().getGlValueGetter(i));
+    }
+}
+
 QMargins ShaderEffectCaller::getMargin(const SkIRect &srcRect) {
     mEngine->setSceneRect(srcRect);
     mEngine->evaluate();
-    const auto jsVal = mEngine->getMarginValue();
-    if(jsVal.isNumber()) {
-        return QMargins() + qCeil(jsVal.toNumber());
-    } else if(jsVal.isArray()) {
-        const int len = jsVal.property("length").toInt();
-        if(len == 2) {
-            const int valX = qCeil(jsVal.property(0).toNumber());
-            const int valY = qCeil(jsVal.property(1).toNumber());
-
-            return QMargins(valX, valY, valX, valY);
-        } else if(len == 4) {
-            const int valLeft = qCeil(jsVal.property(0).toNumber());
-            const int valTop = qCeil(jsVal.property(1).toNumber());
-            const int valRight = qCeil(jsVal.property(2).toNumber());
-            const int valBottom = qCeil(jsVal.property(3).toNumber());
-
-            return QMargins(valLeft, valTop, valRight, valBottom);
-        } else {
-            RuntimeThrow("Invalid Margin script");
-        }
-    } else RuntimeThrow("Invalid Margin script result type");
-    return QMargins();
+    return mEngine->getMargins();
 }
 
 void ShaderEffectCaller::setupProgram(QGL33 * const gl) {

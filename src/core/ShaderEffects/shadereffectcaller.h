@@ -26,6 +26,7 @@
 #ifndef SHADEREFFECTCALLER_H
 #define SHADEREFFECTCALLER_H
 #include "RasterEffects/rastereffectcaller.h"
+#include "ShaderEffects/shadereffect.h"
 #include "shadereffectprogram.h"
 #include "../gpurendertools.h"
 #include "shadereffectjs.h"
@@ -39,6 +40,11 @@ public:
 
     void processGpu(QGL33 * const gl,
                     GpuRenderTools& renderTools);
+
+    void calc(const ShaderEffect * pEff,
+              const qreal relFrame,
+              const qreal resolution,
+              const qreal influence);
 
     ShaderEffectJS& getJSEngine()
     { return *mEngine; }

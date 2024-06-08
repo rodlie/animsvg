@@ -32,6 +32,7 @@
 
 #include <memory>
 #include <QJSEngine>
+#include <QMargins>
 
 class CORE_EXPORT ShaderEffectJS {
 public:
@@ -66,6 +67,7 @@ public:
 
     const bool fMargin;
     QJSValue getMarginValue();
+    const QMargins getMargins();
 
     void setSceneRect(const SkIRect& rect);
 

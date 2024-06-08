@@ -48,34 +48,16 @@ void ShaderEffect::writeIdentifierXEV(QDomElement& ele) const {
     mCreator->writeIdentifierXEV(ele);
 }
 
-stdsptr<RasterEffectCaller> ShaderEffect::getEffectCaller(
-        const qreal relFrame, const qreal resolution,
-        const qreal influence, BoxRenderData * const data) const {
+stdsptr<RasterEffectCaller> ShaderEffect::getEffectCaller(const qreal relFrame,
+                                                          const qreal resolution,
+                                                          const qreal influence,
+                                                          BoxRenderData * const data) const
+{
     Q_UNUSED(data)
     std::unique_ptr<ShaderEffectJS> engineUPtr;
     takeJSEngine(engineUPtr);
-    ShaderEffectJS& engine = *engineUPtr;
-    const auto effect = enve::make_shared<ShaderEffectCaller>(
-                            std::move(engineUPtr), *mProgram);
-
-    QJSValueList setterArgs;
-    UniformSpecifiers& uniSpecs = effect->mUniformSpecifiers;
-    const int argsCount = mProgram->fPropUniLocs.count();
-    for(int i = 0; i < argsCount; i++) {
-        const GLint loc = mProgram->fPropUniLocs.at(i);
-        const auto prop = ca_getChildAt(i);
-        const auto& uniformC = mProgram->fPropUniCreators.at(i);
-        uniformC->create(engine, loc, prop, relFrame,
-                         resolution, influence,
-                         setterArgs, uniSpecs);
-    }
-    engine.setValues(setterArgs);
-    const int valsCount = mProgram->fValueHandlers.count();
-    for(int i = 0; i < valsCount; i++) {
-        const GLint loc = mProgram->fValueLocs.at(i);
-        const auto& value = mProgram->fValueHandlers.at(i);
-        uniSpecs << value->create(loc, &engine.getGlValueGetter(i));
-    }
+    const auto effect = enve::make_shared<ShaderEffectCaller>(std::move(engineUPtr), *mProgram);
+    effect->calc(this, relFrame, resolution, influence);
     return effect;
 }
 

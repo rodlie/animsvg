@@ -28,6 +28,7 @@
 #include <QPointF>
 #include <QColor>
 #include <QRegularExpression>
+#include <QtMath>
 
 #include "exceptions.h"
 #include "threadsafeqjsengine.h"
@@ -112,6 +113,30 @@ QJSValue ShaderEffectJS::getMarginValue()
     if (!fMargin) { return 0.; }
     //return mMarginGetter.call();
     return ThreadSafeQJSEngine::call(&mEngine, [&]{ return mMarginGetter.call(); });
+}
+
+const QMargins ShaderEffectJS::getMargins()
+{
+    const auto jsVal = getMarginValue();
+    if (jsVal.isNumber()) {
+        return QMargins() + qCeil(jsVal.toNumber());
+    } else if (jsVal.isArray()) {
+        const int len = jsVal.property("length").toInt();
+        if (len == 2) {
+            const int valX = qCeil(jsVal.property(0).toNumber());
+            const int valY = qCeil(jsVal.property(1).toNumber());
+            return QMargins(valX, valY, valX, valY);
+        } else if (len == 4) {
+            const int valLeft = qCeil(jsVal.property(0).toNumber());
+            const int valTop = qCeil(jsVal.property(1).toNumber());
+            const int valRight = qCeil(jsVal.property(2).toNumber());
+            const int valBottom = qCeil(jsVal.property(3).toNumber());
+            return QMargins(valLeft, valTop, valRight, valBottom);
+        } else {
+            RuntimeThrow("Invalid Margin script");
+        }
+    } else { RuntimeThrow("Invalid Margin script result type"); }
+    return QMargins();
 }
 
 void ShaderEffectJS::setSceneRect(const SkIRect& rect)
