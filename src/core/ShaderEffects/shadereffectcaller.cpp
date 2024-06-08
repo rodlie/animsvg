@@ -63,7 +63,7 @@ void ShaderEffectCaller::calc(const ShaderEffect *pEff,
                               const qreal influence)
 {
     if (!pEff) { return; }
-    QJSValueList setterArgs;
+    mEngine->clearSetters();
     UniformSpecifiers& uniSpecs = mUniformSpecifiers;
     const int argsCount = mProgram.fPropUniLocs.count();
     for (int i = 0; i < argsCount; i++) {
@@ -72,9 +72,9 @@ void ShaderEffectCaller::calc(const ShaderEffect *pEff,
         const auto& uniformC = mProgram.fPropUniCreators.at(i);
         uniformC->create(getJSEngine(), loc, prop, relFrame,
                          resolution, influence,
-                         setterArgs, uniSpecs);
+                         getJSEngine().getSetters(), uniSpecs);
     }
-    mEngine->setValues(setterArgs);
+    mEngine->updateValues();
     const int valsCount = mProgram.fValueHandlers.count();
     for (int i = 0; i < valsCount; i++) {
         const GLint loc = mProgram.fValueLocs.at(i);

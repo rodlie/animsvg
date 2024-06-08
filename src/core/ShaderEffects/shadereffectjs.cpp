@@ -86,6 +86,21 @@ void ShaderEffectJS::setValues(const QJSValueList& args)
     ThreadSafeQJSEngine::call(&mEngine, [&]{ m_eSet.call(args); });
 }
 
+void ShaderEffectJS::updateValues()
+{
+    ThreadSafeQJSEngine::call(&mEngine, [&]{ m_eSet.call(mSetters); });
+}
+
+void ShaderEffectJS::clearSetters()
+{
+    mSetters.clear();
+}
+
+QJSValueList &ShaderEffectJS::getSetters()
+{
+    return mSetters;
+}
+
 void ShaderEffectJS::evaluate()
 {
     //m_eEvaluate.call();

@@ -57,6 +57,9 @@ public:
     };
 
     void setValues(const QJSValueList& args);
+    void updateValues();
+    void clearSetters();
+    QJSValueList& getSetters();
 
     void evaluate();
 
@@ -80,6 +83,7 @@ private:
     QJSValue m_eEvaluate;
     QJSValueList mGlValueGetters;
     QJSValue mMarginGetter;
+    QJSValueList mSetters;
 };
 
 #endif // SHADEREFFECTJS_H
