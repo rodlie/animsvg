@@ -79,7 +79,7 @@ find_package(PkgConfig QUIET)
 find_package(QT NAMES Qt5 COMPONENTS Core REQUIRED)
 find_package(
     Qt${QT_VERSION_MAJOR}
-    5.12.12
+    5.15.3
     COMPONENTS
     Gui
     Widgets
