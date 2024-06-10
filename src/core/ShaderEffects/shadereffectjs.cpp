@@ -95,9 +95,19 @@ void ShaderEffectJS::clearSetters()
     mSetters.clear();
 }
 
-QJSValueList &ShaderEffectJS::getSetters()
+void ShaderEffectJS::addSetter(const QPointF &val)
 {
-    return mSetters;
+    mSetters << toValue(val);
+}
+
+void ShaderEffectJS::addSetter(const QColor &val)
+{
+    mSetters << toValue(val);
+}
+
+void ShaderEffectJS::addSetter(const qreal &val)
+{
+    mSetters << val;
 }
 
 void ShaderEffectJS::evaluate()
@@ -200,6 +210,7 @@ const QMargins ShaderEffectJS::getMargins()
     return QMargins();
 }
 
+#pragma warning("This still may segfault (on Linux with a bunch of effects)")
 void ShaderEffectJS::setSceneRect(const SkIRect& rect)
 {
     QJSValueList args;

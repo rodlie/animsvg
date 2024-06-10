@@ -24,23 +24,28 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "shadereffectcaller.h"
-
 #include "shadereffectprogram.h"
 
 ShaderEffectCaller::ShaderEffectCaller(std::unique_ptr<ShaderEffectJS>&& engine,
-                                       const ShaderEffectProgram &program) :
-    RasterEffectCaller(HardwareSupport::gpuOnly, false, QMargins()),
-    mEngine(std::move(engine)), mProgramId(program.fId), mProgram(program) {
+                                       const ShaderEffectProgram &program)
+    : RasterEffectCaller(HardwareSupport::gpuOnly,
+                         false,
+                         QMargins())
+    , mEngine(std::move(engine))
+    , mProgramId(program.fId)
+    , mProgram(program)
+{
     Q_ASSERT(mEngine.get());
 }
 
-ShaderEffectCaller::~ShaderEffectCaller() {
+ShaderEffectCaller::~ShaderEffectCaller()
+{
     mProgram.fEngines.push_back(std::move(mEngine));
 }
 
 void ShaderEffectCaller::processGpu(QGL33 * const gl,
-                                    GpuRenderTools &renderTools) {
-
+                                    GpuRenderTools &renderTools)
+{
     renderTools.switchToOpenGL(gl);
 
     renderTools.requestTargetFbo().bind(gl);
@@ -70,9 +75,13 @@ void ShaderEffectCaller::calc(const ShaderEffect *pEff,
         const GLint loc = mProgram.fPropUniLocs.at(i);
         const auto prop = pEff->ca_getChildAt(i);
         const auto& uniformC = mProgram.fPropUniCreators.at(i);
-        uniformC->create(getJSEngine(), loc, prop, relFrame,
-                         resolution, influence,
-                         getJSEngine().getSetters(), uniSpecs);
+        uniformC->create(getJSEngine(),
+                         loc,
+                         prop,
+                         relFrame,
+                         resolution,
+                         influence,
+                         uniSpecs);
     }
     mEngine->updateValues();
     const int valsCount = mProgram.fValueHandlers.count();
@@ -83,13 +92,15 @@ void ShaderEffectCaller::calc(const ShaderEffect *pEff,
     }
 }
 
-QMargins ShaderEffectCaller::getMargin(const SkIRect &srcRect) {
+QMargins ShaderEffectCaller::getMargin(const SkIRect &srcRect)
+{
     mEngine->setSceneRect(srcRect);
     mEngine->evaluate();
     return mEngine->getMargins();
 }
 
-void ShaderEffectCaller::setupProgram(QGL33 * const gl) {
+void ShaderEffectCaller::setupProgram(QGL33 * const gl)
+{
     gl->glUseProgram(mProgramId);
-    for(const auto& uni : mUniformSpecifiers) uni(gl);
+    for (const auto& uni : mUniformSpecifiers) { uni(gl); }
 }

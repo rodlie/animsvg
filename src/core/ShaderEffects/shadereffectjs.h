@@ -77,7 +77,9 @@ public:
     void setValues(const QJSValueList& args);
     void updateValues();
     void clearSetters();
-    QJSValueList& getSetters();
+    void addSetter(const QPointF& val);
+    void addSetter(const QColor& val);
+    void addSetter(const qreal& val);
 
     void evaluate();
 
