@@ -79,7 +79,7 @@ void ShaderEffectCaller::calc(const ShaderEffect *pEff,
     for (int i = 0; i < valsCount; i++) {
         const GLint loc = mProgram.fValueLocs.at(i);
         const auto& value = mProgram.fValueHandlers.at(i);
-        uniSpecs << value->create(loc, &getJSEngine().getGlValueGetter(i));
+        uniSpecs << value->create(loc, getJSEngine(), i);
     }
 }
 

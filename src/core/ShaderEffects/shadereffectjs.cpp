@@ -82,7 +82,6 @@ ShaderEffectJS::ShaderEffectJS(const Blueprint& blueprint)
 
 void ShaderEffectJS::setValues(const QJSValueList& args)
 {
-    //m_eSet.call(args);
     ThreadSafeQJSEngine::call(&mEngine, [&]{ m_eSet.call(args); });
 }
 
@@ -103,7 +102,6 @@ QJSValueList &ShaderEffectJS::getSetters()
 
 void ShaderEffectJS::evaluate()
 {
-    //m_eEvaluate.call();
     ThreadSafeQJSEngine::call(&mEngine, [&]{ m_eEvaluate.call(); });
 }
 
@@ -114,7 +112,6 @@ int ShaderEffectJS::glValueCount() const
 
 QJSValue ShaderEffectJS::getGlValue(const int index)
 {
-    //return mGlValueGetters[index].call();
     return ThreadSafeQJSEngine::call(&mEngine, [&]{ return mGlValueGetters[index].call(); });
 }
 
@@ -123,10 +120,59 @@ QJSValue& ShaderEffectJS::getGlValueGetter(const int index)
     return mGlValueGetters[index];
 }
 
+double ShaderEffectJS::getGlValueDouble(const int index)
+{
+    const QJSValue val = getGlValue(index);
+    if (val.isNumber()) {
+        return val.toNumber();
+    } else { RuntimeThrow("Invalid value. Expected double."); }
+}
+
+ShaderEffectJS::DV2 ShaderEffectJS::getGlValueDouble2(const int index)
+{
+    DV2 vec;
+    const QJSValue val = getGlValue(index);
+    if (val.isArray()) {
+        const int len = val.property("length").toInt();
+        if (len != 2) { RuntimeThrow("Invalid value. Expected vec2."); }
+        vec.v0 = val.property(0).toNumber();
+        vec.v1 = val.property(1).toNumber();
+        return vec;
+    } else { RuntimeThrow("Invalid value. Expected vec2."); }
+}
+
+ShaderEffectJS::DV3 ShaderEffectJS::getGlValueDouble3(const int index)
+{
+    DV3 vec;
+    const QJSValue val = getGlValue(index);
+    if (val.isArray()) {
+        const int len = val.property("length").toInt();
+        if (len != 3) { RuntimeThrow("Invalid value. Expected vec3."); }
+        vec.v0 = val.property(0).toNumber();
+        vec.v1 = val.property(1).toNumber();
+        vec.v2 = val.property(2).toNumber();
+        return vec;
+    } else { RuntimeThrow("Invalid value. Expected vec3."); }
+}
+
+ShaderEffectJS::DV4 ShaderEffectJS::getGlValueDouble4(const int index)
+{
+    DV4 vec;
+    const QJSValue val = getGlValue(index);
+    if (val.isArray()) {
+        const int len = val.property("length").toInt();
+        if (len != 4) { RuntimeThrow("Invalid value. Expected vec4."); }
+        vec.v0 = val.property(0).toNumber();
+        vec.v1 = val.property(1).toNumber();
+        vec.v2 = val.property(2).toNumber();
+        vec.v3 = val.property(3).toNumber();
+        return vec;
+    } else { RuntimeThrow("Invalid value. Expected vec4."); }
+}
+
 QJSValue ShaderEffectJS::getMarginValue()
 {
     if (!fMargin) { return 0.; }
-    //return mMarginGetter.call();
     return ThreadSafeQJSEngine::call(&mEngine, [&]{ return mMarginGetter.call(); });
 }
 
@@ -161,7 +207,6 @@ void ShaderEffectJS::setSceneRect(const SkIRect& rect)
     args << rect.y();
     args << rect.width();
     args << rect.height();
-    //m_eSetSceneRect.call(args);
     ThreadSafeQJSEngine::call(&mEngine, [&]{ m_eSetSceneRect.call(args); });
 }
 

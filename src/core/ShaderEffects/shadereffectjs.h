@@ -36,6 +36,24 @@
 
 class CORE_EXPORT ShaderEffectJS {
 public:
+    struct DV2
+    {
+        double v0;
+        double v1;
+    };
+    struct DV3
+    {
+        double v0;
+        double v1;
+        double v2;
+    };
+    struct DV4
+    {
+        double v0;
+        double v1;
+        double v2;
+        double v3;
+    };
     struct Blueprint;
     ShaderEffectJS(const Blueprint& blueprint);
 
@@ -67,6 +85,11 @@ public:
     QJSValue getGlValue(const int index);
 
     QJSValue& getGlValueGetter(const int index);
+
+    double getGlValueDouble(const int index);
+    DV2 getGlValueDouble2(const int index);
+    DV3 getGlValueDouble3(const int index);
+    DV4 getGlValueDouble4(const int index);
 
     const bool fMargin;
     QJSValue getMarginValue();
