@@ -529,6 +529,25 @@ void loadRect(const QDomElement &pathElement,
     parentGroup->addContained(rect);
 }
 
+void loadLine(const QDomElement &pathElement,
+                  ContainerBox *parentGroup,
+                  VectorPathSvgAttributes &attributes) {
+
+    const QString x1Str = pathElement.attribute("x1");
+    const QString x2Str = pathElement.attribute("x2");
+    const QString y1Str = pathElement.attribute("y1");
+    const QString y2Str = pathElement.attribute("y2");
+
+    SkPath& path = attributes.path();
+    path.moveTo({toSkScalar(x1Str.toDouble()), toSkScalar(y1Str.toDouble())});
+    path.lineTo({toSkScalar(x2Str.toDouble()), toSkScalar(y2Str.toDouble())});
+
+    const auto vectorPath = enve::make_shared<SmartVectorPath>();
+    vectorPath->planCenterPivotPosition();
+    attributes.apply(vectorPath.get());
+    parentGroup->addContained(vectorPath);
+}
+
 void loadText(const QDomElement &pathElement,
               ContainerBox *parentGroup,
               const BoxSvgAttributes &attributes) {
@@ -770,7 +789,7 @@ void loadElement(const QDomElement &element, ContainerBox *parentGroup,
                                x1, y1,
                                x2, y2,
                                trans, type});
-    } else if(tagName == "path" || tagName == "polyline" || tagName == "polygon") {
+    } else if(tagName == "path" || tagName == "polyline" || tagName == "polygon" || tagName == "line") {
         VectorPathSvgAttributes attributes;
         attributes.setParent(parentGroupAttributes);
         attributes.loadBoundingBoxAttributes(element);
@@ -780,6 +799,8 @@ void loadElement(const QDomElement &element, ContainerBox *parentGroup,
             loadPolyline(element, parentGroup, attributes, false);
         } else if(tagName == "polygon") {
             loadPolyline(element, parentGroup, attributes, true);
+        } else if(tagName == "line") {
+            loadLine(element, parentGroup, attributes);
         }
     } else if(tagName == "g" || tagName == "text" ||
               tagName == "circle" || tagName == "ellipse" ||
