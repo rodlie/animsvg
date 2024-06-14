@@ -41,7 +41,7 @@ SettingsDialog::SettingsDialog(QWidget * const parent)
     addSettingsWidget(timeline, tr("Timeline"));
 
     const auto plugins = new PluginsSettingsWidget(this);
-    addSettingsWidget(plugins, tr("Plugins"));
+    addSettingsWidget(plugins, tr("Shaders"));
 
     const auto presets = new PresetSettingsWidget(this);
     addSettingsWidget(presets, tr("Presets"));
