@@ -210,7 +210,7 @@ const QMargins ShaderEffectJS::getMargins()
     return QMargins();
 }
 
-#pragma warning("This still may segfault (on Linux with a bunch of effects)")
+#pragma message("This still may segfault (on Linux with a bunch of effects)")
 void ShaderEffectJS::setSceneRect(const SkIRect& rect)
 {
     QJSValueList args;
