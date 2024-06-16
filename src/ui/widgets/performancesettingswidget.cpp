@@ -122,6 +122,12 @@ PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
 
     mPathGpuAccCheck = new QCheckBox(tr("Path GPU acceleration"), this);
     gpuGroupLayout->addWidget(mPathGpuAccCheck);
+    if (HardwareInfo::sGpuVendor() == GpuVendor::amd) {
+        const auto amdWarning = new QLabel(this);
+        amdWarning->setText(QString("<strong>%1.</strong>")
+                            .arg(tr("Radeon cards may have issues with anti-aliasing when using path acceleration")));
+        gpuGroupLayout->addWidget(amdWarning);
+    }
     addWidget(gpuGroup);
 
     const auto audioWidget = new QGroupBox(this);

@@ -53,7 +53,7 @@ PluginsSettingsWidget::PluginsSettingsWidget(QWidget *parent)
     mShaderLayout->setContentsMargins(0, 0, 0, 0);
 
     const auto mShaderLabel = new QLabel(tr("Shaders Path"), this);
-    mShaderLabel->setToolTip(tr("This location will be scanned for plugins during startup."));
+    mShaderLabel->setToolTip(tr("This location will be scanned for shader plugins during startup."));
     mShaderPath = new QLineEdit(this);
     mShaderPath->setText(AppSupport::getAppShaderEffectsPath());
     const auto mShaderPathButton = new QPushButton(QIcon::fromTheme("dots"),
@@ -90,7 +90,9 @@ PluginsSettingsWidget::PluginsSettingsWidget(QWidget *parent)
     populateShaderTree();
 
     const auto infoLabel = new QLabel(this);
-    infoLabel->setText(tr("Any changes in this section will require a restart of Friction."));
+    infoLabel->setText(QString("<strong>%1.</strong><br><i>%2.</i>")
+                       .arg(tr("Any changes in this section require a restart of Friction"),
+                            tr("Also note that shader effects are still considered experimental")));
     addWidget(infoLabel);
 }
 
