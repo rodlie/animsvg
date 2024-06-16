@@ -56,8 +56,12 @@ stdsptr<RasterEffectCaller> ShaderEffect::getEffectCaller(const qreal relFrame,
     Q_UNUSED(data)
     std::unique_ptr<ShaderEffectJS> engineUPtr;
     takeJSEngine(engineUPtr);
-    const auto effect = enve::make_shared<ShaderEffectCaller>(std::move(engineUPtr), *mProgram);
-    effect->calc(this, relFrame, resolution, influence);
+    const auto effect = enve::make_shared<ShaderEffectCaller>(std::move(engineUPtr),
+                                                              *mProgram,
+                                                              this,
+                                                              relFrame,
+                                                              resolution,
+                                                              influence);
     return effect;
 }
 

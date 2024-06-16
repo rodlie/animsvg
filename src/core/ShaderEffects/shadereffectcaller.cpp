@@ -27,7 +27,11 @@
 #include "shadereffectprogram.h"
 
 ShaderEffectCaller::ShaderEffectCaller(std::unique_ptr<ShaderEffectJS>&& engine,
-                                       const ShaderEffectProgram &program)
+                                       const ShaderEffectProgram &program,
+                                       const ShaderEffect *parentEffect,
+                                       const qreal &relFrame,
+                                       const qreal &resolution,
+                                       const qreal &influence)
     : RasterEffectCaller(HardwareSupport::gpuOnly,
                          false,
                          QMargins())
@@ -36,6 +40,10 @@ ShaderEffectCaller::ShaderEffectCaller(std::unique_ptr<ShaderEffectJS>&& engine,
     , mProgram(program)
 {
     Q_ASSERT(mEngine.get());
+    calc(parentEffect,
+         relFrame,
+         resolution,
+         influence);
 }
 
 ShaderEffectCaller::~ShaderEffectCaller()

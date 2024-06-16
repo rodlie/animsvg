@@ -35,7 +35,11 @@ class CORE_EXPORT ShaderEffectCaller : public RasterEffectCaller {
     e_OBJECT
 public:
     ShaderEffectCaller(std::unique_ptr<ShaderEffectJS>&& engine,
-                       const ShaderEffectProgram& program);
+                       const ShaderEffectProgram& program,
+                       const ShaderEffect* parentEffect,
+                       const qreal& relFrame,
+                       const qreal& resolution,
+                       const qreal& influence);
     ~ShaderEffectCaller();
 
     void processGpu(QGL33 * const gl,
