@@ -76,11 +76,36 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
     mLastFrame->setValue(maxFrame);
 
     mBackground = new QCheckBox(tr("Background"), this);
-    mBackground->setChecked(true);
+    mBackground->setChecked(AppSupport::getSettings("exportSVG",
+                                                    "background",
+                                                    true).toBool());
     mFixedSize = new QCheckBox(tr("Fixed Size"), this);
-    mFixedSize->setChecked(false);
+    mFixedSize->setChecked(AppSupport::getSettings("exportSVG",
+                                                   "fixed",
+                                                   false).toBool());
     mLoop = new QCheckBox(tr("Loop"), this);
-    mLoop->setChecked(true);
+    mLoop->setChecked(AppSupport::getSettings("exportSVG",
+                                              "loop",
+                                              true).toBool());
+
+    connect(mBackground, &QCheckBox::stateChanged,
+            this, [this] {
+        AppSupport::setSettings("exportSVG",
+                                "background",
+                                mBackground->isChecked());
+    });
+    connect(mFixedSize, &QCheckBox::stateChanged,
+            this, [this] {
+        AppSupport::setSettings("exportSVG",
+                                "fixed",
+                                mFixedSize->isChecked());
+    });
+    connect(mLoop, &QCheckBox::stateChanged,
+            this, [this] {
+        AppSupport::setSettings("exportSVG",
+                                "loop",
+                                mLoop->isChecked());
+    });
 
     twoColLayout->addPair(new QLabel(tr("Scene:")), sceneButton);
     twoColLayout->addPair(new QLabel(tr("First Frame:")), mFirstFrame);
@@ -187,25 +212,8 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
     mPreviewButton->setIcon(QIcon::fromTheme("seq_preview"));
     mPreviewButton->setObjectName("SVGPreviewButton");
     buttons->addButton(mPreviewButton, QDialogButtonBox::ActionRole);
-    connect(mPreviewButton, &QPushButton::released, this, [this]() {
-        if (!mPreviewFile) {
-            const QString templ =  QString::fromUtf8("%1/%2_svg_preview_XXXXXX.html").arg(QDir::tempPath(),
-                                                                                          AppSupport::getAppName());
-            mPreviewFile = qsptr<QTemporaryFile>::create(templ);
-            mPreviewFile->open();
-            mPreviewFile->close();
-        }
-        const auto task = exportTo(mPreviewFile->fileName(), true);
-        if (!task) { return; }
-        QPointer<ExportSvgDialog> ptr = this;
-        task->addDependent(
-        {[ptr]() {
-            if (ptr) {
-                const auto fileName = ptr->mPreviewFile->fileName();
-                QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
-            }
-        }, nullptr});
-    });
+    connect(mPreviewButton, &QPushButton::released,
+            this, [this] { showPreview(false); });
 
     const auto settingsWidget = new QWidget(this);
     settingsWidget->setLayout(settingsLayout);
@@ -216,6 +224,28 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
     mainLayout->addWidget(settingsWidget);
 
     setLayout(mainLayout);
+}
+
+void ExportSvgDialog::showPreview(const bool &closeWhenDone)
+{
+    if (!mPreviewFile) {
+        const QString templ = QString::fromUtf8("%1/%2_svg_preview_XXXXXX.html").arg(QDir::tempPath(),
+                                                                                     AppSupport::getAppName());
+        mPreviewFile = qsptr<QTemporaryFile>::create(templ);
+        mPreviewFile->setAutoRemove(false);
+        mPreviewFile->open();
+        mPreviewFile->close();
+    }
+    const auto fileName = mPreviewFile->fileName();
+    const auto task = exportTo(fileName, true);
+    if (!task) {
+        if (closeWhenDone) { close(); }
+        return;
+    }
+    task->addDependent({[fileName, this, closeWhenDone]() {
+                            QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
+                            if (closeWhenDone) { close(); }
+                        }, nullptr});
 }
 
 ComplexTask* ExportSvgDialog::exportTo(const QString& file,

@@ -510,6 +510,12 @@ void MainWindow::setupMenuBar()
                                                   tr("Save Backup", "MenuBar_File"),
                                                   this, &MainWindow::saveBackup);
 
+    const auto previewSvgAct = mFileMenu->addAction(QIcon::fromTheme("seq_preview"),
+                                                    tr("Preview SVG", "MenuBar_File"),
+                                                    this,[this]{ exportSVG(true); },
+                                                    QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                                         "previewSVG",
+                                                                                         "Ctrl+F12").toString()));
     const auto exportSvgAct = mFileMenu->addAction(QIcon::fromTheme("seq_preview"),
                                                    tr("Export SVG", "MenuBar_File"),
                                                    this, &MainWindow::exportSVG,
@@ -519,7 +525,7 @@ void MainWindow::setupMenuBar()
     saveToolBtn->setDefaultAction(mSaveAct);
     saveToolMenu->addAction(saveAsAct);
     saveToolMenu->addAction(saveBackAct);
-    saveToolMenu->addAction(exportSvgAct);
+    //saveToolMenu->addAction(exportSvgAct);
     saveToolMenu->addSeparator();
 
     mFileMenu->addSeparator();
@@ -1146,6 +1152,7 @@ void MainWindow::setupMenuBar()
                         tr("Render"),
                         this, &MainWindow::openRendererWindow);
 
+    mToolbar->addAction(previewSvgAct);
     mToolbar->addAction(exportSvgAct);
 
     setMenuBar(mMenuBar);
@@ -1813,11 +1820,16 @@ const QString MainWindow::checkBeforeExportSVG()
     return result.join("");
 }
 
-void MainWindow::exportSVG()
+void MainWindow::exportSVG(const bool &preview)
 {
-    const auto dialog = new ExportSvgDialog(this, checkBeforeExportSVG());
-    dialog->show();
+    const auto dialog = new ExportSvgDialog(this,
+                                            preview ? QString() : checkBeforeExportSVG());
     dialog->setAttribute(Qt::WA_DeleteOnClose);
+    if (!preview) {
+        dialog->show();
+    } else {
+        dialog->showPreview(true /* close when done */);
+    }
 }
 
 void MainWindow::updateLastOpenDir(const QString &path)

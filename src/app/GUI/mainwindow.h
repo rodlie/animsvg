@@ -180,7 +180,7 @@ public:
     void saveFileAs(const bool setPath = true);
     void saveBackup();
     const QString checkBeforeExportSVG();
-    void exportSVG();
+    void exportSVG(const bool &preview = false);
     void updateLastOpenDir(const QString &path);
     void updateLastSaveDir(const QString &path);
     const QString getLastOpenDir();
