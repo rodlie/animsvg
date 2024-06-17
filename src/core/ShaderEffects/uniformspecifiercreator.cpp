@@ -27,97 +27,99 @@
 
 #include "shadereffectjs.h"
 
-void qrealAnimatorCreate(
-        const bool glValue,
-        const GLint loc,
-        Property * const property,
-        const qreal relFrame,
-        const qreal resolution,
-        const qreal influence,
-        QJSValueList& setterArgs,
-        UniformSpecifiers& uniSpec) {
+void qrealAnimatorCreate(ShaderEffectJS &engine,
+                         const bool glValue,
+                         const GLint loc,
+                         Property * const property,
+                         const qreal relFrame,
+                         const qreal resolution,
+                         const qreal influence,
+                         UniformSpecifiers& uniSpec)
+{
     const auto anim = static_cast<QrealAnimator*>(property);
     const qreal val = anim->getEffectiveValue(relFrame)*resolution*influence;
     const QString propName = anim->prp_getName();
     const QString valScript = propName + " = " + QString::number(val);
-    setterArgs << val;
+    engine.addSetter(val);
 
-    if(!glValue) return;
+    if (!glValue) { return; }
     Q_ASSERT(loc >= 0);
     uniSpec << [loc, val, valScript](QGL33 * const gl) {
         gl->glUniform1f(loc, static_cast<GLfloat>(val));
     };
 }
 
-void intAnimatorCreate(
-        const bool glValue,
-        const GLint loc,
-        Property * const property,
-        const qreal relFrame,
-        const qreal resolution,
-        const qreal influence,
-        QJSValueList& setterArgs,
-        UniformSpecifiers& uniSpec) {
+void intAnimatorCreate(ShaderEffectJS &engine,
+                       const bool glValue,
+                       const GLint loc,
+                       Property * const property,
+                       const qreal relFrame,
+                       const qreal resolution,
+                       const qreal influence,
+                       UniformSpecifiers& uniSpec)
+{
     const auto anim = static_cast<IntAnimator*>(property);
     const int val = qRound(anim->getEffectiveIntValue(relFrame)*resolution*influence);
     const QString valScript = anim->prp_getName() + " = " + QString::number(val);
-    setterArgs << val;
+    engine.addSetter(val);
 
-    if(!glValue) return;
+    if (!glValue) { return; }
     Q_ASSERT(loc >= 0);
     uniSpec << [loc, val, valScript](QGL33 * const gl) {
         gl->glUniform1i(loc, val);
     };
 }
 
-QString vec2ValScript(const QString& name, const QPointF& value) {
+QString vec2ValScript(const QString& name,
+                      const QPointF& value)
+{
     return name + " = [" + QString::number(value.x()) + "," +
                            QString::number(value.y()) + "]";
 }
 
-void qPointFAnimatorCreate(
-        ShaderEffectJS &engine,
-        const bool glValue,
-        const GLint loc,
-        Property * const property,
-        const qreal relFrame,
-        const qreal resolution,
-        const qreal influence,
-        QJSValueList& setterArgs,
-        UniformSpecifiers& uniSpec) {
+void qPointFAnimatorCreate(ShaderEffectJS &engine,
+                           const bool glValue,
+                           const GLint loc,
+                           Property * const property,
+                           const qreal relFrame,
+                           const qreal resolution,
+                           const qreal influence,
+                           UniformSpecifiers& uniSpec)
+{
     const auto anim = static_cast<QPointFAnimator*>(property);
     const QPointF val = anim->getEffectiveValue(relFrame)*resolution*influence;
     const QString valScript = vec2ValScript(anim->prp_getName(), val);
-    setterArgs << engine.toValue(val);
+    engine.addSetter(val);
 
-    if(!glValue) return;
+    if (!glValue) { return; }
     Q_ASSERT(loc >= 0);
     uniSpec << [loc, val, valScript](QGL33 * const gl) {
         gl->glUniform2f(loc, val.x(), val.y());
     };
 }
 
-QString colorValScript(const QString& name, const QColor& value) {
+QString colorValScript(const QString& name,
+                       const QColor& value)
+{
     return name + " = [" + QString::number(value.redF()) + "," +
                            QString::number(value.greenF()) + "," +
                            QString::number(value.blueF()) + "," +
                            QString::number(value.alphaF()) + "]";
 }
 
-void colorAnimatorCreate(
-        ShaderEffectJS &engine,
-        const bool glValue,
-        const GLint loc,
-        Property * const property,
-        const qreal relFrame,
-        QJSValueList& setterArgs,
-        UniformSpecifiers& uniSpec) {
+void colorAnimatorCreate(ShaderEffectJS &engine,
+                         const bool glValue,
+                         const GLint loc,
+                         Property * const property,
+                         const qreal relFrame,
+                         UniformSpecifiers& uniSpec)
+{
     const auto anim = static_cast<ColorAnimator*>(property);
     const QColor val = anim->getColor(relFrame);
     const QString valScript = colorValScript(anim->prp_getName(), val);
-    setterArgs << engine.toValue(val);
+    engine.addSetter(val);
 
-    if(!glValue) return;
+    if (!glValue) { return; }
     Q_ASSERT(loc >= 0);
     uniSpec << [loc, val, valScript](QGL33 * const gl) {
         gl->glUniform4f(loc, val.redF(), val.greenF(), val.blueF(),
@@ -131,27 +133,43 @@ void UniformSpecifierCreator::create(ShaderEffectJS &engine,
                                      const qreal relFrame,
                                      const qreal resolution,
                                      const qreal influence,
-                                     QJSValueList& setterArgs,
-                                     UniformSpecifiers& uniSpec) const {
+                                     UniformSpecifiers& uniSpec) const
+{
     switch(mType) {
     case ShaderPropertyType::floatProperty:
-        return qrealAnimatorCreate(fGLValue, loc, property, relFrame,
+        return qrealAnimatorCreate(engine,
+                                   fGLValue,
+                                   loc,
+                                   property,
+                                   relFrame,
                                    mResolutionScaled ? resolution : 1,
                                    mInfluenceScaled ? influence : 1,
-                                   setterArgs, uniSpec);
+                                   uniSpec);
     case ShaderPropertyType::intProperty:
-        return intAnimatorCreate(fGLValue, loc, property, relFrame,
+        return intAnimatorCreate(engine,
+                                 fGLValue,
+                                 loc,
+                                 property,
+                                 relFrame,
                                  mResolutionScaled ? resolution : 1,
                                  mInfluenceScaled ? influence : 1,
-                                 setterArgs, uniSpec);
+                                 uniSpec);
     case ShaderPropertyType::vec2Property:
-        return qPointFAnimatorCreate(engine, fGLValue, loc, property, relFrame,
+        return qPointFAnimatorCreate(engine,
+                                     fGLValue,
+                                     loc,
+                                     property,
+                                     relFrame,
                                      mResolutionScaled ? resolution : 1,
                                      mInfluenceScaled ? influence : 1,
-                                     setterArgs, uniSpec);
+                                     uniSpec);
     case ShaderPropertyType::colorProperty:
-        return colorAnimatorCreate(engine, fGLValue, loc, property, relFrame,
-                                   setterArgs, uniSpec);
+        return colorAnimatorCreate(engine,
+                                   fGLValue,
+                                   loc,
+                                   property,
+                                   relFrame,
+                                   uniSpec);
     default: RuntimeThrow("Unsupported type");
     }
 }

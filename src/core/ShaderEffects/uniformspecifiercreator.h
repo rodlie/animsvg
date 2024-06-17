@@ -46,7 +46,8 @@ enum class ShaderPropertyType {
 
 typedef std::function<void(QGL33 * const)> UniformSpecifier;
 typedef QList<UniformSpecifier> UniformSpecifiers;
-struct CORE_EXPORT UniformSpecifierCreator : public StdSelfRef {
+struct CORE_EXPORT UniformSpecifierCreator : public StdSelfRef
+{
     UniformSpecifierCreator(const ShaderPropertyType type,
                             const bool glValue,
                             const bool resolutionScaled,
@@ -61,7 +62,6 @@ struct CORE_EXPORT UniformSpecifierCreator : public StdSelfRef {
                 const qreal relFrame,
                 const qreal resolution,
                 const qreal influence,
-                QJSValueList& setterArgs,
                 UniformSpecifiers& uniSpec) const;
 
     const ShaderPropertyType mType;

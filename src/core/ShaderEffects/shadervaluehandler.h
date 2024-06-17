@@ -27,6 +27,7 @@
 #define SHADERVALUEHANDLER_H
 #include <QJSEngine>
 
+#include "ShaderEffects/shadereffectjs.h"
 #include "glhelpers.h"
 #include "smartPointers/ememory.h"
 
@@ -38,15 +39,19 @@ enum class GLValueType {
     none
 };
 
-class CORE_EXPORT ShaderValueHandler : public StdSelfRef {
+class CORE_EXPORT ShaderValueHandler : public StdSelfRef
+{
 public:
     ShaderValueHandler(const QString& name, const GLValueType type,
                        const QString& script);
 
-    UniformSpecifier create(const GLint loc, QJSValue* getter) const;
+    UniformSpecifier create(const GLint loc,
+                            ShaderEffectJS &engine,
+                            int index) const;
 
     const QString fName;
     const QString fScript;
+
 private:
     const GLValueType mType;
 };
