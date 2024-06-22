@@ -207,7 +207,7 @@ if [ ! -f "${QMAKE_BIN}" ]; then
     cd ${QT_SRC}
     ./configure \
     -prefix ${SDK} \
-    -c++std c++17 \
+    -c++std c++14 \
     -qtlibinfix Friction \
     -opengl desktop \
     -release \
