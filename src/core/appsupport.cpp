@@ -235,7 +235,7 @@ const QString AppSupport::getAppDomain()
 
 const QString AppSupport::getAppID()
 {
-    return QString::fromUtf8("graphics.friction");
+    return QString::fromUtf8("graphics.friction.Friction");
 }
 
 const QString AppSupport::getAppUrl()

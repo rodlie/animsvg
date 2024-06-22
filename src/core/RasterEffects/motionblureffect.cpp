@@ -139,8 +139,9 @@ stdsptr<RasterEffectCaller> MotionBlurEffect::getEffectCaller(
                 instanceHwSupport(), sampleCount, opacity, samples);
 }
 
-FrameRange MotionBlurEffect::getMotionBlurPropsIdenticalRange(const int relFrame) const {
-    auto range = mParentBox->getMotionBlurIdenticalRange(relFrame, true);
+FrameRange MotionBlurEffect::getMotionBlurPropsIdenticalRange(const int relFrame) const
+{
+    auto range = mParentBox ? mParentBox->getMotionBlurIdenticalRange(relFrame, true) : FrameRange::EMINMAX;
     if(range == FrameRange::EMINMAX) return range;
     const qreal nSamples = mNumberSamples->getEffectiveValue(relFrame);
     const qreal frameStep = mFrameStep->getEffectiveValue(relFrame);

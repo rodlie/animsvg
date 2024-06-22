@@ -617,6 +617,7 @@ set(
     swt_abstraction.h
     swt_rulescollection.h
     texteffect.h
+    threadsafeqjsengine.h
     transformvalues.h
     undoredo.h
     exceptions.h

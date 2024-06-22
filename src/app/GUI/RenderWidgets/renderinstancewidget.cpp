@@ -397,8 +397,10 @@ void RenderInstanceWidget::updateRenderSettings()
     const RenderSettings &renderSettings = mSettings.getRenderSettings();
     mRenderSettingsDisplayWidget->setRenderSettings(mSettings.getTargetCanvas(),
                                                     renderSettings);
-    const auto label = mSettings.getTargetCanvas()->prp_getName();
-    if (!label.isEmpty()) { mNameLabel->setText(label); }
+    if (mSettings.getTargetCanvas()) {
+        const auto label = mSettings.getTargetCanvas()->prp_getName();
+        if (!label.isEmpty()) { mNameLabel->setText(label); }
+    }
 }
 
 #include "Private/esettings.h"

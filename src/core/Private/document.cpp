@@ -110,11 +110,13 @@ void Document::setCanvasMode(const CanvasMode mode) {
     actionFinished();
 }
 
-Canvas *Document::createNewScene() {
+Canvas *Document::createNewScene(const bool emitCreated) {
     const auto newScene = enve::make_shared<Canvas>(*this);
     fScenes.append(newScene);
     SWT_addChild(newScene.get());
-    emit sceneCreated(newScene.get());
+    if (emitCreated) {
+        emit sceneCreated(newScene.get());
+    }
     return newScene.get();
 }
 

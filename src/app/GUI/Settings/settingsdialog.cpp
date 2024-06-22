@@ -41,7 +41,7 @@ SettingsDialog::SettingsDialog(QWidget * const parent)
     addSettingsWidget(timeline, tr("Timeline"));
 
     const auto plugins = new PluginsSettingsWidget(this);
-    addSettingsWidget(plugins, tr("Plugins"));
+    addSettingsWidget(plugins, tr("Shaders"));
 
     const auto presets = new PresetSettingsWidget(this);
     addSettingsWidget(presets, tr("Presets"));
@@ -56,7 +56,7 @@ SettingsDialog::SettingsDialog(QWidget * const parent)
     restoreButton->setFocusPolicy(Qt::NoFocus);
     //restoreButton->setObjectName("FlatButton");
 
-    const auto cancelButton = new QPushButton(QIcon::fromTheme("cancel"),
+    const auto cancelButton = new QPushButton(QIcon::fromTheme("dialog-cancel"),
                                               tr("Close"),
                                               this);
     cancelButton->setFocusPolicy(Qt::NoFocus);

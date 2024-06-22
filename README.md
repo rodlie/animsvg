@@ -4,9 +4,9 @@
 
 ## Contribute
 
-We accept any contributions (in form of a PR). Before submitting a PR it's recommended that you communicate with the developers first (in [issues](https://github.com/friction2d/friction/issues) or [discussions](https://github.com/friction2d/friction/discussions)). Someone might already be working on the same feature/issue, or for some reason the feature is not wanted.
+We accept any contributions, big or small. Before submitting a PR it's recommended that you communicate with the developers first (in [issues](https://github.com/friction2d/friction/issues) or [discussions](https://github.com/friction2d/friction/discussions)).
 
-It's always preferred to submit PR's against the `main` branch. If your feature is experimental, a new branch could be made available for further development before entering `main`.
+It's always preferred to submit PR's against the `main` branch.
 
 ## Branches and versions
 
@@ -16,11 +16,11 @@ Friction uses `X.Y.Z` version numbers and `vX.Y` branches.
 * `Y` = Minor
 * `Z` = Patch
 
-Branch `main` is always the current branch for the next `X` or `Y` release. The `main` branch should not be considered stable, but usable.
+Branch `main` is always the current branch for the next `X` or `Y` release.
 
-A new stable branch is cut from `main` on each `X` or `Y` release and is maintained until a new stable branch is created. The next `Z` (patch) release comes from the latest stable branch (`vX.Y`).
+A new stable branch is cut from `main` on each `X` or `Y` release and is maintained until a new stable branch is created. Patch (`Z`) releases comes from the parent stable branch (`vX.Y`).
 
-Bug and security fixes to `main` will be backported to active stable branches when possible (and within reason).
+Critical fixes to `main` will be backported to active stable branches when possible (and within reason).
 
 ## Build
 
@@ -33,7 +33,7 @@ Generic build instructions.
 * python3
 * cmake *(3.12+)*
 * clang *(7+)*
-* Qt *(5.15)*
+* Qt *(5.15.x)*
     * Gui
     * Widgets
     * OpenGL
@@ -41,7 +41,7 @@ Generic build instructions.
     * Qml
     * Xml
 * qscintilla
-* ffmpeg *(4.2)*
+* ffmpeg *(4.2.x)*
     * libavformat
     * libavcodec
     * libavutil
@@ -65,7 +65,7 @@ Generic build instructions.
 * `cmake` must be available in `PATH`
 * `python3` must be available in `PATH`
 * [LLVM](https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.7/LLVM-15.0.7-win64.exe) installed to default location
-* Qt 5.15.13 libraries and headers in `friction\src\qt`
+* Qt 5.15.14 libraries and headers in `friction\src\qt`
   * See [configure_qt5.bat](src/scripts/configure_qt5.bat) and [build_qt5.bat](src/scripts/build_qt5.bat)
 * QScintilla 2.14.1 libraries and headers in `friction\src\qscintilla`
   * See [build_qscintilla.bat](src/scripts/build_qscintilla.bat)
@@ -125,7 +125,7 @@ cmake --build . --config Release
 
 ## License
 
-Copyright &copy; Friction [contributors](https://github.com/friction2d/friction/graphs/contributors).
+Copyright &copy; Friction contributors.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 

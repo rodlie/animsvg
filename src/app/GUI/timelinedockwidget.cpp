@@ -512,5 +512,15 @@ void TimelineDockWidget::updateSettingsForCurrentCanvas(Canvas* const canvas)
 void TimelineDockWidget::stopPreview()
 {
     const auto state = RenderHandler::sInstance->currentPreviewState();
-    if (state != PreviewState::stopped) { interruptPreview(); }
+    switch (state) {
+    case PreviewState::paused:
+        interruptPreview();
+        break;
+    case PreviewState::playing:
+    case PreviewState::rendering:
+        interruptPreview();
+        renderPreview();
+        break;
+    default:;
+    }
 }

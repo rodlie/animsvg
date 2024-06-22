@@ -64,7 +64,7 @@ python3 tools/git-sync-deps
 cd ${BUILD_DIR}/friction-${VERSION}
 
 # no symlinks please
-rm -f src/engine/skia/third_party/externals/harfbuzz/README
+find . -type l -exec sh -c 'for i in "$@"; do cp --preserve --remove-destination "$(readlink -f "$i")" "$i"; done' sh {} +
 
 # remove git anything
 find . \( -name ".git" -o -name ".github" -o -name ".gitignore" -o -name ".gitmodules" -o -name ".gitattributes" \) -exec rm -rf -- {} +
@@ -72,10 +72,3 @@ find . \( -name ".git" -o -name ".github" -o -name ".gitignore" -o -name ".gitmo
 cd ${BUILD_DIR}
 tar cvvf friction-${VERSION}.tar friction-${VERSION}
 bzip2 -9 friction-${VERSION}.tar
-
-TARBALL="friction-${VERSION}.tar.bz2"
-
-sha256sum ${TARBALL} > ${TARBALL}.sha256
-gpg --armor --detach-sign ${TARBALL}
-
-du -sh *

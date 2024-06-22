@@ -507,23 +507,26 @@ void MainWindow::setupMenuBar()
                                                   tr("Save Backup", "MenuBar_File"),
                                                   this, &MainWindow::saveBackup);
 
-    const auto exportMenu = mFileMenu->addMenu(QIcon::fromTheme("output"),
-                                               tr("Export", "MenuBar_File"));
-
-    const auto exportSvgAct = exportMenu->addAction(QIcon::fromTheme("seq_preview"),
-                                                    tr("Web Animation (SVG + SMIL)", "MenuBar_File"),
-                                                    this, &MainWindow::exportSVG,
+    const auto previewSvgAct = mFileMenu->addAction(QIcon::fromTheme("seq_preview"),
+                                                    tr("Preview SVG", "MenuBar_File"),
+                                                    this,[this]{ exportSVG(true); },
                                                     QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                                         "exportSVG",
-                                                                                         "Shift+F12").toString()));
+                                                                                         "previewSVG",
+                                                                                         "Ctrl+F12").toString()));
+    const auto exportSvgAct = mFileMenu->addAction(QIcon::fromTheme("seq_preview"),
+                                                   tr("Export SVG", "MenuBar_File"),
+                                                   this, &MainWindow::exportSVG,
+                                                   QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                                        "exportSVG",
+                                                                                        "Shift+F12").toString()));
     saveToolBtn->setDefaultAction(mSaveAct);
     saveToolMenu->addAction(saveAsAct);
     saveToolMenu->addAction(saveBackAct);
-    saveToolMenu->addAction(exportSvgAct);
+    //saveToolMenu->addAction(exportSvgAct);
     saveToolMenu->addSeparator();
 
     mFileMenu->addSeparator();
-    mFileMenu->addAction(QIcon::fromTheme("cancel"),
+    mFileMenu->addAction(QIcon::fromTheme("dialog-cancel"),
                          tr("Close", "MenuBar_File"),
                          this, &MainWindow::closeProject,
                          QKeySequence(tr("Ctrl+W")));
@@ -1133,7 +1136,7 @@ void MainWindow::setupMenuBar()
 
     const auto help = mMenuBar->addMenu(tr("Help", "MenuBar"));
 
-    const auto aboutAct = help->addAction(QIcon::fromTheme("friction"),
+    const auto aboutAct = help->addAction(QIcon::fromTheme(AppSupport::getAppID()),
                                           tr("About", "MenuBar_Help"),
                                           this,
                                           &MainWindow::openAboutWindow);
@@ -1145,6 +1148,9 @@ void MainWindow::setupMenuBar()
     mToolbar->addAction(QIcon::fromTheme("render_animation"),
                         tr("Render"),
                         this, &MainWindow::openRendererWindow);
+
+    mToolbar->addAction(previewSvgAct);
+    mToolbar->addAction(exportSvgAct);
 
     setMenuBar(mMenuBar);
 
@@ -1160,7 +1166,7 @@ void MainWindow::setupMenuBar()
     if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
         frictionButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
     }
-    frictionButton->setIcon(QIcon::fromTheme("friction"));
+    frictionButton->setIcon(QIcon::fromTheme(AppSupport::getAppID()));
     frictionButton->setDefaultAction(aboutAct);
     frictionButton->setToolTip(QString());
     frictionButton->setFocusPolicy(Qt::NoFocus);
@@ -1801,11 +1807,26 @@ void MainWindow::saveBackup()
     }
 }
 
-void MainWindow::exportSVG()
+const QString MainWindow::checkBeforeExportSVG()
 {
-    const auto dialog = new ExportSvgDialog(this);
-    dialog->show();
+    QStringList result;
+    for (const auto& scene : mDocument.fScenes) {
+        const auto warnings = scene->checkForUnsupportedSVG();
+        if (!warnings.isEmpty()) { result.append(warnings); }
+    }
+    return result.join("");
+}
+
+void MainWindow::exportSVG(const bool &preview)
+{
+    const auto dialog = new ExportSvgDialog(this,
+                                            preview ? QString() : checkBeforeExportSVG());
     dialog->setAttribute(Qt::WA_DeleteOnClose);
+    if (!preview) {
+        dialog->show();
+    } else {
+        dialog->showPreview(true /* close when done */);
+    }
 }
 
 void MainWindow::updateLastOpenDir(const QString &path)
@@ -1990,7 +2011,7 @@ void MainWindow::updateRecentMenu()
     for (const auto &path : mRecentFiles) {
         QFileInfo info(path);
         if (!info.exists()) { continue; }
-        mRecentMenu->addAction(QIcon::fromTheme("friction"), info.baseName(), [path, this]() {
+        mRecentMenu->addAction(QIcon::fromTheme(AppSupport::getAppID()), info.baseName(), [path, this]() {
             openFile(path);
         });
     }

@@ -219,10 +219,10 @@ BoxSingleWidget::BoxSingleWidget(BoxScroller * const parent)
     });
 
     mMainLayout->addWidget(mHwSupportButton);
-#pragma message("FIXME: HwSupportButton might segfault if shader effect")
     connect(mHwSupportButton, &BoxesListActionButton::pressed, this, [this]() {
         if (!mTarget) { return; }
         const auto target = mTarget->getTarget();
+        if (const auto sEff = enve_cast<ShaderEffect*>(target)) { return; }
         if (const auto rEff = enve_cast<RasterEffect*>(target)) {
             rEff->switchInstanceHwSupport();
             Document::sInstance->actionFinished();
@@ -598,7 +598,7 @@ void BoxSingleWidget::loadStaticPixmaps(int iconSize)
     C_ICON = new QPixmap(QIcon::fromTheme("cpu-active").pixmap(iconSize, iconSize));
     G_ICON = new QPixmap(QIcon::fromTheme("gpu-active").pixmap(iconSize, iconSize));
     CG_ICON = new QPixmap(QIcon::fromTheme("cpu-gpu").pixmap(iconSize, iconSize));
-    GRAPH_PROPERTY_ICON = new QPixmap(":/icons/noInterpolation/graphProperty.png"); // TODO
+    GRAPH_PROPERTY_ICON = new QPixmap(QIcon::fromTheme("graph_property_2").pixmap(iconSize, iconSize));
     PROMOTE_TO_LAYER_ICON = new QPixmap(QIcon::fromTheme("layer").pixmap(iconSize, iconSize));
 
     sStaticPixmapsLoaded = true;

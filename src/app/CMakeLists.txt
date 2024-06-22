@@ -253,8 +253,7 @@ set(
 set(
     RESOURCES
     resources.qrc
-    icons.qrc
-    hicolor.qrc
+    icons/hicolor.qrc
     ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing.qrc
 )
 if(${LINUX_DEPLOY})
@@ -384,7 +383,7 @@ if(UNIX AND NOT APPLE)
     foreach(HICOLOR_DIR ${HICOLOR_DIRS})
         install(
             FILES
-            icons/hicolor/${HICOLOR_DIR}/apps/${PROJECT_NAME}.png
+            icons/hicolor/${HICOLOR_DIR}/apps/${PROJECT_FREEDESKTOP}.png
             DESTINATION
             ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${HICOLOR_DIR}/apps
             RENAME
@@ -392,7 +391,7 @@ if(UNIX AND NOT APPLE)
         )
         install(
             FILES
-            icons/hicolor/${HICOLOR_DIR}/mimetypes/application-x-${PROJECT_NAME}.png
+            icons/hicolor/${HICOLOR_DIR}/mimetypes/application-x-${PROJECT_FREEDESKTOP}.png
             DESTINATION
             ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${HICOLOR_DIR}/mimetypes
             RENAME
@@ -401,7 +400,7 @@ if(UNIX AND NOT APPLE)
     endforeach()
     install(
         FILES
-        icons/hicolor/scalable/apps/${PROJECT_NAME}.svg
+        icons/hicolor/scalable/apps/${PROJECT_FREEDESKTOP}.svg
         DESTINATION
         ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps
         RENAME
@@ -409,7 +408,7 @@ if(UNIX AND NOT APPLE)
     )
     install(
         FILES
-        icons/hicolor/scalable/mimetypes/application-x-${PROJECT_NAME}.svg
+        icons/hicolor/scalable/mimetypes/application-x-${PROJECT_FREEDESKTOP}.svg
         DESTINATION
         ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/mimetypes
         RENAME

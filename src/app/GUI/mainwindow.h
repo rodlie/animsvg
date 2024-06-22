@@ -179,7 +179,8 @@ public:
                   const bool setPath = true);
     void saveFileAs(const bool setPath = true);
     void saveBackup();
-    void exportSVG();
+    const QString checkBeforeExportSVG();
+    void exportSVG(const bool &preview = false);
     void updateLastOpenDir(const QString &path);
     void updateLastSaveDir(const QString &path);
     const QString getLastOpenDir();
