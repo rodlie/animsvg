@@ -61,12 +61,12 @@ QSpinBox::down-button {
     border-top-width: 0;
 }
 QSpinBox::up-arrow {
-    image: url(:/icons/hicolor/%7x%7/actions/uparrow.png);
+    image: url(:/icons/hicolor/%7x%7/actions/go-up.png);
     width: %7px;
     height: %7px;
 }
 QSpinBox::down-arrow {
-    image: url(:/icons/hicolor/%7x%7/actions/downarrow.png);
+    image: url(:/icons/hicolor/%7x%7/actions/go-down.png);
     width: %7px;
     height: %7px;
 }
@@ -213,7 +213,7 @@ QComboBox::drop-down:button{
     border: 0;
 }
 QComboBox::down-arrow {
-    image: url(:/icons/hicolor/%7x%7/actions/downarrow.png);
+    image: url(:/icons/hicolor/%7x%7/actions/go-down.png);
 }
 
 
