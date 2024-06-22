@@ -52,6 +52,7 @@
 #include "Animators/SmartPath/smartpathcollection.h"
 
 #include "typemenu.h"
+#include "themesupport.h"
 
 QPixmap* BoxSingleWidget::VISIBLE_ICON;
 QPixmap* BoxSingleWidget::INVISIBLE_ICON;
@@ -779,7 +780,7 @@ void BoxSingleWidget::paintEvent(QPaintEvent *) {
 
             if (bsTarget->isSelected()) {
                 //if (ss) { p.fillRect(mFillWidget->geometry(), QColor(125, 200, 255)); }
-                /*else {*/  p.fillRect(mFillWidget->geometry(), /*QColor(180, 180, 180)*/AppSupport::getThemeButtonBaseColor()); //}
+                /*else {*/  p.fillRect(mFillWidget->geometry(), /*QColor(180, 180, 180)*/ThemeSupport::getThemeButtonBaseColor()); //}
                 p.setPen(Qt::white);
             } else {
                 p.setPen(Qt::white);

@@ -69,6 +69,7 @@
 #include "efiltersettings.h"
 #include "Settings/settingsdialog.h"
 #include "appsupport.h"
+#include "themesupport.h"
 
 #include "widgets/assetswidget.h"
 
@@ -285,7 +286,7 @@ MainWindow::MainWindow(Document& document,
 
     const auto fontWidget = new QWidget(this);
     fontWidget->setAutoFillBackground(true);
-    fontWidget->setPalette(AppSupport::getNotSoDarkPalette());
+    fontWidget->setPalette(ThemeSupport::getNotSoDarkPalette());
 
     const auto fontLayout = new QVBoxLayout(fontWidget);
     fontLayout->addWidget(mFontWidget);
@@ -293,7 +294,7 @@ MainWindow::MainWindow(Document& document,
     QMargins frictionMargins(0, 0, 0, 0);
     int frictionSpacing = 0;
 
-    const auto darkPal = AppSupport::getDarkPalette();
+    const auto darkPal = ThemeSupport::getDarkPalette();
     mObjectSettingsScrollArea->setAutoFillBackground(true);
     mObjectSettingsScrollArea->setPalette(darkPal);
 

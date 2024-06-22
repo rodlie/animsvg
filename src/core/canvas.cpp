@@ -46,7 +46,7 @@
 #include "eevent.h"
 #include "Boxes/nullobject.h"
 #include "simpletask.h"
-#include "appsupport.h"
+#include "themesupport.h"
 
 Canvas::Canvas(Document &document,
                const int canvasWidth,
@@ -265,7 +265,7 @@ void Canvas::renderSk(SkCanvas* const canvas,
         canvas->clear(SK_ColorBLACK);
         canvas->clipRect(canvasRect);
     } else {
-        canvas->clear(AppSupport::getThemeBaseSkColor());
+        canvas->clear(ThemeSupport::getThemeBaseSkColor());
         paint.setColor(SK_ColorGRAY);
         paint.setStyle(SkPaint::kStroke_Style);
         paint.setPathEffect(dashPathEffect);

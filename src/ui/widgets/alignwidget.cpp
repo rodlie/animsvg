@@ -31,6 +31,7 @@
 
 #include "GUI/global.h"
 #include "Private/esettings.h"
+#include "themesupport.h"
 
 AlignWidget::AlignWidget(QWidget* const parent)
     : QWidget(parent)
@@ -38,7 +39,7 @@ AlignWidget::AlignWidget(QWidget* const parent)
     , mRelativeTo(nullptr)
 {
     QPalette pal = QPalette();
-    pal.setColor(QPalette::Window, AppSupport::getThemeBaseColor());
+    pal.setColor(QPalette::Window, ThemeSupport::getThemeBaseColor());
     setAutoFillBackground(true);
     setPalette(pal);
 

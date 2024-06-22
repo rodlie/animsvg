@@ -41,7 +41,7 @@
 #include "Animators/qrealpoint.h"
 #include "timelinehighlightwidget.h"
 #include "GUI/dialogsinterface.h"
-#include "appsupport.h"
+#include "themesupport.h"
 
 KeysView::KeysView(BoxScrollWidget *boxesListVisible,
                    QWidget *parent) :
@@ -468,12 +468,12 @@ void KeysView::paintEvent(QPaintEvent *) {
 
     //if(mGraphViewed) p.fillRect(rect(), QColor(33, 33, 38));
     //else p.fillRect(rect(), QColor(33, 33, 38));
-    p.fillRect(rect(), AppSupport::getThemeBaseColor());
+    p.fillRect(rect(), ThemeSupport::getThemeBaseColor());
 
     if(mPixelsPerFrame < 0.001) return;
     if(!mGraphViewed) {
         int currY = eSizesUI::widget;
-        p.setPen(QPen(AppSupport::getThemeTimelineColor(), 2));
+        p.setPen(QPen(ThemeSupport::getThemeTimelineColor(), 2));
         while(currY < height()) {
             p.drawLine(0, currY, width(), currY);
             currY += eSizesUI::widget;
@@ -481,7 +481,7 @@ void KeysView::paintEvent(QPaintEvent *) {
     }
     p.translate(eSizesUI::widget/2, 0);
 
-    p.setPen(QPen(AppSupport::getThemeTimelineColor(), 2));
+    p.setPen(QPen(ThemeSupport::getThemeTimelineColor(), 2));
     qreal xT = mPixelsPerFrame*0.5;
     int iInc = 1;
     bool mult5 = true;
@@ -504,7 +504,7 @@ void KeysView::paintEvent(QPaintEvent *) {
         if (mCurrentScene->getCurrentFrame() <= maxFrame &&
            mCurrentScene->getCurrentFrame() >= minFrame) {
             xT = (mCurrentScene->getCurrentFrame() - mMinViewedFrame)*mPixelsPerFrame + mPixelsPerFrame*0.5;
-            p.setPen(QPen(AppSupport::getThemeHighlightColor(), 2));
+            p.setPen(QPen(ThemeSupport::getThemeHighlightColor(), 2));
             p.drawLine(QPointF(xT, 0), QPointF(xT, height()));
         }
     }
@@ -541,7 +541,7 @@ void KeysView::paintEvent(QPaintEvent *) {
         mValueInput.draw(&p, height() - eSizesUI::widget);
     if(hasFocus()) {
         p.setBrush(Qt::NoBrush);
-        p.setPen(QPen(AppSupport::getThemeHighlightColor(), 4));
+        p.setPen(QPen(ThemeSupport::getThemeHighlightColor(), 4));
         p.drawRect(0, 0, width(), height());
     }
 

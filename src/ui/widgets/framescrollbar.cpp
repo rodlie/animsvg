@@ -28,6 +28,7 @@
 #include <QPainter>
 #include "GUI/global.h"
 #include "colorhelpers.h"
+#include "appsupport.h"
 
 FrameScrollBar::FrameScrollBar(const int minSpan,
                                const int maxSpan,
@@ -66,7 +67,7 @@ void FrameScrollBar::setCurrentCanvas(Canvas * const canvas)
 
 void FrameScrollBar::paintEvent(QPaintEvent *) {
     QPainter p(this);
-    p.fillRect(rect(), AppSupport::getThemeBaseDarkerColor());
+    p.fillRect(rect(), ThemeSupport::getThemeBaseDarkerColor());
 
     const int dFrame = mFrameRange.fMax - mFrameRange.fMin + (mRange ? 0 : 1);
     if(dFrame <= 0) return;
@@ -125,7 +126,7 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         path.lineTo(handleRect.topLeft());
         path.lineTo(handleRect.topRight());
         path.lineTo(handleRect.left() + (handleRect.width() / 2), handleRect.bottom());
-        p.fillPath(path, AppSupport::getThemeHighlightColor());
+        p.fillPath(path, ThemeSupport::getThemeHighlightColor());
     }
 
     // ticks

@@ -33,6 +33,7 @@
 #include "efiltersettings.h"
 #include "memorystructs.h"
 #include "appsupport.h"
+#include "themesupport.h"
 
 enum class GpuVendor {
     intel,
@@ -123,7 +124,7 @@ public:
     bool fTimelineAlternateRow = true;
     QColor fTimelineAlternateRowColor = QColor(0, 0, 0, 25);
     bool fTimelineHighlightRow = true;
-    QColor fTimelineHighlightRowColor = AppSupport::getThemeHighlightColor(15);
+    QColor fTimelineHighlightRowColor = ThemeSupport::getThemeHighlightColor(15);
 
     QColor fObjectKeyframeColor;
     QColor fPropertyGroupKeyframeColor;

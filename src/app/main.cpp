@@ -40,6 +40,7 @@
 #include "ShaderEffects/shadereffectprogram.h"
 #include "videoencoder.h"
 #include "appsupport.h"
+#include "themesupport.h"
 
 #ifdef Q_OS_WIN
 #include "windowsincludes.h"
@@ -202,7 +203,7 @@ int main(int argc, char *argv[])
     ALPHA_MESH_PIX = &alphaMesh;
     std::cout << "Generated Alpha Mesh" << std::endl;
 
-    AppSupport::setupTheme(eSizesUI::widget);
+    ThemeSupport::setupTheme(eSizesUI::widget);
 
     //#ifdef QT_DEBUG
     //    const qint64 pId = QCoreApplication::applicationPid();

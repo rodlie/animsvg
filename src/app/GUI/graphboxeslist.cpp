@@ -32,7 +32,7 @@
 #include "GUI/global.h"
 #include "Animators/qrealkey.h"
 #include "GUI/BoxesList/boxscrollwidget.h"
-#include "appsupport.h"
+#include "themesupport.h"
 
 QColor KeysView::sGetAnimatorColor(const int i) {
     return ANIMATOR_COLORS.at(i % ANIMATOR_COLORS.length());
@@ -162,7 +162,7 @@ void KeysView::graphPaint(QPainter *p) {
             yL -= incY;
             currValue += mValueInc;
         }
-        p->setPen(AppSupport::getThemeTimelineColor());
+        p->setPen(ThemeSupport::getThemeTimelineColor());
         p->drawLines(lines, nLines);
         delete[] lines;
     }
