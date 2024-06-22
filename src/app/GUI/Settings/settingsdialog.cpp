@@ -54,28 +54,28 @@ SettingsDialog::SettingsDialog(QWidget * const parent)
                                                tr("Restore Defaults"),
                                                this);
     restoreButton->setFocusPolicy(Qt::NoFocus);
-    restoreButton->setObjectName("FlatButton");
+    //restoreButton->setObjectName("FlatButton");
 
     const auto cancelButton = new QPushButton(QIcon::fromTheme("cancel"),
                                               tr("Close"),
                                               this);
     cancelButton->setFocusPolicy(Qt::NoFocus);
-    cancelButton->setObjectName("FlatButton");
+    //cancelButton->setObjectName("FlatButton");
 
     const auto applyButton = new QPushButton(QIcon::fromTheme("disk_drive"),
                                              tr("Save"),
                                              this);
     applyButton->setFocusPolicy(Qt::NoFocus);
-    applyButton->setObjectName("FlatButton");
+    //applyButton->setObjectName("FlatButton");
 
     buttonsLayout->addWidget(restoreButton);
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(applyButton);
     buttonsLayout->addWidget(cancelButton);
 
-    restoreButton->setFixedHeight(eSizesUI::widget);
+    /*restoreButton->setFixedHeight(eSizesUI::widget);
     cancelButton->setFixedHeight(eSizesUI::widget);
-    applyButton->setFixedHeight(eSizesUI::widget);
+    applyButton->setFixedHeight(eSizesUI::widget);*/
 
     if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
         restoreButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));

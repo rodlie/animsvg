@@ -133,8 +133,6 @@ int main(int argc, char *argv[])
 // #endif
 #endif
 
-    AppSupport::setupTheme();
-
 #ifndef Q_OS_DARWIN
     const bool threadedOpenGL = QOpenGLContext::supportsThreadedOpenGL();
     if (!threadedOpenGL) {
@@ -203,6 +201,8 @@ int main(int argc, char *argv[])
     });
     ALPHA_MESH_PIX = &alphaMesh;
     std::cout << "Generated Alpha Mesh" << std::endl;
+
+    AppSupport::setupTheme(eSizesUI::widget);
 
     //#ifdef QT_DEBUG
     //    const qint64 pId = QCoreApplication::applicationPid();

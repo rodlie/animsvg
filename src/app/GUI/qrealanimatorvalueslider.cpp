@@ -29,6 +29,7 @@
 #include "mainwindow.h"
 #include "Expressions/expressiondialog.h"
 #include "GUI/dialogsinterface.h"
+#include "appsupport.h"
 
 QrealAnimatorValueSlider::QrealAnimatorValueSlider(qreal minVal, qreal maxVal,
                                                    qreal prefferedStep,
@@ -170,19 +171,16 @@ void QrealAnimatorValueSlider::paint(QPainter *p) {
         if(rec) {
             const bool disabled = isTargetDisabled() || !isEnabled();
             QDoubleSlider::paint(p,
-                                 disabled ? QColor(200, 180, 180) :
-                                            QColor(255, 200, 200),
-                                 disabled ? QColor(180, 160, 160) :
-                                            QColor(255, 160, 160),
-                                 key ? (disabled ? QColor(200, 90, 90) : Qt::red) :
-                                       (disabled ? Qt::darkGray : Qt::black),
+                                 disabled ? AppSupport::getThemeButtonBaseColor(200) : AppSupport::getThemeHighlightAlternativeColor(),
+                                 key ? (disabled ? AppSupport::getThemeAlternateColor() : AppSupport::getThemeHighlightSelectedColor()) : (disabled ? AppSupport::getThemeAlternateColor() : AppSupport::getThemeHighlightColor()),
+                                 key ? (disabled ? Qt::gray : AppSupport::getThemeHighlightSelectedColor()) : (disabled ? Qt::darkGray : AppSupport::getThemeButtonBorderColor()),
                                  disabled ? Qt::darkGray : Qt::black);
         } else {
             QDoubleSlider::paint(p, !isTargetDisabled() && isEnabled());
         }
         if(!textEditing() && mTarget->hasExpression()) {
             if(mTarget->hasValidExpression()) {
-                p->setBrush(QColor(0, 125, 255));
+                p->setBrush(/*QColor(0, 125, 255)*/AppSupport::getThemeHighlightColor());
             } else {
                 p->setBrush(QColor(255, 125, 0));
             }

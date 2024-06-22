@@ -774,13 +774,13 @@ void BoxSingleWidget::paintEvent(QPaintEvent *) {
         nameX += eSizesUI::widget/4;
         const bool ss = enve_cast<eSoundObjectBase*>(prop);
         if(ss || enve_cast<BoundingBox*>(prop)) {
-            if(ss) p.fillRect(rect(), QColor(0, 125, 255, 50));
-            else   p.fillRect(rect(), QColor(0, 0, 0, 50));
+            //if(ss) p.fillRect(rect(), QColor(0, 125, 255, 50));
+            /*else*/   p.fillRect(rect(), QColor(0, 0, 0, 50));
 
-            if(bsTarget->isSelected()) {
-                if(ss) p.fillRect(mFillWidget->geometry(), QColor(125, 200, 255));
-                else   p.fillRect(mFillWidget->geometry(), QColor(180, 180, 180));
-                p.setPen(Qt::black);
+            if (bsTarget->isSelected()) {
+                //if (ss) { p.fillRect(mFillWidget->geometry(), QColor(125, 200, 255)); }
+                /*else {*/  p.fillRect(mFillWidget->geometry(), /*QColor(180, 180, 180)*/AppSupport::getThemeButtonBaseColor()); //}
+                p.setPen(Qt::white);
             } else {
                 p.setPen(Qt::white);
             }

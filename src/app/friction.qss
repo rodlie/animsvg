@@ -1,7 +1,7 @@
 /*
-# enve2d - https://github.com/enve2d
+# Friction - https://friction.graphics
 #
-# Copyright (c) enve2d developers
+# Copyright (c) Friction contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,20 +18,209 @@
 #
 */
 
+/*
+%1 = getThemeButtonBaseColor
+%2 = getThemeButtonBorderColor
+%3 = getThemeBaseDarkerColor
+%4 = getThemeHighlightColor
+%5 = getThemeBaseColor
+%6 = getThemeAlternateColor
+%7 = icon size
+
+*/
+
+/*QTabWidget::pane {
+    border-color: %1;
+}
+QTabWidget::pane,
+QTabBar {
+    background-color: %6;
+}
+QTabBar::tab {
+    background-color: %5;
+}*/
+
+QSpinBox {
+    border-radius: 2%;
+    border: 1px solid transparent;
+}
+QSpinBox:hover {
+    border-color: %4;
+}
+QSpinBox::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    width: %7px;
+    border-width: 1px;
+}
+QSpinBox::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    width: %7px;
+    border-width: 1px;
+    border-top-width: 0;
+}
+QSpinBox::up-arrow {
+    image: url(:/icons/hicolor/%7x%7/actions/uparrow.png);
+    width: %7px;
+    height: %7px;
+}
+QSpinBox::down-arrow {
+    image: url(:/icons/hicolor/%7x%7/actions/downarrow.png);
+    width: %7px;
+    height: %7px;
+}
+QSpinBox#SpinBoxNoButtons::up-arrow,
+QSpinBox#SpinBoxNoButtons::down-arrow,
+QSpinBox#SpinBoxNoButtons::up-button,
+QSpinBox#SpinBoxNoButtons::down-button {
+    width: 0;
+    height: 0;
+}
+
+QTabWidget#TabWidgetCenter::tab-bar {
+    alignment: center;
+}
+QTabBar#TabWidgetCenter::tab:bottom:first {
+    border-bottom-left-radius: 2%;
+}
+QTabBar#TabWidgetCenter::tab:bottom:last {
+    border-bottom-right-radius: 2%;
+}
+QTabBar#TabWidgetCenter::tab:bottom:only-one {
+    border-bottom-left-radius: 2%;
+    border-bottom-right-radius: 2%;
+}
+
+
+QTabWidget::pane,
+QTabBar {
+    padding: .2em;
+    background-color: %6;
+    border: 1px solid %1;
+}
+QTabBar::tab {
+    padding: .4em;
+    border-radius: 2%;
+    border: 1px solid %6;
+    background-color: %5;
+}
+QTabBar::tab:selected {
+    background-color: %1;
+}
+QTabBar::tab:hover {
+    background-color: %3;
+    border-color: %4;
+}
+QTabBar::tab:bottom:!hover {
+    border-top-color: transparent;
+}
+QTabBar::tab:top:!hover {
+    border-bottom-color: transparent;
+}
+QTabBar::tab:bottom {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+QTabBar::tab:top {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+QMenuBar::item:selected,
+QMenu::item:selected {
+    background-color: %1;
+}
+
 QStatusBar::item,
 QToolBar
 {
     border: 0;
 }
 
+QComboBox,
+QPushButton,
+QToolButton,
+QAction {
+    background-color: %1; /*rgb(48.5, 48.5, 59.2);/*(59, 59, 72);*/
+    border-radius: 2%;
+    border: 1px solid %2; /* rgb(65, 65, 80);*/
+}
+/*QComboBox {
+    background-color: rgb(59, 59, 72);
+    border-radius: 2%;
+}*/
+
+QToolButton,
+QAction {
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
+}
+
+QPushButton {
+    padding: .2em;
+}
+
+QToolButton:unchecked,
+QAction:unchecked {
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
+}
+
+QComboBox:hover,
 QPushButton:hover,
 QToolButton:hover,
+QPushButton:checked,
 QToolButton:checked,
 QAction:checked,
-QComboBox:hover,
-QPushButton#QActionButton:checked
+/*QComboBox:hover,*/
+QCheckBox::indicator:unchecked:hover
 {
-    background-color: rgb(112, 8, 10);
+    background-color: %3; /*rgb(19, 19, 21);*/
+    border-color: %4; /* rgb(104, 144, 206);*/
+    
+}
+
+
+QSpinBox,
+QLineEdit {
+    background-color: %3;
+}
+
+QSpinBox:hover,
+QLineEdit:hover {
+    background-color: black;
+}
+
+/*QSpinBox:hover,
+QLineEdit:hover {
+    border-color: %4;
+}*/
+
+/*QComboBox QAbstractItemView {
+  border: 1px solid grey;
+  background: white;
+  selection-background-color: blue;
+}*/
+/*QComboBox {
+      background-color: rgb(30, 30, 41.1); (35.9, 35.9, 52.8);
+    
+}*/
+
+QComboBox::drop-down:button{
+    background-color: transparent;
+    width: %7px;
+    border: 0;
+}
+QComboBox::down-arrow {
+    image: url(:/icons/hicolor/%7x%7/actions/downarrow.png);
+}
+
+
+QComboBox#blendModeCombo,
+QWidget#menuBarWidget QPushButton/*,
+AlignWidget QComboBox*/ {
+    background-color: %5;
 }
 
 QToolBar#animationDockWidget,
@@ -46,11 +235,25 @@ QToolBar::separator {
     border-color: none;
 }
 
-QComboBox#blendModeCombo,
+/*QComboBox#blendModeCombo,
 QWidget#menuBarWidget QPushButton,
 AlignWidget QComboBox {
     background-color: rgb(23, 23, 28);
+}*/
+/* QToolButton#qt_toolbar_ext_button 
+{ 
+    qproperty-icon: url(:/path/to/image.png);
+}*/
+
+QToolButton[popupMode="1"] {
+    padding-right: .1em;
 }
+QToolButton::menu-button {
+    background-color: transparent;
+}
+/*QComboBox::drop-down {
+    background-color:red;
+}*/
 
 QPushButton::menu-indicator,
 QToolButton#ToolButton::menu-indicator,
@@ -81,20 +284,20 @@ FillStrokeSettingsWidget {
     border: 0;
 }
 
-QSpinBox#SpinBoxNoButtons::up-button,
-QSpinBox#SpinBoxNoButtons::down-button {
-    width: 0;
-}
 
-QPushButton#WelcomeButton {
-    padding: 0.25em;
+
+
+QPushButton#WelcomeButton,
+QPushButton#WelcomeRecentButton {
+    /*padding: 0.25em;
     border: 2px solid #666;
     border-radius: 10%;
     color: #ebebeb;
-    font-weight: bold;
+    font-weight: bold;*/
+    background-color: transparent;
 }
 
-QPushButton#WelcomeButton:hover {
+/*QPushButton#WelcomeButton:hover {
     border-color: #ebebeb;
 }
 
@@ -108,14 +311,14 @@ QPushButton#WelcomeRecentButton {
 
 QPushButton#WelcomeRecentButton:hover {
     border: 2px solid #ebebeb;
-}
+}*/
 
-AlignWidget QPushButton,
+/*AlignWidget QPushButton,*/
 QPushButton#FlatButton,
 QToolButton#FlatButton {
     background-color: none;
     border: 0;
-    border-radius: 10%;
+    border-radius: 2%;
 }
 
 QPushButton#FlatButton,
@@ -126,7 +329,9 @@ QToolButton#FlatButton {
 QCheckBox::indicator:unchecked:hover,
 QPushButton#FlatButton:hover,
 QToolButton#FlatButton:hover {
-    background-color: rgb(112, 8, 10);
+    background-color: rgb(19, 19, 21);
+    border-color: rgb(104, 144, 206);
+    
 }
 
 QTabWidget#ThirdPartyBrowser { border: 0; }
@@ -141,3 +346,4 @@ QToolButton#AutoPopupButton:pressed {
 }
 QToolButton#AutoPopupButton::menu-indicator { width: 0px; }
 QToolButton#AutoPopupButton QMenu { border: 1.5px solid rgb(74, 74, 79); }
+

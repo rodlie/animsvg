@@ -32,6 +32,7 @@
 #include "Private/document.h"
 #include "pointhelpers.h"
 #include "GUI/global.h"
+#include "appsupport.h"
 
 SliderEdit::SliderEdit(QWidget* const parent) :
     QLineEdit(parent) {
@@ -179,10 +180,10 @@ void QDoubleSlider::setValueRange(const qreal min, const qreal max) {
 }
 
 void QDoubleSlider::paint(QPainter * const p, const bool enabled) {
-    paint(p, enabled ? QColor(255, 255, 255) : QColor(220, 220, 220),
-          enabled ? QColor(220, 220, 220) : QColor(200, 200, 200),
-          enabled ? Qt::black : Qt::darkGray,
-          enabled ? Qt::black : Qt::darkGray);
+    paint(p, enabled ? /*QColor(255, 255, 255)*/AppSupport::getThemeButtonBaseColor() : /*QColor(220, 220, 220)*/AppSupport::getThemeAlternateColor(),
+          enabled ? /*QColor(220, 220, 220)*/AppSupport::getThemeButtonBorderColor(150) : /*QColor(200, 200, 200)*/AppSupport::getThemeBaseColor(),
+          enabled ? AppSupport::getThemeButtonBorderColor() : Qt::darkGray,
+          enabled ? Qt::white : Qt::darkGray);
 }
 
 QString QDoubleSlider::valueToText(const qreal value) const {
@@ -217,7 +218,8 @@ void QDoubleSlider::paint(QPainter *p,
     } else if(mRightNeighbour) {
         p->setClipRect(0, 0, width()/2, height());
     }
-    p->drawRoundedRect(boundingRect, 5, 5);
+    const int xR = 2;
+    p->drawRoundedRect(boundingRect, xR, xR);
     if(mLeftNeighbour || mRightNeighbour) {
         if(mLeftNeighbour) {
             p->setClipRect(0, 0, width()/2, height());
@@ -236,7 +238,7 @@ void QDoubleSlider::paint(QPainter *p,
             const qreal heightRemoval = qMax(0., eSizesUI::widget/2 - valWidth)*0.5;
             p->drawRoundedRect(QRectF(1, 1, valWidth, height() - 2).
                                adjusted(0, heightRemoval,
-                                        0, -heightRemoval), 5, 5.);
+                                        0, -heightRemoval), xR, xR);
         }
         p->setPen(text);
         if(mShowName) {
@@ -254,7 +256,7 @@ void QDoubleSlider::paint(QPainter *p,
     } else if(mRightNeighbour) {
         p->setClipRect(0, 0, width()/2, height());
     }
-    p->drawRoundedRect(boundingRect, 5, 5);
+    p->drawRoundedRect(boundingRect, xR, xR);
     if(mLeftNeighbour || mRightNeighbour) {
         if(mLeftNeighbour) {
             boundingRect.adjust(-1, 0, 0, 0);

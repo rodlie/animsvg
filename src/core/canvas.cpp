@@ -29,6 +29,7 @@
 #include "Sound/soundcomposition.h"
 #include "Boxes/textbox.h"
 #include "GUI/global.h"
+#include "appsupport.h"
 #include "pointhelpers.h"
 #include "Boxes/internallinkbox.h"
 #include "clipboardcontainer.h"
@@ -45,6 +46,7 @@
 #include "eevent.h"
 #include "Boxes/nullobject.h"
 #include "simpletask.h"
+#include "appsupport.h"
 
 Canvas::Canvas(Document &document,
                const int canvasWidth,
@@ -263,7 +265,7 @@ void Canvas::renderSk(SkCanvas* const canvas,
         canvas->clear(SK_ColorBLACK);
         canvas->clipRect(canvasRect);
     } else {
-        canvas->clear(SkColorSetARGB(255, 33, 33, 38));
+        canvas->clear(AppSupport::getThemeBaseSkColor());
         paint.setColor(SK_ColorGRAY);
         paint.setStyle(SkPaint::kStroke_Style);
         paint.setPathEffect(dashPathEffect);

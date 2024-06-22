@@ -299,14 +299,15 @@ MainWindow::MainWindow(Document& document,
 
     // setup "Fill and Stroke" and "Text and Font" tab
     mTabColorText = new QTabWidget(this);
+    mTabColorText->setObjectName("TabWidgetCenter");
     mTabColorText->tabBar()->setFocusPolicy(Qt::NoFocus);
     mTabColorText->setContentsMargins(frictionMargins);
     mTabColorText->setMinimumWidth(sideBarMin);
     mTabColorText->setTabPosition(QTabWidget::South);
     eSizesUI::widget.add(mTabColorText, [this](const int size) {
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+        //if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
             mTabColorText->setIconSize(QSize(size, size));
-        }
+        //}
     });
 
     mTabColorIndex = mTabColorText->addTab(mFillStrokeSettings,
@@ -318,14 +319,15 @@ MainWindow::MainWindow(Document& document,
 
     // setup "Properties", "Assets", "Queue" tab
     mTabProperties = new QTabWidget(this);
+    mTabProperties->setObjectName("TabWidgetCenter");
     mTabProperties->tabBar()->setFocusPolicy(Qt::NoFocus);
     mTabProperties->setContentsMargins(frictionMargins);
     mTabProperties->setMinimumWidth(sideBarMin);
     mTabProperties->setTabPosition(QTabWidget::South);
     eSizesUI::widget.add(mTabProperties, [this](const int size) {
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+        //if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
             mTabProperties->setIconSize(QSize(size, size));
-        }
+        //}
     });
 
     const auto propertiesWidget = new QWidget(this);

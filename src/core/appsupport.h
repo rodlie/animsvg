@@ -33,6 +33,7 @@
 #include <QStringList>
 
 #include "hardwareenums.h"
+#include "include/core/SkColor.h"
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #define QT_ENDL Qt::endl
@@ -48,10 +49,24 @@ class CORE_EXPORT AppSupport : public QObject
 
 public:
     explicit AppSupport(QObject *parent = nullptr);
-    static void setupTheme();
-    static const QPalette getDarkPalette();
-    static const QPalette getDarkerPalette();
-    static const QPalette getNotSoDarkPalette();
+    static const QColor getThemeBaseColor(int alpha = 255);
+    static SkColor getThemeBaseSkColor(int alpha = 255);
+    static const QColor getThemeBaseDarkColor(int alpha = 255);
+    static const QColor getThemeBaseDarkerColor(int alpha = 255);
+    static const QColor getThemeAlternateColor(int alpha = 255);
+    static const QColor getThemeHighlightColor(int alpha = 255);
+    static const QColor getThemeHighlightAlternativeColor(int alpha = 255);
+    static const QColor getThemeHighlightSelectedColor(int alpha = 255);
+    static SkColor getThemeHighlightSkColor(int alpha = 255);
+    static const QColor getThemeButtonBaseColor(int alpha = 255);
+    static const QColor getThemeButtonBorderColor(int alpha = 255);
+    static const QColor getThemeComboBaseColor(int alpha = 255);
+    static const QColor getThemeTimelineColor();
+    static const QPalette getDarkPalette(int alpha = 255);
+    static const QPalette getDarkerPalette(int alpha = 255);
+    static const QPalette getNotSoDarkPalette(int alpha = 255);
+    static const QString getThemeStyle(int iconSize = 20);
+    static void setupTheme(const int iconSize = 20);
     static QVariant getSettings(const QString &group,
                                 const QString &key,
                                 const QVariant &fallback = QVariant());

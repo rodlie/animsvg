@@ -45,57 +45,140 @@ AppSupport::AppSupport(QObject *parent)
 
 }
 
-void AppSupport::setupTheme()
+const QColor AppSupport::getThemeAlternateColor(int alpha)
+{
+    return QColor(33, 33, 39, alpha); //(40, 40, 47);
+}
+
+const QColor AppSupport::getThemeBaseColor(int alpha)
+{
+    return QColor(26, 26, 30, alpha); //(33, 33, 38);
+}
+
+SkColor AppSupport::getThemeBaseSkColor(int alpha)
+{
+    return SkColorSetARGB(alpha, 26, 26, 30);
+}
+
+const QColor AppSupport::getThemeBaseDarkColor(int alpha)
+{
+    return QColor(25, 25, 25, alpha);
+}
+
+const QColor AppSupport::getThemeBaseDarkerColor(int alpha)
+{
+    return QColor(19, 19, 21, alpha);
+}
+
+const QColor AppSupport::getThemeHighlightColor(int alpha)
+{
+    return QColor(104, 144, 206, alpha);
+}
+
+const QColor AppSupport::getThemeHighlightAlternativeColor(int alpha)
+{
+    return QColor(167, 185, 222, alpha);
+}
+
+const QColor AppSupport::getThemeHighlightSelectedColor(int alpha)
+{
+    return QColor(150, 191, 255, alpha);
+}
+
+SkColor AppSupport::getThemeHighlightSkColor(int alpha)
+{
+    return SkColorSetARGB(alpha, 104, 144, 206);
+}
+
+const QColor AppSupport::getThemeButtonBaseColor(int alpha)
+{
+    return QColor(49, 49, 59, alpha);
+}
+
+const QColor AppSupport::getThemeButtonBorderColor(int alpha)
+{
+    return QColor(65, 65, 80, alpha);
+}
+
+const QColor AppSupport::getThemeComboBaseColor(int alpha)
+{
+    return QColor(36, 36, 53, alpha);
+}
+
+const QColor AppSupport::getThemeTimelineColor()
+{
+    return QColor(44, 44, 49);
+}
+
+const QPalette AppSupport::getDarkPalette(int alpha)
+{
+    QPalette pal = QPalette();
+    pal.setColor(QPalette::Window, getThemeBaseColor(alpha));
+    pal.setColor(QPalette::Base, getThemeBaseColor(alpha));
+    pal.setColor(QPalette::Button, getThemeBaseColor(alpha));
+    return pal;
+}
+
+const QPalette AppSupport::getDarkerPalette(int alpha)
+{
+    QPalette pal = QPalette();
+    pal.setColor(QPalette::Window, getThemeBaseDarkerColor(alpha));
+    pal.setColor(QPalette::Base, getThemeBaseDarkerColor(alpha));
+    pal.setColor(QPalette::Button, getThemeBaseDarkerColor(alpha));
+    return pal;
+}
+
+const QPalette AppSupport::getNotSoDarkPalette(int alpha)
+{
+    QPalette pal = QPalette();
+    pal.setColor(QPalette::Window, getThemeAlternateColor(alpha));
+    pal.setColor(QPalette::Base, getThemeBaseColor(alpha));
+    pal.setColor(QPalette::Button, getThemeBaseColor(alpha));
+    return pal;
+}
+
+const QString AppSupport::getThemeStyle(int iconSize)
+{
+    QString css;
+    QFile stylesheet(QString::fromUtf8(":/styles/%1.qss").arg(AppSupport::getAppName()));
+    if (stylesheet.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        css = stylesheet.readAll();
+        stylesheet.close();
+    }
+    return css.arg(getThemeButtonBaseColor().name(),
+                   getThemeButtonBorderColor().name(),
+                   getThemeBaseDarkerColor().name(),
+                   getThemeHighlightColor().name(),
+                   getThemeBaseColor().name(),
+                   getThemeAlternateColor().name(),
+                   QString::number(iconSize));
+}
+
+void AppSupport::setupTheme(const int iconSize)
 {
     QIcon::setThemeSearchPaths(QStringList() << QString::fromUtf8(":/icons"));
     QIcon::setThemeName(QString::fromUtf8("hicolor"));
     qApp->setStyle(QString::fromUtf8("fusion"));
 
     QPalette palette;
-    palette.setColor(QPalette::Window, QColor(40, 40, 47));
+    palette.setColor(QPalette::Window, getThemeAlternateColor());
     palette.setColor(QPalette::WindowText, Qt::white);
-    palette.setColor(QPalette::Base, QColor(33, 33, 38));
-    palette.setColor(QPalette::AlternateBase, QColor(40, 40, 47));
+    palette.setColor(QPalette::Base, getThemeBaseColor());
+    palette.setColor(QPalette::AlternateBase, getThemeAlternateColor());
     palette.setColor(QPalette::Link, Qt::white);
     palette.setColor(QPalette::LinkVisited, Qt::white);
     palette.setColor(QPalette::ToolTipText, Qt::white);
     palette.setColor(QPalette::ToolTipBase, Qt::black);
     palette.setColor(QPalette::Text, Qt::white);
-    palette.setColor(QPalette::Button, QColor(33, 33, 38));
+    palette.setColor(QPalette::Button, getThemeBaseColor());
     palette.setColor(QPalette::ButtonText, Qt::white);
-    palette.setColor(QPalette::BrightText, Qt::red);
-    palette.setColor(QPalette::Highlight, QColor(177, 16, 20));
+    palette.setColor(QPalette::BrightText, Qt::white);
+    palette.setColor(QPalette::Highlight, getThemeHighlightColor());
     palette.setColor(QPalette::HighlightedText, Qt::white);
     palette.setColor(QPalette::Disabled, QPalette::Text, Qt::darkGray);
     palette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
     qApp->setPalette(palette);
-}
-
-const QPalette AppSupport::getDarkPalette()
-{
-    QPalette pal = QPalette();
-    pal.setColor(QPalette::Window, QColor(33, 33, 38));
-    pal.setColor(QPalette::Base, QColor(33, 33, 38));
-    pal.setColor(QPalette::Button, QColor(33, 33, 38));
-    return pal;
-}
-
-const QPalette AppSupport::getDarkerPalette()
-{
-    QPalette pal = QPalette();
-    pal.setColor(QPalette::Window, QColor(25, 25, 25));
-    pal.setColor(QPalette::Base, QColor(25, 25, 25));
-    pal.setColor(QPalette::Button, QColor(25, 25, 25));
-    return pal;
-}
-
-const QPalette AppSupport::getNotSoDarkPalette()
-{
-    QPalette pal = QPalette();
-    pal.setColor(QPalette::Window, QColor(40, 40, 47));
-    pal.setColor(QPalette::Base, QColor(33, 33, 38));
-    pal.setColor(QPalette::Button, QColor(33, 33, 38));
-    return pal;
+    qApp->setStyleSheet(getThemeStyle(iconSize));
 }
 
 QVariant AppSupport::getSettings(const QString &group,

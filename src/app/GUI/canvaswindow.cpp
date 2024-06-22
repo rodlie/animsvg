@@ -44,6 +44,7 @@
 #include "simpletask.h"
 #include "eevent.h"
 #include "glhelpers.h"
+#include "appsupport.h"
 
 CanvasWindow::CanvasWindow(Document &document,
                            QWidget * const parent)
@@ -183,7 +184,7 @@ void CanvasWindow::renderSk(SkCanvas * const canvas)
 
     if (KFT_hasFocus()) {
         SkPaint paint;
-        paint.setColor(SK_ColorRED);
+        paint.setColor(AppSupport::getThemeHighlightSkColor());
         paint.setStrokeWidth(pixelRatio*4);
         paint.setStyle(SkPaint::kStroke_Style);
         canvas->drawRect(SkRect::MakeWH(width() * pixelRatio,
