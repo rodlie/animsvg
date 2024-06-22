@@ -30,10 +30,13 @@
 #include <QMenu>
 #include "GUI/ColorWidgets/colorpickingwidget.h"
 #include "colorhelpers.h"
-#include "colorlabel.h"
+#include "widgets/colorlabel.h"
 #include "GUI/global.h"
-#include "GUI/actionbutton.h"
-#include "GUI/ColorWidgets/savedcolorswidget.h"
+#include "widgets/actionbutton.h"
+#include "widgets/savedcolorswidget.h"
+#include "appsupport.h"
+
+#include <QShortcut>
 
 void ColorSettingsWidget::updateWidgetTargets()
 {
@@ -266,14 +269,30 @@ void ColorSettingsWidget::startColorPicking() {
     });
 }
 
-ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
+ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
+    : QWidget(parent)
+{
+    setContentsMargins(0, 0, 0, 0);
+    mWidgetsLayout->setMargin(0);
+
+    mTabWidget->setFocusPolicy(Qt::NoFocus);
+
     mColorModeCombo = new QComboBox(this);
+    mColorModeCombo->setFocusPolicy(Qt::NoFocus);
+
     mWidgetsLayout->setAlignment(Qt::AlignTop);
     setLayout(mWidgetsLayout);
 
     mColorLabel = new ColorLabel(this);
     mColorLabel->setSizePolicy(QSizePolicy::Expanding,
                                QSizePolicy::Expanding);
+
+    const auto book = new QShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                         "colorBookmark",
+                                                                         "B").toString()),
+                                    this);
+    connect(book, &QShortcut::activated,
+            mColorLabel, &ColorLabel::addBookmark);
 
 //    mWheelWidget->setLayout(mWheelLayout);
 //    mWheelLayout->setAlignment(Qt::AlignTop);
@@ -348,13 +367,16 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
     aLayout->addWidget(aSpin);
 
     mPickingButton = new QPushButton(QIcon::fromTheme("pick"), QString(), this);
+    mPickingButton->setFocusPolicy(Qt::NoFocus);
     mPickingButton->setObjectName("FlatButton");
     mPickingButton->setToolTip(tr("Pick Color"));
     connect(mPickingButton, &QPushButton::released,
             this, &ColorSettingsWidget::startColorPicking);
     eSizesUI::widget.add(mPickingButton, [this](const int size) {
         mPickingButton->setFixedHeight(size);
-        mPickingButton->setIconSize(QSize(size, size));
+        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+            mPickingButton->setIconSize(QSize(size, size));
+        }
     });
 
     mColorLabelLayout->addWidget(mColorLabel);
@@ -372,6 +394,7 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent) : QWidget(parent) {
     hexLayout = new QHBoxLayout;
     hexLayout->addWidget(new QLabel("Hex", this));
     mHexEdit = new QLineEdit("#FF000000", this);
+    mHexEdit->setFocusPolicy(Qt::ClickFocus);
     hexLayout->addWidget(mHexEdit);
     mRGBLayout->addLayout(hexLayout);
 

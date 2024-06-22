@@ -33,10 +33,12 @@ ClosableContainer::ClosableContainer(QWidget *parent) : QWidget(parent) {
     setLayout(mMainLayout);
     mContentArrow = new QPushButton("", this);
     mContentArrow->setFocusPolicy(Qt::NoFocus);
-    mContentArrow->setObjectName("iconButton");
+    mContentArrow->setObjectName("FlatButton");
     mContentArrow->setCheckable(true);
     mContentArrow->setFixedSize(eSizesUI::widget, eSizesUI::widget);
-    mContentArrow->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
+    if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+        mContentArrow->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
+    }
     connect(mContentArrow, &QPushButton::toggled,
             this, &ClosableContainer::setContentVisible);
 
@@ -92,10 +94,8 @@ bool ClosableContainer::isChecked() const {
     return mCheckBox->isChecked();
 }
 
-void ClosableContainer::setContentVisible(const bool visible) {
-    QString iconPath = eSettings::sIconsDir();
-    if(visible) iconPath += "/down-arrow.png";
-    else iconPath += "/right-arrow.png";
-    mContentArrow->setIcon(QIcon(iconPath));
+void ClosableContainer::setContentVisible(const bool visible)
+{
+    mContentArrow->setIcon(QIcon::fromTheme(visible ? "downarrow" : "rightarrow"));
     mContWidget->setVisible(visible);
 }

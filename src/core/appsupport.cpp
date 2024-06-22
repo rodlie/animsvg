@@ -37,6 +37,7 @@
 #include <QDomElement>
 #include <QDirIterator>
 #include <QtMath>
+#include <QRegularExpression>
 
 AppSupport::AppSupport(QObject *parent)
     : QObject{parent}
@@ -46,6 +47,7 @@ AppSupport::AppSupport(QObject *parent)
 
 void AppSupport::setupTheme()
 {
+    QIcon::setThemeSearchPaths(QStringList() << QString::fromUtf8(":/icons"));
     QIcon::setThemeName(QString::fromUtf8("hicolor"));
     qApp->setStyle(QString::fromUtf8("fusion"));
 
@@ -75,6 +77,15 @@ const QPalette AppSupport::getDarkPalette()
     pal.setColor(QPalette::Window, QColor(33, 33, 38));
     pal.setColor(QPalette::Base, QColor(33, 33, 38));
     pal.setColor(QPalette::Button, QColor(33, 33, 38));
+    return pal;
+}
+
+const QPalette AppSupport::getDarkerPalette()
+{
+    QPalette pal = QPalette();
+    pal.setColor(QPalette::Window, QColor(25, 25, 25));
+    pal.setColor(QPalette::Base, QColor(25, 25, 25));
+    pal.setColor(QPalette::Button, QColor(25, 25, 25));
     return pal;
 }
 
@@ -141,7 +152,7 @@ const QString AppSupport::getAppDomain()
 
 const QString AppSupport::getAppID()
 {
-    return QString::fromUtf8("graphics.friction");
+    return QString::fromUtf8("graphics.friction.Friction");
 }
 
 const QString AppSupport::getAppUrl()
@@ -149,33 +160,39 @@ const QString AppSupport::getAppUrl()
     return QString::fromUtf8("https://friction.graphics");
 }
 
-const QString AppSupport::getAppVersion(bool html)
+const QString AppSupport::getAppVersion()
 {
-    QString version = QString::fromUtf8("0.9.5"); // fallback, should not happen
-#ifdef PROJECT_VERSION
-    version = QString::fromUtf8(PROJECT_VERSION);
-#endif
+    QString version = QString::fromUtf8(PROJECT_VERSION);
 #ifndef PROJECT_OFFICIAL
     version.append("-dev");
 #endif
-    QString git;
-#ifdef PROJECT_GIT
-    git = QString::fromUtf8(PROJECT_GIT);
-#endif
-    QString branch;
-#ifdef PROJECT_BRANCH
-    branch = QString::fromUtf8(PROJECT_BRANCH);
-#endif
-    if (!branch.isEmpty()) {
-        version.append(QString::fromUtf8(" %1").arg(branch));
-    }
-    if (!git.isEmpty()) {
-        if (branch.isEmpty()) { version.append(QString::fromUtf8(" ")); }
-        else { version.append(QString::fromUtf8("/")); }
-        version.append(html ? QString::fromUtf8("<a href=\"%2/%1\">%1</a>").arg(git,
-                                                                                getAppCommitUrl()) : git);
-    }
     return version;
+}
+
+const QString AppSupport::getAppBuildInfo(bool html)
+{
+#if defined(PROJECT_COMMIT) && defined(PROJECT_BRANCH)
+    const auto commit = QString::fromUtf8(PROJECT_COMMIT);
+    const auto branch = QString::fromUtf8(PROJECT_BRANCH);
+    if (commit.isEmpty() || branch.isEmpty()) { return QString(); }
+    if (!html) {
+        return QString("%1 %2 %3 %4.").arg(tr("Built from"),
+                                           commit,
+                                           tr("on"),
+                                           branch);
+    } else {
+        return QString("%1 <a href=\"%5/%2\">%2</a> %3 <a href=\"%6/%4\">%4</a>.")
+                      .arg(tr("Built from commit"),
+                           commit,
+                           tr("on branch"),
+                           branch,
+                           getAppCommitUrl(),
+                           getAppBranchUrl());
+    }
+#else
+    Q_UNUSED(html)
+#endif
+    return QString();
 }
 
 const QString AppSupport::getAppDesc()
@@ -206,6 +223,11 @@ const QString AppSupport::getAppLatestReleaseUrl()
 const QString AppSupport::getAppCommitUrl()
 {
     return QString::fromUtf8("https://github.com/friction2d/friction/commit");
+}
+
+const QString AppSupport::getAppBranchUrl()
+{
+    return QString::fromUtf8("https://github.com/friction2d/friction/tree");
 }
 
 const QString AppSupport::getAppConfigPath()
@@ -541,4 +563,11 @@ QPair<bool, bool> AppSupport::getResolutionPresetStatus()
     status.second = settings.value("EnableResolutionsAuto", true).toBool();
     settings.endGroup();
     return status;
+}
+
+const QString AppSupport::filterTextAZW(const QString &text)
+{
+    QRegularExpression regex("\\s|\\W");
+    QString output = text;
+    return output.replace(regex, "");
 }

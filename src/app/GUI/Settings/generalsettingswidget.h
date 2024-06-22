@@ -24,7 +24,7 @@
 #ifndef GENERALSETTINGSWIDGET_H
 #define GENERALSETTINGSWIDGET_H
 
-#include "settingswidget.h"
+#include "widgets/settingswidget.h"
 
 #include <QCheckBox>
 #include <QSpinBox>

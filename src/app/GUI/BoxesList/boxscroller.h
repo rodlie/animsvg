@@ -27,7 +27,7 @@
 #define BOXSCROLLWIDGETVISIBLEPART_H
 
 #include <QWidget>
-#include "OptimalScrollArea/scrollwidgetvisiblepart.h"
+#include "optimalscrollarena/scrollwidgetvisiblepart.h"
 #include "singlewidgettarget.h"
 #include "framerange.h"
 

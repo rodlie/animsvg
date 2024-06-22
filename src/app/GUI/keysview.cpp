@@ -36,7 +36,6 @@
 #include "GUI/global.h"
 #include "pointhelpers.h"
 #include "canvaswindow.h"
-#include "GUI/Dialogs/durationrectsettingsdialog.h"
 #include <QApplication>
 #include "clipboardcontainer.h"
 #include "Animators/qrealpoint.h"
@@ -472,7 +471,7 @@ void KeysView::paintEvent(QPaintEvent *) {
     if(mPixelsPerFrame < 0.001) return;
     if(!mGraphViewed) {
         int currY = eSizesUI::widget;
-        p.setPen(QPen(QColor(40, 40, 40), 1));
+        p.setPen(QPen(QColor(40, 40, 40), 2));
         while(currY < height()) {
             p.drawLine(0, currY, width(), currY);
             currY += eSizesUI::widget;
@@ -480,7 +479,7 @@ void KeysView::paintEvent(QPaintEvent *) {
     }
     p.translate(eSizesUI::widget/2, 0);
 
-    p.setPen(QPen(QColor(44, 44, 49), 1));
+    p.setPen(QPen(QColor(44, 44, 49), 2));
     qreal xT = mPixelsPerFrame*0.5;
     int iInc = 1;
     bool mult5 = true;

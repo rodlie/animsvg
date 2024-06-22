@@ -25,7 +25,7 @@
 
 #ifndef TIMELINEWRAPPERNODE_H
 #define TIMELINEWRAPPERNODE_H
-#include "widgetwrappernode.h"
+#include "widgets/widgetwrappernode.h"
 #include "timelinewidget.h"
 
 class TimelineWrapperNode : public WidgetWrapperNode {

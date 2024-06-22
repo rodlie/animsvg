@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.12)
 project(frictioncore LANGUAGES CXX)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../cmake")
@@ -33,7 +33,7 @@ message("-- ffmpeg libraries: ${FFMPEG_LIBRARIES_DIRS} ${FFMPEG_LIBRARIES}")
 message("-- skia libraries: ${SKIA_LIBRARIES}")
 
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
-add_definitions(-DPROJECT_GIT="${GIT_COMMIT}")
+add_definitions(-DPROJECT_COMMIT="${GIT_COMMIT}")
 add_definitions(-DPROJECT_BRANCH="${GIT_BRANCH}")
 
 add_definitions(-DCORE_LIBRARY)
@@ -41,7 +41,7 @@ add_definitions(-DCORE_LIBRARY)
 include_directories(
     #${QUAZIP_INCLUDE_DIRS}
     ${FFMPEG_INCLUDE_DIRS}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../skia
+    ${CMAKE_CURRENT_SOURCE_DIR}/../engine/skia
 )
 
 set(
@@ -209,6 +209,7 @@ set(
     ShaderEffects/shadereffectprogram.cpp
     ShaderEffects/shadervaluehandler.cpp
     ShaderEffects/uniformspecifiercreator.cpp
+    Sound/audiohandler.cpp
     Sound/eindependentsound.cpp
     Sound/esound.cpp
     Sound/esoundlink.cpp
@@ -286,12 +287,10 @@ set(
     swt_abstraction.cpp
     swt_rulescollection.cpp
     texteffect.cpp
-    texteffectcaller.cpp
     transformvalues.cpp
     undoredo.cpp
     exceptions.cpp
     glhelpers.cpp
-    skia/skimagecopy.cpp
     skia/skqtconversions.cpp
     pointhelpers.cpp
     simplemath.cpp
@@ -344,6 +343,10 @@ set(
     wrappedint.cpp
     zipfileloader.cpp
     zipfilesaver.cpp
+    outputsettings.cpp
+    rendersettings.cpp
+    renderinstancesettings.cpp
+    videoencoder.cpp
 )
 
 set(
@@ -530,6 +533,7 @@ set(
     ShaderEffects/shadereffectprogram.h
     ShaderEffects/shadervaluehandler.h
     ShaderEffects/uniformspecifiercreator.h
+    Sound/audiohandler.h
     Sound/eindependentsound.h
     Sound/esound.h
     Sound/esoundlink.h
@@ -613,14 +617,13 @@ set(
     swt_abstraction.h
     swt_rulescollection.h
     texteffect.h
-    texteffectcaller.h
+    threadsafeqjsengine.h
     transformvalues.h
     undoredo.h
     exceptions.h
     glhelpers.h
     skia/skiadefines.h
     skia/skiaincludes.h
-    skia/skimagecopy.h
     skia/skqtconversions.h
     pointhelpers.h
     simplemath.h
@@ -675,6 +678,10 @@ set(
     windowsincludes.h
     zipfileloader.h
     zipfilesaver.h
+    outputsettings.h
+    rendersettings.h
+    renderinstancesettings.h
+    videoencoder.h
 )
 
 if(NOT WIN32)
@@ -701,7 +708,7 @@ target_link_directories(
     ${PROJECT_NAME}
     PRIVATE
     ${FFMPEG_LIBRARIES_DIRS}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../skia/out/build
+    ${CMAKE_CURRENT_BINARY_DIR}/../engine/skia
     #${QUAZIP_LIBRARIES_DIRS}
 )
 

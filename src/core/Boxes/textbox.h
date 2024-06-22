@@ -71,6 +71,8 @@ public:
 
     void openTextEditor(QWidget* dialogParent);
 
+    bool hasTextEffects() const { return mTextEffects->hasEffects(); };
+
     void setCurrentValue(const QString &text);
 
     void saveSVG(SvgExporter& doc, DomEleTask* const task) const;

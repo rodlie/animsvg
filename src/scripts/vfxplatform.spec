@@ -1,7 +1,7 @@
 Name: friction
 Version: __FRICTION_PKG_VERSION__
 Release: 1
-Summary: Friction Motion Graphics
+Summary: Motion graphics and animation
 Group: System Environment/Base
 License: GPL3
 Source0: friction-__FRICTION_VERSION__.tar
@@ -11,7 +11,7 @@ AutoReq: no
 %global __provides_exclude_from /opt
 
 %description
-Friction is a powerful and versatile free and open-source motion graphics application that allows you to create stunning vector and raster animations for web and video platforms with ease.
+Powerful and versatile motion graphics and animation application that allows you to create stunning vector and raster animations for web and video platforms with ease.
 
 %prep
 %setup -n friction-__FRICTION_VERSION__

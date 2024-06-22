@@ -50,6 +50,7 @@ public:
     explicit AppSupport(QObject *parent = nullptr);
     static void setupTheme();
     static const QPalette getDarkPalette();
+    static const QPalette getDarkerPalette();
     static const QPalette getNotSoDarkPalette();
     static QVariant getSettings(const QString &group,
                                 const QString &key,
@@ -63,13 +64,15 @@ public:
     static const QString getAppDomain();
     static const QString getAppID();
     static const QString getAppUrl();
-    static const QString getAppVersion(bool html = false);
+    static const QString getAppVersion();
+    static const QString getAppBuildInfo(bool html = false);
     static const QString getAppDesc();
     static const QString getAppCompany();
     static const QString getAppContributorsUrl();
     static const QString getAppIssuesUrl();
     static const QString getAppLatestReleaseUrl();
     static const QString getAppCommitUrl();
+    static const QString getAppBranchUrl();
     static const QString getAppConfigPath();
     static const QString getAppOutputProfilesPath();
     static const QString getAppPathEffectsPath();
@@ -100,6 +103,7 @@ public:
     static void saveResolutionPreset(const int w, const int h);
     static bool removeResolutionPreset(const int w, const int h);
     static QPair<bool, bool> getResolutionPresetStatus();
+    static const QString filterTextAZW(const QString &text);
 };
 
 #endif // APPSUPPORT_H

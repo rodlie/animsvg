@@ -28,6 +28,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 option(LINUX_DEPLOY "Linux Deploy" OFF)
 option(WIN_DEPLOY "Windows Deploy" OFF)
 
+if(${LINUX_DEPLOY})
+    add_definitions(-DLINUX_DEPLOY)
+endif()
+if(${WIN_DEPLOY})
+    add_definitions(-DWIN_DEPLOY)
+endif()
+
+if(UNIX AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    message(FATAL_ERROR "Only Clang is supported.")
+elseif(WIN32 AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    message(FATAL_ERROR "Only MSVC is supported.")
+endif()
+
 if(UNIX)
     add_compile_options(-Wall -Wextra -Wno-unused-private-field)
     if(NOT ${LINUX_DEPLOY})
@@ -53,7 +66,6 @@ if(UNIX AND NOT APPLE)
     if(${STATIC_FFMPEG})
         set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-Bsymbolic")
     endif()
-    add_definitions(-DFRICTION_BUNDLE_GPERFTOOLS)
 endif()
 
 if(NOT WIN32)
@@ -67,7 +79,7 @@ find_package(PkgConfig QUIET)
 find_package(QT NAMES Qt5 COMPONENTS Core REQUIRED)
 find_package(
     Qt${QT_VERSION_MAJOR}
-    5.12
+    5.15.3
     COMPONENTS
     Gui
     Widgets
@@ -75,7 +87,6 @@ find_package(
     Multimedia
     Qml
     Xml
-    Svg
     REQUIRED
 )
 set(QT_LIBRARIES
@@ -86,7 +97,7 @@ set(QT_LIBRARIES
     Qt${QT_VERSION_MAJOR}::Multimedia
     Qt${QT_VERSION_MAJOR}::Qml
     Qt${QT_VERSION_MAJOR}::Xml
-    Qt${QT_VERSION_MAJOR}::Svg)
+)
 
 if(WIN32)
     set(SKIA_LIBRARIES
@@ -101,5 +112,8 @@ else()
             skia
             fontconfig
             ${OPENGL_LIBRARY})
+        pkg_check_modules(UNWIND REQUIRED libunwind)
+        set(GPERF_INCLUDE_DIRS ${CMAKE_CURRENT_BINARY_DIR}/../gperftools ${UNWIND_INCLUDE_DIRS})
+        set(GPERF_LIBRARIES tcmalloc_static ${UNWIND_LIBRARIES})
     endif()
 endif()

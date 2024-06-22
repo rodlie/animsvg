@@ -23,7 +23,6 @@ set -e -x
 source /opt/rh/llvm-toolset-7.0/enable
 clang -v
 
-CWD=${CWD:-`pwd`}
 SDK=${SDK:-"/opt/friction"}
 BUILD=${BUILD:-"${HOME}"}
 
@@ -31,6 +30,7 @@ REL=${REL:-1}
 BRANCH=${BRANCH:-""}
 COMMIT=${COMMIT:-""}
 TAG=${TAG:-""}
+TAR_VERSION=${TAR_VERSION:-""}
 
 export PATH="${SDK}/bin:${PATH}"
 export PKG_CONFIG_PATH="${SDK}/lib/pkgconfig"
@@ -59,21 +59,11 @@ if [ ! -d "${BUILD}/friction" ]; then
         git clone https://github.com/friction2d/friction
         cd friction
         git checkout ${CHECKOUT}
-        git submodule update -i --recursive docs
+        git submodule update -i --recursive
     )
 fi
 
 cd ${BUILD}/friction
-
-if [ ! -d "src/skia/out" ]; then
-    mv src/skia src/skia.orig
-    ln -sf ${SDK}/skia src/skia
-fi
-
-if [ ! -d "src/gperftools/.libs" ]; then
-    mv src/gperftools src/gperftools.orig
-    ln -sf ${SDK}/gperftools src/gperftools
-fi
 
 rm -rf build-vfxplatform || true
 mkdir build-vfxplatform && cd build-vfxplatform
@@ -83,23 +73,34 @@ if [ "${REL}" != 1 ]; then
     REL_STATUS="OFF"
 fi
 
+# workaround for gperftools (until I fix it)
+cp -a ${SDK}/include/libunw* /usr/include/
+cp -a ${SDK}/lib/libunw* /usr/lib64/
+
+CMAKE_EXTRA=""
+
+GIT_COMMIT=`git rev-parse --short=8 HEAD`
+GIT_BRANCH=`git rev-parse --abbrev-ref HEAD`
+
 cmake -GNinja \
 -DCMAKE_INSTALL_PREFIX=${SDK} \
 -DCMAKE_PREFIX_PATH=${SDK} \
 -DCMAKE_BUILD_TYPE=Release \
 -DLINUX_DEPLOY=ON \
+-DUSE_SKIA_SYSTEM_LIBS=OFF \
 -DFRICTION_OFFICIAL_RELEASE=${REL_STATUS} \
 -DQSCINTILLA_INCLUDE_DIRS=${SDK}/include \
 -DQSCINTILLA_LIBRARIES_DIRS=${SDK}/lib \
 -DQSCINTILLA_LIBRARIES=qscintilla2_friction_qt5 \
 -DCMAKE_CXX_COMPILER=clang++ \
 -DCMAKE_C_COMPILER=clang \
+-DGIT_COMMIT=${GIT_COMMIT} \
+-DGIT_BRANCH=${GIT_BRANCH} \
 ..
 
 VERSION=`cat version.txt`
 if [ "${REL}" != 1 ]; then
-    GIT=`git rev-parse --short HEAD`
-    VERSION="${VERSION}-dev-${GIT}"
+    VERSION="${VERSION}-${GIT_COMMIT}"
 fi
 
 cmake --build .

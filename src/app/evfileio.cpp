@@ -54,7 +54,7 @@
 #include "Animators/qrealkey.h"
 #include "GUI/mainwindow.h"
 #include "GUI/canvaswindow.h"
-#include "GUI/GradientWidgets/gradientwidget.h"
+#include "gradientwidgets/gradientwidget.h"
 #include <QMessageBox>
 #include "PathEffects/patheffectsinclude.h"
 #include "ReadWrite/basicreadwrite.h"
@@ -90,9 +90,11 @@ void MainWindow::loadEVFile(const QString &path) {
         if(evVersion >= EvFormat::betterSWTAbsReadWrite) {
             int nScenes; readStream >> nScenes;
             for(int i = 0; i < nScenes; i++) {
-                const auto scene = mDocument.createNewScene();
-                if(evVersion >= EvFormat::readSceneSettingsBeforeContent) {
+                const bool beforeContent = (evVersion >= EvFormat::readSceneSettingsBeforeContent);
+                const auto scene = mDocument.createNewScene(!beforeContent);
+                if (beforeContent) {
                     scene->readSettings(readStream);
+                    mDocument.sceneCreated(scene);
                 }
             }
             mLayoutHandler->read(readStream);
@@ -111,6 +113,7 @@ void MainWindow::loadEVFile(const QString &path) {
     }
     file.close();
     addRecentFile(path);
+    mRenderWidget->updateRenderSettings();
 }
 
 void MainWindow::saveToFile(const QString &path,

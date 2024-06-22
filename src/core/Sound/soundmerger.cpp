@@ -101,8 +101,8 @@ void mergePlanarDataSigned(T const * const * const src,
                            const int nChannels) {
     int dstId = dstRange.fMin;
     int srcId = srcRange.fMin;
-    const qreal min = std::numeric_limits<T>::min();
-    const qreal max = std::numeric_limits<T>::max();
+    const qreal min = (qreal)std::numeric_limits<T>::min();
+    const qreal max = (qreal)std::numeric_limits<T>::max();
     if(volIt.staticValue()) {
         const qreal vol = volIt.getValueAndProgress(1);
         for(int i = 0; i < nSamples; i++) {
@@ -132,8 +132,8 @@ void mergeInterleavedDataSigned(const T* const src,
                                 const int nChannels) {
     int dstId = dstRange.fMin*nChannels;
     int srcId = srcRange.fMin*nChannels;
-    const qreal min = std::numeric_limits<T>::min();
-    const qreal max = std::numeric_limits<T>::max();
+    const qreal min = (qreal)std::numeric_limits<T>::min();
+    const qreal max = (qreal)std::numeric_limits<T>::max();
     if(volIt.staticValue()) {
         const qreal vol = volIt.getValueAndProgress(1);
         for(int i = 0; i < nSamples; i++) {

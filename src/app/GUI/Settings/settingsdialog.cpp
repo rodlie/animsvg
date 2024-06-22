@@ -7,11 +7,11 @@
 #include "appsupport.h"
 
 #include "generalsettingswidget.h"
-#include "performancesettingswidget.h"
-#include "canvassettingswidget.h"
+#include "widgets/performancesettingswidget.h"
+#include "widgets/canvassettingswidget.h"
 #include "timelinesettingswidget.h"
 #include "pluginssettingswidget.h"
-#include "presetsettingswidget.h"
+#include "widgets/presetsettingswidget.h"
 
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -41,7 +41,7 @@ SettingsDialog::SettingsDialog(QWidget * const parent)
     addSettingsWidget(timeline, tr("Timeline"));
 
     const auto plugins = new PluginsSettingsWidget(this);
-    addSettingsWidget(plugins, tr("Plugins"));
+    addSettingsWidget(plugins, tr("Shaders"));
 
     const auto presets = new PresetSettingsWidget(this);
     addSettingsWidget(presets, tr("Presets"));
@@ -54,31 +54,27 @@ SettingsDialog::SettingsDialog(QWidget * const parent)
                                                tr("Restore Defaults"),
                                                this);
     restoreButton->setFocusPolicy(Qt::NoFocus);
-    restoreButton->setObjectName("FlatButton");
 
-    const auto cancelButton = new QPushButton(QIcon::fromTheme("cancel"),
+    const auto cancelButton = new QPushButton(QIcon::fromTheme("dialog-cancel"),
                                               tr("Close"),
                                               this);
     cancelButton->setFocusPolicy(Qt::NoFocus);
-    cancelButton->setObjectName("FlatButton");
 
     const auto applyButton = new QPushButton(QIcon::fromTheme("disk_drive"),
                                              tr("Save"),
                                              this);
     applyButton->setFocusPolicy(Qt::NoFocus);
-    applyButton->setObjectName("FlatButton");
 
     buttonsLayout->addWidget(restoreButton);
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(applyButton);
     buttonsLayout->addWidget(cancelButton);
 
-    restoreButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
-    restoreButton->setFixedHeight(eSizesUI::widget);
-    cancelButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
-    cancelButton->setFixedHeight(eSizesUI::widget);
-    applyButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
-    applyButton->setFixedHeight(eSizesUI::widget);
+    if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+        restoreButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
+        cancelButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
+        applyButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
+    }
 
     mainLayout->addLayout(buttonsLayout);
     const auto statusBar = new QStatusBar(this);

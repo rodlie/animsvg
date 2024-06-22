@@ -38,6 +38,8 @@ namespace EvFormat {
         colorizeInfluence = 23,
         transformEffects = 24,
         transformEffects2 = 25,
+        codecProfile = 26,
+        effectCustomName = 27,
 
         nextVersion
     };

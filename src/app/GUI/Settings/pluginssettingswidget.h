@@ -24,7 +24,7 @@
 #ifndef PLUGINSSETTINGSWIDGET_H
 #define PLUGINSSETTINGSWIDGET_H
 
-#include "settingswidget.h"
+#include "widgets/settingswidget.h"
 
 #include <QLineEdit>
 #include <QStringList>

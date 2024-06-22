@@ -28,7 +28,7 @@
 #include "outputsettingsdialog.h"
 #include "outputsettingsdisplaywidget.h"
 #include "GUI/global.h"
-#include "GUI/editablecombobox.h"
+#include "widgets/editablecombobox.h"
 
 OutputProfilesDialog::OutputProfilesDialog(
         const OutputSettings &currentSettings,

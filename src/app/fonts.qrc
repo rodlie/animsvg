@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>fonts/LICENSE.txt</file>
-        <file>fonts/Roboto-Medium.ttf</file>
-    </qresource>
-</RCC>

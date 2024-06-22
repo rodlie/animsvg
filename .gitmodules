@@ -1,12 +1,12 @@
-[submodule "src/skia"]
-	path = src/skia
+[submodule "src/engine/skia"]
+	path = src/engine/skia
 	url = https://github.com/friction2d/skia
 [submodule "src/gperftools"]
 	path = src/gperftools
 	url = https://github.com/friction2d/gperftools
-[submodule "src/plugins/shaders"]
-	path = src/plugins/shaders
-	url = https://github.com/friction2d/friction-shader-plugins
 [submodule "docs"]
 	path = docs
 	url = https://github.com/friction2d/friction2d.github.io
+[submodule "src/app/icons"]
+	path = src/app/icons
+	url = https://github.com/friction2d/friction-icon-theme

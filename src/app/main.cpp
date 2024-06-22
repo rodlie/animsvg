@@ -27,10 +27,9 @@
 #include <QProcess>
 #include <QDesktopWidget>
 //#include <QScreen>
+#include <QMessageBox>
 
-#ifdef FRICTION_BUNDLE_ROBOTO
-#include <QFontDatabase>
-#endif
+#include <libavutil/ffversion.h>
 
 #include "hardwareinfo.h"
 #include "Private/esettings.h"
@@ -40,7 +39,6 @@
 #include "memoryhandler.h"
 #include "ShaderEffects/shadereffectprogram.h"
 #include "videoencoder.h"
-#include "iconloader.h"
 #include "appsupport.h"
 
 #ifdef Q_OS_WIN
@@ -90,8 +88,20 @@ void generateAlphaMesh(QPixmap& alphaMesh,
 
 int main(int argc, char *argv[])
 {
+#ifdef Q_OS_WIN
+#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
+    // Set window title bar color based on dark/light theme
+    // https://www.qt.io/blog/dark-mode-on-windows-11-with-qt-6.5
+    // https://learn.microsoft.com/en-us/answers/questions/1161597/how-to-detect-windows-application-dark-mode
+    QSettings registry("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+                       QSettings::NativeFormat);
+    if (registry.value("AppsUseLightTheme", 0).toInt() == 0) { qputenv("QT_QPA_PLATFORM",
+                                                                       "windows:darkmode=1"); }
+#endif
+#endif
+
 #ifdef Q_OS_LINUX
-    // Force XCB on Linux
+    // Force XCB on Linux until we support Wayland
     qputenv("QT_QPA_PLATFORM", "xcb");
 #endif
 
@@ -105,19 +115,16 @@ int main(int argc, char *argv[])
     QApplication::setOrganizationDomain(AppSupport::getAppDomain());
     QApplication::setApplicationVersion(AppSupport::getAppVersion());
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
     QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     QApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
 
     setDefaultFormat();
     QApplication app(argc, argv);
     setlocale(LC_NUMERIC, "C");
-
-#ifdef FRICTION_BUNDLE_ROBOTO
-    int fid = QFontDatabase::addApplicationFont(":/fonts/Roboto-Medium.ttf");
-    QApplication::setFont(QFontDatabase::applicationFontFamilies(fid).at(0));
-#endif
 
 #ifdef Q_OS_WIN
 // we ship a custom build of Qt 5.12.12 (with this feature backported) on Windows, so ignore this check
@@ -159,6 +166,7 @@ int main(int argc, char *argv[])
         } else {
             dpi = qApp->desktop()->logicalDpiX() / 96.0; //QGuiApplication::primaryScreen()->logicalDotsPerInch() / 96.0
         }
+        settings.fCurrentInterfaceDPI = dpi;
         qDebug() << "DPI" << dpi;
         const auto fm = QFontMetrics(OS_FONT);
         const qreal scaling = qBound(0.5, dpi, 1.5);
@@ -210,14 +218,6 @@ int main(int argc, char *argv[])
     }
 
     eFilterSettings filterSettings;
-
-    // remove when we have moved over to QIcon:
-    QDir(eSettings::sSettingsDir()).mkpath(eSettings::sIconsDir());
-
-    // remove when we have moved over to QIcon:
-    eSizesUI::button.add([](const int size) {
-        IconLoader::generateAll(eSizesUI::widget, size);
-    });
 
     eWidgetsImpl widImpl;
     ImportHandler importHandler;
@@ -283,6 +283,12 @@ int main(int argc, char *argv[])
     RenderHandler renderHandler(document, audioHandler,
                                 *videoEncoder, memoryHandler);
     std::cout << "Render handler initialized" << std::endl;
+
+    if (avformat_version() >= 3812708) {
+        QMessageBox::critical(nullptr,
+                              QObject::tr("Unsupported FFmpeg version"),
+                              QObject::tr("Friction is built against an unsupported FFmpeg version. Use at own risk and don't report any issues upstream."));
+    }
 
     const QString openProject = argc > 1 ? argv[1] : QString();
     MainWindow w(document,

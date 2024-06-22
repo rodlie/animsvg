@@ -42,7 +42,7 @@ qreal gRandF(const qreal fMin, const qreal fMax) {
 }
 
 float gSkRandF(const float fMin, const float fMax) {
-    float f = static_cast<float>(QRandomGenerator::global()->generate())/RAND_MAX;
+    float f = static_cast<float>(QRandomGenerator::global()->generate())/(float)RAND_MAX;
     return fMin + f * (fMax - fMin);
 }
 

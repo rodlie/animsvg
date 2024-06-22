@@ -20,7 +20,6 @@
 
 set -e -x
 
-CWD=${CWD:-`pwd`}
 SDK=${SDK:-"/opt/friction"}
 DISTFILES=${DISTFILES:-"/mnt"}
 BUILD=${BUILD:-"${HOME}"}
@@ -29,15 +28,44 @@ REL=${REL:-1}
 BRANCH=${BRANCH:-""}
 COMMIT=${COMMIT:-""}
 TAG=${TAG:-""}
-MKJOBS=${MKJOBS:-4}
+MKJOBS=${MKJOBS:-32}
+SDK_VERSION=${SDK_VERSION:-""}
+ONLY_SDK=${ONLY_SDK:-0}
+SDK_TAR="${DISTFILES}/friction-vfxplatform-CY2021-sdk-${SDK_VERSION}.tar"
+DOWNLOAD_SDK=${DOWNLOAD_SDK:-0}
+TAR_VERSION=${TAR_VERSION:-""}
+
+# Download SDK
+if [ "${DOWNLOAD_SDK}" = 1 ] && [ ! -f "${SDK_TAR}.bz2" ]; then
+    (cd ${DISTFILES} ;
+        wget https://download.friction.graphics/distfiles/vfxplatform/friction-vfxplatform-CY2021-sdk-${SDK_VERSION}.tar.bz2
+    )
+fi
 
 # Build SDK
-# CWD=${CWD} SDK=${SDK} DISTFILES=${DISTFILES} MKJOBS=${MKJOBS} ${CWD}/build_vfxplatform_skia.sh
-# CWD=${CWD} SDK=${SDK} DISTFILES=${DISTFILES} MKJOBS=${MKJOBS} ${CWD}/build_vfxplatform_sdk.sh
-# CWD=${CWD} SDK=${SDK} DISTFILES=${DISTFILES} MKJOBS=${MKJOBS} ${CWD}/build_vfxplatform_ffmpeg.sh
+if [ ! -d "${SDK}" ]; then
+    mkdir -p "${SDK}/lib"
+    mkdir -p "${SDK}/bin"
+    (cd "${SDK}"; ln -sf lib lib64)
+fi
+if [ -f "${SDK_TAR}.bz2" ]; then
+(cd ${SDK}/.. ; tar xf ${SDK_TAR}.bz2 )
+else
+SDK=${SDK} DISTFILES=${DISTFILES} MKJOBS=${MKJOBS} ${BUILD}/build_vfxplatform_sdk01.sh
+SDK=${SDK} DISTFILES=${DISTFILES} MKJOBS=${MKJOBS} ${BUILD}/build_vfxplatform_sdk02.sh
+SDK=${SDK} DISTFILES=${DISTFILES} MKJOBS=${MKJOBS} ${BUILD}/build_vfxplatform_sdk03.sh
+(cd ${SDK}/.. ;
+    rm -rf friction/src
+    tar cvvf ${SDK_TAR} friction
+    bzip2 -9 ${SDK_TAR}
+)
+fi
+
+if [ "${ONLY_SDK}" = 1 ]; then
+    exit 0
+fi
 
 # Build Friction
-CWD=${CWD} \
 SDK=${SDK} \
 BUILD=${BUILD} \
 MKJOBS=${MKJOBS} \
@@ -45,19 +73,22 @@ REL=${REL} \
 BRANCH=${BRANCH} \
 COMMIT=${COMMIT} \
 TAG=${TAG} \
-${CWD}/build_vfxplatform_friction.sh
+TAR_VERSION=${TAR_VERSION} \
+${BUILD}/build_vfxplatform_friction.sh
 
 # Get Friction version
 VERSION=`cat ${BUILD}/friction/build-vfxplatform/version.txt`
 if [ "${REL}" != 1 ]; then
-    GIT=`(cd ${BUILD}/friction ; git rev-parse --short HEAD)`
-    VERSION="${VERSION}-dev-${GIT}"
+    GIT_COMMIT=`(cd ${BUILD}/friction ; git rev-parse --short=8 HEAD)`
+    VERSION="${VERSION}-${GIT_COMMIT}"
+fi
+if [ "${TAR_VERSION}" != "" ]; then
+    VERSION=${TAR_VERSION}
 fi
 
 # Package Friction
-CWD=${CWD} \
 SDK=${SDK} \
 DISTFILES=${DISTFILES} \
 BUILD=${BUILD} \
 VERSION=${VERSION} \
-${CWD}/build_vfxplatform_package_tar.sh
+${BUILD}/build_vfxplatform_package.sh

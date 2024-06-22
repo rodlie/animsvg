@@ -26,6 +26,7 @@
 #include "renderinstancewidget.h"
 #include "GUI/global.h"
 #include <QMenu>
+#include "canvas.h"
 #include "outputsettingsdialog.h"
 #include "outputsettingsprofilesdialog.h"
 #include "outputsettingsdisplaywidget.h"
@@ -177,13 +178,15 @@ void RenderInstanceWidget::iniGUI() {
     eSizesUI::widget.add(mOutputSettingsProfilesButton, [this](const int size) {
         mRenderSettingsButton->setFixedHeight(size);
         mOutputSettingsButton->setFixedHeight(size);
-        mOutputSettingsProfilesButton->setIconSize(QSize(size, size));
         mOutputSettingsProfilesButton->setFixedSize(QSize(size, size));
-        mOutputDestinationButton->setIconSize(QSize(size, size));
         mOutputDestinationButton->setFixedSize(QSize(size, size));
-        mPlayButton->setIconSize(QSize(size, size));
         mPlayButton->setFixedSize(QSize(size, size));
         mOutputDestinationLineEdit->setFixedHeight(size);
+        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+            mOutputSettingsProfilesButton->setIconSize(QSize(size, size));
+            mOutputDestinationButton->setIconSize(QSize(size, size));
+            mPlayButton->setIconSize(QSize(size, size));
+        }
     });
 
     QWidget *outputDestinationWidget = new QWidget(this);
@@ -387,6 +390,17 @@ void RenderInstanceWidget::read(eReadStream &src) {
     mSettings.read(src);
     bool checked; src >> checked;
     setChecked(checked);
+}
+
+void RenderInstanceWidget::updateRenderSettings()
+{
+    const RenderSettings &renderSettings = mSettings.getRenderSettings();
+    mRenderSettingsDisplayWidget->setRenderSettings(mSettings.getTargetCanvas(),
+                                                    renderSettings);
+    if (mSettings.getTargetCanvas()) {
+        const auto label = mSettings.getTargetCanvas()->prp_getName();
+        if (!label.isEmpty()) { mNameLabel->setText(label); }
+    }
 }
 
 #include "Private/esettings.h"

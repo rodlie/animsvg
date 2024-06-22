@@ -18,6 +18,10 @@
 #
 */
 
+QMenu::item:disabled {
+    background: transparent;
+}
+
 QStatusBar::item,
 QToolBar
 {
@@ -35,16 +39,19 @@ QPushButton#QActionButton:checked
 }
 
 QToolBar#animationDockWidget,
-QToolBar#ViewerNodeBar,
-QToolBar#ViewerDrawBar,
+/*QToolBar#ViewerNodeBar,
+QToolBar#ViewerDrawBar,*/
 #darkWidget
 {
     background-color: rgb(33, 33, 38);
 }
 
+QToolBar::separator {
+    border-color: none;
+}
+
 QComboBox#blendModeCombo,
 QWidget#menuBarWidget QPushButton,
-QLineEdit#SearchLine,
 AlignWidget QComboBox {
     background-color: rgb(23, 23, 28);
 }
@@ -58,6 +65,7 @@ QLineEdit#SearchLine {
     border: 0;
 }
 
+QLineEdit#SearchLine,
 BoxScrollWidget,
 BoxScroller {
     background-color: transparent;
@@ -126,3 +134,14 @@ QToolButton#FlatButton:hover {
 }
 
 QTabWidget#ThirdPartyBrowser { border: 0; }
+
+QWidget#TimelineMenu QPushButton,
+QToolButton#AutoPopupButton,
+QToolButton#AutoPopupButton:focus,
+QToolButton#AutoPopupButton:hover,
+QToolButton#AutoPopupButton:pressed {
+    border: 0;
+    background-color: transparent;
+}
+QToolButton#AutoPopupButton::menu-indicator { width: 0px; }
+QToolButton#AutoPopupButton QMenu { border: 1.5px solid rgb(74, 74, 79); }

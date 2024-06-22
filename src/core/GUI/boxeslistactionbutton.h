@@ -27,10 +27,15 @@
 #define BOXESLISTACTIONBUTTON_H
 
 #include "../core_global.h"
+#include "GUI/global.h"
+
+#include <functional>
 
 #include <QWidget>
+#include <QPaintEvent>
 
-class CORE_EXPORT BoxesListActionButton : public QWidget {
+class CORE_EXPORT BoxesListActionButton : public QWidget
+{
     Q_OBJECT
 public:
     BoxesListActionButton(QWidget * const parent = nullptr);
@@ -43,13 +48,15 @@ protected:
 signals:
     void pressed();
 };
-#include <functional>
-class CORE_EXPORT PixmapActionButton : public BoxesListActionButton {
+
+class CORE_EXPORT PixmapActionButton : public BoxesListActionButton
+{
 public:
     PixmapActionButton(QWidget * const parent = nullptr) :
         BoxesListActionButton(parent) {}
 
-    void setPixmapChooser(const std::function<QPixmap*()>& func) {
+    void setPixmapChooser(const std::function<QPixmap*()>& func)
+    {
         mPixmapChooser = func;
     }
 protected:
@@ -57,6 +64,5 @@ protected:
 private:
     std::function<QPixmap*()> mPixmapChooser;
 };
-
 
 #endif // BOXESLISTACTIONBUTTON_H

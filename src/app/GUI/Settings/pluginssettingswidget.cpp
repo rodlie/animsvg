@@ -35,6 +35,7 @@
 #include <QHeaderView>
 
 #include "GUI/global.h"
+#include "Private/esettings.h"
 
 PluginsSettingsWidget::PluginsSettingsWidget(QWidget *parent)
     : SettingsWidget(parent)
@@ -52,7 +53,7 @@ PluginsSettingsWidget::PluginsSettingsWidget(QWidget *parent)
     mShaderLayout->setContentsMargins(0, 0, 0, 0);
 
     const auto mShaderLabel = new QLabel(tr("Shaders Path"), this);
-    mShaderLabel->setToolTip(tr("This location will be scanned for plugins during startup."));
+    mShaderLabel->setToolTip(tr("This location will be scanned for shader plugins during startup."));
     mShaderPath = new QLineEdit(this);
     mShaderPath->setText(AppSupport::getAppShaderEffectsPath());
     const auto mShaderPathButton = new QPushButton(QIcon::fromTheme("dots"),
@@ -60,7 +61,9 @@ PluginsSettingsWidget::PluginsSettingsWidget(QWidget *parent)
                                                    this);
     mShaderPathButton->setObjectName("FlatButton");
     mShaderPathButton->setFocusPolicy(Qt::NoFocus);
-    mShaderPathButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
+    if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+        mShaderPathButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
+    }
     mShaderPathButton->setFixedSize(QSize(eSizesUI::widget, eSizesUI::widget));
 
     mShaderLayout->addWidget(mShaderLabel);
@@ -87,7 +90,9 @@ PluginsSettingsWidget::PluginsSettingsWidget(QWidget *parent)
     populateShaderTree();
 
     const auto infoLabel = new QLabel(this);
-    infoLabel->setText(tr("Any changes in this section will require a restart of Friction."));
+    infoLabel->setText(QString("<strong>%1.</strong><br><i>%2.</i>")
+                       .arg(tr("Any changes in this section require a restart of Friction"),
+                            tr("Also note that shader effects are still considered experimental")));
     addWidget(infoLabel);
 }
 

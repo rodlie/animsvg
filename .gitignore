@@ -18,5 +18,8 @@ build-*
 *.diff
 *.patch
 ffmpeg
-
 *.7z
+distfiles
+backup
+CHANGES.md
+friction-distfiles

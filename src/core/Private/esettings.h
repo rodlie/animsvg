@@ -100,6 +100,7 @@ public:
 
     // ui settings
     qreal fInterfaceScaling;
+    qreal fCurrentInterfaceDPI;
     bool fDefaultInterfaceScaling;
 
     // canvas settings

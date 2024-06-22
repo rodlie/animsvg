@@ -35,7 +35,7 @@
 #include "smartPointers/stdselfref.h"
 #include "framerange.h"
 #include "ReadWrite/basicreadwrite.h"
-#include "fakemenubar.h"
+#include "widgets/fakemenubar.h"
 #include "XML/runtimewriteid.h"
 
 class SWT_Abstraction;
