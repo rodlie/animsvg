@@ -454,6 +454,20 @@ const QPair<bool, int> Canvas::getFrameOut()
     return mOut;
 }
 
+void Canvas::setMarker(const QString &text,
+                       const int frame)
+{
+    QString marker = text;
+    if (marker.isEmpty()) { marker = tr("Marker"); }
+    mMarkers.push_back({marker, frame});
+    qDebug() << "add marker" << frame;
+}
+
+const std::vector<QPair<QString, int> > Canvas::getMarkers()
+{
+    return mMarkers;
+}
+
 stdsptr<BoxRenderData> Canvas::createRenderData() {
     return enve::make_shared<CanvasRenderData>(this);
 }

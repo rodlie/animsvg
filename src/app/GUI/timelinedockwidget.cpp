@@ -84,6 +84,18 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mMainLayout->setSpacing(0);
     mMainLayout->setMargin(0);
 
+    mFrameMarkersAct = new QAction(/*QIcon::fromTheme("dots"),*/
+                              tr("M"),
+                              this);
+    mFrameMarkersAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                       "addMarker",
+                                                                       "k").toString()));
+    connect(mFrameMarkersAct, &QAction::triggered,
+            this, [this]() {
+            const auto scene = *mDocument.fActiveScene;
+            if (!scene) { return; }
+            scene->setMarker(tr("Marker"), scene->getCurrentFrame());
+    });
 
     mFrameInAct = new QAction(/*QIcon::fromTheme("dots"),*/
                                   tr("In"),
@@ -284,6 +296,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mToolBar->addAction(mPlayButton);
     mToolBar->addAction(mStopButton);
     mToolBar->addAction(mLoopButton);
+    mToolBar->addAction(mFrameMarkersAct);
 
     mRenderProgressAct->setVisible(false);
 

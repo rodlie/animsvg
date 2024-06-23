@@ -125,6 +125,7 @@ private:
 
     QAction *mFrameInAct;
     QAction *mFrameOutAct;
+    QAction *mFrameMarkersAct;
 
     QList<TimelineWidget*> mTimelineWidgets;
     //AnimationDockWidget *mAnimationDockWidget;

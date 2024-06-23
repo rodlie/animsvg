@@ -360,6 +360,10 @@ public:
     const QPair<bool,int> getFrameIn();
     const QPair<bool,int> getFrameOut();
 
+    void setMarker(const QString &text,
+                   const int frame);
+    const std::vector<QPair<QString,int>> getMarkers();
+
     ColorAnimator *getBgColorAnimator()
     {
         return mBackgroundColor.get();
@@ -794,6 +798,8 @@ protected:
 
     QPair<bool,int> mIn{false, 0};
     QPair<bool,int> mOut{false, 0};
+
+    std::vector<QPair<QString,int>> mMarkers;
 
     void handleMovePointMousePressEvent(const eMouseEvent &e);
     void handleMovePointMouseMove(const eMouseEvent &e);

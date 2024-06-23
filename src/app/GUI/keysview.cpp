@@ -497,7 +497,24 @@ void KeysView::paintEvent(QPaintEvent *) {
     maxFrame += qFloor((width() - 40 - xT)/mPixelsPerFrame) - maxFrame%iInc;
     for(int i = minFrame; i <= maxFrame; i += iInc) {
         const qreal xTT = xT + (i - mMinViewedFrame + 1)*mPixelsPerFrame;
+        p.setPen(QPen(ThemeSupport::getThemeTimelineColor(), 2));
         p.drawLine(QPointF(xTT, 0), QPointF(xTT, height()));
+
+        if (mCurrentScene) {
+            const auto frameIn = mCurrentScene->getFrameIn();
+            const auto frameOut = mCurrentScene->getFrameOut();
+            if ((frameOut.first && i == (frameOut.second-1)) || (frameIn.first && i == (frameIn.second-1))) {
+                p.setPen(QPen(ThemeSupport::getThemeHighlightColor(), 2, Qt::DotLine));
+                p.drawLine(QPointF(xTT, 0), QPointF(xTT, height()));
+            }
+            const auto markers = mCurrentScene->getMarkers();
+            for (const auto &mark: markers) {
+                if ((mark.second-1) == i) {
+                    p.setPen(QPen(Qt::white, 2, Qt::DotLine));
+                    p.drawLine(QPointF(xTT, 0), QPointF(xTT, height()));
+                }
+            }
+        }
     }
 
     if (mCurrentScene) {
