@@ -62,6 +62,8 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     , mCurrentFrameSpin(nullptr)
     , mRenderProgressAct(nullptr)
     , mRenderProgress(nullptr)
+    , mFrameInAct(nullptr)
+    , mFrameOutAct(nullptr)
 {
     connect(RenderHandler::sInstance, &RenderHandler::previewFinished,
             this, &TimelineDockWidget::previewFinished);
@@ -81,6 +83,35 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     setLayout(mMainLayout);
     mMainLayout->setSpacing(0);
     mMainLayout->setMargin(0);
+
+
+    mFrameInAct = new QAction(/*QIcon::fromTheme("dots"),*/
+                                  tr("In"),
+                                  this);
+    mFrameInAct->setCheckable(true);
+    mFrameInAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                  "frameIn",
+                                                                  "i").toString()));
+    connect(mFrameInAct, &QAction::triggered,
+            this, [this]() {
+        const auto scene = *mDocument.fActiveScene;
+        if (!scene) { return; }
+        scene->setFrameIn(mFrameInAct->isChecked(), scene->getCurrentFrame());
+    });
+
+    mFrameOutAct = new QAction(/*QIcon::fromTheme("dots"),*/
+                               tr("Out"),
+                               this);
+    mFrameOutAct->setCheckable(true);
+    mFrameOutAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                   "frameOut",
+                                                                   "o").toString()));
+    connect(mFrameOutAct, &QAction::triggered,
+            this, [this]() {
+        const auto scene = *mDocument.fActiveScene;
+        if (!scene) { return; }
+        scene->setFrameOut(mFrameOutAct->isChecked(), scene->getCurrentFrame());
+    });
 
     mFrameRewindAct = new QAction(QIcon::fromTheme("rewind"),
                                   tr("Rewind"),
@@ -236,6 +267,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mRenderProgress->setFormat(tr("Cache %p%"));
 
     mToolBar->addWidget(mFrameStartSpin);
+    mToolBar->addAction(mFrameInAct);
 
     QWidget *spacerWidget1 = new QWidget(this);
     spacerWidget1->setSizePolicy(QSizePolicy::Expanding,
@@ -260,6 +292,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
                                  QSizePolicy::Minimum);
     mToolBar->addWidget(spacerWidget2);
 
+    mToolBar->addAction(mFrameOutAct);
     mToolBar->addWidget(mFrameEndSpin);
 
     mMainLayout->addWidget(mToolBar);

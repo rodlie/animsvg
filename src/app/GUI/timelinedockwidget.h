@@ -123,6 +123,9 @@ private:
     QAction *mRenderProgressAct;
     QProgressBar *mRenderProgress;
 
+    QAction *mFrameInAct;
+    QAction *mFrameOutAct;
+
     QList<TimelineWidget*> mTimelineWidgets;
     //AnimationDockWidget *mAnimationDockWidget;
 };

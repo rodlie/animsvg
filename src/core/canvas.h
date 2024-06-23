@@ -353,6 +353,13 @@ public:
 
     void setFrameRange(const FrameRange& range);
 
+    void setFrameIn(const bool enabled,
+                    const int frameIn);
+    void setFrameOut(const bool enabled,
+                     const int frameOut);
+    const QPair<bool,int> getFrameIn();
+    const QPair<bool,int> getFrameOut();
+
     ColorAnimator *getBgColorAnimator()
     {
         return mBackgroundColor.get();
@@ -784,6 +791,9 @@ protected:
     CanvasMode mCurrentMode = CanvasMode::boxTransform;
 
     std::map<int, stdsptr<ConnContextObjList<GraphAnimator*>>> mSelectedForGraph;
+
+    QPair<bool,int> mIn{false, 0};
+    QPair<bool,int> mOut{false, 0};
 
     void handleMovePointMousePressEvent(const eMouseEvent &e);
     void handleMovePointMouseMove(const eMouseEvent &e);

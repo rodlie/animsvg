@@ -422,9 +422,36 @@ void Canvas::renderSk(SkCanvas* const canvas,
         mValueInput.draw(canvas, drawRect.height() - eSizesUI::widget);
 }
 
-void Canvas::setFrameRange(const FrameRange &range) {
+void Canvas::setFrameRange(const FrameRange &range)
+{
     mRange = range;
     emit newFrameRange(range);
+}
+
+void Canvas::setFrameIn(const bool enabled,
+                        const int frameIn)
+{
+    mIn.first = enabled;
+    mIn.second = frameIn;
+    emit newFrameRange(mRange);
+}
+
+void Canvas::setFrameOut(const bool enabled,
+                         const int frameOut)
+{
+    mOut.first = enabled;
+    mOut.second = frameOut;
+    emit newFrameRange(mRange);
+}
+
+const QPair<bool, int> Canvas::getFrameIn()
+{
+    return mIn;
+}
+
+const QPair<bool, int> Canvas::getFrameOut()
+{
+    return mOut;
 }
 
 stdsptr<BoxRenderData> Canvas::createRenderData() {
