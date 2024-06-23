@@ -268,7 +268,7 @@ eSettings::eSettings(const int cpuThreads,
                      "selectedKeyframeColor",
                      QColor(255, 255, 0));
 
-    gSettings << std::make_shared<eColorSetting>(
+    /*gSettings << std::make_shared<eColorSetting>(
                      fVisibilityRangeColor,
                      "visibilityRangeColor",
                      QColor(131, 92, 255, 255));
@@ -279,7 +279,7 @@ eSettings::eSettings(const int cpuThreads,
     gSettings << std::make_shared<eColorSetting>(
                      fAnimationRangeColor,
                      "animationRangeColor",
-                     QColor(0, 0, 0, 55));
+                     QColor(0, 0, 0, 55));*/
 
     loadDefaults();
 

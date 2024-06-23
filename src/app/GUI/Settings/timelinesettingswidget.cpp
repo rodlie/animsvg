@@ -64,7 +64,7 @@ TimelineSettingsWidget::TimelineSettingsWidget(QWidget *parent) :
     add2HWidgets(new QLabel("Selected keyframe color"),
                  mSelectedKeyframeColor);
 
-    addSeparator();
+    /*addSeparator();
 
     mVisibilityRangeColor = new ColorAnimatorButton(
                                mSett.fVisibilityRangeColor);
@@ -78,7 +78,7 @@ TimelineSettingsWidget::TimelineSettingsWidget(QWidget *parent) :
     add2HWidgets(new QLabel("Selected visibility range color"),
                  mSelectedVisibilityRangeColor);
     add2HWidgets(new QLabel("Animation range color"),
-                 mAnimationRangeColor);
+                 mAnimationRangeColor);*/
 
     /*eSizesUI::widget.add(mAlternateRowCheck, [this](const int size) {
         mAlternateRowCheck->setFixedHeight(size);
@@ -100,9 +100,9 @@ void TimelineSettingsWidget::applySettings() {
     mSett.fPropertyKeyframeColor = mPropertyKeyframeColor->color();
     mSett.fSelectedKeyframeColor = mSelectedKeyframeColor->color();
 
-    mSett.fVisibilityRangeColor = mVisibilityRangeColor->color();
-    mSett.fSelectedVisibilityRangeColor = mSelectedVisibilityRangeColor->color();
-    mSett.fAnimationRangeColor = mAnimationRangeColor->color();
+    //mSett.fVisibilityRangeColor = mVisibilityRangeColor->color();
+    //mSett.fSelectedVisibilityRangeColor = mSelectedVisibilityRangeColor->color();
+    //mSett.fAnimationRangeColor = mAnimationRangeColor->color();
 }
 
 void TimelineSettingsWidget::updateSettings(bool restore)
@@ -119,7 +119,7 @@ void TimelineSettingsWidget::updateSettings(bool restore)
     mPropertyKeyframeColor->setColor(mSett.fPropertyKeyframeColor);
     mSelectedKeyframeColor->setColor(mSett.fSelectedKeyframeColor);
 
-    mVisibilityRangeColor->setColor(mSett.fVisibilityRangeColor);
-    mSelectedVisibilityRangeColor->setColor(mSett.fSelectedVisibilityRangeColor);
-    mAnimationRangeColor->setColor(mSett.fAnimationRangeColor);
+    //mVisibilityRangeColor->setColor(mSett.fVisibilityRangeColor);
+    //mSelectedVisibilityRangeColor->setColor(mSett.fSelectedVisibilityRangeColor);
+    //mAnimationRangeColor->setColor(mSett.fAnimationRangeColor);
 }

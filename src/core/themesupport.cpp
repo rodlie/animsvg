@@ -92,6 +92,16 @@ const QColor ThemeSupport::getThemeTimelineColor(int alpha)
     return alpha == 255 ? QColor(44, 44, 49) : QColor(44, 44, 49, alpha);
 }
 
+const QColor ThemeSupport::getThemeRangeColor(int alpha)
+{
+    return alpha == 255 ? QColor(56, 73, 101) : QColor(56, 73, 101, alpha);
+}
+
+const QColor ThemeSupport::getThemeRangeSelectedColor(int alpha)
+{
+    return alpha == 255 ? QColor(104, 144, 206) : QColor(104, 144, 206, alpha);
+}
+
 const QPalette ThemeSupport::getDarkPalette(int alpha)
 {
     QPalette pal = QPalette();

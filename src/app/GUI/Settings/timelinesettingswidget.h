@@ -50,9 +50,9 @@ private:
     ColorAnimatorButton* mPropertyKeyframeColor = nullptr;
     ColorAnimatorButton* mSelectedKeyframeColor = nullptr;
 
-    ColorAnimatorButton* mVisibilityRangeColor = nullptr;
-    ColorAnimatorButton* mSelectedVisibilityRangeColor = nullptr;
-    ColorAnimatorButton* mAnimationRangeColor = nullptr;
+    //ColorAnimatorButton* mVisibilityRangeColor = nullptr;
+    //ColorAnimatorButton* mSelectedVisibilityRangeColor = nullptr;
+    //ColorAnimatorButton* mAnimationRangeColor = nullptr;
 };
 
 #endif // TIMELINESETTINGSWIDGET_H

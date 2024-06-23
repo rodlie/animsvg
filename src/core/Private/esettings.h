@@ -131,9 +131,9 @@ public:
     QColor fPropertyKeyframeColor;
     QColor fSelectedKeyframeColor;
 
-    QColor fVisibilityRangeColor;
-    QColor fSelectedVisibilityRangeColor;
-    QColor fAnimationRangeColor;
+    QColor fVisibilityRangeColor = ThemeSupport::getThemeRangeColor();
+    QColor fSelectedVisibilityRangeColor = ThemeSupport::getThemeRangeSelectedColor();
+    QColor fAnimationRangeColor = QColor(0, 0, 0, 55);
 
 signals:
     void settingsChanged();
