@@ -27,9 +27,17 @@
 #include <QIcon>
 #include <QApplication>
 
+const QColor ThemeSupport::getQColor(int r,
+                                     int g,
+                                     int b,
+                                     int a)
+{
+    return a == 255 ? QColor(r, g, b) : QColor(r, g, b, a);
+}
+
 const QColor ThemeSupport::getThemeBaseColor(int alpha)
 {
-    return alpha == 255 ? QColor(26, 26, 30) : QColor(26, 26, 30, alpha);
+    return getQColor(26, 26, 30, alpha);
 }
 
 SkColor ThemeSupport::getThemeBaseSkColor(int alpha)
@@ -39,32 +47,32 @@ SkColor ThemeSupport::getThemeBaseSkColor(int alpha)
 
 const QColor ThemeSupport::getThemeBaseDarkColor(int alpha)
 {
-    return alpha == 255 ? QColor(25, 25, 25) : QColor(25, 25, 25, alpha);
+    return getQColor(25, 25, 25, alpha);
 }
 
 const QColor ThemeSupport::getThemeBaseDarkerColor(int alpha)
 {
-    return alpha == 255 ? QColor(19, 19, 21) : QColor(19, 19, 21, alpha);
+    return getQColor(19, 19, 21, alpha);
 }
 
 const QColor ThemeSupport::getThemeAlternateColor(int alpha)
 {
-    return alpha == 255 ? QColor(33, 33, 39) : QColor(33, 33, 39, alpha);
+    return getQColor(33, 33, 39, alpha);
 }
 
 const QColor ThemeSupport::getThemeHighlightColor(int alpha)
 {
-    return alpha == 255 ? QColor(104, 144, 206) : QColor(104, 144, 206, alpha);
+    return getQColor(104, 144, 206, alpha);
 }
 
 const QColor ThemeSupport::getThemeHighlightAlternativeColor(int alpha)
 {
-    return alpha == 255 ? QColor(167, 185, 222) : QColor(167, 185, 222, alpha);
+    return getQColor(167, 185, 222, alpha);
 }
 
 const QColor ThemeSupport::getThemeHighlightSelectedColor(int alpha)
 {
-    return alpha == 255 ? QColor(150, 191, 255) : QColor(150, 191, 255, alpha);
+    return getQColor(150, 191, 255, alpha);
 }
 
 SkColor ThemeSupport::getThemeHighlightSkColor(int alpha)
@@ -74,32 +82,32 @@ SkColor ThemeSupport::getThemeHighlightSkColor(int alpha)
 
 const QColor ThemeSupport::getThemeButtonBaseColor(int alpha)
 {
-    return alpha == 255 ? QColor(49, 49, 59) : QColor(49, 49, 59, alpha);
+    return getQColor(49, 49, 59, alpha);
 }
 
 const QColor ThemeSupport::getThemeButtonBorderColor(int alpha)
 {
-    return alpha == 255 ? QColor(65, 65, 80) : QColor(65, 65, 80, alpha);
+    return getQColor(65, 65, 80, alpha);
 }
 
 const QColor ThemeSupport::getThemeComboBaseColor(int alpha)
 {
-    return alpha == 255 ? QColor(36, 36, 53) : QColor(36, 36, 53, alpha);
+    return getQColor(36, 36, 53, alpha);
 }
 
 const QColor ThemeSupport::getThemeTimelineColor(int alpha)
 {
-    return alpha == 255 ? QColor(44, 44, 49) : QColor(44, 44, 49, alpha);
+    return getQColor(44, 44, 49, alpha);
 }
 
 const QColor ThemeSupport::getThemeRangeColor(int alpha)
 {
-    return alpha == 255 ? QColor(56, 73, 101) : QColor(56, 73, 101, alpha);
+    return getQColor(56, 73, 101, alpha);
 }
 
 const QColor ThemeSupport::getThemeRangeSelectedColor(int alpha)
 {
-    return alpha == 255 ? QColor(104, 144, 206) : QColor(104, 144, 206, alpha);
+    return getQColor(87, 120, 173, alpha);
 }
 
 const QPalette ThemeSupport::getDarkPalette(int alpha)

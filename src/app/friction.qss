@@ -19,6 +19,7 @@
 */
 
 /*
+
 %1 = getThemeButtonBaseColor
 %2 = getThemeButtonBorderColor
 %3 = getThemeBaseDarkerColor
@@ -28,17 +29,6 @@
 %7 = icon size
 
 */
-
-/*QTabWidget::pane {
-    border-color: %1;
-}
-QTabWidget::pane,
-QTabBar {
-    background-color: %6;
-}
-QTabBar::tab {
-    background-color: %5;
-}*/
 
 QSpinBox {
     border-radius: 2%;
@@ -92,7 +82,6 @@ QTabBar#TabWidgetCenter::tab:bottom:only-one {
     border-bottom-right-radius: 2%;
 }
 
-
 QTabWidget::pane,
 QTabBar {
     padding: .2em;
@@ -100,17 +89,24 @@ QTabBar {
     border: 1px solid %1;
 }
 QTabBar::tab {
-    padding: .4em;
+    padding: .2em;
     border-radius: 2%;
     border: 1px solid %6;
     background-color: %5;
 }
 QTabBar::tab:selected {
     background-color: %1;
+    border-color: %4;
 }
 QTabBar::tab:hover {
     background-color: %3;
     border-color: %4;
+}
+QTabBar::tab:bottom:hover {
+    border-top-color: transparent;
+}
+QTabBar::tab:top:hover {
+    border-bottom-color: transparent;
 }
 QTabBar::tab:bottom:!hover {
     border-top-color: transparent;
@@ -125,6 +121,27 @@ QTabBar::tab:bottom {
 QTabBar::tab:top {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+}
+QTabWidget::pane {
+    border-radius: 2%;
+    border: 1px solid %4;
+}
+
+QTabWidget#ColorTabWidget::pane {
+    border-radius: unset;
+    border: unset;
+}
+QTabWidget#ColorTabWidget QTabBar::tab {
+    border-radius: 2%;
+    border: 1px solid %6;
+}
+QTabWidget#ColorTabWidget QTabBar::tab:selected {
+    background-color: %1;
+    border-color: %4;
+}
+QTabWidget#ColorTabWidget QTabBar::tab:hover {
+    background-color: %3;
+    border-color: %4;
 }
 
 QMenuBar::item:selected,
@@ -180,7 +197,6 @@ QCheckBox::indicator:unchecked:hover
     border-color: %4; /* rgb(104, 144, 206);*/
     
 }
-
 
 QSpinBox,
 QLineEdit {
@@ -347,3 +363,31 @@ QToolButton#AutoPopupButton:pressed {
 QToolButton#AutoPopupButton::menu-indicator { width: 0px; }
 QToolButton#AutoPopupButton QMenu { border: 1.5px solid rgb(74, 74, 79); }
 
+QSplitter::handle:horizontal {
+    background-color: transparent;
+}
+QSplitter::handle:vertical {
+    background-color: transparent;
+}
+
+#TimelineMenu QPushButton:hover,
+#TimelineMenu QPushButton:checked {
+    background-color: %4;
+}
+
+QTabWidget#TabWidgetWide::tab-bar {
+    min-width:1000;
+}
+QTabWidget#TabWidgetWide QTabBar::tab:!selected {
+    background-color: transparent;
+}
+QTabWidget#TabWidgetWide QTabBar::tab:hover {
+    background-color: %3;
+}
+
+QSpinBox#LeftSpinBox::up-button {
+    subcontrol-position: top left;
+}
+QSpinBox#LeftSpinBox::down-button {
+    subcontrol-position: bottom left;
+}

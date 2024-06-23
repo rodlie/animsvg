@@ -34,6 +34,7 @@ class CORE_EXPORT ThemeSupport
 {
 
 public:
+    static const QColor getQColor(int r, int g, int b, int a = 255);
     static const QColor getThemeBaseColor(int alpha = 255);
     static SkColor getThemeBaseSkColor(int alpha = 255);
     static const QColor getThemeBaseDarkColor(int alpha = 255);

@@ -411,6 +411,7 @@ signals:
     void currentContainerSet(ContainerBox*);
     void dimensionsChanged(int, int);
     void fpsChanged(qreal);
+    void displayTimeCodeChanged(bool);
     void gradientCreated(SceneBoundGradient*);
     void gradientRemoved(SceneBoundGradient*);
     void openTextEditor();
@@ -494,6 +495,7 @@ public:
     void setDisplayTimecode(bool timecode)
     {
         mDisplayTimeCode = timecode;
+        emit displayTimeCodeChanged(timecode);
     }
 
     BoundingBox *getBoxAt(const QPointF &absPos)

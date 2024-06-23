@@ -140,8 +140,8 @@ RenderWidget::RenderWidget(QWidget *parent)
     mScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     bottomLayout->addWidget(mStartRenderButton);
-    bottomLayout->addWidget(mRenderProgressBar);
     bottomLayout->addWidget(mStopRenderButton);
+    bottomLayout->addWidget(mRenderProgressBar);
     bottomLayout->addWidget(mAddRenderButton);
     bottomLayout->addWidget(mClearQueueButton);
 

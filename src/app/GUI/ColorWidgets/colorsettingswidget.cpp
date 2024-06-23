@@ -384,6 +384,7 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     mColorLabelLayout->addWidget(mPickingButton);
     mWidgetsLayout->addLayout(mColorLabelLayout);
 
+    mTabWidget->setObjectName("ColorTabWidget");
     mTabWidget->setTabPosition(QTabWidget::South);
     mTabWidget->addTab(mRGBWidget, "RGB");
     mTabWidget->addTab(mHSVWidget, "HSV");

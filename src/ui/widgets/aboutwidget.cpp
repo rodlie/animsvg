@@ -109,7 +109,7 @@ AboutWidget::AboutWidget(QWidget *parent)
     const auto mThirdParty = new QTabWidget(this);
     mThirdParty->setTabPosition(QTabWidget::South);
     mThirdParty->setTabBarAutoHide(true);
-    mThirdParty->setObjectName(QString::fromUtf8("ThirdPartyBrowser"));
+    mThirdParty->setObjectName(QString::fromUtf8("ColorTabWidget"));
 
     QStringList parties;
     parties << "friction";
