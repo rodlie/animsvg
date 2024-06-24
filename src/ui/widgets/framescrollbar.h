@@ -51,6 +51,10 @@ public:
     int getMaxFrame();
     int getMinFrame();
 
+    bool hasFrameIn(const int frame);
+    bool hasFrameOut(const int frame);
+    bool hasFrameMarker(const int frame);
+
     FrameRange getViewedRange() const;
     int getFirstViewedFrame() const;
     int getLastViewedFrame() const;

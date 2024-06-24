@@ -134,7 +134,7 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         // draw minor
         // copy pasta (ish) from keysview.cpp
         // in order to line up ticks properly
-        p.setPen(QPen(Qt::darkGray, 2));
+        //p.setPen(QPen(Qt::darkGray, 2));
         p.translate(eSizesUI::widget/2, 0);
         qreal xT = pixPerFrame*0.5;
         int iInc = 1;
@@ -150,6 +150,13 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         mMaxFrame += qFloor((width() - 40 - xT)/pixPerFrame) - mMaxFrame%iInc;
         for (int i = mMinFrame; i <= mMaxFrame; i += iInc) {
             const qreal xTT = xT + (i - mFrameRange.fMin + 1)*pixPerFrame;
+            if (hasFrameIn(i) || hasFrameOut(i)) {
+                p.setPen(QPen(ThemeSupport::getThemeHighlightColor(), 2, Qt::DotLine));
+            } else if (hasFrameMarker(i)) {
+                p.setPen(QPen(Qt::white, 2, Qt::DotLine));
+            } else {
+                p.setPen(QPen(Qt::darkGray, 2));
+            }
             p.drawLine(QPointF(xTT, threeFourthsHeight + 4), QPointF(xTT, height()));
         }
 
@@ -183,6 +190,28 @@ int FrameScrollBar::getMaxFrame() {
 
 int FrameScrollBar::getMinFrame() {
     return mFrameRange.fMin;
+}
+
+bool FrameScrollBar::hasFrameIn(const int frame)
+{
+    if (!mCurrentCanvas) { return false; }
+    const auto frameIn = mCurrentCanvas->getFrameIn();
+    if ((frameIn.first && frame == (frameIn.second - 1))) { return true; }
+    return false;
+}
+
+bool FrameScrollBar::hasFrameOut(const int frame)
+{
+    if (!mCurrentCanvas) { return false; }
+    const auto frameOut = mCurrentCanvas->getFrameOut();
+    if ((frameOut.first && frame == (frameOut.second - 1))) { return true; }
+    return false;
+}
+
+bool FrameScrollBar::hasFrameMarker(const int frame)
+{
+    if (!mCurrentCanvas) { return false; }
+    return mCurrentCanvas->hasMarker(frame);
 }
 
 void FrameScrollBar::wheelEvent(QWheelEvent *event) {
