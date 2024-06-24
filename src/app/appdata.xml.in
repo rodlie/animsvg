@@ -12,7 +12,7 @@
     <p>@PROJECT_DESCRIPTION@</p>
   </description>
   <releases>
-    <release date="2024-06-23" version="0.9.6">
+    <release date="2024-06-24" version="0.9.6">
       <description>
         <p>This release includes new features, critical fixes and generic UI/UX improvements.</p>
       </description>
