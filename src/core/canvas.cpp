@@ -461,7 +461,7 @@ void Canvas::setMarker(const QString &text,
     QString marker = text;
     if (marker.isEmpty()) { marker = tr("Marker"); }
     mMarkers.push_back({marker, frame});
-    qDebug() << "add marker" << frame;
+    emit newFrameRange(mRange);
 }
 
 bool Canvas::hasMarker(const int frame)
