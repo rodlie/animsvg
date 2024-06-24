@@ -457,10 +457,20 @@ const QPair<bool, int> Canvas::getFrameOut()
 void Canvas::setMarker(const QString &text,
                        const int frame)
 {
+    if (hasMarker(frame)) { return; }
     QString marker = text;
     if (marker.isEmpty()) { marker = tr("Marker"); }
     mMarkers.push_back({marker, frame});
     qDebug() << "add marker" << frame;
+}
+
+bool Canvas::hasMarker(const int frame)
+{
+    const auto markers = getMarkers();
+    for (const auto &mark: markers) {
+        if ((mark.second - 1) == frame) { return true; }
+    }
+    return false;
 }
 
 const std::vector<QPair<QString, int> > Canvas::getMarkers()
