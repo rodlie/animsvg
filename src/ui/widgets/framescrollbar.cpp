@@ -150,14 +150,17 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         mMaxFrame += qFloor((width() - 40 - xT)/pixPerFrame) - mMaxFrame%iInc;
         for (int i = mMinFrame; i <= mMaxFrame; i += iInc) {
             const qreal xTT = xT + (i - mFrameRange.fMin + 1)*pixPerFrame;
+            qreal h = threeFourthsHeight + 4;
             if (hasFrameIn(i) || hasFrameOut(i)) {
+                h = 4;
                 p.setPen(QPen(ThemeSupport::getThemeHighlightColor(), 2, Qt::DotLine));
             } else if (hasFrameMarker(i)) {
                 p.setPen(QPen(Qt::white, 2, Qt::DotLine));
+                h = 4;
             } else {
                 p.setPen(QPen(Qt::darkGray, 2));
             }
-            p.drawLine(QPointF(xTT, threeFourthsHeight + 4), QPointF(xTT, height()));
+            p.drawLine(QPointF(xTT, h), QPointF(xTT, height()));
         }
 
         // draw main
