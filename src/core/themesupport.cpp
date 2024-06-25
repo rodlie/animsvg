@@ -115,6 +115,11 @@ const QColor ThemeSupport::getThemeFrameMarkerColor(int alpha)
     return getQColor(255, 123, 0, alpha);
 }
 
+const QColor ThemeSupport::getThemeObjectColor(int alpha)
+{
+    return getQColor(0, 102, 255, alpha);
+}
+
 const QPalette ThemeSupport::getDarkPalette(int alpha)
 {
     QPalette pal = QPalette();
