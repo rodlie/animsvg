@@ -522,7 +522,7 @@ void KeysView::paintEvent(QPaintEvent *) {
         if (hasFrameIn(i) || hasFrameOut(i)) {
             p.setPen(QPen(ThemeSupport::getThemeHighlightColor(), 2, Qt::DotLine));
         } else if (hasFrameMarker(i)) {
-            p.setPen(QPen(Qt::white, 2, Qt::DotLine));
+            p.setPen(QPen(ThemeSupport::getThemeFrameMarkerColor(), 2, Qt::DotLine));
         } else {
             p.setPen(QPen(ThemeSupport::getThemeTimelineColor(), 2));
         }
