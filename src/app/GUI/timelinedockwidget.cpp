@@ -101,9 +101,9 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
                                   tr("In"),
                                   this);
     mFrameInAct->setCheckable(true);
-    mFrameInAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+    /*mFrameInAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                   "frameIn",
-                                                                  "i").toString()));
+                                                                  "i").toString()));*/
     connect(mFrameInAct, &QAction::triggered,
             this, [this]() {
         const auto scene = *mDocument.fActiveScene;
@@ -115,9 +115,9 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
                                tr("Out"),
                                this);
     mFrameOutAct->setCheckable(true);
-    mFrameOutAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+    /*mFrameOutAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                    "frameOut",
-                                                                   "o").toString()));
+                                                                   "o").toString()));*/
     connect(mFrameOutAct, &QAction::triggered,
             this, [this]() {
         const auto scene = *mDocument.fActiveScene;
