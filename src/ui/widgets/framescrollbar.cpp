@@ -108,7 +108,6 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     const qreal threeFourthsHeight = height()*0.75;
     const qreal maxX = width() + eSizesUI::widget;
 
-    // draw handle
     QRectF handleRect;
     const int hLeftFrames = mFirstViewedFrame - minFrame;
     const qreal handleFixedWidth = 16;
@@ -120,21 +119,19 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     handleRect.setWidth(mBottom ? handleWidth : handleFixedWidth);
     handleRect.setBottom(mBottom ? 6 : height()/3);
     if (mRange) { p.fillRect(handleRect, col); }
-    else { // triangle
+    /*else { // triangle
         QPainterPath path;
         path.moveTo(handleRect.left() + (handleRect.width() / 2), handleRect.bottom());
         path.lineTo(handleRect.topLeft());
         path.lineTo(handleRect.topRight());
         path.lineTo(handleRect.left() + (handleRect.width() / 2), handleRect.bottom());
         p.fillPath(path, ThemeSupport::getThemeHighlightColor());
-    }
+    }*/
 
-    // ticks
+    // draw the stuff ...
     if (!mRange) {
         // draw minor
-        // copy pasta (ish) from keysview.cpp
-        // in order to line up ticks properly
-        //p.setPen(QPen(Qt::darkGray, 2));
+        p.setPen(QPen(Qt::darkGray, 2));
         p.translate(eSizesUI::widget/2, 0);
         qreal xT = pixPerFrame*0.5;
         int iInc = 1;
@@ -150,19 +147,14 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         mMaxFrame += qFloor((width() - 40 - xT)/pixPerFrame) - mMaxFrame%iInc;
         for (int i = mMinFrame; i <= mMaxFrame; i += iInc) {
             const qreal xTT = xT + (i - mFrameRange.fMin + 1)*pixPerFrame;
-            qreal h = threeFourthsHeight + 4;
-            if (hasFrameIn(i) || hasFrameOut(i)) {
-                h = 4;
-                p.setPen(QPen(ThemeSupport::getThemeHighlightColor(), 2, Qt::DotLine));
-            } else if (hasFrameMarker(i)) {
-                p.setPen(QPen(Qt::white, 2, Qt::DotLine));
-                h = 4;
-            } else {
+            bool hasMarker = hasFrameMarker(i);
+            if (hasFrameIn(i) || hasFrameOut(i) || hasMarker) {
+                p.setPen(QPen(hasMarker ? ThemeSupport::getThemeFrameMarkerColor() : ThemeSupport::getThemeHighlightColor(), 2, Qt::DotLine));
+                p.drawLine(QPointF(xTT, 4), QPointF(xTT, height()));
                 p.setPen(QPen(Qt::darkGray, 2));
             }
-            p.drawLine(QPointF(xTT, h), QPointF(xTT, height()));
+            p.drawLine(QPointF(xTT, threeFourthsHeight + 4), QPointF(xTT, height()));
         }
-
         // draw main
         p.setPen(QPen(Qt::white, 2));
         p.translate(-(eSizesUI::widget/2), 0);
@@ -177,6 +169,13 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
             xL += inc;
             currentFrame += mDrawFrameInc;
         }
+        // draw handle
+        QPainterPath path;
+        path.moveTo(handleRect.left() + (handleRect.width() / 2), handleRect.bottom());
+        path.lineTo(handleRect.topLeft());
+        path.lineTo(handleRect.topRight());
+        path.lineTo(handleRect.left() + (handleRect.width() / 2), handleRect.bottom());
+        p.fillPath(path, ThemeSupport::getThemeHighlightColor());
     }
 
     p.end();
