@@ -147,8 +147,8 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         mMaxFrame += qFloor((width() - 40 - xT)/pixPerFrame) - mMaxFrame%iInc;
         for (int i = mMinFrame; i <= mMaxFrame; i += iInc) {
             const qreal xTT = xT + (i - mFrameRange.fMin + 1)*pixPerFrame;
-            bool hasMarker = hasFrameMarker(i);
-            if (hasFrameIn(i) || hasFrameOut(i) || hasMarker) {
+            bool hasMarker = hasFrameMarker(i+1);
+            if (hasFrameIn(i+1) || hasFrameOut(i+1) || hasMarker) {
                 p.setPen(QPen(hasMarker ? ThemeSupport::getThemeFrameMarkerColor() : ThemeSupport::getThemeHighlightColor(), 2, Qt::DotLine));
                 p.drawLine(QPointF(xTT, 4), QPointF(xTT, height()));
                 p.setPen(QPen(Qt::darkGray, 2));
@@ -198,7 +198,7 @@ bool FrameScrollBar::hasFrameIn(const int frame)
 {
     if (!mCurrentCanvas) { return false; }
     const auto frameIn = mCurrentCanvas->getFrameIn();
-    if ((frameIn.first && frame == (frameIn.second - 1))) { return true; }
+    if ((frameIn.first && frame == frameIn.second)) { return true; }
     return false;
 }
 
@@ -206,7 +206,7 @@ bool FrameScrollBar::hasFrameOut(const int frame)
 {
     if (!mCurrentCanvas) { return false; }
     const auto frameOut = mCurrentCanvas->getFrameOut();
-    if ((frameOut.first && frame == (frameOut.second - 1))) { return true; }
+    if ((frameOut.first && frame == frameOut.second)) { return true; }
     return false;
 }
 

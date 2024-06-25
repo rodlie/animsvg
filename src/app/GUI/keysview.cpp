@@ -194,7 +194,7 @@ bool KeysView::hasFrameIn(const int frame)
 {
     if (!mCurrentScene) { return false; }
     const auto frameIn = mCurrentScene->getFrameIn();
-    if ((frameIn.first && frame == (frameIn.second - 1))) { return true; }
+    if (frameIn.first && frame == frameIn.second) { return true; }
     return false;
 }
 
@@ -202,7 +202,7 @@ bool KeysView::hasFrameOut(const int frame)
 {
     if (!mCurrentScene) { return false; }
     const auto frameOut = mCurrentScene->getFrameOut();
-    if ((frameOut.first && frame == (frameOut.second - 1))) { return true; }
+    if (frameOut.first && frame == frameOut.second) { return true; }
     return false;
 }
 
@@ -519,9 +519,9 @@ void KeysView::paintEvent(QPaintEvent *) {
     maxFrame += qFloor((width() - 40 - xT)/mPixelsPerFrame) - maxFrame%iInc;
     for(int i = minFrame; i <= maxFrame; i += iInc) {
         const qreal xTT = xT + (i - mMinViewedFrame + 1)*mPixelsPerFrame;
-        if (hasFrameIn(i) || hasFrameOut(i)) {
+        if (hasFrameIn(i+1) || hasFrameOut(i+1)) {
             p.setPen(QPen(ThemeSupport::getThemeHighlightColor(), 2, Qt::DotLine));
-        } else if (hasFrameMarker(i)) {
+        } else if (hasFrameMarker(i+1)) {
             p.setPen(QPen(ThemeSupport::getThemeFrameMarkerColor(), 2, Qt::DotLine));
         } else {
             p.setPen(QPen(ThemeSupport::getThemeTimelineColor(), 2));

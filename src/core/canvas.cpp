@@ -457,18 +457,27 @@ const QPair<bool, int> Canvas::getFrameOut()
 void Canvas::setMarker(const QString &text,
                        const int frame)
 {
-    if (hasMarker(frame)) { return; }
+    if (hasMarker(frame, true)) { return; }
     QString marker = text;
     if (marker.isEmpty()) { marker = tr("Marker"); }
     mMarkers.push_back({marker, frame});
     emit newFrameRange(mRange);
 }
 
-bool Canvas::hasMarker(const int frame)
+bool Canvas::hasMarker(const int frame,
+                       const bool removeExists)
 {
     const auto markers = getMarkers();
+    int index = 0;
     for (const auto &mark: markers) {
-        if ((mark.second - 1) == frame) { return true; }
+        if (mark.second == frame) {
+            if (removeExists) {
+                mMarkers.erase(mMarkers.begin() + index);
+                emit newFrameRange(mRange);
+            }
+            return true;
+        }
+        index++;
     }
     return false;
 }

@@ -89,40 +89,45 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
                               this);
     mFrameMarkersAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                        "addMarker",
-                                                                       "k").toString()));
+                                                                       "k").toString())); // 'm' already in use
     connect(mFrameMarkersAct, &QAction::triggered,
             this, [this]() {
             const auto scene = *mDocument.fActiveScene;
             if (!scene) { return; }
-            scene->setMarker(tr("Marker"), scene->getCurrentFrame());
+            const auto frame = scene->getCurrentFrame();
+            scene->setMarker(tr("Marker"), frame);
     });
 
-    mFrameInAct = new QAction(/*QIcon::fromTheme("dots"),*/
-                                  tr("In"),
-                                  this);
-    mFrameInAct->setCheckable(true);
-    /*mFrameInAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+    mFrameInAct = new QAction(tr("In"), this);
+    mFrameInAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                   "frameIn",
-                                                                  "i").toString()));*/
+                                                                  "i").toString())); // 'i' already in use
     connect(mFrameInAct, &QAction::triggered,
             this, [this]() {
         const auto scene = *mDocument.fActiveScene;
         if (!scene) { return; }
-        scene->setFrameIn(mFrameInAct->isChecked(), scene->getCurrentFrame());
+        const auto frame = scene->getCurrentFrame();
+        if (scene->getFrameOut().first) {
+            if (frame >= scene->getFrameOut().second) { return; }
+        }
+        bool apply = (scene->getFrameIn().second != frame);
+        scene->setFrameIn(apply, frame);
     });
 
-    mFrameOutAct = new QAction(/*QIcon::fromTheme("dots"),*/
-                               tr("Out"),
-                               this);
-    mFrameOutAct->setCheckable(true);
-    /*mFrameOutAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
+    mFrameOutAct = new QAction(tr("Out"), this);
+    mFrameOutAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                    "frameOut",
-                                                                   "o").toString()));*/
+                                                                   "o").toString()));
     connect(mFrameOutAct, &QAction::triggered,
             this, [this]() {
         const auto scene = *mDocument.fActiveScene;
         if (!scene) { return; }
-        scene->setFrameOut(mFrameOutAct->isChecked(), scene->getCurrentFrame());
+        const auto frame = scene->getCurrentFrame();
+        if (scene->getFrameIn().first) {
+            if (frame <= scene->getFrameIn().second) { return; }
+        }
+        bool apply = (scene->getFrameOut().second != frame);
+        scene->setFrameOut(apply, frame);
     });
 
     mFrameRewindAct = new QAction(QIcon::fromTheme("rewind"),
