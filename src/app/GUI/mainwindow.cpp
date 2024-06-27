@@ -619,7 +619,7 @@ void MainWindow::setupMenuBar()
     mEditMenu->addAction(new NoShortcutAction(
                              tr("Invert Selection", "MenuBar_Edit"),
                              &mActions, &Actions::invertSelectionAction,
-                             Qt::Key_I, mEditMenu));
+                             Qt::SHIFT + Qt::Key_A, mEditMenu));
     mEditMenu->addAction(new NoShortcutAction(
                              tr("Clear Selection", "MenuBar_Edit"),
                              &mActions, &Actions::clearSelectionAction,

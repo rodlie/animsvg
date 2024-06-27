@@ -83,6 +83,9 @@ public:
 
     void stopPreview();
 
+    void setIn();
+    void setOut();
+
 private:
     void setLoop(const bool loop);
     void interruptPreview();
@@ -123,8 +126,6 @@ private:
     QAction *mRenderProgressAct;
     QProgressBar *mRenderProgress;
 
-    QAction *mFrameInAct;
-    QAction *mFrameOutAct;
     QAction *mFrameMarkersAct;
 
     QList<TimelineWidget*> mTimelineWidgets;

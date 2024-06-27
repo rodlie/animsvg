@@ -62,8 +62,6 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     , mCurrentFrameSpin(nullptr)
     , mRenderProgressAct(nullptr)
     , mRenderProgress(nullptr)
-    , mFrameInAct(nullptr)
-    , mFrameOutAct(nullptr)
 {
     connect(RenderHandler::sInstance, &RenderHandler::previewFinished,
             this, &TimelineDockWidget::previewFinished);
@@ -96,38 +94,6 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
             if (!scene) { return; }
             const auto frame = scene->getCurrentFrame();
             scene->setMarker(tr("Marker"), frame);
-    });
-
-    mFrameInAct = new QAction(tr("In"), this);
-    mFrameInAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                  "frameIn",
-                                                                  "i").toString())); // 'i' already in use
-    connect(mFrameInAct, &QAction::triggered,
-            this, [this]() {
-        const auto scene = *mDocument.fActiveScene;
-        if (!scene) { return; }
-        const auto frame = scene->getCurrentFrame();
-        if (scene->getFrameOut().first) {
-            if (frame >= scene->getFrameOut().second) { return; }
-        }
-        bool apply = (scene->getFrameIn().second != frame);
-        scene->setFrameIn(apply, frame);
-    });
-
-    mFrameOutAct = new QAction(tr("Out"), this);
-    mFrameOutAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                   "frameOut",
-                                                                   "o").toString()));
-    connect(mFrameOutAct, &QAction::triggered,
-            this, [this]() {
-        const auto scene = *mDocument.fActiveScene;
-        if (!scene) { return; }
-        const auto frame = scene->getCurrentFrame();
-        if (scene->getFrameIn().first) {
-            if (frame <= scene->getFrameIn().second) { return; }
-        }
-        bool apply = (scene->getFrameOut().second != frame);
-        scene->setFrameOut(apply, frame);
     });
 
     mFrameRewindAct = new QAction(QIcon::fromTheme("rewind"),
@@ -284,7 +250,6 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mRenderProgress->setFormat(tr("Cache %p%"));
 
     mToolBar->addWidget(mFrameStartSpin);
-    mToolBar->addAction(mFrameInAct);
 
     QWidget *spacerWidget1 = new QWidget(this);
     spacerWidget1->setSizePolicy(QSizePolicy::Expanding,
@@ -310,7 +275,6 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
                                  QSizePolicy::Minimum);
     mToolBar->addWidget(spacerWidget2);
 
-    mToolBar->addAction(mFrameOutAct);
     mToolBar->addWidget(mFrameEndSpin);
 
     mMainLayout->addWidget(mToolBar);
@@ -390,6 +354,12 @@ bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
             case PreviewState::rendering: playPreview(); break;
             case PreviewState::playing: pausePreview(); break;
             case PreviewState::paused: resumePreview(); break;
+        }
+    } else if(key == Qt::Key_I || key == Qt::Key_O) { // set frame in/out
+        switch(key) {
+            case Qt::Key_I: setIn(); break;
+            case Qt::Key_O: setOut(); break;
+            default:;
         }
     } else if (key == Qt::Key_Right && !(mods & Qt::ControlModifier)) { // next frame
         mDocument.incActiveSceneFrame();
@@ -596,4 +566,28 @@ void TimelineDockWidget::stopPreview()
         break;
     default:;
     }
+}
+
+void TimelineDockWidget::setIn()
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return; }
+    const auto frame = scene->getCurrentFrame();
+    if (scene->getFrameOut().first) {
+        if (frame >= scene->getFrameOut().second) { return; }
+    }
+    bool apply = (scene->getFrameIn().second != frame);
+    scene->setFrameIn(apply, frame);
+}
+
+void TimelineDockWidget::setOut()
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return; }
+    const auto frame = scene->getCurrentFrame();
+    if (scene->getFrameIn().first) {
+        if (frame <= scene->getFrameIn().second) { return; }
+    }
+    bool apply = (scene->getFrameOut().second != frame);
+    scene->setFrameOut(apply, frame);
 }

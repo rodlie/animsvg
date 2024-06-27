@@ -537,11 +537,14 @@ bool CanvasWindow::handleSelectAllKeyPress(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_A && !isMouseGrabber()) {
         bool altPressed = event->modifiers() & Qt::AltModifier;
+        bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
         auto currentMode = mDocument.fCanvasMode;
-        if (currentMode == CanvasMode::boxTransform) {
+        if (shiftPressed) {
+            mCurrentCanvas->invertSelectionAction();
+        } else if (currentMode == CanvasMode::boxTransform) {
             if (altPressed) {
                mCurrentCanvas->deselectAllBoxesAction();
-           } else {
+            } else {
                mCurrentCanvas->selectAllBoxesAction();
            }
         } else if (currentMode == CanvasMode::pointTransform) {
@@ -625,9 +628,9 @@ bool CanvasWindow::KFT_keyPressEvent(QKeyEvent *event)
     //if(handleShiftKeysKeyPress(event)) return true; // does nothing, see func
 
     const auto canvasMode = mDocument.fCanvasMode;
-    if (e.fKey == Qt::Key_I && !isMouseGrabber()) {
-        mActions.invertSelectionAction();
-    } /*else if(e.fKey == Qt::Key_W) {
+    /*if (e.fKey == Qt::Key_I && !isMouseGrabber()) {
+        //mActions.invertSelectionAction();
+    } else if(e.fKey == Qt::Key_W) {
         if(canvasMode == CanvasMode::paint) mDocument.incBrushRadius();
     } else if(e.fKey == Qt::Key_Q) {
         if(canvasMode == CanvasMode::paint) mDocument.decBrushRadius();
@@ -635,7 +638,7 @@ bool CanvasWindow::KFT_keyPressEvent(QKeyEvent *event)
         if(canvasMode == CanvasMode::paint) mDocument.setPaintMode(PaintMode::erase);
     } else if(e.fKey == Qt::Key_B) {
         if(canvasMode == CanvasMode::paint) mDocument.setPaintMode(PaintMode::normal);
-    }*/ else if ((e.fKey == Qt::Key_Enter || e.fKey == Qt::Key_Return) &&
+    } else*/ if ((e.fKey == Qt::Key_Enter || e.fKey == Qt::Key_Return) &&
                  canvasMode == CanvasMode::drawPath) {
         const bool manual = mDocument.fDrawPathManual;
         if (manual) { mCurrentCanvas->drawPathFinish(1/e.fScale); }
