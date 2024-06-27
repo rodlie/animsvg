@@ -289,6 +289,7 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
         menu.addSeparator();
         menu.addAction(setFrameInAct);
         menu.addAction(setFrameOutAct);
+        menu.addAction(clearFrameOutAct);
         menu.addAction(setMarkerAct);
 
         QAction* selectedAction = menu.exec(event->globalPos());
