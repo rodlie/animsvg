@@ -81,7 +81,10 @@ public:
     static const QPair<QString,QString> getShaderID(const QString &path);
     static const QStringList getFilesFromPath(const QString &path,
                                               const QStringList &suffix = QStringList());
-    static const QString getTimeCodeFromFrame(int frame, float fps);
+    static const QString getTimeCodeFromFrame(int frame,
+                                              float fps);
+    static int getFrameFromTimeCode(const QString &timecode,
+                                    float fps);
     static HardwareSupport getRasterEffectHardwareSupport(const QString &effect,
                                                           HardwareSupport fallback);
     static const QString getRasterEffectHardwareSupportString(const QString &effect,

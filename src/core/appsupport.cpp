@@ -306,7 +306,8 @@ const QStringList AppSupport::getFilesFromPath(const QString &path,
     return result;
 }
 
-const QString AppSupport::getTimeCodeFromFrame(int frame, float fps)
+const QString AppSupport::getTimeCodeFromFrame(int frame,
+                                               float fps)
 {
     int ss = qFloor(frame / fps);
     int mm = qFloor(ss / 60);
@@ -316,6 +317,22 @@ const QString AppSupport::getTimeCodeFromFrame(int frame, float fps)
                                       QString::number(mm).rightJustified(2, '0'),
                                       QString::number(ss).rightJustified(2, '0'),
                                       QString::number(ff).rightJustified(2, '0'));
+}
+
+int AppSupport::getFrameFromTimeCode(const QString &timecode,
+                                     float fps)
+{
+    const auto list = timecode.split(":");
+    if (fps > 0. && list.count() == 4) {
+        int hh = list.at(0).toInt();
+        int mm = list.at(1).toInt();
+        int ss = list.at(2).toInt();
+        int ff = list.at(3).toInt();
+        ss += (mm * 60) + (hh * 3600);
+        ff += ss * fps;
+        return ff;
+    }
+    return 0;
 }
 
 HardwareSupport AppSupport::getRasterEffectHardwareSupport(const QString &effect,
