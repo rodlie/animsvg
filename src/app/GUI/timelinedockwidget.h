@@ -85,6 +85,7 @@ public:
 
     void setIn();
     void setOut();
+    void setMarker();
 
 private:
     void setLoop(const bool loop);
@@ -125,8 +126,6 @@ private:
 
     QAction *mRenderProgressAct;
     QProgressBar *mRenderProgress;
-
-    QAction *mFrameMarkersAct;
 
     QList<TimelineWidget*> mTimelineWidgets;
     //AnimationDockWidget *mAnimationDockWidget;

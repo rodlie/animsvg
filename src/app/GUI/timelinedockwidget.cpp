@@ -82,20 +82,6 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mMainLayout->setSpacing(0);
     mMainLayout->setMargin(0);
 
-    mFrameMarkersAct = new QAction(/*QIcon::fromTheme("dots"),*/
-                              tr("M"),
-                              this);
-    mFrameMarkersAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                       "addMarker",
-                                                                       "k").toString())); // 'm' already in use
-    connect(mFrameMarkersAct, &QAction::triggered,
-            this, [this]() {
-            const auto scene = *mDocument.fActiveScene;
-            if (!scene) { return; }
-            const auto frame = scene->getCurrentFrame();
-            scene->setMarker(tr("Marker"), frame);
-    });
-
     mFrameRewindAct = new QAction(QIcon::fromTheme("rewind"),
                                   tr("Rewind"),
                                   this);
@@ -266,7 +252,6 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mToolBar->addAction(mPlayButton);
     mToolBar->addAction(mStopButton);
     mToolBar->addAction(mLoopButton);
-    mToolBar->addAction(mFrameMarkersAct);
 
     mRenderProgressAct->setVisible(false);
 
@@ -333,6 +318,7 @@ void TimelineDockWidget::setLoop(const bool loop)
     RenderHandler::sInstance->setLoop(loop);
 }
 
+// TODO: marker shortcut
 bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
 {
     const int key = event->key();
@@ -590,4 +576,12 @@ void TimelineDockWidget::setOut()
     }
     bool apply = (scene->getFrameOut().second != frame);
     scene->setFrameOut(apply, frame);
+}
+
+void TimelineDockWidget::setMarker()
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return; }
+    const auto frame = scene->getCurrentFrame();
+    scene->setMarker(tr("Marker"), frame);
 }
