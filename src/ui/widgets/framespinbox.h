@@ -37,6 +37,7 @@ public:
     void setDisplayTimeCode(const bool &enabled);
     void updateFps(const qreal &fps);
     QString textFromValue(int value) const override;
+    void fixup(QString &str) const override;
 
 private:
     bool mDisplayTimecode = false;

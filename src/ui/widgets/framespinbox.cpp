@@ -39,3 +39,11 @@ QString FrameSpinBox::textFromValue(int value) const
 {
     return mDisplayTimecode ? AppSupport::getTimeCodeFromFrame(value, mFps) : QSpinBox::textFromValue(value);
 }
+
+void FrameSpinBox::fixup(QString &str) const
+{
+    if (mDisplayTimecode) {
+        str = QString::number(AppSupport::getFrameFromTimeCode(str, mFps));
+    }
+    QSpinBox::fixup(str);
+}
