@@ -318,7 +318,6 @@ void TimelineDockWidget::setLoop(const bool loop)
     RenderHandler::sInstance->setLoop(loop);
 }
 
-// TODO: marker shortcut
 bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
 {
     const int key = event->key();
@@ -341,7 +340,9 @@ bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
             case PreviewState::playing: pausePreview(); break;
             case PreviewState::paused: resumePreview(); break;
         }
-    } else if(key == Qt::Key_I || key == Qt::Key_O) { // set frame in/out
+    } else if (key == Qt::Key_K) { // set marker
+        setMarker();
+    } else if (key == Qt::Key_I || key == Qt::Key_O) { // set frame in/out
         switch(key) {
             case Qt::Key_I: setIn(); break;
             case Qt::Key_O: setOut(); break;
