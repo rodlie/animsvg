@@ -487,6 +487,12 @@ const std::vector<QPair<QString, int> > Canvas::getMarkers()
     return mMarkers;
 }
 
+void Canvas::clearMarkers()
+{
+    mMarkers.clear();
+    emit newFrameRange(mRange);
+}
+
 stdsptr<BoxRenderData> Canvas::createRenderData() {
     return enve::make_shared<CanvasRenderData>(this);
 }

@@ -285,12 +285,15 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
         const auto setFrameOutAct = new QAction(tr("Set Frame Out"), this);
         const auto clearFrameOutAct = new QAction(tr("Clear Frame In/Out"), this);
         const auto setMarkerAct = new QAction(tr(hasMarker ? "Remove Marker" : "Add Marker"), this);
+        const auto clearMarkersAct = new QAction(tr("Clear Markers"), this);
 
         menu.addSeparator();
         menu.addAction(setFrameInAct);
         menu.addAction(setFrameOutAct);
         menu.addAction(clearFrameOutAct);
+        menu.addSeparator();
         menu.addAction(setMarkerAct);
+        menu.addAction(clearMarkersAct);
 
         QAction* selectedAction = menu.exec(event->globalPos());
         if (selectedAction) {
@@ -336,6 +339,10 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
             } else if (selectedAction == setMarkerAct) {
                 if (mCurrentCanvas) {
                     mCurrentCanvas->setMarker(tr("Marker"), mCurrentCanvas->getCurrentFrame());
+                }
+            } else if (selectedAction == clearMarkersAct) {
+                if (mCurrentCanvas) {
+                    mCurrentCanvas->clearMarkers();
                 }
             }
         }

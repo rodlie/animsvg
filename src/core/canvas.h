@@ -365,6 +365,7 @@ public:
     bool hasMarker(const int frame,
                    const bool removeExists = false);
     const std::vector<QPair<QString,int>> getMarkers();
+    void clearMarkers();
 
     ColorAnimator *getBgColorAnimator()
     {
