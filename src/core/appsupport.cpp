@@ -331,6 +331,9 @@ int AppSupport::getFrameFromTimeCode(const QString &timecode,
         ss += (mm * 60) + (hh * 3600);
         ff += ss * fps;
         return ff;
+    } else {
+        // assume it's just a frame number
+        return timecode.toInt();
     }
     return 0;
 }
