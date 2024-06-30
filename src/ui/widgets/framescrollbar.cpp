@@ -198,7 +198,7 @@ bool FrameScrollBar::hasFrameIn(const int frame)
 {
     if (!mCurrentCanvas) { return false; }
     const auto frameIn = mCurrentCanvas->getFrameIn();
-    if ((frameIn.first && frame == frameIn.second)) { return true; }
+    if ((frameIn.enabled && frame == frameIn.frame)) { return true; }
     return false;
 }
 
@@ -206,7 +206,7 @@ bool FrameScrollBar::hasFrameOut(const int frame)
 {
     if (!mCurrentCanvas) { return false; }
     const auto frameOut = mCurrentCanvas->getFrameOut();
-    if ((frameOut.first && frame == frameOut.second)) { return true; }
+    if ((frameOut.enabled && frame == frameOut.frame)) { return true; }
     return false;
 }
 
@@ -321,24 +321,24 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
             } else if (selectedAction == setFrameInAct) {
                 if (mCurrentCanvas) {
                     const auto frame = mCurrentCanvas->getCurrentFrame();
-                    if (mCurrentCanvas->getFrameOut().first) {
-                        if (frame >= mCurrentCanvas->getFrameOut().second) { return; }
+                    if (mCurrentCanvas->getFrameOut().enabled) {
+                        if (frame >= mCurrentCanvas->getFrameOut().frame) { return; }
                     }
-                    bool apply = (mCurrentCanvas->getFrameIn().second != frame);
+                    bool apply = (mCurrentCanvas->getFrameIn().frame != frame);
                     mCurrentCanvas->setFrameIn(apply, frame);
                 }
             } else if (selectedAction == setFrameOutAct) {
                 if (mCurrentCanvas) {
                     const auto frame = mCurrentCanvas->getCurrentFrame();
-                    if (mCurrentCanvas->getFrameIn().first) {
-                        if (frame <= mCurrentCanvas->getFrameIn().second) { return; }
+                    if (mCurrentCanvas->getFrameIn().enabled) {
+                        if (frame <= mCurrentCanvas->getFrameIn().frame) { return; }
                     }
-                    bool apply = (mCurrentCanvas->getFrameOut().second != frame);
+                    bool apply = (mCurrentCanvas->getFrameOut().frame != frame);
                     mCurrentCanvas->setFrameOut(apply, frame);
                 }
             } else if (selectedAction == setMarkerAct) {
                 if (mCurrentCanvas) {
-                    mCurrentCanvas->setMarker(tr("Marker"), mCurrentCanvas->getCurrentFrame());
+                    mCurrentCanvas->setMarker(mCurrentCanvas->getCurrentFrame());
                 }
             } else if (selectedAction == clearMarkersAct) {
                 if (mCurrentCanvas) {

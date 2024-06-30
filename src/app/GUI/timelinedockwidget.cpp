@@ -537,6 +537,8 @@ void TimelineDockWidget::updateSettingsForCurrentCanvas(Canvas* const canvas)
     });
     connect(canvas, &Canvas::currentFrameChanged,
             this, &TimelineDockWidget::handleCurrentFrameChanged);
+
+    update(); // needed for loaded markers
 }
 
 void TimelineDockWidget::stopPreview()
@@ -560,10 +562,10 @@ void TimelineDockWidget::setIn()
     const auto scene = *mDocument.fActiveScene;
     if (!scene) { return; }
     const auto frame = scene->getCurrentFrame();
-    if (scene->getFrameOut().first) {
-        if (frame >= scene->getFrameOut().second) { return; }
+    if (scene->getFrameOut().enabled) {
+        if (frame >= scene->getFrameOut().frame) { return; }
     }
-    bool apply = (scene->getFrameIn().second != frame);
+    bool apply = (scene->getFrameIn().frame != frame);
     scene->setFrameIn(apply, frame);
 }
 
@@ -572,10 +574,10 @@ void TimelineDockWidget::setOut()
     const auto scene = *mDocument.fActiveScene;
     if (!scene) { return; }
     const auto frame = scene->getCurrentFrame();
-    if (scene->getFrameIn().first) {
-        if (frame <= scene->getFrameIn().second) { return; }
+    if (scene->getFrameIn().enabled) {
+        if (frame <= scene->getFrameIn().frame) { return; }
     }
-    bool apply = (scene->getFrameOut().second != frame);
+    bool apply = (scene->getFrameOut().frame != frame);
     scene->setFrameOut(apply, frame);
 }
 
@@ -584,5 +586,5 @@ void TimelineDockWidget::setMarker()
     const auto scene = *mDocument.fActiveScene;
     if (!scene) { return; }
     const auto frame = scene->getCurrentFrame();
-    scene->setMarker(tr("Marker"), frame);
+    scene->setMarker(frame);
 }

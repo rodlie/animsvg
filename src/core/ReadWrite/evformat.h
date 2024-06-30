@@ -40,6 +40,7 @@ namespace EvFormat {
         transformEffects2 = 25,
         codecProfile = 26,
         effectCustomName = 27,
+        markers = 28,
 
         nextVersion
     };

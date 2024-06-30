@@ -431,46 +431,48 @@ void Canvas::setFrameRange(const FrameRange &range)
 void Canvas::setFrameIn(const bool enabled,
                         const int frameIn)
 {
-    mIn.first = enabled;
-    mIn.second = frameIn;
+    mIn.enabled = enabled;
+    mIn.frame = frameIn;
     emit newFrameRange(mRange);
 }
 
 void Canvas::setFrameOut(const bool enabled,
                          const int frameOut)
 {
-    mOut.first = enabled;
-    mOut.second = frameOut;
+    mOut.enabled = enabled;
+    mOut.frame = frameOut;
     emit newFrameRange(mRange);
 }
 
-const QPair<bool, int> Canvas::getFrameIn()
+const FrameMarker Canvas::getFrameIn()
 {
     return mIn;
 }
 
-const QPair<bool, int> Canvas::getFrameOut()
+const FrameMarker Canvas::getFrameOut()
 {
     return mOut;
 }
 
-void Canvas::setMarker(const QString &text,
+void Canvas::setMarker(const QString &title,
                        const int frame)
 {
     if (hasMarker(frame, true)) { return; }
-    QString marker = text;
-    if (marker.isEmpty()) { marker = tr("Marker"); }
-    mMarkers.push_back({marker, frame});
+    mMarkers.push_back({title.isEmpty() ? tr("Marker") : title, true, frame});
     emit newFrameRange(mRange);
+}
+
+void Canvas::setMarker(const int frame)
+{
+    setMarker(tr("Marker"), frame);
 }
 
 bool Canvas::hasMarker(const int frame,
                        const bool removeExists)
 {
-    const auto markers = getMarkers();
     int index = 0;
-    for (const auto &mark: markers) {
-        if (mark.second == frame) {
+    for (const auto &mark: mMarkers) {
+        if (mark.frame == frame) {
             if (removeExists) {
                 mMarkers.erase(mMarkers.begin() + index);
                 emit newFrameRange(mRange);
@@ -482,7 +484,7 @@ bool Canvas::hasMarker(const int frame,
     return false;
 }
 
-const std::vector<QPair<QString, int> > Canvas::getMarkers()
+const std::vector<FrameMarker> Canvas::getMarkers()
 {
     return mMarkers;
 }
@@ -1136,16 +1138,23 @@ void Canvas::writeSettings(eWriteStream& dst) const
     dst << mHeight;
     dst << mFps;
     dst << mRange;
+
+    writeMarkers(dst);
 }
 
 void Canvas::readSettings(eReadStream& src)
 {
-    int currFrame; src >> currFrame;
+    int currFrame;
+    src >> currFrame;
     src >> mClipToCanvasSize;
     src >> mWidth;
     src >> mHeight;
     src >> mFps;
-    FrameRange range; src >> range;
+    FrameRange range;
+    src >> range;
+    if (src.evFileVersion() >= EvFormat::markers) {
+        readMarkers(src);
+    }
     setFrameRange(range);
     anim_setAbsFrame(currFrame);
 }
@@ -1165,6 +1174,40 @@ void Canvas::readBoundingBox(eReadStream& src)
         readSettings(src);
     }
     clearGradientRWIds();
+}
+
+void Canvas::writeMarkers(eWriteStream &dst) const
+{
+    dst << mIn.enabled;
+    dst << mIn.frame;
+    dst << mOut.enabled;
+    dst << mOut.frame;
+    QStringList markers;
+    for (auto &marker: mMarkers) {
+        QString title = marker.title.isEmpty() ? tr("Marker") : marker.title;
+        markers << QString("%1:%2").arg(title, QString::number(marker.frame));
+    }
+    dst << markers.join(",").toUtf8();
+}
+
+void Canvas::readMarkers(eReadStream &src)
+{
+    src >> mIn.enabled;
+    src >> mIn.frame;
+    src >> mOut.enabled;
+    src >> mOut.frame;
+    QByteArray markerData;
+    src >> markerData;
+    mMarkers.clear();
+    const auto markers = QString::fromUtf8(markerData).split(",");
+    for (auto &marker: markers) {
+        const auto content = marker.split(":");
+        if (content.size() != 2) { continue; }
+        QString title = content.at(0).isEmpty() ? tr("Marker") : content.at(0);
+        int frame = content.at(1).toInt();
+        if (hasMarker(frame)) { continue; }
+        mMarkers.push_back({title, true, frame});
+    }
 }
 
 void Canvas::writeBoxOrSoundXEV(const stdsptr<XevZipFileSaver>& xevFileSaver,

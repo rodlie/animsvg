@@ -194,7 +194,7 @@ bool KeysView::hasFrameIn(const int frame)
 {
     if (!mCurrentScene) { return false; }
     const auto frameIn = mCurrentScene->getFrameIn();
-    if (frameIn.first && frame == frameIn.second) { return true; }
+    if (frameIn.enabled && frame == frameIn.frame) { return true; }
     return false;
 }
 
@@ -202,7 +202,7 @@ bool KeysView::hasFrameOut(const int frame)
 {
     if (!mCurrentScene) { return false; }
     const auto frameOut = mCurrentScene->getFrameOut();
-    if (frameOut.first && frame == frameOut.second) { return true; }
+    if (frameOut.enabled && frame == frameOut.frame) { return true; }
     return false;
 }
 

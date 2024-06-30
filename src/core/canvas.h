@@ -357,15 +357,17 @@ public:
                     const int frameIn);
     void setFrameOut(const bool enabled,
                      const int frameOut);
-    const QPair<bool,int> getFrameIn();
-    const QPair<bool,int> getFrameOut();
+    const FrameMarker getFrameIn();
+    const FrameMarker getFrameOut();
 
-    void setMarker(const QString &text,
+    void setMarker(const QString &title,
                    const int frame);
+    void setMarker(const int frame);
     bool hasMarker(const int frame,
                    const bool removeExists = false);
-    const std::vector<QPair<QString,int>> getMarkers();
+    const std::vector<FrameMarker> getMarkers();
     void clearMarkers();
+
 
     ColorAnimator *getBgColorAnimator()
     {
@@ -552,6 +554,8 @@ public:
     void readSettings(eReadStream &src);
     void writeBoundingBox(eWriteStream& dst) const;
     void readBoundingBox(eReadStream& src);
+    void writeMarkers(eWriteStream &dst) const;
+    void readMarkers(eReadStream &src);
 
     void writeBoxOrSoundXEV(const stdsptr<XevZipFileSaver> &xevFileSaver,
                             const RuntimeIdToWriteId &objListIdConv,
@@ -799,10 +803,9 @@ protected:
 
     std::map<int, stdsptr<ConnContextObjList<GraphAnimator*>>> mSelectedForGraph;
 
-    QPair<bool,int> mIn{false, 0};
-    QPair<bool,int> mOut{false, 0};
-
-    std::vector<QPair<QString,int>> mMarkers;
+    FrameMarker mIn{tr("In"), false, 0};
+    FrameMarker mOut{tr("Out"), false, 0};
+    std::vector<FrameMarker> mMarkers;
 
     void handleMovePointMousePressEvent(const eMouseEvent &e);
     void handleMovePointMouseMove(const eMouseEvent &e);
