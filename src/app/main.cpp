@@ -285,11 +285,13 @@ int main(int argc, char *argv[])
                                 *videoEncoder, memoryHandler);
     std::cout << "Render handler initialized" << std::endl;
 
+#ifndef QT_DEBUG
     if (avformat_version() >= 3812708) {
         QMessageBox::critical(nullptr,
                               QObject::tr("Unsupported FFmpeg version"),
                               QObject::tr("Friction is built against an unsupported FFmpeg version. Use at own risk and don't report any issues upstream."));
     }
+#endif
 
     const QString openProject = argc > 1 ? argv[1] : QString();
     MainWindow w(document,
