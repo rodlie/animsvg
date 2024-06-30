@@ -78,6 +78,10 @@ public:
     void clearKeySelection();
     void selectKeysInSelectionRect();
 
+    bool hasFrameIn(const int frame);
+    bool hasFrameOut(const int frame);
+    bool hasFrameMarker(const int frame);
+
     // graph
 
     void graphPaint(QPainter *p);

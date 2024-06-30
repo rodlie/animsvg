@@ -25,8 +25,6 @@
 
 #include "esettings.h"
 
-#include "appsupport.h"
-
 #include "GUI/global.h"
 #include "exceptions.h"
 
@@ -238,7 +236,7 @@ eSettings::eSettings(const int cpuThreads,
                      fPathControlScaling,
                      "pathControlScaling", 1.);
 
-    gSettings << std::make_shared<eBoolSetting>(
+    /*gSettings << std::make_shared<eBoolSetting>(
                      fTimelineAlternateRow,
                      "timelineAlternateRow", true);
     gSettings << std::make_shared<eColorSetting>(
@@ -251,7 +249,7 @@ eSettings::eSettings(const int cpuThreads,
     gSettings << std::make_shared<eColorSetting>(
                      fTimelineHighlightRowColor,
                      "timelineHighlightRowColor",
-                     QColor(255, 0, 0, 15));
+                     QColor(255, 0, 0, 15));*/
 
     gSettings << std::make_shared<eColorSetting>(
                      fObjectKeyframeColor,
@@ -270,7 +268,7 @@ eSettings::eSettings(const int cpuThreads,
                      "selectedKeyframeColor",
                      QColor(255, 255, 0));
 
-    gSettings << std::make_shared<eColorSetting>(
+    /*gSettings << std::make_shared<eColorSetting>(
                      fVisibilityRangeColor,
                      "visibilityRangeColor",
                      QColor(131, 92, 255, 255));
@@ -281,7 +279,7 @@ eSettings::eSettings(const int cpuThreads,
     gSettings << std::make_shared<eColorSetting>(
                      fAnimationRangeColor,
                      "animationRangeColor",
-                     QColor(0, 0, 0, 55));
+                     QColor(0, 0, 0, 55));*/
 
     loadDefaults();
 

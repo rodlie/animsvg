@@ -43,7 +43,7 @@
 #include "widgets/scenechooser.h"
 #include "widgets/changewidthwidget.h"
 #include "timelinehighlightwidget.h"
-#include "appsupport.h"
+#include "themesupport.h"
 
 TimelineWidget::TimelineWidget(Document &document,
                                QWidget * const menu,
@@ -51,7 +51,7 @@ TimelineWidget::TimelineWidget(Document &document,
     : QWidget(parent)
     , mDocument(document)
 {
-    setPalette(AppSupport::getDarkerPalette());
+    setPalette(ThemeSupport::getDarkerPalette());
     setAutoFillBackground(true);
 
     mMainLayout = new QGridLayout(this);

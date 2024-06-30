@@ -27,6 +27,8 @@
 
 #include <QPainter>
 
+#include "themesupport.h"
+
 BoxesListActionButton::BoxesListActionButton(QWidget * const parent)
     : QWidget(parent)
 {
@@ -60,7 +62,7 @@ void PixmapActionButton::paintEvent(QPaintEvent *)
 
     QPainter p(this);
     const int pX = 0;
-    if (mHover) { p.fillRect(QRect(QPoint(pX, pX), pix->size()), QColor(112, 8, 10)); }
+    if (mHover) { p.fillRect(QRect(QPoint(pX, pX), pix->size()), ThemeSupport::getThemeHighlightColor(50)); }
     p.drawPixmap(pX, pX, *pix);
     p.end();
 }

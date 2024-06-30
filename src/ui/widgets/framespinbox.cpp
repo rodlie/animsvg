@@ -21,31 +21,30 @@
 #
 */
 
-// Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
+#include "framespinbox.h"
+#include "appsupport.h"
 
-#ifndef EVFORMAT_H
-#define EVFORMAT_H
-
-namespace EvFormat {
-    enum {
-        dataCompression = 16,
-        textSkFont = 17,
-        oilEffectImprov = 18,
-        betterSWTAbsReadWrite = 19,
-        readSceneSettingsBeforeContent = 20,
-        relativeFilePathSave = 21,
-        flipBook = 22,
-        colorizeInfluence = 23,
-        transformEffects = 24,
-        transformEffects2 = 25,
-        codecProfile = 26,
-        effectCustomName = 27,
-        markers = 28,
-
-        nextVersion
-    };
-
-    const int version = nextVersion - 1;
+void FrameSpinBox::setDisplayTimeCode(const bool &enabled)
+{
+    setSingleStep(enabled && mFps > 0. ? mFps : 1);
+    mDisplayTimecode = enabled;
+    setSpecialValueText(enabled ? "00:00:00:00" : "");
 }
 
-#endif // EVFORMAT_H
+void FrameSpinBox::updateFps(const qreal &fps)
+{
+    mFps = fps;
+}
+
+QString FrameSpinBox::textFromValue(int value) const
+{
+    return mDisplayTimecode ? AppSupport::getTimeCodeFromFrame(value, mFps) : QSpinBox::textFromValue(value);
+}
+
+void FrameSpinBox::fixup(QString &str) const
+{
+    if (mDisplayTimecode) {
+        str = QString::number(AppSupport::getFrameFromTimeCode(str, mFps));
+    }
+    QSpinBox::fixup(str);
+}

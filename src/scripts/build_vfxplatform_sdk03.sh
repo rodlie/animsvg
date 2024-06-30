@@ -71,7 +71,7 @@ if [ ! -f "${SDK}/bin/nasm" ]; then
     cd ${SRC}
     NASM_SRC=nasm-${NASM_V}
     rm -rf ${NASM_SRC} || true
-    tar xf ${DIST}/${NASM_SRC}.tar.xz
+    tar xf ${DIST}/ffmpeg/${NASM_SRC}.tar.xz
     cd ${NASM_SRC}
     ./configure ${COMMON_CONFIGURE}
     make -j${MKJOBS}
@@ -83,7 +83,7 @@ if [ ! -f "${SDK}/lib/libbz2.so.1.0" ]; then
     cd ${SRC}
     BZIP_SRC=bzip2-${BZIP_V}
     rm -rf ${BZIP_SRC} || true
-    tar xf ${DIST}/${BZIP_SRC}.tar.gz
+    tar xf ${DIST}/ffmpeg/${BZIP_SRC}.tar.gz
     cd ${BZIP_SRC}
     make -f Makefile-libbz2_so
     cp -a libbz2.so* ${SDK}/lib/
@@ -96,7 +96,7 @@ if [ ! -f "${SDK}/lib/libz.so" ]; then
     cd ${SRC}
     ZLIB_SRC=zlib-${ZLIB_V}
     rm -rf ${ZLIB_SRC} || true
-    tar xf ${DIST}/${ZLIB_SRC}.tar.xz
+    tar xf ${DIST}/ffmpeg/${ZLIB_SRC}.tar.xz
     cd ${ZLIB_SRC}
     ./configure ${COMMON_CONFIGURE}
     make -j${MKJOBS}
@@ -108,7 +108,7 @@ if [ ! -f "${SDK}/lib/libmp3lame.so" ]; then
     cd ${SRC}
     LAME_SRC=lame-${LAME_V}
     rm -rf ${LAME_SRC} || true
-    tar xf ${DIST}/${LAME_SRC}.tar.gz
+    tar xf ${DIST}/ffmpeg/${LAME_SRC}.tar.gz
     cd ${LAME_SRC}
     CFLAGS="${DEFAULT_CFLAGS}" \
     CXXFLAGS="${DEFAULT_CFLAGS}" \
@@ -123,7 +123,7 @@ if [ ! -f "${SDK}/lib/libvpx.so" ]; then
     cd ${SRC}
     VPX_SRC=libvpx-${VPX_V}
     rm -rf ${VPX_SRC} || true
-    tar xf ${DIST}/libvpx-v${VPX_V}.tar.gz
+    tar xf ${DIST}/ffmpeg/libvpx-v${VPX_V}.tar.gz
     cd ${VPX_SRC}
     CFLAGS="${DEFAULT_CFLAGS}" \
     CXXFLAGS="${DEFAULT_CFLAGS}" \
@@ -138,7 +138,7 @@ if [ ! -f "${SDK}/lib/libogg.so" ]; then
     cd ${SRC}
     OGG_SRC=libogg-${OGG_V}
     rm -rf ${OGG_SRC} || true
-    tar xf ${DIST}/${OGG_SRC}.tar.gz
+    tar xf ${DIST}/ffmpeg/${OGG_SRC}.tar.gz
     cd ${OGG_SRC}
     CFLAGS="${DEFAULT_CFLAGS}" \
     CXXFLAGS="${DEFAULT_CFLAGS}" \
@@ -153,7 +153,7 @@ if [ ! -f "${SDK}/lib/libvorbis.so" ]; then
     cd ${SRC}
     VORBIS_SRC=libvorbis-${VORBIS_V}
     rm -rf ${VORBIS_SRC} || true
-    tar xf ${DIST}/${VORBIS_SRC}.tar.gz
+    tar xf ${DIST}/ffmpeg/${VORBIS_SRC}.tar.gz
     cd ${VORBIS_SRC}
     CFLAGS="${DEFAULT_CFLAGS}" \
     CXXFLAGS="${DEFAULT_CFLAGS}" \
@@ -168,7 +168,7 @@ if [ ! -f "${SDK}/lib/libtheora.so" ]; then
     cd ${SRC}
     THEORA_SRC=libtheora-${THEORA_V}
     rm -rf ${THEORA_SRC} || true
-    tar xf ${DIST}/${THEORA_SRC}.tar.gz
+    tar xf ${DIST}/ffmpeg/${THEORA_SRC}.tar.gz
     cd ${THEORA_SRC}
     CFLAGS="${DEFAULT_CFLAGS}" \
     CXXFLAGS="${DEFAULT_CFLAGS}" \
@@ -182,7 +182,7 @@ fi # libtheora
 if [ ! -f "${SDK}/lib/libxvidcore.so" ]; then
     cd ${SRC}
     rm -rf xvidcore || true
-    tar xf ${DIST}/xvidcore-${XVID_V}.tar.gz
+    tar xf ${DIST}/ffmpeg/xvidcore-${XVID_V}.tar.gz
     cd xvidcore/build/generic
     CFLAGS="${DEFAULT_CFLAGS}" \
     CXXFLAGS="${DEFAULT_CFLAGS}" \
@@ -197,7 +197,7 @@ if [ ! -f "${SDK}/lib/liblsmash.so" ]; then
     cd ${SRC}
     LSMASH_SRC=l-smash-${LSMASH_V}
     rm -rf ${LSMASH_SRC} || true
-    tar xf ${DIST}/liblsmash-v${LSMASH_V}.tar.gz
+    tar xf ${DIST}/ffmpeg/liblsmash-v${LSMASH_V}.tar.gz
     cd ${LSMASH_SRC}
     CFLAGS="${DEFAULT_CFLAGS}" \
     CXXFLAGS="${DEFAULT_CFLAGS}" \
@@ -212,7 +212,7 @@ if [ ! -f "${SDK}/lib/libx264.so" ]; then
     cd ${SRC}
     X264_SRC=x264-snapshot-${X264_V}
     rm -rf ${X264_SRC} || true
-    tar xf ${DIST}/${X264_SRC}.tar.bz2
+    tar xf ${DIST}/ffmpeg/${X264_SRC}.tar.bz2
     cd ${X264_SRC}
     CFLAGS="${DEFAULT_CFLAGS}" \
     CXXFLAGS="${DEFAULT_CFLAGS}" \
@@ -227,7 +227,7 @@ if [ ! -f "${SDK}/lib/libx265.so" ]; then
     cd ${SRC}
     X265_SRC=x265_${X265_V}
     rm -rf ${X265_SRC} || true
-    tar xf ${DIST}/${X265_SRC}.tar.gz
+    tar xf ${DIST}/ffmpeg/${X265_SRC}.tar.gz
     cd ${X265_SRC}/source
     mkdir build && cd build
     CFLAGS="${DEFAULT_CFLAGS}" \
@@ -248,7 +248,7 @@ if [ ! -f "${SDK}/lib/libaom.so" ]; then
     cd ${SRC}
     AOM_SRC=libaom-${AOM_V}
     rm -rf ${AOM_SRC} || true
-    tar xf ${DIST}/${AOM_SRC}.tar.gz
+    tar xf ${DIST}/ffmpeg/${AOM_SRC}.tar.gz
     cd ${AOM_SRC}
     mkdir build2 && cd build2
     CFLAGS="${DEFAULT_CFLAGS}" \
@@ -276,7 +276,7 @@ if [ ! -f "${SDK}/lib/pkgconfig/libavcodec.pc" ]; then
     cd ${SRC}
     FFMPEG_SRC=ffmpeg-${FFMPEG_V}
     rm -rf ${FFMPEG_SRC} || true
-    tar xf ${DIST}/${FFMPEG_SRC}.tar.xz
+    tar xf ${DIST}/ffmpeg/${FFMPEG_SRC}.tar.xz
     cd ${FFMPEG_SRC}
     CFLAGS="${DEFAULT_CFLAGS}" \
     CXXFLAGS="${DEFAULT_CFLAGS}" \

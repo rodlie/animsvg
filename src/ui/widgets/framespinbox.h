@@ -21,31 +21,27 @@
 #
 */
 
-// Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
+#ifndef FRAMESPINBOX_H
+#define FRAMESPINBOX_H
 
-#ifndef EVFORMAT_H
-#define EVFORMAT_H
+#include "ui_global.h"
 
-namespace EvFormat {
-    enum {
-        dataCompression = 16,
-        textSkFont = 17,
-        oilEffectImprov = 18,
-        betterSWTAbsReadWrite = 19,
-        readSceneSettingsBeforeContent = 20,
-        relativeFilePathSave = 21,
-        flipBook = 22,
-        colorizeInfluence = 23,
-        transformEffects = 24,
-        transformEffects2 = 25,
-        codecProfile = 26,
-        effectCustomName = 27,
-        markers = 28,
+#include <QSpinBox>
 
-        nextVersion
-    };
+class UI_EXPORT FrameSpinBox : public QSpinBox
+{
+    Q_OBJECT
 
-    const int version = nextVersion - 1;
-}
+public:
+    using QSpinBox::QSpinBox;
+    void setDisplayTimeCode(const bool &enabled);
+    void updateFps(const qreal &fps);
+    QString textFromValue(int value) const override;
+    void fixup(QString &str) const override;
 
-#endif // EVFORMAT_H
+private:
+    bool mDisplayTimecode = false;
+    qreal mFps = 0;
+};
+
+#endif // FRAMESPINBOX_H

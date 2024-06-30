@@ -28,7 +28,6 @@
 
 #include <QObject>
 #include <QVariant>
-#include <QPalette>
 #include <QPair>
 #include <QStringList>
 
@@ -48,10 +47,6 @@ class CORE_EXPORT AppSupport : public QObject
 
 public:
     explicit AppSupport(QObject *parent = nullptr);
-    static void setupTheme();
-    static const QPalette getDarkPalette();
-    static const QPalette getDarkerPalette();
-    static const QPalette getNotSoDarkPalette();
     static QVariant getSettings(const QString &group,
                                 const QString &key,
                                 const QVariant &fallback = QVariant());
@@ -86,7 +81,10 @@ public:
     static const QPair<QString,QString> getShaderID(const QString &path);
     static const QStringList getFilesFromPath(const QString &path,
                                               const QStringList &suffix = QStringList());
-    static const QString getTimeCodeFromFrame(int frame, float fps);
+    static const QString getTimeCodeFromFrame(int frame,
+                                              float fps);
+    static int getFrameFromTimeCode(const QString &timecode,
+                                    float fps);
     static HardwareSupport getRasterEffectHardwareSupport(const QString &effect,
                                                           HardwareSupport fallback);
     static const QString getRasterEffectHardwareSupportString(const QString &effect,

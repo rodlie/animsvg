@@ -23,6 +23,7 @@
 
 #include "uilayout.h"
 #include "appsupport.h"
+#include "themesupport.h"
 
 #include <QLabel>
 #include <QPushButton>
@@ -66,7 +67,7 @@ UIDock::UIDock(QWidget *parent,
 
         if (darkHeader) {
             headerWidget->setAutoFillBackground(true);
-            headerWidget->setPalette(AppSupport::getDarkPalette());
+            headerWidget->setPalette(ThemeSupport::getDarkPalette());
         }
 
         headerWidget->setContentsMargins(0, 0, 0, 0);

@@ -141,7 +141,8 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     connect(mLoopButton, &QAction::triggered,
             this, &TimelineDockWidget::setLoop);
 
-    mFrameStartSpin = new QSpinBox(this);
+    mFrameStartSpin = new FrameSpinBox(this);
+    mFrameStartSpin->setObjectName("LeftSpinBox");
     mFrameStartSpin->setAlignment(Qt::AlignHCenter);
     mFrameStartSpin->setFocusPolicy(Qt::ClickFocus);
     mFrameStartSpin->setToolTip(tr("Scene frame start"));
@@ -162,7 +163,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
             scene->setFrameRange(range);
     });
 
-    mFrameEndSpin = new QSpinBox(this);
+    mFrameEndSpin = new FrameSpinBox(this);
     mFrameEndSpin->setAlignment(Qt::AlignHCenter);
     mFrameEndSpin->setFocusPolicy(Qt::ClickFocus);
     mFrameEndSpin->setToolTip(tr("Scene frame end"));
@@ -183,7 +184,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
             scene->setFrameRange(range);
     });
 
-    mCurrentFrameSpin = new QSpinBox(this);
+    mCurrentFrameSpin = new FrameSpinBox(this);
     mCurrentFrameSpin->setAlignment(Qt::AlignHCenter);
     mCurrentFrameSpin->setObjectName(QString::fromUtf8("SpinBoxNoButtons"));
     mCurrentFrameSpin->setFocusPolicy(Qt::ClickFocus);
@@ -262,6 +263,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mToolBar->addWidget(mFrameEndSpin);
 
     mMainLayout->addWidget(mToolBar);
+    mMainLayout->addSpacing(2);
 
     mPlayFromBeginningButton->setEnabled(false);
     mPlayButton->setEnabled(false);
@@ -337,6 +339,14 @@ bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
             case PreviewState::rendering: playPreview(); break;
             case PreviewState::playing: pausePreview(); break;
             case PreviewState::paused: resumePreview(); break;
+        }
+    } else if (key == Qt::Key_K) { // set marker
+        setMarker();
+    } else if (key == Qt::Key_I || key == Qt::Key_O) { // set frame in/out
+        switch(key) {
+            case Qt::Key_I: setIn(); break;
+            case Qt::Key_O: setOut(); break;
+            default:;
         }
     } else if (key == Qt::Key_Right && !(mods & Qt::ControlModifier)) { // next frame
         mDocument.incActiveSceneFrame();
@@ -499,6 +509,27 @@ void TimelineDockWidget::updateSettingsForCurrentCanvas(Canvas* const canvas)
     updateFrameRange(range);
     handleCurrentFrameChanged(canvas->anim_getCurrentAbsFrame());
 
+    mCurrentFrameSpin->setDisplayTimeCode(canvas->getDisplayTimecode());
+    mFrameStartSpin->setDisplayTimeCode(canvas->getDisplayTimecode());
+    mFrameEndSpin->setDisplayTimeCode(canvas->getDisplayTimecode());
+
+    mCurrentFrameSpin->updateFps(canvas->getFps());
+    mFrameStartSpin->updateFps(canvas->getFps());
+    mFrameEndSpin->updateFps(canvas->getFps());
+
+    connect(canvas, &Canvas::fpsChanged,
+            this, [this](const qreal fps) {
+        mCurrentFrameSpin->updateFps(fps);
+        mFrameStartSpin->updateFps(fps);
+        mFrameEndSpin->updateFps(fps);
+    });
+    connect(canvas, &Canvas::displayTimeCodeChanged,
+            this, [this](const bool enabled) {
+        mCurrentFrameSpin->setDisplayTimeCode(enabled);
+        mFrameStartSpin->setDisplayTimeCode(enabled);
+        mFrameEndSpin->setDisplayTimeCode(enabled);
+    });
+
     connect(canvas,
             &Canvas::newFrameRange,
             this, [this](const FrameRange range) {
@@ -506,6 +537,8 @@ void TimelineDockWidget::updateSettingsForCurrentCanvas(Canvas* const canvas)
     });
     connect(canvas, &Canvas::currentFrameChanged,
             this, &TimelineDockWidget::handleCurrentFrameChanged);
+
+    update(); // needed for loaded markers
 }
 
 void TimelineDockWidget::stopPreview()
@@ -522,4 +555,36 @@ void TimelineDockWidget::stopPreview()
         break;
     default:;
     }
+}
+
+void TimelineDockWidget::setIn()
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return; }
+    const auto frame = scene->getCurrentFrame();
+    if (scene->getFrameOut().enabled) {
+        if (frame >= scene->getFrameOut().frame) { return; }
+    }
+    bool apply = (scene->getFrameIn().frame != frame);
+    scene->setFrameIn(apply, frame);
+}
+
+void TimelineDockWidget::setOut()
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return; }
+    const auto frame = scene->getCurrentFrame();
+    if (scene->getFrameIn().enabled) {
+        if (frame <= scene->getFrameIn().frame) { return; }
+    }
+    bool apply = (scene->getFrameOut().frame != frame);
+    scene->setFrameOut(apply, frame);
+}
+
+void TimelineDockWidget::setMarker()
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return; }
+    const auto frame = scene->getCurrentFrame();
+    scene->setMarker(frame);
 }

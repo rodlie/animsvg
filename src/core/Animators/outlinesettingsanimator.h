@@ -127,6 +127,6 @@ private:
     qsptr<BrushSettingsAnimator> mBrushSettings =
             enve::make_shared<BrushSettingsAnimator>();
     qsptr<QrealAnimator> mLineWidth =
-            enve::make_shared<QrealAnimator>(2, 0, 999, 1, "thickness");
+            enve::make_shared<QrealAnimator>(10, 0, 999, 1, "thickness");
 };
 #endif // OUTLINESETTINGSANIMATOR_H

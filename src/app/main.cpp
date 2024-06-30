@@ -40,6 +40,7 @@
 #include "ShaderEffects/shadereffectprogram.h"
 #include "videoencoder.h"
 #include "appsupport.h"
+#include "themesupport.h"
 
 #ifdef Q_OS_WIN
 #include "windowsincludes.h"
@@ -133,8 +134,6 @@ int main(int argc, char *argv[])
 // #endif
 #endif
 
-    AppSupport::setupTheme();
-
 #ifndef Q_OS_DARWIN
     const bool threadedOpenGL = QOpenGLContext::supportsThreadedOpenGL();
     if (!threadedOpenGL) {
@@ -203,6 +202,8 @@ int main(int argc, char *argv[])
     });
     ALPHA_MESH_PIX = &alphaMesh;
     std::cout << "Generated Alpha Mesh" << std::endl;
+
+    ThemeSupport::setupTheme(eSizesUI::widget);
 
     //#ifdef QT_DEBUG
     //    const qint64 pId = QCoreApplication::applicationPid();
@@ -284,11 +285,13 @@ int main(int argc, char *argv[])
                                 *videoEncoder, memoryHandler);
     std::cout << "Render handler initialized" << std::endl;
 
+#ifndef QT_DEBUG
     if (avformat_version() >= 3812708) {
         QMessageBox::critical(nullptr,
                               QObject::tr("Unsupported FFmpeg version"),
                               QObject::tr("Friction is built against an unsupported FFmpeg version. Use at own risk and don't report any issues upstream."));
     }
+#endif
 
     const QString openProject = argc > 1 ? argv[1] : QString();
     MainWindow w(document,

@@ -278,6 +278,7 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     mTabWidget->setFocusPolicy(Qt::NoFocus);
 
     mColorModeCombo = new QComboBox(this);
+    mColorModeCombo->setMinimumWidth(60);
     mColorModeCombo->setFocusPolicy(Qt::NoFocus);
 
     mWidgetsLayout->setAlignment(Qt::AlignTop);
@@ -368,7 +369,6 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
 
     mPickingButton = new QPushButton(QIcon::fromTheme("pick"), QString(), this);
     mPickingButton->setFocusPolicy(Qt::NoFocus);
-    mPickingButton->setObjectName("FlatButton");
     mPickingButton->setToolTip(tr("Pick Color"));
     connect(mPickingButton, &QPushButton::released,
             this, &ColorSettingsWidget::startColorPicking);
@@ -383,6 +383,7 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     mColorLabelLayout->addWidget(mPickingButton);
     mWidgetsLayout->addLayout(mColorLabelLayout);
 
+    mTabWidget->setObjectName("ColorTabWidget");
     mTabWidget->setTabPosition(QTabWidget::South);
     mTabWidget->addTab(mRGBWidget, "RGB");
     mTabWidget->addTab(mHSVWidget, "HSV");

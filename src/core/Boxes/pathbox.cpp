@@ -41,6 +41,7 @@
 #include "clipboardcontainer.h"
 #include "circle.h"
 #include "Boxes/smartvectorpath.h"
+#include "themesupport.h"
 
 PathBox::PathBox(const QString &name, const eBoxType type) :
     BoxWithPathEffects(name, type) {
@@ -74,7 +75,7 @@ PathBox::PathBox(const QString &name, const eBoxType type) :
     mStrokeGradientPoints = mFillSettings->getGradientPoints();
 
     mStrokeSettings->setPaintType(PaintType::FLATPAINT);
-    mStrokeSettings->setCurrentColor(Qt::cyan);
+    mStrokeSettings->setCurrentColor(ThemeSupport::getThemeObjectColor());
 
     ca_prependChild(mPathEffectsAnimators.get(), mFillSettings);
     ca_prependChild(mPathEffectsAnimators.get(), mStrokeSettings);

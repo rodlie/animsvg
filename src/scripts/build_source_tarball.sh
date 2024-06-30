@@ -24,6 +24,7 @@ CWD=`pwd`
 BUILD_DIR=${CWD}/build-source
 BUILD_TMP=${CWD}/build-tmp
 COMMIT=`git rev-parse --short=8 HEAD`
+CUSTOM=${CUSTOM:-""}
 
 if [ -d "${BUILD_DIR}" ]; then
     rm -rf ${BUILD_DIR}
@@ -42,11 +43,11 @@ cmake -G Ninja \
 -DCMAKE_CXX_COMPILER=clang++ \
 -DCMAKE_C_COMPILER=clang \
 -DGIT_COMMIT=${COMMIT} \
--DGIT_BRANCH=${BRANCH} \
+-DCUSTOM_BUILD=${CUSTOM} \
 ..
 VERSION=`cat version.txt`
 
-if [ "${COMMIT}" != "" ]; then
+if [ "${COMMIT}" != "" ] && [ "${CUSTOM}" = "" ]; then
     VERSION="${VERSION}-${COMMIT}"
 fi
 

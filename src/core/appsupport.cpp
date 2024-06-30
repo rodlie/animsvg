@@ -45,59 +45,6 @@ AppSupport::AppSupport(QObject *parent)
 
 }
 
-void AppSupport::setupTheme()
-{
-    QIcon::setThemeSearchPaths(QStringList() << QString::fromUtf8(":/icons"));
-    QIcon::setThemeName(QString::fromUtf8("hicolor"));
-    qApp->setStyle(QString::fromUtf8("fusion"));
-
-    QPalette palette;
-    palette.setColor(QPalette::Window, QColor(40, 40, 47));
-    palette.setColor(QPalette::WindowText, Qt::white);
-    palette.setColor(QPalette::Base, QColor(33, 33, 38));
-    palette.setColor(QPalette::AlternateBase, QColor(40, 40, 47));
-    palette.setColor(QPalette::Link, Qt::white);
-    palette.setColor(QPalette::LinkVisited, Qt::white);
-    palette.setColor(QPalette::ToolTipText, Qt::white);
-    palette.setColor(QPalette::ToolTipBase, Qt::black);
-    palette.setColor(QPalette::Text, Qt::white);
-    palette.setColor(QPalette::Button, QColor(33, 33, 38));
-    palette.setColor(QPalette::ButtonText, Qt::white);
-    palette.setColor(QPalette::BrightText, Qt::red);
-    palette.setColor(QPalette::Highlight, QColor(177, 16, 20));
-    palette.setColor(QPalette::HighlightedText, Qt::white);
-    palette.setColor(QPalette::Disabled, QPalette::Text, Qt::darkGray);
-    palette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
-    qApp->setPalette(palette);
-}
-
-const QPalette AppSupport::getDarkPalette()
-{
-    QPalette pal = QPalette();
-    pal.setColor(QPalette::Window, QColor(33, 33, 38));
-    pal.setColor(QPalette::Base, QColor(33, 33, 38));
-    pal.setColor(QPalette::Button, QColor(33, 33, 38));
-    return pal;
-}
-
-const QPalette AppSupport::getDarkerPalette()
-{
-    QPalette pal = QPalette();
-    pal.setColor(QPalette::Window, QColor(25, 25, 25));
-    pal.setColor(QPalette::Base, QColor(25, 25, 25));
-    pal.setColor(QPalette::Button, QColor(25, 25, 25));
-    return pal;
-}
-
-const QPalette AppSupport::getNotSoDarkPalette()
-{
-    QPalette pal = QPalette();
-    pal.setColor(QPalette::Window, QColor(40, 40, 47));
-    pal.setColor(QPalette::Base, QColor(33, 33, 38));
-    pal.setColor(QPalette::Button, QColor(33, 33, 38));
-    return pal;
-}
-
 QVariant AppSupport::getSettings(const QString &group,
                                  const QString &key,
                                  const QVariant &fallback)
@@ -163,6 +110,9 @@ const QString AppSupport::getAppUrl()
 const QString AppSupport::getAppVersion()
 {
     QString version = QString::fromUtf8(PROJECT_VERSION);
+#ifdef CUSTOM_BUILD
+    version.append(QString("-%1").arg(CUSTOM_BUILD));
+#endif
 #ifndef PROJECT_OFFICIAL
     version.append("-dev");
 #endif
@@ -359,7 +309,8 @@ const QStringList AppSupport::getFilesFromPath(const QString &path,
     return result;
 }
 
-const QString AppSupport::getTimeCodeFromFrame(int frame, float fps)
+const QString AppSupport::getTimeCodeFromFrame(int frame,
+                                               float fps)
 {
     int ss = qFloor(frame / fps);
     int mm = qFloor(ss / 60);
@@ -369,6 +320,25 @@ const QString AppSupport::getTimeCodeFromFrame(int frame, float fps)
                                       QString::number(mm).rightJustified(2, '0'),
                                       QString::number(ss).rightJustified(2, '0'),
                                       QString::number(ff).rightJustified(2, '0'));
+}
+
+int AppSupport::getFrameFromTimeCode(const QString &timecode,
+                                     float fps)
+{
+    const auto list = timecode.split(":");
+    if (fps > 0. && list.count() == 4) {
+        int hh = list.at(0).toInt();
+        int mm = list.at(1).toInt();
+        int ss = list.at(2).toInt();
+        int ff = list.at(3).toInt();
+        ss += (mm * 60) + (hh * 3600);
+        ff += ss * fps;
+        return ff;
+    } else {
+        // assume it's just a frame number
+        return timecode.toInt();
+    }
+    return 0;
 }
 
 HardwareSupport AppSupport::getRasterEffectHardwareSupport(const QString &effect,

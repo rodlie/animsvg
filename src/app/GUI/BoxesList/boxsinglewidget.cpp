@@ -52,6 +52,7 @@
 #include "Animators/SmartPath/smartpathcollection.h"
 
 #include "typemenu.h"
+#include "themesupport.h"
 
 QPixmap* BoxSingleWidget::VISIBLE_ICON;
 QPixmap* BoxSingleWidget::INVISIBLE_ICON;
@@ -770,21 +771,19 @@ void BoxSingleWidget::paintEvent(QPaintEvent *) {
             p.fillRect(mFillWidget->geometry(), QColor(0, 0, 0, 55));
         }
     }
-    if(bsTarget) {
+    if (bsTarget) {
         nameX += eSizesUI::widget/4;
         const bool ss = enve_cast<eSoundObjectBase*>(prop);
-        if(ss || enve_cast<BoundingBox*>(prop)) {
-            if(ss) p.fillRect(rect(), QColor(0, 125, 255, 50));
-            else   p.fillRect(rect(), QColor(0, 0, 0, 50));
-
-            if(bsTarget->isSelected()) {
-                if(ss) p.fillRect(mFillWidget->geometry(), QColor(125, 200, 255));
-                else   p.fillRect(mFillWidget->geometry(), QColor(180, 180, 180));
-                p.setPen(Qt::black);
+        if (ss || enve_cast<BoundingBox*>(prop)) {
+            p.fillRect(rect(), QColor(0, 0, 0, 50));
+            if (bsTarget->isSelected()) {
+                p.fillRect(mFillWidget->geometry(),
+                           ThemeSupport::getThemeButtonBaseColor());
+                p.setPen(Qt::white);
             } else {
                 p.setPen(Qt::white);
             }
-        } else if(enve_cast<BlendEffectBoxShadow*>(prop)) {
+        } else if (enve_cast<BlendEffectBoxShadow*>(prop)) {
             p.fillRect(rect(), QColor(0, 255, 125, 50));
             nameX += eSizesUI::widget;
         }

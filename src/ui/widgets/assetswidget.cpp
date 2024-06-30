@@ -35,6 +35,7 @@
 #include "FileCacheHandlers/imagecachehandler.h"
 #include "FileCacheHandlers/imagesequencecachehandler.h"
 #include "filesourcescache.h"
+#include "themesupport.h"
 
 #include "GUI/global.h"
 
@@ -152,7 +153,7 @@ AssetsWidget::AssetsWidget(QWidget *parent)
     , mTree(nullptr)
 {
     setAcceptDrops(true);
-    setPalette(AppSupport::getDarkPalette());
+    setPalette(ThemeSupport::getDarkPalette());
     setAutoFillBackground(true);
     setContentsMargins(0, 10, 0, 0);
     QVBoxLayout *mLayout = new QVBoxLayout(this);

@@ -31,6 +31,7 @@
 
 #include "GUI/global.h"
 #include "Private/esettings.h"
+#include "themesupport.h"
 
 AlignWidget::AlignWidget(QWidget* const parent)
     : QWidget(parent)
@@ -38,7 +39,7 @@ AlignWidget::AlignWidget(QWidget* const parent)
     , mRelativeTo(nullptr)
 {
     QPalette pal = QPalette();
-    pal.setColor(QPalette::Window, QColor(33, 33, 38));
+    pal.setColor(QPalette::Window, ThemeSupport::getThemeBaseColor());
     setAutoFillBackground(true);
     setPalette(pal);
 
@@ -122,7 +123,7 @@ AlignWidget::AlignWidget(QWidget* const parent)
     });
     buttonsLay->addWidget(bottomButton);
 
-    if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+    //if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
         int buttonSize = eSizesUI::widget;
         leftButton->setIconSize(QSize(buttonSize, buttonSize));
         hCenterButton->setIconSize(QSize(buttonSize, buttonSize));
@@ -130,7 +131,7 @@ AlignWidget::AlignWidget(QWidget* const parent)
         topButton->setIconSize(QSize(buttonSize, buttonSize));
         vCenterButton->setIconSize(QSize(buttonSize, buttonSize));
         bottomButton->setIconSize(QSize(buttonSize, buttonSize));
-    }
+    //}
 }
 
 void AlignWidget::triggerAlign(const Qt::Alignment align)

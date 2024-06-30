@@ -31,6 +31,7 @@
 #include <QWidget>
 #include "smartPointers/ememory.h"
 #include "canvas.h"
+#include "themesupport.h"
 
 class HddCachableCacheHandler;
 
@@ -49,6 +50,10 @@ public:
 
     int getMaxFrame();
     int getMinFrame();
+
+    bool hasFrameIn(const int frame);
+    bool hasFrameOut(const int frame);
+    bool hasFrameMarker(const int frame);
 
     FrameRange getViewedRange() const;
     int getFirstViewedFrame() const;
@@ -103,7 +108,7 @@ private:
     qreal mFps;
     qreal mLastMousePressFrame;
 
-    QColor mHandleColor = QColor(100, 100, 100);
+    QColor mHandleColor = ThemeSupport::getThemeButtonBaseColor();
     qptr<Canvas> mCurrentCanvas;
 };
 

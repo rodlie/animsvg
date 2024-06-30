@@ -31,7 +31,7 @@
 #include "videoencoder.h"
 #include "renderhandler.h"
 #include "videoencoder.h"
-#include "appsupport.h"
+#include "themesupport.h"
 #include "../mainwindow.h"
 
 RenderWidget::RenderWidget(QWidget *parent)
@@ -57,7 +57,7 @@ RenderWidget::RenderWidget(QWidget *parent)
     bottomWidget->setContentsMargins(0, 0, 0, 0);
     const auto bottomLayout = new QHBoxLayout(bottomWidget);
 
-    const auto darkPal = AppSupport::getDarkPalette();
+    const auto darkPal = ThemeSupport::getDarkPalette();
     bottomWidget->setAutoFillBackground(true);
     bottomWidget->setPalette(darkPal);
     bottomWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -71,7 +71,6 @@ RenderWidget::RenderWidget(QWidget *parent)
     mStartRenderButton = new QPushButton(QIcon::fromTheme("render_animation"),
                                          tr("Render"),
                                          this);
-    mStartRenderButton->setObjectName("FlatButton");
     mStartRenderButton->setFocusPolicy(Qt::NoFocus);
     mStartRenderButton->setSizePolicy(QSizePolicy::Preferred,
                                       QSizePolicy::Preferred);
@@ -81,7 +80,6 @@ RenderWidget::RenderWidget(QWidget *parent)
     mStopRenderButton = new QPushButton(QIcon::fromTheme("cancel"),
                                         QString(),
                                         this);
-    mStopRenderButton->setObjectName("FlatButton");
     mStopRenderButton->setToolTip(tr("Stop Rendering"));
     mStopRenderButton->setFocusPolicy(Qt::NoFocus);
     mStopRenderButton->setSizePolicy(QSizePolicy::Preferred,
@@ -93,7 +91,6 @@ RenderWidget::RenderWidget(QWidget *parent)
     mAddRenderButton = new QPushButton(QIcon::fromTheme("plus"),
                                        QString(),
                                        this);
-    mAddRenderButton->setObjectName("FlatButton");
     mAddRenderButton->setToolTip(tr("Add current scene to queue"));
     mAddRenderButton->setFocusPolicy(Qt::NoFocus);
     mAddRenderButton->setSizePolicy(QSizePolicy::Preferred,
@@ -106,7 +103,6 @@ RenderWidget::RenderWidget(QWidget *parent)
     mClearQueueButton = new QPushButton(QIcon::fromTheme("trash"),
                                         QString(),
                                         this);
-    mClearQueueButton->setObjectName("FlatButton");
     mClearQueueButton->setToolTip(tr("Clear Queue"));
     mClearQueueButton->setFocusPolicy(Qt::NoFocus);
     mClearQueueButton->setSizePolicy(QSizePolicy::Preferred,
@@ -115,10 +111,6 @@ RenderWidget::RenderWidget(QWidget *parent)
             this, &RenderWidget::clearRenderQueue);
 
     eSizesUI::widget.add(mStartRenderButton, [this](const int size) {
-        mStartRenderButton->setFixedHeight(size);
-        mStopRenderButton->setFixedSize(QSize(size, size));
-        mAddRenderButton->setFixedSize(QSize(size, size));
-        mClearQueueButton->setFixedSize(QSize(size, size));
         if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
             mStartRenderButton->setIconSize(QSize(size, size));
             mStopRenderButton->setIconSize(QSize(size, size));
@@ -140,8 +132,8 @@ RenderWidget::RenderWidget(QWidget *parent)
     mScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     bottomLayout->addWidget(mStartRenderButton);
-    bottomLayout->addWidget(mRenderProgressBar);
     bottomLayout->addWidget(mStopRenderButton);
+    bottomLayout->addWidget(mRenderProgressBar);
     bottomLayout->addWidget(mAddRenderButton);
     bottomLayout->addWidget(mClearQueueButton);
 

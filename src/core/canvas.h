@@ -353,6 +353,22 @@ public:
 
     void setFrameRange(const FrameRange& range);
 
+    void setFrameIn(const bool enabled,
+                    const int frameIn);
+    void setFrameOut(const bool enabled,
+                     const int frameOut);
+    const FrameMarker getFrameIn();
+    const FrameMarker getFrameOut();
+
+    void setMarker(const QString &title,
+                   const int frame);
+    void setMarker(const int frame);
+    bool hasMarker(const int frame,
+                   const bool removeExists = false);
+    const std::vector<FrameMarker> getMarkers();
+    void clearMarkers();
+
+
     ColorAnimator *getBgColorAnimator()
     {
         return mBackgroundColor.get();
@@ -411,6 +427,7 @@ signals:
     void currentContainerSet(ContainerBox*);
     void dimensionsChanged(int, int);
     void fpsChanged(qreal);
+    void displayTimeCodeChanged(bool);
     void gradientCreated(SceneBoundGradient*);
     void gradientRemoved(SceneBoundGradient*);
     void openTextEditor();
@@ -494,6 +511,7 @@ public:
     void setDisplayTimecode(bool timecode)
     {
         mDisplayTimeCode = timecode;
+        emit displayTimeCodeChanged(timecode);
     }
 
     BoundingBox *getBoxAt(const QPointF &absPos)
@@ -536,6 +554,8 @@ public:
     void readSettings(eReadStream &src);
     void writeBoundingBox(eWriteStream& dst) const;
     void readBoundingBox(eReadStream& src);
+    void writeMarkers(eWriteStream &dst) const;
+    void readMarkers(eReadStream &src);
 
     void writeBoxOrSoundXEV(const stdsptr<XevZipFileSaver> &xevFileSaver,
                             const RuntimeIdToWriteId &objListIdConv,
@@ -782,6 +802,10 @@ protected:
     CanvasMode mCurrentMode = CanvasMode::boxTransform;
 
     std::map<int, stdsptr<ConnContextObjList<GraphAnimator*>>> mSelectedForGraph;
+
+    FrameMarker mIn{tr("In"), false, 0};
+    FrameMarker mOut{tr("Out"), false, 0};
+    std::vector<FrameMarker> mMarkers;
 
     void handleMovePointMousePressEvent(const eMouseEvent &e);
     void handleMovePointMouseMove(const eMouseEvent &e);

@@ -69,6 +69,7 @@
 #include "efiltersettings.h"
 #include "Settings/settingsdialog.h"
 #include "appsupport.h"
+#include "themesupport.h"
 
 #include "widgets/assetswidget.h"
 
@@ -179,17 +180,11 @@ MainWindow::MainWindow(Document& document,
     connect (mAutoSaveTimer, &QTimer::timeout,
              this, &MainWindow::checkAutoSaveTimer);
 
-    QFile stylesheet(QString::fromUtf8(":/styles/%1.qss").arg(AppSupport::getAppName()));
-    if (stylesheet.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        setStyleSheet(stylesheet.readAll());
-        stylesheet.close();
-    }
-
     BoxSingleWidget::loadStaticPixmaps(eSizesUI::widget);
 
     mDocument.setPath("");
 
-    int sideBarMin = 300;
+    int sideBarMin = 320;
 
     mFillStrokeSettings = new FillStrokeSettingsWidget(mDocument, this);
     mFillStrokeSettings->setMinimumWidth(sideBarMin);
@@ -268,6 +263,7 @@ MainWindow::MainWindow(Document& document,
     statusBar()->addPermanentWidget(resolutionLabel);
 
     mResolutionComboBox = new EditableComboBox(this);
+    mResolutionComboBox->setMinimumWidth(100);
     mResolutionComboBox->setFocusPolicy(Qt::ClickFocus);
     mResolutionComboBox->addItem("100 %");
     mResolutionComboBox->addItem("75 %");
@@ -290,7 +286,7 @@ MainWindow::MainWindow(Document& document,
 
     const auto fontWidget = new QWidget(this);
     fontWidget->setAutoFillBackground(true);
-    fontWidget->setPalette(AppSupport::getNotSoDarkPalette());
+    fontWidget->setPalette(ThemeSupport::getNotSoDarkPalette());
 
     const auto fontLayout = new QVBoxLayout(fontWidget);
     fontLayout->addWidget(mFontWidget);
@@ -298,20 +294,21 @@ MainWindow::MainWindow(Document& document,
     QMargins frictionMargins(0, 0, 0, 0);
     int frictionSpacing = 0;
 
-    const auto darkPal = AppSupport::getDarkPalette();
+    const auto darkPal = ThemeSupport::getDarkPalette();
     mObjectSettingsScrollArea->setAutoFillBackground(true);
     mObjectSettingsScrollArea->setPalette(darkPal);
 
     // setup "Fill and Stroke" and "Text and Font" tab
     mTabColorText = new QTabWidget(this);
+    mTabColorText->setObjectName("TabWidgetWide");
     mTabColorText->tabBar()->setFocusPolicy(Qt::NoFocus);
     mTabColorText->setContentsMargins(frictionMargins);
     mTabColorText->setMinimumWidth(sideBarMin);
     mTabColorText->setTabPosition(QTabWidget::South);
     eSizesUI::widget.add(mTabColorText, [this](const int size) {
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+        //if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
             mTabColorText->setIconSize(QSize(size, size));
-        }
+        //}
     });
 
     mTabColorIndex = mTabColorText->addTab(mFillStrokeSettings,
@@ -323,14 +320,15 @@ MainWindow::MainWindow(Document& document,
 
     // setup "Properties", "Assets", "Queue" tab
     mTabProperties = new QTabWidget(this);
+    mTabProperties->setObjectName("TabWidgetWide");
     mTabProperties->tabBar()->setFocusPolicy(Qt::NoFocus);
     mTabProperties->setContentsMargins(frictionMargins);
     mTabProperties->setMinimumWidth(sideBarMin);
     mTabProperties->setTabPosition(QTabWidget::South);
     eSizesUI::widget.add(mTabProperties, [this](const int size) {
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+        //if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
             mTabProperties->setIconSize(QSize(size, size));
-        }
+        //}
     });
 
     const auto propertiesWidget = new QWidget(this);
@@ -621,7 +619,7 @@ void MainWindow::setupMenuBar()
     mEditMenu->addAction(new NoShortcutAction(
                              tr("Invert Selection", "MenuBar_Edit"),
                              &mActions, &Actions::invertSelectionAction,
-                             Qt::Key_I, mEditMenu));
+                             Qt::SHIFT + Qt::Key_A, mEditMenu));
     mEditMenu->addAction(new NoShortcutAction(
                              tr("Clear Selection", "MenuBar_Edit"),
                              &mActions, &Actions::clearSelectionAction,

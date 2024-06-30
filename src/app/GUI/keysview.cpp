@@ -41,6 +41,7 @@
 #include "Animators/qrealpoint.h"
 #include "timelinehighlightwidget.h"
 #include "GUI/dialogsinterface.h"
+#include "themesupport.h"
 
 KeysView::KeysView(BoxScrollWidget *boxesListVisible,
                    QWidget *parent) :
@@ -187,6 +188,28 @@ void KeysView::selectKeysInSelectionRect() {
             addKeyToSelection(key);
         }
     }
+}
+
+bool KeysView::hasFrameIn(const int frame)
+{
+    if (!mCurrentScene) { return false; }
+    const auto frameIn = mCurrentScene->getFrameIn();
+    if (frameIn.enabled && frame == frameIn.frame) { return true; }
+    return false;
+}
+
+bool KeysView::hasFrameOut(const int frame)
+{
+    if (!mCurrentScene) { return false; }
+    const auto frameOut = mCurrentScene->getFrameOut();
+    if (frameOut.enabled && frame == frameOut.frame) { return true; }
+    return false;
+}
+
+bool KeysView::hasFrameMarker(const int frame)
+{
+    if (!mCurrentScene) { return false; }
+    return mCurrentScene->hasMarker(frame);
 }
 
 void KeysView::resizeEvent(QResizeEvent *e) {
@@ -465,13 +488,14 @@ void KeysView::drawKeys(QPainter * const p,
 void KeysView::paintEvent(QPaintEvent *) {
     QPainter p(this);
 
-    if(mGraphViewed) p.fillRect(rect(), QColor(33, 33, 38));
-    else p.fillRect(rect(), QColor(33, 33, 38));
+    //if(mGraphViewed) p.fillRect(rect(), QColor(33, 33, 38));
+    //else p.fillRect(rect(), QColor(33, 33, 38));
+    p.fillRect(rect(), ThemeSupport::getThemeBaseColor());
 
     if(mPixelsPerFrame < 0.001) return;
     if(!mGraphViewed) {
         int currY = eSizesUI::widget;
-        p.setPen(QPen(QColor(40, 40, 40), 2));
+        p.setPen(QPen(ThemeSupport::getThemeTimelineColor(), 2));
         while(currY < height()) {
             p.drawLine(0, currY, width(), currY);
             currY += eSizesUI::widget;
@@ -479,7 +503,7 @@ void KeysView::paintEvent(QPaintEvent *) {
     }
     p.translate(eSizesUI::widget/2, 0);
 
-    p.setPen(QPen(QColor(44, 44, 49), 2));
+    p.setPen(QPen(ThemeSupport::getThemeTimelineColor(), 2));
     qreal xT = mPixelsPerFrame*0.5;
     int iInc = 1;
     bool mult5 = true;
@@ -495,6 +519,13 @@ void KeysView::paintEvent(QPaintEvent *) {
     maxFrame += qFloor((width() - 40 - xT)/mPixelsPerFrame) - maxFrame%iInc;
     for(int i = minFrame; i <= maxFrame; i += iInc) {
         const qreal xTT = xT + (i - mMinViewedFrame + 1)*mPixelsPerFrame;
+        if (hasFrameIn(i+1) || hasFrameOut(i+1)) {
+            p.setPen(QPen(ThemeSupport::getThemeHighlightColor(), 2, Qt::DotLine));
+        } else if (hasFrameMarker(i+1)) {
+            p.setPen(QPen(ThemeSupport::getThemeFrameMarkerColor(), 2, Qt::DotLine));
+        } else {
+            p.setPen(QPen(ThemeSupport::getThemeTimelineColor(), 2));
+        }
         p.drawLine(QPointF(xTT, 0), QPointF(xTT, height()));
     }
 
@@ -502,7 +533,7 @@ void KeysView::paintEvent(QPaintEvent *) {
         if (mCurrentScene->getCurrentFrame() <= maxFrame &&
            mCurrentScene->getCurrentFrame() >= minFrame) {
             xT = (mCurrentScene->getCurrentFrame() - mMinViewedFrame)*mPixelsPerFrame + mPixelsPerFrame*0.5;
-            p.setPen(QPen(QColor(180, 0, 0), 2));
+            p.setPen(QPen(ThemeSupport::getThemeHighlightColor(), 2));
             p.drawLine(QPointF(xT, 0), QPointF(xT, height()));
         }
     }
@@ -539,7 +570,7 @@ void KeysView::paintEvent(QPaintEvent *) {
         mValueInput.draw(&p, height() - eSizesUI::widget);
     if(hasFocus()) {
         p.setBrush(Qt::NoBrush);
-        p.setPen(QPen(Qt::red, 4));
+        p.setPen(QPen(ThemeSupport::getThemeHighlightColor(), 4));
         p.drawRect(0, 0, width(), height());
     }
 

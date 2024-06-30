@@ -340,6 +340,7 @@ set(
     MovablePoints/pathpointshandler.cpp
     canvasbase.cpp
     typemenu.cpp
+    themesupport.cpp
     wrappedint.cpp
     zipfileloader.cpp
     zipfilesaver.cpp
@@ -673,6 +674,7 @@ set(
     MovablePoints/pathpointshandler.h
     canvasbase.h
     typemenu.h
+    themesupport.h
     pointtypemenu.h
     wrappedint.h
     windowsincludes.h
