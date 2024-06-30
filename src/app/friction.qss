@@ -159,14 +159,10 @@ QComboBox,
 QPushButton,
 QToolButton,
 QAction {
-    background-color: %1; /*rgb(48.5, 48.5, 59.2);/*(59, 59, 72);*/
+    background-color: %1;
     border-radius: 2%;
-    border: 1px solid %2; /* rgb(65, 65, 80);*/
+    border: 1px solid %2;
 }
-/*QComboBox {
-    background-color: rgb(59, 59, 72);
-    border-radius: 2%;
-}*/
 
 QToolButton,
 QAction {
@@ -190,11 +186,10 @@ QToolButton:hover,
 QPushButton:checked,
 QToolButton:checked,
 QAction:checked,
-/*QComboBox:hover,*/
 QCheckBox::indicator:unchecked:hover
 {
-    background-color: %3; /*rgb(19, 19, 21);*/
-    border-color: %4; /* rgb(104, 144, 206);*/
+    background-color: %3;
+    border-color: %4;
     
 }
 
@@ -208,21 +203,6 @@ QLineEdit:hover {
     background-color: black;
 }
 
-/*QSpinBox:hover,
-QLineEdit:hover {
-    border-color: %4;
-}*/
-
-/*QComboBox QAbstractItemView {
-  border: 1px solid grey;
-  background: white;
-  selection-background-color: blue;
-}*/
-/*QComboBox {
-      background-color: rgb(30, 30, 41.1); (35.9, 35.9, 52.8);
-    
-}*/
-
 QComboBox::drop-down:button{
     background-color: transparent;
     width: %7px;
@@ -232,16 +212,12 @@ QComboBox::down-arrow {
     image: url(:/icons/hicolor/%7x%7/actions/go-down.png);
 }
 
-
 QComboBox#blendModeCombo,
-QWidget#menuBarWidget QPushButton/*,
-AlignWidget QComboBox*/ {
+QWidget#menuBarWidget QPushButton {
     background-color: %5;
 }
 
 QToolBar#animationDockWidget,
-/*QToolBar#ViewerNodeBar,
-QToolBar#ViewerDrawBar,*/
 #darkWidget
 {
     background-color: rgb(33, 33, 38);
@@ -251,25 +227,12 @@ QToolBar::separator {
     border-color: none;
 }
 
-/*QComboBox#blendModeCombo,
-QWidget#menuBarWidget QPushButton,
-AlignWidget QComboBox {
-    background-color: rgb(23, 23, 28);
-}*/
-/* QToolButton#qt_toolbar_ext_button 
-{ 
-    qproperty-icon: url(:/path/to/image.png);
-}*/
-
 QToolButton[popupMode="1"] {
     padding-right: .1em;
 }
 QToolButton::menu-button {
     background-color: transparent;
 }
-/*QComboBox::drop-down {
-    background-color:red;
-}*/
 
 QPushButton::menu-indicator,
 QToolButton#ToolButton::menu-indicator,
@@ -300,16 +263,8 @@ FillStrokeSettingsWidget {
     border: 0;
 }
 
-
-
-
 QPushButton#WelcomeButton,
 QPushButton#WelcomeRecentButton {
-    /*padding: 0.25em;
-    border: 2px solid #666;
-    border-radius: 10%;
-    color: #ebebeb;
-    font-weight: bold;*/
     background-color: transparent;
 }
 
@@ -329,7 +284,6 @@ QPushButton#WelcomeRecentButton:hover {
     border: 2px solid #ebebeb;
 }*/
 
-/*AlignWidget QPushButton,*/
 QPushButton#FlatButton,
 QToolButton#FlatButton {
     background-color: none;
@@ -376,7 +330,7 @@ QSplitter::handle:vertical {
 }
 
 QTabWidget#TabWidgetWide::tab-bar {
-    min-width:1000;
+    min-width: 1000;
 }
 QTabWidget#TabWidgetWide QTabBar::tab:!selected {
     background-color: transparent;
