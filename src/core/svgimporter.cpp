@@ -109,7 +109,7 @@ public:
 protected:
     qreal mOpacity = 1;
     QColor mColor;
-    PaintType mPaintType = NOPAINT;
+    PaintType mPaintType = FLATPAINT;
     Gradient *mGradient = nullptr;
     GradientType mGradientType = GradientType::LINEAR;
     QPointF mGradientP1;
@@ -119,7 +119,9 @@ protected:
 
 class StrokeSvgAttributes : public FillSvgAttributes {
 public:
-    StrokeSvgAttributes() {}
+    StrokeSvgAttributes() {
+        mPaintType = NOPAINT;
+    }
 
     qreal getLineWidth() const;
     SkPaint::Cap getCapStyle() const;
@@ -135,11 +137,11 @@ public:
 
     void apply(BoundingBox *box, const qreal scale) const;
 protected:
-    SkPaint::Cap mCapStyle = SkPaint::kRound_Cap;
-    SkPaint::Join mJoinStyle = SkPaint::kRound_Join;
+    SkPaint::Cap mCapStyle = SkPaint::kButt_Cap;
+    SkPaint::Join mJoinStyle = SkPaint::kMiter_Join;
     QPainter::CompositionMode mOutlineCompositionMode =
             QPainter::CompositionMode_Source;
-    qreal mLineWidth = 0;
+    qreal mLineWidth = 1;
 };
 
 class BoxSvgAttributes {
@@ -1256,6 +1258,8 @@ void StrokeSvgAttributes::setOutlineCompositionMode(const QPainter::CompositionM
 
 void StrokeSvgAttributes::apply(BoundingBox *box, const qreal scale) const {
     box->strokeWidthAction(QrealAction::sMakeSet(mLineWidth*scale));
+    box->setStrokeJoinStyle(mJoinStyle);
+    box->setStrokeCapStyle(mCapStyle);
     FillSvgAttributes::apply(box, PaintSetting::OUTLINE);
     //box->setStrokePaintType(mPaintType, mColor, mGradient);
 }
