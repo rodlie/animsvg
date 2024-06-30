@@ -110,6 +110,9 @@ const QString AppSupport::getAppUrl()
 const QString AppSupport::getAppVersion()
 {
     QString version = QString::fromUtf8(PROJECT_VERSION);
+#ifdef CUSTOM_BUILD
+    version.append(QString("-%1").arg(CUSTOM_BUILD));
+#endif
 #ifndef PROJECT_OFFICIAL
     version.append("-dev");
 #endif
