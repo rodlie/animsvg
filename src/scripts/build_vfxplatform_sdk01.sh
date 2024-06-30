@@ -70,7 +70,7 @@ if [ ! -f "${NINJA_BIN}" ]; then
     cd ${SRC}
     NINJA_SRC=ninja-${NINJA_V}
     rm -rf ${NINJA_SRC} || true
-    tar xf ${DIST}/${NINJA_SRC}.tar.gz
+    tar xf ${DIST}/tools/${NINJA_SRC}.tar.gz
     cd ${NINJA_SRC}
     ./configure.py --bootstrap
     cp -a ninja ${NINJA_BIN}

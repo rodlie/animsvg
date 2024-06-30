@@ -30,6 +30,7 @@ REL=${REL:-1}
 BRANCH=${BRANCH:-""}
 COMMIT=${COMMIT:-""}
 TAG=${TAG:-""}
+CUSTOM=${CUSTOM:-""}
 TAR_VERSION=${TAR_VERSION:-""}
 
 export PATH="${SDK}/bin:${PATH}"
@@ -96,10 +97,11 @@ cmake -GNinja \
 -DCMAKE_C_COMPILER=clang \
 -DGIT_COMMIT=${GIT_COMMIT} \
 -DGIT_BRANCH=${GIT_BRANCH} \
+-DCUSTOM_BUILD=${CUSTOM} \
 ..
 
 VERSION=`cat version.txt`
-if [ "${REL}" != 1 ]; then
+if [ "${REL}" != 1 ] && [ "${CUSTOM}" = "" ]; then
     VERSION="${VERSION}-${GIT_COMMIT}"
 fi
 
