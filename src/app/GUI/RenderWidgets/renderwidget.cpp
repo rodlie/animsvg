@@ -71,7 +71,6 @@ RenderWidget::RenderWidget(QWidget *parent)
     mStartRenderButton = new QPushButton(QIcon::fromTheme("render_animation"),
                                          tr("Render"),
                                          this);
-    //mStartRenderButton->setObjectName("FlatButton");
     mStartRenderButton->setFocusPolicy(Qt::NoFocus);
     mStartRenderButton->setSizePolicy(QSizePolicy::Preferred,
                                       QSizePolicy::Preferred);
@@ -81,7 +80,6 @@ RenderWidget::RenderWidget(QWidget *parent)
     mStopRenderButton = new QPushButton(QIcon::fromTheme("cancel"),
                                         QString(),
                                         this);
-    //mStopRenderButton->setObjectName("FlatButton");
     mStopRenderButton->setToolTip(tr("Stop Rendering"));
     mStopRenderButton->setFocusPolicy(Qt::NoFocus);
     mStopRenderButton->setSizePolicy(QSizePolicy::Preferred,
@@ -93,7 +91,6 @@ RenderWidget::RenderWidget(QWidget *parent)
     mAddRenderButton = new QPushButton(QIcon::fromTheme("plus"),
                                        QString(),
                                        this);
-    //mAddRenderButton->setObjectName("FlatButton");
     mAddRenderButton->setToolTip(tr("Add current scene to queue"));
     mAddRenderButton->setFocusPolicy(Qt::NoFocus);
     mAddRenderButton->setSizePolicy(QSizePolicy::Preferred,
@@ -106,7 +103,6 @@ RenderWidget::RenderWidget(QWidget *parent)
     mClearQueueButton = new QPushButton(QIcon::fromTheme("trash"),
                                         QString(),
                                         this);
-    //mClearQueueButton->setObjectName("FlatButton");
     mClearQueueButton->setToolTip(tr("Clear Queue"));
     mClearQueueButton->setFocusPolicy(Qt::NoFocus);
     mClearQueueButton->setSizePolicy(QSizePolicy::Preferred,
@@ -115,10 +111,6 @@ RenderWidget::RenderWidget(QWidget *parent)
             this, &RenderWidget::clearRenderQueue);
 
     eSizesUI::widget.add(mStartRenderButton, [this](const int size) {
-        //mStartRenderButton->setFixedHeight(size);
-        //mStopRenderButton->setFixedSize(QSize(size, size));
-        //mAddRenderButton->setFixedSize(QSize(size, size));
-        //mClearQueueButton->setFixedSize(QSize(size, size));
         if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
             mStartRenderButton->setIconSize(QSize(size, size));
             mStopRenderButton->setIconSize(QSize(size, size));

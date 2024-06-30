@@ -180,8 +180,8 @@ void QDoubleSlider::setValueRange(const qreal min, const qreal max) {
 }
 
 void QDoubleSlider::paint(QPainter * const p, const bool enabled) {
-    paint(p, enabled ? /*QColor(255, 255, 255)*/ThemeSupport::getThemeButtonBaseColor() : /*QColor(220, 220, 220)*/ThemeSupport::getThemeAlternateColor(),
-          enabled ? /*QColor(220, 220, 220)*/ThemeSupport::getThemeButtonBorderColor(150) : /*QColor(200, 200, 200)*/ThemeSupport::getThemeBaseColor(),
+    paint(p, enabled ? ThemeSupport::getThemeButtonBaseColor() : ThemeSupport::getThemeAlternateColor(),
+          enabled ? ThemeSupport::getThemeButtonBorderColor(150) : ThemeSupport::getThemeBaseColor(),
           enabled ? ThemeSupport::getThemeButtonBorderColor() : Qt::darkGray,
           enabled ? Qt::white : Qt::darkGray);
 }

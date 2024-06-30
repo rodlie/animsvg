@@ -180,7 +180,7 @@ void QrealAnimatorValueSlider::paint(QPainter *p) {
         }
         if(!textEditing() && mTarget->hasExpression()) {
             if(mTarget->hasValidExpression()) {
-                p->setBrush(/*QColor(0, 125, 255)*/ThemeSupport::getThemeHighlightColor());
+                p->setBrush(ThemeSupport::getThemeHighlightColor());
             } else {
                 p->setBrush(QColor(255, 125, 0));
             }

@@ -119,14 +119,6 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     handleRect.setWidth(mBottom ? handleWidth : handleFixedWidth);
     handleRect.setBottom(mBottom ? 6 : height()/3);
     if (mRange) { p.fillRect(handleRect, col); }
-    /*else { // triangle
-        QPainterPath path;
-        path.moveTo(handleRect.left() + (handleRect.width() / 2), handleRect.bottom());
-        path.lineTo(handleRect.topLeft());
-        path.lineTo(handleRect.topRight());
-        path.lineTo(handleRect.left() + (handleRect.width() / 2), handleRect.bottom());
-        p.fillPath(path, ThemeSupport::getThemeHighlightColor());
-    }*/
 
     // draw the stuff ...
     if (!mRange) {
