@@ -278,6 +278,7 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
         const auto clearFrameOutAct = new QAction(tr("Clear Frame In/Out"), this);
         const auto setMarkerAct = new QAction(tr(hasMarker ? "Remove Marker" : "Add Marker"), this);
         const auto clearMarkersAct = new QAction(tr("Clear Markers"), this);
+        const auto splitDurationAct = new QAction(tr("Split"), this);
 
         menu.addSeparator();
         menu.addAction(setFrameInAct);
@@ -286,6 +287,8 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
         menu.addSeparator();
         menu.addAction(setMarkerAct);
         menu.addAction(clearMarkersAct);
+        menu.addSeparator();
+        menu.addAction(splitDurationAct);
 
         QAction* selectedAction = menu.exec(event->globalPos());
         if (selectedAction) {
@@ -335,6 +338,10 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
             } else if (selectedAction == clearMarkersAct) {
                 if (mCurrentCanvas) {
                     mCurrentCanvas->clearMarkers();
+                }
+            } else if (selectedAction == splitDurationAct) {
+                if (mCurrentCanvas) {
+                    mCurrentCanvas->splitAction();
                 }
             }
         }
