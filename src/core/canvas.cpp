@@ -24,6 +24,7 @@
 #include <QMouseEvent>
 #include <QDebug>
 #include <QApplication>
+#include "Boxes/videobox.h"
 #include "MovablePoints/pathpivot.h"
 #include "Boxes/imagebox.h"
 #include "Sound/soundcomposition.h"
@@ -791,6 +792,45 @@ void Canvas::cutAction()
     if (mSelectedBoxes.isEmpty()) { return; }
     copyAction();
     deleteAction();
+}
+
+void Canvas::splitAction()
+{
+    if (mSelectedBoxes.isEmpty() || mSelectedBoxes.count() > 1) { return; }
+
+    const auto vidBox = enve_cast<VideoBox*>(mSelectedBoxes.getList().at(0));
+    if (!vidBox) { return; }
+
+    const auto dRect = vidBox->getDurationRectangle();
+    if (!dRect) { return; }
+
+    const auto frame = getCurrentFrame();
+    const auto values = dRect->getValues();
+    const auto range = dRect->getAbsFrameRange();
+
+    if (!range.inRange(frame)) { return; }
+
+    int offset = values.fMax - (range.fMax - frame);
+
+    copyAction();
+    pasteAction();
+
+    if (mCurrentContainer->getContainedBoxesCount() < 1) { return; }
+
+    const auto box = mCurrentContainer->getContainedBoxes().at(0);
+    if (!box) { return; }
+
+    const auto cRect = box->getDurationRectangle();
+    if (!cRect) { return; }
+
+    dRect->setValues({values.fShift, offset, values.fMax});
+    cRect->setValues({values.fShift, values.fMin, offset});
+
+    for (int i = box->getZIndex(); i < vidBox->getZIndex(); i = box->getZIndex()) {
+        box->moveDown();
+    }
+
+    mDocument.actionFinished();
 }
 
 void Canvas::duplicateAction()

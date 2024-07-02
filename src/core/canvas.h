@@ -538,6 +538,7 @@ public:
     void copyAction();
     void pasteAction();
     void cutAction();
+    void splitAction();
     void duplicateAction();
     void selectAllAction();
     void clearSelectionAction();
