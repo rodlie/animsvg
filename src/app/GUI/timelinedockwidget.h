@@ -86,6 +86,7 @@ public:
     void setIn();
     void setOut();
     void setMarker();
+    void splitClip();
 
 private:
     void setLoop(const bool loop);

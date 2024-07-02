@@ -340,6 +340,8 @@ bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
             case PreviewState::playing: pausePreview(); break;
             case PreviewState::paused: resumePreview(); break;
         }
+    } else if (key == Qt::Key_K && (mods & Qt::ShiftModifier)) { // split clip
+        splitClip();
     } else if (key == Qt::Key_K) { // set marker
         setMarker();
     } else if (key == Qt::Key_I || key == Qt::Key_O) { // set frame in/out
@@ -587,4 +589,11 @@ void TimelineDockWidget::setMarker()
     if (!scene) { return; }
     const auto frame = scene->getCurrentFrame();
     scene->setMarker(frame);
+}
+
+void TimelineDockWidget::splitClip()
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return; }
+    scene->splitAction();
 }
