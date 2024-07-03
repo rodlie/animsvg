@@ -341,7 +341,8 @@ void KeysView::mousePressEvent(QMouseEvent *e) {
             if(!movable) {
             } else if(movable->isDurationRect()) {
                 QMenu menu;
-                menu.addAction("Settings...");
+                menu.addAction(tr("Edit duration"));
+                // TODO: add split action
                 const auto selectedAction = menu.exec(e->globalPos());
                 if(selectedAction) {
                     const auto durRect = static_cast<DurationRectangle*>(movable);
@@ -517,15 +518,24 @@ void KeysView::paintEvent(QPaintEvent *) {
     minFrame += qCeil((-xT)/mPixelsPerFrame);
     minFrame = minFrame - minFrame%iInc - 1;
     maxFrame += qFloor((width() - 40 - xT)/mPixelsPerFrame) - maxFrame%iInc;
+
     for(int i = minFrame; i <= maxFrame; i += iInc) {
         const qreal xTT = xT + (i - mMinViewedFrame + 1)*mPixelsPerFrame;
-        if (hasFrameIn(i+1) || hasFrameOut(i+1)) {
+        p.drawLine(QPointF(xTT, 0), QPointF(xTT, height()));
+    }
+
+    // draw markers (and in/out)
+    for (int i = minFrame; i <= maxFrame; i++) {
+        bool hasIn = hasFrameIn(i+1);
+        bool hasOut = hasFrameOut(i+1);
+        bool hasMark = hasFrameMarker(i+1);
+        if (!hasIn && !hasOut && !hasMark) { continue; }
+        if (hasIn || hasOut) {
             p.setPen(QPen(ThemeSupport::getThemeHighlightColor(), 2, Qt::DotLine));
-        } else if (hasFrameMarker(i+1)) {
+        } else if (hasMark) {
             p.setPen(QPen(ThemeSupport::getThemeFrameMarkerColor(), 2, Qt::DotLine));
-        } else {
-            p.setPen(QPen(ThemeSupport::getThemeTimelineColor(), 2));
         }
+        const qreal xTT = xT + (i - mMinViewedFrame + 1)*mPixelsPerFrame;
         p.drawLine(QPointF(xTT, 0), QPointF(xTT, height()));
     }
 

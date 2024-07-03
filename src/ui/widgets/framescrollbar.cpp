@@ -122,8 +122,6 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
 
     // draw the stuff ...
     if (!mRange) {
-        // draw minor
-        p.setPen(QPen(Qt::darkGray, 2));
         p.translate(eSizesUI::widget/2, 0);
         qreal xT = pixPerFrame*0.5;
         int iInc = 1;
@@ -137,16 +135,25 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         mMinFrame += qCeil((-xT)/pixPerFrame);
         mMinFrame = mMinFrame - mMinFrame%iInc - 1;
         mMaxFrame += qFloor((width() - 40 - xT)/pixPerFrame) - mMaxFrame%iInc;
+
+        // draw markers (and in/out)
+        for (int i = minFrame; i <= maxFrame; i++) {
+            bool hasIn = hasFrameIn(i+1);
+            bool hasOut = hasFrameOut(i+1);
+            bool hasMark = hasFrameMarker(i+1);
+            if (!hasIn && !hasOut && !hasMark) { continue; }
+            p.setPen(QPen(hasMark ? ThemeSupport::getThemeFrameMarkerColor() : ThemeSupport::getThemeHighlightColor(), 2, Qt::DotLine));
+            const qreal xTT = xT + (i - mFrameRange.fMin + 1)*pixPerFrame;
+            p.drawLine(QPointF(xTT, 4), QPointF(xTT, height()));
+        }
+
+        // draw minor
+        p.setPen(QPen(Qt::darkGray, 2));
         for (int i = mMinFrame; i <= mMaxFrame; i += iInc) {
             const qreal xTT = xT + (i - mFrameRange.fMin + 1)*pixPerFrame;
-            bool hasMarker = hasFrameMarker(i+1);
-            if (hasFrameIn(i+1) || hasFrameOut(i+1) || hasMarker) {
-                p.setPen(QPen(hasMarker ? ThemeSupport::getThemeFrameMarkerColor() : ThemeSupport::getThemeHighlightColor(), 2, Qt::DotLine));
-                p.drawLine(QPointF(xTT, 4), QPointF(xTT, height()));
-                p.setPen(QPen(Qt::darkGray, 2));
-            }
             p.drawLine(QPointF(xTT, threeFourthsHeight + 4), QPointF(xTT, height()));
         }
+
         // draw main
         p.setPen(QPen(Qt::white, 2));
         p.translate(-(eSizesUI::widget/2), 0);
@@ -278,7 +285,7 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
         const auto clearFrameOutAct = new QAction(tr("Clear Frame In/Out"), this);
         const auto setMarkerAct = new QAction(tr(hasMarker ? "Remove Marker" : "Add Marker"), this);
         const auto clearMarkersAct = new QAction(tr("Clear Markers"), this);
-        const auto splitDurationAct = new QAction(tr("Split"), this);
+        const auto splitDurationAct = new QAction(tr("Split Clip"), this);
 
         menu.addSeparator();
         menu.addAction(setFrameInAct);
