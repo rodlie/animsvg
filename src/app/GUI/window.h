@@ -25,6 +25,7 @@
 #define WINDOW_H
 
 #include <QDialog>
+#include <QVBoxLayout>
 #include <QKeyEvent>
 #include <QCloseEvent>
 
@@ -42,12 +43,17 @@ public:
                     bool forwardKeys = false);
     ~Window();
     void focusWindow();
+    void addWidget(QWidget *child);
+
+signals:
+    void closed();
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
 
 private:
+    QVBoxLayout *mLayout;
     void loadState(bool visible = true);
     void saveState();
     bool mBlockEscKey;
