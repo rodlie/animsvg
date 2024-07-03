@@ -319,7 +319,7 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
                     if (mCurrentCanvas->getFrameOut().enabled) {
                         if (frame >= mCurrentCanvas->getFrameOut().frame) { return; }
                     }
-                    bool apply = (mCurrentCanvas->getFrameIn().frame != frame);
+                    bool apply = frame == 0 ? true : (mCurrentCanvas->getFrameIn().frame != frame);
                     mCurrentCanvas->setFrameIn(apply, frame);
                 }
             } else if (selectedAction == setFrameOutAct) {

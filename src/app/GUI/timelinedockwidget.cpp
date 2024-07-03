@@ -567,7 +567,7 @@ void TimelineDockWidget::setIn()
     if (scene->getFrameOut().enabled) {
         if (frame >= scene->getFrameOut().frame) { return; }
     }
-    bool apply = (scene->getFrameIn().frame != frame);
+    bool apply = frame == 0 ? true : (scene->getFrameIn().frame != frame);
     scene->setFrameIn(apply, frame);
 }
 
