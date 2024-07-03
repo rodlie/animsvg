@@ -199,6 +199,7 @@ protected:
     void showEvent(QShowEvent *e);
 
 private:
+    bool mShutdown;
     QWidget *mWelcomeDialog;
     //CentralWidget *mCentralWidget;
     QStackedWidget *mStackWidget;
@@ -396,13 +397,16 @@ private:
     Window *mAboutWindow;
     void openAboutWindow();
 
+    QAction *mViewTimelineAct;
     Window *mTimelineWindow;
     QAction *mTimelineWindowAct;
     void openTimelineWindow();
+    void closedTimelineWindow();
 
     Window *mRenderWindow;
     QAction *mRenderWindowAct;
-    void openRenderQueueWindow(const bool &focus = true);
+    void openRenderQueueWindow();
+    void closedRenderQueueWindow();
 
 protected:
     void keyPressEvent(QKeyEvent *event);

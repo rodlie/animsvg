@@ -86,6 +86,7 @@ MainWindow::MainWindow(Document& document,
                        const QString &openProject,
                        QWidget * const parent)
     : QMainWindow(parent)
+    , mShutdown(false)
     , mWelcomeDialog(nullptr)
     //, mCentralWidget(nullptr)
     , mStackWidget(nullptr)
@@ -138,6 +139,7 @@ MainWindow::MainWindow(Document& document,
     , mAutoSaveTimer(nullptr)
     , mAboutWidget(nullptr)
     , mAboutWindow(nullptr)
+    , mViewTimelineAct(nullptr)
     , mTimelineWindow(nullptr)
     , mTimelineWindowAct(nullptr)
     , mRenderWindow(nullptr)
@@ -422,6 +424,7 @@ MainWindow::MainWindow(Document& document,
 
 MainWindow::~MainWindow()
 {
+    mShutdown = true;
     std::cout << "Closing Friction, please wait ... " << std::endl;
     if (mAutoSaveTimer->isActive()) { mAutoSaveTimer->stop(); }
     writeSettings();
@@ -1009,14 +1012,14 @@ void MainWindow::setupMenuBar()
         else { showNormal(); }
     });
 
-    const auto viewTimelineAct = mViewMenu->addAction(tr("View Timeline"));
-    viewTimelineAct->setCheckable(true);
-    viewTimelineAct->setChecked(true);
-    viewTimelineAct->setShortcut(QKeySequence(Qt::Key_T));
-    connect(viewTimelineAct, &QAction::triggered,
+    mViewTimelineAct = mViewMenu->addAction(tr("View Timeline"));
+    mViewTimelineAct->setCheckable(true);
+    mViewTimelineAct->setChecked(true);
+    mViewTimelineAct->setShortcut(QKeySequence(Qt::Key_T));
+    connect(mViewTimelineAct, &QAction::triggered,
             this, [this](bool triggered) {
         if (mTimelineWindowAct->isChecked()) {
-            openTimelineWindow();
+            mViewTimelineAct->setChecked(true); // ignore if window
         } else {
             mUI->setDockVisible(tr("Timeline"), triggered);
         }
@@ -1026,12 +1029,9 @@ void MainWindow::setupMenuBar()
     mTimelineWindowAct->setCheckable(true);
     connect(mTimelineWindowAct, &QAction::triggered,
             this, [this](bool triggered) {
-        if (!triggered) {
-            mUI->addDockWidget(tr("Timeline"), mTimeline);
-            mTimelineWindow->deleteLater();
-        } else {
-            openTimelineWindow();
-        }
+        if (mShutdown) { return; }
+        if (!triggered) { mTimelineWindow->close(); }
+        else { openTimelineWindow(); }
         AppSupport::setSettings("ui",
                                 "TimelineWindow",
                                 triggered);
@@ -1041,14 +1041,9 @@ void MainWindow::setupMenuBar()
     mRenderWindowAct->setCheckable(true);
     connect(mRenderWindowAct, &QAction::triggered,
             this, [this](bool triggered) {
-        if (!triggered) {
-            mTabQueueIndex = mTabProperties->addTab(mRenderWidget,
-                                                    QIcon::fromTheme("render_animation"),
-                                                    tr("Queue"));
-            mRenderWindow->deleteLater();
-        } else {
-            openRenderQueueWindow();
-        }
+        if (mShutdown) { return; }
+        if (!triggered) { mRenderWindow->close(); }
+        else { openRenderQueueWindow(); }
         AppSupport::setSettings("ui",
                                 "RenderWindow",
                                 triggered);
@@ -1234,26 +1229,55 @@ void MainWindow::openTimelineWindow()
                                      true,
                                      true,
                                      true);
-        mUI->setDockVisible(tr("Timeline"), false);
+        connect(mTimelineWindow, &Window::closed,
+                this, [this]() {
+            if (mShutdown) { return; }
+            closedTimelineWindow();
+        });
+    } else {
+        mTimelineWindow->addWidget(mTimeline);
     }
+    mTimelineWindowAct->setChecked(true);
+    mUI->setDockVisible(tr("Timeline"), false);
     mTimelineWindow->focusWindow();
 }
 
-void MainWindow::openRenderQueueWindow(const bool &focus)
+void MainWindow::closedTimelineWindow()
 {
+    mTimelineWindowAct->setChecked(false);
+    mUI->addDockWidget(tr("Timeline"), mTimeline);
+}
+
+void MainWindow::openRenderQueueWindow()
+{
+    mRenderWindowAct->setChecked(true);
+    mTabProperties->removeTab(mTabQueueIndex);
+    mRenderWidget->setVisible(true);
     if (!mRenderWindow) {
-        mTabProperties->removeTab(mTabQueueIndex);
-        mRenderWidget->setVisible(true);
         mRenderWindow = new Window(this,
                                    mRenderWidget,
                                    tr("Renderer"),
                                    QString("RenderWindow"),
-                                   focus,
+                                   true,
                                    true,
                                    false);
+        connect(mRenderWindow, &Window::closed,
+                this, [this]() {
+            if (mShutdown) { return; }
+            closedRenderQueueWindow();
+        });
+    } else {
+        mRenderWindow->addWidget(mRenderWidget);
     }
-    if (!focus) { return; }
     mRenderWindow->focusWindow();
+}
+
+void MainWindow::closedRenderQueueWindow()
+{
+    mRenderWindowAct->setChecked(false);
+    mTabQueueIndex = mTabProperties->addTab(mRenderWidget,
+                                            QIcon::fromTheme("render_animation"),
+                                            tr("Queue"));
 }
 
 void MainWindow::openWelcomeDialog()
@@ -1648,7 +1672,7 @@ void MainWindow::readSettings(const QString &openProject)
     mRenderWindowAct->blockSignals(false);
 
     if (isTimelineWindow) { openTimelineWindow(); }
-    if (isRenderWindow) { openRenderQueueWindow(false); }
+    if (isRenderWindow) { openRenderQueueWindow(); }
 
     if (isFull) { showFullScreen(); }
     else if (isMax) { showMaximized(); }
