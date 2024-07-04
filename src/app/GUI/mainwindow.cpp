@@ -1030,9 +1030,6 @@ void MainWindow::setupMenuBar()
         if (mShutdown) { return; }
         if (!triggered) { mTimelineWindow->close(); }
         else { openTimelineWindow(); }
-        AppSupport::setSettings("ui",
-                                "TimelineWindow",
-                                triggered);
     });
 
     mRenderWindowAct = mViewMenu->addAction(tr("Queue Window"));
@@ -1042,9 +1039,6 @@ void MainWindow::setupMenuBar()
         if (mShutdown) { return; }
         if (!triggered) { mRenderWindow->close(); }
         else { openRenderQueueWindow(); }
-        AppSupport::setSettings("ui",
-                                "RenderWindow",
-                                triggered);
     });
 
     /*mPanelsMenu = mViewMenu->addMenu(tr("Docks", "MenuBar_View"));
@@ -1219,6 +1213,9 @@ void MainWindow::openAboutWindow()
 
 void MainWindow::openTimelineWindow()
 {
+    AppSupport::setSettings("ui",
+                            "TimelineWindow",
+                            true);
     if (!mTimelineWindow) {
         mTimelineWindow = new Window(this,
                                      mTimeline,
@@ -1228,10 +1225,7 @@ void MainWindow::openTimelineWindow()
                                      true,
                                      true);
         connect(mTimelineWindow, &Window::closed,
-                this, [this]() {
-            if (mShutdown) { return; }
-            closedTimelineWindow();
-        });
+                this, [this]() { closedTimelineWindow(); });
     } else {
         mTimelineWindow->addWidget(mTimeline);
     }
@@ -1242,12 +1236,19 @@ void MainWindow::openTimelineWindow()
 
 void MainWindow::closedTimelineWindow()
 {
+    if (mShutdown) { return; }
+    AppSupport::setSettings("ui",
+                            "TimelineWindow",
+                            false);
     mTimelineWindowAct->setChecked(false);
     mUI->addDockWidget(tr("Timeline"), mTimeline);
 }
 
 void MainWindow::openRenderQueueWindow()
 {
+    AppSupport::setSettings("ui",
+                            "RenderWindow",
+                            true);
     mRenderWindowAct->setChecked(true);
     mTabProperties->removeTab(mTabQueueIndex);
     mRenderWidget->setVisible(true);
@@ -1260,10 +1261,7 @@ void MainWindow::openRenderQueueWindow()
                                    true,
                                    false);
         connect(mRenderWindow, &Window::closed,
-                this, [this]() {
-            if (mShutdown) { return; }
-            closedRenderQueueWindow();
-        });
+                this, [this]() { closedRenderQueueWindow(); });
     } else {
         mRenderWindow->addWidget(mRenderWidget);
     }
@@ -1272,6 +1270,10 @@ void MainWindow::openRenderQueueWindow()
 
 void MainWindow::closedRenderQueueWindow()
 {
+    if (mShutdown) { return; }
+    AppSupport::setSettings("ui",
+                            "RenderWindow",
+                            false);
     mRenderWindowAct->setChecked(false);
     mTabQueueIndex = mTabProperties->addTab(mRenderWidget,
                                             QIcon::fromTheme("render_animation"),
@@ -1617,6 +1619,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
 void MainWindow::closeEvent(QCloseEvent *e)
 {
     if (!closeProject()) { e->ignore(); }
+    else { mShutdown = true; }
 }
 
 bool MainWindow::processKeyEvent(QKeyEvent *event)
