@@ -104,7 +104,8 @@ void Canvas::addActionsToMenu(QMenu *const menu) {
         if(ok) changeFpsTo(newFps);
     });
 
-    menu->addAction("Settings...", [this]() {
+    menu->addAction(QIcon::fromTheme("sequence"),
+                    tr("Scene Properties"), [this]() {
         const auto& dialogs = DialogsInterface::instance();
         dialogs.showSceneSettingsDialog(this);
     });
