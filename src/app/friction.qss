@@ -208,6 +208,8 @@ QComboBox::drop-down:button{
     width: %7px;
     border: 0;
 }
+
+QToolButton::menu-arrow,
 QComboBox::down-arrow {
     image: url(:/icons/hicolor/%7x%7/actions/go-down.png);
 }
