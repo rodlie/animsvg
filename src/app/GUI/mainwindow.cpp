@@ -826,7 +826,7 @@ void MainWindow::setupMenuBar()
     sceneToolBtn->setMenu(sceneToolMenu);
     mToolbar->addWidget(sceneToolBtn);
 
-    mSceneMenu = new QMenu(this); //mMenuBar->addMenu(tr("Scene", "MenuBar"));
+    mSceneMenu = mMenuBar->addMenu(tr("Scene", "MenuBar"));
 
     const auto newSceneAct = mSceneMenu->addAction(QIcon::fromTheme("file_new"),
                                                    tr("New Scene", "MenuBar_Scene"),
