@@ -218,7 +218,7 @@ TimelineWidget::TimelineWidget(Document &document,
     keysViewScrollbarLayout->setAlignment(Qt::AlignRight);
     /*keysViewScrollbarLayout->addWidget(
                 mBoxesListScrollArea->verticalScrollBar());*/
-    mBoxesListScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    mBoxesListScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     keysViewScrollbarLayout->setContentsMargins(0, 0, 0, 0);
 
     connect(mBoxesListScrollArea->verticalScrollBar(),
