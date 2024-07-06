@@ -347,3 +347,37 @@ QSpinBox#LeftSpinBox::up-button {
 QSpinBox#LeftSpinBox::down-button {
     subcontrol-position: bottom left;
 }
+
+QScrollBar:vertical {
+    border: 0px;
+    background: transparent;
+    width: 10px;
+    margin: 2px;
+}
+
+QScrollBar:horizontal {
+    border: 0px;
+    background: transparent;
+    height: 10px;
+    margin: 2px;
+}
+
+QScrollBar::handle:vertical,
+QScrollBar::handle:horizontal {
+    background-color: %2;
+    border: 0;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::add-line:horizontal {
+    width: 0px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical,
+QScrollBar::sub-line:horizontal {
+    width: 0px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
