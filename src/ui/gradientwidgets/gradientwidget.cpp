@@ -27,6 +27,8 @@
 #include <QMouseEvent>
 #include <QMenu>
 #include <QAction>
+#include <QPushButton>
+#include <QHBoxLayout>
 
 #include "gradientwidgets/displayedgradientswidget.h"
 #include "Animators/gradient.h"
@@ -53,7 +55,31 @@ GradientWidget::GradientWidget(QWidget * const parent)
     mGradientsListWidget = new GradientsListWidget(this);
     mCurrentGradientWidget = new CurrentGradientWidget(this);
 
+    const auto buttonsWidget = new QWidget(this);
+    buttonsWidget->setContentsMargins(0, 0, 0 ,0);
+    buttonsWidget->setFocusPolicy(Qt::NoFocus);
+
+    const auto buttonsLayout = new QHBoxLayout(buttonsWidget);
+    buttonsLayout->setContentsMargins(0, 0, 0, 0);
+
+    const auto buttonAdd = new QPushButton(QIcon::fromTheme("plus"), QString(""), this);
+    const auto buttonRem = new QPushButton(QIcon::fromTheme("minus"), QString(""), this);
+    const auto buttonDup = new QPushButton(QIcon::fromTheme("duplicate"), QString(""), this);
+
+    buttonAdd->setToolTip(tr("Add Gradient"));
+    buttonRem->setToolTip(tr("Remove Gradient"));
+    buttonDup->setToolTip(tr("Duplicate Gradient"));
+
+    buttonAdd->setFocusPolicy(Qt::NoFocus);
+    buttonRem->setFocusPolicy(Qt::NoFocus);
+    buttonDup->setFocusPolicy(Qt::NoFocus);
+
+    buttonsLayout->addWidget(buttonAdd);
+    buttonsLayout->addWidget(buttonRem);
+    buttonsLayout->addWidget(buttonDup);
+
     mMainLayout->addWidget(mGradientsListWidget);
+    mMainLayout->addWidget(buttonsWidget);
     mMainLayout->addWidget(mCurrentGradientWidget);
 
     /*eSizesUI::widget.add(this, [this](const int size) {
@@ -73,6 +99,13 @@ GradientWidget::GradientWidget(QWidget * const parent)
             mCurrentGradientWidget, &CurrentGradientWidget::setCurrentGradient);
     connect(mCurrentGradientWidget, &CurrentGradientWidget::selectedColorChanged,
             this, &GradientWidget::selectedColorChanged);
+
+    connect(buttonAdd, &QPushButton::clicked,
+            list, &DisplayedGradientsWidget::newGradient);
+    connect(buttonRem, &QPushButton::clicked,
+            list, &DisplayedGradientsWidget::removeSelectedGradient);
+    connect(buttonDup, &QPushButton::clicked,
+            list, &DisplayedGradientsWidget::duplicateSelectedGradient);
 }
 
 void GradientWidget::clearAll()

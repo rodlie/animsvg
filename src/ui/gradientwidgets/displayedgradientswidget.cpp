@@ -160,6 +160,14 @@ void DisplayedGradientsWidget::setSelectedGradient(Gradient *gradient) {
     update();
 }
 
+void DisplayedGradientsWidget::newGradient()
+{
+    const auto newGrad = mScene->createNewGradient();
+    newGrad->addColor(Qt::black);
+    newGrad->addColor(Qt::white);
+    setSelectedGradient(newGrad);
+}
+
 void DisplayedGradientsWidget::addGradient(Gradient * const gradient) {
     auto& conn = mGradients.addObj(gradient);
     conn << connect(gradient, &Gradient::prp_absFrameRangeChanged,
@@ -178,6 +186,19 @@ void DisplayedGradientsWidget::removeGradient(Gradient * const gradient) {
     }
     updateHeight();
     update();
+}
+
+void DisplayedGradientsWidget::removeSelectedGradient()
+{
+    removeGradient(mSelectedGradient);
+}
+
+void DisplayedGradientsWidget::duplicateSelectedGradient()
+{
+    const auto newGrad = mScene->createNewGradient();
+    const auto clipboard = enve::make_shared<PropertyClipboard>(mSelectedGradient);
+    clipboard->paste(newGrad);
+    setSelectedGradient(newGrad);
 }
 
 void DisplayedGradientsWidget::gradientLeftPressed(const int gradId) {
