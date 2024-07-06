@@ -91,7 +91,7 @@ void DisplayedGradientsWidget::paintGL() {
     const int nVisible = qMin(mGradients.count() - mTopGradientId,
                               mMaxVisibleGradients);
     int gradY = mDisplayedTop;
-    glClearColor(0.3f, 0.3f, 0.3f, 1);
+    glClearColor(0.075f, 0.075f, 0.082f, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(GRADIENT_PROGRAM.fID);
     glBindVertexArray(mPlainSquareVAO);
