@@ -354,6 +354,14 @@ void FillStrokeSettingsWidget::setGradientFillAction()
     mFillFlatButton->setChecked(false);
     mFillNoneButton->setChecked(false);
     paintTypeSet(GRADIENTPAINT);
+
+    const auto scene = *mDocument.fActiveScene;
+    if (scene && scene->gradients().count() < 1) {
+        const auto grad = scene->createNewGradient();
+        grad->addColor(Qt::black);
+        grad->addColor(Qt::white);
+    }
+
     mDocument.actionFinished();
 }
 
