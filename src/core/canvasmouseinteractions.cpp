@@ -63,30 +63,34 @@ void Canvas::handleMovePathMousePressEvent(const eMouseEvent& e) {
     }
 }
 
-void Canvas::addActionsToMenu(QMenu *const menu) {
+void Canvas::addActionsToMenu(QMenu *const menu)
+{
     const auto clipboard = mDocument.getBoxesClipboard();
-    if(clipboard) {
-        QAction * const pasteAct = menu->addAction("Paste", this,
-                                                  &Canvas::pasteAction);
+    if (clipboard) {
+        QAction * const pasteAct = menu->addAction(tr("Paste"), this,
+                                                   &Canvas::pasteAction);
         pasteAct->setShortcut(Qt::CTRL + Qt::Key_V);
     }
 
-    QMenu * const linkCanvasMenu = menu->addMenu("Link Scene");
-    for(const auto& canvas : mDocument.fScenes) {
+    QMenu * const linkCanvasMenu = menu->addMenu(QIcon::fromTheme("sequence"),
+                                                 tr("Link Scene"));
+    for (const auto& canvas : mDocument.fScenes) {
         const auto slot = [this, canvas]() {
             auto newLink = canvas->createLink(false);
             mCurrentContainer->addContained(newLink);
             newLink->centerPivotPosition();
         };
-        QAction * const action = linkCanvasMenu->addAction(
-                    canvas->prp_getName(), this, slot);
-        if(canvas == this) {
+        QAction * const action = linkCanvasMenu->addAction(canvas->prp_getName(),
+                                                           this,
+                                                           slot);
+        if (canvas == this) {
             action->setEnabled(false);
             action->setVisible(false);
         }
     }
 
-    menu->addAction("Duplicate Scene", [this]() {
+    menu->addAction(QIcon::fromTheme("duplicate"),
+                    tr("Duplicate Scene"), [this]() {
         const auto newScene = Document::sInstance->createNewScene();
         newScene->setCanvasSize(mWidth, mHeight);
         newScene->setFps(mFps);
@@ -96,12 +100,13 @@ void Canvas::addActionsToMenu(QMenu *const menu) {
     });
 
     const auto parentWidget = menu->parentWidget();
-    menu->addAction("Map to Different Fps...", [this, parentWidget]() {
+    menu->addAction(QIcon::fromTheme("file_movie"),
+                    tr("Map to Different Fps"), [this, parentWidget]() {
         bool ok;
         const qreal newFps = QInputDialog::getDouble(
                     parentWidget, "Map to Different Fps",
                     "New Fps:", mFps, 1, 999, 2, &ok);
-        if(ok) changeFpsTo(newFps);
+        if (ok) { changeFpsTo(newFps); }
     });
 
     menu->addAction(QIcon::fromTheme("sequence"),
