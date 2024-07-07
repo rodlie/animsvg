@@ -55,32 +55,67 @@ GradientWidget::GradientWidget(QWidget * const parent)
     mGradientsListWidget = new GradientsListWidget(this);
     mCurrentGradientWidget = new CurrentGradientWidget(this);
 
-    const auto buttonsWidget = new QWidget(this);
-    buttonsWidget->setContentsMargins(0, 0, 0 ,0);
-    buttonsWidget->setFocusPolicy(Qt::NoFocus);
+    const auto aWidget = new QWidget(this);
+    aWidget->setContentsMargins(0, 0, 0 ,0);
+    aWidget->setFocusPolicy(Qt::NoFocus);
 
-    const auto buttonsLayout = new QHBoxLayout(buttonsWidget);
-    buttonsLayout->setContentsMargins(0, 0, 0, 0);
+    const auto aLayout = new QHBoxLayout(aWidget);
+    aLayout->setContentsMargins(0, 0, 0, 0);
+
+    const auto bWidget = new QWidget(this);
+    bWidget->setContentsMargins(0, 0, 0 ,0);
+    bWidget->setFocusPolicy(Qt::NoFocus);
+
+    const auto bLayout = new QHBoxLayout(bWidget);
+    bLayout->setContentsMargins(0, 0, 0, 0);
+
+    const auto cWidget = new QWidget(this);
+    cWidget->setContentsMargins(0, 0, 0 ,0);
+    cWidget->setFocusPolicy(Qt::NoFocus);
+
+    const auto cLayout = new QVBoxLayout(cWidget);
+    cLayout->setContentsMargins(0, 0, 0, 0);
 
     const auto buttonAdd = new QPushButton(QIcon::fromTheme("plus"), QString(""), this);
     const auto buttonRem = new QPushButton(QIcon::fromTheme("minus"), QString(""), this);
     const auto buttonDup = new QPushButton(QIcon::fromTheme("duplicate"), QString(""), this);
+    const auto buttonAddColor = new QPushButton(QIcon::fromTheme("plus"), QString(""), this);
+    const auto buttonRemColor = new QPushButton(QIcon::fromTheme("minus"), QString(""), this);
 
     buttonAdd->setToolTip(tr("Add Gradient"));
     buttonRem->setToolTip(tr("Remove Gradient"));
     buttonDup->setToolTip(tr("Duplicate Gradient"));
+    buttonAddColor->setToolTip(tr("Add Color"));
+    buttonRemColor->setToolTip(tr("Remove Color"));
 
     buttonAdd->setFocusPolicy(Qt::NoFocus);
     buttonRem->setFocusPolicy(Qt::NoFocus);
     buttonDup->setFocusPolicy(Qt::NoFocus);
+    buttonAddColor->setFocusPolicy(Qt::NoFocus);
+    buttonRemColor->setFocusPolicy(Qt::NoFocus);
 
-    buttonsLayout->addWidget(buttonAdd);
-    buttonsLayout->addWidget(buttonRem);
-    buttonsLayout->addWidget(buttonDup);
+    buttonAdd->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    buttonRem->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    buttonDup->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    buttonAddColor->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    buttonRemColor->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    mMainLayout->addWidget(mGradientsListWidget);
-    mMainLayout->addWidget(buttonsWidget);
-    mMainLayout->addWidget(mCurrentGradientWidget);
+    mCurrentGradientWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    mGradientsListWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    aLayout->addWidget(mGradientsListWidget);
+    aLayout->addWidget(cWidget);
+
+    bLayout->addWidget(mCurrentGradientWidget);
+    bLayout->addWidget(buttonAddColor);
+    bLayout->addWidget(buttonRemColor);
+
+    cLayout->addWidget(buttonAdd);
+    cLayout->addWidget(buttonRem);
+    cLayout->addWidget(buttonDup);
+
+    mMainLayout->addWidget(aWidget);
+    mMainLayout->addWidget(bWidget);
 
     /*eSizesUI::widget.add(this, [this](const int size) {
         const qreal mult = (3 + mNumberVisibleGradients + 0.5);
@@ -106,6 +141,11 @@ GradientWidget::GradientWidget(QWidget * const parent)
             list, &DisplayedGradientsWidget::removeSelectedGradient);
     connect(buttonDup, &QPushButton::clicked,
             list, &DisplayedGradientsWidget::duplicateSelectedGradient);
+
+    connect(buttonAddColor, &QPushButton::clicked,
+            mCurrentGradientWidget, &CurrentGradientWidget::colorAdd);
+    connect(buttonRemColor, &QPushButton::clicked,
+            mCurrentGradientWidget, &CurrentGradientWidget::colorRemove);
 }
 
 void GradientWidget::clearAll()

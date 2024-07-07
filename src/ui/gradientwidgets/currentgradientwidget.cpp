@@ -179,6 +179,20 @@ void CurrentGradientWidget::setCurrentColorId(const int id) {
     update();
 }
 
+void CurrentGradientWidget::colorAdd()
+{
+    mGradient->addColor(Qt::black);
+}
+
+void CurrentGradientWidget::colorRemove()
+{
+    if (mGradient->ca_getNumberOfChildren() < 2) {
+        mColor->setColor(Qt::black);
+    } else {
+        mGradient->removeChild(mColor->ref<ColorAnimator>());
+    }
+}
+
 ColorAnimator *CurrentGradientWidget::getColorAnimator() {
     return mColor;
 }

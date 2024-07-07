@@ -46,6 +46,8 @@ public:
     void colorRightPress(const int x, const QPoint &point);
     void colorLeftPress(const int x);
     void setCurrentColorId(const int id);
+    void colorAdd();
+    void colorRemove();
 
     ColorAnimator *getColorAnimator();
 
