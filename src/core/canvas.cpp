@@ -434,7 +434,7 @@ void Canvas::setFrameIn(const bool enabled,
 {
     mIn.enabled = enabled;
     mIn.frame = frameIn;
-    emit newFrameRange(mRange);
+    emit requestUpdate();
 }
 
 void Canvas::setFrameOut(const bool enabled,
@@ -442,7 +442,7 @@ void Canvas::setFrameOut(const bool enabled,
 {
     mOut.enabled = enabled;
     mOut.frame = frameOut;
-    emit newFrameRange(mRange);
+    emit requestUpdate();
 }
 
 const FrameMarker Canvas::getFrameIn()
@@ -460,7 +460,7 @@ void Canvas::setMarker(const QString &title,
 {
     if (hasMarker(frame, true)) { return; }
     mMarkers.push_back({title.isEmpty() ? tr("Marker") : title, true, frame});
-    emit newFrameRange(mRange);
+    emit requestUpdate();
 }
 
 void Canvas::setMarker(const int frame)
@@ -493,7 +493,7 @@ const std::vector<FrameMarker> Canvas::getMarkers()
 void Canvas::clearMarkers()
 {
     mMarkers.clear();
-    emit newFrameRange(mRange);
+    emit requestUpdate();
 }
 
 stdsptr<BoxRenderData> Canvas::createRenderData() {
