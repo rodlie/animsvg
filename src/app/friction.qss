@@ -355,6 +355,11 @@ QScrollBar:vertical {
     margin: 2px;
 }
 
+#NoMarginVerticalScrollBar QScrollBar:vertical {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 QScrollBar:horizontal {
     border: 0px;
     background: transparent;
