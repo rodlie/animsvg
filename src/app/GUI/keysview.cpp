@@ -331,24 +331,30 @@ void KeysView::mousePressEvent(QMouseEvent *e) {
             }
         }
     } else {
-        if(mMovingKeys) {
+        if (mMovingKeys) {
             cancelTransform();
         } else {
-            auto movable = getRectangleMovableAtPos(
-                                        posU.x(), posU.y(),
-                                        mPixelsPerFrame,
-                                        mMinViewedFrame);
-            if(!movable) {
-            } else if(movable->isDurationRect()) {
+            auto movable = getRectangleMovableAtPos(posU.x(),
+                                                    posU.y(),
+                                                    mPixelsPerFrame,
+                                                    mMinViewedFrame);
+            if (!movable) {
+            } else if (movable->isDurationRect()) {
                 QMenu menu;
-                menu.addAction(tr("Edit duration"));
-                // TODO: add split action
+                const QString editStr = tr("Edit duration");
+                const QString splitStr = tr("Split Clip");
+                menu.addAction(editStr);
+                menu.addAction(splitStr);
                 const auto selectedAction = menu.exec(e->globalPos());
-                if(selectedAction) {
-                    const auto durRect = static_cast<DurationRectangle*>(movable);
-                    if(!durRect) return;
-                    const auto& instance = DialogsInterface::instance();
-                    instance.showDurationSettingsDialog(durRect);
+                if (selectedAction) {
+                    if (selectedAction->text() == editStr) {
+                        const auto durRect = static_cast<DurationRectangle*>(movable);
+                        if (!durRect) { return; }
+                        const auto& instance = DialogsInterface::instance();
+                        instance.showDurationSettingsDialog(durRect);
+                    } else if (selectedAction->text() == splitStr) {
+                        if (mCurrentScene) { mCurrentScene->splitAction(); }
+                    }
                 }
             }
         }
