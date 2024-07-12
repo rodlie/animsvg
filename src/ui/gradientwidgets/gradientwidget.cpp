@@ -122,6 +122,21 @@ GradientWidget::GradientWidget(QWidget * const parent)
         setFixedHeight(qRound(mult*size));
     });*/
 
+    eSizesUI::widget.add(buttonAdd,
+                         [&buttonAddColor,
+                          &buttonRemColor,
+                          &buttonAdd,
+                          &buttonRem,
+                          &buttonDup](const int size) {
+        buttonAddColor->setFixedHeight(size);
+        buttonRemColor->setFixedHeight(size);
+        buttonAddColor->setIconSize(QSize(size, size));
+        buttonRemColor->setIconSize(QSize(size, size));
+        buttonAdd->setIconSize(QSize(size, size));
+        buttonRem->setIconSize(QSize(size, size));
+        buttonDup->setIconSize(QSize(size, size));
+    });
+
     const auto list = mGradientsListWidget->getList();
     connect(list, &DisplayedGradientsWidget::triggered,
             this, &GradientWidget::setCurrentGradient);
