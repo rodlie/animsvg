@@ -181,11 +181,13 @@ void CurrentGradientWidget::setCurrentColorId(const int id) {
 
 void CurrentGradientWidget::colorAdd()
 {
+    if (!mGradient) { return; }
     mGradient->addColor(Qt::black);
 }
 
 void CurrentGradientWidget::colorRemove()
 {
+    if (!mGradient) { return; }
     if (mGradient->ca_getNumberOfChildren() < 2) {
         mColor->setColor(Qt::black);
     } else {
