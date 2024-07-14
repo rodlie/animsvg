@@ -162,6 +162,7 @@ void DisplayedGradientsWidget::setSelectedGradient(Gradient *gradient) {
 
 void DisplayedGradientsWidget::newGradient()
 {
+    if (!mScene) { return; }
     const auto newGrad = mScene->createNewGradient();
     newGrad->addColor(Qt::black);
     newGrad->addColor(Qt::white);
@@ -195,6 +196,7 @@ void DisplayedGradientsWidget::removeSelectedGradient()
 
 void DisplayedGradientsWidget::duplicateSelectedGradient()
 {
+    if (!mScene) { return; }
     const auto newGrad = mScene->createNewGradient();
     const auto clipboard = enve::make_shared<PropertyClipboard>(mSelectedGradient);
     clipboard->paste(newGrad);
