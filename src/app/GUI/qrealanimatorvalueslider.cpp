@@ -38,6 +38,16 @@ QrealAnimatorValueSlider::QrealAnimatorValueSlider(qreal minVal, qreal maxVal,
 
 }
 
+QrealAnimatorValueSlider::QrealAnimatorValueSlider(qreal minVal,
+                                                   qreal maxVal,
+                                                   qreal prefferedStep,
+                                                   QWidget *parent,
+                                                   bool autoAdjust)
+    : QDoubleSlider(minVal, maxVal, prefferedStep, parent, autoAdjust)
+{
+
+}
+
 QrealAnimatorValueSlider::QrealAnimatorValueSlider(qreal minVal, qreal maxVal,
                                                    qreal prefferedStep,
                                                    QrealAnimator *animator,

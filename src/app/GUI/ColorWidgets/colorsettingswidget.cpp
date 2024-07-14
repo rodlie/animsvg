@@ -246,7 +246,7 @@ void ColorSettingsWidget::moveAlphaWidgetToTab(const int tabId) {
     }/* else if(tabId == 3) {
         mWheelLayout->addLayout(hexLayout);
     }*/
-    for(int i=0;i < mTabWidget->count();i++)
+    /*for(int i=0;i < mTabWidget->count();i++)
         if(i!=tabId)
             mTabWidget->widget(i)->setSizePolicy(QSizePolicy::Minimum,
                                                  QSizePolicy::Ignored);
@@ -254,7 +254,7 @@ void ColorSettingsWidget::moveAlphaWidgetToTab(const int tabId) {
     mTabWidget->widget(tabId)->setSizePolicy(QSizePolicy::Minimum,
                                              QSizePolicy::Preferred);
     mTabWidget->widget(tabId)->resize(
-                mTabWidget->widget(tabId)->minimumSizeHint());
+                mTabWidget->widget(tabId)->minimumSizeHint());*/
 }
 
 void ColorSettingsWidget::startColorPicking() {
@@ -331,6 +331,9 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     mRGBLayout->addLayout(bLayout);
     mRGBWidget->setLayout(mRGBLayout);
 
+    mRGBLayout->setContentsMargins(0, 0, 0, 0);
+    mRGBWidget->setContentsMargins(0, 0, 0, 0);
+
     hRect = new ColorValueRect(HUE_PROGRAM, this);
     hLayout->addWidget(hLabel);
     hLayout->addWidget(hRect);
@@ -349,6 +352,9 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     mHSVLayout->addLayout(vLayout);
     mHSVWidget->setLayout(mHSVLayout);
 
+    mHSVLayout->setContentsMargins(0, 0, 0, 0);
+    mHSVWidget->setContentsMargins(0, 0, 0, 0);
+
     hslSatRect = new ColorValueRect(HSL_SATURATION_PROGRAM, this);
     hslSLayout->addWidget(hslSLabel);
     hslSLayout->addWidget(hslSatRect);
@@ -361,6 +367,9 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     mHSLLayout->addLayout(hslSLayout);
     mHSLLayout->addLayout(lLayout);
     mHSLWidget->setLayout(mHSLLayout);
+
+    mHSLLayout->setContentsMargins(0, 0, 0, 0);
+    mHSLWidget->setContentsMargins(0, 0, 0, 0);
 
     aRect = new ColorValueRect(ALPHA_PROGRAM, this);
     aLayout->addWidget(aLabel);

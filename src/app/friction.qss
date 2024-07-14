@@ -130,6 +130,8 @@ QTabWidget::pane {
 QTabWidget#ColorTabWidget::pane {
     border-radius: unset;
     border: unset;
+    margin: 0;
+    padding: 0;
 }
 QTabWidget#ColorTabWidget QTabBar::tab {
     border-radius: 2%;
