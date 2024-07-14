@@ -47,6 +47,7 @@ public:
         void reset() {
             if(mStack) {
                 mStack->mUndoRedoBlocked--;
+                if (mStack->mUndoRedoBlocked < 0) { mStack->mUndoRedoBlocked = 0; }
                 mStack = nullptr;
             }
         }
