@@ -232,7 +232,7 @@ QToolBar::separator {
 }
 
 QToolButton[popupMode="1"] {
-    padding-right: .1em;
+    padding-right: .3em;
 }
 QToolButton::menu-button {
     background-color: transparent;
@@ -387,4 +387,18 @@ QScrollBar::sub-line:horizontal {
     width: 0px;
     subcontrol-position: top;
     subcontrol-origin: margin;
+}
+
+QToolBar#animationDockWidget {
+    margin-bottom: 1em;
+    margin-right: 1em;
+    background: transparent;
+}
+
+QTabWidget#TabWidgetWide QTabBar::tab:bottom {
+    margin-bottom: .5em;
+}
+
+QTabWidget#TabWidgetWide QTabBar {
+    border: 0;
 }
