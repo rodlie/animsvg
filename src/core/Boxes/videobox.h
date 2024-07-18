@@ -40,6 +40,12 @@ protected:
     void prp_readPropertyXEV_impl(const QDomElement& ele, const XevImporter& imp);
     QDomElement prp_writePropertyXEV_impl(const XevExporter& exp) const;
 public:
+    struct VideoSpecs {
+        int width;
+        int height;
+        int frames;
+        qreal fps;
+    };
     void changeSourceFile();
 
     void writeBoundingBox(eWriteStream& dst) const;
@@ -51,6 +57,7 @@ public:
     { return mSound.get(); }
     void setFilePath(const QString& path);
     QString getFilePath();
+    const VideoSpecs getSpecs();
 private:
     void setFilePathNoRename(const QString &path);
 
