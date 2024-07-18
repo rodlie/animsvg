@@ -770,6 +770,9 @@ eBoxOrSound *Actions::importFile(const QString &path,
             importedBox->moveByAbs(relDropPos);
             importedBox->finishTransform();
         }
+        if (const auto videoBox = enve_cast<VideoBox*>(result)) {
+            Document::sInstance->newVideo(videoBox->getSpecs());
+        }
     }
     afterAction();
     return result.get();
