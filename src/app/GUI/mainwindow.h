@@ -236,6 +236,8 @@ private:
 
     QStringList mRecentFiles;
 
+    void handleNewVideoClip(const VideoBox::VideoSpecs &specs);
+
 //    bool mRendering = false;
 
 //    bool mCancelLastBoxUpdate = false;

@@ -174,6 +174,8 @@ MainWindow::MainWindow(Document& document,
         mTabColorText->setCurrentIndex(mTabTextIndex);
         mFontWidget->setTextFocus();
     });
+    connect(&mDocument, &Document::newVideo,
+            this, &MainWindow::handleNewVideoClip);
 
     setWindowIcon(QIcon::fromTheme(AppSupport::getAppName()));
     setMinimumSize(1024, 576);
@@ -2071,3 +2073,17 @@ void MainWindow::writeRecentFiles()
     for (const auto &file : mRecentFiles) { files.append(file); }
     AppSupport::setSettings("files", "recentSaved", files);
 }
+
+void MainWindow::handleNewVideoClip(const VideoBox::VideoSpecs &specs)
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return; }
+    if (scene->getContainedBoxes().count() != 1) { return; }
+    const auto reply = QMessageBox::question(this,
+                                             tr("Adjust scene?"),
+                                             tr("Adjust scene to new video clip?"));
+    if (reply != QMessageBox::Yes) { return; }
+    scene->setCanvasSize(specs.width, specs.height);
+    scene->setFps(specs.fps);
+    scene->setFrameRange({0, specs.frames - 1});
+ }
