@@ -41,6 +41,7 @@
 #include "zipfileloader.h"
 #include "XML/runtimewriteid.h"
 #include "XML/xevzipfilesaver.h"
+#include "Boxes/videobox.h"
 
 class SceneBoundGradient;
 class FileDataCacheHandler;
@@ -209,6 +210,7 @@ signals:
     void evFilePathChanged(QString);
     void documentChanged();
     void openTextEditor();
+    void newVideo(const VideoBox::VideoSpecs specs);
 };
 
 #endif // DOCUMENT_H
