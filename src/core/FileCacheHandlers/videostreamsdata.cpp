@@ -148,6 +148,8 @@ void VideoStreamsData::open(const char * const path)
                       nullptr) < 0) {
         RuntimeThrow(QObject::tr("Failed to open codec"));
     }
+    fWidth = fCodecContext->width;
+    fHeight = fCodecContext->height;
     fSwsContext = sws_getContext(fCodecContext->width,
                                  fCodecContext->height,
                                  fCodecContext->pix_fmt,
