@@ -55,10 +55,17 @@ public:
     ImageCacheContainer* getFrameAtOrBeforeFrame(const int relFrame) const;
     int getFrameCount() const;
     void setFrameCount(const int count);
+    qreal getFps() const;
+    void setFps(const qreal fps);
+    const QSize getDim();
+    void setDim(const QSize dim);
 signals:
     void frameCountUpdated(int);
 private:
     int mFrameCount = 0;
+    qreal mFrameFps = 0;
+    int mFrameWidth = 0;
+    int mFrameHeight = 0;
     QList<VideoFrameHandler*> mFrameHandlers;
     QList<int> mFramesBeingLoaded;
     QList<stdsptr<VideoFrameLoader>> mFrameLoaders;
