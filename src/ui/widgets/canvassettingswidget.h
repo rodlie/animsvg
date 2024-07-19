@@ -32,6 +32,7 @@
 
 #include <QDoubleSpinBox>
 #include <QCheckBox>
+#include <QComboBox>
 
 class ColorAnimatorButton;
 class QSlider;
@@ -54,6 +55,7 @@ private:
     QSlider* mPathControlSize;
     ColorAnimatorButton* mPathControlColor = nullptr;
     ColorAnimatorButton* mPathControlSelectedColor = nullptr;
+    QComboBox* mAdjustSceneFromFirstClip = nullptr;
 };
 
 #endif // CANVASSETTINGSWIDGET_H

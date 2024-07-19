@@ -42,6 +42,7 @@ include_directories(
 
 set(
     SOURCES
+    dialogs/adjustscenedialog.cpp
     dialogs/applyexpressiondialog.cpp
     dialogs/durationrectsettingsdialog.cpp
     dialogs/exportsvgdialog.cpp
@@ -101,6 +102,7 @@ set(
 set(
     HEADERS
     ui_global.h
+    dialogs/adjustscenedialog.h
     dialogs/applyexpressiondialog.h
     dialogs/durationrectsettingsdialog.h
     dialogs/exportsvgdialog.h

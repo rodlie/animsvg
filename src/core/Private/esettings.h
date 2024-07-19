@@ -55,6 +55,11 @@ class CORE_EXPORT eSettings : public QObject
     Q_OBJECT
 
 public:
+    enum AdjustSceneArgs {
+        AdjustSceneAsk,
+        AdjustSceneAlways,
+        AdjustSceneNever
+    };
     eSettings(const int cpuThreads,
               const intKB ramKB);
 
@@ -70,6 +75,7 @@ public:
     void loadDefaults();
     void loadFromFile();
     void saveToFile();
+    void saveKeyToFile(const QString &key);
 
     // general
     QString fUserSettingsDir;
@@ -119,6 +125,8 @@ public:
     qreal fPathControlScaling;
     QColor fPathControlColor;
     QColor fPathControlSelectedColor;
+
+    int fAdjustSceneFromFirstClip = AdjustSceneAsk;
 
     // timeline settings
     bool fTimelineAlternateRow = true;

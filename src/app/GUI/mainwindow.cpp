@@ -72,6 +72,7 @@
 #include "themesupport.h"
 
 #include "widgets/assetswidget.h"
+#include "dialogs/adjustscenedialog.h"
 
 MainWindow *MainWindow::sInstance = nullptr;
 
@@ -2076,7 +2077,13 @@ void MainWindow::writeRecentFiles()
 
 void MainWindow::handleNewVideoClip(const VideoBox::VideoSpecs &specs)
 {
-    if (specs.fps < 1 || specs.dim.height() < 1 || specs.dim.width() < 1) { return; }
+    int act = eSettings::instance().fAdjustSceneFromFirstClip;
+
+    // never apply or bad specs?
+    if (act == eSettings::AdjustSceneNever ||
+        specs.fps < 1 ||
+        specs.dim.height() < 1 ||
+        specs.dim.width() < 1) { return; }
 
     const auto scene = *mDocument.fActiveScene;
     if (!scene) { return; }
@@ -2089,22 +2096,16 @@ void MainWindow::handleNewVideoClip(const VideoBox::VideoSpecs &specs)
         scene->getFps() == specs.fps &&
         scene->getFrameRange().fMax == specs.range.fMax) { return; }
 
-    const auto reply = QMessageBox::question(this,
-                                             tr("Adjust scene to clip?"),
-                                             tr("Video clip and scene do not match, adjust scene to clip?\n\n"
-                                                "Clip: %1x%2 Fps: %3 Frames: %4\n\n"
-                                                "Scene: %5x%6 Fps: %7 Frames: %8")
-                                                 .arg(QString::number(specs.dim.width()),
-                                                      QString::number(specs.dim.height()),
-                                                      QString::number(specs.fps),
-                                                      QString::number(specs.range.fMax),
-                                                      QString::number(scene->getCanvasWidth()),
-                                                      QString::number(scene->getCanvasHeight()),
-                                                      QString::number(scene->getFps()),
-                                                      QString::number(scene->getFrameRange().fMax)));
-    if (reply != QMessageBox::Yes) { return; }
-    scene->setCanvasSize(specs.dim.width(),
-                         specs.dim.height());
-    scene->setFps(specs.fps);
-    scene->setFrameRange(specs.range);
+    // always apply?
+    if (act == eSettings::AdjustSceneAlways) {
+        scene->setCanvasSize(specs.dim.width(),
+                             specs.dim.height());
+        scene->setFps(specs.fps);
+        scene->setFrameRange(specs.range);
+        return;
+    }
+
+    // open dialog if ask
+    AdjustSceneDialog dialog(scene, specs, this);
+    dialog.exec();
  }

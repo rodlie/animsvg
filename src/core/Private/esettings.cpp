@@ -236,6 +236,10 @@ eSettings::eSettings(const int cpuThreads,
                      fPathControlScaling,
                      "pathControlScaling", 1.);
 
+    gSettings << std::make_shared<eIntSetting>(fAdjustSceneFromFirstClip,
+                                               "AdjustSceneFromFirstClip",
+                                               AdjustSceneAsk);
+
     /*gSettings << std::make_shared<eBoolSetting>(
                      fTimelineAlternateRow,
                      "timelineAlternateRow", true);
@@ -345,5 +349,15 @@ void eSettings::saveToFile()
 {
     for (const auto& setting : gSettings) {
         setting->writeValue();
+    }
+}
+
+void eSettings::saveKeyToFile(const QString &key)
+{
+    for (const auto& setting : gSettings) {
+        if (key == setting->fName) {
+            setting->writeValue();
+            return;
+        }
     }
 }

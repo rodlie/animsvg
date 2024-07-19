@@ -76,6 +76,19 @@ CanvasSettingsWidget::CanvasSettingsWidget(QWidget* const parent) :
     mRtlSupport = new QCheckBox("RTL language support", this);
     addWidget(mRtlSupport);
 
+    const auto mAdjustSceneWidget = new QWidget(this);
+    const auto mAdjustSceneLayout = new QHBoxLayout(mAdjustSceneWidget);
+    const auto mAdjustSceneLabel = new QLabel(tr("Adjust scene to first clip"), this);
+
+    mAdjustSceneFromFirstClip = new QComboBox(this);
+    mAdjustSceneFromFirstClip->addItem(tr("Ask"), eSettings::AdjustSceneAsk);
+    mAdjustSceneFromFirstClip->addItem(tr("Always"), eSettings::AdjustSceneAlways);
+    mAdjustSceneFromFirstClip->addItem(tr("Never"), eSettings::AdjustSceneNever);
+
+    mAdjustSceneLayout->addWidget(mAdjustSceneLabel);
+    mAdjustSceneLayout->addWidget(mAdjustSceneFromFirstClip);
+    addWidget(mAdjustSceneWidget);
+
     eSizesUI::widget.add(mRtlSupport, [this](const int size) {
         mRtlSupport->setFixedHeight(size);
         mRtlSupport->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
@@ -96,6 +109,8 @@ void CanvasSettingsWidget::applySettings() {
     mSett.fPathControlSelectedColor = mPathControlSelectedColor->color();
 
     mSett.fCanvasRtlSupport = mRtlSupport->isChecked();
+
+    mSett.fAdjustSceneFromFirstClip = mAdjustSceneFromFirstClip->currentData().toInt();
 }
 
 void CanvasSettingsWidget::updateSettings(bool restore)
@@ -114,4 +129,11 @@ void CanvasSettingsWidget::updateSettings(bool restore)
     mPathControlSelectedColor->setColor(mSett.fPathControlSelectedColor);
 
     mRtlSupport->setChecked(mSett.fCanvasRtlSupport);
+
+    for (int i = 0; i < mAdjustSceneFromFirstClip->count(); i++) {
+        if (mAdjustSceneFromFirstClip->itemData(i).toInt() == mSett.fAdjustSceneFromFirstClip) {
+            mAdjustSceneFromFirstClip->setCurrentIndex(i);
+            return;
+        }
+    }
 }
