@@ -2076,14 +2076,35 @@ void MainWindow::writeRecentFiles()
 
 void MainWindow::handleNewVideoClip(const VideoBox::VideoSpecs &specs)
 {
+    if (specs.fps < 1 || specs.dim.height() < 1 || specs.dim.width() < 1) { return; }
+
     const auto scene = *mDocument.fActiveScene;
     if (!scene) { return; }
+
+    // only continue if this is the only clip
     if (scene->getContainedBoxes().count() != 1) { return; }
+
+    // is identical?
+    if (scene->getCanvasSize() == specs.dim &&
+        scene->getFps() == specs.fps &&
+        scene->getFrameRange().fMax == specs.range.fMax) { return; }
+
     const auto reply = QMessageBox::question(this,
-                                             tr("Adjust scene?"),
-                                             tr("Adjust scene to new video clip?"));
+                                             tr("Adjust scene to clip?"),
+                                             tr("Video clip and scene do not match, adjust scene to clip?\n\n"
+                                                "Clip: %1x%2 Fps: %3 Frames: %4\n\n"
+                                                "Scene: %5x%6 Fps: %7 Frames: %8")
+                                                 .arg(QString::number(specs.dim.width()),
+                                                      QString::number(specs.dim.height()),
+                                                      QString::number(specs.fps),
+                                                      QString::number(specs.range.fMax),
+                                                      QString::number(scene->getCanvasWidth()),
+                                                      QString::number(scene->getCanvasHeight()),
+                                                      QString::number(scene->getFps()),
+                                                      QString::number(scene->getFrameRange().fMax)));
     if (reply != QMessageBox::Yes) { return; }
-    scene->setCanvasSize(specs.width, specs.height);
+    scene->setCanvasSize(specs.dim.width(),
+                         specs.dim.height());
     scene->setFps(specs.fps);
-    scene->setFrameRange({0, specs.frames - 1});
+    scene->setFrameRange(specs.range);
  }

@@ -41,10 +41,9 @@ protected:
     QDomElement prp_writePropertyXEV_impl(const XevExporter& exp) const;
 public:
     struct VideoSpecs {
-        int width;
-        int height;
-        int frames;
+        QSize dim;
         qreal fps;
+        FrameRange range;
     };
     void changeSourceFile();
 

@@ -156,10 +156,10 @@ const VideoBox::VideoSpecs VideoBox::getSpecs()
     VideoSpecs specs;
     const auto h = mFileHandler->getFrameHandler();
     if (!h) { return specs; }
-    specs.frames = h->getFrameCount();
+    int frames = h->getFrameCount();
+    specs.range = FrameRange{0, frames <= 1 ? 0 : frames - 1};
     specs.fps = h->getFps();
-    specs.height = h->getDim().height();
-    specs.width = h->getDim().width();
+    specs.dim = h->getDim();
     return specs;
 }
 
