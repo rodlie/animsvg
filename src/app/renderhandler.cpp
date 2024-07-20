@@ -285,10 +285,10 @@ void RenderHandler::playPreview() {
     TaskScheduler::sClearAllFinishedFuncs();
     const auto fIn = mCurrentScene->getFrameIn();
     const auto fOut = mCurrentScene->getFrameOut();
-    const int minPreviewFrame = fIn.enabled? fIn.frame : mSavedCurrentFrame;
+    const int minPreviewFrame = fIn.enabled? (fIn.frame < mSavedCurrentFrame && mSavedCurrentFrame < mCurrentRenderFrame ? mSavedCurrentFrame : fIn.frame) : mSavedCurrentFrame;
     const int maxPreviewFrame = qMin(mMaxRenderFrame, mCurrentRenderFrame);
     if(minPreviewFrame >= maxPreviewFrame) return;
-    mMinPreviewFrame = mLoop ? (fIn.enabled? fIn.frame : mCurrentScene->getMinFrame()) : (fIn.enabled? fIn.frame : minPreviewFrame);
+    mMinPreviewFrame = mLoop ? (fIn.enabled? fIn.frame : mCurrentScene->getMinFrame()) : (fIn.enabled? (fIn.frame < minPreviewFrame && minPreviewFrame < mCurrentRenderFrame ? minPreviewFrame : fIn.frame) : minPreviewFrame);
     mMaxPreviewFrame = fOut.enabled ? fOut.frame : maxPreviewFrame;
     mCurrentPreviewFrame = minPreviewFrame;
     mCurrentScene->setSceneFrame(mCurrentPreviewFrame);
