@@ -70,9 +70,9 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
     const int minFrame = scene ? scene->getMinFrame() : 0;
     const int maxFrame = scene ? scene->getMaxFrame() : 0;
 
-    mFirstFrame->setRange(-99999, maxFrame);
+    mFirstFrame->setRange(-INT_MAX, maxFrame);
     mFirstFrame->setValue(minFrame);
-    mLastFrame->setRange(minFrame, 99999);
+    mLastFrame->setRange(minFrame, INT_MAX);
     mLastFrame->setValue(maxFrame);
 
     mBackground = new QCheckBox(tr("Background"), this);
