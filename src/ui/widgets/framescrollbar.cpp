@@ -70,9 +70,10 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     p.fillRect(rect(), ThemeSupport::getThemeBaseDarkerColor());
 
     const int dFrame = mFrameRange.fMax - mFrameRange.fMin + (mRange ? 0 : 1);
-    if(dFrame <= 0) return;
+    if (dFrame <= 0) { return; }
+
     const qreal pixPerFrame = (width() - 2.*eSizesUI::widget)/dFrame;
-    if(pixPerFrame < 0 || isZero2Dec(pixPerFrame)) return;
+    if (pixPerFrame < 0) { return; }
 
     const int f0 = -qCeil(0.5*eSizesUI::widget/pixPerFrame);
     const int minFrame = mFrameRange.fMin + f0;
@@ -100,13 +101,9 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     }
 
     QColor col = mHandleColor;
-
-    const qreal inc = mDrawFrameInc*pixPerFrame;
     const int minMod = minFrame%mDrawFrameInc;
-    qreal xL = (-minMod + (mRange ? 0. : 0.5))*pixPerFrame + x0;
     int currentFrame = minFrame - minMod;
     const qreal threeFourthsHeight = height()*0.75;
-    const qreal maxX = width() + eSizesUI::widget;
 
     QRectF handleRect;
     const int hLeftFrames = mFirstViewedFrame - minFrame;
@@ -118,10 +115,9 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     handleRect.setTop(mBottom ? 2 : 0);
     handleRect.setWidth(mBottom ? handleWidth : handleFixedWidth);
     handleRect.setBottom(mBottom ? 6 : height()/3);
-    if (mRange) { p.fillRect(handleRect, col); }
 
-    // draw the stuff ...
-    if (!mRange) {
+    if (mRange) { p.fillRect(handleRect, col); }
+    else { // draw the stuff ...
         p.translate(eSizesUI::widget/2, 0);
         qreal xT = pixPerFrame*0.5;
         int iInc = 1;
@@ -147,28 +143,32 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
             p.drawLine(QPointF(xTT, 4), QPointF(xTT, height()));
         }
 
-        // draw minor
+        // draw minor ticks
         p.setPen(QPen(Qt::darkGray, 2));
         for (int i = mMinFrame; i <= mMaxFrame; i += iInc) {
             const qreal xTT = xT + (i - mFrameRange.fMin + 1)*pixPerFrame;
             p.drawLine(QPointF(xTT, threeFourthsHeight + 4), QPointF(xTT, height()));
         }
 
-        // draw main
+        // draw major ticks
         p.setPen(QPen(Qt::white, 2));
-        p.translate(-(eSizesUI::widget/2), 0);
-        while (xL < maxX) {
-            p.drawLine(QPointF(xL, threeFourthsHeight + 2), QPointF(xL, height()));
+        bool timecode = (mDisplayTime && mFps > 0);
+        int fInc = iInc * 5;
+        if (timecode) { fInc *= 2; }
+        for (int i = mMinFrame; i <= mMaxFrame; i += fInc) {
+            const qreal xTT = xT + (i - mFrameRange.fMin + 1)*pixPerFrame;
+            p.drawLine(QPointF(xTT, threeFourthsHeight + 2), QPointF(xTT, height()));
             QString drawValue = QString::number(currentFrame);
-            if (mDisplayTime && mFps > 0) {
-                drawValue = AppSupport::getTimeCodeFromFrame(currentFrame, mFps);
-            }
-            p.drawText(QRectF(xL - inc, 0, 2*inc, height()),
-                       Qt::AlignCenter, drawValue);
-            xL += inc;
-            currentFrame += mDrawFrameInc;
+            if (timecode) { drawValue = AppSupport::getTimeCodeFromFrame(currentFrame, mFps); }
+            int pInc = fInc;
+            if (pInc < 25) { pInc = 25; }
+            if (timecode) { pInc *= 5; }
+            p.drawText(QRectF(xTT - pInc, 0, 2 * pInc, height()), Qt::AlignCenter, drawValue);
+            currentFrame += fInc;
         }
+
         // draw handle
+        p.translate(-(eSizesUI::widget/2), 0);
         QPainterPath path;
         path.moveTo(handleRect.left() + (handleRect.width() / 2), handleRect.bottom());
         path.lineTo(handleRect.topLeft());
