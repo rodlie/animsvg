@@ -90,12 +90,12 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
 
     mWidthLabel = new QLabel(tr("Width"), this);
     mWidthSpinBox = new QSpinBox(this);
-    mWidthSpinBox->setRange(1, 9999);
+    mWidthSpinBox->setRange(1, INT_MAX);
     mWidthSpinBox->setValue(width);
 
     mHeightLabel = new QLabel(tr("Height"), this);
     mHeightSpinBox = new QSpinBox(this);
-    mHeightSpinBox->setRange(1, 9999);
+    mHeightSpinBox->setRange(1, INT_MAX);
     mHeightSpinBox->setValue(height);
 
     mResToolButton = new QToolButton(this);
@@ -118,11 +118,11 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
 
     mFrameRangeLabel = new QLabel(tr("Duration"), this);
     mMinFrameSpin = new QSpinBox(this);
-    mMinFrameSpin->setRange(0, 999999);
+    mMinFrameSpin->setRange(0, INT_MAX);
     mMinFrameSpin->setValue(range.fMin);
 
     mMaxFrameSpin = new QSpinBox(this);
-    mMaxFrameSpin->setRange(0, 999999);
+    mMaxFrameSpin->setRange(0, INT_MAX);
     mMaxFrameSpin->setValue(range.fMax);
 
     mTypeTime = new QComboBox(this);
@@ -151,7 +151,7 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
     mFPSSpinBox = new QDoubleSpinBox(this);
     mFPSSpinBox->setLocale(QLocale(QLocale::English,
                                    QLocale::UnitedStates));
-    mFPSSpinBox->setRange(1, 300);
+    mFPSSpinBox->setRange(1, INT_MAX);
     mFPSSpinBox->setDecimals(3);
     mFPSSpinBox->setValue(fps);
 
