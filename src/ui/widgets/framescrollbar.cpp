@@ -70,9 +70,9 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     p.fillRect(rect(), ThemeSupport::getThemeBaseDarkerColor());
 
     const int dFrame = mFrameRange.fMax - mFrameRange.fMin + (mRange ? 0 : 1);
-    if(dFrame <= 0) return;
+    if (dFrame <= 0) { return; }
     const qreal pixPerFrame = (width() - 2.*eSizesUI::widget)/dFrame;
-    if(pixPerFrame < 0 || isZero2Dec(pixPerFrame)) return;
+    if (pixPerFrame < 0) { return; }
 
     const int f0 = -qCeil(0.5*eSizesUI::widget/pixPerFrame);
     const int minFrame = mFrameRange.fMin + f0;
@@ -157,17 +157,18 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         // draw main
         p.setPen(QPen(Qt::white, 2));
         p.translate(-(eSizesUI::widget/2), 0);
-        while (xL < maxX) {
-            p.drawLine(QPointF(xL, threeFourthsHeight + 2), QPointF(xL, height()));
-            QString drawValue = QString::number(currentFrame);
-            if (mDisplayTime && mFps > 0) {
-                drawValue = AppSupport::getTimeCodeFromFrame(currentFrame, mFps);
+        bool timecode = mDisplayTime && mFps > 0;
+        if (qAbs(pixPerFrame) > 0.11) {
+            while (xL < maxX) {
+                p.drawLine(QPointF(xL, threeFourthsHeight + 2), QPointF(xL, height()));
+                QString drawValue = QString::number(currentFrame);
+                if (timecode) { drawValue = AppSupport::getTimeCodeFromFrame(currentFrame, mFps); }
+                p.drawText(QRectF(xL - inc, 0, 2 * inc, height()), Qt::AlignCenter, drawValue);
+                xL += inc;
+                currentFrame += mDrawFrameInc;
             }
-            p.drawText(QRectF(xL - inc, 0, 2*inc, height()),
-                       Qt::AlignCenter, drawValue);
-            xL += inc;
-            currentFrame += mDrawFrameInc;
         }
+
         // draw handle
         QPainterPath path;
         path.moveTo(handleRect.left() + (handleRect.width() / 2), handleRect.bottom());
