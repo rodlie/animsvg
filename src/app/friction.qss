@@ -30,19 +30,23 @@
 
 */
 
+QDoubleSpinBox,
 QSpinBox {
     border-radius: 2%;
     border: 1px solid transparent;
 }
+QDoubleSpinBox:hover,
 QSpinBox:hover {
     border-color: %4;
 }
+QDoubleSpinBox::up-button,
 QSpinBox::up-button {
     subcontrol-origin: border;
     subcontrol-position: top right;
     width: %7px;
     border-width: 1px;
 }
+QDoubleSpinBox::down-button,
 QSpinBox::down-button {
     subcontrol-origin: border;
     subcontrol-position: bottom right;
@@ -50,11 +54,13 @@ QSpinBox::down-button {
     border-width: 1px;
     border-top-width: 0;
 }
+QDoubleSpinBox::up-arrow,
 QSpinBox::up-arrow {
     image: url(:/icons/hicolor/%7x%7/actions/go-up.png);
     width: %7px;
     height: %7px;
 }
+QDoubleSpinBox::down-arrow,
 QSpinBox::down-arrow {
     image: url(:/icons/hicolor/%7x%7/actions/go-down.png);
     width: %7px;
@@ -195,11 +201,13 @@ QCheckBox::indicator:unchecked:hover
     
 }
 
+QDoubleSpinBox,
 QSpinBox,
 QLineEdit {
     background-color: %3;
 }
 
+QDoubleSpinBox:hover,
 QSpinBox:hover,
 QLineEdit:hover {
     background-color: black;
