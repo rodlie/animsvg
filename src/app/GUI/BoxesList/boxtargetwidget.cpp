@@ -31,6 +31,7 @@
 #include "Properties/boxtargetproperty.h"
 #include "GUI/mainwindow.h"
 #include "Properties/emimedata.h"
+#include "themesupport.h"
 
 BoxTargetWidget::BoxTargetWidget(QWidget *parent) : QWidget(parent) {
     setAcceptDrops(true);
@@ -122,15 +123,15 @@ void BoxTargetWidget::paintEvent(QPaintEvent *) {
     QPainter p(this);
     if(mProperty->SWT_isDisabled()) p.setOpacity(.5);
     p.setRenderHint(QPainter::Antialiasing);
-    p.setBrush(Qt::white);
+    p.setBrush(ThemeSupport::getThemeButtonBorderColor());
     if(mDragging) {
-        p.setPen(Qt::white);
+        p.setPen(ThemeSupport::getThemeHighlightSelectedColor());
     } else {
-        p.setPen(Qt::black);
+        p.setPen(ThemeSupport::getThemeButtonBaseColor());
     }
     p.drawRoundedRect(rect().adjusted(1, 1, -1, -1), 5., 5.);
 
-    p.setPen(Qt::black);
+    p.setPen(Qt::white);
     const auto target = mProperty->getTarget();
     if(!target) {
         p.drawText(rect(), Qt::AlignCenter, "-none-");
