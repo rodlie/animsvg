@@ -258,19 +258,19 @@ eSettings::eSettings(const int cpuThreads,
     gSettings << std::make_shared<eColorSetting>(
                      fObjectKeyframeColor,
                      "objectKeyframeColor",
-                     QColor(0, 125, 255));
+                     ThemeSupport::getThemeColorBlue());
     gSettings << std::make_shared<eColorSetting>(
                      fPropertyGroupKeyframeColor,
                      "propertyGroupKeyframeColor",
-                     QColor(0, 255, 0));
+                     ThemeSupport::getThemeColorGreen());
     gSettings << std::make_shared<eColorSetting>(
                      fPropertyKeyframeColor,
                      "propertyKeyframeColor",
-                     QColor(255, 0, 0));
+                     ThemeSupport::getThemeColorRed());
     gSettings << std::make_shared<eColorSetting>(
                      fSelectedKeyframeColor,
                      "selectedKeyframeColor",
-                     QColor(255, 255, 0));
+                     ThemeSupport::getThemeColorYellow());
 
     /*gSettings << std::make_shared<eColorSetting>(
                      fVisibilityRangeColor,

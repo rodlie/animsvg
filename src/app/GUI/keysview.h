@@ -33,10 +33,13 @@
 #include "smartPointers/ememory.h"
 #include "framerange.h"
 #include "conncontextobjlist.h"
+#include "themesupport.h"
 
-const QList<QColor> ANIMATOR_COLORS = {QColor(255, 0, 0) , QColor(0, 255, 255),
-                                      QColor(255, 255, 0), QColor(255, 0, 255),
-                                      QColor(0, 255, 0)};
+const QList<QColor> ANIMATOR_COLORS = {ThemeSupport::getThemeColorRed(),
+                                       ThemeSupport::getThemeColorBlue(),
+                                       ThemeSupport::getThemeColorYellow(),
+                                       ThemeSupport::getThemeColorPink(),
+                                       ThemeSupport::getThemeColorGreen()};
 
 class Key;
 class QrealKey;

@@ -112,12 +112,42 @@ const QColor ThemeSupport::getThemeRangeSelectedColor(int alpha)
 
 const QColor ThemeSupport::getThemeFrameMarkerColor(int alpha)
 {
-    return getQColor(255, 123, 0, alpha);
+    return getThemeColorOrange(alpha);
 }
 
 const QColor ThemeSupport::getThemeObjectColor(int alpha)
 {
     return getQColor(0, 102, 255, alpha);
+}
+
+const QColor ThemeSupport::getThemeColorRed(int alpha)
+{
+    return getQColor(199, 67, 72, alpha);
+}
+
+const QColor ThemeSupport::getThemeColorBlue(int alpha)
+{
+    return getQColor(73, 142, 209, alpha);
+}
+
+const QColor ThemeSupport::getThemeColorYellow(int alpha)
+{
+    return getQColor(209, 183, 73, alpha);
+}
+
+const QColor ThemeSupport::getThemeColorPink(int alpha)
+{
+    return getQColor(169, 73, 209, alpha);
+}
+
+const QColor ThemeSupport::getThemeColorGreen(int alpha)
+{
+    return getQColor(73, 209, 132, alpha);
+}
+
+const QColor ThemeSupport::getThemeColorOrange(int alpha)
+{
+    return getQColor(255, 123, 0, alpha);
 }
 
 const QPalette ThemeSupport::getDarkPalette(int alpha)

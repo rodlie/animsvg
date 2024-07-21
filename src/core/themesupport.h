@@ -52,6 +52,12 @@ public:
     static const QColor getThemeRangeSelectedColor(int alpha = 255);
     static const QColor getThemeFrameMarkerColor(int alpha = 255);
     static const QColor getThemeObjectColor(int alpha = 255);
+    static const QColor getThemeColorRed(int alpha = 255);
+    static const QColor getThemeColorBlue(int alpha = 255);
+    static const QColor getThemeColorYellow(int alpha = 255);
+    static const QColor getThemeColorPink(int alpha = 255);
+    static const QColor getThemeColorGreen(int alpha = 255);
+    static const QColor getThemeColorOrange(int alpha = 255);
     static const QPalette getDarkPalette(int alpha = 255);
     static const QPalette getDarkerPalette(int alpha = 255);
     static const QPalette getNotSoDarkPalette(int alpha = 255);
