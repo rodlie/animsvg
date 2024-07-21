@@ -830,6 +830,11 @@ void Canvas::splitAction()
         box->moveDown();
     }
 
+    mSelectedBoxes.removeObj(box);
+    box->setSelected(false);
+    mSelectedBoxes.addObj(vidBox);
+    vidBox->setSelected(true);
+
     mDocument.actionFinished();
 }
 
