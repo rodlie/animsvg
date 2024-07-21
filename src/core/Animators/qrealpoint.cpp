@@ -25,6 +25,7 @@
 
 #include "qrealpoint.h"
 #include "graphkey.h"
+#include "themesupport.h"
 
 QrealPoint::QrealPoint(QrealPointType type,
                        GraphKey * const parentKey,
@@ -148,17 +149,21 @@ void QrealPoint::setFrameAndValue(const qreal relFrame, const qreal value,
     mParentKey->updateCtrlFromCtrl(mType, pixelsPerFrame, pixelsPerValue);
 }
 
-void QrealPoint::draw(QPainter * const p, const QColor &paintColor) {
+void QrealPoint::draw(QPainter * const p,
+                      const QColor &paintColor)
+{
+    Q_UNUSED(paintColor)
     const QPointF center(getAbsFrame(), getValue());
 
-    p->setBrush(Qt::black);
-    if(mHovered) gDrawCosmeticEllipse(p, center, mRadius + 1, mRadius + 1);
-    else gDrawCosmeticEllipse(p, center, mRadius, mRadius);
+    p->setBrush(ThemeSupport::getThemeBaseDarkColor());
+    if (mHovered) { gDrawCosmeticEllipse(p, center, mRadius + 1, mRadius + 1); }
+    else { gDrawCosmeticEllipse(p, center, mRadius, mRadius); }
+
 
     //p->setBrush(paintColor);
     p->setBrush(Qt::white);
 
-    if(!isSelected()) p->setBrush(paintColor.lighter());
+    if (!isSelected()) { p->setBrush(/*paintColor.lighter()*/Qt::gray); }
 
     gDrawCosmeticEllipse(p, center, mRadius - 1, mRadius - 1);
 }
