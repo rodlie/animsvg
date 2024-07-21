@@ -343,9 +343,9 @@ bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
             case PreviewState::playing: pausePreview(); break;
             case PreviewState::paused: resumePreview(); break;
         }
-    } else if (key == Qt::Key_K && (mods & Qt::ShiftModifier)) { // split clip
+    } else if (key == Qt::Key_K) { // split clip
         splitClip();
-    } else if (key == Qt::Key_K) { // set marker
+    } else if (key == Qt::Key_M) { // set marker
         setMarker();
     } else if (key == Qt::Key_I || key == Qt::Key_O) { // set frame in/out
         switch(key) {
