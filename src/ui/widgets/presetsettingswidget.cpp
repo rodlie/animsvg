@@ -95,13 +95,14 @@ void PresetSettingsWidget::setupResolutionPresetWidget()
     mTreeResolutions->setHeaderLabels(QStringList() << QString("") << tr("Width") << tr("Height"));
     mTreeResolutions->setAlternatingRowColors(true);
     mTreeResolutions->setSortingEnabled(false);
-    mTreeResolutions->setHeaderHidden(false);
+    mTreeResolutions->setHeaderHidden(true);
     mTreeResolutions->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
     mTreeResolutions->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     const auto mPushButtonAddResolution = new QPushButton(QIcon::fromTheme("plus"),
                                                           QString(),
                                                           this);
+    mPushButtonAddResolution->setObjectName("FlatButton");
     mPushButtonAddResolution->setFocusPolicy(Qt::NoFocus);
 
     connect(mPushButtonAddResolution, &QPushButton::pressed,
@@ -202,6 +203,7 @@ void PresetSettingsWidget::setupFpsPresetWidget()
     const auto mPushButtonAddFps = new QPushButton(QIcon::fromTheme("plus"),
                                                    QString(),
                                                    this);
+    mPushButtonAddFps->setObjectName("FlatButton");
     mPushButtonAddFps->setFocusPolicy(Qt::NoFocus);
 
     connect(mPushButtonAddFps, &QPushButton::pressed,
