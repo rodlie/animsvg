@@ -737,9 +737,12 @@ eBoxOrSound *Actions::importFile(const QString &path,
         RuntimeThrow("File " + path + " does not exit.");
 
     QFileInfo fInfo(path);
-    AppSupport::setSettings("files",
-                            "recentImportDir",
-                            fInfo.dir().absolutePath());
+
+    if (fInfo.dir().absolutePath() != QDir::homePath()) {
+        AppSupport::setSettings("files",
+                                "recentImportDir",
+                                fInfo.dir().absolutePath());
+    }
 
     if(fInfo.isDir()) {
         result = createImageSequenceBox(path);
