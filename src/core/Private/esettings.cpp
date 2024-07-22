@@ -196,6 +196,10 @@ eSettings::eSettings(const int cpuThreads,
                      fDefaultInterfaceScaling,
                      "defaultInterfaceScaling", true);
 
+    gSettings << std::make_shared<eIntSetting>(
+                     fImportFileDirOpt,
+                     "ImportFileDirOpt", ImportFileDirRecent);
+
     gSettings << std::make_shared<eBoolSetting>(
                      fCanvasRtlSupport,
                      "rtlTextSupport", false);

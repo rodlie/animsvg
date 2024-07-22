@@ -60,6 +60,10 @@ public:
         AdjustSceneAlways,
         AdjustSceneNever
     };
+    enum ImportFileDirOpt {
+        ImportFileDirRecent,
+        ImportFileDirProject
+    };
     eSettings(const int cpuThreads,
               const intKB ramKB);
 
@@ -89,6 +93,8 @@ public:
 
     AccPreference fAccPreference = AccPreference::defaultPreference;
     bool fPathGpuAcc = true;
+
+    int fImportFileDirOpt = ImportFileDirRecent;
 
     bool fHddCache = true;
     QString fHddCacheFolder = ""; // "" - use system default temporary files folder

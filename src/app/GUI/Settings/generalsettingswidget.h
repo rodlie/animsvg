@@ -29,6 +29,7 @@
 #include <QCheckBox>
 #include <QSpinBox>
 #include <QSlider>
+#include <QComboBox>
 
 class GeneralSettingsWidget : public SettingsWidget
 {
@@ -43,6 +44,7 @@ private:
     QSpinBox *mAutoSaveTimer;
     QCheckBox *mDefaultInterfaceScaling;
     QSlider *mInterfaceScaling;
+    QComboBox *mImportFileDir;
 };
 
 #endif // GENERALSETTINGSWIDGET_H

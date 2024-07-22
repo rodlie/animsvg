@@ -41,6 +41,7 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     , mAutoSaveTimer(nullptr)
     , mDefaultInterfaceScaling(nullptr)
     , mInterfaceScaling(nullptr)
+    , mImportFileDir(nullptr)
 {
     const auto mGeneralWidget = new QWidget(this);
     mGeneralWidget->setContentsMargins(0, 0, 0, 0);
@@ -122,6 +123,27 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
 
     mGeneralLayout->addWidget(mScaleWidget);
 
+    const auto mImportWidget = new QGroupBox(this);
+    mImportWidget->setTitle(tr("Import"));
+    mImportWidget->setContentsMargins(0, 0, 0, 0);
+    const auto mImportLayout = new QVBoxLayout(mImportWidget);
+
+    const auto mImportFileWidget = new QWidget(this);
+    mImportFileWidget->setContentsMargins(0, 0, 0, 0);
+    const auto mImportFileLayout = new QHBoxLayout(mImportFileWidget);
+
+    const auto mImportFileLabel = new QLabel(tr("Default import directory"), this);
+    mImportFileDir = new QComboBox(this);
+    mImportFileDir->addItem(tr("Last used directory"), eSettings::ImportFileDirRecent);
+    mImportFileDir->addItem(tr("Project directory"), eSettings::ImportFileDirProject);
+
+    mImportFileLayout->addWidget(mImportFileLabel);
+    mImportFileLayout->addWidget(mImportFileDir);
+
+    mImportLayout->addWidget(mImportFileWidget);
+
+    mGeneralLayout->addWidget(mImportWidget);
+
     mGeneralLayout->addStretch();
     addWidget(mGeneralWidget);
 
@@ -150,6 +172,7 @@ void GeneralSettingsWidget::applySettings()
 
     mSett.fDefaultInterfaceScaling = mDefaultInterfaceScaling->isChecked();
     mSett.fInterfaceScaling = mInterfaceScaling->value() * 0.01;
+    mSett.fImportFileDirOpt = mImportFileDir->currentData().toInt();
     eSizesUI::font.updateSize();
     eSizesUI::widget.updateSize();
 }
@@ -170,4 +193,11 @@ void GeneralSettingsWidget::updateSettings(bool restore)
 
     mDefaultInterfaceScaling->setChecked(mSett.fDefaultInterfaceScaling);
     mInterfaceScaling->setValue(mDefaultInterfaceScaling->isChecked() ? 100 : 100 * mSett.fInterfaceScaling);
+
+    for (int i = 0; i < mImportFileDir->count(); i++) {
+        if (mImportFileDir->itemData(i).toInt() == mSett.fImportFileDirOpt) {
+            mImportFileDir->setCurrentIndex(i);
+            return;
+        }
+    }
 }

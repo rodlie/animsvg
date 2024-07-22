@@ -1904,8 +1904,20 @@ bool MainWindow::closeProject()
 void MainWindow::importFile()
 {
     disableEventFilter();
-    const QString defPath = mDocument.fEvFile.isEmpty() ?
-                AppSupport::getSettings("files", "recentImportDir", QDir::homePath()).toString() : mDocument.fEvFile;
+
+    const auto recentDir = AppSupport::getSettings("files",
+                                                   "recentImportDir",
+                                                   QDir::homePath()).toString();
+    QString defPath = QDir::homePath();
+    switch (eSettings::instance().fImportFileDirOpt) {
+    case eSettings::ImportFileDirRecent:
+        defPath = recentDir;
+        break;
+    case eSettings::ImportFileDirProject:
+        defPath = mDocument.fEvFile.isEmpty() ? recentDir : mDocument.fEvFile;
+        break;
+    default:;
+    }
 
     const QString title = tr("Import File(s)", "ImportDialog_Title");
     const QString fileType = tr("Files %1", "ImportDialog_FileTypes");
