@@ -1905,7 +1905,7 @@ void MainWindow::importFile()
 {
     disableEventFilter();
     const QString defPath = mDocument.fEvFile.isEmpty() ?
-                QDir::homePath() : mDocument.fEvFile;
+                AppSupport::getSettings("files", "recentImportDir", QDir::homePath()).toString() : mDocument.fEvFile;
 
     const QString title = tr("Import File(s)", "ImportDialog_Title");
     const QString fileType = tr("Files %1", "ImportDialog_FileTypes");
