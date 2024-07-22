@@ -1190,7 +1190,8 @@ void MainWindow::setResolutionText(QString text)
 
 void MainWindow::checkAutoSaveTimer()
 {
-    qDebug() << "check auto save timer" << mAutoSave << mAutoSaveTimeout;
+    if (mShutdown) { return; }
+
     if (mAutoSave &&
         mChangedSinceSaving &&
         !mDocument.fEvFile.isEmpty())
@@ -1982,6 +1983,8 @@ void MainWindow::revert()
 
 void MainWindow::updateAutoSaveBackupState()
 {
+    if (mShutdown) { return; }
+
     mBackupOnSave = AppSupport::getSettings("files",
                                             "BackupOnSave",
                                             false).toBool();
