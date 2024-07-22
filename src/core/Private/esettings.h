@@ -96,6 +96,14 @@ public:
 
     int fImportFileDirOpt = ImportFileDirRecent;
 
+    bool fToolBarActionNew = true;
+    bool fToolBarActionOpen = true;
+    bool fToolBarActionSave = true;
+    bool fToolBarActionScene = true;
+    bool fToolBarActionRender = true;
+    bool fToolBarActionPreview = true;
+    bool fToolBarActionExport = true;
+
     bool fHddCache = true;
     QString fHddCacheFolder = ""; // "" - use system default temporary files folder
     intMB fHddCacheMBCap = intMB(0); // <= 0 - no cap

@@ -30,6 +30,7 @@
 #include <QSpinBox>
 #include <QSlider>
 #include <QComboBox>
+#include <QVBoxLayout>
 
 class GeneralSettingsWidget : public SettingsWidget
 {
@@ -42,9 +43,21 @@ private:
     QCheckBox *mAutoBackup;
     QCheckBox *mAutoSave;
     QSpinBox *mAutoSaveTimer;
+
     QCheckBox *mDefaultInterfaceScaling;
     QSlider *mInterfaceScaling;
+
     QComboBox *mImportFileDir;
+
+    QCheckBox *mToolBarActionNew;
+    QCheckBox *mToolBarActionOpen;
+    QCheckBox *mToolBarActionSave;
+    QCheckBox *mToolBarActionScene;
+    QCheckBox *mToolBarActionRender;
+    QCheckBox *mToolBarActionPreview;
+    QCheckBox *mToolBarActionExport;
+
+    void setupToolBarWidgets(QVBoxLayout *lay);
 };
 
 #endif // GENERALSETTINGSWIDGET_H

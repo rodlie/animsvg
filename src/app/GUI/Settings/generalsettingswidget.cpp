@@ -25,9 +25,9 @@
 #include "appsupport.h"
 
 #include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <QLabel>
 #include <QGroupBox>
+#include <QScrollArea>
 
 #include "Private/esettings.h"
 #include "GUI/global.h"
@@ -42,6 +42,13 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     , mDefaultInterfaceScaling(nullptr)
     , mInterfaceScaling(nullptr)
     , mImportFileDir(nullptr)
+    , mToolBarActionNew(nullptr)
+    , mToolBarActionOpen(nullptr)
+    , mToolBarActionSave(nullptr)
+    , mToolBarActionScene(nullptr)
+    , mToolBarActionRender(nullptr)
+    , mToolBarActionPreview(nullptr)
+    , mToolBarActionExport(nullptr)
 {
     const auto mGeneralWidget = new QWidget(this);
     mGeneralWidget->setContentsMargins(0, 0, 0, 0);
@@ -139,10 +146,10 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
 
     mImportFileLayout->addWidget(mImportFileLabel);
     mImportFileLayout->addWidget(mImportFileDir);
-
     mImportLayout->addWidget(mImportFileWidget);
-
     mGeneralLayout->addWidget(mImportWidget);
+
+    setupToolBarWidgets(mGeneralLayout);
 
     mGeneralLayout->addStretch();
     addWidget(mGeneralWidget);
@@ -173,6 +180,15 @@ void GeneralSettingsWidget::applySettings()
     mSett.fDefaultInterfaceScaling = mDefaultInterfaceScaling->isChecked();
     mSett.fInterfaceScaling = mInterfaceScaling->value() * 0.01;
     mSett.fImportFileDirOpt = mImportFileDir->currentData().toInt();
+
+    mSett.fToolBarActionNew = mToolBarActionNew->isChecked();
+    mSett.fToolBarActionOpen = mToolBarActionOpen->isChecked();
+    mSett.fToolBarActionSave = mToolBarActionSave->isChecked();
+    mSett.fToolBarActionScene = mToolBarActionScene->isChecked();
+    mSett.fToolBarActionRender = mToolBarActionRender->isChecked();
+    mSett.fToolBarActionPreview = mToolBarActionPreview->isChecked();
+    mSett.fToolBarActionExport = mToolBarActionExport->isChecked();
+
     eSizesUI::font.updateSize();
     eSizesUI::widget.updateSize();
 }
@@ -194,10 +210,65 @@ void GeneralSettingsWidget::updateSettings(bool restore)
     mDefaultInterfaceScaling->setChecked(mSett.fDefaultInterfaceScaling);
     mInterfaceScaling->setValue(mDefaultInterfaceScaling->isChecked() ? 100 : 100 * mSett.fInterfaceScaling);
 
+    mToolBarActionNew->setChecked(mSett.fToolBarActionNew);
+    mToolBarActionOpen->setChecked(mSett.fToolBarActionOpen);
+    mToolBarActionSave->setChecked(mSett.fToolBarActionSave);
+    mToolBarActionScene->setChecked(mSett.fToolBarActionScene);
+    mToolBarActionRender->setChecked(mSett.fToolBarActionRender);
+    mToolBarActionPreview->setChecked(mSett.fToolBarActionPreview);
+    mToolBarActionExport->setChecked(mSett.fToolBarActionExport);
+
     for (int i = 0; i < mImportFileDir->count(); i++) {
         if (mImportFileDir->itemData(i).toInt() == mSett.fImportFileDirOpt) {
             mImportFileDir->setCurrentIndex(i);
             return;
         }
     }
+}
+
+void GeneralSettingsWidget::setupToolBarWidgets(QVBoxLayout *lay)
+{
+    if (!lay) { return; }
+
+    const auto area = new QScrollArea(this);
+    const auto container = new QGroupBox(this);
+    const auto containerLayout = new QVBoxLayout(container);
+    const auto containerInner = new QWidget(this);
+    const auto containerInnerLayout = new QVBoxLayout(containerInner);
+
+    area->setWidget(containerInner);
+    area->setWidgetResizable(true);
+    area->setContentsMargins(0, 0, 0, 0);
+
+    container->setTitle(tr("Toolbar Actions"));
+
+    container->setContentsMargins(0, 0, 0, 0);
+
+    containerInnerLayout->setMargin(5);
+    containerLayout->setMargin(0);
+
+    containerLayout->addWidget(area);
+
+    mToolBarActionNew = new QCheckBox(tr("New"), this);
+    containerInnerLayout->addWidget(mToolBarActionNew);
+
+    mToolBarActionOpen = new QCheckBox(tr("Open"), this);
+    containerInnerLayout->addWidget(mToolBarActionOpen);
+
+    mToolBarActionSave = new QCheckBox(tr("Save"), this);
+    containerInnerLayout->addWidget(mToolBarActionSave);
+
+    mToolBarActionScene = new QCheckBox(tr("Scene"), this);
+    containerInnerLayout->addWidget(mToolBarActionScene);
+
+    mToolBarActionRender = new QCheckBox(tr("Render"), this);
+    containerInnerLayout->addWidget(mToolBarActionRender);
+
+    mToolBarActionPreview = new QCheckBox(tr("Preview"), this);
+    containerInnerLayout->addWidget(mToolBarActionPreview);
+
+    mToolBarActionExport = new QCheckBox(tr("Export"), this);
+    containerInnerLayout->addWidget(mToolBarActionExport);
+
+    lay->addWidget(container);
 }

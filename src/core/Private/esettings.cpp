@@ -196,9 +196,14 @@ eSettings::eSettings(const int cpuThreads,
                      fDefaultInterfaceScaling,
                      "defaultInterfaceScaling", true);
 
-    gSettings << std::make_shared<eIntSetting>(
-                     fImportFileDirOpt,
-                     "ImportFileDirOpt", ImportFileDirRecent);
+    gSettings << std::make_shared<eIntSetting>(fImportFileDirOpt, "ImportFileDirOpt", ImportFileDirRecent);
+    gSettings << std::make_shared<eBoolSetting>(fToolBarActionNew, "ToolBarActionNew", true);
+    gSettings << std::make_shared<eBoolSetting>(fToolBarActionOpen, "ToolBarActionOpen", true);
+    gSettings << std::make_shared<eBoolSetting>(fToolBarActionSave, "ToolBarActionSave", true);
+    gSettings << std::make_shared<eBoolSetting>(fToolBarActionScene, "ToolBarActionScene", true);
+    gSettings << std::make_shared<eBoolSetting>(fToolBarActionRender, "ToolBarActionRender", true);
+    gSettings << std::make_shared<eBoolSetting>(fToolBarActionPreview, "ToolBarActionPreview", true);
+    gSettings << std::make_shared<eBoolSetting>(fToolBarActionExport, "ToolBarActionExport", true);
 
     gSettings << std::make_shared<eBoolSetting>(
                      fCanvasRtlSupport,

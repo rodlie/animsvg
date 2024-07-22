@@ -446,26 +446,16 @@ void MainWindow::setupMenuBar()
                                              tr("New", "MenuBar_File"),
                                              this, &MainWindow::newFile,
                                              Qt::CTRL + Qt::Key_N);
-    mToolbar->addAction(newAct);
+    if (eSettings::instance().fToolBarActionNew) {
+        mToolbar->addAction(newAct);
+    }
 
     const auto openAct = mFileMenu->addAction(QIcon::fromTheme("file_folder"),
                                               tr("Open", "MenuBar_File"),
                                               this, qOverload<>(&MainWindow::openFile),
                                               Qt::CTRL + Qt::Key_O);
-
-    const auto loadToolBtn = new QToolButton(this);
-    loadToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
-    loadToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    loadToolBtn->setFocusPolicy(Qt::NoFocus);
-    const auto loadToolMenu = new QMenu(this);
-    loadToolBtn->setMenu(loadToolMenu);
-
-    mToolbar->addWidget(loadToolBtn);
-    loadToolBtn->setDefaultAction(openAct);
-
     mRecentMenu = mFileMenu->addMenu(QIcon::fromTheme("file_folder"),
                                      tr("Open Recent", "MenuBar_File"));
-
     mFileMenu->addSeparator();
     const auto linkedAct = mFileMenu->addAction(QIcon::fromTheme("linked"),
                                                 tr("Link"),
@@ -481,23 +471,28 @@ void MainWindow::setupMenuBar()
                                                    tr("Import Image Sequence", "MenuBar_File"),
                                                    this, &MainWindow::importImageSequence);
 
-    loadToolMenu->addAction(linkedAct);
-    loadToolMenu->addAction(importAct);
-    loadToolMenu->addAction(importSeqAct);
-    loadToolMenu->addMenu(mRecentMenu);
+    if (eSettings::instance().fToolBarActionOpen) {
+        const auto loadToolBtn = new QToolButton(this);
+        loadToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
+        loadToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        loadToolBtn->setFocusPolicy(Qt::NoFocus);
+
+        const auto loadToolMenu = new QMenu(this);
+        loadToolBtn->setMenu(loadToolMenu);
+        loadToolBtn->setDefaultAction(openAct);
+
+        loadToolMenu->addAction(linkedAct);
+        loadToolMenu->addAction(importAct);
+        loadToolMenu->addAction(importSeqAct);
+        loadToolMenu->addMenu(mRecentMenu);
+
+        mToolbar->addWidget(loadToolBtn);
+    }
 
     mFileMenu->addSeparator();
     mFileMenu->addAction(QIcon::fromTheme("loop_back"),
                          tr("Revert", "MenuBar_File"),
                          this, &MainWindow::revert);
-
-    const auto saveToolBtn = new QToolButton(this);
-    saveToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
-    saveToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    saveToolBtn->setFocusPolicy(Qt::NoFocus);
-    const auto saveToolMenu = new QMenu(this);
-    saveToolBtn->setMenu(saveToolMenu);
-    mToolbar->addWidget(saveToolBtn);
 
     mFileMenu->addSeparator();
     mSaveAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
@@ -526,11 +521,24 @@ void MainWindow::setupMenuBar()
                                                    QKeySequence(AppSupport::getSettings("shortcuts",
                                                                                         "exportSVG",
                                                                                         "Shift+F12").toString()));
-    saveToolBtn->setDefaultAction(mSaveAct);
-    saveToolMenu->addAction(saveAsAct);
-    saveToolMenu->addAction(saveBackAct);
-    //saveToolMenu->addAction(exportSvgAct);
-    saveToolMenu->addSeparator();
+
+    if (eSettings::instance().fToolBarActionSave) {
+        const auto saveToolBtn = new QToolButton(this);
+        saveToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
+        saveToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        saveToolBtn->setFocusPolicy(Qt::NoFocus);
+
+        const auto saveToolMenu = new QMenu(this);
+        saveToolBtn->setMenu(saveToolMenu);
+        saveToolBtn->setDefaultAction(mSaveAct);
+
+        saveToolMenu->addAction(saveAsAct);
+        saveToolMenu->addAction(saveBackAct);
+        //saveToolMenu->addAction(exportSvgAct);
+        saveToolMenu->addSeparator();
+
+        mToolbar->addWidget(saveToolBtn);
+    }
 
     mFileMenu->addSeparator();
     mFileMenu->addAction(QIcon::fromTheme("dialog-cancel"),
@@ -817,16 +825,6 @@ void MainWindow::setupMenuBar()
 
 //    mEffectsMenu->addAction("Blur");
 
-    const auto sceneToolBtn = new QToolButton(this);
-    sceneToolBtn->setText(tr("Scene"));
-    sceneToolBtn->setIcon(QIcon::fromTheme("sequence"));
-    sceneToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
-    sceneToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    sceneToolBtn->setFocusPolicy(Qt::NoFocus);
-    const auto sceneToolMenu = new QMenu(this);
-    sceneToolBtn->setMenu(sceneToolMenu);
-    mToolbar->addWidget(sceneToolBtn);
-
     mSceneMenu = mMenuBar->addMenu(tr("Scene", "MenuBar"));
 
     const auto newSceneAct = mSceneMenu->addAction(QIcon::fromTheme("file_new"),
@@ -834,14 +832,14 @@ void MainWindow::setupMenuBar()
                                                    this, [this]() {
         SceneSettingsDialog::sNewSceneDialog(mDocument, this);
     });
-    sceneToolMenu->addAction(newSceneAct);
 
-    {
-        const auto qAct = mSceneMenu->addAction(QIcon::fromTheme("cancel"),
-                                                tr("Delete Scene", "MenuBar_Scene"));
-        mActions.deleteSceneAction->connect(qAct);
-        sceneToolMenu->addAction(qAct);
-    }
+
+
+    const auto deleteSceneAct = mSceneMenu->addAction(QIcon::fromTheme("cancel"),
+                                                      tr("Delete Scene", "MenuBar_Scene"));
+    mActions.deleteSceneAction->connect(deleteSceneAct);
+
+
 
     mSceneMenu->addSeparator();
 
@@ -851,18 +849,36 @@ void MainWindow::setupMenuBar()
                                          QKeySequence(AppSupport::getSettings("shortcuts",
                                                                               "addToQue",
                                                                               "F12").toString()));
-    sceneToolMenu->addAction(mAddToQueAct);
+
 
     mSceneMenu->addSeparator();
 
-    {
-        const auto qAct = mSceneMenu->addAction(QIcon::fromTheme("sequence"),
-                                                tr("Scene Properties", "MenuBar_Scene"));
-        mActions.sceneSettingsAction->connect(qAct);
-        sceneToolBtn->setDefaultAction(qAct);
+
+    const auto scenePropAct = mSceneMenu->addAction(QIcon::fromTheme("sequence"),
+                                                    tr("Scene Properties", "MenuBar_Scene"));
+    mActions.sceneSettingsAction->connect(scenePropAct);
+
+    if (eSettings::instance().fToolBarActionScene) {
+        const auto sceneToolBtn = new QToolButton(this);
         sceneToolBtn->setText(tr("Scene"));
-        connect(qAct, &QAction::changed,
+        sceneToolBtn->setIcon(QIcon::fromTheme("sequence"));
+        sceneToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
+        sceneToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        sceneToolBtn->setFocusPolicy(Qt::NoFocus);
+        const auto sceneToolMenu = new QMenu(this);
+        sceneToolBtn->setMenu(sceneToolMenu);
+
+        sceneToolMenu->addAction(newSceneAct);
+        sceneToolMenu->addAction(mAddToQueAct);
+        sceneToolMenu->addAction(deleteSceneAct);
+
+        sceneToolBtn->setDefaultAction(scenePropAct);
+        sceneToolBtn->setText(tr("Scene"));
+
+        connect(scenePropAct, &QAction::changed,
                 this, [sceneToolBtn]() { sceneToolBtn->setText(tr("Scene")); });
+
+        mToolbar->addWidget(sceneToolBtn);
     }
 
     const auto zoomMenu = mViewMenu->addMenu(
@@ -1138,12 +1154,19 @@ void MainWindow::setupMenuBar()
         QMessageBox::aboutQt(this, tr("About Qt"));
     });
 
-    mToolbar->addAction(QIcon::fromTheme("render_animation"),
-                        tr("Render"),
-                        this, &MainWindow::openRendererWindow);
+    if (eSettings::instance().fToolBarActionRender) {
+        mToolbar->addAction(QIcon::fromTheme("render_animation"),
+                            tr("Render"),
+                            this, &MainWindow::openRendererWindow);
+    }
 
-    mToolbar->addAction(previewSvgAct);
-    mToolbar->addAction(exportSvgAct);
+    if (eSettings::instance().fToolBarActionPreview) {
+        mToolbar->addAction(previewSvgAct);
+    }
+
+    if (eSettings::instance().fToolBarActionExport) {
+        mToolbar->addAction(exportSvgAct);
+    }
 
     setMenuBar(mMenuBar);
 
