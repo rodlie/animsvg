@@ -473,6 +473,8 @@ private:
     void setCustomPropertiesVisible(const bool visible);
     void setBlendEffectsVisible(const bool visible);
     void setTransformEffectsVisible(const bool visible);
+    void setSVGPropertiesVisible(const bool visible);
+    bool getSVGPropertiesVisible();
 
     SkBlendMode mBlendMode = SkBlendMode::kSrcOver;
 

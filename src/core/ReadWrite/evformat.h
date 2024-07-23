@@ -41,6 +41,7 @@ namespace EvFormat {
         codecProfile = 26,
         effectCustomName = 27,
         markers = 28,
+        svgBeginEnd = 29,
 
         nextVersion
     };

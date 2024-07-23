@@ -74,6 +74,7 @@ BoundingBox::BoundingBox(const QString& name, const eBoxType type) :
     mCustomProperties->SWT_setVisible(false);
 
     mTransformAnimator->ca_addChild(mTransformEffectCollection);
+    setSVGPropertiesVisible(false);
 
     ca_addChild(mBlendEffectCollection);
     mBlendEffectCollection->SWT_hide();
@@ -1085,6 +1086,31 @@ void BoundingBox::setBlendEffectsVisible(const bool visible) {
     prp_afterWholeInfluenceRangeChanged();
 }
 
+void BoundingBox::setSVGPropertiesVisible(const bool visible)
+{
+    const auto& children = mTransformAnimator->ca_getNumberOfChildren();
+    const auto properties = QStringList() << "begin event" << "end event";
+    for (int i = 0; i < children; i++) {
+        const auto child = mTransformAnimator->ca_getChildAt(i);
+        if (!child) { continue; }
+        if (!properties.contains(child->prp_getName())) { continue; }
+        child->SWT_setVisible(visible);
+    }
+}
+
+bool BoundingBox::getSVGPropertiesVisible()
+{
+    const auto& children = mTransformAnimator->ca_getNumberOfChildren();
+    const auto properties = QStringList() << "begin event" << "end event";
+    for (int i = 0; i < children; i++) {
+        const auto child = mTransformAnimator->ca_getChildAt(i);
+        if (!child) { continue; }
+        if (!properties.contains(child->prp_getName())) { continue; }
+        return child->SWT_isVisible();
+    }
+    return false;
+}
+
 #include <QInputDialog>
 void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu) {
     if(menu->hasActionsForType<BoundingBox>()) return;
@@ -1094,6 +1120,15 @@ void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu) {
         PropertyNameDialog::sRenameBox(this, parentWidget);
     });
     menu->addSeparator();
+    {
+        const PropertyMenu::CheckSelectedOp<BoundingBox> visRangeOp =
+            [](BoundingBox* const box, const bool checked) {
+                box->setSVGPropertiesVisible(checked);
+            };
+        menu->addCheckableAction(tr("SVG Properties"),
+                                 getSVGPropertiesVisible(),
+                                 visRangeOp);
+    }
     {
         const PropertyMenu::CheckSelectedOp<BoundingBox> visRangeOp =
         [](BoundingBox* const box, const bool checked) {
