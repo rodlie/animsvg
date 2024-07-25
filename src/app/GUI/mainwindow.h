@@ -365,6 +365,7 @@ private:
     void setupMenuBar();
     void setupMenuEffects();
     void addRasterEffect(const qsptr<RasterEffect> &rasterEffect);
+    void setupExtraMenus();
 
     QList<SceneBoundGradient*> mLoadedGradientsList;
 

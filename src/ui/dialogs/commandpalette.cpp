@@ -51,6 +51,7 @@ CommandPalette::CommandPalette(QWidget *parent)
 
     mSuggestions->setObjectName("CommandPaletteSuggestions");
     mSuggestions->setMinimumHeight(150);
+    mSuggestions->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     mSuggestions->hide();
 
     mUserInput->setObjectName("CommandPaletteInput");
@@ -68,6 +69,8 @@ CommandPalette::CommandPalette(QWidget *parent)
             const auto act = actions.at(i);
             if (!act->text().startsWith(mUserInput->text(), Qt::CaseInsensitive)) { continue; }
             const auto item = new QListWidgetItem(act->text(), mSuggestions);
+            const auto alt = act->data().toString();
+            if (!alt.isEmpty()) { item->setText(alt); }
             item->setData(Qt::UserRole, i);
             if (!act->icon().isNull()) { item->setIcon(act->icon()); }
             else { item->setIcon(QIcon::fromTheme("drawPathAutoChecked")); }

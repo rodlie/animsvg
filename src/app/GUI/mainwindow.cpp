@@ -450,6 +450,7 @@ void MainWindow::setupMenuBar()
                                              tr("New", "MenuBar_File"),
                                              this, &MainWindow::newFile,
                                              Qt::CTRL + Qt::Key_N);
+    newAct->setData(tr("New Project"));
     cmdAddAction(newAct);
     if (eSettings::instance().fToolBarActionNew) {
         mToolbar->addAction(newAct);
@@ -458,6 +459,7 @@ void MainWindow::setupMenuBar()
                                               tr("Open", "MenuBar_File"),
                                               this, qOverload<>(&MainWindow::openFile),
                                               Qt::CTRL + Qt::Key_O);
+    openAct->setData(tr("Open Project"));
     cmdAddAction(openAct);
     mRecentMenu = mFileMenu->addMenu(QIcon::fromTheme("file_folder"),
                                      tr("Open Recent", "MenuBar_File"));
@@ -501,6 +503,7 @@ void MainWindow::setupMenuBar()
     const auto revertAct = mFileMenu->addAction(QIcon::fromTheme("loop_back"),
                                                 tr("Revert", "MenuBar_File"),
                                                 this, &MainWindow::revert);
+    revertAct->setData(tr("Revert Project"));
     cmdAddAction(revertAct);
 
     mFileMenu->addSeparator();
@@ -508,18 +511,21 @@ void MainWindow::setupMenuBar()
                                     tr("Save", "MenuBar_File"),
                                     this, qOverload<>(&MainWindow::saveFile),
                                     Qt::CTRL + Qt::Key_S);
+    mSaveAct->setData(tr("Save Project"));
     cmdAddAction(mSaveAct);
 
     const auto saveAsAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
                                                 tr("Save As", "MenuBar_File"),
                                                 this, [this]() { saveFileAs(); },
                                                 Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+    saveAsAct->setData(tr("Save Project As ..."));
     cmdAddAction(saveAsAct);
 
     const auto saveBackAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
                                                   tr("Save Backup", "MenuBar_File"),
                                                   this, &MainWindow::saveBackup);
-    cmdAddAction(saveAsAct);
+    saveBackAct->setData(tr("Save Project Backup"));
+    cmdAddAction(saveBackAct);
 
     const auto previewSvgAct = mFileMenu->addAction(QIcon::fromTheme("seq_preview"),
                                                     tr("Preview SVG", "MenuBar_File"),
@@ -527,6 +533,7 @@ void MainWindow::setupMenuBar()
                                                     QKeySequence(AppSupport::getSettings("shortcuts",
                                                                                          "previewSVG",
                                                                                          "Ctrl+F12").toString()));
+    previewSvgAct->setData(tr("Preview SVG Animation"));
     cmdAddAction(previewSvgAct);
 
     const auto exportSvgAct = mFileMenu->addAction(QIcon::fromTheme("seq_preview"),
@@ -535,6 +542,7 @@ void MainWindow::setupMenuBar()
                                                    QKeySequence(AppSupport::getSettings("shortcuts",
                                                                                         "exportSVG",
                                                                                         "Shift+F12").toString()));
+    exportSvgAct->setData(tr("Export SVG Animation"));
     cmdAddAction(exportSvgAct);
 
     if (eSettings::instance().fToolBarActionSave) {
@@ -560,6 +568,7 @@ void MainWindow::setupMenuBar()
                                                       tr("Close", "MenuBar_File"),
                                                       this, &MainWindow::closeProject,
                                                       QKeySequence(tr("Ctrl+W")));
+    closeProjectAct->setData(tr("Close Project"));
     cmdAddAction(closeProjectAct);
 
     mFileMenu->addSeparator();
@@ -578,6 +587,7 @@ void MainWindow::setupMenuBar()
                                                  tr("Exit", "MenuBar_File"),
                                                  this, &MainWindow::close,
                                                  QKeySequence(tr("Ctrl+Q")));
+    quitAppAct->setData(tr("Quit Friction"));
     cmdAddAction(quitAppAct);
 
     mEditMenu = mMenuBar->addMenu(tr("Edit", "MenuBar"));
@@ -712,24 +722,28 @@ void MainWindow::setupMenuBar()
                 tr("Raise", "MenuBar_Object"));
     raiseQAct->setShortcut(Qt::Key_PageUp);
     mActions.raiseAction->connect(raiseQAct);
+    raiseQAct->setData(tr("Raise Object"));
     cmdAddAction(raiseQAct);
 
     const auto lowerQAct = mObjectMenu->addAction(
                 tr("Lower", "MenuBar_Object"));
     lowerQAct->setShortcut(Qt::Key_PageDown);
     mActions.lowerAction->connect(lowerQAct);
+    lowerQAct->setData(tr("Lower Object"));
     cmdAddAction(lowerQAct);
 
     const auto rttQAct = mObjectMenu->addAction(
                 tr("Raise to Top", "MenuBar_Object"));
     rttQAct->setShortcut(Qt::Key_Home);
     mActions.raiseToTopAction->connect(rttQAct);
+    rttQAct->setData(tr("Raise Object to Top"));
     cmdAddAction(rttQAct);
 
     const auto ltbQAct = mObjectMenu->addAction(
                 tr("Lower to Bottom", "MenuBar_Object"));
     ltbQAct->setShortcut(Qt::Key_End);
     mActions.lowerToBottomAction->connect(ltbQAct);
+    ltbQAct->setData(tr("Lower Object to Bottom"));
     cmdAddAction(ltbQAct);
 
     mObjectMenu->addSeparator();
@@ -770,6 +784,7 @@ void MainWindow::setupMenuBar()
                 tr("Group", "MenuBar_Object"));
     groupQAct->setShortcut(Qt::CTRL + Qt::Key_G);
     mActions.groupAction->connect(groupQAct);
+    groupQAct->setData(tr("Group Selected"));
     cmdAddAction(groupQAct);
 
     const auto ungroupQAct = mObjectMenu->addAction(
@@ -786,19 +801,19 @@ void MainWindow::setupMenuBar()
                 tr("Move", "MenuBar_Object_Transform"));
     moveAct->setShortcut(Qt::Key_G);
     moveAct->setDisabled(true);
-    cmdAddAction(moveAct);
+    //cmdAddAction(moveAct);
 
     const auto rotateAct = transformMenu->addAction(
                 tr("Rotate", "MenuBar_Object_Transform"));
     rotateAct->setShortcut(Qt::Key_R);
     rotateAct->setDisabled(true);
-    cmdAddAction(rotateAct);
+    //cmdAddAction(rotateAct);
 
     const auto scaleAct = transformMenu->addAction(
                 tr("Scale", "MenuBar_Object_Transform"));
     scaleAct->setShortcut(Qt::Key_S);
     scaleAct->setDisabled(true);
-    cmdAddAction(scaleAct);
+    //cmdAddAction(scaleAct);
 
     transformMenu->addSeparator();
 
@@ -1226,6 +1241,7 @@ void MainWindow::setupMenuBar()
 
 
     setupMenuEffects();
+    setupExtraMenus();
 
     const auto help = mMenuBar->addMenu(tr("Help", "MenuBar"));
 
@@ -1286,9 +1302,14 @@ void MainWindow::setupMenuEffects()
     const auto menu = new QMenu(this);
     const auto adder = [this, menu](const QString& name, const QString& path,
                                     const RasterEffectMenuCreator::EffectCreator& creator) {
-        Q_UNUSED(path)
         if (name.isEmpty()) { return; }
-        const auto act =  menu->addAction(name);
+        QString title = name;
+        if (!path.isEmpty()) {
+            title.append(QString(" (%1 - %2)").arg(tr("Raster Effect"), path));
+        } else {
+            title.append(QString(" (%1)").arg(tr("Raster Effect")));
+        }
+        const auto act =  menu->addAction(title);
         cmdAddAction(act);
         connect(act, &QAction::triggered, this, [this, creator]() {
             addRasterEffect(creator());
@@ -1307,6 +1328,11 @@ void MainWindow::addRasterEffect(const qsptr<RasterEffect> &rasterEffect)
 
     box->addRasterEffect(rasterEffect);
     mDocument.actionFinished();
+}
+
+void MainWindow::setupExtraMenus()
+{
+
 }
 
 void MainWindow::setResolutionText(QString text)
