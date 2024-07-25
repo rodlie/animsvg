@@ -50,7 +50,7 @@ CommandPalette::CommandPalette(QWidget *parent)
     lay->addWidget(mSuggestions);
 
     mSuggestions->setObjectName("CommandPaletteSuggestions");
-    mSuggestions->setMinimumHeight(100);
+    mSuggestions->setMinimumHeight(150);
     mSuggestions->hide();
 
     mUserInput->setObjectName("CommandPaletteInput");
@@ -69,6 +69,8 @@ CommandPalette::CommandPalette(QWidget *parent)
             if (!act->text().startsWith(mUserInput->text(), Qt::CaseInsensitive)) { continue; }
             const auto item = new QListWidgetItem(act->text(), mSuggestions);
             item->setData(Qt::UserRole, i);
+            if (!act->icon().isNull()) { item->setIcon(act->icon()); }
+            else { item->setIcon(QIcon::fromTheme("drawPathAutoChecked")); }
             mSuggestions->addItem(item);
             items++;
         }

@@ -419,4 +419,5 @@ QLineEdit#CommandPaletteInput {
 
 QListWidget#CommandPaletteSuggestions {
     border: 2px solid %2;
+    background-color: %5;
 }
