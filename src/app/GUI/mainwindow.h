@@ -192,6 +192,7 @@ public:
     void revert();
     void updateAutoSaveBackupState();
     void openRendererWindow();
+    void cmdAddAction(QAction *act);
 
 protected:
     void lockFinished();
@@ -362,6 +363,8 @@ private:
     void setupToolBar();
     void connectToolBarActions();
     void setupMenuBar();
+    void setupMenuEffects();
+    void addRasterEffect(const qsptr<RasterEffect> &rasterEffect);
 
     QList<SceneBoundGradient*> mLoadedGradientsList;
 

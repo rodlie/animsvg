@@ -73,6 +73,10 @@
 
 #include "widgets/assetswidget.h"
 #include "dialogs/adjustscenedialog.h"
+#include "dialogs/commandpalette.h"
+
+#include "RasterEffects/rastereffectsinclude.h"
+#include "RasterEffects/rastereffectmenucreator.h"
 
 MainWindow *MainWindow::sInstance = nullptr;
 
@@ -446,14 +450,15 @@ void MainWindow::setupMenuBar()
                                              tr("New", "MenuBar_File"),
                                              this, &MainWindow::newFile,
                                              Qt::CTRL + Qt::Key_N);
+    cmdAddAction(newAct);
     if (eSettings::instance().fToolBarActionNew) {
         mToolbar->addAction(newAct);
     }
-
     const auto openAct = mFileMenu->addAction(QIcon::fromTheme("file_folder"),
                                               tr("Open", "MenuBar_File"),
                                               this, qOverload<>(&MainWindow::openFile),
                                               Qt::CTRL + Qt::Key_O);
+    cmdAddAction(openAct);
     mRecentMenu = mFileMenu->addMenu(QIcon::fromTheme("file_folder"),
                                      tr("Open Recent", "MenuBar_File"));
     mFileMenu->addSeparator();
@@ -461,15 +466,18 @@ void MainWindow::setupMenuBar()
                                                 tr("Link"),
                                                 this, &MainWindow::linkFile,
                                                 Qt::CTRL + Qt::Key_L);
+    cmdAddAction(linkedAct);
 
     const auto importAct = mFileMenu->addAction(QIcon::fromTheme("file_blank"),
                                                 tr("Import File", "MenuBar_File"),
                                                 this, qOverload<>(&MainWindow::importFile),
                                                 Qt::CTRL + Qt::Key_I);
+    cmdAddAction(importAct);
 
     const auto importSeqAct = mFileMenu->addAction(QIcon::fromTheme("renderlayers"),
                                                    tr("Import Image Sequence", "MenuBar_File"),
                                                    this, &MainWindow::importImageSequence);
+    cmdAddAction(importSeqAct);
 
     if (eSettings::instance().fToolBarActionOpen) {
         const auto loadToolBtn = new QToolButton(this);
@@ -490,24 +498,28 @@ void MainWindow::setupMenuBar()
     }
 
     mFileMenu->addSeparator();
-    mFileMenu->addAction(QIcon::fromTheme("loop_back"),
-                         tr("Revert", "MenuBar_File"),
-                         this, &MainWindow::revert);
+    const auto revertAct = mFileMenu->addAction(QIcon::fromTheme("loop_back"),
+                                                tr("Revert", "MenuBar_File"),
+                                                this, &MainWindow::revert);
+    cmdAddAction(revertAct);
 
     mFileMenu->addSeparator();
     mSaveAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
                                     tr("Save", "MenuBar_File"),
                                     this, qOverload<>(&MainWindow::saveFile),
                                     Qt::CTRL + Qt::Key_S);
+    cmdAddAction(mSaveAct);
 
     const auto saveAsAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
                                                 tr("Save As", "MenuBar_File"),
                                                 this, [this]() { saveFileAs(); },
                                                 Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+    cmdAddAction(saveAsAct);
 
     const auto saveBackAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
                                                   tr("Save Backup", "MenuBar_File"),
                                                   this, &MainWindow::saveBackup);
+    cmdAddAction(saveAsAct);
 
     const auto previewSvgAct = mFileMenu->addAction(QIcon::fromTheme("seq_preview"),
                                                     tr("Preview SVG", "MenuBar_File"),
@@ -515,12 +527,15 @@ void MainWindow::setupMenuBar()
                                                     QKeySequence(AppSupport::getSettings("shortcuts",
                                                                                          "previewSVG",
                                                                                          "Ctrl+F12").toString()));
+    cmdAddAction(previewSvgAct);
+
     const auto exportSvgAct = mFileMenu->addAction(QIcon::fromTheme("seq_preview"),
                                                    tr("Export SVG", "MenuBar_File"),
                                                    this, &MainWindow::exportSVG,
                                                    QKeySequence(AppSupport::getSettings("shortcuts",
                                                                                         "exportSVG",
                                                                                         "Shift+F12").toString()));
+    cmdAddAction(exportSvgAct);
 
     if (eSettings::instance().fToolBarActionSave) {
         const auto saveToolBtn = new QToolButton(this);
@@ -541,22 +556,29 @@ void MainWindow::setupMenuBar()
     }
 
     mFileMenu->addSeparator();
-    mFileMenu->addAction(QIcon::fromTheme("dialog-cancel"),
-                         tr("Close", "MenuBar_File"),
-                         this, &MainWindow::closeProject,
-                         QKeySequence(tr("Ctrl+W")));
+    const auto closeProjectAct = mFileMenu->addAction(QIcon::fromTheme("dialog-cancel"),
+                                                      tr("Close", "MenuBar_File"),
+                                                      this, &MainWindow::closeProject,
+                                                      QKeySequence(tr("Ctrl+W")));
+    cmdAddAction(closeProjectAct);
+
     mFileMenu->addSeparator();
-    mFileMenu->addAction(QIcon::fromTheme("preferences"),
-                         tr("Preferences", "MenuBar_Edit"), [this]() {
+
+    const auto prefsAct = mFileMenu->addAction(QIcon::fromTheme("preferences"),
+                                               tr("Preferences", "MenuBar_Edit"), [this]() {
         const auto settDial = new SettingsDialog(this);
         settDial->setAttribute(Qt::WA_DeleteOnClose);
         settDial->show();
     }, QKeySequence(tr("Ctrl+P")));
+    cmdAddAction(prefsAct);
+
     mFileMenu->addSeparator();
-    mFileMenu->addAction(QIcon::fromTheme("quit"),
-                         tr("Exit", "MenuBar_File"),
-                         this, &MainWindow::close,
-                         QKeySequence(tr("Ctrl+Q")));
+
+    const auto quitAppAct = mFileMenu->addAction(QIcon::fromTheme("quit"),
+                                                 tr("Exit", "MenuBar_File"),
+                                                 this, &MainWindow::close,
+                                                 QKeySequence(tr("Ctrl+Q")));
+    cmdAddAction(quitAppAct);
 
     mEditMenu = mMenuBar->addMenu(tr("Edit", "MenuBar"));
 
@@ -564,6 +586,7 @@ void MainWindow::setupMenuBar()
                                                tr("Undo", "MenuBar_Edit"));
     undoQAct->setShortcut(Qt::CTRL + Qt::Key_Z);
     mActions.undoAction->connect(undoQAct);
+    cmdAddAction(undoQAct);
 
     // workaround
     // if we undo text changes we also want the font widget to reflect this
@@ -583,6 +606,7 @@ void MainWindow::setupMenuBar()
                                                tr("Redo", "MenuBar_Edit"));
     redoQAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Z);
     mActions.redoAction->connect(redoQAct);
+    cmdAddAction(redoQAct);
 
     mEditMenu->addSeparator();
 
@@ -591,6 +615,7 @@ void MainWindow::setupMenuBar()
         mEditMenu->addAction(qAct);
         qAct->setShortcut(Qt::CTRL + Qt::Key_C);
         mActions.copyAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     {
@@ -598,6 +623,7 @@ void MainWindow::setupMenuBar()
         mEditMenu->addAction(qAct);
         qAct->setShortcut(Qt::CTRL + Qt::Key_X);
         mActions.cutAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     {
@@ -605,6 +631,7 @@ void MainWindow::setupMenuBar()
         mEditMenu->addAction(qAct);
         qAct->setShortcut(Qt::CTRL + Qt::Key_V);
         mActions.pasteAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     mEditMenu->addSeparator();
@@ -614,6 +641,7 @@ void MainWindow::setupMenuBar()
         mEditMenu->addAction(qAct);
         qAct->setShortcut(Qt::CTRL + Qt::Key_D);
         mActions.duplicateAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     mEditMenu->addSeparator();
@@ -623,33 +651,46 @@ void MainWindow::setupMenuBar()
         mEditMenu->addAction(qAct);
         qAct->setShortcut(Qt::Key_Delete);
         mActions.deleteAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     mEditMenu->addSeparator();
-    mEditMenu->addAction(new NoShortcutAction(
-                             tr("Select All", "MenuBar_Edit"),
-                             &mActions, &Actions::selectAllAction,
-                             Qt::Key_A, mEditMenu));
-    mEditMenu->addAction(new NoShortcutAction(
-                             tr("Invert Selection", "MenuBar_Edit"),
-                             &mActions, &Actions::invertSelectionAction,
-                             Qt::SHIFT + Qt::Key_A, mEditMenu));
-    mEditMenu->addAction(new NoShortcutAction(
-                             tr("Clear Selection", "MenuBar_Edit"),
-                             &mActions, &Actions::clearSelectionAction,
-                             Qt::ALT + Qt::Key_A, mEditMenu));
+
+    {
+        const auto qAct = new NoShortcutAction(tr("Select All", "MenuBar_Edit"), &mActions, &Actions::selectAllAction, Qt::Key_A, mEditMenu);
+        mEditMenu->addAction(qAct);
+        cmdAddAction(qAct);
+    }
+
+    {
+        const auto qAct = new NoShortcutAction(tr("Invert Selection", "MenuBar_Edit"), &mActions, &Actions::invertSelectionAction, Qt::SHIFT + Qt::Key_A, mEditMenu);
+        mEditMenu->addAction(qAct);
+        cmdAddAction(qAct);
+    }
+
+    {
+        const auto qAct = new NoShortcutAction(tr("Clear Selection", "MenuBar_Edit"), &mActions, &Actions::clearSelectionAction, Qt::ALT + Qt::Key_A, mEditMenu);
+        mEditMenu->addAction(qAct);
+        cmdAddAction(qAct);
+    }
+
     mEditMenu->addSeparator();
-    mEditMenu->addAction(tr("Clear Cache", "MenuBar_Edit"), [this]() {
+
+    const auto clearCacheAct = mEditMenu->addAction(tr("Clear Cache", "MenuBar_Edit"), [this]() {
         const auto m = MemoryHandler::sInstance;
         m->clearMemory();
         mTimeline->update();
     }, QKeySequence(tr("Ctrl+R")));
+    cmdAddAction(clearCacheAct);
+
     mEditMenu->addSeparator();
-    mEditMenu->addAction(tr("Clear Recent Files"), [this]() {
+
+    const auto clearRecentAct = mEditMenu->addAction(tr("Clear Recent Files"), [this]() {
         mRecentFiles.clear();
         writeRecentFiles();
         updateRecentMenu();
     });
+    cmdAddAction(clearRecentAct);
 
 //    mSelectSameMenu = mEditMenu->addMenu("Select Same");
 //    mSelectSameMenu->addAction("Fill and Stroke");
@@ -671,21 +712,25 @@ void MainWindow::setupMenuBar()
                 tr("Raise", "MenuBar_Object"));
     raiseQAct->setShortcut(Qt::Key_PageUp);
     mActions.raiseAction->connect(raiseQAct);
+    cmdAddAction(raiseQAct);
 
     const auto lowerQAct = mObjectMenu->addAction(
                 tr("Lower", "MenuBar_Object"));
     lowerQAct->setShortcut(Qt::Key_PageDown);
     mActions.lowerAction->connect(lowerQAct);
+    cmdAddAction(lowerQAct);
 
     const auto rttQAct = mObjectMenu->addAction(
                 tr("Raise to Top", "MenuBar_Object"));
     rttQAct->setShortcut(Qt::Key_Home);
     mActions.raiseToTopAction->connect(rttQAct);
+    cmdAddAction(rttQAct);
 
     const auto ltbQAct = mObjectMenu->addAction(
                 tr("Lower to Bottom", "MenuBar_Object"));
     ltbQAct->setShortcut(Qt::Key_End);
     mActions.lowerToBottomAction->connect(ltbQAct);
+    cmdAddAction(ltbQAct);
 
     mObjectMenu->addSeparator();
 
@@ -693,12 +738,14 @@ void MainWindow::setupMenuBar()
         const auto qAct = mObjectMenu->addAction(
                     tr("Rotate 90° CW", "MenuBar_Object"));
         mActions.rotate90CWAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     {
         const auto qAct = mObjectMenu->addAction(
                     tr("Rotate 90° CCW", "MenuBar_Object"));
         mActions.rotate90CCWAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     {
@@ -706,6 +753,7 @@ void MainWindow::setupMenuBar()
                     tr("Flip Horizontal", "MenuBar_Object"));
         qAct->setShortcut(Qt::Key_H);
         mActions.flipHorizontalAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     {
@@ -713,6 +761,7 @@ void MainWindow::setupMenuBar()
                     tr("Flip Vertical", "MenuBar_Object"));
         qAct->setShortcut(Qt::Key_V);
         mActions.flipVerticalAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     mObjectMenu->addSeparator();
@@ -721,11 +770,13 @@ void MainWindow::setupMenuBar()
                 tr("Group", "MenuBar_Object"));
     groupQAct->setShortcut(Qt::CTRL + Qt::Key_G);
     mActions.groupAction->connect(groupQAct);
+    cmdAddAction(groupQAct);
 
     const auto ungroupQAct = mObjectMenu->addAction(
                 tr("Ungroup", "MenuBar_Object"));
     ungroupQAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_G);
     mActions.ungroupAction->connect(ungroupQAct);
+    cmdAddAction(ungroupQAct);
 
     mObjectMenu->addSeparator();
 
@@ -735,23 +786,33 @@ void MainWindow::setupMenuBar()
                 tr("Move", "MenuBar_Object_Transform"));
     moveAct->setShortcut(Qt::Key_G);
     moveAct->setDisabled(true);
+    cmdAddAction(moveAct);
+
     const auto rotateAct = transformMenu->addAction(
                 tr("Rotate", "MenuBar_Object_Transform"));
     rotateAct->setShortcut(Qt::Key_R);
     rotateAct->setDisabled(true);
+    cmdAddAction(rotateAct);
+
     const auto scaleAct = transformMenu->addAction(
                 tr("Scale", "MenuBar_Object_Transform"));
     scaleAct->setShortcut(Qt::Key_S);
     scaleAct->setDisabled(true);
+    cmdAddAction(scaleAct);
+
     transformMenu->addSeparator();
+
     const auto xAct = transformMenu->addAction(
                 tr("X-Axis Only", "MenuBar_Object_Transform"));
     xAct->setShortcut(Qt::Key_X);
     xAct->setDisabled(true);
+    //cmdAddAction(xAct);
+
     const auto yAct = transformMenu->addAction(
                 tr("Y-Axis Only", "MenuBar_Object_Transform"));
     yAct->setShortcut(Qt::Key_Y);
     yAct->setDisabled(true);
+    //cmdAddAction(yAct);
 
 
     mPathMenu = mMenuBar->addMenu(tr("Path", "MenuBar"));
@@ -759,10 +820,12 @@ void MainWindow::setupMenuBar()
     const auto otpQAct = mPathMenu->addAction(
                 tr("Object to Path", "MenuBar_Path"));
     mActions.objectsToPathAction->connect(otpQAct);
+    cmdAddAction(otpQAct);
 
     const auto stpQAct = mPathMenu->addAction(
                 tr("Stroke to Path", "MenuBar_Path"));
     mActions.strokeToPathAction->connect(stpQAct);
+    cmdAddAction(stpQAct);
 
     mPathMenu->addSeparator();
 
@@ -771,6 +834,7 @@ void MainWindow::setupMenuBar()
                     tr("Union", "MenuBar_Path"));
         qAct->setShortcut(Qt::CTRL + Qt::Key_Plus);
         mActions.pathsUnionAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     {
@@ -778,6 +842,7 @@ void MainWindow::setupMenuBar()
                     tr("Difference", "MenuBar_Path"));
         qAct->setShortcut(Qt::CTRL + Qt::Key_Minus);
         mActions.pathsDifferenceAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     {
@@ -785,6 +850,7 @@ void MainWindow::setupMenuBar()
                     tr("Intersection", "MenuBar_Path"));
         qAct->setShortcut(Qt::CTRL + Qt::Key_Asterisk);
         mActions.pathsIntersectionAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     {
@@ -792,6 +858,7 @@ void MainWindow::setupMenuBar()
                     tr("Exclusion", "MenuBar_Path"));
         qAct->setShortcut(Qt::CTRL + Qt::Key_AsciiCircum);
         mActions.pathsExclusionAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     {
@@ -799,6 +866,7 @@ void MainWindow::setupMenuBar()
                     tr("Division", "MenuBar_Path"));
         qAct->setShortcut(Qt::CTRL + Qt::Key_Slash);
         mActions.pathsDivisionAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
 
@@ -812,6 +880,7 @@ void MainWindow::setupMenuBar()
                     tr("Combine", "MenuBar_Path"));
         qAct->setShortcut(Qt::CTRL + Qt::Key_K);
         mActions.pathsCombineAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     {
@@ -819,6 +888,7 @@ void MainWindow::setupMenuBar()
                     tr("Break Apart", "MenuBar_Path"));
         qAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_K);
         mActions.pathsBreakApartAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
 //    mEffectsMenu = mMenuBar->addMenu("Effects");
@@ -832,12 +902,14 @@ void MainWindow::setupMenuBar()
                                                    this, [this]() {
         SceneSettingsDialog::sNewSceneDialog(mDocument, this);
     });
+    cmdAddAction(newSceneAct);
 
 
 
     const auto deleteSceneAct = mSceneMenu->addAction(QIcon::fromTheme("cancel"),
                                                       tr("Delete Scene", "MenuBar_Scene"));
     mActions.deleteSceneAction->connect(deleteSceneAct);
+    cmdAddAction(deleteSceneAct);
 
 
 
@@ -849,6 +921,7 @@ void MainWindow::setupMenuBar()
                                          QKeySequence(AppSupport::getSettings("shortcuts",
                                                                               "addToQue",
                                                                               "F12").toString()));
+    cmdAddAction(mAddToQueAct);
 
 
     mSceneMenu->addSeparator();
@@ -857,6 +930,7 @@ void MainWindow::setupMenuBar()
     const auto scenePropAct = mSceneMenu->addAction(QIcon::fromTheme("sequence"),
                                                     tr("Scene Properties", "MenuBar_Scene"));
     mActions.sceneSettingsAction->connect(scenePropAct);
+    cmdAddAction(scenePropAct);
 
     if (eSettings::instance().fToolBarActionScene) {
         const auto sceneToolBtn = new QToolButton(this);
@@ -886,6 +960,7 @@ void MainWindow::setupMenuBar()
 
     mZoomInAction = zoomMenu->addAction(tr("Zoom In", "MenuBar_View_Zoom"));
     mZoomInAction->setShortcut(QKeySequence("Ctrl+Shift++"));
+    cmdAddAction(mZoomInAction);
     connect(mZoomInAction, &QAction::triggered,
             this, [](){
         const auto target = KeyFocusTarget::KFT_getCurrentTarget();
@@ -896,6 +971,7 @@ void MainWindow::setupMenuBar()
 
     mZoomOutAction = zoomMenu->addAction(tr("Zoom Out", "MenuBar_View_Zoom"));
     mZoomOutAction->setShortcut(QKeySequence("Ctrl+Shift+-"));
+    cmdAddAction(mZoomOutAction);
     connect(mZoomOutAction, &QAction::triggered,
             this, [](){
         const auto target = KeyFocusTarget::KFT_getCurrentTarget();
@@ -913,6 +989,7 @@ void MainWindow::setupMenuBar()
         if (!cwTarget) { return; }
         cwTarget->fitCanvasToSize();
     });
+    cmdAddAction(mFitViewAction);
 
     mResetZoomAction = zoomMenu->addAction(tr("Reset Zoom", "MenuBar_View_Zoom"));
     mResetZoomAction->setShortcut(QKeySequence("Ctrl+1"));
@@ -923,6 +1000,7 @@ void MainWindow::setupMenuBar()
         if (!cwTarget) { return; }
         cwTarget->resetTransformation();
     });
+    cmdAddAction(mResetZoomAction);
 
     const auto filteringMenu = mViewMenu->addMenu(
                 tr("Filtering", "MenuBar_View"));
@@ -1001,6 +1079,7 @@ void MainWindow::setupMenuBar()
     mClipViewToCanvas->setCheckable(true);
     //mClipViewToCanvas->setChecked(true);
     mClipViewToCanvas->setShortcut(QKeySequence(Qt::Key_C));
+    cmdAddAction(mClipViewToCanvas);
     connect(mClipViewToCanvas, &QAction::triggered,
             &mActions, &Actions::setClipToCanvas);
 
@@ -1023,6 +1102,7 @@ void MainWindow::setupMenuBar()
     mViewFullScreenAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                          "fullScreen",
                                                                          "F11").toString()));
+    cmdAddAction(mViewFullScreenAct);
     connect(mViewFullScreenAct, &QAction::triggered,
             this, [this](const bool checked) {
         if (checked) { showFullScreen(); }
@@ -1041,6 +1121,7 @@ void MainWindow::setupMenuBar()
             mUI->setDockVisible(tr("Timeline"), triggered);
         }
     });
+    cmdAddAction(mViewTimelineAct);
 
     mTimelineWindowAct = mViewMenu->addAction(tr("Timeline Window"));
     mTimelineWindowAct->setCheckable(true);
@@ -1143,16 +1224,27 @@ void MainWindow::setupMenuBar()
     connect(mBrushColorBookmarksAction, &QAction::toggled,
             mCentralWidget, &CentralWidget::setSidesVisibilitySetting);*/
 
+
+    setupMenuEffects();
+
     const auto help = mMenuBar->addMenu(tr("Help", "MenuBar"));
 
     const auto aboutAct = help->addAction(QIcon::fromTheme(AppSupport::getAppID()),
                                           tr("About", "MenuBar_Help"),
                                           this,
                                           &MainWindow::openAboutWindow);
+    cmdAddAction(aboutAct);
     help->addAction(QIcon::fromTheme("question"),
                     tr("About Qt", "MenuBar_Help"), this, [this]() {
         QMessageBox::aboutQt(this, tr("About Qt"));
     });
+
+    help->addAction(tr("Command Palette"), this, []() {
+        CommandPalette dialog;
+        dialog.exec();
+    }, QKeySequence(AppSupport::getSettings("shortcuts",
+                                            "cmdPalette",
+                                            "Ctrl+Space").toString()));
 
     if (eSettings::instance().fToolBarActionRender) {
         mToolbar->addAction(QIcon::fromTheme("render_animation"),
@@ -1187,6 +1279,34 @@ void MainWindow::setupMenuBar()
     frictionButton->setToolTip(QString());
     frictionButton->setFocusPolicy(Qt::NoFocus);
     mToolbar->addWidget(frictionButton);
+}
+
+void MainWindow::setupMenuEffects()
+{
+    const auto menu = new QMenu(this);
+    const auto adder = [this, menu](const QString& name, const QString& path,
+                                    const RasterEffectMenuCreator::EffectCreator& creator) {
+        Q_UNUSED(path)
+        if (name.isEmpty()) { return; }
+        const auto act =  menu->addAction(name);
+        cmdAddAction(act);
+        connect(act, &QAction::triggered, this, [this, creator]() {
+            addRasterEffect(creator());
+        });
+    };
+    RasterEffectMenuCreator::forEveryEffect(adder);
+}
+
+void MainWindow::addRasterEffect(const qsptr<RasterEffect> &rasterEffect)
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return; }
+
+    const auto box = scene->getCurrentBox();
+    if (!box) { return; }
+
+    box->addRasterEffect(rasterEffect);
+    mDocument.actionFinished();
 }
 
 void MainWindow::setResolutionText(QString text)
@@ -2040,6 +2160,13 @@ void MainWindow::openRendererWindow()
         if (mRenderWindowAct->isChecked()) { openRenderQueueWindow(); }
         else { mTabProperties->setCurrentIndex(mTabQueueIndex); }
     }
+}
+
+void MainWindow::cmdAddAction(QAction *act)
+{
+    if (!act || eSettings::instance().fCommandPalette.contains(act)) { return; }
+    qDebug() << "command palette add action" << act->text() << act->toolTip();
+    eSettings::sInstance->fCommandPalette.append(act);
 }
 
 stdsptr<void> MainWindow::lock()

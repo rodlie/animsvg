@@ -88,6 +88,7 @@ void MainWindow::setupToolBoxMain()
             });
     boxTransformAct->setChecked(true); // default
     mToolBoxGroupMain->addAction(boxTransformAct);
+    cmdAddAction(boxTransformAct);
 
     // pointTransform
     QAction *pointTransformAct = new QAction(QIcon::fromTheme("pointTransform"),
@@ -97,6 +98,8 @@ void MainWindow::setupToolBoxMain()
     pointTransformAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                         "pointTransform",
                                                                         "F2").toString()));
+    cmdAddAction(pointTransformAct);
+
     connect(pointTransformAct,
             &QAction::triggered,
             this,
@@ -121,6 +124,7 @@ void MainWindow::setupToolBoxMain()
     addPointModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                       "pathCreate",
                                                                       "F3").toString()));
+    cmdAddAction(addPointModeAct);
     connect(addPointModeAct,
             &QAction::triggered,
             this,
@@ -145,6 +149,7 @@ void MainWindow::setupToolBoxMain()
     drawPathModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                       "drawPath",
                                                                       "F4").toString()));
+    cmdAddAction(drawPathModeAct);
     connect(drawPathModeAct,
             &QAction::triggered,
             this,
@@ -193,6 +198,7 @@ void MainWindow::setupToolBoxMain()
     circleModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                     "circleMode",
                                                                     "F5").toString()));
+    cmdAddAction(circleModeAct);
     connect(circleModeAct,
             &QAction::triggered,
             this,
@@ -217,6 +223,7 @@ void MainWindow::setupToolBoxMain()
     rectModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                   "rectMode",
                                                                   "F6").toString()));
+    cmdAddAction(rectModeAct);
     connect(rectModeAct,
             &QAction::triggered,
             this,
@@ -241,6 +248,7 @@ void MainWindow::setupToolBoxMain()
     textModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                   "textMode",
                                                                   "F7").toString()));
+    cmdAddAction(textModeAct);
     connect(textModeAct,
             &QAction::triggered,
             this,
@@ -266,6 +274,7 @@ void MainWindow::setupToolBoxMain()
     nullModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                   "nullMode",
                                                                   "F8").toString()));
+    cmdAddAction(nullModeAct);
     connect(nullModeAct,
             &QAction::triggered,
             this,
@@ -305,6 +314,7 @@ void MainWindow::setupToolBoxMain()
                 }
             });
     mToolBoxGroupMain->addAction(pickModeAct);
+    cmdAddAction(pickModeAct);
 
     mToolBoxMain->addActions(mToolBoxGroupMain->actions());
 
@@ -342,6 +352,7 @@ void MainWindow::setupToolBoxNodes()
     mActionConnectPointsAct = new QAction(QIcon::fromTheme("nodeConnect"),
                                           tr("Connect Nodes"),
                                           this);
+    cmdAddAction(mActionConnectPointsAct);
     connect(mActionConnectPointsAct, &QAction::triggered,
             this, [this]() { mActions.connectPointsSlot(); });
     mToolBoxGroupNodes->addAction(mActionConnectPointsAct);
@@ -350,6 +361,7 @@ void MainWindow::setupToolBoxNodes()
     mActionDisconnectPointsAct = new QAction(QIcon::fromTheme("nodeDisconnect"),
                                              tr("Disconnect Nodes"),
                                              this);
+    cmdAddAction(mActionDisconnectPointsAct);
     connect(mActionDisconnectPointsAct, &QAction::triggered,
             this, [this]() { mActions.disconnectPointsSlot(); });
     mToolBoxGroupNodes->addAction(mActionDisconnectPointsAct);
@@ -358,6 +370,7 @@ void MainWindow::setupToolBoxNodes()
     mActionMergePointsAct = new QAction(QIcon::fromTheme("nodeMerge"),
                                         tr("Merge Nodes"),
                                         this);
+    cmdAddAction(mActionMergePointsAct);
     connect(mActionMergePointsAct, &QAction::triggered,
             this, [this]() { mActions.mergePointsSlot(); });
     mToolBoxGroupNodes->addAction(mActionMergePointsAct);
@@ -366,6 +379,7 @@ void MainWindow::setupToolBoxNodes()
     mActionNewNodeAct = new QAction(QIcon::fromTheme("nodeNew"),
                                     tr("New Node"),
                                     this);
+    cmdAddAction(mActionNewNodeAct);
     connect(mActionNewNodeAct, &QAction::triggered,
             this, [this]() { mActions.subdivideSegments(); });
     mToolBoxGroupNodes->addAction(mActionNewNodeAct);
@@ -374,6 +388,7 @@ void MainWindow::setupToolBoxNodes()
     mActionSymmetricPointCtrlsAct = new QAction(QIcon::fromTheme("nodeSymmetric"),
                                                 tr("Symmetric Nodes"),
                                                 this);
+    cmdAddAction(mActionSymmetricPointCtrlsAct);
     connect(mActionSymmetricPointCtrlsAct, &QAction::triggered,
             this, [this]() { mActions.makePointCtrlsSymmetric(); });
     mToolBoxGroupNodes->addAction(mActionSymmetricPointCtrlsAct);
@@ -382,6 +397,7 @@ void MainWindow::setupToolBoxNodes()
     mActionSmoothPointCtrlsAct = new QAction(QIcon::fromTheme("nodeSmooth"),
                                              tr("Smooth Nodes"),
                                              this);
+    cmdAddAction(mActionSmoothPointCtrlsAct);
     connect(mActionSmoothPointCtrlsAct, &QAction::triggered,
             this, [this]() { mActions.makePointCtrlsSmooth(); });
     mToolBoxGroupNodes->addAction(mActionSmoothPointCtrlsAct);
@@ -390,6 +406,7 @@ void MainWindow::setupToolBoxNodes()
     mActionCornerPointCtrlsAct = new QAction(QIcon::fromTheme("nodeCorner"),
                                              tr("Corner Nodes"),
                                              this);
+    cmdAddAction(mActionCornerPointCtrlsAct);
     connect(mActionCornerPointCtrlsAct, &QAction::triggered,
             this, [this]() { mActions.makePointCtrlsCorner(); });
     mToolBoxGroupNodes->addAction(mActionCornerPointCtrlsAct);
@@ -398,6 +415,7 @@ void MainWindow::setupToolBoxNodes()
     mActionLineAct = new QAction(QIcon::fromTheme("segmentLine"),
                                  tr("Make Segment Line"),
                                  this);
+    cmdAddAction(mActionLineAct);
     connect(mActionLineAct, &QAction::triggered,
             this, [this]() { mActions.makeSegmentLine(); });
     mToolBoxGroupNodes->addAction(mActionLineAct);
@@ -406,6 +424,7 @@ void MainWindow::setupToolBoxNodes()
     mActionCurveAct = new QAction(QIcon::fromTheme("segmentCurve"),
                                   tr("Make Segment Curve"),
                                   this);
+    cmdAddAction(mActionCurveAct);
     connect(mActionCurveAct, &QAction::triggered,
             this, [this]() { mActions.makeSegmentCurve(); });
     mToolBoxGroupNodes->addAction(mActionCurveAct);

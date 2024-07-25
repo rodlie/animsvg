@@ -256,6 +256,15 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mToolBar->addAction(mStopButton);
     mToolBar->addAction(mLoopButton);
 
+    mMainWindow->cmdAddAction(mFrameRewindAct);
+    mMainWindow->cmdAddAction(mPrevKeyframeAct);
+    mMainWindow->cmdAddAction(mNextKeyframeAct);
+    mMainWindow->cmdAddAction(mFrameFastForwardAct);
+    mMainWindow->cmdAddAction(mPlayFromBeginningButton);
+    mMainWindow->cmdAddAction(mPlayButton);
+    mMainWindow->cmdAddAction(mStopButton);
+    mMainWindow->cmdAddAction(mLoopButton);
+
     mRenderProgressAct->setVisible(false);
 
     QWidget *spacerWidget2 = new QWidget(this);
