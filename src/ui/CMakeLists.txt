@@ -44,6 +44,7 @@ set(
     SOURCES
     dialogs/adjustscenedialog.cpp
     dialogs/applyexpressiondialog.cpp
+    dialogs/commandpalette.cpp
     dialogs/durationrectsettingsdialog.cpp
     dialogs/exportsvgdialog.cpp
     dialogs/qrealpointvaluedialog.cpp
@@ -104,6 +105,7 @@ set(
     ui_global.h
     dialogs/adjustscenedialog.h
     dialogs/applyexpressiondialog.h
+    dialogs/commandpalette.h
     dialogs/durationrectsettingsdialog.h
     dialogs/exportsvgdialog.h
     dialogs/qrealpointvaluedialog.h

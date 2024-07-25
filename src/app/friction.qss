@@ -410,3 +410,13 @@ QTabWidget#TabWidgetWide QTabBar::tab:bottom {
 QTabWidget#TabWidgetWide QTabBar {
     border: 0;
 }
+
+QLineEdit#CommandPaletteInput {
+    border-radius: 10%;
+    border: 2px solid %4;
+    padding: .5em;
+}
+
+QListWidget#CommandPaletteSuggestions {
+    border: 2px solid %2;
+}
