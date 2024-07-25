@@ -468,6 +468,7 @@ void MainWindow::setupMenuBar()
                                                 tr("Link"),
                                                 this, &MainWindow::linkFile,
                                                 Qt::CTRL + Qt::Key_L);
+    linkedAct->setData(tr("Link File"));
     cmdAddAction(linkedAct);
 
     const auto importAct = mFileMenu->addAction(QIcon::fromTheme("file_blank"),

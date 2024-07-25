@@ -88,6 +88,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mFrameRewindAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                       "rewind",
                                                                       "Shift+Left").toString()));
+    mFrameRewindAct->setData(tr("Go to First Frame"));
     connect(mFrameRewindAct, &QAction::triggered,
             this, [this]() {
         const auto scene = *mDocument.fActiveScene;
@@ -102,6 +103,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mFrameFastForwardAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                            "fastForward",
                                                                            "Shift+Right").toString()));
+    mFrameFastForwardAct->setData(tr("Go to Last Frame"));
     connect(mFrameFastForwardAct, &QAction::triggered,
             this, [this]() {
         const auto scene = *mDocument.fActiveScene;
@@ -111,7 +113,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     });
 
     mPlayFromBeginningButton = new QAction(QIcon::fromTheme("preview"),
-                                           tr("Play From the Beginning"),
+                                           tr("Play Preview From Start"),
                                            this);
     connect(mPlayFromBeginningButton, &QAction::triggered,
             this, [this]() {
@@ -124,7 +126,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     });
 
     mPlayButton = new QAction(QIcon::fromTheme("play"),
-                              tr("Render Preview"),
+                              tr("Play Preview"),
                               this);
 
     mStopButton = new QAction(QIcon::fromTheme("stop"),
@@ -135,7 +137,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
             this, &TimelineDockWidget::interruptPreview);
 
     mLoopButton = new QAction(QIcon::fromTheme("loop"),
-                              tr("Loop"),
+                              tr("Loop Preview"),
                               this);
     mLoopButton->setCheckable(true);
     connect(mLoopButton, &QAction::triggered,
@@ -206,6 +208,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
                                               QString(),
                                               this);
     mPrevKeyframeAct->setToolTip(tr("Previous Keyframe"));
+    mPrevKeyframeAct->setData(mPrevKeyframeAct->toolTip());
     connect(mPrevKeyframeAct, &QAction::triggered,
             this, [this]() {
         if (setPrevKeyframe()) {
@@ -217,6 +220,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
                                               QString(),
                                               this);
     mNextKeyframeAct->setToolTip(tr("Next Keyframe"));
+    mNextKeyframeAct->setData(mNextKeyframeAct->toolTip());
     connect(mNextKeyframeAct, &QAction::triggered,
             this, [this]() {
         if (setNextKeyframe()) {
@@ -400,7 +404,7 @@ void TimelineDockWidget::previewFinished()
     mPlayFromBeginningButton->setDisabled(false);
     mStopButton->setDisabled(true);
     mPlayButton->setIcon(QIcon::fromTheme("play"));
-    mPlayButton->setText(tr("Render Preview"));
+    mPlayButton->setText(tr("Play Preview"));
     disconnect(mPlayButton, nullptr, this, nullptr);
     connect(mPlayButton, &QAction::triggered,
             this, &TimelineDockWidget::renderPreview);

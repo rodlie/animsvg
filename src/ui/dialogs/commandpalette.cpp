@@ -67,7 +67,9 @@ CommandPalette::CommandPalette(QWidget *parent)
         int items = 0;
         for (int i = 0; i < actions.count(); i++) {
             const auto act = actions.at(i);
-            if (!act->text().startsWith(mUserInput->text(), Qt::CaseInsensitive)) { continue; }
+            if (!act->text().startsWith(mUserInput->text(),
+                                        Qt::CaseInsensitive) &&
+                mUserInput->text() != "?") { continue; }
             const auto item = new QListWidgetItem(act->text(), mSuggestions);
             const auto alt = act->data().toString();
             if (!alt.isEmpty()) { item->setText(alt); }

@@ -66,7 +66,7 @@ void MainWindow::setupToolBoxMain()
 
     // boxTransform
     QAction *boxTransformAct = new QAction(QIcon::fromTheme("boxTransform"),
-                                           tr("Object"),
+                                           tr("Object Mode"),
                                            this);
     boxTransformAct->setCheckable(true);
     boxTransformAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
@@ -92,7 +92,7 @@ void MainWindow::setupToolBoxMain()
 
     // pointTransform
     QAction *pointTransformAct = new QAction(QIcon::fromTheme("pointTransform"),
-                                             tr("Point"),
+                                             tr("Point Mode"),
                                              this);
     pointTransformAct->setCheckable(true);
     pointTransformAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
@@ -293,7 +293,7 @@ void MainWindow::setupToolBoxMain()
 
     // pickMode
     QAction *pickModeAct = new QAction(QIcon::fromTheme("pick"),
-                                       tr("Pick"),
+                                       tr("Pick Mode"),
                                        this);
     pickModeAct->setCheckable(true);
     pickModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
