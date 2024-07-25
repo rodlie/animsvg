@@ -28,6 +28,7 @@
 
 #include <QtCore>
 #include <QColor>
+#include <QAction>
 
 #include "skia/skiaincludes.h"
 #include "efiltersettings.h"
@@ -156,6 +157,9 @@ public:
     QColor fVisibilityRangeColor = ThemeSupport::getThemeRangeColor();
     QColor fSelectedVisibilityRangeColor = ThemeSupport::getThemeRangeSelectedColor();
     QColor fAnimationRangeColor = QColor(0, 0, 0, 55);
+
+    // command palette
+    QList<QAction*> fCommandPalette;
 
 signals:
     void settingsChanged();
