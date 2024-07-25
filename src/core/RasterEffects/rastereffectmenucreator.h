@@ -59,7 +59,6 @@ struct CORE_EXPORT RasterEffectMenuCreator {
         };
         forEveryEffect(adder);
     }
-private:
     static void forEveryEffect(const EffectAdder& add);
 };
 
