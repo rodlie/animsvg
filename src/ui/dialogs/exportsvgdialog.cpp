@@ -39,6 +39,7 @@
 #include <QPlainTextEdit>
 #include <QProcess>
 #include <QMessageBox>
+#include <QGroupBox>
 
 ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
                                  const QString &warnings)
@@ -90,7 +91,7 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
                                               "loop",
                                               true).toBool());
 
-    mOptimize = new QCheckBox(tr("Optimize"), this);
+    mOptimize = new QCheckBox(tr("Optimize for Web"), this);
     mOptimize->setChecked(AppSupport::getSettings("exportSVG",
                                                   "optimize",
                                                   false).toBool());
@@ -169,12 +170,19 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
     mImageOptionsLayout->addWidget(mImageQuality);
     twoColLayout->addPair(mImageFormatLabel, mImageOptions);
 
+    const auto optsWidget = new QGroupBox(tr("Options"), this);
+    const auto optsLayout = new QVBoxLayout(optsWidget);
+
+    optsWidget->setContentsMargins(0, 0, 0, 0);
+
+    optsLayout->addWidget(mBackground);
+    optsLayout->addWidget(mFixedSize);
+    optsLayout->addWidget(mLoop);
+    optsLayout->addWidget(mOptimize);
+
     // settings layout
     settingsLayout->addLayout(twoColLayout);
-    settingsLayout->addWidget(mBackground);
-    settingsLayout->addWidget(mFixedSize);
-    settingsLayout->addWidget(mLoop);
-    settingsLayout->addWidget(mOptimize);
+    settingsLayout->addWidget(optsWidget);
     settingsLayout->addStretch();
 
     connect(mFirstFrame, qOverload<int>(&QSpinBox::valueChanged),
