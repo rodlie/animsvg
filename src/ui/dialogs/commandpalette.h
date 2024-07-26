@@ -42,6 +42,11 @@ private:
     QLineEdit *mUserInput;
     QListWidget *mSuggestions;
 
+    bool skipItem(const QString &title,
+                  const QString &input);
+    bool isCmd(const QString &input);
+    void parseCmd(const QString &input);
+
 protected:
     bool eventFilter(QObject* obj, QEvent *e) override;
 };

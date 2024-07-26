@@ -63,19 +63,20 @@ CommandPalette::CommandPalette(QWidget *parent)
         mSuggestions->clear();
         mSuggestions->hide();
         if (mUserInput->text().isEmpty()) { return; }
+        if (isCmd(mUserInput->text())) { return; }
         const auto actions = eSettings::instance().fCommandPalette;
+        const auto defIcon = QIcon::fromTheme("drawPathAutoChecked");
         int items = 0;
         for (int i = 0; i < actions.count(); i++) {
             const auto act = actions.at(i);
-            if (!act->text().startsWith(mUserInput->text(),
-                                        Qt::CaseInsensitive) &&
-                mUserInput->text() != "?") { continue; }
+            if (!act->isEnabled()) { continue; }
+            if (skipItem(act->text(), mUserInput->text())) { continue; }
             const auto item = new QListWidgetItem(act->text(), mSuggestions);
             const auto alt = act->data().toString();
             if (!alt.isEmpty()) { item->setText(alt); }
             item->setData(Qt::UserRole, i);
             if (!act->icon().isNull()) { item->setIcon(act->icon()); }
-            else { item->setIcon(QIcon::fromTheme("drawPathAutoChecked")); }
+            else { item->setIcon(defIcon); }
             mSuggestions->addItem(item);
             items++;
         }
@@ -83,6 +84,10 @@ CommandPalette::CommandPalette(QWidget *parent)
     });
 
     connect(mUserInput, &QLineEdit::returnPressed, this, [this]() {
+        if (isCmd(mUserInput->text())) {
+            parseCmd(mUserInput->text());
+            return;
+        }
         if (mSuggestions->count() < 1) { return; }
         const auto index = mSuggestions->item(0)->data(Qt::UserRole).toInt();
         const auto act = eSettings::instance().fCommandPalette.at(index);
@@ -98,6 +103,28 @@ CommandPalette::CommandPalette(QWidget *parent)
         act->trigger();
         close();
     });
+}
+
+bool CommandPalette::skipItem(const QString &title,
+                              const QString &input)
+{
+    if (title.isEmpty() || input.isEmpty()) { return true; }
+    if (!title.startsWith(input,
+                          Qt::CaseInsensitive) && input != "?") { return true; }
+    return false;
+}
+
+bool CommandPalette::isCmd(const QString &input)
+{
+    if (input.startsWith(":") ||
+        input.startsWith("+") ||
+        input.startsWith("-")) { return true; }
+    return false;
+}
+
+void CommandPalette::parseCmd(const QString &input)
+{
+    qDebug() << input;
 }
 
 bool CommandPalette::eventFilter(QObject *obj, QEvent *e)
