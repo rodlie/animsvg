@@ -417,7 +417,12 @@ QLineEdit#CommandPaletteInput {
     padding: .5em;
 }
 
-QListWidget#CommandPaletteSuggestions {
+QListWidget#CommandPaletteSuggestions,
+QLabel#CommandPaletteLabel {
     border: 2px solid %2;
     background-color: %5;
+}
+
+QLabel#CommandPaletteLabel {
+    padding: .5em;
 }
