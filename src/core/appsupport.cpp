@@ -355,28 +355,38 @@ const QStringList AppSupport::getFilesFromPath(const QString &path,
 const QString AppSupport::getTimeCodeFromFrame(int frame,
                                                float fps)
 {
-    int ss = qFloor(frame / fps);
-    int mm = qFloor(ss / 60);
-    int hh = qFloor(mm / 60);
-    int ff = frame - (ss * fps);
-    return QString("%1:%2:%3:%4").arg(QString::number(hh).rightJustified(2, '0'),
-                                      QString::number(mm).rightJustified(2, '0'),
-                                      QString::number(ss).rightJustified(2, '0'),
-                                      QString::number(ff).rightJustified(2, '0'));
+    if (fps <= 0) { return "00:00:00:00"; }
+    bool negative = frame < 0;
+    if (negative) { frame = qAbs(frame); }
+    double totalSeconds = static_cast<double>(frame) / fps;
+    int hours = static_cast<int>(totalSeconds / 3600);
+    int minutes = static_cast<int>((totalSeconds - hours * 3600) / 60);
+    int seconds = static_cast<int>(totalSeconds - hours * 3600 - minutes * 60);
+    int frames = static_cast<int>((totalSeconds - static_cast<int>(totalSeconds)) * fps);
+    QString timecode = QString("%1:%2:%3:%4")
+                           .arg(hours, 2, 10, QChar('0'))
+                           .arg(minutes, 2, 10, QChar('0'))
+                           .arg(seconds, 2, 10, QChar('0'))
+                           .arg(frames, 2, 10, QChar('0'));
+    if (negative) { timecode.prepend("-"); }
+    //qDebug() << frame << "=" << timecode;
+    return timecode;
 }
 
 int AppSupport::getFrameFromTimeCode(const QString &timecode,
                                      float fps)
 {
     const auto list = timecode.split(":");
+    bool negative = timecode.startsWith("-");
     if (fps > 0. && list.count() == 4) {
-        int hh = list.at(0).toInt();
+        int hh = negative ? QString(list.at(0)).replace("-", "").toInt() : list.at(0).toInt();
         int mm = list.at(1).toInt();
         int ss = list.at(2).toInt();
         int ff = list.at(3).toInt();
-        ss += (mm * 60) + (hh * 3600);
-        ff += ss * fps;
-        return ff;
+        double totalSeconds = hh * 3600 + mm * 60 + ss + static_cast<double>(ff) / fps;
+        int frame = static_cast<int>(totalSeconds * fps);
+        //qDebug() << timecode << "=" << negative ? -frame : frame;
+        return negative ? -frame : frame;
     } else {
         // assume it's just a frame number
         return timecode.toInt();
