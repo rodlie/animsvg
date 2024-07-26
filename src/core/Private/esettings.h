@@ -160,6 +160,7 @@ public:
 
     // command palette
     QList<QAction*> fCommandPalette;
+    QList<QString> fCommandHistory;
 
 signals:
     void settingsChanged();
