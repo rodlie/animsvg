@@ -29,6 +29,7 @@ void FrameSpinBox::setDisplayTimeCode(const bool &enabled)
     setSingleStep(enabled && mFps > 0. ? mFps : 1);
     mDisplayTimecode = enabled;
     setSpecialValueText(enabled ? "00:00:00:00" : "");
+    updateGeometry();
 }
 
 void FrameSpinBox::updateFps(const qreal &fps)
