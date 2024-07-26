@@ -69,6 +69,7 @@ public:
     static const QString getAppCommitUrl();
     static const QString getAppBranchUrl();
     static const QString getAppConfigPath();
+    static const QString getAppPath();
     static const QString getAppOutputProfilesPath();
     static const QString getAppPathEffectsPath();
     static const QString getAppRasterEffectsPath();
@@ -76,6 +77,8 @@ public:
     static const QString getAppShaderPresetsPath();
     static const QString getAppExPresetsPath();
     static const QString getAppUserExPresetsPath();
+    static const QString getSVGO();
+    static const QString getSVGOConfig();
     static const QString getFileMimeType(const QString &path);
     static const QString getFileIcon(const QString &path);
     static const QPair<QString,QString> getShaderID(const QString &path);

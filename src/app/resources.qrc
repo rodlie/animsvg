@@ -22,4 +22,7 @@
         <file alias="up-arrow.png">pixmaps/up-arrow.png</file>
         <file alias="down-arrow.png">pixmaps/down-arrow.png</file>
     </qresource>
+    <qresource prefix="/config">
+        <file>svgo.config.js</file>
+    </qresource>
 </RCC>

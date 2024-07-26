@@ -37,6 +37,8 @@
 #include <QMenuBar>
 #include <QDesktopServices>
 #include <QPlainTextEdit>
+#include <QProcess>
+#include <QMessageBox>
 
 ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
                                  const QString &warnings)
@@ -88,6 +90,12 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
                                               "loop",
                                               true).toBool());
 
+    mOptimize = new QCheckBox(tr("Optimize"), this);
+    mOptimize->setChecked(AppSupport::getSettings("exportSVG",
+                                                  "optimize",
+                                                  false).toBool());
+    mOptimize->setDisabled(AppSupport::getSVGO().isEmpty());
+
     connect(mBackground, &QCheckBox::stateChanged,
             this, [this] {
         AppSupport::setSettings("exportSVG",
@@ -105,6 +113,12 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
         AppSupport::setSettings("exportSVG",
                                 "loop",
                                 mLoop->isChecked());
+    });
+    connect(mOptimize, &QCheckBox::stateChanged,
+            this, [this] {
+        AppSupport::setSettings("exportSVG",
+                                "optimize",
+                                mOptimize->isChecked());
     });
 
     twoColLayout->addPair(new QLabel(tr("Scene:")), sceneButton);
@@ -160,6 +174,7 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
     settingsLayout->addWidget(mBackground);
     settingsLayout->addWidget(mFixedSize);
     settingsLayout->addWidget(mLoop);
+    settingsLayout->addWidget(mOptimize);
     settingsLayout->addStretch();
 
     connect(mFirstFrame, qOverload<int>(&QSpinBox::valueChanged),
@@ -190,7 +205,20 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
                                 "recentExported",
                                 saveInfo.absoluteDir().absolutePath());
         const bool success = exportTo(saveAs);
-        if (success) { accept(); }
+        if (success) {
+            if (mOptimize->isEnabled() &&
+                mOptimize->isChecked()) {
+                if (!QProcess::startDetached(AppSupport::getSVGO(),
+                                             QStringList() << "--config"
+                                                           << AppSupport::getSVGOConfig()
+                                                           << saveAs)) {
+                    QMessageBox::warning(this,
+                                         tr("Optimizer Failed"),
+                                         tr("Failed to launch SVG optimizer."));
+                }
+            }
+            accept();
+        }
     });
 
     connect(buttons, &QDialogButtonBox::rejected, this, &QDialog::reject);

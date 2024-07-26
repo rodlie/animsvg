@@ -55,6 +55,7 @@ private:
     QCheckBox *mBackground;
     QCheckBox *mFixedSize;
     QCheckBox *mLoop;
+    QCheckBox *mOptimize;
 
     QComboBox *mImageFormat;
     QSpinBox *mImageQuality;

@@ -190,6 +190,11 @@ const QString AppSupport::getAppConfigPath()
     return path;
 }
 
+const QString AppSupport::getAppPath()
+{
+    return QApplication::applicationDirPath();
+}
+
 const QString AppSupport::getAppOutputProfilesPath()
 {
     QString path = QString::fromUtf8("%1/OutputProfiles").arg(getAppConfigPath());
@@ -227,7 +232,7 @@ const QString AppSupport::getAppShaderEffectsPath(bool restore)
 
 const QString AppSupport::getAppShaderPresetsPath()
 {
-    QString path1 = QApplication::applicationDirPath();
+    QString path1 = getAppPath();
     QString path2 = path1;
     path1.append(QString::fromUtf8("/plugins/shaders"));
     path2.append(QString::fromUtf8("/../share/friction/plugins/shaders"));
@@ -238,7 +243,7 @@ const QString AppSupport::getAppShaderPresetsPath()
 
 const QString AppSupport::getAppExPresetsPath()
 {
-    QString path1 = QApplication::applicationDirPath();
+    QString path1 = getAppPath();
     QString path2 = path1;
     path1.append(QString::fromUtf8("/presets/expressions"));
     path2.append(QString::fromUtf8("/../share/friction/presets/expressions"));
@@ -252,6 +257,44 @@ const QString AppSupport::getAppUserExPresetsPath()
     QString path = QString::fromUtf8("%1/ExPresets").arg(getAppConfigPath());
     QDir dir(path);
     if (!dir.exists()) { dir.mkpath(path); }
+    return path;
+}
+
+const QString AppSupport::getSVGO()
+{
+#ifdef Q_OS_WIN
+    const QString svgo = "svgo-win.exe";
+#else
+    const QString svgo = "svgo-linux";
+#endif
+    const QString path = QString("%1%2%3").arg(getAppPath(),
+                                               QDir::separator(),
+                                               svgo);
+    qDebug() << "check for svgo" << path;
+    if (QFile::exists(path)) { return path; }
+    return QString();
+}
+
+const QString AppSupport::getSVGOConfig()
+{
+    QString filename = "svgo.config.js";
+    QString path = getAppConfigPath() + QDir::separator() + filename;
+    qDebug() << "check for" << filename;
+    if (!QFile::exists(path)) {
+        QString config;
+        QFile file(":/config/" + filename);
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            config = file.readAll();
+            file.close();
+        }
+        if (!config.isEmpty()) {
+            QFile file(path);
+            if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                file.write(config.toUtf8());
+                file.close();
+            }
+        }
+    }
     return path;
 }
 
