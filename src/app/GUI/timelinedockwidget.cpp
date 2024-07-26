@@ -192,17 +192,10 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mCurrentFrameSpin->setKeyboardTracking(false);
     mCurrentFrameSpin->setAlignment(Qt::AlignHCenter);
     mCurrentFrameSpin->setObjectName(QString::fromUtf8("SpinBoxNoButtons"));
-    mCurrentFrameSpin->setFocusPolicy(Qt::ClickFocus);
+    mCurrentFrameSpin->setFocusPolicy(Qt::NoFocus);
     mCurrentFrameSpin->setToolTip(tr("Current frame"));
     mCurrentFrameSpin->setRange(-INT_MAX, INT_MAX);
-    connect(mCurrentFrameSpin,
-            &QSpinBox::editingFinished,
-            this, [this]() {
-        const auto scene = *mDocument.fActiveScene;
-        if (!scene) { return; }
-        scene->anim_setAbsFrame(mCurrentFrameSpin->value());
-        mDocument.actionFinished();
-    });
+    mCurrentFrameSpin->setReadOnly(true);
 
     const auto mPrevKeyframeAct = new QAction(QIcon::fromTheme("prev_keyframe"),
                                               QString(),
