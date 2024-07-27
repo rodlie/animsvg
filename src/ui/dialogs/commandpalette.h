@@ -24,6 +24,7 @@
 #ifndef COMMANDPALETTE_H
 #define COMMANDPALETTE_H
 
+#include "Private/document.h"
 #include "ui_global.h"
 
 #include <QDialog>
@@ -32,20 +33,33 @@
 #include <QListWidgetItem>
 #include <QList>
 #include <QEvent>
+#include <QLabel>
 
 class UI_EXPORT CommandPalette : public QDialog
 {
+    Q_OBJECT
 public:
-    explicit CommandPalette(QWidget *parent = nullptr);
+    explicit CommandPalette(Document &document,
+                            QWidget *parent = nullptr);
 
 private:
+    Document& mDocument;
     QLineEdit *mUserInput;
+    QLabel *mLabel;
     QListWidget *mSuggestions;
+    int mHistoryCounter;
 
     bool skipItem(const QString &title,
                   const QString &input);
     bool isCmd(const QString &input);
     void parseCmd(const QString &input);
+    bool showToolTip(const QString& input);
+    void updateToolTip(const QString &input);
+    void getHistory(const bool append = false);
+    void appendHistory(const QString &input);
+    QAction *getAction(const int index);
+    bool isIntOrDouble(const QString &input);
+    bool isActionCmd(const QString &input);
 
 protected:
     bool eventFilter(QObject* obj, QEvent *e) override;

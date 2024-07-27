@@ -753,14 +753,14 @@ void MainWindow::setupMenuBar()
         const auto qAct = mObjectMenu->addAction(
                     tr("Rotate 90° CW", "MenuBar_Object"));
         mActions.rotate90CWAction->connect(qAct);
-        cmdAddAction(qAct);
+        //cmdAddAction(qAct);
     }
 
     {
         const auto qAct = mObjectMenu->addAction(
                     tr("Rotate 90° CCW", "MenuBar_Object"));
         mActions.rotate90CCWAction->connect(qAct);
-        cmdAddAction(qAct);
+        //cmdAddAction(qAct);
     }
 
     {
@@ -1256,8 +1256,8 @@ void MainWindow::setupMenuBar()
         QMessageBox::aboutQt(this, tr("About Qt"));
     });
 
-    help->addAction(tr("Command Palette"), this, []() {
-        CommandPalette dialog;
+    help->addAction(tr("Command Palette"), this, [this]() {
+        CommandPalette dialog(mDocument, this);
         dialog.exec();
     }, QKeySequence(AppSupport::getSettings("shortcuts",
                                             "cmdPalette",
@@ -1333,7 +1333,28 @@ void MainWindow::addRasterEffect(const qsptr<RasterEffect> &rasterEffect)
 
 void MainWindow::setupExtraMenus()
 {
-
+    const auto menu = new QMenu(this);
+    // TODO: make a function to add extra actions
+    // add rotate action
+    {
+        const auto act = menu->addAction(QIcon::fromTheme("loop"/* TODO: find new (blender) icon! */),
+                                         tr("Rotate selected ..."));
+        act->setData("cmd:rotate");
+        act->setToolTip(QString("<p><b>%1</b> %2 <i>%3</i></p>").arg(tr("Rotate"),
+                                                                     tr("selected items by"),
+                                                                     tr("AMOUNT")));
+        cmdAddAction(act);
+    }
+    // add scale action
+    {
+        const auto act = menu->addAction(QIcon::fromTheme("image-x-generic"/* TODO: find new (blender) icon! */),
+                                         tr("Scale selected ..."));
+        act->setData("cmd:scale");
+        act->setToolTip(QString("<p><b>%1</b> %2 <i>%3</i></p>").arg(tr("Scale"),
+                                                                     tr("selected items by"),
+                                                                     tr("AMOUNT")));
+        cmdAddAction(act);
+    }
 }
 
 void MainWindow::setResolutionText(QString text)

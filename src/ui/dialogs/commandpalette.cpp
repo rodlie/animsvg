@@ -25,13 +25,23 @@
 
 #include <QVBoxLayout>
 #include <QKeyEvent>
+#include <QRegularExpression>
 
 #include "Private/esettings.h"
+#include "canvas.h"
 
-CommandPalette::CommandPalette(QWidget *parent)
+#define ITEM_ACTION_ROLE Qt::UserRole
+#define ITEM_CMD_ROLE Qt::UserRole + 1
+#define ITEM_TOOLTIP_ROLE Qt::UserRole + 2
+
+CommandPalette::CommandPalette(Document& document,
+                               QWidget *parent)
     : QDialog(parent)
+    , mDocument(document)
     , mUserInput(nullptr)
+    , mLabel(nullptr)
     , mSuggestions(nullptr)
+    , mHistoryCounter(-1)
 {
     setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
     setAttribute(Qt::WA_NoSystemBackground);
@@ -44,9 +54,11 @@ CommandPalette::CommandPalette(QWidget *parent)
     const auto lay = new QVBoxLayout(this);
 
     mSuggestions = new QListWidget(this);
+    mLabel = new QLabel(this);
     mUserInput = new QLineEdit(this);
 
     lay->addWidget(mUserInput);
+    lay->addWidget(mLabel);
     lay->addWidget(mSuggestions);
 
     mSuggestions->setObjectName("CommandPaletteSuggestions");
@@ -54,54 +66,103 @@ CommandPalette::CommandPalette(QWidget *parent)
     mSuggestions->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     mSuggestions->hide();
 
+    mLabel->setWordWrap(true);
+    mLabel->setObjectName("CommandPaletteLabel");
+    mLabel->hide();
+
     mUserInput->setObjectName("CommandPaletteInput");
     mUserInput->setPlaceholderText(tr("Search for action ..."));
     mUserInput->installEventFilter(this);
     mUserInput->setFocus();
 
-    connect(mUserInput, &QLineEdit::textChanged, this, [this]() {
+    connect(mUserInput, &QLineEdit::textChanged, this, [this](const auto &input) {
         mSuggestions->clear();
         mSuggestions->hide();
-        if (mUserInput->text().isEmpty()) { return; }
-        if (isCmd(mUserInput->text())) { return; }
+        adjustSize();
+
+        if (input.isEmpty()) { return; }
+        if (isCmd(input)) { return; }
+
         const auto actions = eSettings::instance().fCommandPalette;
         const auto defIcon = QIcon::fromTheme("drawPathAutoChecked");
+
         int items = 0;
         for (int i = 0; i < actions.count(); i++) {
             const auto act = actions.at(i);
             if (!act->isEnabled()) { continue; }
-            if (skipItem(act->text(), mUserInput->text())) { continue; }
+            QString alt = act->data().toString();
+
+            // act cmd?
+            const bool isCmd = isActionCmd(alt);
+            if (isCmd) { alt.clear(); }
+
+            // skip or match
+            if (skipItem(alt.isEmpty() ? act->text() : alt, input)) { continue; }
+
             const auto item = new QListWidgetItem(act->text(), mSuggestions);
-            const auto alt = act->data().toString();
+            item->setData(ITEM_ACTION_ROLE, i);
+
+            // set alt text as title if any
             if (!alt.isEmpty()) { item->setText(alt); }
-            item->setData(Qt::UserRole, i);
+
+            if (isCmd) {
+                item->setData(ITEM_CMD_ROLE, act->data().toString().split("cmd:").takeLast().simplified());
+                item->setData(ITEM_TOOLTIP_ROLE, act->toolTip());
+            }
+
             if (!act->icon().isNull()) { item->setIcon(act->icon()); }
             else { item->setIcon(defIcon); }
             mSuggestions->addItem(item);
             items++;
         }
-        if (mSuggestions->isHidden() && items > 0) { mSuggestions->show(); }
+
+        if (mSuggestions->isHidden() && items > 0) {
+            mSuggestions->show();
+            if (mLabel->isVisible()) { mLabel->hide(); }
+            adjustSize();
+        }
     });
 
     connect(mUserInput, &QLineEdit::returnPressed, this, [this]() {
-        if (isCmd(mUserInput->text())) {
-            parseCmd(mUserInput->text());
+        const auto input = mUserInput->text();
+        if (isCmd(input)) {
+            parseCmd(input);
             return;
         }
         if (mSuggestions->count() < 1) { return; }
-        const auto index = mSuggestions->item(0)->data(Qt::UserRole).toInt();
-        const auto act = eSettings::instance().fCommandPalette.at(index);
+        const auto item = mSuggestions->item(0);
+        if (!item) { return; }
+        const auto cmd = item->data(ITEM_CMD_ROLE).toString();
+        const auto tooltip = item->data(ITEM_TOOLTIP_ROLE).toString();
+        const auto act = getAction(item->data(ITEM_ACTION_ROLE).toInt());
         if (!act) { return; }
+        if (!cmd.isEmpty()) {
+            mUserInput->setText(QString("%1:").arg(cmd));
+            mUserInput->setCursorPosition(mUserInput->text().length());
+            updateToolTip(tooltip);
+            return;
+        }
         act->trigger();
-        close();
+        appendHistory(item->text());
+        accept();
     });
 
     connect(mSuggestions, &QListWidget::itemActivated, this, [this](const auto item) {
-        const auto index = item->data(Qt::UserRole).toInt();
-        const auto act = eSettings::instance().fCommandPalette.at(index);
+        if (!item) { return; }
+        const auto cmd = item->data(ITEM_CMD_ROLE).toString();
+        const auto tooltip = item->data(ITEM_TOOLTIP_ROLE).toString();
+        const auto act = getAction(item->data(ITEM_ACTION_ROLE).toInt());
         if (!act) { return; }
+        if (!cmd.isEmpty()) {
+            mUserInput->setFocus();
+            mUserInput->setText(QString("%1:").arg(cmd));
+            mUserInput->setCursorPosition(mUserInput->text().length());
+            updateToolTip(tooltip);
+            return;
+        }
         act->trigger();
-        close();
+        appendHistory(item->text());
+        accept();
     });
 }
 
@@ -116,7 +177,7 @@ bool CommandPalette::skipItem(const QString &title,
 
 bool CommandPalette::isCmd(const QString &input)
 {
-    if (input.startsWith(":") ||
+    if (input.contains(":") || /* use contains for now, but probably not the best solution */
         input.startsWith("+") ||
         input.startsWith("-")) { return true; }
     return false;
@@ -124,7 +185,134 @@ bool CommandPalette::isCmd(const QString &input)
 
 void CommandPalette::parseCmd(const QString &input)
 {
-    qDebug() << input;
+    if (input.isEmpty()) { return; }
+    qDebug() << "parse cmd" << input;
+
+    // multiple?
+    if (input.contains(" && ")) {
+        for (const auto &cmd : input.split("&&")) { parseCmd(cmd.simplified()); }
+        return;
+    }
+
+    static QRegularExpression validFrameCmd("^[:][-]?[0-9]*[sm]?$");
+    const bool goToFrame = (validFrameCmd.match(input).hasMatch() && input != ":");
+    qDebug() << "go to frame?" << goToFrame;
+
+    static QRegularExpression validRotateCmd("^rotate[:][-]?[0-9,.]*$");
+    const bool doRotate = (validRotateCmd.match(input).hasMatch() && input != "rotate:");
+    qDebug() << "do rotate?" << doRotate;
+
+    static QRegularExpression validScaleCmd("^scale[:][-]?[0-9,.]*$");
+    const bool doScale = (validScaleCmd.match(input).hasMatch() && input != "scale:");
+    qDebug() << "do scale?" << doScale;
+
+    if (goToFrame) {
+        const bool hasSec = input.endsWith("s");
+        const bool hasMin = input.endsWith("m");
+        if (hasSec && hasMin) { return; }
+        QString args = input;
+        int value = args.replace(":", "")
+                        .replace("m", "")
+                        .replace("s", "")
+                        .simplified()
+                        .toInt();
+        const auto scene = *mDocument.fActiveScene;
+        if (scene) {
+            if (hasSec) { value *= scene->getFps(); }
+            else if (hasMin) { value = (value * 60) * scene->getFps(); }
+            qDebug() << "go to frame" << value;
+            scene->anim_setAbsFrame(value);
+            mDocument.actionFinished();
+            appendHistory(input);
+            accept();
+        }
+        return;
+    }
+
+    if (doRotate) {
+        const QString arg = input.split(":").takeLast().simplified().replace(",", ".");
+        if (!isIntOrDouble(arg)) { return; }
+        const auto scene = *mDocument.fActiveScene;
+        if (scene) {
+            qDebug() << "do rotate" << arg;
+            scene->rotateSelectedBoxesStartAndFinish(arg.toDouble());
+            mDocument.actionFinished();
+            appendHistory(input);
+            accept();
+        }
+        return;
+    }
+
+    if (doScale) {
+        const QString arg = input.split(":").takeLast().simplified().replace(",", ".");
+        if (!isIntOrDouble(arg)) { return; }
+        const auto scene = *mDocument.fActiveScene;
+        if (scene) {
+            qDebug() << "do scale" << arg;
+            scene->scaleSelectedBoxesStartAndFinish(arg.toDouble());
+            mDocument.actionFinished();
+            appendHistory(input);
+            accept();
+        }
+        return;
+    }
+}
+
+bool CommandPalette::showToolTip(const QString &input)
+{
+    return input.startsWith("cmd:");
+}
+
+void CommandPalette::updateToolTip(const QString &input)
+{
+    if (input.isEmpty()) { return; }
+    mLabel->setText(input);
+    if (mLabel->isHidden()) {
+        mLabel->show();
+        adjustSize();
+    }
+}
+
+void CommandPalette::getHistory(const bool append)
+{
+    const auto history = eSettings::instance().fCommandHistory;
+    if (history.count() < 1) { return; }
+    if (mHistoryCounter < 0 ||
+        mHistoryCounter >= history.count()) { mHistoryCounter = history.count() - 1; }
+    const QString cmd = history.at(mHistoryCounter);
+    mUserInput->setText(append ? QString("%1 && %2").arg(mUserInput->text(), cmd) : cmd);
+    mUserInput->setCursorPosition(mUserInput->text().length());
+    mHistoryCounter--;
+}
+
+void CommandPalette::appendHistory(const QString &input)
+{
+    if (input.isEmpty()) { return; }
+    eSettings::sInstance->fCommandHistory.append(input);
+}
+
+QAction *CommandPalette::getAction(const int index)
+{
+    const auto actions = eSettings::instance().fCommandPalette;
+    if (actions.count() < 1 ||
+        index < 0 ||
+        index >= actions.count()) { return nullptr; }
+    return actions.at(index);
+}
+
+bool CommandPalette::isIntOrDouble(const QString &input)
+{
+    if (input.isEmpty()) { return false; }
+
+    static QRegularExpression isInt("^[-]?[0-9]*$");
+    static QRegularExpression isDouble("^[-]?[0-9]*[.][0-9]*?$");
+
+    return (isInt.match(input).hasMatch() || isDouble.match(input).hasMatch());
+}
+
+bool CommandPalette::isActionCmd(const QString &input)
+{
+    return (input.startsWith("cmd:") && input != "cmd:");
 }
 
 bool CommandPalette::eventFilter(QObject *obj, QEvent *e)
@@ -132,7 +320,10 @@ bool CommandPalette::eventFilter(QObject *obj, QEvent *e)
     if (obj == mUserInput) {
         if (e->type() == QEvent::KeyPress) {
             QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
-            if (keyEvent->key() == Qt::Key_Down) {
+            if (keyEvent->key() == Qt::Key_Up) {
+                getHistory(keyEvent->modifiers() & Qt::ShiftModifier);
+                return true;
+            } else if (keyEvent->key() == Qt::Key_Down) {
                 mSuggestions->setFocus();
                 return true;
             }
