@@ -313,6 +313,25 @@ void Canvas::rotateSelectedBoxesStartAndFinish(const qreal rotBy) {
     }
 }
 
+void Canvas::scaleSelectedBoxesStartAndFinish(const qreal scaleBy)
+{
+    if (mDocument.fLocalPivot) {
+        for(const auto &box : mSelectedBoxes) {
+            box->startScaleTransform();
+            box->scale(scaleBy);
+            box->finishTransform();
+        }
+    } else {
+        for (const auto &box : mSelectedBoxes) {
+            box->startRotTransform();
+            box->startPosTransform();
+            box->saveTransformPivotAbsPos(mRotPivot->getAbsolutePos());
+            box->scaleRelativeToSavedPivot(scaleBy);
+            box->finishTransform();
+        }
+    }
+}
+
 void Canvas::rotateSelectedBy(const qreal rotBy,
                               const QPointF &absOrigin,
                               const bool startTrans) {

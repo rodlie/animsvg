@@ -543,6 +543,8 @@ public:
     void selectAllAction();
     void clearSelectionAction();
     void rotateSelectedBoxesStartAndFinish(const qreal rotBy);
+    void scaleSelectedBoxesStartAndFinish(const qreal scaleBy);
+
     bool shouldScheduleUpdate()
     {
         return mSceneFrameOutdated;
