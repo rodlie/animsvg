@@ -1335,7 +1335,7 @@ void MainWindow::setupExtraMenus()
 {
     const auto menu = new QMenu(this);
     // TODO: make a function to add extra actions
-    // add rotate action
+    // add rotate
     {
         const auto act = menu->addAction(QIcon::fromTheme("loop"/* TODO: find new (blender) icon! */),
                                          tr("Rotate selected ..."));
@@ -1345,7 +1345,7 @@ void MainWindow::setupExtraMenus()
                                                                      tr("AMOUNT")));
         cmdAddAction(act);
     }
-    // add scale action
+    // add scale
     {
         const auto act = menu->addAction(QIcon::fromTheme("image-x-generic"/* TODO: find new (blender) icon! */),
                                          tr("Scale selected ..."));
@@ -1353,6 +1353,83 @@ void MainWindow::setupExtraMenus()
         act->setToolTip(QString("<p><b>%1</b> %2 <i>%3</i></p>").arg(tr("Scale"),
                                                                      tr("selected items by"),
                                                                      tr("AMOUNT")));
+        cmdAddAction(act);
+    }
+    // add marker
+    {
+        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+                                         tr("Marker at ..."));
+        act->setData("cmd:marker");
+        act->setToolTip(QString("<p><b>%1</b> %2 <i>%3</i></p>").arg(tr("Marker"),
+                                                                     tr("at"),
+                                                                     tr("TIME (frame/sec/min)."
+                                                                        " Use <b>,</b> to add multiple markers.")));
+        cmdAddAction(act);
+    }
+    // clear markers
+    {
+        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+                                         tr("Clear Markers"));
+        connect(act, &QAction::triggered,
+                this, [this](){
+            const auto scene = *mDocument.fActiveScene;
+            if (scene) { scene->clearMarkers(); }
+        });
+        cmdAddAction(act);
+    }
+    // add in
+    {
+        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+                                         tr("In at ..."));
+        act->setData("cmd:in");
+        act->setToolTip(QString("<p><b>%1</b> %2 <i>%3</i></p>").arg(tr("Frame In"),
+                                                                     tr("at"),
+                                                                     tr("TIME (frame/sec/min).")));
+        cmdAddAction(act);
+    }
+    // add out
+    {
+        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+                                         tr("Out at ..."));
+        act->setData("cmd:out");
+        act->setToolTip(QString("<p><b>%1</b> %2 <i>%3</i></p>").arg(tr("Frame Out"),
+                                                                     tr("at"),
+                                                                     tr("TIME (frame/sec/min).")));
+        cmdAddAction(act);
+    }
+    // clear in/out
+    {
+        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+                                         tr("Clear In"));
+        connect(act, &QAction::triggered,
+                this, [this](){
+            const auto scene = *mDocument.fActiveScene;
+            if (!scene) { return; }
+            scene->setFrameIn(false, 0);
+        });
+        cmdAddAction(act);
+    }
+    {
+        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+                                         tr("Clear Out"));
+        connect(act, &QAction::triggered,
+                this, [this](){
+            const auto scene = *mDocument.fActiveScene;
+            if (!scene) { return; }
+            scene->setFrameOut(false, 0);
+        });
+        cmdAddAction(act);
+    }
+    {
+        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+                                         tr("Clear In/Out"));
+        connect(act, &QAction::triggered,
+                this, [this](){
+            const auto scene = *mDocument.fActiveScene;
+            if (!scene) { return; }
+            scene->setFrameIn(false, 0);
+            scene->setFrameOut(false, 0);
+        });
         cmdAddAction(act);
     }
 }

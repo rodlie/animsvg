@@ -210,6 +210,14 @@ void CommandPalette::parseCmd(const QString &input)
     const bool doMarkers = (validMarkersCmd.match(input).hasMatch() && input != "marker:");
     qDebug() << "do markers?" << doMarkers;
 
+    static QRegularExpression validFrameInCmd("^in[:][-]?[0-9]*[sm]?$");
+    const bool doFrameIn = (validFrameInCmd.match(input).hasMatch() && input != "in:");
+    qDebug() << "do frame in?" << doFrameIn;
+
+    static QRegularExpression validFrameOutCmd("^out[:][-]?[0-9]*[sm]?$");
+    const bool doFrameOut = (validFrameOutCmd.match(input).hasMatch() && input != "out:");
+    qDebug() << "do frame out?" << doFrameOut;
+
     if (goToFrame) {
         QString frame = input.simplified();
         const bool hasSec = frame.endsWith("s");
@@ -273,6 +281,26 @@ void CommandPalette::parseCmd(const QString &input)
             qDebug() << "do marker" << value;
             scene->setMarker(value);
         }
+        appendHistory(input);
+        accept();
+        return;
+    }
+
+    if (doFrameIn || doFrameOut) {
+        QString frame = input.split(":").takeLast().simplified();
+        const bool hasSec = frame.endsWith("s");
+        const bool hasMin = frame.endsWith("m");
+        if (hasSec && hasMin) { return; }
+        if (!isIntOrDouble(frame.replace("m", "")
+                                .replace("s", ""))) { return; }
+        int value = frame.toInt();
+        const auto scene = *mDocument.fActiveScene;
+        if (!scene) { return; }
+        if (hasSec) { value *= scene->getFps(); }
+        else if (hasMin) { value = (value * 60) * scene->getFps(); }
+        qDebug() << "do frame in/out" << value;
+        if (doFrameIn) { scene->setFrameIn(true, value); }
+        else if (doFrameOut) { scene->setFrameOut(true, value); }
         appendHistory(input);
         accept();
         return;
