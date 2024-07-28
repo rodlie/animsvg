@@ -1337,7 +1337,7 @@ void MainWindow::setupExtraMenus()
 
     // add rotate
     {
-        const auto act = menu->addAction(QIcon::fromTheme("loop"/* TODO: find new (blender) icon! */),
+        const auto act = menu->addAction(QIcon::fromTheme("image-x-generic"/* TODO: find new (blender) icon! */),
                                          tr("Rotate selected ..."));
         act->setData("cmd:rotate");
         act->setToolTip(QString("<p><b>%1</b> %2 <i>%3</i></p>").arg(tr("Rotate"),
@@ -1357,7 +1357,7 @@ void MainWindow::setupExtraMenus()
     }
     // add move
     {
-        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+        const auto act = menu->addAction(QIcon::fromTheme("image-x-generic"/* TODO: find new (blender) icon! */),
                                          tr("Move selected ..."));
         act->setData("cmd:move");
         act->setToolTip(QString("<p><b>%1</b> %2 <i>%3</i></p>").arg(tr("Move"),
@@ -1367,7 +1367,7 @@ void MainWindow::setupExtraMenus()
     }
     // add marker
     {
-        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+        const auto act = menu->addAction(QIcon::fromTheme("sequence"/* TODO: find new (blender) icon! */),
                                          tr("Marker at ..."));
         act->setData("cmd:marker");
         act->setToolTip(QString("<p><b>%1</b> %2 <i>%3</i></p>").arg(tr("Marker"),
@@ -1378,7 +1378,7 @@ void MainWindow::setupExtraMenus()
     }
     // clear markers
     {
-        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+        const auto act = menu->addAction(QIcon::fromTheme("trash"/* TODO: find new (blender) icon! */),
                                          tr("Clear Markers"));
         connect(act, &QAction::triggered,
                 this, [this](){
@@ -1389,7 +1389,7 @@ void MainWindow::setupExtraMenus()
     }
     // add in
     {
-        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+        const auto act = menu->addAction(QIcon::fromTheme("pivot-align-left"),
                                          tr("In at ..."));
         act->setData("cmd:in");
         act->setToolTip(QString("<p><b>%1</b> %2 <i>%3</i></p>").arg(tr("Frame In"),
@@ -1399,7 +1399,7 @@ void MainWindow::setupExtraMenus()
     }
     // add out
     {
-        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+        const auto act = menu->addAction(QIcon::fromTheme("pivot-align-right"),
                                          tr("Out at ..."));
         act->setData("cmd:out");
         act->setToolTip(QString("<p><b>%1</b> %2 <i>%3</i></p>").arg(tr("Frame Out"),
@@ -1409,7 +1409,7 @@ void MainWindow::setupExtraMenus()
     }
     // clear in/out
     {
-        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+        const auto act = menu->addAction(QIcon::fromTheme("trash"/* TODO: find new (blender) icon! */),
                                          tr("Clear In"));
         connect(act, &QAction::triggered,
                 this, [this](){
@@ -1420,7 +1420,7 @@ void MainWindow::setupExtraMenus()
         cmdAddAction(act);
     }
     {
-        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+        const auto act = menu->addAction(QIcon::fromTheme("trash"/* TODO: find new (blender) icon! */),
                                          tr("Clear Out"));
         connect(act, &QAction::triggered,
                 this, [this](){
@@ -1431,7 +1431,7 @@ void MainWindow::setupExtraMenus()
         cmdAddAction(act);
     }
     {
-        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+        const auto act = menu->addAction(QIcon::fromTheme("trash"/* TODO: find new (blender) icon! */),
                                          tr("Clear In/Out"));
         connect(act, &QAction::triggered,
                 this, [this](){
@@ -1444,7 +1444,7 @@ void MainWindow::setupExtraMenus()
     }
     // center pivot
     {
-        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+        const auto act = menu->addAction(QIcon::fromTheme("pivot-align-center"),
                                          tr("Center Pivot"));
         connect(act, &QAction::triggered, this, [this]() {
             const auto scene = *mDocument.fActiveScene;
@@ -1455,7 +1455,7 @@ void MainWindow::setupExtraMenus()
     }
     // create link
     {
-        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+        const auto act = menu->addAction(QIcon::fromTheme("linked"),
                                          tr("Create Link"));
         connect(act, &QAction::triggered, this, [this]() {
             const auto scene = *mDocument.fActiveScene;
