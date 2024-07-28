@@ -1015,6 +1015,11 @@ void BoundingBox::removeRasterEffect(const qsptr<RasterEffect> &effect) {
     mRasterEffectsAnimators->removeChild(effect);
 }
 
+void BoundingBox::addBlendEffect(const qsptr<BlendEffect> &blendEffect)
+{
+    mBlendEffectCollection->addChild(blendEffect);
+}
+
 //int BoundingBox::prp_getParentFrameShift() const {
 //    if(!mParentGroup) {
 //        return 0;

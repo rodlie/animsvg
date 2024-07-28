@@ -366,6 +366,8 @@ public:
     void addRasterEffect(const qsptr<RasterEffect> &rasterEffect);
     void removeRasterEffect(const qsptr<RasterEffect> &effect);
 
+    void addBlendEffect(const qsptr<BlendEffect> &blendEffect);
+
     void setBlendModeSk(const SkBlendMode blendMode);
 
     QPointF mapRelPosToAbs(const QPointF &relPos) const;
