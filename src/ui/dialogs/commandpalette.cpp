@@ -199,6 +199,14 @@ void CommandPalette::parseCmd(const QString &input)
     const bool goToFrame = (validFrameCmd.match(input).hasMatch() && input != ":");
     qDebug() << "go to frame?" << goToFrame;
 
+    static QRegularExpression validFrameSkipNextCmd("^\\+[0-9]*[sm]?$");
+    const bool skipToNextFrame = (validFrameSkipNextCmd.match(input).hasMatch() && input != "+");
+    qDebug() << "skip to next frame?" << skipToNextFrame;
+
+    static QRegularExpression validFrameSkipPrevCmd("^\\-[0-9]*[sm]?$");
+    const bool skipToPrevFrame = (validFrameSkipPrevCmd.match(input).hasMatch() && input != "-");
+    qDebug() << "skip to prev frame?" << skipToPrevFrame;
+
     static QRegularExpression validRotateCmd("^rotate[:][-]?[0-9,.]*$");
     const bool doRotate = (validRotateCmd.match(input).hasMatch() && input != "rotate:");
     qDebug() << "do rotate?" << doRotate;
@@ -223,12 +231,12 @@ void CommandPalette::parseCmd(const QString &input)
     const bool doFrameOut = (validFrameOutCmd.match(input).hasMatch() && input != "out:");
     qDebug() << "do frame out?" << doFrameOut;
 
-    if (goToFrame) {
+    if (goToFrame || skipToNextFrame || skipToPrevFrame) {
         QString frame = input.simplified();
         const bool hasSec = frame.endsWith("s");
         const bool hasMin = frame.endsWith("m");
         if (hasSec && hasMin) { return; }
-        if (!isIntOrDouble(frame.replace(":", "")
+        if (!isIntOrDouble(frame.replace(goToFrame ? ":" : (skipToNextFrame ? "+" : "-"), "")
                                 .replace("m", "")
                                 .replace("s", ""))) { return; }
         int value = frame.toInt();
@@ -236,7 +244,9 @@ void CommandPalette::parseCmd(const QString &input)
         if (!scene) { return; }
         if (hasSec) { value *= scene->getFps(); }
         else if (hasMin) { value = (value * 60) * scene->getFps(); }
-        qDebug() << "go to frame" << value;
+
+        if (!goToFrame) { value = skipToNextFrame ? scene->getCurrentFrame() + value : scene->getCurrentFrame() - value; }
+        qDebug() << "go to or skip to frame" << value;
         scene->anim_setAbsFrame(value);
         mDocument.actionFinished();
         appendHistory(input);
@@ -395,7 +405,7 @@ bool CommandPalette::eventFilter(QObject *obj, QEvent *e)
                 getHistory(keyEvent->modifiers() & Qt::ShiftModifier);
                 return true;
             } else if (keyEvent->key() == Qt::Key_Down) {
-                mSuggestions->setFocus();
+                if (mSuggestions->isVisible()) { mSuggestions->setFocus(); }
                 return true;
             }
         }
