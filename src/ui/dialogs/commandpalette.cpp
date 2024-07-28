@@ -206,26 +206,28 @@ void CommandPalette::parseCmd(const QString &input)
     const bool doScale = (validScaleCmd.match(input).hasMatch() && input != "scale:");
     qDebug() << "do scale?" << doScale;
 
+    static QRegularExpression validMarkersCmd("^marker[:][0-9sm,-]*$");
+    const bool doMarkers = (validMarkersCmd.match(input).hasMatch() && input != "marker:");
+    qDebug() << "do markers?" << doMarkers;
+
     if (goToFrame) {
-        const bool hasSec = input.endsWith("s");
-        const bool hasMin = input.endsWith("m");
+        QString frame = input.simplified();
+        const bool hasSec = frame.endsWith("s");
+        const bool hasMin = frame.endsWith("m");
         if (hasSec && hasMin) { return; }
-        QString args = input;
-        int value = args.replace(":", "")
-                        .replace("m", "")
-                        .replace("s", "")
-                        .simplified()
-                        .toInt();
+        if (!isIntOrDouble(frame.replace(":", "")
+                                .replace("m", "")
+                                .replace("s", ""))) { return; }
+        int value = frame.toInt();
         const auto scene = *mDocument.fActiveScene;
-        if (scene) {
-            if (hasSec) { value *= scene->getFps(); }
-            else if (hasMin) { value = (value * 60) * scene->getFps(); }
-            qDebug() << "go to frame" << value;
-            scene->anim_setAbsFrame(value);
-            mDocument.actionFinished();
-            appendHistory(input);
-            accept();
-        }
+        if (!scene) { return; }
+        if (hasSec) { value *= scene->getFps(); }
+        else if (hasMin) { value = (value * 60) * scene->getFps(); }
+        qDebug() << "go to frame" << value;
+        scene->anim_setAbsFrame(value);
+        mDocument.actionFinished();
+        appendHistory(input);
+        accept();
         return;
     }
 
@@ -233,13 +235,12 @@ void CommandPalette::parseCmd(const QString &input)
         const QString arg = input.split(":").takeLast().simplified().replace(",", ".");
         if (!isIntOrDouble(arg)) { return; }
         const auto scene = *mDocument.fActiveScene;
-        if (scene) {
-            qDebug() << "do rotate" << arg;
-            scene->rotateSelectedBoxesStartAndFinish(arg.toDouble());
-            mDocument.actionFinished();
-            appendHistory(input);
-            accept();
-        }
+        if (!scene) { return; }
+        qDebug() << "do rotate" << arg;
+        scene->rotateSelectedBoxesStartAndFinish(arg.toDouble());
+        mDocument.actionFinished();
+        appendHistory(input);
+        accept();
         return;
     }
 
@@ -247,13 +248,33 @@ void CommandPalette::parseCmd(const QString &input)
         const QString arg = input.split(":").takeLast().simplified().replace(",", ".");
         if (!isIntOrDouble(arg)) { return; }
         const auto scene = *mDocument.fActiveScene;
-        if (scene) {
-            qDebug() << "do scale" << arg;
-            scene->scaleSelectedBoxesStartAndFinish(arg.toDouble());
-            mDocument.actionFinished();
-            appendHistory(input);
-            accept();
+        if (!scene) { return; }
+        qDebug() << "do scale" << arg;
+        scene->scaleSelectedBoxesStartAndFinish(arg.toDouble());
+        mDocument.actionFinished();
+        appendHistory(input);
+        accept();
+        return;
+    }
+
+    if (doMarkers) {
+        const QString args = input.split(":").takeLast().simplified();
+        const auto scene = *mDocument.fActiveScene;
+        if (!scene) { return; }
+        for (const auto &arg : args.split(",")) {
+            QString mark = arg.simplified();
+            const bool hasSec = mark.endsWith("s");
+            const bool hasMin = mark.endsWith("m");
+            if (hasSec && hasMin) { continue; }
+            if (!isIntOrDouble(mark.replace("m", "").replace("s", ""))) { continue; }
+            int value = mark.toInt();
+            if (hasSec) { value *= scene->getFps(); }
+            else if (hasMin) { value = (value * 60) * scene->getFps(); }
+            qDebug() << "do marker" << value;
+            scene->setMarker(value);
         }
+        appendHistory(input);
+        accept();
         return;
     }
 }
