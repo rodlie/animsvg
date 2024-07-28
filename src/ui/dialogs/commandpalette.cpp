@@ -72,6 +72,7 @@ CommandPalette::CommandPalette(Document& document,
 
     mUserInput->setObjectName("CommandPaletteInput");
     mUserInput->setPlaceholderText(tr("Search for action ..."));
+    mUserInput->addAction(QIcon::fromTheme("zoom"), QLineEdit::LeadingPosition);
     mUserInput->installEventFilter(this);
     mUserInput->setFocus();
 
@@ -206,6 +207,10 @@ void CommandPalette::parseCmd(const QString &input)
     const bool doScale = (validScaleCmd.match(input).hasMatch() && input != "scale:");
     qDebug() << "do scale?" << doScale;
 
+    static QRegularExpression validMoveCmd("^move[:][-]?[0-9,.x]*$");
+    const bool doMove = (validMoveCmd.match(input).hasMatch() && input != "move:");
+    qDebug() << "do move?" << doMove;
+
     static QRegularExpression validMarkersCmd("^marker[:][0-9sm,-]*$");
     const bool doMarkers = (validMarkersCmd.match(input).hasMatch() && input != "marker:");
     qDebug() << "do markers?" << doMarkers;
@@ -259,6 +264,23 @@ void CommandPalette::parseCmd(const QString &input)
         if (!scene) { return; }
         qDebug() << "do scale" << arg;
         scene->scaleSelectedBoxesStartAndFinish(arg.toDouble());
+        mDocument.actionFinished();
+        appendHistory(input);
+        accept();
+        return;
+    }
+
+    if (doMove) {
+        const QStringList args = input.split(":").takeLast().simplified().replace(",", ".").split("x");
+        if (args.count() != 2) { return; }
+        const QString moveX = args.at(0);
+        const QString moveY = args.at(1);
+        if (!isIntOrDouble(moveX) || !isIntOrDouble(moveY)) { return; }
+        const auto scene = *mDocument.fActiveScene;
+        if (!scene) { return; }
+        qDebug() << "do move" << moveX << moveY;
+        scene->moveSelectedBoxesStartAndFinish({moveX.toDouble(),
+                                                moveY.toDouble()});
         mDocument.actionFinished();
         appendHistory(input);
         accept();

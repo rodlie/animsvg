@@ -332,6 +332,15 @@ void Canvas::scaleSelectedBoxesStartAndFinish(const qreal scaleBy)
     }
 }
 
+void Canvas::moveSelectedBoxesStartAndFinish(const QPointF moveBy)
+{
+    for (const auto &box : mSelectedBoxes) {
+        box->startPosTransform();
+        box->moveByAbs(moveBy);
+        box->finishTransform();
+    }
+}
+
 void Canvas::rotateSelectedBy(const qreal rotBy,
                               const QPointF &absOrigin,
                               const bool startTrans) {

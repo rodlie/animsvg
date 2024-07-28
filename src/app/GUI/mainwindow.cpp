@@ -1355,6 +1355,16 @@ void MainWindow::setupExtraMenus()
                                                                      tr("AMOUNT")));
         cmdAddAction(act);
     }
+    // add move
+    {
+        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+                                         tr("Move selected ..."));
+        act->setData("cmd:move");
+        act->setToolTip(QString("<p><b>%1</b> %2 <i>%3</i></p>").arg(tr("Move"),
+                                                                     tr("selected items by"),
+                                                                     tr("AMOUNT (XxY)")));
+        cmdAddAction(act);
+    }
     // add marker
     {
         const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),

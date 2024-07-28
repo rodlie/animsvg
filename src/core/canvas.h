@@ -544,6 +544,7 @@ public:
     void clearSelectionAction();
     void rotateSelectedBoxesStartAndFinish(const qreal rotBy);
     void scaleSelectedBoxesStartAndFinish(const qreal scaleBy);
+    void moveSelectedBoxesStartAndFinish(const QPointF moveBy);
 
     bool shouldScheduleUpdate()
     {
