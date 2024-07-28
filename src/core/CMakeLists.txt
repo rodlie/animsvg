@@ -386,6 +386,7 @@ set(
     BlendEffects/blendeffectcollection.h
     BlendEffects/moveblendeffect.h
     BlendEffects/targetedblendeffect.h
+    BlendEffects/blendeffectmenucreator.h
     Boxes/animationbox.h
     Boxes/boundingbox.h
     Boxes/boxrendercontainer.h

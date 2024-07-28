@@ -75,8 +75,8 @@
 #include "dialogs/adjustscenedialog.h"
 #include "dialogs/commandpalette.h"
 
-#include "RasterEffects/rastereffectsinclude.h"
 #include "RasterEffects/rastereffectmenucreator.h"
+#include "BlendEffects/blendeffectmenucreator.h"
 
 MainWindow *MainWindow::sInstance = nullptr;
 
@@ -1301,25 +1301,45 @@ void MainWindow::setupMenuBar()
 void MainWindow::setupMenuEffects()
 {
     const auto menu = new QMenu(this);
-    const auto adder = [this, menu](const QString& name, const QString& path,
-                                    const RasterEffectMenuCreator::EffectCreator& creator) {
-        if (name.isEmpty()) { return; }
-        QString title = name;
-        if (!path.isEmpty()) {
-            title.append(QString(" (%1 - %2)").arg(tr("Raster Effect"), path));
-        } else {
-            title.append(QString(" (%1)").arg(tr("Raster Effect")));
-        }
-        const auto act =  menu->addAction(title);
-        cmdAddAction(act);
-        connect(act, &QAction::triggered, this, [this, creator]() {
-            addRasterEffect(creator());
-        });
-    };
-    RasterEffectMenuCreator::forEveryEffect(adder);
+    { // raster
+        const auto adder = [this, menu](const QString& name, const QString& path,
+                                        const RasterEffectMenuCreator::EffectCreator& creator) {
+            if (name.isEmpty()) { return; }
+            QString title = name;
+            if (!path.isEmpty()) {
+                title.append(QString(" (%1 - %2)").arg(tr("Raster Effect"), path));
+            } else {
+                title.append(QString(" (%1)").arg(tr("Raster Effect")));
+            }
+            const auto act =  menu->addAction(title);
+            cmdAddAction(act);
+            connect(act, &QAction::triggered, this, [this, creator]() {
+                addRasterEffect(creator());
+            });
+        };
+        RasterEffectMenuCreator::forEveryEffect(adder);
+    }
+    { // path TODO
+        // adapt PathEffectsMenu::addPathEffectsToBoxActionMenu(menu);
+    }
+    { // transform TODO
+        // adapt TransformEffectCollection::prp_setupTreeViewMenu(menu);
+    }
+    { // blend
+        const auto adder = [this, menu](const QString& name,
+                                        const BlendEffectMenuCreator::EffectCreator& creator) {
+            if (name.isEmpty()) { return; }
+            const auto act =  menu->addAction(name);
+            cmdAddAction(act);
+            connect(act, &QAction::triggered, this, [this, creator]() {
+                addBlendEffect(creator());
+            });
+        };
+        BlendEffectMenuCreator::forEveryEffect(adder);
+    }
 }
 
-void MainWindow::addRasterEffect(const qsptr<RasterEffect> &rasterEffect)
+void MainWindow::addRasterEffect(const qsptr<RasterEffect> &effect)
 {
     const auto scene = *mDocument.fActiveScene;
     if (!scene) { return; }
@@ -1327,7 +1347,19 @@ void MainWindow::addRasterEffect(const qsptr<RasterEffect> &rasterEffect)
     const auto box = scene->getCurrentBox();
     if (!box) { return; }
 
-    box->addRasterEffect(rasterEffect);
+    box->addRasterEffect(effect);
+    mDocument.actionFinished();
+}
+
+void MainWindow::addBlendEffect(const qsptr<BlendEffect> &effect)
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return; }
+
+    const auto box = scene->getCurrentBox();
+    if (!box) { return; }
+
+    box->addBlendEffect(effect);
     mDocument.actionFinished();
 }
 
