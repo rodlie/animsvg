@@ -1442,6 +1442,28 @@ void MainWindow::setupExtraMenus()
         });
         cmdAddAction(act);
     }
+    // center pivot
+    {
+        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+                                         tr("Center Pivot"));
+        connect(act, &QAction::triggered, this, [this]() {
+            const auto scene = *mDocument.fActiveScene;
+            if (!scene) { return; }
+            scene->centerPivotForSelected();
+        });
+        cmdAddAction(act);
+    }
+    // create link
+    {
+        const auto act = menu->addAction(QIcon::fromTheme("dialog-information"/* TODO: find new (blender) icon! */),
+                                         tr("Create Link"));
+        connect(act, &QAction::triggered, this, [this]() {
+            const auto scene = *mDocument.fActiveScene;
+            if (!scene) { return; }
+            scene->createLinkBoxForSelected();
+        });
+        cmdAddAction(act);
+    }
 }
 
 void MainWindow::setResolutionText(QString text)
