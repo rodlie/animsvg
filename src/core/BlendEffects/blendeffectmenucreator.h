@@ -43,9 +43,9 @@ struct CORE_EXPORT BlendEffectMenuCreator
                                   const EffectCreator&)>;
     static void forEveryEffect(const EffectAdder& add)
     {
-        add(QObject::tr("New Move Blend Effect"),
+        add(QObject::tr("Add Move Blend Effect"),
             []() { return enve::make_shared<MoveBlendEffect>(); });
-        add(QObject::tr("New Targeted Blend Effect"),
+        add(QObject::tr("Add Targeted Blend Effect"),
             []() { return enve::make_shared<TargetedBlendEffect>(); });
     }
 };

@@ -426,3 +426,10 @@ QLabel#CommandPaletteLabel {
 QLabel#CommandPaletteLabel {
     padding: .5em;
 }
+
+QMenu::separator {
+  width: 1px;
+  height: 1px;
+  margin: 4px;
+  background-color: %4;
+}

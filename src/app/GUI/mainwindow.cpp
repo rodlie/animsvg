@@ -464,7 +464,7 @@ void MainWindow::setupMenuBar()
     cmdAddAction(openAct);
     mRecentMenu = mFileMenu->addMenu(QIcon::fromTheme("file_folder"),
                                      tr("Open Recent", "MenuBar_File"));
-    mFileMenu->addSeparator();
+
     const auto linkedAct = mFileMenu->addAction(QIcon::fromTheme("linked"),
                                                 tr("Link"),
                                                 this, &MainWindow::linkFile,
@@ -501,7 +501,6 @@ void MainWindow::setupMenuBar()
         mToolbar->addWidget(loadToolBtn);
     }
 
-    mFileMenu->addSeparator();
     const auto revertAct = mFileMenu->addAction(QIcon::fromTheme("loop_back"),
                                                 tr("Revert", "MenuBar_File"),
                                                 this, &MainWindow::revert);
@@ -509,6 +508,7 @@ void MainWindow::setupMenuBar()
     cmdAddAction(revertAct);
 
     mFileMenu->addSeparator();
+
     mSaveAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
                                     tr("Save", "MenuBar_File"),
                                     this, qOverload<>(&MainWindow::saveFile),
@@ -573,8 +573,6 @@ void MainWindow::setupMenuBar()
     closeProjectAct->setData(tr("Close Project"));
     cmdAddAction(closeProjectAct);
 
-    mFileMenu->addSeparator();
-
     const auto prefsAct = mFileMenu->addAction(QIcon::fromTheme("preferences"),
                                                tr("Preferences", "MenuBar_Edit"), [this]() {
         const auto settDial = new SettingsDialog(this);
@@ -582,8 +580,6 @@ void MainWindow::setupMenuBar()
         settDial->show();
     }, QKeySequence(tr("Ctrl+P")));
     cmdAddAction(prefsAct);
-
-    mFileMenu->addSeparator();
 
     const auto quitAppAct = mFileMenu->addAction(QIcon::fromTheme("quit"),
                                                  tr("Exit", "MenuBar_File"),
@@ -646,8 +642,6 @@ void MainWindow::setupMenuBar()
         cmdAddAction(qAct);
     }
 
-    mEditMenu->addSeparator();
-
     {
         const auto qAct = new NoShortcutAction(tr("Duplicate", "MenuBar_Edit"));
         mEditMenu->addAction(qAct);
@@ -655,8 +649,6 @@ void MainWindow::setupMenuBar()
         mActions.duplicateAction->connect(qAct);
         cmdAddAction(qAct);
     }
-
-    mEditMenu->addSeparator();
 
     {
         const auto qAct = new NoShortcutAction(tr("Delete", "MenuBar_Edit"));
@@ -694,8 +686,6 @@ void MainWindow::setupMenuBar()
         mTimeline->update();
     }, QKeySequence(tr("Ctrl+R")));
     cmdAddAction(clearCacheAct);
-
-    mEditMenu->addSeparator();
 
     const auto clearRecentAct = mEditMenu->addAction(tr("Clear Recent Files"), [this]() {
         mRecentFiles.clear();
@@ -908,11 +898,10 @@ void MainWindow::setupMenuBar()
         cmdAddAction(qAct);
     }
 
-//    mEffectsMenu = mMenuBar->addMenu("Effects");
-
-//    mEffectsMenu->addAction("Blur");
 
     mSceneMenu = mMenuBar->addMenu(tr("Scene", "MenuBar"));
+    mEffectsMenu = mMenuBar->addMenu(tr("Effects"));
+    setupMenuEffects();
 
     const auto newSceneAct = mSceneMenu->addAction(QIcon::fromTheme("file_new"),
                                                    tr("New Scene", "MenuBar_Scene"),
@@ -928,7 +917,10 @@ void MainWindow::setupMenuBar()
     mActions.deleteSceneAction->connect(deleteSceneAct);
     cmdAddAction(deleteSceneAct);
 
-
+    const auto scenePropAct = mSceneMenu->addAction(QIcon::fromTheme("sequence"),
+                                                    tr("Scene Properties", "MenuBar_Scene"));
+    mActions.sceneSettingsAction->connect(scenePropAct);
+    cmdAddAction(scenePropAct);
 
     mSceneMenu->addSeparator();
 
@@ -939,15 +931,6 @@ void MainWindow::setupMenuBar()
                                                                               "addToQue",
                                                                               "F12").toString()));
     cmdAddAction(mAddToQueAct);
-
-
-    mSceneMenu->addSeparator();
-
-
-    const auto scenePropAct = mSceneMenu->addAction(QIcon::fromTheme("sequence"),
-                                                    tr("Scene Properties", "MenuBar_Scene"));
-    mActions.sceneSettingsAction->connect(scenePropAct);
-    cmdAddAction(scenePropAct);
 
     if (eSettings::instance().fToolBarActionScene) {
         const auto sceneToolBtn = new QToolButton(this);
@@ -1242,7 +1225,6 @@ void MainWindow::setupMenuBar()
             mCentralWidget, &CentralWidget::setSidesVisibilitySetting);*/
 
 
-    setupMenuEffects();
     setupExtraMenus();
 
     const auto help = mMenuBar->addMenu(tr("Help", "MenuBar"));
@@ -1301,33 +1283,15 @@ void MainWindow::setupMenuBar()
 
 void MainWindow::setupMenuEffects()
 {
-    const auto menu = new QMenu(this);
-    { // raster
-        const auto adder = [this, menu](const QString& name, const QString& path,
-                                        const RasterEffectMenuCreator::EffectCreator& creator) {
-            if (name.isEmpty()) { return; }
-            QString title = name;
-            if (!path.isEmpty()) {
-                title.append(QString(" (%1 - %2)").arg(tr("Raster Effect"), path));
-            } else {
-                title.append(QString(" (%1)").arg(tr("Raster Effect")));
-            }
-            const auto act =  menu->addAction(title);
-            cmdAddAction(act);
-            connect(act, &QAction::triggered, this, [this, creator]() {
-                addRasterEffect(creator());
-            });
-        };
-        RasterEffectMenuCreator::forEveryEffect(adder);
-    }
     { // path TODO
         // adapt PathEffectsMenu::addPathEffectsToBoxActionMenu(menu);
     }
     { // transform
+        const auto menu = mEffectsMenu->addMenu(QIcon::fromTheme("preferences"), tr("Transform Effects"));
         const auto adder = [this, menu](const QString& name,
                                         const TransformEffectMenuCreator::EffectCreator& creator) {
             if (name.isEmpty()) { return; }
-            const auto act =  menu->addAction(name);
+            const auto act =  menu->addAction(QIcon::fromTheme("preferences"), name);
             cmdAddAction(act);
             connect(act, &QAction::triggered, this, [this, creator]() {
                 addTransformEffect(creator());
@@ -1336,16 +1300,36 @@ void MainWindow::setupMenuEffects()
         TransformEffectMenuCreator::forEveryEffect(adder);
     }
     { // blend
+        const auto menu = mEffectsMenu->addMenu(QIcon::fromTheme("preferences"), tr("Blend Effects"));
         const auto adder = [this, menu](const QString& name,
                                         const BlendEffectMenuCreator::EffectCreator& creator) {
             if (name.isEmpty()) { return; }
-            const auto act =  menu->addAction(name);
+            const auto act =  menu->addAction(QIcon::fromTheme("preferences"), name);
             cmdAddAction(act);
             connect(act, &QAction::triggered, this, [this, creator]() {
                 addBlendEffect(creator());
             });
         };
         BlendEffectMenuCreator::forEveryEffect(adder);
+    }
+    { // raster
+        const auto menu = mEffectsMenu->addMenu(QIcon::fromTheme("preferences"), tr("Raster Effects"));
+        const auto adder = [this, menu](const QString& name, const QString& path,
+                                        const RasterEffectMenuCreator::EffectCreator& creator) {
+            if (name.isEmpty()) { return; }
+            QString title = name;
+            if (!path.isEmpty()) { title.append(QString(" (%1)").arg(path));}
+            const auto act =  menu->addAction(QIcon::fromTheme("preferences"), title);
+            cmdAddAction(act);
+            connect(act, &QAction::triggered, this, [this, creator]() {
+                addRasterEffect(creator());
+            });
+        };
+        RasterEffectMenuCreator::forEveryEffectCore(adder);
+        menu->addSeparator();
+        RasterEffectMenuCreator::forEveryEffectCustom(adder);
+        RasterEffectMenuCreator::forEveryEffectShader(adder);
+        //RasterEffectMenuCreator::forEveryEffect(adder);
     }
 }
 
