@@ -1020,6 +1020,11 @@ void BoundingBox::addBlendEffect(const qsptr<BlendEffect> &blendEffect)
     mBlendEffectCollection->addChild(blendEffect);
 }
 
+void BoundingBox::addTransformEffect(const qsptr<TransformEffect> &transformEffect)
+{
+    mTransformEffectCollection->addChild(transformEffect);
+}
+
 //int BoundingBox::prp_getParentFrameShift() const {
 //    if(!mParentGroup) {
 //        return 0;

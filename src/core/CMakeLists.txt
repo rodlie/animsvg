@@ -560,6 +560,7 @@ set(
     TransformEffects/trackeffect.h
     TransformEffects/transformeffect.h
     TransformEffects/transformeffectcollection.h
+    TransformEffects/transformeffectmenucreator.h
     XML/runtimewriteid.h
     XML/xevexporter.h
     XML/xevimporter.h

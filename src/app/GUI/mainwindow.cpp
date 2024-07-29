@@ -77,6 +77,7 @@
 
 #include "RasterEffects/rastereffectmenucreator.h"
 #include "BlendEffects/blendeffectmenucreator.h"
+#include "TransformEffects/transformeffectmenucreator.h"
 
 MainWindow *MainWindow::sInstance = nullptr;
 
@@ -1322,8 +1323,17 @@ void MainWindow::setupMenuEffects()
     { // path TODO
         // adapt PathEffectsMenu::addPathEffectsToBoxActionMenu(menu);
     }
-    { // transform TODO
-        // adapt TransformEffectCollection::prp_setupTreeViewMenu(menu);
+    { // transform
+        const auto adder = [this, menu](const QString& name,
+                                        const TransformEffectMenuCreator::EffectCreator& creator) {
+            if (name.isEmpty()) { return; }
+            const auto act =  menu->addAction(name);
+            cmdAddAction(act);
+            connect(act, &QAction::triggered, this, [this, creator]() {
+                addTransformEffect(creator());
+            });
+        };
+        TransformEffectMenuCreator::forEveryEffect(adder);
     }
     { // blend
         const auto adder = [this, menu](const QString& name,
@@ -1360,6 +1370,18 @@ void MainWindow::addBlendEffect(const qsptr<BlendEffect> &effect)
     if (!box) { return; }
 
     box->addBlendEffect(effect);
+    mDocument.actionFinished();
+}
+
+void MainWindow::addTransformEffect(const qsptr<TransformEffect> &effect)
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return; }
+
+    const auto box = scene->getCurrentBox();
+    if (!box) { return; }
+
+    box->addTransformEffect(effect);
     mDocument.actionFinished();
 }
 

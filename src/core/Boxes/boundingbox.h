@@ -367,6 +367,7 @@ public:
     void removeRasterEffect(const qsptr<RasterEffect> &effect);
 
     void addBlendEffect(const qsptr<BlendEffect> &blendEffect);
+    void addTransformEffect(const qsptr<TransformEffect> &transformEffect);
 
     void setBlendModeSk(const SkBlendMode blendMode);
 
