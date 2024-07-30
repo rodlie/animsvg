@@ -482,6 +482,7 @@ set(
     PathEffects/subpatheffect.h
     PathEffects/sumpatheffect.h
     PathEffects/zigzagpatheffect.h
+    PathEffects/patheffectmenucreator.h
     Private/Tasks/complextask.h
     Private/Tasks/execcontroller.h
     Private/Tasks/gputaskexecutor.h
