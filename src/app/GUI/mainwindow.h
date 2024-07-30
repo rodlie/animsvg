@@ -364,10 +364,17 @@ private:
     void connectToolBarActions();
     void setupMenuBar();
     void setupMenuEffects();
+    void setupMenuExtras();
+
+    BoundingBox* getCurrentBox();
+
     void addRasterEffect(const qsptr<RasterEffect> &effect);
     void addBlendEffect(const qsptr<BlendEffect> &effect);
     void addTransformEffect(const qsptr<TransformEffect> &effect);
-    void setupExtraMenus();
+    void addPathEffect(const qsptr<PathEffect> &effect);
+    void addFillPathEffect(const qsptr<PathEffect> &effect);
+    void addOutlineBasePathEffect(const qsptr<PathEffect> &effect);
+    void addOutlinePathEffect(const qsptr<PathEffect> &effect);
 
     QList<SceneBoundGradient*> mLoadedGradientsList;
 

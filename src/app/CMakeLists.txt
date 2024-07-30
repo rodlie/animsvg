@@ -197,6 +197,8 @@ set(
     GUI/fontswidget.cpp
     GUI/fillstrokesettings.cpp
     GUI/toolbox.cpp
+    GUI/extraactions.cpp
+    GUI/effectactions.cpp
 )
 
 set(
