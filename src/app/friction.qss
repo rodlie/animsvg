@@ -433,3 +433,7 @@ QMenu::separator {
   margin: 4px;
   background-color: %4;
 }
+
+QMenu::item:disabled {
+    background: transparent;
+}
