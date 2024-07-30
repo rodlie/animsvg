@@ -88,7 +88,7 @@ void MainWindow::setupToolBoxMain()
             });
     boxTransformAct->setChecked(true); // default
     mToolBoxGroupMain->addAction(boxTransformAct);
-    cmdAddAction(boxTransformAct);
+    //cmdAddAction(boxTransformAct);
 
     // pointTransform
     QAction *pointTransformAct = new QAction(QIcon::fromTheme("pointTransform"),
@@ -98,7 +98,7 @@ void MainWindow::setupToolBoxMain()
     pointTransformAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                         "pointTransform",
                                                                         "F2").toString()));
-    cmdAddAction(pointTransformAct);
+    //cmdAddAction(pointTransformAct);
 
     connect(pointTransformAct,
             &QAction::triggered,
@@ -124,7 +124,7 @@ void MainWindow::setupToolBoxMain()
     addPointModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                       "pathCreate",
                                                                       "F3").toString()));
-    cmdAddAction(addPointModeAct);
+    //cmdAddAction(addPointModeAct);
     connect(addPointModeAct,
             &QAction::triggered,
             this,
@@ -149,7 +149,7 @@ void MainWindow::setupToolBoxMain()
     drawPathModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                       "drawPath",
                                                                       "F4").toString()));
-    cmdAddAction(drawPathModeAct);
+    //cmdAddAction(drawPathModeAct);
     connect(drawPathModeAct,
             &QAction::triggered,
             this,
@@ -198,7 +198,7 @@ void MainWindow::setupToolBoxMain()
     circleModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                     "circleMode",
                                                                     "F5").toString()));
-    cmdAddAction(circleModeAct);
+    //cmdAddAction(circleModeAct);
     connect(circleModeAct,
             &QAction::triggered,
             this,
@@ -223,7 +223,7 @@ void MainWindow::setupToolBoxMain()
     rectModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                   "rectMode",
                                                                   "F6").toString()));
-    cmdAddAction(rectModeAct);
+    //cmdAddAction(rectModeAct);
     connect(rectModeAct,
             &QAction::triggered,
             this,
@@ -248,7 +248,7 @@ void MainWindow::setupToolBoxMain()
     textModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                   "textMode",
                                                                   "F7").toString()));
-    cmdAddAction(textModeAct);
+    //cmdAddAction(textModeAct);
     connect(textModeAct,
             &QAction::triggered,
             this,
@@ -274,7 +274,7 @@ void MainWindow::setupToolBoxMain()
     nullModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                   "nullMode",
                                                                   "F8").toString()));
-    cmdAddAction(nullModeAct);
+    //cmdAddAction(nullModeAct);
     connect(nullModeAct,
             &QAction::triggered,
             this,
@@ -314,7 +314,7 @@ void MainWindow::setupToolBoxMain()
                 }
             });
     mToolBoxGroupMain->addAction(pickModeAct);
-    cmdAddAction(pickModeAct);
+    //cmdAddAction(pickModeAct);
 
     mToolBoxMain->addActions(mToolBoxGroupMain->actions());
 
