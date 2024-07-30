@@ -356,11 +356,13 @@ void CommandPalette::updateToolTip(const QString &input)
 
 void CommandPalette::getHistory(const bool append)
 {
+    if (append && !isCmd(mUserInput->text())) { return; }
     const auto history = eSettings::instance().fCommandHistory;
     if (history.count() < 1) { return; }
     if (mHistoryCounter < 0 ||
         mHistoryCounter >= history.count()) { mHistoryCounter = history.count() - 1; }
     const QString cmd = history.at(mHistoryCounter);
+    if (append && !isCmd(cmd)) { return; }
     mUserInput->setText(append ? QString("%1 && %2").arg(mUserInput->text(), cmd) : cmd);
     mUserInput->setCursorPosition(mUserInput->text().length());
     mHistoryCounter--;
