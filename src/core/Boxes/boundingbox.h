@@ -284,6 +284,7 @@ public:
     void rotateBy(const qreal rot);
     void scale(const qreal scaleBy);
     void scale(const qreal scaleXBy, const qreal scaleYBy);
+    void scaleBy(const qreal scale);
     void saveTransformPivotAbsPos(const QPointF &absPivot);
 
     void startPosTransform();

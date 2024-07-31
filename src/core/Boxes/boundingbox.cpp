@@ -732,6 +732,11 @@ void BoundingBox::scale(const qreal scaleXBy, const qreal scaleYBy) {
     mTransformAnimator->scale(scaleXBy, scaleYBy);
 }
 
+void BoundingBox::scaleBy(const qreal scale)
+{
+    mTransformAnimator->setScale(scale, scale);
+}
+
 void BoundingBox::rotateBy(const qreal rot) {
     mTransformAnimator->rotateRelativeToSavedValue(rot);
 }
