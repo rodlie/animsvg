@@ -318,7 +318,7 @@ void Canvas::scaleSelectedBoxesStartAndFinish(const qreal scaleBy)
     if (mDocument.fLocalPivot) {
         for(const auto &box : mSelectedBoxes) {
             box->startScaleTransform();
-            box->scaleBy(scaleBy);
+            box->setScale(scaleBy);
             box->finishTransform();
         }
     } else {
