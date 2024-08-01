@@ -193,6 +193,7 @@ public:
     void updateAutoSaveBackupState();
     void openRendererWindow();
     void cmdAddAction(QAction *act);
+    LayoutHandler* getLayoutHandler();
 
 protected:
     void lockFinished();
