@@ -260,7 +260,7 @@ void CommandPalette::parseCmd(const QString &input)
         const auto scene = *mDocument.fActiveScene;
         if (!scene) { return; }
         qDebug() << "do rotate" << arg;
-        scene->rotateSelectedBoxesStartAndFinish(arg.toDouble());
+        scene->rotateSelectedBoxesStartAndFinish(arg.toDouble(), false);
         mDocument.actionFinished();
         appendHistory(input);
         accept();

@@ -295,11 +295,13 @@ NormalSegment Canvas::getSegment(const eMouseEvent& e) const {
     return NormalSegment();
 }
 
-void Canvas::rotateSelectedBoxesStartAndFinish(const qreal rotBy) {
+void Canvas::rotateSelectedBoxesStartAndFinish(const qreal rotBy,
+                                               bool inc) {
     if(mDocument.fLocalPivot) {
         for(const auto &box : mSelectedBoxes) {
             box->startRotTransform();
-            box->rotateBy(rotBy);
+            if (inc) { box->rotateBy(rotBy); }
+            else { box->setRotate(rotBy); }
             box->finishTransform();
         }
     } else {
