@@ -194,6 +194,7 @@ public:
     void openRendererWindow();
     void cmdAddAction(QAction *act);
     LayoutHandler* getLayoutHandler();
+    TimelineDockWidget* getTimeLineWidget();
 
 protected:
     void lockFinished();
