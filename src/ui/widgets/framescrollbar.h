@@ -29,6 +29,8 @@
 #include "ui_global.h"
 
 #include <QWidget>
+#include <QFontMetrics>
+
 #include "smartPointers/ememory.h"
 #include "canvas.h"
 #include "themesupport.h"
@@ -54,6 +56,7 @@ public:
     bool hasFrameIn(const int frame);
     bool hasFrameOut(const int frame);
     bool hasFrameMarker(const int frame);
+    const QString getFrameMarkerText(const int frame);
 
     FrameRange getViewedRange() const;
     int getFirstViewedFrame() const;
@@ -107,6 +110,8 @@ private:
 
     qreal mFps;
     qreal mLastMousePressFrame;
+
+    QFontMetrics mFm;
 
     QColor mHandleColor = ThemeSupport::getThemeButtonBaseColor();
     qptr<Canvas> mCurrentCanvas;

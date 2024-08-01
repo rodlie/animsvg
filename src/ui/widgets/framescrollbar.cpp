@@ -37,6 +37,7 @@ FrameScrollBar::FrameScrollBar(const int minSpan,
                                const bool bottom,
                                QWidget *parent)
     : QWidget(parent)
+    , mFm(QFontMetrics(font()))
 {
     mDisplayTime = AppSupport::getSettings("ui",
                                            "DisplayTimecode",
@@ -142,9 +143,20 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
             bool hasOut = hasFrameOut(i+1);
             bool hasMark = hasFrameMarker(i+1);
             if (!hasIn && !hasOut && !hasMark) { continue; }
-            p.setPen(QPen(hasMark ? ThemeSupport::getThemeFrameMarkerColor() : ThemeSupport::getThemeHighlightColor(), 2, Qt::DotLine));
+            const QColor col = hasMark ? ThemeSupport::getThemeFrameMarkerColor() : ThemeSupport::getThemeHighlightColor();
+            p.setPen(QPen(col, 2, Qt::DotLine));
             const qreal xTT = xT + (i - mFrameRange.fMin + 1)*pixPerFrame;
             p.drawLine(QPointF(xTT, 4), QPointF(xTT, height()));
+
+            QString drawValue = hasIn ? tr("In") : hasOut ? tr("Out") : getFrameMarkerText(i+1);
+            if (!drawValue.isEmpty()) {
+                p.setPen(QPen(col, 0, Qt::SolidLine));
+                const auto rect = QRectF(xTT - 1, 0, mFm.horizontalAdvance(drawValue) + 2, mFm.height());
+                p.fillRect(rect, QBrush(col, Qt::SolidPattern));
+                p.drawRect(rect);
+                p.setPen(Qt::black);
+                p.drawText(rect, Qt::AlignCenter, drawValue);
+            }
         }
 
         // draw minor
@@ -214,6 +226,12 @@ bool FrameScrollBar::hasFrameMarker(const int frame)
 {
     if (!mCurrentCanvas) { return false; }
     return mCurrentCanvas->hasMarker(frame);
+}
+
+const QString FrameScrollBar::getFrameMarkerText(const int frame)
+{
+    if (!mCurrentCanvas) { return QString(); }
+    return mCurrentCanvas->getMarkerText(frame);
 }
 
 void FrameScrollBar::wheelEvent(QWheelEvent *event) {
