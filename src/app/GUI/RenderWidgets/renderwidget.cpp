@@ -307,6 +307,17 @@ void RenderWidget::render(RenderInstanceSettings &settings)
     mRenderProgressBar->setValue(renderSettings.fMinFrame);
     handleRenderState(RenderState::waiting);
     mCurrentRenderedSettings = &settings;
+
+    // the scene we want to render MUST be current if multiple scenes are in queue
+    const auto scene = mCurrentRenderedSettings->getTargetCanvas();
+    if (scene) {
+        const auto handler = MainWindow::sGetInstance()->getLayoutHandler();
+        const int index = handler->getSceneId(scene);
+        if (index > -1 && !handler->isCurrentScene(index)) {
+            handler->setCurrentScene(index);
+        }
+    }
+
     RenderHandler::sInstance->renderFromSettings(&settings);
     connect(&settings, &RenderInstanceSettings::renderFrameChanged,
             this, &RenderWidget::setRenderedFrame);

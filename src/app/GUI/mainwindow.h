@@ -192,6 +192,7 @@ public:
     void revert();
     void updateAutoSaveBackupState();
     void openRendererWindow();
+    LayoutHandler* getLayoutHandler();
 
 protected:
     void lockFinished();

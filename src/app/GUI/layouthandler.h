@@ -186,6 +186,10 @@ public:
                                                  mNumberLayouts - nCLays + relCurrentId;
         setCurrent(absId);
     }
+    int getSceneId(const Canvas* const scene) { return sceneId(scene); };
+    bool isCurrentScene(const int index) { return index == mCurrentId; };
+    void setCurrentScene(const int index) { setCurrent(index); };
+
 private:
     void rename(const int id, const QString& newName) {
         auto& layout = mLayouts[uint(id)];

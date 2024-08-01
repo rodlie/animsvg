@@ -2003,6 +2003,11 @@ void MainWindow::openRendererWindow()
     }
 }
 
+LayoutHandler *MainWindow::getLayoutHandler()
+{
+    return mLayoutHandler;
+}
+
 stdsptr<void> MainWindow::lock()
 {
     if (mLock) { return mLock->ref<Lock>(); }
