@@ -193,6 +193,7 @@ public:
     void updateAutoSaveBackupState();
     void openRendererWindow();
     LayoutHandler* getLayoutHandler();
+    TimelineDockWidget* getTimeLineWidget();
 
 protected:
     void lockFinished();

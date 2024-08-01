@@ -2008,6 +2008,11 @@ LayoutHandler *MainWindow::getLayoutHandler()
     return mLayoutHandler;
 }
 
+TimelineDockWidget *MainWindow::getTimeLineWidget()
+{
+    return mTimeline;
+}
+
 stdsptr<void> MainWindow::lock()
 {
     if (mLock) { return mLock->ref<Lock>(); }

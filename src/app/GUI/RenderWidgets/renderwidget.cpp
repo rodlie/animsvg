@@ -33,6 +33,7 @@
 #include "videoencoder.h"
 #include "appsupport.h"
 #include "../mainwindow.h"
+#include "../timelinedockwidget.h"
 
 RenderWidget::RenderWidget(QWidget *parent)
     : QWidget(parent)
@@ -226,6 +227,10 @@ void RenderWidget::handleRenderState(const RenderState &state)
     mStopRenderButton->setEnabled(!isIdle);
     mAddRenderButton->setEnabled(isIdle);
     mRenderProgressBar->setFormat(renderStateFormat);
+
+    const auto timeline = MainWindow::sGetInstance()->getTimeLineWidget();
+    if (timeline) { timeline->setEnabled(isIdle); }
+
     emit renderStateChanged(renderStateFormat, mState);
 
     if (isIdle) {
