@@ -365,6 +365,7 @@ public:
     void setMarker(const int frame);
     bool hasMarker(const int frame,
                    const bool removeExists = false);
+    const QString getMarkerText(int frame);
     const std::vector<FrameMarker> getMarkers();
     void clearMarkers();
 

@@ -459,13 +459,13 @@ void Canvas::setMarker(const QString &title,
                        const int frame)
 {
     if (hasMarker(frame, true)) { return; }
-    mMarkers.push_back({title.isEmpty() ? tr("Marker") : title, true, frame});
+    mMarkers.push_back({title.isEmpty() ? QString::number(mMarkers.size()) : title, true, frame});
     emit requestUpdate();
 }
 
 void Canvas::setMarker(const int frame)
 {
-    setMarker(tr("Marker"), frame);
+    setMarker(QString::number(mMarkers.size()), frame);
 }
 
 bool Canvas::hasMarker(const int frame,
@@ -483,6 +483,14 @@ bool Canvas::hasMarker(const int frame,
         index++;
     }
     return false;
+}
+
+const QString Canvas::getMarkerText(int frame)
+{
+    for (const auto &mark: mMarkers) {
+        if (mark.frame == frame) { return mark.title; }
+    }
+    return QString();
 }
 
 const std::vector<FrameMarker> Canvas::getMarkers()
