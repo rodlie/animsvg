@@ -26,10 +26,7 @@
 
 #include "core_global.h"
 
-#include <QString>
 #include <functional>
-#include "BlendEffects/moveblendeffect.h"
-#include "BlendEffects/targetedblendeffect.h"
 #include "smartPointers/selfref.h"
 
 class BlendEffect;
@@ -41,13 +38,7 @@ struct CORE_EXPORT BlendEffectMenuCreator
     using EffectCreator = Creator<BlendEffect>;
     using EffectAdder = Func<void(const QString&,
                                   const EffectCreator&)>;
-    static void forEveryEffect(const EffectAdder& add)
-    {
-        add(QObject::tr("Move"),
-            []() { return enve::make_shared<MoveBlendEffect>(); });
-        add(QObject::tr("Targeted"),
-            []() { return enve::make_shared<TargetedBlendEffect>(); });
-    }
+    static void forEveryEffect(const EffectAdder& add);
 };
 
 #endif // BLENDEFFECTMENUCREATOR_H

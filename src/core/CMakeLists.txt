@@ -79,6 +79,7 @@ set(
     BlendEffects/blendeffectcollection.cpp
     BlendEffects/moveblendeffect.cpp
     BlendEffects/targetedblendeffect.cpp
+    BlendEffects/blendeffectmenucreator.cpp
     Boxes/animationbox.cpp
     Boxes/boundingbox.cpp
     Boxes/boxrendercontainer.cpp
@@ -168,6 +169,7 @@ set(
     PathEffects/subpatheffect.cpp
     PathEffects/sumpatheffect.cpp
     PathEffects/zigzagpatheffect.cpp
+    PathEffects/patheffectmenucreator.cpp
     Private/Tasks/complextask.cpp
     Private/Tasks/execcontroller.cpp
     Private/Tasks/gputaskexecutor.cpp
@@ -234,6 +236,7 @@ set(
     TransformEffects/trackeffect.cpp
     TransformEffects/transformeffect.cpp
     TransformEffects/transformeffectcollection.cpp
+    TransformEffects/transformeffectmenucreator.cpp
     XML/xevexporter.cpp
     XML/xevimporter.cpp
     XML/xevzipfilesaver.cpp

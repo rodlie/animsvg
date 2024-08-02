@@ -26,13 +26,7 @@
 
 #include "core_global.h"
 
-#include <QString>
 #include <functional>
-#include "TransformEffects/followobjecteffect.h"
-#include "TransformEffects/followobjectrelativeeffect.h"
-#include "TransformEffects/followpatheffect.h"
-#include "TransformEffects/parenteffect.h"
-#include "TransformEffects/trackeffect.h"
 #include "smartPointers/selfref.h"
 
 class TransformEffect;
@@ -44,19 +38,7 @@ struct CORE_EXPORT TransformEffectMenuCreator
     using EffectCreator = Creator<TransformEffect>;
     using EffectAdder = Func<void(const QString&,
                                   const EffectCreator&)>;
-    static void forEveryEffect(const EffectAdder& add)
-    {
-        add(QObject::tr("Track"),
-            []() { return enve::make_shared<TrackEffect>(); });
-        add(QObject::tr("Follow Path"),
-            []() { return enve::make_shared<FollowPathEffect>(); });
-        add(QObject::tr("Follow Object"),
-            []() { return enve::make_shared<FollowObjectEffect>(); });
-        add(QObject::tr("Follow Object Relative"),
-            []() { return enve::make_shared<FollowObjectRelativeEffect>(); });
-        add(QObject::tr("Parent"),
-            []() { return enve::make_shared<ParentEffect>(); });
-    }
+    static void forEveryEffect(const EffectAdder& add);
 };
 
 #endif // TRANSFORMEFFECTMENUCREATOR_H

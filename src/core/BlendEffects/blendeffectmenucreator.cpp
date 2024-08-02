@@ -21,24 +21,15 @@
 #
 */
 
-#ifndef PATHEFFECTMENUCREATOR_H
-#define PATHEFFECTMENUCREATOR_H
+#include "BlendEffects/blendeffectmenucreator.h"
 
-#include "core_global.h"
+#include "BlendEffects/moveblendeffect.h"
+#include "BlendEffects/targetedblendeffect.h"
 
-#include <functional>
-#include "smartPointers/selfref.h"
-
-class PathEffect;
-
-struct CORE_EXPORT PathEffectMenuCreator
+void BlendEffectMenuCreator::forEveryEffect(const EffectAdder &add)
 {
-    template <typename T> using Func = std::function<T>;
-    template <typename T> using Creator = Func<qsptr<T>()>;
-    using EffectCreator = Creator<PathEffect>;
-    using EffectAdder = Func<void(const QString&,
-                                  const EffectCreator&)>;
-    static void forEveryEffect(const EffectAdder& add);
-};
-
-#endif // PATHEFFECTMENUCREATOR_H
+    add(QObject::tr("Move"),
+        []() { return enve::make_shared<MoveBlendEffect>(); });
+    add(QObject::tr("Targeted"),
+        []() { return enve::make_shared<TargetedBlendEffect>(); });
+}
