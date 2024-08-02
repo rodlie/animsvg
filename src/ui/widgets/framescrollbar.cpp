@@ -142,6 +142,18 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         mMinFrame = mMinFrame - mMinFrame%iInc - 1;
         mMaxFrame += qFloor((width() - 40 - xT)/pixPerFrame) - mMaxFrame%iInc;
 
+        // draw in/out range
+        if (frameIn.first && frameOut.first) {
+            p.setPen(Qt::NoPen);
+            const qreal xTT1 = xT + (frameIn.second - mFrameRange.fMin) * pixPerFrame;
+            const qreal xTT2 = xT + (frameOut.second - mFrameRange.fMin) * pixPerFrame;
+            const int h = mFm.height();
+            const auto rect = QRectF(xTT1, h, xTT2 - xTT1, height() - h);
+            p.fillRect(rect, QBrush(ThemeSupport::getThemeColorGreenDark(),
+                                    Qt::SolidPattern));
+            p.drawRect(rect);
+        }
+
         // draw markers (and in/out)
         for (int i = minFrame; i <= maxFrame; i++) {
             bool hasIn = frameIn.first ? hasFrameIn(i) : false;
@@ -152,8 +164,9 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
             p.setPen(QPen(col, 2, Qt::SolidLine));
             const qreal xTT = xT + (i - mFrameRange.fMin + 1)*pixPerFrame;
             p.drawLine(QPointF(xTT, 0), QPointF(xTT, mFm.height() + 4));
+
             const QString drawValue = hasIn ? tr("In") : hasOut ? tr("Out") : getFrameMarkerText(i);
-            p.setPen(QPen(col, 0, Qt::SolidLine));
+            p.setPen(Qt::NoPen);
             const auto rect = QRectF(xTT + 1, 0,
                                      mFm.horizontalAdvance(drawValue) + 2,
                                      mFm.height());
@@ -161,18 +174,6 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
             p.drawRect(rect);
             p.setPen(Qt::black);
             p.drawText(rect, Qt::AlignCenter, drawValue);
-        }
-
-        // draw in/out range
-        if (frameIn.first && frameOut.first) {
-            p.setPen(Qt::NoPen);
-            const qreal xTT1 = xT + (frameIn.second - mFrameRange.fMin) * pixPerFrame;
-            const qreal xTT2 = xT + (frameOut.second - mFrameRange.fMin) * pixPerFrame;
-            const int h = mFm.height() + 1;
-            const auto rect = QRectF(xTT1, h, xTT2 - xTT1, height() - h);
-            p.fillRect(rect, QBrush(ThemeSupport::getThemeColorGreen(40),
-                                    Qt::SolidPattern));
-            p.drawRect(rect);
         }
 
         // draw minor

@@ -145,6 +145,11 @@ const QColor ThemeSupport::getThemeColorGreen(int alpha)
     return getQColor(73, 209, 132, alpha);
 }
 
+const QColor ThemeSupport::getThemeColorGreenDark(int alpha)
+{
+    return getQColor(27, 49, 39, alpha);
+}
+
 const QColor ThemeSupport::getThemeColorOrange(int alpha)
 {
     return getQColor(255, 123, 0, alpha);
