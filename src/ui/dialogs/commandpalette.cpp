@@ -60,6 +60,7 @@ CommandPalette::CommandPalette(Document& document,
     lay->addWidget(mUserInput);
     lay->addWidget(mLabel);
     lay->addWidget(mSuggestions);
+    lay->addStretch();
 
     mSuggestions->setObjectName("CommandPaletteSuggestions");
     mSuggestions->setMinimumHeight(150);
@@ -219,8 +220,7 @@ void CommandPalette::parseCmd(const QString &input)
     const bool doMove = (validMoveCmd.match(input).hasMatch() && input != "move:");
     qDebug() << "do move?" << doMove;
 
-    static QRegularExpression validMarkersCmd("^marker[:][0-9sm,-]*$");
-    const bool doMarkers = (validMarkersCmd.match(input).hasMatch() && input != "marker:");
+    const bool doMarkers = (input.startsWith("marker:") && input != "marker:");
     qDebug() << "do markers?" << doMarkers;
 
     static QRegularExpression validFrameInCmd("^in[:][-]?[0-9]*[sm]?$");
@@ -302,7 +302,9 @@ void CommandPalette::parseCmd(const QString &input)
         const auto scene = *mDocument.fActiveScene;
         if (!scene) { return; }
         for (const auto &arg : args.split(",")) {
-            QString mark = arg.simplified();
+            const auto args = arg.split(" ");
+            bool hasTitle = args.count() > 1;
+            QString mark = hasTitle ? args.at(0).simplified() : arg.simplified();
             const bool hasSec = mark.endsWith("s");
             const bool hasMin = mark.endsWith("m");
             if (hasSec && hasMin) { continue; }
@@ -311,7 +313,8 @@ void CommandPalette::parseCmd(const QString &input)
             if (hasSec) { value *= scene->getFps(); }
             else if (hasMin) { value = (value * 60) * scene->getFps(); }
             qDebug() << "do marker" << value;
-            scene->setMarker(value);
+            if (hasTitle) { scene->setMarker(args.mid(1).join(" "), value); }
+            else { scene->setMarker(value); }
         }
         appendHistory(input);
         accept();

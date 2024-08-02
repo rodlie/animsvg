@@ -62,10 +62,11 @@ void MainWindow::setupMenuExtras()
         const auto act = menu->addAction(QIcon::fromTheme("sequence"/* TODO: find new (blender) icon! */),
                                          tr("Marker at ..."));
         act->setData("cmd:marker");
-        act->setToolTip(QString("<p><b>%1</b> %2 <i>%3</i></p>").arg(tr("Marker"),
-                                                                     tr("at"),
-                                                                     tr("TIME (frame/sec/min)."
-                                                                        " Use <b>,</b> to add multiple markers.")));
+        act->setToolTip(QString("<p><b>%1</b> %2 <i>%3</i><br><br>%4</p>").arg(tr("Marker"),
+                                                                               tr("at"),
+                                                                               tr("TIME TITLE."),
+                                                                               tr("Time can be frame, sec (<i>X</i><b>s</b>) or min (<i>X</i><b>m</b>)."
+                                                                                  " Use <b>,</b> to add multiple markers. Title is optional.")));
         cmdAddAction(act);
     }
     // clear markers
