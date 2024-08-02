@@ -57,6 +57,8 @@ public:
     bool hasFrameOut(const int frame);
     bool hasFrameMarker(const int frame);
     const QString getFrameMarkerText(const int frame);
+    const QPair<bool,int> getFrameIn();
+    const QPair<bool,int> getFrameOut();
 
     FrameRange getViewedRange() const;
     int getFirstViewedFrame() const;

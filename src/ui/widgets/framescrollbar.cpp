@@ -123,6 +123,11 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
 
     // draw the stuff ...
     if (!mRange) {
+        const auto colOrange = ThemeSupport::getThemeFrameMarkerColor();
+        const auto colGreen = ThemeSupport::getThemeColorGreen();
+        const auto frameIn = getFrameIn();
+        const auto frameOut = getFrameOut();
+
         p.translate(eSizesUI::widget/2, 0);
         qreal xT = pixPerFrame*0.5;
         int iInc = 1;
@@ -138,46 +143,36 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         mMaxFrame += qFloor((width() - 40 - xT)/pixPerFrame) - mMaxFrame%iInc;
 
         // draw markers (and in/out)
-        bool hasInVal = false;
-        bool hasOutVal = false;
-        QPair<int, int> inOut{minFrame, maxFrame};
         for (int i = minFrame; i <= maxFrame; i++) {
-            bool hasIn = hasFrameIn(i+1);
-            bool hasOut = hasFrameOut(i+1);
-            bool hasMark = hasFrameMarker(i+1);
+            bool hasIn = frameIn.first ? hasFrameIn(i) : false;
+            bool hasOut = frameOut.first ? hasFrameOut(i) : false;
+            bool hasMark = hasFrameMarker(i);
             if (!hasIn && !hasOut && !hasMark) { continue; }
-            if (hasIn) {
-                hasInVal = true;
-                inOut.first = i;
-            }
-            if (hasOut) {
-                hasOutVal = true;
-                inOut.second = i;
-            }
-            const QColor col = hasMark ? ThemeSupport::getThemeFrameMarkerColor() : ThemeSupport::getThemeColorGreen();
+            const QColor col = hasMark ? colOrange : colGreen;
             p.setPen(QPen(col, 2, Qt::SolidLine));
             const qreal xTT = xT + (i - mFrameRange.fMin + 1)*pixPerFrame;
             p.drawLine(QPointF(xTT, 0), QPointF(xTT, mFm.height() + 4));
-
-            QString drawValue = hasIn ? tr("In") : hasOut ? tr("Out") : getFrameMarkerText(i+1);
-            if (!drawValue.isEmpty()) {
-                p.setPen(QPen(col, 0, Qt::SolidLine));
-                const auto rect = QRectF(xTT + 1, 0, mFm.horizontalAdvance(drawValue) + 2, mFm.height());
-                p.fillRect(rect, QBrush(col, Qt::SolidPattern));
-                p.drawRect(rect);
-                p.setPen(Qt::black);
-                p.drawText(rect, Qt::AlignCenter, drawValue);
-            }
+            const QString drawValue = hasIn ? tr("In") : hasOut ? tr("Out") : getFrameMarkerText(i);
+            p.setPen(QPen(col, 0, Qt::SolidLine));
+            const auto rect = QRectF(xTT + 1, 0,
+                                     mFm.horizontalAdvance(drawValue) + 2,
+                                     mFm.height());
+            p.fillRect(rect, QBrush(col, Qt::SolidPattern));
+            p.drawRect(rect);
+            p.setPen(Qt::black);
+            p.drawText(rect, Qt::AlignCenter, drawValue);
         }
 
         // draw in/out range
-        if (hasInVal || hasOutVal) {
-            const QColor col = ThemeSupport::getThemeColorGreen();
-            p.setPen(QPen(col, 2, Qt::SolidLine));
-            const qreal xTT1 = xT + ((!hasInVal ? minFrame : inOut.first) - mFrameRange.fMin + 1)*pixPerFrame;
-            const qreal xTT2 = xT + ((!hasOutVal ? maxFrame : inOut.second) - mFrameRange.fMin + 1)*pixPerFrame;
+        if (frameIn.first && frameOut.first) {
+            p.setPen(Qt::NoPen);
+            const qreal xTT1 = xT + (frameIn.second - mFrameRange.fMin) * pixPerFrame;
+            const qreal xTT2 = xT + (frameOut.second - mFrameRange.fMin) * pixPerFrame;
             const int h = mFm.height() + 1;
-            p.drawLine(QPointF(xTT1, h), QPointF(xTT2, h));
+            const auto rect = QRectF(xTT1, h, xTT2 - xTT1, height() - h);
+            p.fillRect(rect, QBrush(ThemeSupport::getThemeColorGreen(40),
+                                    Qt::SolidPattern));
+            p.drawRect(rect);
         }
 
         // draw minor
@@ -231,7 +226,7 @@ bool FrameScrollBar::hasFrameIn(const int frame)
 {
     if (!mCurrentCanvas) { return false; }
     const auto frameIn = mCurrentCanvas->getFrameIn();
-    if ((frameIn.enabled && frame == frameIn.frame)) { return true; }
+    if ((frameIn.enabled && frame + 1 == frameIn.frame)) { return true; }
     return false;
 }
 
@@ -239,20 +234,34 @@ bool FrameScrollBar::hasFrameOut(const int frame)
 {
     if (!mCurrentCanvas) { return false; }
     const auto frameOut = mCurrentCanvas->getFrameOut();
-    if ((frameOut.enabled && frame == frameOut.frame)) { return true; }
+    if ((frameOut.enabled && frame + 1 == frameOut.frame)) { return true; }
     return false;
 }
 
 bool FrameScrollBar::hasFrameMarker(const int frame)
 {
     if (!mCurrentCanvas) { return false; }
-    return mCurrentCanvas->hasMarker(frame);
+    return mCurrentCanvas->hasMarker(frame + 1);
 }
 
 const QString FrameScrollBar::getFrameMarkerText(const int frame)
 {
     if (!mCurrentCanvas) { return QString(); }
-    return mCurrentCanvas->getMarkerText(frame);
+    return mCurrentCanvas->getMarkerText(frame + 1);
+}
+
+const QPair<bool, int> FrameScrollBar::getFrameIn()
+{
+    if (!mCurrentCanvas) { return {false, 0}; }
+    const auto in = mCurrentCanvas->getFrameIn();
+    return {in.enabled, in.frame};
+}
+
+const QPair<bool, int> FrameScrollBar::getFrameOut()
+{
+    if (!mCurrentCanvas) { return {false, 0}; }
+    const auto out = mCurrentCanvas->getFrameOut();
+    return {out.enabled, out.frame};
 }
 
 void FrameScrollBar::wheelEvent(QWheelEvent *event) {
