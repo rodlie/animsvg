@@ -536,11 +536,8 @@ void KeysView::paintEvent(QPaintEvent *) {
         bool hasOut = hasFrameOut(i+1);
         bool hasMark = hasFrameMarker(i+1);
         if (!hasIn && !hasOut && !hasMark) { continue; }
-        if (hasIn || hasOut) {
-            p.setPen(QPen(ThemeSupport::getThemeHighlightColor(), 2, Qt::DotLine));
-        } else if (hasMark) {
-            p.setPen(QPen(ThemeSupport::getThemeFrameMarkerColor(), 2, Qt::DotLine));
-        }
+        const QColor col = hasMark ? ThemeSupport::getThemeFrameMarkerColor() : ThemeSupport::getThemeColorGreen();
+        p.setPen(QPen(col, 2, Qt::DotLine));
         const qreal xTT = xT + (i - mMinViewedFrame + 1)*mPixelsPerFrame;
         p.drawLine(QPointF(xTT, 0), QPointF(xTT, height()));
     }

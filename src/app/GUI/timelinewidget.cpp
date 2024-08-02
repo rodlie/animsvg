@@ -249,7 +249,7 @@ TimelineWidget::TimelineWidget(Document &document,
     mFrameScrollBar = new FrameScrollBar(1, 1, false, false, false, this);
     mFrameScrollBar->setSizePolicy(QSizePolicy::Minimum,
                                    QSizePolicy::Preferred);
-    mFrameScrollBar->setFixedHeight(35);
+    mFrameScrollBar->setFixedHeight(40);
 //    connect(MemoryHandler::sGetInstance(), &MemoryHandler::memoryFreed,
 //            frameScrollBar,
 //            qOverload<>(&FrameScrollBar::update));
