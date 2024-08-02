@@ -25,6 +25,7 @@
 
 #include <QToolButton>
 #include <QStackedLayout>
+#include <QDesktopWidget>
 
 #include "timelinewidget.h"
 #include "widgets/framescrollbar.h"
@@ -249,7 +250,10 @@ TimelineWidget::TimelineWidget(Document &document,
     mFrameScrollBar = new FrameScrollBar(1, 1, false, false, false, this);
     mFrameScrollBar->setSizePolicy(QSizePolicy::Minimum,
                                    QSizePolicy::Preferred);
-    mFrameScrollBar->setFixedHeight(40);
+
+    const qreal dpi = QApplication::desktop()->logicalDpiX() / 96.0;
+    mFrameScrollBar->setFixedHeight(40 * dpi);
+
 //    connect(MemoryHandler::sGetInstance(), &MemoryHandler::memoryFreed,
 //            frameScrollBar,
 //            qOverload<>(&FrameScrollBar::update));
