@@ -369,6 +369,7 @@ public:
     const std::vector<FrameMarker> getMarkers();
     void clearMarkers();
 
+    void addKeySelectedProperties();
 
     ColorAnimator *getBgColorAnimator()
     {

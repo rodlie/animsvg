@@ -676,6 +676,15 @@ void MainWindow::setupMenuBar()
 
     mEditMenu->addSeparator();
 
+    const auto addKeyAct = mEditMenu->addAction(tr("Add Key(s)"), [this]() {
+        const auto scene = *mDocument.fActiveScene;
+        if (!scene) { return; }
+        scene->addKeySelectedProperties();
+    }, QKeySequence(tr("Insert")));
+    cmdAddAction(addKeyAct);
+
+    mEditMenu->addSeparator();
+
     const auto clearCacheAct = mEditMenu->addAction(tr("Clear Cache", "MenuBar_Edit"), [this]() {
         const auto m = MemoryHandler::sInstance;
         m->clearMemory();
