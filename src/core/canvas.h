@@ -353,6 +353,8 @@ public:
 
     void setFrameRange(const FrameRange& range);
 
+    void addKeySelectedProperties();
+
     ColorAnimator *getBgColorAnimator()
     {
         return mBackgroundColor.get();

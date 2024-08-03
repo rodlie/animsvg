@@ -425,6 +425,16 @@ void Canvas::setFrameRange(const FrameRange &range) {
     emit newFrameRange(range);
 }
 
+void Canvas::addKeySelectedProperties()
+{
+    for (const auto &prop : mSelectedProps.getList()) {
+        const auto asAnim = enve_cast<Animator*>(prop);
+        if (!asAnim) { continue; }
+        asAnim->anim_saveCurrentValueAsKey();
+    }
+    mDocument.actionFinished();
+}
+
 stdsptr<BoxRenderData> Canvas::createRenderData() {
     return enve::make_shared<CanvasRenderData>(this);
 }
