@@ -1,6 +1,8 @@
 # Friction
 
-[Friction](https://friction.graphics) is a powerful and versatile motion graphics application that allows you to create stunning vector and raster animations for web and video platforms with ease.
+[Friction](https://friction.graphics) is a powerful and versatile motion graphics application that allows you to create vector and raster animations for web and video platforms with ease.
+
+![Screenshot of Friction 1.0.0 Beta 1](https://friction.graphics/assets/screenshots/100/friction-100b1-screenshot.jpg)
 
 ## Contribute
 
@@ -20,7 +22,7 @@ Branch `main` is always the current branch for the next `X` or `Y` release.
 
 A new stable branch is cut from `main` on each `X` or `Y` release and is maintained until a new stable branch is created. Patch (`Z`) releases comes from the parent stable branch (`vX.Y`).
 
-Critical fixes to `main` will be backported to active stable branches when possible (and within reason).
+Important fixes added to `main` will be backported to active stable branches when possible (and within reason).
 
 ## Build
 
@@ -107,7 +109,7 @@ cmake --build . --config Release
 
 ### Build on Windows
 
-All requirements must be installed in the correct folders, this is an example and should be adjusted to fit your enviroment.
+All requirements must be installed in the correct folders, this is an example and should be adjusted to fit your environment.
 
 ```
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\Common7\Tools\VsDevCmd.bat"
