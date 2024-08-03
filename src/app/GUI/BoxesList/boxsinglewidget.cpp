@@ -54,6 +54,8 @@
 #include "typemenu.h"
 #include "themesupport.h"
 
+#include <QMessageBox>
+
 QPixmap* BoxSingleWidget::VISIBLE_ICON;
 QPixmap* BoxSingleWidget::INVISIBLE_ICON;
 QPixmap* BoxSingleWidget::BOX_CHILDREN_VISIBLE_ICON;
@@ -580,7 +582,13 @@ void BoxSingleWidget::loadStaticPixmaps(int iconSize)
     qWarning() << "Icon sizes:" << sizes;
 
     if (!sizes.contains(QSize(iconSize, iconSize))) {
-        qWarning() << "WARNING! Requested icon size not available in theme, expect blurry icons";
+        QMessageBox::warning(nullptr,
+                             tr("Icon issues"),
+                             tr("<p>Requested icon size <b>%1</b> is not available,"
+                                " expect blurry and missing icons.</p>"
+                                "<p>Note that this may happen if you change the display scaling"
+                                " in Windows without restarting."
+                                " If you still have issues after restarting please report this issue.</p>").arg(iconSize));
     }
 
     VISIBLE_ICON = new QPixmap(QIcon::fromTheme("visible").pixmap(iconSize, iconSize));
