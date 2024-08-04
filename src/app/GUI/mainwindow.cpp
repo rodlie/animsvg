@@ -676,7 +676,8 @@ void MainWindow::setupMenuBar()
 
     mEditMenu->addSeparator();
 
-    const auto addKeyAct = mEditMenu->addAction(tr("Add Key(s)"), [this]() {
+    const auto addKeyAct = mEditMenu->addAction(QIcon::fromTheme("plus"),
+                                                tr("Add Key(s)"), [this]() {
         const auto scene = *mDocument.fActiveScene;
         if (!scene) { return; }
         scene->addKeySelectedProperties();
@@ -1244,7 +1245,8 @@ void MainWindow::setupMenuBar()
         QMessageBox::aboutQt(this, tr("About Qt"));
     });
 
-    help->addAction(tr("Command Palette"), this, [this]() {
+    help->addAction(QIcon::fromTheme("cmd"),
+                    tr("Command Palette"), this, [this]() {
         CommandPalette dialog(mDocument, this);
         dialog.exec();
     }, QKeySequence(AppSupport::getSettings("shortcuts",

@@ -30,20 +30,22 @@
 
 void MainWindow::setupMenuEffects()
 {
+    const QIcon eIcon = QIcon::fromTheme("effect");
     { // path
-        const auto menu1 = mEffectsMenu->addMenu(QIcon::fromTheme("preferences"), tr("Path Effects"));
-        const auto menu2 = mEffectsMenu->addMenu(QIcon::fromTheme("preferences"), tr("Fill Effects"));
-        const auto menu3 = mEffectsMenu->addMenu(QIcon::fromTheme("preferences"), tr("Outline Base Effects"));
-        const auto menu4 = mEffectsMenu->addMenu(QIcon::fromTheme("preferences"), tr("Outline Effects"));
+        const auto menu1 = mEffectsMenu->addMenu(eIcon, tr("Path Effects"));
+        const auto menu2 = mEffectsMenu->addMenu(eIcon, tr("Fill Effects"));
+        const auto menu3 = mEffectsMenu->addMenu(eIcon, tr("Outline Base Effects"));
+        const auto menu4 = mEffectsMenu->addMenu(eIcon, tr("Outline Effects"));
         const auto adder = [this,
                             menu1,
                             menu2,
                             menu3,
-                            menu4](const QString& name,
+                            menu4,
+                            eIcon](const QString& name,
                                    const PathEffectMenuCreator::EffectCreator& creator) {
             if (name.isEmpty()) { return; }
             {
-                const auto act =  menu1->addAction(QIcon::fromTheme("preferences"), name);
+                const auto act =  menu1->addAction(eIcon, name);
                 act->setData(QString(name).prepend(tr("Add ")).append(tr(" (Path Effect)")));
                 cmdAddAction(act);
                 connect(act, &QAction::triggered, this, [this, creator]() {
@@ -51,7 +53,7 @@ void MainWindow::setupMenuEffects()
                 });
             }
             {
-                const auto act =  menu2->addAction(QIcon::fromTheme("preferences"), name);
+                const auto act =  menu2->addAction(eIcon, name);
                 act->setData(QString(name).prepend(tr("Add ")).append(tr(" (Fill Effect)")));
                 cmdAddAction(act);
                 connect(act, &QAction::triggered, this, [this, creator]() {
@@ -59,7 +61,7 @@ void MainWindow::setupMenuEffects()
                 });
             }
             {
-                const auto act =  menu3->addAction(QIcon::fromTheme("preferences"), name);
+                const auto act =  menu3->addAction(eIcon, name);
                 act->setData(QString(name).prepend(tr("Add ")).append(tr(" (Outline Base Effect)")));
                 cmdAddAction(act);
                 connect(act, &QAction::triggered, this, [this, creator]() {
@@ -67,7 +69,7 @@ void MainWindow::setupMenuEffects()
                 });
             }
             {
-                const auto act =  menu4->addAction(QIcon::fromTheme("preferences"), name);
+                const auto act =  menu4->addAction(eIcon, name);
                 act->setData(QString(name).prepend(tr("Add ")).append(tr(" (Outline Effect)")));
                 cmdAddAction(act);
                 connect(act, &QAction::triggered, this, [this, creator]() {
@@ -78,11 +80,11 @@ void MainWindow::setupMenuEffects()
         PathEffectMenuCreator::forEveryEffect(adder);
     }
     { // transform
-        const auto menu = mEffectsMenu->addMenu(QIcon::fromTheme("preferences"), tr("Transform Effects"));
-        const auto adder = [this, menu](const QString& name,
+        const auto menu = mEffectsMenu->addMenu(eIcon, tr("Transform Effects"));
+        const auto adder = [this, menu, eIcon](const QString& name,
                                         const TransformEffectMenuCreator::EffectCreator& creator) {
             if (name.isEmpty()) { return; }
-            const auto act =  menu->addAction(QIcon::fromTheme("preferences"), name);
+            const auto act =  menu->addAction(eIcon, name);
             act->setData(QString(name).prepend(tr("Add ")).append(tr(" (Transform Effect)")));
             cmdAddAction(act);
             connect(act, &QAction::triggered, this, [this, creator]() {
@@ -92,11 +94,11 @@ void MainWindow::setupMenuEffects()
         TransformEffectMenuCreator::forEveryEffect(adder);
     }
     { // blend
-        const auto menu = mEffectsMenu->addMenu(QIcon::fromTheme("preferences"), tr("Blend Effects"));
-        const auto adder = [this, menu](const QString& name,
+        const auto menu = mEffectsMenu->addMenu(eIcon, tr("Blend Effects"));
+        const auto adder = [this, menu, eIcon](const QString& name,
                                         const BlendEffectMenuCreator::EffectCreator& creator) {
             if (name.isEmpty()) { return; }
-            const auto act =  menu->addAction(QIcon::fromTheme("preferences"), name);
+            const auto act =  menu->addAction(eIcon, name);
             act->setData(QString(name).prepend(tr("Add ")).append(tr(" (Blend Effect)")));
             cmdAddAction(act);
             connect(act, &QAction::triggered, this, [this, creator]() {
@@ -106,13 +108,13 @@ void MainWindow::setupMenuEffects()
         BlendEffectMenuCreator::forEveryEffect(adder);
     }
     { // raster
-        const auto menu = mEffectsMenu->addMenu(QIcon::fromTheme("preferences"), tr("Raster Effects"));
-        const auto adder = [this, menu](const QString& name, const QString& path,
+        const auto menu = mEffectsMenu->addMenu(eIcon, tr("Raster Effects"));
+        const auto adder = [this, menu, eIcon](const QString& name, const QString& path,
                                         const RasterEffectMenuCreator::EffectCreator& creator) {
             if (name.isEmpty()) { return; }
             QString title = name;
             if (!path.isEmpty()) { title.append(QString(" (%1)").arg(path));}
-            const auto act =  menu->addAction(QIcon::fromTheme("preferences"), title);
+            const auto act =  menu->addAction(eIcon, title);
             act->setData(QString(name).prepend(tr("Add ")).append(tr(" (Raster Effect)")));
             cmdAddAction(act);
             connect(act, &QAction::triggered, this, [this, creator]() {
@@ -123,7 +125,6 @@ void MainWindow::setupMenuEffects()
         menu->addSeparator();
         RasterEffectMenuCreator::forEveryEffectCustom(adder);
         RasterEffectMenuCreator::forEveryEffectShader(adder);
-        //RasterEffectMenuCreator::forEveryEffect(adder);
     }
 }
 
