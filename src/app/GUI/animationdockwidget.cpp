@@ -96,13 +96,10 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
 
     addAction(mLineButton);
     addAction(mCurveButton);
-    addSeparator();
     addAction(mSymmetricButton);
     addAction(mSmoothButton);
     addAction(mCornerButton);
-    addSeparator();
     addAction(mFitToHeightButton);
     //addWidget(valueLines);
-    addSeparator();
     addAction(onlySelectedAct);
 }

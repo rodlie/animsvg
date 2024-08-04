@@ -403,6 +403,10 @@ QToolBar#animationDockWidget {
     background: transparent;
 }
 
+QToolBar#animationDockWidget QToolButton {
+    background-color: %3;
+}
+
 QTabWidget#TabWidgetWide QTabBar::tab:bottom {
     margin-bottom: .5em;
 }
