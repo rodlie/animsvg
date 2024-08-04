@@ -104,6 +104,7 @@ if(WIN32)
         skia
         user32
         opengl32)
+    add_definitions(-DSKIA_DLL)
 else()
     if(APPLE)
         set(SKIA_LIBRARIES skia)

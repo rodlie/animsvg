@@ -50,7 +50,7 @@ if(WIN32)
     else()
         set(SKIA_UPDATE_CMD :)
     endif()
-    set(SKIA_ARGS "target_os=\"windows\" host_os=\"win\" current_os=\"win\" target_cpu=\"x64\"")
+    set(SKIA_ARGS "target_os=\"windows\" host_os=\"win\" current_os=\"win\" target_cpu=\"x64\" is_component_build=true")
     set(SKIA_ARGS "${SKIA_ARGS} clang_win=\"C:\\Program Files\\LLVM\" cc=\"clang-cl\" cxx=\"clang-cl\"")
     set(SKIA_ARGS "${SKIA_ARGS} extra_cflags=[\"-Wno-error\",\"/MD\",\"/O2\"]")
 else()
@@ -104,3 +104,7 @@ ExternalProject_Add(
     USES_TERMINAL_CONFIGURE true
     USES_TERMINAL_BUILD true
 )
+
+if(WIN32)
+    add_custom_command(TARGET Engine POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SKIA_BUILD_DIR}/skia.dll.lib ${SKIA_BUILD_DIR}/skia.lib)
+endif()
