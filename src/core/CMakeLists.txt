@@ -716,7 +716,7 @@ target_link_directories(
     ${PROJECT_NAME}
     PRIVATE
     ${FFMPEG_LIBRARIES_DIRS}
-    ${CMAKE_CURRENT_BINARY_DIR}/../engine/skia
+    ${SKIA_LIBRARIES_DIRS}
     #${QUAZIP_LIBRARIES_DIRS}
 )
 
