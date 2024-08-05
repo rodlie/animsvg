@@ -20,14 +20,14 @@
 #
 
 if(WIN32)
-    set(FFMPEG_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/src/ffmpeg/include)
+    set(FFMPEG_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/sdk/include)
     set(FFMPEG_LIBRARIES
         avformat
         avcodec
         avutil
         swscale
         swresample)
-    set(FFMPEG_LIBRARIES_DIRS ${CMAKE_SOURCE_DIR}/src/ffmpeg/bin)
+    set(FFMPEG_LIBRARIES_DIRS ${CMAKE_SOURCE_DIR}/sdk/bin)
 else()
     pkg_check_modules(AVFORMAT REQUIRED libavformat)
     pkg_check_modules(AVCODEC REQUIRED libavcodec)

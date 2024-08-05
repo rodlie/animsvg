@@ -66,9 +66,9 @@ if(APPLE)
 endif()
 
 if(WIN32)
-    set(QSCINTILLA_LIBRARIES_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../qscintilla/src/release)
+    set(QSCINTILLA_LIBRARIES_DIRS ${CMAKE_SOURCE_DIR}/sdk/bin)
     set(QSCINTILLA_LIBRARIES qscintilla2_qt5)
-    set(QSCINTILLA_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../qscintilla/src)
+    set(QSCINTILLA_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/sdk/include)
     add_definitions(-DQSCINTILLA_DLL)
 else()
     set(QSCINTILLA_LIBRARIES_DIRS "/usr/lib" CACHE STRING "qscintilla library path")
@@ -289,7 +289,7 @@ target_link_directories(
     ${FFMPEG_LIBRARIES_DIRS}
     ${QSCINTILLA_LIBRARIES_DIRS}
     #${QUAZIP_LIBRARIES_DIRS}
-    ${CMAKE_CURRENT_BINARY_DIR}/../engine/skia
+    ${SKIA_LIBRARIES_DIRS}
 )
 
 if(${USE_SKIA_SYSTEM_LIBS} AND UNIX)
