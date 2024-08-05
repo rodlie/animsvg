@@ -1,0 +1,24 @@
+name: Windows PR
+
+on: [pull_request]
+
+jobs:
+  build:
+
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build
+      shell: cmd
+      run: .\src\scripts\build_ci.bat
+    - name: Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: friction-ci-${{github.sha}}-windows-x64
+        path: build\output\*.7z
+    - uses: actions/comment@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        body: "Windows build available: ${{ steps.upload-artifact.outputs.artifact_url }}"
+        issue-number: ${{ github.event.pull_request.number }}

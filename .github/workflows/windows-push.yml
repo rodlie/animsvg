@@ -1,6 +1,6 @@
-name: Windows
+name: Windows CI
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build:
