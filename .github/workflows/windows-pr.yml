@@ -17,7 +17,7 @@ jobs:
       with:
         name: friction-ci-${{github.sha}}-windows-x64
         path: build\output\*.7z
-    - uses: actions/comment@v1
+    - uses: peter-evans/create-or-update-comment@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         body: "Windows build available: ${{ steps.upload-artifact.outputs.artifact_url }}"
