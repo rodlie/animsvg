@@ -67,12 +67,14 @@ Generic build instructions.
 * `cmake` must be available in `PATH`
 * `python3` must be available in `PATH`
 * [LLVM](https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.7/LLVM-15.0.7-win64.exe) installed to default location
-* Qt 5.15.14 libraries and headers in `friction\src\qt`
+* Qt 5.15.14 libraries and headers in `friction\sdk`
   * See [configure_qt5.bat](src/scripts/configure_qt5.bat) and [build_qt5.bat](src/scripts/build_qt5.bat)
-* QScintilla 2.14.1 libraries and headers in `friction\src\qscintilla`
+* QScintilla 2.14.1 libraries and headers in `friction\sdk`
   * See [build_qscintilla.bat](src/scripts/build_qscintilla.bat)
-* FFmpeg 4.2.9 libraries and headers in `friction\src\ffmpeg`
+* FFmpeg 4.2.9 libraries and headers in `friction\sdk`
   * See [build_mxe_ffmpeg.sh](src/scripts/build_mxe_ffmpeg.sh) and [mxe](https://github.com/friction2d/mxe)
+
+Binary SDK available [here](https://github.com/friction2d/friction-sdk/releases).
 
 ### Get
 
@@ -114,13 +116,13 @@ All requirements must be installed in the correct folders, this is an example an
 ```
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\Common7\Tools\VsDevCmd.bat"
 
-set QT_DIR=%cd%\src\qt
-set PATH=C:\Python;%ProgramFiles%\CMake\bin;%ProgramFiles%\Git\bin;%QT_DIR%\bin;%PATH%
+set SDK_DIR=%cd%\sdk
+set PATH=C:\Python;%ProgramFiles%\CMake\bin;%ProgramFiles%\Git\bin;%SDK_DIR%\bin;%PATH%
 
 mkdir build
 cd build
 
-cmake -G "Visual Studio 15 2017" -A x64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=%QT_DIR% ..
+cmake -G "Visual Studio 15 2017" -A x64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=%SDK_DIR% ..
 
 cmake --build . --config Release
 ```
