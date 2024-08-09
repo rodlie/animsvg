@@ -546,10 +546,10 @@ void GraphAnimator::graph_saveSVG(SvgExporter& exp,
     } else {
         const auto tagName = transform ? "animateTransform" : "animate";
         auto anim = exp.createElement(tagName);
-        if (transform) {
-            if (!beginEvent.isEmpty()) { anim.setAttribute("begin", beginEvent); }
-            if (!endEvent.isEmpty()) { anim.setAttribute("end", endEvent); }
-        }
+
+        if (!beginEvent.isEmpty()) { anim.setAttribute("begin", beginEvent); }
+        if (!endEvent.isEmpty()) { anim.setAttribute("end", endEvent); }
+
         anim.setAttribute("attributeName", attrName);
         if(!type.isEmpty()) anim.setAttribute("type", type);
         const qreal div = span - 1;

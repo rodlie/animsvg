@@ -677,7 +677,9 @@ QDomElement BoxTransformAnimator::saveSVG(SvgExporter& exp,
                                  beginEvent, endEvent);
     {
         const auto opaAnim = getOpacityAnimator();
-        opaAnim->saveQrealSVG(exp, unpivot, visRange, "opacity", 0.01);
+        opaAnim->saveQrealSVG(exp, unpivot, visRange,
+                              "opacity", 0.01, false, "", "%1",
+                              beginEvent, endEvent);
     }
 
     auto shear = exp.createElement("g");
