@@ -43,10 +43,14 @@ PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
     : SettingsWidget(parent)
     , mAudioDevicesCombo(nullptr)
 {
+    const auto capGroup = new QGroupBox(tr("Limits"), this);
+    capGroup->setObjectName("BlueBox");
+    const auto capLayout = new QVBoxLayout(capGroup);
+    addWidget(capGroup);
 
     QHBoxLayout* cpuCapSett = new QHBoxLayout;
 
-    mCpuThreadsCapCheck = new QCheckBox(tr("CPU cap"), this);
+    mCpuThreadsCapCheck = new QCheckBox(tr("CPU"), this);
     mCpuThreadsCapLabel = new QLabel(this);
     mCpuThreadsCapSlider = new QSlider(Qt::Horizontal);
     mCpuThreadsCapSlider->setRange(1, HardwareInfo::sCpuThreads());
@@ -62,16 +66,14 @@ PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
         mCpuThreadsCapLabel->setText(QString("%1 / %2").arg(val).arg(nTot));
     });
 
-    addWidget(mCpuThreadsCapCheck);
-    cpuCapSett->addWidget(mCpuThreadsCapLabel);
+    cpuCapSett->addWidget(mCpuThreadsCapCheck);
     cpuCapSett->addWidget(mCpuThreadsCapSlider);
-    addLayout(cpuCapSett);
-
-    addSeparator();
+    cpuCapSett->addWidget(mCpuThreadsCapLabel);
+    capLayout->addLayout(cpuCapSett);
 
     QHBoxLayout* ramCapSett = new QHBoxLayout;
 
-    mRamMBCapCheck = new QCheckBox(tr("RAM cap"), this);
+    mRamMBCapCheck = new QCheckBox(tr("RAM"), this);
     mRamMBCapSpin = new QSpinBox(this);
     mRamMBCapSpin->setRange(250, intMB(HardwareInfo::sRamKB()).fValue);
     mRamMBCapSpin->setSuffix(" MB");
@@ -92,14 +94,13 @@ PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
             mRamMBCapSpin, &QSpinBox::setValue);
 
     ramCapSett->addWidget(mRamMBCapCheck);
+    ramCapSett->addWidget(mRamMBCapSlider);
     ramCapSett->addWidget(mRamMBCapSpin);
-    addLayout(ramCapSett);
-    addWidget(mRamMBCapSlider);
-
-    addSeparator();
+    capLayout->addLayout(ramCapSett);
 
     const auto gpuGroup = new QGroupBox(HardwareInfo::sGpuRendererString(),
                                         this);
+    gpuGroup->setObjectName("BlueBox");
     const auto gpuGroupLayout = new QVBoxLayout(gpuGroup);
 
     mAccPreferenceLabel = new QLabel(tr("Acceleration preference"));
@@ -125,32 +126,29 @@ PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
     addWidget(gpuGroup);
 
     const auto audioWidget = new QGroupBox(this);
-    audioWidget->setTitle(tr("Audio"));
+    audioWidget->setObjectName("BlueBox");
+    audioWidget->setTitle(tr("Audio Device"));
 
     const auto audioLayout = new QHBoxLayout(audioWidget);
 
-    QLabel *audioLabel = new QLabel(tr("Output"), this);
+    //QLabel *audioLabel = new QLabel(tr("Output"), this);
     mAudioDevicesCombo = new QComboBox(this);
     mAudioDevicesCombo->setSizePolicy(QSizePolicy::Preferred,
                                       QSizePolicy::Preferred);
     mAudioDevicesCombo->setFocusPolicy(Qt::NoFocus);
     mAudioDevicesCombo->setEnabled(false);
 
-    audioLayout->addWidget(audioLabel);
+    //audioLayout->addWidget(audioLabel);
     audioLayout->addWidget(mAudioDevicesCombo);
 
-    addSeparator();
     addWidget(audioWidget);
 
     setupRasterEffectWidgets();
 
     eSizesUI::widget.add(mCpuThreadsCapCheck, [this](const int size) {
         mCpuThreadsCapCheck->setFixedHeight(size);
-        mCpuThreadsCapCheck->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
         mRamMBCapCheck->setFixedHeight(size);
-        mRamMBCapCheck->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
         mPathGpuAccCheck->setFixedHeight(size);
-        mPathGpuAccCheck->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
     });
 
     QTimer::singleShot(250, this,
@@ -229,6 +227,7 @@ void PerformanceSettingsWidget::setupRasterEffectWidgets()
 
     const auto area = new QScrollArea(this);
     const auto container = new QGroupBox(this);
+    container->setObjectName("BlueBox");
     const auto containerLayout = new QVBoxLayout(container);
     const auto containerInner = new QWidget(this);
     const auto containerInnerLayout = new QVBoxLayout(containerInner);
@@ -236,13 +235,13 @@ void PerformanceSettingsWidget::setupRasterEffectWidgets()
     area->setWidget(containerInner);
     area->setWidgetResizable(true);
     area->setContentsMargins(0, 0, 0, 0);
+    area->setFrameShape(QFrame::NoFrame);
 
     container->setTitle(tr("Raster Effects"));
 
     container->setContentsMargins(0, 0, 0, 0);
 
     containerInnerLayout->setMargin(5);
-    containerLayout->setMargin(0);
 
     containerLayout->addWidget(area);
 

@@ -38,11 +38,6 @@ AlignWidget::AlignWidget(QWidget* const parent)
     , mAlignPivot(nullptr)
     , mRelativeTo(nullptr)
 {
-    QPalette pal = QPalette();
-    pal.setColor(QPalette::Window, ThemeSupport::getThemeBaseColor());
-    setAutoFillBackground(true);
-    setPalette(pal);
-
     const auto mainLayout = new QVBoxLayout(this);
     setLayout(mainLayout);
 
@@ -123,15 +118,27 @@ AlignWidget::AlignWidget(QWidget* const parent)
     });
     buttonsLay->addWidget(bottomButton);
 
-    //if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-        int buttonSize = eSizesUI::widget;
-        leftButton->setIconSize(QSize(buttonSize, buttonSize));
-        hCenterButton->setIconSize(QSize(buttonSize, buttonSize));
-        rightButton->setIconSize(QSize(buttonSize, buttonSize));
-        topButton->setIconSize(QSize(buttonSize, buttonSize));
-        vCenterButton->setIconSize(QSize(buttonSize, buttonSize));
-        bottomButton->setIconSize(QSize(buttonSize, buttonSize));
-    //}
+    eSizesUI::widget.add(leftButton, [leftButton,
+                                      hCenterButton,
+                                      rightButton,
+                                      topButton,
+                                      vCenterButton,
+                                      bottomButton](const int size) {
+        leftButton->setFixedHeight(size);
+        hCenterButton->setFixedHeight(size);
+        rightButton->setFixedHeight(size);
+        topButton->setFixedHeight(size);
+        vCenterButton->setFixedHeight(size);
+        bottomButton->setFixedHeight(size);
+        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+            leftButton->setIconSize(QSize(size, size));
+            hCenterButton->setIconSize(QSize(size, size));
+            rightButton->setIconSize(QSize(size, size));
+            topButton->setIconSize(QSize(size, size));
+            vCenterButton->setIconSize(QSize(size, size));
+            bottomButton->setIconSize(QSize(size, size));
+        }
+    });
 }
 
 void AlignWidget::triggerAlign(const Qt::Alignment align)

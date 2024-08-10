@@ -58,9 +58,9 @@ RenderWidget::RenderWidget(QWidget *parent)
     bottomWidget->setContentsMargins(0, 0, 0, 0);
     const auto bottomLayout = new QHBoxLayout(bottomWidget);
 
-    const auto darkPal = ThemeSupport::getDarkPalette();
-    bottomWidget->setAutoFillBackground(true);
-    bottomWidget->setPalette(darkPal);
+    setPalette(ThemeSupport::getDarkPalette());
+    setAutoFillBackground(true);
+
     bottomWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     mRenderProgressBar = new QProgressBar(this);
@@ -121,6 +121,8 @@ RenderWidget::RenderWidget(QWidget *parent)
     });
 
     mContWidget = new QWidget(this);
+    mContWidget->setPalette(ThemeSupport::getDarkPalette());
+    mContWidget->setAutoFillBackground(true);
     mContWidget->setContentsMargins(0, 0, 0, 0);
     mContLayout = new QVBoxLayout(mContWidget);
     mContLayout->setAlignment(Qt::AlignTop);
@@ -138,8 +140,8 @@ RenderWidget::RenderWidget(QWidget *parent)
     bottomLayout->addWidget(mAddRenderButton);
     bottomLayout->addWidget(mClearQueueButton);
 
-    mMainLayout->addWidget(mScrollArea);
     mMainLayout->addWidget(bottomWidget);
+    mMainLayout->addWidget(mScrollArea);
 
     const auto vidEmitter = VideoEncoder::sInstance->getEmitter();
     connect(vidEmitter, &VideoEncoderEmitter::encodingStarted,

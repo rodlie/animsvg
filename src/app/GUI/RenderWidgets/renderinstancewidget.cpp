@@ -81,16 +81,16 @@ void RenderInstanceWidget::iniGUI() {
     mNameLabel = new QLineEdit(this);
     mNameLabel->setFocusPolicy(Qt::NoFocus);
     mNameLabel->setFixedHeight(eSizesUI::widget);
-    mNameLabel->setObjectName("darkWidget");
+    mNameLabel->setObjectName("RenderTitleWidget");
     mNameLabel->setReadOnly(true);
-    mNameLabel->setFrame(false);
+    //mNameLabel->setFrame(false);
 
     setLabelWidget(mNameLabel);
 
     QWidget *contWid = new QWidget(this);
     contWid->setContentsMargins(0, 0, 0, 0);
     contWid->setLayout(mContentLayout);
-    contWid->setObjectName("darkWidget");
+    contWid->setObjectName("RenderContentWidget");
 
     addContentWidget(contWid);
 
@@ -98,7 +98,7 @@ void RenderInstanceWidget::iniGUI() {
 
     QWidget *renderSettingsLabelWidget = new QWidget(this);
     renderSettingsLabelWidget->setContentsMargins(0, 0, 0, 0);
-    renderSettingsLabelWidget->setObjectName("darkWidget");
+    //renderSettingsLabelWidget->setObjectName("darkWidget");
     QVBoxLayout *renderSettingsLayout = new QVBoxLayout(renderSettingsLabelWidget);
 
     mRenderSettingsButton = new QPushButton(tr("Scene ..."));
@@ -204,6 +204,7 @@ void RenderInstanceWidget::iniGUI() {
 
     mContentLayout->setMargin(0);
     mContentLayout->setSpacing(0);
+    mContentLayout->setContentsMargins(0, 0, 0, 0);
 }
 
 void RenderInstanceWidget::updateFromSettings() {

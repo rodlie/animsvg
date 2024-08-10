@@ -292,13 +292,15 @@ MainWindow::MainWindow(Document& document,
 
     const auto fontWidget = new QWidget(this);
     fontWidget->setAutoFillBackground(true);
-    fontWidget->setPalette(ThemeSupport::getNotSoDarkPalette());
+    fontWidget->setPalette(ThemeSupport::getDarkPalette());
 
     const auto fontLayout = new QVBoxLayout(fontWidget);
     fontLayout->addWidget(mFontWidget);
 
     QMargins frictionMargins(0, 0, 0, 0);
     int frictionSpacing = 0;
+
+    fontWidget->setContentsMargins(frictionMargins);
 
     const auto darkPal = ThemeSupport::getDarkPalette();
     mObjectSettingsScrollArea->setAutoFillBackground(true);

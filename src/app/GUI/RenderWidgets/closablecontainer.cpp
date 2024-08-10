@@ -31,9 +31,9 @@
 ClosableContainer::ClosableContainer(QWidget *parent) : QWidget(parent) {
     mMainLayout->setAlignment(Qt::AlignTop);
     setLayout(mMainLayout);
-    mContentArrow = new QPushButton("", this);
+    mContentArrow = new QPushButton(this);
     mContentArrow->setFocusPolicy(Qt::NoFocus);
-    mContentArrow->setObjectName("FlatButton");
+    //mContentArrow->setObjectName("FlatButton");
     mContentArrow->setCheckable(true);
     mContentArrow->setFixedSize(eSizesUI::widget, eSizesUI::widget);
     if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
@@ -48,10 +48,11 @@ ClosableContainer::ClosableContainer(QWidget *parent) : QWidget(parent) {
     mVLayout->addWidget(mContWidget);
     mContWidget->setContentsMargins(0, 0, 0, 0);
     mContWidget->setLayout(mContLayout);
-    mContLayout->setMargin(0);
+    //mContLayout->setMargin(0);
     mContLayout->setAlignment(Qt::AlignTop);
     mVLayout->setSpacing(0);
     mVLayout->setMargin(0);
+    mVLayout->setContentsMargins(0, 0, 0, 0);
     setContentVisible(false);
 }
 
@@ -73,7 +74,6 @@ void ClosableContainer::setCheckable(const bool check) {
         mCheckBox->setFocusPolicy(Qt::NoFocus);
         eSizesUI::widget.add(mCheckBox, [this](const int size) {
             mCheckBox->setFixedSize(QSize(size, size));
-            mCheckBox->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
         });
         mMainLayout->insertWidget(0, mCheckBox, 0, Qt::AlignTop);
         mCheckBox->setChecked(true);

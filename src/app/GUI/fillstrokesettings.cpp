@@ -320,6 +320,7 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     mMainLayout->addStretch();
 
     const auto mFillStrokeArea = new ScrollArea(this);
+    mFillAndStrokeWidget->setObjectName("DarkWidget");
     mFillStrokeArea->setWidget(mFillAndStrokeWidget);
 
     const auto mLayout = new QVBoxLayout(this);

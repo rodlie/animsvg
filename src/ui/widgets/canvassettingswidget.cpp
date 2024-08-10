@@ -91,7 +91,6 @@ CanvasSettingsWidget::CanvasSettingsWidget(QWidget* const parent) :
 
     eSizesUI::widget.add(mRtlSupport, [this](const int size) {
         mRtlSupport->setFixedHeight(size);
-        mRtlSupport->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
     });
 }
 

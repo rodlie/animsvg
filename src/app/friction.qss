@@ -27,6 +27,7 @@
 %5 = getThemeBaseColor
 %6 = getThemeAlternateColor
 %7 = icon size
+%8 = getThemeColorOrange
 
 */
 
@@ -91,22 +92,20 @@ QTabBar#TabWidgetCenter::tab:bottom:only-one {
 QTabWidget::pane,
 QTabBar {
     padding: .2em;
-    background-color: %6;
-    border: 1px solid %1;
+    background-color: %5;
+    border: none;
 }
 QTabBar::tab {
-    padding: .2em;
+    padding: .3em;
     border-radius: 2%;
-    border: 1px solid %6;
+    border: 2px solid %5;
     background-color: %5;
 }
 QTabBar::tab:selected {
-    background-color: %1;
-    border-color: %4;
+    background-color: %5;
 }
 QTabBar::tab:hover {
     background-color: %3;
-    border-color: %4;
 }
 QTabBar::tab:bottom:hover {
     border-top-color: transparent;
@@ -130,7 +129,6 @@ QTabBar::tab:top {
 }
 QTabWidget::pane {
     border-radius: 2%;
-    border: 1px solid %4;
 }
 
 QTabWidget#ColorTabWidget::pane {
@@ -139,17 +137,21 @@ QTabWidget#ColorTabWidget::pane {
     margin: 0;
     padding: 0;
 }
-QTabWidget#ColorTabWidget QTabBar::tab {
-    border-radius: 2%;
-    border: 1px solid %6;
+
+QTabBar::tab:top:selected {
+    border-bottom: 2px solid %4;
 }
-QTabWidget#ColorTabWidget QTabBar::tab:selected {
-    background-color: %1;
-    border-color: %4;
+
+QTabBar::tab:bottom:selected {
+    border-top: 2px solid %4;
 }
-QTabWidget#ColorTabWidget QTabBar::tab:hover {
-    background-color: %3;
-    border-color: %4;
+
+QTabBar::tab:top:!selected:hover {
+    border-bottom: 2px solid %8;
+}
+
+QTabBar::tab:bottom:!selected:hover {
+    border-top: 2px solid %8;
 }
 
 QMenuBar::item:selected,
@@ -269,10 +271,6 @@ QMenuBar {
 QLineEdit#OutputDestinationLineEdit {
     border: 0;
     background-color: rgb(40, 40, 47);
-}
-
-FillStrokeSettingsWidget {
-    border: 0;
 }
 
 QPushButton#WelcomeButton,
@@ -407,10 +405,6 @@ QToolBar#animationDockWidget QToolButton {
     background-color: %3;
 }
 
-QTabWidget#TabWidgetWide QTabBar::tab:bottom {
-    margin-bottom: .5em;
-}
-
 QTabWidget#TabWidgetWide QTabBar {
     border: 0;
 }
@@ -440,4 +434,58 @@ QMenu::separator {
 
 QMenu::item:disabled {
     background: transparent;
+}
+
+QWidget#DarkWidget {
+    background-color: %5;
+}
+
+QGroupBox#BlueBox,
+QGroupBox#BlueBoxLeft {
+    background-color: %6;
+    border: 1px solid %1;
+    border-bottom-left-radius: 2%;
+    border-bottom-right-radius: 2%;
+}
+
+QGroupBox#BlueBox::title,
+QGroupBox#BlueBoxLeft::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    border-top-left-radius: 2%;
+    border-top-right-radius: 2%;
+    padding: .2em;
+    padding-top: .3em;
+    background-color: transparent;
+    border-bottom: 2px solid %4;
+}
+
+QGroupBox#BlueBoxLeft {
+    border: none;
+}
+
+QGroupBox#BlueBoxLeft::title {
+    subcontrol-position: top left;
+}
+
+QLineEdit#RenderTitleWidget {
+    border: 1px solid %6;
+}
+
+QWidget#RenderContentWidget {
+    background-color: %6;
+    border: 1px solid %1;
+}
+
+QCheckBox::indicator:hover,
+QCheckBox::indicator:hover:unchecked {
+    background-color: %4;
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/icons/hicolor/%7x%7/actions/dialog-ok.png);
+}
+
+QCheckBox::indicator:unchecked {
+    image: url(:/icons/hicolor/%7x%7/actions/dialog-cancel.png);
 }

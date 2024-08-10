@@ -55,48 +55,43 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     const auto mGeneralLayout = new QVBoxLayout(mGeneralWidget);
     mGeneralLayout->setContentsMargins(0, 0, 0, 0);
 
-    const auto mAutoBackupWidget = new QGroupBox(this);
-    mAutoBackupWidget->setTitle(tr("Backup"));
-    mAutoBackupWidget->setContentsMargins(0, 0, 0, 0);
-    const auto mAutoBackupLayout = new QHBoxLayout(mAutoBackupWidget);
+    const auto mProjectWidget = new QGroupBox(this);
+    mProjectWidget->setObjectName("BlueBox");
+    mProjectWidget->setTitle(tr("Project I/O"));
+    mProjectWidget->setContentsMargins(0, 0, 0, 0);
+    const auto mProjectLayout = new QVBoxLayout(mProjectWidget);
 
-    const auto mAutoBackupLabel = new QLabel(tr("Enable Backup on Save"), this);
-    mAutoBackupLabel->setToolTip(tr("Creates a backup file after each successful save.\n\n"
-                                    "Backup files are stored in a folder called PROJECT.friction_backup."));
-
-    mAutoBackup = new QCheckBox(this);
+    mAutoBackup = new QCheckBox(tr("Enable Backup on Save"), this);
     mAutoBackup->setCheckable(true);
+    mAutoBackup->setToolTip(tr("Creates a backup file after each successful save.\n\n"
+                               "Backup files are stored in a folder called PROJECT.friction_backup."));
+    mProjectLayout->addWidget(mAutoBackup);
 
-    mAutoBackupLayout->addWidget(mAutoBackupLabel);
-    mAutoBackupLayout->addStretch();
-    mAutoBackupLayout->addWidget(mAutoBackup);
+    mGeneralLayout->addWidget(mProjectWidget);
 
-    mGeneralLayout->addWidget(mAutoBackupWidget);
-
-    const auto mAutoSaveWidget = new QGroupBox(this);
-    mAutoSaveWidget->setTitle(tr("Auto Save"));
+    const auto mAutoSaveWidget = new QWidget(this);
     mAutoSaveWidget->setContentsMargins(0, 0, 0, 0);
     const auto mAutoSaveLayout = new QHBoxLayout(mAutoSaveWidget);
+    mAutoSaveLayout->setContentsMargins(0, 0, 0, 0);
+    mAutoSaveLayout->setMargin(0);
 
-    const auto mAutoSaveLabel = new QLabel(tr("Enable Auto Save"), this);
-    mAutoSaveLabel->setToolTip(tr("Will auto save each X min if project is unsaved.\n\n"
-                                  "Enable Backup on Save for incremental saves (and as a failsafe)."));
-
-    mAutoSave = new QCheckBox(this);
+    mAutoSave = new QCheckBox(tr("Enable Auto Save"), this);
     mAutoSave->setCheckable(true);
+    mAutoSave->setToolTip(tr("Will auto save each X min if project is unsaved.\n\n"
+                             "Enable Backup on Save for incremental saves (and as a failsafe)."));
 
     mAutoSaveTimer = new QSpinBox(this);
     mAutoSaveTimer->setRange(1, 60);
     mAutoSaveTimer->setSuffix(tr(" min"));
 
-    mAutoSaveLayout->addWidget(mAutoSaveLabel);
-    mAutoSaveLayout->addStretch();
     mAutoSaveLayout->addWidget(mAutoSave);
+    mAutoSaveLayout->addStretch();
     mAutoSaveLayout->addWidget(mAutoSaveTimer);
 
-    mGeneralLayout->addWidget(mAutoSaveWidget);
+    mProjectLayout->addWidget(mAutoSaveWidget);
 
     const auto mScaleWidget = new QGroupBox(this);
+    mScaleWidget->setObjectName("BlueBox");
     mScaleWidget->setTitle(tr("Interface Scaling"));
     mScaleWidget->setContentsMargins(0, 0, 0, 0);
     const auto mScaleLayout = new QVBoxLayout(mScaleWidget);
@@ -130,14 +125,11 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
 
     mGeneralLayout->addWidget(mScaleWidget);
 
-    const auto mImportWidget = new QGroupBox(this);
-    mImportWidget->setTitle(tr("Import"));
-    mImportWidget->setContentsMargins(0, 0, 0, 0);
-    const auto mImportLayout = new QVBoxLayout(mImportWidget);
-
     const auto mImportFileWidget = new QWidget(this);
     mImportFileWidget->setContentsMargins(0, 0, 0, 0);
     const auto mImportFileLayout = new QHBoxLayout(mImportFileWidget);
+    mImportFileLayout->setContentsMargins(0, 0, 0, 0);
+    mImportFileLayout->setMargin(0);
 
     const auto mImportFileLabel = new QLabel(tr("Default import directory"), this);
     mImportFileDir = new QComboBox(this);
@@ -146,8 +138,9 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
 
     mImportFileLayout->addWidget(mImportFileLabel);
     mImportFileLayout->addWidget(mImportFileDir);
-    mImportLayout->addWidget(mImportFileWidget);
-    mGeneralLayout->addWidget(mImportWidget);
+
+    mProjectLayout->addSpacing(10);
+    mProjectLayout->addWidget(mImportFileWidget);
 
     setupToolBarWidgets(mGeneralLayout);
 
@@ -155,12 +148,9 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     addWidget(mGeneralWidget);
 
     eSizesUI::widget.add(mAutoBackup, [this](const int size) {
-        mAutoBackup->setFixedSize(QSize(size, size));
-        mAutoBackup->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
-        mAutoSave->setFixedSize(QSize(size, size));
-        mAutoSave->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
+        mAutoBackup->setFixedHeight(size);
+        mAutoSave->setFixedHeight(size);
         mDefaultInterfaceScaling->setFixedHeight(size);
-        mDefaultInterfaceScaling->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
     });
 }
 
@@ -232,6 +222,7 @@ void GeneralSettingsWidget::setupToolBarWidgets(QVBoxLayout *lay)
 
     const auto area = new QScrollArea(this);
     const auto container = new QGroupBox(this);
+    container->setObjectName("BlueBox");
     const auto containerLayout = new QVBoxLayout(container);
     const auto containerInner = new QWidget(this);
     const auto containerInnerLayout = new QVBoxLayout(containerInner);
@@ -239,13 +230,14 @@ void GeneralSettingsWidget::setupToolBarWidgets(QVBoxLayout *lay)
     area->setWidget(containerInner);
     area->setWidgetResizable(true);
     area->setContentsMargins(0, 0, 0, 0);
+    area->setFrameShape(QFrame::NoFrame);
 
     container->setTitle(tr("Toolbar Actions"));
 
     container->setContentsMargins(0, 0, 0, 0);
 
     containerInnerLayout->setMargin(5);
-    containerLayout->setMargin(0);
+    //containerLayout->setMargin(0);
 
     containerLayout->addWidget(area);
 

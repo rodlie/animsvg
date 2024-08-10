@@ -174,6 +174,8 @@ FontsWidget::FontsWidget(QWidget *parent)
     });
 
     mTextInput = new QPlainTextEdit(this);
+    mTextInput->setPalette(ThemeSupport::getDarkerPalette());
+    mTextInput->setAutoFillBackground(true);
     mTextInput->setFocusPolicy(Qt::ClickFocus);
     mTextInput->setPlaceholderText(tr("Enter text ..."));
     connect(mTextInput, &QPlainTextEdit::textChanged,

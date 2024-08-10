@@ -80,6 +80,7 @@ OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
     mOutputFormatsLayout->addWidget(mOutputFormatsComboBox);
 
     mVideoGroupBox = new QGroupBox(tr("Video"), this);
+    mVideoGroupBox->setObjectName("BlueBoxLeft");
     mVideoGroupBox->setCheckable(true);
     mVideoGroupBox->setChecked(true);
     mVideoSettingsLayout = new TwoColumnLayout();
@@ -106,6 +107,7 @@ OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
                                   mBitrateSpinBox);
 
     mAudioGroupBox = new QGroupBox(tr("Audio"), this);
+    mAudioGroupBox->setObjectName("BlueBoxLeft");
     mAudioGroupBox->setCheckable(true);
     mAudioSettingsLayout = new TwoColumnLayout();
     mAudioCodecsLabel = new QLabel(tr("Codec"), this);

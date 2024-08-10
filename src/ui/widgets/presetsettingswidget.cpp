@@ -47,13 +47,9 @@ PresetSettingsWidget::PresetSettingsWidget(QWidget *parent)
 
     eSizesUI::widget.add(this, [this](const int size) {
         mCheckResolutions->setFixedHeight(size);
-        mCheckResolutions->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
         mCheckResolutionsAuto->setFixedHeight(size);
-        mCheckResolutionsAuto->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
         mCheckFps->setFixedHeight(size);
-        mCheckFps->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
         mCheckFpsAuto->setFixedHeight(size);
-        mCheckFpsAuto->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
     });
 }
 
@@ -74,6 +70,7 @@ void PresetSettingsWidget::setupResolutionPresetWidget()
 {
     const auto area = new QScrollArea(this);
     const auto container = new QGroupBox(this);
+    container->setObjectName("BlueBox");
     const auto containerLayout = new QVBoxLayout(container);
     const auto containerInner = new QWidget(this);
     const auto containerInnerLayout = new QVBoxLayout(containerInner);
@@ -81,13 +78,13 @@ void PresetSettingsWidget::setupResolutionPresetWidget()
     area->setWidget(containerInner);
     area->setWidgetResizable(true);
     area->setContentsMargins(0, 0, 0, 0);
+    area->setFrameShape(QFrame::NoFrame);
 
     container->setTitle(tr("Scene Resolutions"));
 
     container->setContentsMargins(0, 0, 0, 0);
 
     containerInnerLayout->setMargin(0);
-    containerLayout->setMargin(0);
 
     containerLayout->addWidget(area);
 
@@ -176,6 +173,7 @@ void PresetSettingsWidget::setupFpsPresetWidget()
 {
     const auto area = new QScrollArea(this);
     const auto container = new QGroupBox(this);
+    container->setObjectName("BlueBox");
     const auto containerLayout = new QVBoxLayout(container);
     const auto containerInner = new QWidget(this);
     const auto containerInnerLayout = new QVBoxLayout(containerInner);
@@ -183,13 +181,13 @@ void PresetSettingsWidget::setupFpsPresetWidget()
     area->setWidget(containerInner);
     area->setWidgetResizable(true);
     area->setContentsMargins(0, 0, 0, 0);
+    area->setFrameShape(QFrame::NoFrame);
 
     container->setTitle(tr("Scene Frame Rates"));
 
     container->setContentsMargins(0, 0, 0, 0);
 
     containerInnerLayout->setMargin(0);
-    containerLayout->setMargin(0);
 
     containerLayout->addWidget(area);
 

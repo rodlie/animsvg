@@ -173,6 +173,7 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
     const auto optsWidget = new QGroupBox(tr("Options"), this);
     const auto optsLayout = new QVBoxLayout(optsWidget);
 
+    optsWidget->setObjectName("BlueBox");
     optsWidget->setContentsMargins(0, 0, 0, 0);
 
     optsLayout->addWidget(mBackground);
