@@ -382,9 +382,9 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     connect(mPickingButton, &QPushButton::released,
             this, &ColorSettingsWidget::startColorPicking);
     eSizesUI::widget.add(mPickingButton, [this](const int size) {
-        mPickingButton->setFixedHeight(size);
+        mPickingButton->setFixedSize(size, size);
         //if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            mPickingButton->setIconSize(QSize(size, size));
+            //mPickingButton->setIconSize(QSize(size, size));
         //}
     });
 

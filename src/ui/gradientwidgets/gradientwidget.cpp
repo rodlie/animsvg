@@ -113,9 +113,11 @@ GradientWidget::GradientWidget(QWidget * const parent)
     cLayout->addWidget(buttonAdd);
     cLayout->addWidget(buttonRem);
     cLayout->addWidget(buttonDup);
+    cLayout->addStretch();
 
     mMainLayout->addWidget(aWidget);
     mMainLayout->addWidget(bWidget);
+    mMainLayout->addStretch();
 
     /*eSizesUI::widget.add(this, [this](const int size) {
         const qreal mult = (3 + mNumberVisibleGradients + 0.5);
@@ -128,13 +130,16 @@ GradientWidget::GradientWidget(QWidget * const parent)
                           &buttonAdd,
                           &buttonRem,
                           &buttonDup](const int size) {
-        buttonAddColor->setFixedHeight(size);
-        buttonRemColor->setFixedHeight(size);
-        buttonAddColor->setIconSize(QSize(size, size));
+        buttonAddColor->setFixedSize(size, size);
+        buttonRemColor->setFixedSize(size, size);
+        buttonAdd->setFixedHeight(size);
+        buttonRem->setFixedHeight(size);
+        buttonDup->setFixedHeight(size);
+        /*buttonAddColor->setIconSize(QSize(size, size));
         buttonRemColor->setIconSize(QSize(size, size));
         buttonAdd->setIconSize(QSize(size, size));
         buttonRem->setIconSize(QSize(size, size));
-        buttonDup->setIconSize(QSize(size, size));
+        buttonDup->setIconSize(QSize(size, size));*/
     });
 
     const auto list = mGradientsListWidget->getList();

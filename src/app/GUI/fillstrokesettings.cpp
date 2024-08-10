@@ -262,7 +262,14 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
         mFlatCapStyleButton->setFixedHeight(size);
         mSquareCapStyleButton->setFixedHeight(size);
         mRoundCapStyleButton->setFixedHeight(size);
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+        mFillTargetButton->setFixedHeight(size);
+        mStrokeTargetButton->setFixedHeight(size);
+        mFillNoneButton->setFixedHeight(size);
+        mFillFlatButton->setFixedHeight(size);
+        mFillGradientButton->setFixedHeight(size);
+        mLinearGradientButton->setFixedHeight(size);
+        mRadialGradientButton->setFixedHeight(size);
+        /*if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
             mBevelJoinStyleButton->setIconSize(QSize(size, size));
             mMiterJointStyleButton->setIconSize(QSize(size, size));
             mRoundJoinStyleButton->setIconSize(QSize(size, size));
@@ -276,7 +283,7 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
             mFillGradientButton->setIconSize(QSize(size, size));
             mLinearGradientButton->setIconSize(QSize(size, size));
             mRadialGradientButton->setIconSize(QSize(size, size));
-        }
+        }*/
     });
 
     // layout
@@ -309,6 +316,8 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     mColorTypeLayout->addWidget(mFillGradientButton);
 
     const auto mFillAndStrokeWidget = new QWidget(this);
+    mFillAndStrokeWidget->setContentsMargins(0, 0, 0, 0);
+
     const auto mMainLayout = new QVBoxLayout(mFillAndStrokeWidget);
 
     mMainLayout->addWidget(mTargetWidget);
@@ -324,7 +333,7 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     mFillStrokeArea->setWidget(mFillAndStrokeWidget);
 
     const auto mLayout = new QVBoxLayout(this);
-
+    mLayout->setContentsMargins(0,0,0,0);
     mLayout->setMargin(0);
     mLayout->addWidget(mFillStrokeArea);
 
