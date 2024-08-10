@@ -140,8 +140,8 @@ RenderWidget::RenderWidget(QWidget *parent)
     bottomLayout->addWidget(mAddRenderButton);
     bottomLayout->addWidget(mClearQueueButton);
 
-    mMainLayout->addWidget(bottomWidget);
     mMainLayout->addWidget(mScrollArea);
+    mMainLayout->addWidget(bottomWidget);
 
     const auto vidEmitter = VideoEncoder::sInstance->getEmitter();
     connect(vidEmitter, &VideoEncoderEmitter::encodingStarted,

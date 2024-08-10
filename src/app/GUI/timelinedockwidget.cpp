@@ -222,11 +222,6 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     });
 
     mToolBar = new QToolBar(this);
-    eSizesUI::widget.add(mToolBar, [this](const int size) {
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            mToolBar->setIconSize(QSize(size, size));
-        }
-    });
     mToolBar->setMovable(false);
 
     mRenderProgress = new QProgressBar(this);
@@ -236,6 +231,13 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mRenderProgress->setFormat(tr("Cache %p%"));
 
     mToolBar->addWidget(mFrameStartSpin);
+
+    eSizesUI::widget.add(mToolBar, [this](const int size) {
+        mRenderProgress->setFixedHeight(size);
+        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+            mToolBar->setIconSize(QSize(size, size));
+        }
+    });
 
     QWidget *spacerWidget1 = new QWidget(this);
     spacerWidget1->setSizePolicy(QSizePolicy::Expanding,

@@ -28,6 +28,7 @@
 %6 = getThemeAlternateColor
 %7 = icon size
 %8 = getThemeColorOrange
+%9 = getThemeRangeSelectedColor
 
 */
 
@@ -488,4 +489,15 @@ QCheckBox::indicator:checked {
 
 QCheckBox::indicator:unchecked {
     image: url(:/icons/hicolor/%7x%7/actions/dialog-cancel.png);
+}
+
+QProgressBar {
+    background-color: transparent;
+    border: 0;
+    text-align: center;
+}
+
+QProgressBar::chunk {
+    background-color: %9;
+    width: 10px;
 }
