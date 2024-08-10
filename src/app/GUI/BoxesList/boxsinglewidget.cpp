@@ -575,40 +575,34 @@ void BoxSingleWidget::setTargetAbstraction(SWT_Abstraction *abs) {
 void BoxSingleWidget::loadStaticPixmaps(int iconSize)
 {
     if (sStaticPixmapsLoaded) { return; }
-    const auto sizes = QIcon::fromTheme("visible").availableSizes();
-
-    qWarning() << "Icon theme:" << QIcon::themeName() << iconSize;
-    qWarning() << "Icon path:" << QIcon::themeSearchPaths();
-    qWarning() << "Icon sizes:" << sizes;
-
-    if (!sizes.contains(QSize(iconSize, iconSize))) {
+    if (!ThemeSupport::hasIconSize(iconSize)) {
         QMessageBox::warning(nullptr,
                              tr("Icon issues"),
                              tr("<p>Requested icon size <b>%1</b> is not available,"
-                                " expect blurry and missing icons.</p>"
+                                " expect blurry icons.</p>"
                                 "<p>Note that this may happen if you change the display scaling"
                                 " in Windows without restarting."
                                 " If you still have issues after restarting please report this issue.</p>").arg(iconSize));
     }
-
-    VISIBLE_ICON = new QPixmap(QIcon::fromTheme("visible").pixmap(iconSize, iconSize));
-    INVISIBLE_ICON = new QPixmap(QIcon::fromTheme("hidden").pixmap(iconSize, iconSize));
-    BOX_CHILDREN_VISIBLE_ICON = new QPixmap(QIcon::fromTheme("visible-child").pixmap(iconSize, iconSize));
-    BOX_CHILDREN_HIDDEN_ICON = new QPixmap(QIcon::fromTheme("hidden-child").pixmap(iconSize, iconSize));
-    ANIMATOR_CHILDREN_VISIBLE_ICON = new QPixmap(QIcon::fromTheme("visible-child-small").pixmap(iconSize, iconSize));
-    ANIMATOR_CHILDREN_HIDDEN_ICON = new QPixmap(QIcon::fromTheme("hidden-child-small").pixmap(iconSize, iconSize));
-    LOCKED_ICON = new QPixmap(QIcon::fromTheme("locked").pixmap(iconSize, iconSize));
-    UNLOCKED_ICON = new QPixmap(QIcon::fromTheme("unlocked").pixmap(iconSize, iconSize));
-    MUTED_ICON = new QPixmap(QIcon::fromTheme("muted").pixmap(iconSize, iconSize));
-    UNMUTED_ICON = new QPixmap(QIcon::fromTheme("unmuted").pixmap(iconSize, iconSize));
-    ANIMATOR_RECORDING_ICON = new QPixmap(QIcon::fromTheme("record").pixmap(iconSize, iconSize));
-    ANIMATOR_NOT_RECORDING_ICON = new QPixmap(QIcon::fromTheme("norecord").pixmap(iconSize, iconSize));
-    ANIMATOR_DESCENDANT_RECORDING_ICON = new QPixmap(QIcon::fromTheme("record-child").pixmap(iconSize, iconSize));
-    C_ICON = new QPixmap(QIcon::fromTheme("cpu-active").pixmap(iconSize, iconSize));
-    G_ICON = new QPixmap(QIcon::fromTheme("gpu-active").pixmap(iconSize, iconSize));
-    CG_ICON = new QPixmap(QIcon::fromTheme("cpu-gpu").pixmap(iconSize, iconSize));
-    GRAPH_PROPERTY_ICON = new QPixmap(QIcon::fromTheme("graph_property_2").pixmap(iconSize, iconSize));
-    PROMOTE_TO_LAYER_ICON = new QPixmap(QIcon::fromTheme("layer").pixmap(iconSize, iconSize));
+    const auto pixmapSize = ThemeSupport::getIconSize(iconSize);
+    VISIBLE_ICON = new QPixmap(QIcon::fromTheme("visible").pixmap(pixmapSize));
+    INVISIBLE_ICON = new QPixmap(QIcon::fromTheme("hidden").pixmap(pixmapSize));
+    BOX_CHILDREN_VISIBLE_ICON = new QPixmap(QIcon::fromTheme("visible-child").pixmap(pixmapSize));
+    BOX_CHILDREN_HIDDEN_ICON = new QPixmap(QIcon::fromTheme("hidden-child").pixmap(pixmapSize));
+    ANIMATOR_CHILDREN_VISIBLE_ICON = new QPixmap(QIcon::fromTheme("visible-child-small").pixmap(pixmapSize));
+    ANIMATOR_CHILDREN_HIDDEN_ICON = new QPixmap(QIcon::fromTheme("hidden-child-small").pixmap(pixmapSize));
+    LOCKED_ICON = new QPixmap(QIcon::fromTheme("locked").pixmap(pixmapSize));
+    UNLOCKED_ICON = new QPixmap(QIcon::fromTheme("unlocked").pixmap(pixmapSize));
+    MUTED_ICON = new QPixmap(QIcon::fromTheme("muted").pixmap(pixmapSize));
+    UNMUTED_ICON = new QPixmap(QIcon::fromTheme("unmuted").pixmap(pixmapSize));
+    ANIMATOR_RECORDING_ICON = new QPixmap(QIcon::fromTheme("record").pixmap(pixmapSize));
+    ANIMATOR_NOT_RECORDING_ICON = new QPixmap(QIcon::fromTheme("norecord").pixmap(pixmapSize));
+    ANIMATOR_DESCENDANT_RECORDING_ICON = new QPixmap(QIcon::fromTheme("record-child").pixmap(pixmapSize));
+    C_ICON = new QPixmap(QIcon::fromTheme("cpu-active").pixmap(pixmapSize));
+    G_ICON = new QPixmap(QIcon::fromTheme("gpu-active").pixmap(pixmapSize));
+    CG_ICON = new QPixmap(QIcon::fromTheme("cpu-gpu").pixmap(pixmapSize));
+    GRAPH_PROPERTY_ICON = new QPixmap(QIcon::fromTheme("graph_property_2").pixmap(pixmapSize));
+    PROMOTE_TO_LAYER_ICON = new QPixmap(QIcon::fromTheme("layer").pixmap(pixmapSize));
 
     sStaticPixmapsLoaded = true;
 }

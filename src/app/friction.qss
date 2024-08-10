@@ -20,6 +20,8 @@
 
 /*
 
+Colors and icon size from 'src/core/themesupport.cpp'.
+
 %1 = getThemeButtonBaseColor
 %2 = getThemeButtonBorderColor
 %3 = getThemeBaseDarkerColor
@@ -312,7 +314,6 @@ QPushButton#FlatButton:hover,
 QToolButton#FlatButton:hover {
     background-color: rgb(19, 19, 21);
     border-color: rgb(104, 144, 206);
-    
 }
 
 QTabWidget#ThirdPartyBrowser { border: 0; }

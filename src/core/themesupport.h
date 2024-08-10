@@ -27,6 +27,8 @@
 #include "core_global.h"
 
 #include <QPalette>
+#include <QList>
+#include <QSize>
 
 #include "include/core/SkColor.h"
 
@@ -64,6 +66,10 @@ public:
     static const QPalette getNotSoDarkPalette(int alpha = 255);
     static const QString getThemeStyle(int iconSize = 20);
     static void setupTheme(const int iconSize = 20);
+    static const QList<QSize> getAvailableIconSizes();
+    static const QSize getIconSize(const int size);
+    static bool hasIconSize(const int size);
+    static const QSize findClosestIconSize(int iconSize);
 };
 
 #endif // THEMESUPPORT_H

@@ -196,7 +196,7 @@ const QString ThemeSupport::getThemeStyle(int iconSize)
                    getThemeHighlightColor().name(),
                    getThemeBaseColor().name(),
                    getThemeAlternateColor().name(),
-                   QString::number(iconSize),
+                   QString::number(getIconSize(iconSize).width()),
                    getThemeColorOrange().name(),
                    getThemeRangeSelectedColor().name());
 }
@@ -226,4 +226,33 @@ void ThemeSupport::setupTheme(const int iconSize)
     palette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
     qApp->setPalette(palette);
     qApp->setStyleSheet(getThemeStyle(iconSize));
+}
+
+const QList<QSize> ThemeSupport::getAvailableIconSizes()
+{
+    return QIcon::fromTheme("visible").availableSizes();
+}
+
+const QSize ThemeSupport::getIconSize(const int size)
+{
+    QSize requestedSize(size, size);
+    const auto iconSizes = getAvailableIconSizes();
+    if (iconSizes.contains(requestedSize)) { return requestedSize; }
+    return findClosestIconSize(size);
+}
+
+bool ThemeSupport::hasIconSize(const int size)
+{
+    return getAvailableIconSizes().contains(QSize(size, size));
+}
+
+const QSize ThemeSupport::findClosestIconSize(int iconSize)
+{
+    const auto iconSizes = getAvailableIconSizes();
+    return *std::min_element(iconSizes.begin(),
+                             iconSizes.end(),
+                             [iconSize](const QSize& a,
+                                        const QSize& b) {
+        return qAbs(a.width() - iconSize) < qAbs(b.width() - iconSize);
+    });
 }
