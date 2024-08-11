@@ -190,10 +190,10 @@ MainWindow::MainWindow(Document& document,
 
     mDocument.setPath("");
 
-    int sideBarMin = 320;
+    //int sideBarMin = 320;
 
     mFillStrokeSettings = new FillStrokeSettingsWidget(mDocument, this);
-    mFillStrokeSettings->setMinimumWidth(sideBarMin);
+    //mFillStrokeSettings->setMinimumWidth(sideBarMin);
 
     mFontWidget = new FontsWidget(this);
     mFontWidget->setDisabled(true);
@@ -311,7 +311,7 @@ MainWindow::MainWindow(Document& document,
     mTabColorText->setObjectName("TabWidgetWide");
     mTabColorText->tabBar()->setFocusPolicy(Qt::NoFocus);
     mTabColorText->setContentsMargins(frictionMargins);
-    mTabColorText->setMinimumWidth(sideBarMin);
+    //mTabColorText->setMinimumWidth(sideBarMin);
     mTabColorText->setTabPosition(QTabWidget::South);
     eSizesUI::widget.add(mTabColorText, [this](const int size) {
         //if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
@@ -331,7 +331,7 @@ MainWindow::MainWindow(Document& document,
     mTabProperties->setObjectName("TabWidgetWide");
     mTabProperties->tabBar()->setFocusPolicy(Qt::NoFocus);
     mTabProperties->setContentsMargins(frictionMargins);
-    mTabProperties->setMinimumWidth(sideBarMin);
+    //mTabProperties->setMinimumWidth(sideBarMin);
     mTabProperties->setTabPosition(QTabWidget::South);
     eSizesUI::widget.add(mTabProperties, [this](const int size) {
         //if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
@@ -1280,9 +1280,9 @@ void MainWindow::setupMenuBar()
     const auto frictionButton = new QToolButton(this);
     frictionButton->setObjectName(QString::fromUtf8("ToolButton"));
     frictionButton->setPopupMode(QToolButton::InstantPopup);
-    if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+    /*if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
         frictionButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
-    }
+    }*/
     frictionButton->setIcon(QIcon::fromTheme(AppSupport::getAppID()));
     frictionButton->setDefaultAction(aboutAct);
     frictionButton->setToolTip(QString());
@@ -1473,11 +1473,11 @@ void MainWindow::setupToolBar()
     mToolbar->setFocusPolicy(Qt::NoFocus);
     mToolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     mToolbar->setMovable(false);
-    eSizesUI::widget.add(mToolbar, [this](const int size) {
+    /*eSizesUI::widget.add(mToolbar, [this](const int size) {
         if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
             mToolbar->setIconSize(QSize(size, size));
         }
-    });
+    });*/
     addToolBar(mToolbar);
 
 
