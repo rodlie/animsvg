@@ -160,9 +160,10 @@ int main(int argc, char *argv[])
 
     OS_FONT = QApplication::font();
     eSizesUI::font.setEvaluator([&settings]() {
-        qreal dpi = qApp->desktop()->logicalDpiX() / 96.0; //QGuiApplication::primaryScreen()->logicalDotsPerInch() / 96.0
+        qreal dpi = qApp->desktop()->logicalDpiX() / 96.0;
         settings.fCurrentInterfaceDPI = dpi;
-        qWarning() << "DPI:" << dpi;
+        qWarning() << "Desktop logicalDpiX:" << dpi;
+        qWarning() << "Desktop PixelRatioF:" << qApp->desktop()->devicePixelRatioF();
         const auto fm = QFontMetrics(OS_FONT);
         const qreal scaling = qBound(0.5, dpi, 1.5);
         return qRound(fm.height()*scaling);

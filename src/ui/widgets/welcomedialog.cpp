@@ -63,7 +63,7 @@ WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
                                              QString::number(ThemeSupport::getIconSize(logoSize).width()),
                                              AppSupport::getAppDisplayName(),
                                              AppSupport::getAppID(),
-                                             QString::number(ThemeSupport::getIconSize(logoSize * 2).width())));
+                                             QString::number(ThemeSupport::getIconSize(qRound(logoSize * devicePixelRatioF())).width())));
 
     const auto buttonWid = new QWidget(this);
     buttonWid->setContentsMargins(0, 0, 0, 0);
