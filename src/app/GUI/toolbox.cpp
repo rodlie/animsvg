@@ -38,13 +38,13 @@ void MainWindow::setupToolBox()
     setupToolBoxNodes();
     setupToolBoxDraw();
 
-    /*eSizesUI::widget.add(mToolBoxMain, [this](const int size) {
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+    eSizesUI::widget.add(mToolBoxMain, [this](const int size) {
+        //if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
             mToolBoxMain->setIconSize(QSize(size, size));
             mToolBoxNodes->setIconSize(QSize(size, size));
             mToolBoxDraw->setIconSize(QSize(size, size));
-        }
-    });*/
+        //}
+    });
 
     mToolBoxMainIndex = mToolBoxStack->addWidget(mToolBoxMain);
     mToolBoxNodesIndex = mToolBoxExtraStack->addWidget(mToolBoxNodes);
