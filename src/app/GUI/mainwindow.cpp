@@ -1473,11 +1473,11 @@ void MainWindow::setupToolBar()
     mToolbar->setFocusPolicy(Qt::NoFocus);
     mToolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     mToolbar->setMovable(false);
-    /*eSizesUI::widget.add(mToolbar, [this](const int size) {
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+    eSizesUI::widget.add(mToolbar, [this](const int size) {
+        //if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
             mToolbar->setIconSize(QSize(size, size));
-        }
-    });*/
+        //}
+    });
     addToolBar(mToolbar);
 
 

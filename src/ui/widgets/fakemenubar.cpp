@@ -91,7 +91,7 @@ FakeMenuBar::FakeMenuBar(QWidget* const parent) :
     mActsLayout = new QHBoxLayout();
     mActsLayout->setAlignment(Qt::AlignLeft);
     mActsLayout->setContentsMargins(0, 0, 0, 0);
-    mActsLayout->setSpacing(0);
+    mActsLayout->setSpacing(1);
 
     mainLayout->addLayout(mActsLayout);
 

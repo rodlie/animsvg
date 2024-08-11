@@ -23,6 +23,7 @@
 
 #include "aboutwidget.h"
 #include "appsupport.h"
+#include "themesupport.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -42,12 +43,13 @@ AboutWidget::AboutWidget(QWidget *parent)
     const auto mTopLabel = new QLabel(this);
 
     QString label = QString::fromUtf8("<div style=\"margin: 0; padding: 0; text-align: center; font-weight: normal;\">"
-                                      "<img src=\":/icons/hicolor/%2x%2/apps/%4.png\" width=\"%2\" height=\"%2\">"
+                                      "<img src=\":/icons/hicolor/%5x%5/apps/%4.png\" width=\"%2\" height=\"%2\">"
                                       "<h1 style=\"font-weight: normal; margin-top: 0; padding-top: 0;\">%3<br><span style=\"font-size: large;\">%1</span></h1>"
                                       "</div>").arg(AppSupport::getAppVersion(),
-                                                    QString::number(96),
+                                                    QString::number(ThemeSupport::getIconSize(96).width()),
                                                     AppSupport::getAppDisplayName(),
-                                                    AppSupport::getAppID());
+                                                    AppSupport::getAppID(),
+                                                    QString::number(ThemeSupport::getIconSize(96 * 2).width()));
     const auto buildInfo = AppSupport::getAppBuildInfo(true);
     if (!buildInfo.isEmpty()) {
         label.append(buildInfo);
