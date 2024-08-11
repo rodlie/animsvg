@@ -118,10 +118,11 @@ RenderWidget::RenderWidget(QWidget *parent)
             this, &RenderWidget::clearRenderQueue);
 
     eSizesUI::widget.add(mStartRenderButton, [this](const int size) {
-        mStartRenderButton->setFixedHeight(size);
-        mStopRenderButton->setFixedHeight(size);
-        mAddRenderButton->setFixedHeight(size);
-        mClearQueueButton->setFixedHeight(size);
+        Q_UNUSED(size)
+        mStartRenderButton->setFixedHeight(eSizesUI::button);
+        mStopRenderButton->setFixedHeight(eSizesUI::button);
+        mAddRenderButton->setFixedHeight(eSizesUI::button);
+        mClearQueueButton->setFixedHeight(eSizesUI::button);
     });
 
     mContWidget = new QWidget(this);

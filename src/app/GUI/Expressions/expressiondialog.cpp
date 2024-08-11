@@ -594,8 +594,9 @@ ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
 
     const int pixSize = eSizesUI::widget/2;
     eSizesUI::widget.add(mBindingsButton, [this](const int size) {
-        mBindingsButton->setFixedHeight(size);
-        mDefinitionsButon->setFixedHeight(size);
+        Q_UNUSED(size)
+        mBindingsButton->setFixedHeight(eSizesUI::button);
+        mDefinitionsButon->setFixedHeight(eSizesUI::button);
     });
 
     QPixmap pix(pixSize, pixSize);

@@ -159,14 +159,9 @@ int main(int argc, char *argv[])
                        HardwareInfo::sRamKB());
 
     OS_FONT = QApplication::font();
-    eSizesUI::font.setEvaluator([&settings]() {
-        qreal dpi = qApp->desktop()->logicalDpiX() / 96.0;
-        settings.fCurrentInterfaceDPI = dpi;
-        qWarning() << "Desktop logicalDpiX:" << dpi;
-        qWarning() << "Desktop PixelRatioF:" << qApp->desktop()->devicePixelRatioF();
+    eSizesUI::font.setEvaluator([]() {
         const auto fm = QFontMetrics(OS_FONT);
-        const qreal scaling = qBound(0.5, dpi, 1.5);
-        return qRound(fm.height()*scaling);
+        return fm.height();
     });
     eSizesUI::widget.setEvaluator([]() {
         return eSizesUI::font.size()*4/3;

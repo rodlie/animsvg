@@ -160,12 +160,13 @@ FontsWidget::FontsWidget(QWidget *parent)
             this, [this]() { emit textVAlignmentChanged(Qt::AlignBottom); });
 
     eSizesUI::widget.add(mAlignLeft, [this](const int size) {
-        mAlignLeft->setFixedHeight(size);
-        mAlignCenter->setFixedHeight(size);
-        mAlignRight->setFixedHeight(size);
-        mAlignTop->setFixedHeight(size);
-        mAlignVCenter->setFixedHeight(size);
-        mAlignBottom->setFixedHeight(size);
+        Q_UNUSED(size)
+        mAlignLeft->setFixedHeight(eSizesUI::button);
+        mAlignCenter->setFixedHeight(eSizesUI::button);
+        mAlignRight->setFixedHeight(eSizesUI::button);
+        mAlignTop->setFixedHeight(eSizesUI::button);
+        mAlignVCenter->setFixedHeight(eSizesUI::button);
+        mAlignBottom->setFixedHeight(eSizesUI::button);
     });
 
     mTextInput = new QPlainTextEdit(this);

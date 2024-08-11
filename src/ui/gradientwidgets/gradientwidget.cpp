@@ -130,11 +130,12 @@ GradientWidget::GradientWidget(QWidget * const parent)
                           &buttonAdd,
                           &buttonRem,
                           &buttonDup](const int size) {
-        buttonAddColor->setFixedSize(size, size);
-        buttonRemColor->setFixedSize(size, size);
-        buttonAdd->setFixedHeight(size);
-        buttonRem->setFixedHeight(size);
-        buttonDup->setFixedHeight(size);
+        Q_UNUSED(size)
+        buttonAddColor->setFixedSize(eSizesUI::button, eSizesUI::button);
+        buttonRemColor->setFixedSize(eSizesUI::button, eSizesUI::button);
+        buttonAdd->setFixedHeight(eSizesUI::button);
+        buttonRem->setFixedHeight(eSizesUI::button);
+        buttonDup->setFixedHeight(eSizesUI::button);
         /*buttonAddColor->setIconSize(QSize(size, size));
         buttonRemColor->setIconSize(QSize(size, size));
         buttonAdd->setIconSize(QSize(size, size));

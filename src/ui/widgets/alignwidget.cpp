@@ -126,12 +126,13 @@ AlignWidget::AlignWidget(QWidget* const parent)
                                       topButton,
                                       vCenterButton,
                                       bottomButton](const int size) {
-        leftButton->setFixedHeight(size);
-        hCenterButton->setFixedHeight(size);
-        rightButton->setFixedHeight(size);
-        topButton->setFixedHeight(size);
-        vCenterButton->setFixedHeight(size);
-        bottomButton->setFixedHeight(size);
+        Q_UNUSED(size)
+        leftButton->setFixedHeight(eSizesUI::button);
+        hCenterButton->setFixedHeight(eSizesUI::button);
+        rightButton->setFixedHeight(eSizesUI::button);
+        topButton->setFixedHeight(eSizesUI::button);
+        vCenterButton->setFixedHeight(eSizesUI::button);
+        bottomButton->setFixedHeight(eSizesUI::button);
     });
 }
 

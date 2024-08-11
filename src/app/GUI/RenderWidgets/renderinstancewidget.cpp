@@ -80,7 +80,7 @@ void RenderInstanceWidget::iniGUI() {
     setObjectName("darkWidget");
     mNameLabel = new QLineEdit(this);
     mNameLabel->setFocusPolicy(Qt::NoFocus);
-    mNameLabel->setFixedHeight(eSizesUI::widget);
+    mNameLabel->setFixedHeight(eSizesUI::button);
     mNameLabel->setObjectName("RenderTitleWidget");
     mNameLabel->setReadOnly(true);
     //mNameLabel->setFrame(false);
@@ -176,12 +176,13 @@ void RenderInstanceWidget::iniGUI() {
     mOutputDestinationLineEdit->setObjectName(QString::fromUtf8("OutputDestinationLineEdit"));
 
     eSizesUI::widget.add(mOutputSettingsProfilesButton, [this](const int size) {
-        mRenderSettingsButton->setFixedHeight(size);
-        mOutputSettingsButton->setFixedHeight(size);
-        mOutputSettingsProfilesButton->setFixedSize(QSize(size, size));
-        mOutputDestinationButton->setFixedSize(QSize(size, size));
-        mPlayButton->setFixedSize(QSize(size, size));
-        mOutputDestinationLineEdit->setFixedHeight(size);
+        Q_UNUSED(size)
+        mRenderSettingsButton->setFixedHeight(eSizesUI::button);
+        mOutputSettingsButton->setFixedHeight(eSizesUI::button);
+        mOutputSettingsProfilesButton->setFixedSize(QSize(eSizesUI::button, eSizesUI::button));
+        mOutputDestinationButton->setFixedSize(QSize(eSizesUI::button, eSizesUI::button));
+        mPlayButton->setFixedSize(QSize(eSizesUI::button, eSizesUI::button));
+        mOutputDestinationLineEdit->setFixedHeight(eSizesUI::button);
     });
 
     QWidget *outputDestinationWidget = new QWidget(this);

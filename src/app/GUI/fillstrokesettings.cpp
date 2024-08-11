@@ -256,19 +256,20 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
 
     // adjust sizes
     eSizesUI::widget.add(mBevelJoinStyleButton, [this](const int size) {
-        mBevelJoinStyleButton->setFixedHeight(size);
-        mMiterJointStyleButton->setFixedHeight(size);
-        mRoundJoinStyleButton->setFixedHeight(size);
-        mFlatCapStyleButton->setFixedHeight(size);
-        mSquareCapStyleButton->setFixedHeight(size);
-        mRoundCapStyleButton->setFixedHeight(size);
-        mFillTargetButton->setFixedHeight(size);
-        mStrokeTargetButton->setFixedHeight(size);
-        mFillNoneButton->setFixedHeight(size);
-        mFillFlatButton->setFixedHeight(size);
-        mFillGradientButton->setFixedHeight(size);
-        mLinearGradientButton->setFixedHeight(size);
-        mRadialGradientButton->setFixedHeight(size);
+        Q_UNUSED(size)
+        mBevelJoinStyleButton->setFixedHeight(eSizesUI::button);
+        mMiterJointStyleButton->setFixedHeight(eSizesUI::button);
+        mRoundJoinStyleButton->setFixedHeight(eSizesUI::button);
+        mFlatCapStyleButton->setFixedHeight(eSizesUI::button);
+        mSquareCapStyleButton->setFixedHeight(eSizesUI::button);
+        mRoundCapStyleButton->setFixedHeight(eSizesUI::button);
+        mFillTargetButton->setFixedHeight(eSizesUI::button);
+        mStrokeTargetButton->setFixedHeight(eSizesUI::button);
+        mFillNoneButton->setFixedHeight(eSizesUI::button);
+        mFillFlatButton->setFixedHeight(eSizesUI::button);
+        mFillGradientButton->setFixedHeight(eSizesUI::button);
+        mLinearGradientButton->setFixedHeight(eSizesUI::button);
+        mRadialGradientButton->setFixedHeight(eSizesUI::button);
     });
 
     // layout

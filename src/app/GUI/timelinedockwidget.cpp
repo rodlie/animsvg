@@ -225,15 +225,16 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mToolBar->setMovable(false);
 
     mRenderProgress = new QProgressBar(this);
-    mRenderProgress->setSizePolicy(QSizePolicy::Preferred,
-                                   QSizePolicy::Preferred);
-    mRenderProgress->setMinimumWidth(150);
+    mRenderProgress->setSizePolicy(QSizePolicy::Expanding,
+                                   QSizePolicy::Expanding);
+    mRenderProgress->setFixedWidth(mCurrentFrameSpin->width());
     mRenderProgress->setFormat(tr("Cache %p%"));
 
     mToolBar->addWidget(mFrameStartSpin);
 
     eSizesUI::widget.add(mToolBar, [this](const int size) {
-        mRenderProgress->setFixedHeight(size);
+        //mRenderProgress->setFixedHeight(eSizesUI::button);
+        mToolBar->setFixedHeight(eSizesUI::button);
         mToolBar->setIconSize(QSize(size, size));
     });
 

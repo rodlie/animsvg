@@ -73,9 +73,10 @@ SettingsDialog::SettingsDialog(QWidget * const parent)
     eSizesUI::widget.add(restoreButton, [restoreButton,
                                          applyButton,
                                          cancelButton](const int size) {
-        restoreButton->setFixedHeight(size);
-        cancelButton->setFixedHeight(size);
-        applyButton->setFixedHeight(size);
+        Q_UNUSED(size)
+        restoreButton->setFixedHeight(eSizesUI::button);
+        cancelButton->setFixedHeight(eSizesUI::button);
+        applyButton->setFixedHeight(eSizesUI::button);
     });
 
     mainLayout->addLayout(buttonsLayout);
