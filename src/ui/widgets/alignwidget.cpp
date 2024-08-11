@@ -44,20 +44,22 @@ AlignWidget::AlignWidget(QWidget* const parent)
     const auto combosLay = new QHBoxLayout;
     mainLayout->addLayout(combosLay);
 
-    combosLay->addWidget(new QLabel(tr("Align")));
+    //combosLay->addWidget(new QLabel(tr("Align")));
     mAlignPivot = new QComboBox(this);
+    mAlignPivot->setMinimumWidth(20);
     mAlignPivot->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     mAlignPivot->setFocusPolicy(Qt::NoFocus);
-    mAlignPivot->addItem(tr("Geometry"));
-    mAlignPivot->addItem(tr("Pivot"));
+    mAlignPivot->addItem(tr("Align Geometry"));
+    mAlignPivot->addItem(tr("Align Pivot"));
     combosLay->addWidget(mAlignPivot);
 
-    combosLay->addWidget(new QLabel(tr("Relative to")));
+    //combosLay->addWidget(new QLabel(tr("Relative to")));
     mRelativeTo = new QComboBox(this);
+    mRelativeTo->setMinimumWidth(20);
     mRelativeTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     mRelativeTo->setFocusPolicy(Qt::NoFocus);
-    mRelativeTo->addItem(tr("Scene"));
-    mRelativeTo->addItem(tr("Last Selected"));
+    mRelativeTo->addItem(tr("Relative to Scene"));
+    mRelativeTo->addItem(tr("Relative to Last Selected"));
     combosLay->addWidget(mRelativeTo);
 
     const auto buttonsLay = new QHBoxLayout;

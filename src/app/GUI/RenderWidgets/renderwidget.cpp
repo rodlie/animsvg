@@ -54,6 +54,10 @@ RenderWidget::RenderWidget(QWidget *parent)
     mMainLayout->setSpacing(0);
     setLayout(mMainLayout);
 
+    const auto topWidget = new QWidget(this);
+    topWidget->setContentsMargins(0, 0, 0, 0);
+    const auto topLayout = new QHBoxLayout(topWidget);
+
     const auto bottomWidget = new QWidget(this);
     bottomWidget->setContentsMargins(0, 0, 0, 0);
     const auto bottomLayout = new QHBoxLayout(bottomWidget);
@@ -62,11 +66,13 @@ RenderWidget::RenderWidget(QWidget *parent)
     setAutoFillBackground(true);
 
     bottomWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    topWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     mRenderProgressBar = new QProgressBar(this);
+    mRenderProgressBar->setMinimumWidth(10);
     setSizePolicy(QSizePolicy::Expanding,
                   QSizePolicy::Expanding);
-    mRenderProgressBar->setFormat(tr("Idle"));
+    mRenderProgressBar->setFormat("");
     mRenderProgressBar->setValue(0);
 
     mStartRenderButton = new QPushButton(QIcon::fromTheme("render_animation"),
@@ -138,12 +144,15 @@ RenderWidget::RenderWidget(QWidget *parent)
     mScrollArea->setWidgetResizable(true);
     mScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    bottomLayout->addWidget(mStartRenderButton);
-    bottomLayout->addWidget(mStopRenderButton);
-    bottomLayout->addWidget(mRenderProgressBar);
-    bottomLayout->addWidget(mAddRenderButton);
-    bottomLayout->addWidget(mClearQueueButton);
+    topLayout->addStretch();
+    topLayout->addWidget(mAddRenderButton);
+    topLayout->addWidget(mClearQueueButton);
 
+    bottomLayout->addWidget(mStartRenderButton);
+    bottomLayout->addWidget(mRenderProgressBar);
+    bottomLayout->addWidget(mStopRenderButton);
+
+    mMainLayout->addWidget(topWidget);
     mMainLayout->addWidget(mScrollArea);
     mMainLayout->addWidget(bottomWidget);
 
@@ -200,13 +209,10 @@ void RenderWidget::handleRenderState(const RenderState &state)
     QString renderStateFormat;
     switch (mState) {
     case RenderState::rendering:
-        renderStateFormat = tr("Rendering %p%");
+        renderStateFormat = tr("%p%");
         break;
     case RenderState::error:
         renderStateFormat = tr("Error");
-        break;
-    case RenderState::finished:
-        renderStateFormat = tr("Finished");
         break;
     case RenderState::paused:
         renderStateFormat = tr("Paused %p%");
@@ -215,7 +221,7 @@ void RenderWidget::handleRenderState(const RenderState &state)
         renderStateFormat = tr("Waiting %p%");
         break;
     default:
-        renderStateFormat = tr("Idle");
+        renderStateFormat = "";
         break;
     }
     bool isIdle = (mState == RenderState::error ||

@@ -500,5 +500,5 @@ QProgressBar {
 
 QProgressBar::chunk {
     background-color: %9;
-    width: 10px;
+    width: 5px;
 }

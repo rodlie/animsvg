@@ -50,14 +50,17 @@ FontsWidget::FontsWidget(QWidget *parent)
     , mColorButton(nullptr)
 {
     mFontStyleCombo = new QComboBox(this);
+    mFontStyleCombo->setMinimumWidth(20);
     mFontStyleCombo->setFocusPolicy(Qt::NoFocus);
     mFontStyleCombo->setToolTip(tr("Font style"));
 
     mFontFamilyCombo = new QComboBox(this);
+    mFontFamilyCombo->setMinimumWidth(20);
     mFontFamilyCombo->setFocusPolicy(Qt::NoFocus);
     mFontFamilyCombo->setToolTip(tr("Font family"));
 
     mFontSizeCombo = new EditableComboBox(this, true);
+    mFontSizeCombo->setMinimumWidth(20);
     mFontSizeCombo->setCompleter(nullptr);
     mFontSizeCombo->setMinimumContentsLength(3);
     mFontSizeCombo->setToolTip(tr("Font size"));
@@ -89,15 +92,15 @@ FontsWidget::FontsWidget(QWidget *parent)
     mFontStyleCombo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     mFontSizeCombo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
-    QLabel *fontFamilyLabel = new QLabel(tr("Family"), this);
-    QLabel *fontStyleLabel = new QLabel(tr("Style"), this);
-    QLabel *fontSizeLabel = new QLabel(tr("Size"), this);
+   // QLabel *fontFamilyLabel = new QLabel(tr("Family"), this);
+   // QLabel *fontStyleLabel = new QLabel(tr("Style"), this);
+  //  QLabel *fontSizeLabel = new QLabel(tr("Size"), this);
 
     QWidget *fontFamilyWidget = new QWidget(this);
     fontFamilyWidget->setContentsMargins(0, 0, 0, 0);
     QHBoxLayout *fontFamilyLayout = new QHBoxLayout(fontFamilyWidget);
     fontFamilyLayout->setMargin(0);
-    fontFamilyLayout->addWidget(fontFamilyLabel);
+   // fontFamilyLayout->addWidget(fontFamilyLabel);
     fontFamilyLayout->addWidget(mFontFamilyCombo);
 
     QWidget *fontStyleWidget = new QWidget(this);
@@ -105,9 +108,9 @@ FontsWidget::FontsWidget(QWidget *parent)
     QHBoxLayout *fontStyleLayout = new QHBoxLayout(fontStyleWidget);
     fontStyleLayout->setMargin(0);
 
-    fontStyleLayout->addWidget(fontStyleLabel);
+  //  fontStyleLayout->addWidget(fontStyleLabel);
     fontStyleLayout->addWidget(mFontStyleCombo);
-    fontStyleLayout->addWidget(fontSizeLabel);
+  //  fontStyleLayout->addWidget(fontSizeLabel);
     fontStyleLayout->addWidget(mFontSizeCombo);
     fontStyleLayout->addWidget(mColorButton);
 

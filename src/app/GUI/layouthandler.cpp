@@ -55,9 +55,9 @@ LayoutHandler::LayoutHandler(Document& document,
     newLayPush->setObjectName("FlatButton");
     eSizesUI::widget.add(newLayPush, [newLayPush](const int size) {
         newLayPush->setFixedSize(QSize(size, size));
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+        /*if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
             newLayPush->setIconSize(QSize(size, size));
-        }
+        }*/
     });
     //newLayPush->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
 
@@ -67,9 +67,9 @@ LayoutHandler::LayoutHandler(Document& document,
     removeLayPush->setObjectName("FlatButton");
     eSizesUI::widget.add(removeLayPush, [removeLayPush](const int size) {
         removeLayPush->setFixedSize(QSize(size, size));
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+        /*if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
             removeLayPush->setIconSize(QSize(size, size));
-        }
+        }*/
     });
     //removeLayPush->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
 
