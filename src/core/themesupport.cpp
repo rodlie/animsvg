@@ -199,7 +199,8 @@ const QString ThemeSupport::getThemeStyle(int iconSize)
                    getThemeAlternateColor().name(),
                    QString::number(getIconSize(iconSize).width()),
                    getThemeColorOrange().name(),
-                   getThemeRangeSelectedColor().name());
+                   getThemeRangeSelectedColor().name(),
+                   QString::number(getIconSize(iconSize / 2).width()));
 }
 
 void ThemeSupport::setupTheme(const int iconSize)

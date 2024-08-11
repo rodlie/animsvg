@@ -31,6 +31,7 @@ Colors and icon size from 'src/core/themesupport.cpp'.
 %7 = icon size
 %8 = getThemeColorOrange
 %9 = getThemeRangeSelectedColor
+%10 = half icon size
 
 */
 
@@ -61,14 +62,14 @@ QSpinBox::down-button {
 QDoubleSpinBox::up-arrow,
 QSpinBox::up-arrow {
     image: url(:/icons/hicolor/scalable/actions/go-up.svg);
-    width: %7px;
-    height: %7px;
+    width: %10px;
+    height: %10px;
 }
 QDoubleSpinBox::down-arrow,
 QSpinBox::down-arrow {
     image: url(:/icons/hicolor/scalable/actions/go-down.svg);
-    width: %7px;
-    height: %7px;
+    width: %10px;
+    height: %10px;
 }
 QSpinBox#SpinBoxNoButtons::up-arrow,
 QSpinBox#SpinBoxNoButtons::down-arrow,
@@ -227,6 +228,8 @@ QComboBox::drop-down:button{
 QToolButton::menu-arrow,
 QComboBox::down-arrow {
     image: url(:/icons/hicolor/scalable/actions/go-down.svg);
+    width: %7px;
+    height: %7px;
 }
 
 QComboBox#blendModeCombo,
@@ -486,10 +489,14 @@ QCheckBox::indicator:hover:unchecked {
 
 QCheckBox::indicator:checked {
     image: url(:/icons/hicolor/scalable/actions/dialog-ok.svg);
+    width: %7px;
+    height: %7px;
 }
 
 QCheckBox::indicator:unchecked {
     image: url(:/icons/hicolor/scalable/actions/dialog-cancel.svg);
+    width: %7px;
+    height: %7px;
 }
 
 QProgressBar {
