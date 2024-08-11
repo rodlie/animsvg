@@ -211,12 +211,6 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
                                               tr("Close"),
                                               this);
 
-    connect(mScene, &SceneChooser::currentChanged,
-            this, [this, sceneButton, buttonExport](Canvas* const scene) {
-        buttonExport->setEnabled(scene);
-        sceneButton->setText(mScene->title());
-    });
-
     connect(buttonExport, &QPushButton::clicked, this, [this]() {
         const QString fileType = tr("SVG Files %1", "ExportDialog_FileType");
         QString saveAs = eDialogs::saveFile(tr("Export SVG"),
@@ -269,6 +263,15 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
 
     connect(mPreviewButton, &QPushButton::released,
             this, [this] { showPreview(false); });
+
+    mPreviewButton->setEnabled(scene);
+    buttonExport->setEnabled(scene);
+    connect(mScene, &SceneChooser::currentChanged,
+            this, [this, sceneButton, buttonExport](Canvas* const scene) {
+        buttonExport->setEnabled(scene);
+        mPreviewButton->setEnabled(scene);
+        sceneButton->setText(mScene->title());
+    });
 
     buttonsLayout->addWidget(mPreviewButton);
     buttonsLayout->addStretch();
