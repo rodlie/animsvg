@@ -180,7 +180,7 @@ MainWindow::MainWindow(Document& document,
             this, &MainWindow::handleNewVideoClip);
 
     setWindowIcon(QIcon::fromTheme(AppSupport::getAppName()));
-    setMinimumSize(1024, 576);
+    //setMinimumSize(1024, 576);
 
     mAutoSaveTimer = new QTimer(this);
     connect (mAutoSaveTimer, &QTimer::timeout,

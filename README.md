@@ -42,6 +42,7 @@ Generic build instructions.
     * Multimedia
     * Qml
     * Xml
+    * Svg
 * qscintilla
 * ffmpeg *(4.2.x)*
     * libavformat

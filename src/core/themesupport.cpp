@@ -26,6 +26,7 @@
 #include <QFile>
 #include <QIcon>
 #include <QApplication>
+#include <QDebug>
 
 const QColor ThemeSupport::getQColor(int r,
                                      int g,
@@ -237,8 +238,12 @@ const QSize ThemeSupport::getIconSize(const int size)
 {
     QSize requestedSize(size, size);
     const auto iconSizes = getAvailableIconSizes();
-    if (iconSizes.contains(requestedSize)) { return requestedSize; }
-    return findClosestIconSize(size);
+    bool hasIconSize = iconSizes.contains(requestedSize);
+    qDebug() << "requested icon size" << size  << hasIconSize << "available" << iconSizes;
+    if (hasIconSize) { return requestedSize; }
+    const auto foundIconSize = findClosestIconSize(size);
+    qDebug() << "found icon size replacement" << foundIconSize;
+    return foundIconSize;
 }
 
 bool ThemeSupport::hasIconSize(const int size)
