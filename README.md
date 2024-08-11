@@ -2,7 +2,7 @@
 
 [Friction](https://friction.graphics) is a powerful and versatile motion graphics application that allows you to create vector and raster animations for web and video platforms with ease.
 
-![Screenshot of Friction 1.0.0 Beta 1](https://friction.graphics/assets/screenshots/100/friction-100b1-screenshot.png)
+![Screenshot of Friction 1.0.0 Beta 1](https://friction.graphics/assets/screenshots/100/friction-100b1-screenshot.png?v=1)
 
 ## Contribute
 
@@ -42,7 +42,6 @@ Generic build instructions.
     * Multimedia
     * Qml
     * Xml
-    * Svg
 * qscintilla
 * ffmpeg *(4.2.x)*
     * libavformat
