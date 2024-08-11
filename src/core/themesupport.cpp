@@ -191,6 +191,16 @@ const QString ThemeSupport::getThemeStyle(int iconSize)
         css = stylesheet.readAll();
         stylesheet.close();
     }
+#ifdef Q_OS_WIN
+    css.replace("/scalable/actions/go-up.svg",
+                "/%7x%7/actions/go-up.png");
+    css.replace("/scalable/actions/go-down.svg",
+                "/%7x%7/actions/go-down.png");
+    css.replace("/scalable/actions/dialog-ok.svg",
+                "/%7x%7/actions/dialog-ok.png");
+    css.replace("/scalable/actions/dialog-cancel.svg",
+                "/%7x%7/actions/dialog-cancel.png");
+#endif
     return css.arg(getThemeButtonBaseColor().name(),
                    getThemeButtonBorderColor().name(),
                    getThemeBaseDarkerColor().name(),
