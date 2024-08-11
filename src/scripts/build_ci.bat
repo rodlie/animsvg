@@ -6,8 +6,16 @@ REM # GPLv3+
 
 set OPT=%1
 set REL=OFF
+set BTYPE=Release
+set BDIR=release
+
 if "%OPT%" == "release" (
     set REL=ON
+)
+
+if "%OPT%" == "debug" (
+    set BTYPE=Debug
+    set BDIR=debug
 )
 
 set CWD=%cd%
@@ -37,9 +45,9 @@ mkdir build
 cd "%CWD%\build"
 mkdir output
 
-cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=%SDK_DIR% -DBUILD_ENGINE=OFF -DFRICTION_OFFICIAL_RELEASE=%REL% -DWIN_DEPLOY=ON -DGIT_COMMIT=%COMMIT% -DGIT_BRANCH=%BRANCH% ..
+cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_BUILD_TYPE=%BTYPE% -DCMAKE_PREFIX_PATH=%SDK_DIR% -DBUILD_ENGINE=OFF -DFRICTION_OFFICIAL_RELEASE=%REL% -DWIN_DEPLOY=ON -DGIT_COMMIT=%COMMIT% -DGIT_BRANCH=%BRANCH% ..
 set /p VERSION=<version.txt
-cmake --build . --config Release
+cmake --build . --config %BTYPE%
 
 if "%REL%" == "OFF" (
     set VERSION="%VERSION%-%COMMIT%"
@@ -50,9 +58,9 @@ mkdir "%OUTPUT_DIR%"
 mkdir "%OUTPUT_DIR%\audio"
 mkdir "%OUTPUT_DIR%\platforms"
 
-copy "%CWD%\build\src\core\release\frictioncore.dll" "%OUTPUT_DIR%\"
-copy "%CWD%\build\src\ui\release\frictionui.dll" "%OUTPUT_DIR%\"
-copy "%CWD%\build\src\app\release\friction.exe" "%OUTPUT_DIR%\"
+copy "%CWD%\build\src\core\%BDIR%\frictioncore.dll" "%OUTPUT_DIR%\"
+copy "%CWD%\build\src\ui\%BDIR%\frictionui.dll" "%OUTPUT_DIR%\"
+copy "%CWD%\build\src\app\%BDIR%\friction.exe" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\svgo-win.exe" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\skia.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\Qt5Core.dll" "%OUTPUT_DIR%\"

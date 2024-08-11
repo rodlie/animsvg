@@ -3,10 +3,8 @@ name: Windows
 on: [push, pull_request]
 
 jobs:
-  build:
-
+  release:
     runs-on: windows-2019
-
     steps:
     - uses: actions/checkout@v3
     - name: Build
@@ -15,5 +13,17 @@ jobs:
     - name: Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: friction-ci-${{github.sha}}-windows-x64
+        name: friction-ci-windows-x64
+        path: build\output\*.7z
+  debug:
+    runs-on: windows-2019
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build
+      shell: cmd
+      run: .\src\scripts\build_ci.bat debug
+    - name: Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: friction-ci-debug-windows-x64
         path: build\output\*.7z
