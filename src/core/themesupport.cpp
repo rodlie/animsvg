@@ -195,13 +195,13 @@ const QString ThemeSupport::getThemeStyle(int iconSize)
 #ifdef Q_OS_WIN
     // svg in qss on windows are broken!
     css.replace("/scalable/actions/go-up.svg); /* half */",
-                "/%12x%12/actions/go-up.png);");
+                "/%11x%11/actions/go-up.png);");
     css.replace("/scalable/actions/go-up.svg); /* full */",
-                "/%12x%12/actions/go-up.png);");
+                "/%11x%11/actions/go-up.png);");
     css.replace("/scalable/actions/go-down.svg); /* half */",
-                "/%12x%12/actions/go-down.png);");
+                "/%11x%11/actions/go-down.png);");
     css.replace("/scalable/actions/go-down.svg); /* full */",
-                "/%12x%12/actions/go-down.png);");
+                "/%11x%11/actions/go-down.png);");
     css.replace("/scalable/actions/dialog-ok.svg",
                 "/%11x%11/actions/dialog-ok.png");
     css.replace("/scalable/actions/dialog-cancel.svg",
