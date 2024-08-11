@@ -287,6 +287,20 @@ private:
     UILayout *mUI;
 
     QAction *mSaveAct;
+    QAction *mSaveAsAct;
+    QAction *mSaveBackAct;
+    QAction *mPreviewSVGAct;
+    QAction *mExportSVGAct;
+    QAction *mRenderVideoAct;
+    QAction *mCloseProjectAct;
+    QAction *mLinkedAct;
+    QAction *mImportAct;
+    QAction *mImportSeqAct;
+    QAction *mRevertAct;
+    QAction *mSelectAllAct;
+    QAction *mInvertSelAct;
+    QAction *mClearSelAct;
+    QAction *mAddKeyAct;
 
     QAction *mActionConnectPointsAct;
     QAction *mActionDisconnectPointsAct;

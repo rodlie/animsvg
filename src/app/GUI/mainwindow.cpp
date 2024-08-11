@@ -115,6 +115,20 @@ MainWindow::MainWindow(Document& document,
     //, mFilesDockBar(nullptr)
     //, mBrushSettingsDockBar(nullptr)
     , mSaveAct(nullptr)
+    , mSaveAsAct(nullptr)
+    , mSaveBackAct(nullptr)
+    , mPreviewSVGAct(nullptr)
+    , mExportSVGAct(nullptr)
+    , mRenderVideoAct(nullptr)
+    , mCloseProjectAct(nullptr)
+    , mLinkedAct(nullptr)
+    , mImportAct(nullptr)
+    , mImportSeqAct(nullptr)
+    , mRevertAct(nullptr)
+    , mSelectAllAct(nullptr)
+    , mInvertSelAct(nullptr)
+    , mClearSelAct(nullptr)
+    , mAddKeyAct(nullptr)
     , mAddToQueAct(nullptr)
     , mViewFullScreenAct(nullptr)
     , mLocalPivotAct(nullptr)
@@ -459,23 +473,26 @@ void MainWindow::setupMenuBar()
     mRecentMenu = mFileMenu->addMenu(QIcon::fromTheme("file_folder"),
                                      tr("Open Recent", "MenuBar_File"));
 
-    const auto linkedAct = mFileMenu->addAction(QIcon::fromTheme("linked"),
+    mLinkedAct = mFileMenu->addAction(QIcon::fromTheme("linked"),
                                                 tr("Link"),
                                                 this, &MainWindow::linkFile,
                                                 Qt::CTRL + Qt::Key_L);
-    linkedAct->setData(tr("Link File"));
-    cmdAddAction(linkedAct);
+    mLinkedAct->setEnabled(false);
+    mLinkedAct->setData(tr("Link File"));
+    cmdAddAction(mLinkedAct);
 
-    const auto importAct = mFileMenu->addAction(QIcon::fromTheme("file_blank"),
-                                                tr("Import File", "MenuBar_File"),
-                                                this, qOverload<>(&MainWindow::importFile),
-                                                Qt::CTRL + Qt::Key_I);
-    cmdAddAction(importAct);
+    mImportAct = mFileMenu->addAction(QIcon::fromTheme("file_blank"),
+                                      tr("Import File", "MenuBar_File"),
+                                      this, qOverload<>(&MainWindow::importFile),
+                                      Qt::CTRL + Qt::Key_I);
+    mImportAct->setEnabled(false);
+    cmdAddAction(mImportAct);
 
-    const auto importSeqAct = mFileMenu->addAction(QIcon::fromTheme("renderlayers"),
-                                                   tr("Import Image Sequence", "MenuBar_File"),
-                                                   this, &MainWindow::importImageSequence);
-    cmdAddAction(importSeqAct);
+    mImportSeqAct = mFileMenu->addAction(QIcon::fromTheme("renderlayers"),
+                                         tr("Import Image Sequence", "MenuBar_File"),
+                                         this, &MainWindow::importImageSequence);
+    mImportSeqAct->setEnabled(false);
+    cmdAddAction(mImportSeqAct);
 
     if (eSettings::instance().fToolBarActionOpen) {
         const auto loadToolBtn = new QToolButton(this);
@@ -487,19 +504,20 @@ void MainWindow::setupMenuBar()
         loadToolBtn->setMenu(loadToolMenu);
         loadToolBtn->setDefaultAction(openAct);
 
-        loadToolMenu->addAction(linkedAct);
-        loadToolMenu->addAction(importAct);
-        loadToolMenu->addAction(importSeqAct);
+        loadToolMenu->addAction(mLinkedAct);
+        loadToolMenu->addAction(mImportSeqAct);
+        loadToolMenu->addAction(mImportSeqAct);
         loadToolMenu->addMenu(mRecentMenu);
 
         mToolbar->addWidget(loadToolBtn);
     }
 
-    const auto revertAct = mFileMenu->addAction(QIcon::fromTheme("loop_back"),
-                                                tr("Revert", "MenuBar_File"),
-                                                this, &MainWindow::revert);
-    revertAct->setData(tr("Revert Project"));
-    cmdAddAction(revertAct);
+    mRevertAct = mFileMenu->addAction(QIcon::fromTheme("loop_back"),
+                                      tr("Revert", "MenuBar_File"),
+                                      this, &MainWindow::revert);
+    mRevertAct->setEnabled(false);
+    mRevertAct->setData(tr("Revert Project"));
+    cmdAddAction(mRevertAct);
 
     mFileMenu->addSeparator();
 
@@ -507,39 +525,46 @@ void MainWindow::setupMenuBar()
                                     tr("Save", "MenuBar_File"),
                                     this, qOverload<>(&MainWindow::saveFile),
                                     Qt::CTRL + Qt::Key_S);
+    mSaveAct->setEnabled(false);
     mSaveAct->setData(tr("Save Project"));
     cmdAddAction(mSaveAct);
 
-    const auto saveAsAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
-                                                tr("Save As", "MenuBar_File"),
-                                                this, [this]() { saveFileAs(); },
-                                                Qt::CTRL + Qt::SHIFT + Qt::Key_S);
-    saveAsAct->setData(tr("Save Project As ..."));
-    cmdAddAction(saveAsAct);
+    mSaveAsAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
+                                      tr("Save As", "MenuBar_File"),
+                                      this, [this]() { saveFileAs(); },
+                                      Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+    mSaveAsAct->setEnabled(false);
+    mSaveAsAct->setData(tr("Save Project As ..."));
+    cmdAddAction(mSaveAsAct);
 
-    const auto saveBackAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
-                                                  tr("Save Backup", "MenuBar_File"),
-                                                  this, &MainWindow::saveBackup);
-    saveBackAct->setData(tr("Save Project Backup"));
-    cmdAddAction(saveBackAct);
+    mSaveBackAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
+                                        tr("Save Backup", "MenuBar_File"),
+                                        this, &MainWindow::saveBackup);
+    mSaveBackAct->setEnabled(false);
+    mSaveBackAct->setData(tr("Save Project Backup"));
+    cmdAddAction(mSaveBackAct);
 
-    const auto previewSvgAct = mFileMenu->addAction(QIcon::fromTheme("seq_preview"),
-                                                    tr("Preview SVG", "MenuBar_File"),
-                                                    this,[this]{ exportSVG(true); },
-                                                    QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                                         "previewSVG",
-                                                                                         "Ctrl+F12").toString()));
-    previewSvgAct->setData(tr("Preview SVG Animation"));
-    cmdAddAction(previewSvgAct);
+    mPreviewSVGAct = mFileMenu->addAction(QIcon::fromTheme("seq_preview"),
+                                          tr("Preview", "MenuBar_File"),
+                                          this,[this]{ exportSVG(true); },
+                                          QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                               "previewSVG",
+                                                                               "Ctrl+F12").toString()));
+    mPreviewSVGAct->setEnabled(false);
+    mPreviewSVGAct->setToolTip(tr("Preview SVG Animation in Web Browser"));
+    mPreviewSVGAct->setData(mPreviewSVGAct->toolTip());
+    cmdAddAction(mPreviewSVGAct);
 
-    const auto exportSvgAct = mFileMenu->addAction(QIcon::fromTheme("seq_preview"),
-                                                   tr("Export SVG", "MenuBar_File"),
-                                                   this, &MainWindow::exportSVG,
-                                                   QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                                        "exportSVG",
-                                                                                        "Shift+F12").toString()));
-    exportSvgAct->setData(tr("Export SVG Animation"));
-    cmdAddAction(exportSvgAct);
+    mExportSVGAct = mFileMenu->addAction(QIcon::fromTheme("seq_preview"),
+                                        tr("Export", "MenuBar_File"),
+                                        this, &MainWindow::exportSVG,
+                                        QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                             "exportSVG",
+                                                                             "Shift+F12").toString()));
+    mExportSVGAct->setEnabled(false);
+    mExportSVGAct->setToolTip(tr("Export SVG Animation for the Web"));
+    mExportSVGAct->setData(mExportSVGAct->toolTip());
+    cmdAddAction(mExportSVGAct);
 
     if (eSettings::instance().fToolBarActionSave) {
         const auto saveToolBtn = new QToolButton(this);
@@ -551,8 +576,8 @@ void MainWindow::setupMenuBar()
         saveToolBtn->setMenu(saveToolMenu);
         saveToolBtn->setDefaultAction(mSaveAct);
 
-        saveToolMenu->addAction(saveAsAct);
-        saveToolMenu->addAction(saveBackAct);
+        saveToolMenu->addAction(mSaveAsAct);
+        saveToolMenu->addAction(mSaveBackAct);
         //saveToolMenu->addAction(exportSvgAct);
         saveToolMenu->addSeparator();
 
@@ -560,12 +585,13 @@ void MainWindow::setupMenuBar()
     }
 
     mFileMenu->addSeparator();
-    const auto closeProjectAct = mFileMenu->addAction(QIcon::fromTheme("dialog-cancel"),
+    mCloseProjectAct = mFileMenu->addAction(QIcon::fromTheme("dialog-cancel"),
                                                       tr("Close", "MenuBar_File"),
                                                       this, &MainWindow::closeProject,
                                                       QKeySequence(tr("Ctrl+W")));
-    closeProjectAct->setData(tr("Close Project"));
-    cmdAddAction(closeProjectAct);
+    mCloseProjectAct->setEnabled(false);
+    mCloseProjectAct->setData(tr("Close Project"));
+    cmdAddAction(mCloseProjectAct);
 
     const auto prefsAct = mFileMenu->addAction(QIcon::fromTheme("preferences"),
                                                tr("Preferences", "MenuBar_Edit"), [this]() {
@@ -655,32 +681,51 @@ void MainWindow::setupMenuBar()
     mEditMenu->addSeparator();
 
     {
-        const auto qAct = new NoShortcutAction(tr("Select All", "MenuBar_Edit"), &mActions, &Actions::selectAllAction, Qt::Key_A, mEditMenu);
-        mEditMenu->addAction(qAct);
-        cmdAddAction(qAct);
+        mSelectAllAct = new NoShortcutAction(tr("Select All",
+                                                "MenuBar_Edit"),
+                                             &mActions,
+                                             &Actions::selectAllAction,
+                                             Qt::Key_A,
+                                             mEditMenu);
+        mSelectAllAct->setEnabled(false);
+        mEditMenu->addAction(mSelectAllAct);
+        cmdAddAction(mSelectAllAct);
     }
 
     {
-        const auto qAct = new NoShortcutAction(tr("Invert Selection", "MenuBar_Edit"), &mActions, &Actions::invertSelectionAction, Qt::SHIFT + Qt::Key_A, mEditMenu);
-        mEditMenu->addAction(qAct);
-        cmdAddAction(qAct);
+        mInvertSelAct = new NoShortcutAction(tr("Invert Selection",
+                                                "MenuBar_Edit"),
+                                             &mActions,
+                                             &Actions::invertSelectionAction,
+                                             Qt::SHIFT + Qt::Key_A,
+                                             mEditMenu);
+        mInvertSelAct->setEnabled(false);
+        mEditMenu->addAction(mInvertSelAct);
+        cmdAddAction(mInvertSelAct);
     }
 
     {
-        const auto qAct = new NoShortcutAction(tr("Clear Selection", "MenuBar_Edit"), &mActions, &Actions::clearSelectionAction, Qt::ALT + Qt::Key_A, mEditMenu);
-        mEditMenu->addAction(qAct);
-        cmdAddAction(qAct);
+        mClearSelAct = new NoShortcutAction(tr("Clear Selection",
+                                               "MenuBar_Edit"),
+                                            &mActions,
+                                            &Actions::clearSelectionAction,
+                                            Qt::ALT + Qt::Key_A,
+                                            mEditMenu);
+        mClearSelAct->setEnabled(false);
+        mEditMenu->addAction(mClearSelAct);
+        cmdAddAction(mClearSelAct);
     }
 
     mEditMenu->addSeparator();
 
-    const auto addKeyAct = mEditMenu->addAction(QIcon::fromTheme("plus"),
-                                                tr("Add Key(s)"), [this]() {
+    mAddKeyAct = mEditMenu->addAction(QIcon::fromTheme("plus"),
+                                      tr("Add Key(s)"), [this]() {
         const auto scene = *mDocument.fActiveScene;
         if (!scene) { return; }
         scene->addKeySelectedProperties();
     }, QKeySequence(tr("Insert")));
-    cmdAddAction(addKeyAct);
+    mAddKeyAct->setEnabled(false);
+    cmdAddAction(mAddKeyAct);
 
     mEditMenu->addSeparator();
 
@@ -905,6 +950,7 @@ void MainWindow::setupMenuBar()
 
     mSceneMenu = mMenuBar->addMenu(tr("Scene", "MenuBar"));
     mEffectsMenu = mMenuBar->addMenu(tr("Effects"));
+    mEffectsMenu->setEnabled(false);
     setupMenuEffects();
 
     const auto newSceneAct = mSceneMenu->addAction(QIcon::fromTheme("file_new"),
@@ -934,6 +980,7 @@ void MainWindow::setupMenuBar()
                                          QKeySequence(AppSupport::getSettings("shortcuts",
                                                                               "addToQue",
                                                                               "F12").toString()));
+    mAddToQueAct->setEnabled(false);
     cmdAddAction(mAddToQueAct);
 
     if (eSettings::instance().fToolBarActionScene) {
@@ -1252,17 +1299,18 @@ void MainWindow::setupMenuBar()
                                             "Ctrl+Space").toString()));
 
     if (eSettings::instance().fToolBarActionRender) {
-        mToolbar->addAction(QIcon::fromTheme("render_animation"),
-                            tr("Render"),
-                            this, &MainWindow::openRendererWindow);
+        mRenderVideoAct = mToolbar->addAction(QIcon::fromTheme("render_animation"),
+                                              tr("Render"),
+                                              this, &MainWindow::openRendererWindow);
+        mRenderVideoAct->setEnabled(false);
     }
 
     if (eSettings::instance().fToolBarActionPreview) {
-        mToolbar->addAction(previewSvgAct);
+        mToolbar->addAction(mPreviewSVGAct);
     }
 
     if (eSettings::instance().fToolBarActionExport) {
-        mToolbar->addAction(exportSvgAct);
+        mToolbar->addAction(mExportSVGAct);
     }
 
     setMenuBar(mMenuBar);
@@ -1433,7 +1481,25 @@ void MainWindow::addCanvasToRenderQue()
 void MainWindow::updateSettingsForCurrentCanvas(Canvas* const scene)
 {
     mObjectSettingsWidget->setCurrentScene(scene);
-    if(!scene) {
+    if (mPreviewSVGAct) { mPreviewSVGAct->setEnabled(scene); }
+    if (mExportSVGAct) { mExportSVGAct->setEnabled(scene); }
+    if (mSaveAct) { mSaveAct->setEnabled(scene); }
+    if (mSaveAsAct) { mSaveAsAct->setEnabled(scene); }
+    if (mSaveBackAct) { mSaveBackAct->setEnabled(scene); }
+    if (mAddToQueAct) { mAddToQueAct->setEnabled(scene); }
+    if (mRenderVideoAct) { mRenderVideoAct->setEnabled(scene); }
+    if (mCloseProjectAct) { mCloseProjectAct->setEnabled(scene); }
+    if (mLinkedAct) { mLinkedAct->setEnabled(scene); }
+    if (mImportAct) { mImportAct->setEnabled(scene); }
+    if (mImportSeqAct) { mImportSeqAct->setEnabled(scene); }
+    if (mRevertAct) { mRevertAct->setEnabled(scene); }
+    if (mSelectAllAct) { mSelectAllAct->setEnabled(scene); }
+    if (mInvertSelAct) { mInvertSelAct->setEnabled(scene); }
+    if (mClearSelAct) { mClearSelAct->setEnabled(scene); }
+    if (mAddKeyAct) { mAddKeyAct->setEnabled(scene); }
+    if (mEffectsMenu) { mEffectsMenu->setEnabled(scene); }
+
+    if (!scene) {
         mObjectSettingsWidget->setMainTarget(nullptr);
         mTimeline->updateSettingsForCurrentCanvas(nullptr);
         return;
