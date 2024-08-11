@@ -192,21 +192,6 @@ const QString ThemeSupport::getThemeStyle(int iconSize)
         css = stylesheet.readAll();
         stylesheet.close();
     }
-#ifdef Q_OS_WIN
-    // svg in qss on windows are broken!
-    css.replace("/scalable/actions/go-up.svg); /* half */",
-                "/%11x%11/actions/go-up.png);");
-    css.replace("/scalable/actions/go-up.svg); /* full */",
-                "/%11x%11/actions/go-up.png);");
-    css.replace("/scalable/actions/go-down.svg); /* half */",
-                "/%11x%11/actions/go-down.png);");
-    css.replace("/scalable/actions/go-down.svg); /* full */",
-                "/%11x%11/actions/go-down.png);");
-    css.replace("/scalable/actions/dialog-ok.svg",
-                "/%11x%11/actions/dialog-ok.png");
-    css.replace("/scalable/actions/dialog-cancel.svg",
-                "/%11x%11/actions/dialog-cancel.png");
-#endif
     const qreal iconPixelRatio = iconSize * qApp->desktop()->devicePixelRatioF();
     return css.arg(getThemeButtonBaseColor().name(),
                    getThemeButtonBorderColor().name(),

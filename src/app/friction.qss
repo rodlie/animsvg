@@ -63,13 +63,13 @@ QSpinBox::down-button {
 }
 QDoubleSpinBox::up-arrow,
 QSpinBox::up-arrow {
-    image: url(:/icons/hicolor/scalable/actions/go-up.svg); /* half */
+    image: url(:/icons/hicolor/%11x%11/actions/go-up.png);
     width: %10px;
     height: %10px;
 }
 QDoubleSpinBox::down-arrow,
 QSpinBox::down-arrow {
-    image: url(:/icons/hicolor/scalable/actions/go-down.svg); /* half */
+    image: url(:/icons/hicolor/%11x%11/actions/go-down.png);
     width: %10px;
     height: %10px;
 }
@@ -229,7 +229,7 @@ QComboBox::drop-down:button{
 
 QToolButton::menu-arrow,
 QComboBox::down-arrow {
-    image: url(:/icons/hicolor/scalable/actions/go-down.svg); /* full */
+    image: url(:/icons/hicolor/%11x%11/actions/go-down.png);
     width: %7px;
     height: %7px;
 }
@@ -490,13 +490,13 @@ QCheckBox::indicator:hover:unchecked {
 }
 
 QCheckBox::indicator:checked {
-    image: url(:/icons/hicolor/scalable/actions/dialog-ok.svg);
+    image: url(:/icons/hicolor/%11x%11/actions/dialog-ok.png);
     width: %7px;
     height: %7px;
 }
 
 QCheckBox::indicator:unchecked {
-    image: url(:/icons/hicolor/scalable/actions/dialog-cancel.svg);
+    image: url(:/icons/hicolor/%11x%11/actions/dialog-cancel.png);
     width: %7px;
     height: %7px;
 }
