@@ -157,6 +157,11 @@ const QColor ThemeSupport::getThemeColorOrange(int alpha)
     return getQColor(255, 123, 0, alpha);
 }
 
+const QColor ThemeSupport::getThemeColorTextDisabled(int alpha)
+{
+    return getQColor(112, 112, 113, alpha);
+}
+
 const QPalette ThemeSupport::getDarkPalette(int alpha)
 {
     QPalette pal = QPalette();
@@ -204,7 +209,8 @@ const QString ThemeSupport::getThemeStyle(int iconSize)
                    getThemeRangeSelectedColor().name(),
                    QString::number(getIconSize(iconSize / 2).width()),
                    QString::number(getIconSize(qRound(iconPixelRatio)).width()),
-                   QString::number(getIconSize(qRound(iconPixelRatio / 2)).width()));
+                   QString::number(getIconSize(qRound(iconPixelRatio / 2)).width()),
+                   getThemeColorTextDisabled().name());
 }
 
 void ThemeSupport::setupTheme(const int iconSize)

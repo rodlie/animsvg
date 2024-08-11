@@ -61,6 +61,7 @@ public:
     static const QColor getThemeColorGreen(int alpha = 255);
     static const QColor getThemeColorGreenDark(int alpha = 255);
     static const QColor getThemeColorOrange(int alpha = 255);
+    static const QColor getThemeColorTextDisabled(int alpha = 255);
     static const QPalette getDarkPalette(int alpha = 255);
     static const QPalette getDarkerPalette(int alpha = 255);
     static const QPalette getNotSoDarkPalette(int alpha = 255);
