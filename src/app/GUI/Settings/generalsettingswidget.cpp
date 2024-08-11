@@ -39,8 +39,8 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     , mAutoBackup(nullptr)
     , mAutoSave(nullptr)
     , mAutoSaveTimer(nullptr)
-    , mDefaultInterfaceScaling(nullptr)
-    , mInterfaceScaling(nullptr)
+    //, mDefaultInterfaceScaling(nullptr)
+    //, mInterfaceScaling(nullptr)
     , mImportFileDir(nullptr)
     , mToolBarActionNew(nullptr)
     , mToolBarActionOpen(nullptr)
@@ -90,7 +90,7 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
 
     mProjectLayout->addWidget(mAutoSaveWidget);
 
-    const auto mScaleWidget = new QGroupBox(this);
+    /*const auto mScaleWidget = new QGroupBox(this);
     mScaleWidget->setObjectName("BlueBox");
     mScaleWidget->setTitle(tr("Interface Scaling"));
     mScaleWidget->setContentsMargins(0, 0, 0, 0);
@@ -123,7 +123,7 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     infoLabel->setText(tr("Changes here will require a restart of Friction."));
     mScaleLayout->addWidget(infoLabel);
 
-    mGeneralLayout->addWidget(mScaleWidget);
+    mGeneralLayout->addWidget(mScaleWidget);*/
 
     const auto mImportFileWidget = new QWidget(this);
     mImportFileWidget->setContentsMargins(0, 0, 0, 0);
@@ -150,7 +150,7 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     eSizesUI::widget.add(mAutoBackup, [this](const int size) {
         mAutoBackup->setFixedHeight(size);
         mAutoSave->setFixedHeight(size);
-        mDefaultInterfaceScaling->setFixedHeight(size);
+        //mDefaultInterfaceScaling->setFixedHeight(size);
     });
 }
 
@@ -167,8 +167,8 @@ void GeneralSettingsWidget::applySettings()
                             (mAutoSaveTimer->value() * 60) * 1000);
     MainWindow::sGetInstance()->updateAutoSaveBackupState();
 
-    mSett.fDefaultInterfaceScaling = mDefaultInterfaceScaling->isChecked();
-    mSett.fInterfaceScaling = mInterfaceScaling->value() * 0.01;
+    //mSett.fDefaultInterfaceScaling = mDefaultInterfaceScaling->isChecked();
+    //mSett.fInterfaceScaling = mInterfaceScaling->value() * 0.01;
     mSett.fImportFileDirOpt = mImportFileDir->currentData().toInt();
 
     mSett.fToolBarActionNew = mToolBarActionNew->isChecked();
@@ -197,8 +197,8 @@ void GeneralSettingsWidget::updateSettings(bool restore)
     if (ms < 60000) { ms = 60000; }
     mAutoSaveTimer->setValue((ms / 1000) / 60);
 
-    mDefaultInterfaceScaling->setChecked(mSett.fDefaultInterfaceScaling);
-    mInterfaceScaling->setValue(mDefaultInterfaceScaling->isChecked() ? 100 : 100 * mSett.fInterfaceScaling);
+    //mDefaultInterfaceScaling->setChecked(mSett.fDefaultInterfaceScaling);
+    //mInterfaceScaling->setValue(mDefaultInterfaceScaling->isChecked() ? 100 : 100 * mSett.fInterfaceScaling);
 
     mToolBarActionNew->setChecked(mSett.fToolBarActionNew);
     mToolBarActionOpen->setChecked(mSett.fToolBarActionOpen);

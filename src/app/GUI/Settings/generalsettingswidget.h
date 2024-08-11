@@ -44,8 +44,8 @@ private:
     QCheckBox *mAutoSave;
     QSpinBox *mAutoSaveTimer;
 
-    QCheckBox *mDefaultInterfaceScaling;
-    QSlider *mInterfaceScaling;
+    //QCheckBox *mDefaultInterfaceScaling;
+    //QSlider *mInterfaceScaling;
 
     QComboBox *mImportFileDir;
 
