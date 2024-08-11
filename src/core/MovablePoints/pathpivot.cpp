@@ -27,6 +27,7 @@
 #include "canvas.h"
 #include "pointhelpers.h"
 #include "Animators/transformanimator.h"
+#include "themesupport.h"
 
 PathPivot::PathPivot(const Canvas * const parent) :
     NonAnimatedMovablePoint(parent->getTransformAnimator(),
@@ -42,16 +43,16 @@ void PathPivot::drawSk(SkCanvas * const canvas,
                        const bool ctrlPressed) {
     Q_UNUSED(keyOnCurrent)
     Q_UNUSED(ctrlPressed)
-    const SkPoint absPos = toSkPoint(getAbsolutePos());
+    //const SkPoint absPos = toSkPoint(getAbsolutePos());
     if(isVisible(mode)) {
         const SkColor fillCol = isSelected() ?
-                    SkColorSetRGB(0, 255, 0) :
-                    SkColorSetRGB(125, 255, 125);
+                    toSkColor(ThemeSupport::getThemeColorBlue()) :
+                    toSkColor(ThemeSupport::getThemeColorGreen());
         const SkPoint absPos = toSkPoint(getAbsolutePos());
         drawOnAbsPosSk(canvas, absPos, invScale, fillCol);
     }
 
-    canvas->save();
+    /*canvas->save();
     canvas->translate(absPos.x(), absPos.y());
     SkPaint paint;
     paint.setStyle(SkPaint::kStroke_Style);
@@ -59,7 +60,7 @@ void PathPivot::drawSk(SkCanvas * const canvas,
     const float scaledHalfRadius = toSkScalar(getRadius()*0.5)*invScale;
     canvas->drawLine(-scaledHalfRadius, 0, scaledHalfRadius, 0, paint);
     canvas->drawLine(0, -scaledHalfRadius, 0, scaledHalfRadius, paint);
-    canvas->restore();
+    canvas->restore();*/
 }
 
 void PathPivot::drawTransforming(SkCanvas * const canvas,

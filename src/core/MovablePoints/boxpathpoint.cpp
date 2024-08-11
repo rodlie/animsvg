@@ -26,6 +26,7 @@
 #include "boxpathpoint.h"
 #include "pointhelpers.h"
 #include "Animators/transformanimator.h"
+#include "themesupport.h"
 
 BoxPathPoint::BoxPathPoint(QPointFAnimator * const associatedAnimator,
                            BoxTransformAnimator * const boxTrans) :
@@ -59,11 +60,11 @@ void BoxPathPoint::drawSk(SkCanvas * const canvas, const CanvasMode mode,
     Q_UNUSED(ctrlPressed)
     const SkPoint absPos = toSkPoint(getAbsolutePos());
     const SkColor fillCol = isSelected() ?
-                SkColorSetRGB(255, 255, 0) :
-                SkColorSetRGB(255, 255, 125);
+                toSkColor(ThemeSupport::getThemeColorRed()) :
+                toSkColor(ThemeSupport::getThemeColorOrange());
     drawOnAbsPosSk(canvas, absPos, invScale, fillCol);
 
-    canvas->save();
+    /*canvas->save();
     canvas->translate(absPos.x(), absPos.y());
     SkPaint paint;
     paint.setStyle(SkPaint::kStroke_Style);
@@ -71,5 +72,5 @@ void BoxPathPoint::drawSk(SkCanvas * const canvas, const CanvasMode mode,
     const float scaledHalfRadius = toSkScalar(getRadius()*0.5)*invScale;
     canvas->drawLine(-scaledHalfRadius, 0, scaledHalfRadius, 0, paint);
     canvas->drawLine(0, -scaledHalfRadius, 0, scaledHalfRadius, paint);
-    canvas->restore();
+    canvas->restore();*/
 }

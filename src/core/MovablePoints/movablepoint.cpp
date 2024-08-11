@@ -27,6 +27,7 @@
 #include "skia/skqtconversions.h"
 #include "pointhelpers.h"
 #include "Animators/transformanimator.h"
+#include "themesupport.h"
 
 MovablePoint::MovablePoint(const MovablePointType type) : mType(type) {}
 
@@ -93,20 +94,20 @@ void MovablePoint::drawOnAbsPosSk(SkCanvas * const canvas,
     canvas->drawCircle(absPos, scaledRadius, paint);
 
     paint.setStyle(SkPaint::kStroke_Style);
-    paint.setColor(SK_ColorBLACK);
+    paint.setColor(toSkColor(ThemeSupport::getThemeButtonBaseColor()));
     paint.setStrokeWidth(invScale);
     canvas->drawCircle(absPos, scaledRadius, paint);
 
     if(keyOnCurrent) {
         const float halfRadius = scaledRadius*0.5f;
 
-        paint.setColor(SK_ColorRED);
+        paint.setColor(toSkColor(ThemeSupport::getThemeColorRed()));
         paint.setStyle(SkPaint::kFill_Style);
         canvas->drawCircle(absPos, halfRadius, paint);
 
         paint.setStyle(SkPaint::kStroke_Style);
         paint.setStrokeWidth(0.5f*invScale);
-        paint.setColor(SK_ColorBLACK);
+        paint.setColor(SK_ColorWHITE);
         canvas->drawCircle(absPos, halfRadius, paint);
     }
 }
