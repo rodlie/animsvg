@@ -593,10 +593,10 @@ ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
     updateAllScript();
 
     const int pixSize = eSizesUI::widget/2;
-    if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-        mBindingsButton->setIconSize({pixSize, pixSize});
-        mDefinitionsButon->setIconSize({pixSize, pixSize});
-    }
+    eSizesUI::widget.add(mBindingsButton, [this](const int size) {
+        mBindingsButton->setFixedHeight(size);
+        mDefinitionsButon->setFixedHeight(size);
+    });
 
     QPixmap pix(pixSize, pixSize);
     pix.fill(Qt::transparent);

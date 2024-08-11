@@ -166,14 +166,6 @@ FontsWidget::FontsWidget(QWidget *parent)
         mAlignTop->setFixedHeight(size);
         mAlignVCenter->setFixedHeight(size);
         mAlignBottom->setFixedHeight(size);
-        /*if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            mAlignLeft->setIconSize(QSize(size, size));
-            mAlignCenter->setIconSize(QSize(size, size));
-            mAlignRight->setIconSize(QSize(size, size));
-            mAlignTop->setIconSize(QSize(size, size));
-            mAlignVCenter->setIconSize(QSize(size, size));
-            mAlignBottom->setIconSize(QSize(size, size));
-        }*/
     });
 
     mTextInput = new QPlainTextEdit(this);

@@ -122,12 +122,6 @@ RenderWidget::RenderWidget(QWidget *parent)
         mStopRenderButton->setFixedHeight(size);
         mAddRenderButton->setFixedHeight(size);
         mClearQueueButton->setFixedHeight(size);
-        /*if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            mStartRenderButton->setIconSize(QSize(size, size));
-            mStopRenderButton->setIconSize(QSize(size, size));
-            mAddRenderButton->setIconSize(QSize(size, size));
-            mClearQueueButton->setIconSize(QSize(size, size));
-        }*/
     });
 
     mContWidget = new QWidget(this);

@@ -35,10 +35,9 @@ ClosableContainer::ClosableContainer(QWidget *parent) : QWidget(parent) {
     mContentArrow->setFocusPolicy(Qt::NoFocus);
     //mContentArrow->setObjectName("FlatButton");
     mContentArrow->setCheckable(true);
-    mContentArrow->setFixedSize(eSizesUI::widget, eSizesUI::widget);
-    if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-        mContentArrow->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
-    }
+    eSizesUI::widget.add(mContentArrow, [this](const int size) {
+        mContentArrow->setFixedSize(size, size);
+    });
     connect(mContentArrow, &QPushButton::toggled,
             this, &ClosableContainer::setContentVisible);
 

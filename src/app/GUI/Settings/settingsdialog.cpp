@@ -70,11 +70,13 @@ SettingsDialog::SettingsDialog(QWidget * const parent)
     buttonsLayout->addWidget(applyButton);
     buttonsLayout->addWidget(cancelButton);
 
-    if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-        restoreButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
-        cancelButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
-        applyButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
-    }
+    eSizesUI::widget.add(restoreButton, [restoreButton,
+                                         applyButton,
+                                         cancelButton](const int size) {
+        restoreButton->setFixedHeight(size);
+        cancelButton->setFixedHeight(size);
+        applyButton->setFixedHeight(size);
+    });
 
     mainLayout->addLayout(buttonsLayout);
     const auto statusBar = new QStatusBar(this);

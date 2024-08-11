@@ -314,9 +314,7 @@ MainWindow::MainWindow(Document& document,
     //mTabColorText->setMinimumWidth(sideBarMin);
     mTabColorText->setTabPosition(QTabWidget::South);
     eSizesUI::widget.add(mTabColorText, [this](const int size) {
-        //if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            mTabColorText->setIconSize(QSize(size, size));
-        //}
+        mTabColorText->setIconSize(QSize(size, size));
     });
 
     mTabColorIndex = mTabColorText->addTab(mFillStrokeSettings,
@@ -334,9 +332,7 @@ MainWindow::MainWindow(Document& document,
     //mTabProperties->setMinimumWidth(sideBarMin);
     mTabProperties->setTabPosition(QTabWidget::South);
     eSizesUI::widget.add(mTabProperties, [this](const int size) {
-        //if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            mTabProperties->setIconSize(QSize(size, size));
-        //}
+        mTabProperties->setIconSize(QSize(size, size));
     });
 
     const auto propertiesWidget = new QWidget(this);
@@ -1280,9 +1276,6 @@ void MainWindow::setupMenuBar()
     const auto frictionButton = new QToolButton(this);
     frictionButton->setObjectName(QString::fromUtf8("ToolButton"));
     frictionButton->setPopupMode(QToolButton::InstantPopup);
-    /*if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-        frictionButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
-    }*/
     frictionButton->setIcon(QIcon::fromTheme(AppSupport::getAppID()));
     frictionButton->setDefaultAction(aboutAct);
     frictionButton->setToolTip(QString());
@@ -1474,9 +1467,7 @@ void MainWindow::setupToolBar()
     mToolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     mToolbar->setMovable(false);
     eSizesUI::widget.add(mToolbar, [this](const int size) {
-        //if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            mToolbar->setIconSize(QSize(size, size));
-        //}
+        mToolbar->setIconSize(QSize(size, size));
     });
     addToolBar(mToolbar);
 

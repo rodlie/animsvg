@@ -27,6 +27,7 @@
 #include <QIcon>
 #include <QApplication>
 #include <QDebug>
+#include <QDesktopWidget>
 
 const QColor ThemeSupport::getQColor(int r,
                                      int g,
@@ -191,6 +192,22 @@ const QString ThemeSupport::getThemeStyle(int iconSize)
         css = stylesheet.readAll();
         stylesheet.close();
     }
+#ifdef Q_OS_WIN
+    // svg in qss on windows are broken!
+    css.replace("/scalable/actions/go-up.svg); /* half */",
+                "/%12x%12/actions/go-up.png);");
+    css.replace("/scalable/actions/go-up.svg); /* full */",
+                "/%12x%12/actions/go-up.png);");
+    css.replace("/scalable/actions/go-down.svg); /* half */",
+                "/%12x%12/actions/go-down.png);");
+    css.replace("/scalable/actions/go-down.svg); /* full */",
+                "/%12x%12/actions/go-down.png);");
+    css.replace("/scalable/actions/dialog-ok.svg",
+                "/%11x%11/actions/dialog-ok.png");
+    css.replace("/scalable/actions/dialog-cancel.svg",
+                "/%11x%11/actions/dialog-cancel.png");
+#endif
+    const qreal iconPixelRatio = iconSize * qApp->desktop()->devicePixelRatioF();
     return css.arg(getThemeButtonBaseColor().name(),
                    getThemeButtonBorderColor().name(),
                    getThemeBaseDarkerColor().name(),
@@ -200,7 +217,9 @@ const QString ThemeSupport::getThemeStyle(int iconSize)
                    QString::number(getIconSize(iconSize).width()),
                    getThemeColorOrange().name(),
                    getThemeRangeSelectedColor().name(),
-                   QString::number(getIconSize(iconSize / 2).width()));
+                   QString::number(getIconSize(iconSize / 2).width()),
+                   QString::number(getIconSize(qRound(iconPixelRatio)).width()),
+                   QString::number(getIconSize(qRound(iconPixelRatio / 2)).width()));
 }
 
 void ThemeSupport::setupTheme(const int iconSize)

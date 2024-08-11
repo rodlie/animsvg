@@ -61,10 +61,10 @@ PluginsSettingsWidget::PluginsSettingsWidget(QWidget *parent)
                                                    this);
     mShaderPathButton->setObjectName("FlatButton");
     mShaderPathButton->setFocusPolicy(Qt::NoFocus);
-    if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-        mShaderPathButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
-    }
-    mShaderPathButton->setFixedSize(QSize(eSizesUI::widget, eSizesUI::widget));
+
+    eSizesUI::widget.add(mShaderPathButton, [mShaderPathButton](const int size) {
+        mShaderPathButton->setFixedSize(size, size);
+    });
 
     mShaderLayout->addWidget(mShaderLabel);
     mShaderLayout->addWidget(mShaderPath);

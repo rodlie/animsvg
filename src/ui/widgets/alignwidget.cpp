@@ -132,14 +132,6 @@ AlignWidget::AlignWidget(QWidget* const parent)
         topButton->setFixedHeight(size);
         vCenterButton->setFixedHeight(size);
         bottomButton->setFixedHeight(size);
-        /*if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            leftButton->setIconSize(QSize(size, size));
-            hCenterButton->setIconSize(QSize(size, size));
-            rightButton->setIconSize(QSize(size, size));
-            topButton->setIconSize(QSize(size, size));
-            vCenterButton->setIconSize(QSize(size, size));
-            bottomButton->setIconSize(QSize(size, size));
-        }*/
     });
 }
 

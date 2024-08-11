@@ -269,21 +269,6 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
         mFillGradientButton->setFixedHeight(size);
         mLinearGradientButton->setFixedHeight(size);
         mRadialGradientButton->setFixedHeight(size);
-        /*if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            mBevelJoinStyleButton->setIconSize(QSize(size, size));
-            mMiterJointStyleButton->setIconSize(QSize(size, size));
-            mRoundJoinStyleButton->setIconSize(QSize(size, size));
-            mFlatCapStyleButton->setIconSize(QSize(size, size));
-            mSquareCapStyleButton->setIconSize(QSize(size, size));
-            mRoundCapStyleButton->setIconSize(QSize(size, size));
-            mFillTargetButton->setIconSize(QSize(size, size));
-            mStrokeTargetButton->setIconSize(QSize(size, size));
-            mFillNoneButton->setIconSize(QSize(size, size));
-            mFillFlatButton->setIconSize(QSize(size, size));
-            mFillGradientButton->setIconSize(QSize(size, size));
-            mLinearGradientButton->setIconSize(QSize(size, size));
-            mRadialGradientButton->setIconSize(QSize(size, size));
-        }*/
     });
 
     // layout
