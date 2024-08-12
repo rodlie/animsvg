@@ -39,10 +39,9 @@ void MainWindow::setupToolBox()
     setupToolBoxDraw();
 
     eSizesUI::widget.add(mToolBoxMain, [this](const int size) {
-        Q_UNUSED(size)
-        mToolBoxMain->setIconSize(QSize(eSizesUI::button, eSizesUI::button));
-        mToolBoxNodes->setIconSize(QSize(eSizesUI::button, eSizesUI::button));
-        mToolBoxDraw->setIconSize(QSize(eSizesUI::button, eSizesUI::button));
+        mToolBoxMain->setIconSize(QSize(size, size));
+        mToolBoxNodes->setIconSize(QSize(size, size));
+        mToolBoxDraw->setIconSize(QSize(size, size));
     });
 
     mToolBoxMainIndex = mToolBoxStack->addWidget(mToolBoxMain);

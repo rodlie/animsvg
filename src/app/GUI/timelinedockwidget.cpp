@@ -233,10 +233,8 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mToolBar->addWidget(mFrameStartSpin);
 
     eSizesUI::widget.add(mToolBar, [this](const int size) {
-        Q_UNUSED(size)
         //mRenderProgress->setFixedHeight(eSizesUI::button);
-        //mToolBar->setFixedHeight(eSizesUI::button);
-        mToolBar->setIconSize(QSize(eSizesUI::button, eSizesUI::button));
+        mToolBar->setIconSize(QSize(size, size));
     });
 
     QWidget *spacerWidget1 = new QWidget(this);

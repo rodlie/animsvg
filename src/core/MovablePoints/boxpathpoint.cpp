@@ -60,8 +60,8 @@ void BoxPathPoint::drawSk(SkCanvas * const canvas, const CanvasMode mode,
     Q_UNUSED(ctrlPressed)
     const SkPoint absPos = toSkPoint(getAbsolutePos());
     const SkColor fillCol = isSelected() ?
-                toSkColor(ThemeSupport::getThemeColorRed()) :
-                toSkColor(ThemeSupport::getThemeColorOrange());
+                toSkColor(ThemeSupport::getThemeColorRed(155)) :
+                toSkColor(ThemeSupport::getThemeColorOrange(155));
     drawOnAbsPosSk(canvas, absPos, invScale, fillCol);
 
     /*canvas->save();

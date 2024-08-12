@@ -46,8 +46,8 @@ void PathPivot::drawSk(SkCanvas * const canvas,
     //const SkPoint absPos = toSkPoint(getAbsolutePos());
     if(isVisible(mode)) {
         const SkColor fillCol = isSelected() ?
-                    toSkColor(ThemeSupport::getThemeColorBlue()) :
-                    toSkColor(ThemeSupport::getThemeColorGreen());
+                    toSkColor(ThemeSupport::getThemeColorBlue(155)) :
+                    toSkColor(ThemeSupport::getThemeColorGreen(155));
         const SkPoint absPos = toSkPoint(getAbsolutePos());
         drawOnAbsPosSk(canvas, absPos, invScale, fillCol);
     }
