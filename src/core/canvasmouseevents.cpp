@@ -208,7 +208,7 @@ void Canvas::mouseDoubleClickEvent(const eMouseEvent &e) {
                    mCurrentMode == CanvasMode::pointTransform) &&
                   enve_cast<TextBox*>(mHoveredBox)) {
             e.fReleaseMouse();
-            static_cast<TextBox*>(mHoveredBox.data())->openTextEditor(e.fWidget);
+            emit openTextEditor();
         } else if(mCurrentMode == CanvasMode::boxTransform &&
                   enve_cast<SmartVectorPath*>(mHoveredBox)) {
             Document::sInstance->setCanvasMode(CanvasMode::pointTransform);
