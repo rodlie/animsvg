@@ -69,14 +69,28 @@
 #include "ReadWrite/evformat.h"
 #include "XML/runtimewriteid.h"
 
-void MainWindow::loadEVFile(const QString &path) {
+void MainWindow::loadEVFile(const QString &path)
+{
     QFile file(path);
-    if(!file.exists()) RuntimeThrow("File does not exist " + path);
-    if(!file.open(QIODevice::ReadOnly))
+    if (!file.exists()) { RuntimeThrow("File does not exist " + path); }
+    if (!file.open(QIODevice::ReadOnly)) {
         RuntimeThrow("Could not open file " + path);
+    }
     try {
         const int evVersion = FileFooter::sReadEvFileVersion(&file);
-        if(evVersion <= 0) RuntimeThrow("Incompatible or incomplete data");
+        if (evVersion <= 0) { RuntimeThrow("Incompatible or incomplete data"); }
+
+        if (evVersion > EvFormat::version) {
+            QMessageBox::warning(this,
+                                 tr("Unsupported project version"),
+                                 tr("This project file (version %1) is not compatible"
+                                    " with this version of Friction,"
+                                    " max supported project version is %2.").arg(QString::number(evVersion),
+                                                                                 QString::number(EvFormat::version)));
+            file.close();
+            return;
+        }
+
         eReadStream readStream(evVersion, &file);
         readStream.setPath(path);
 
