@@ -305,7 +305,13 @@ void RenderInstanceWidget::updateOutputDestinationFromCurrentFormat() {
         outputDst = Document::sInstance->projectDirectory() + "/untitled";
     }
     const QString tmpStr = QString(format->extensions);
-    const QStringList supportedExt = tmpStr.split(",");
+    QStringList supportedExt = tmpStr.split(",");
+    if (isImgSeq) {
+        const auto exts = getExportImageExtensions(outputSettings);
+        if (!exts.second.isEmpty()) {
+            supportedExt = exts.second.join(" ").split("*.", Qt::SkipEmptyParts);
+        }
+    }
     const QString fileName = outputDst.split("/").last();
     const QStringList dividedName = fileName.split(".");
     QString currExt;
@@ -349,12 +355,18 @@ void RenderInstanceWidget::openOutputDestinationDialog() {
     QString selectedExt;
     const OutputSettings &outputSettings = mSettings.getOutputRenderSettings();
     const auto format = outputSettings.fOutputFormat;
-    if(format) {
+    if (format) {
         QString tmpStr = QString(format->extensions);
-        const QStringList supportedExt = tmpStr.split(",");
-        selectedExt = "." + supportedExt.first();
-        tmpStr.replace(",", " *.");
-        supportedExts = "Output File (*." + tmpStr + ")";
+        const auto exts = getExportImageExtensions(outputSettings);
+        if (!exts.first.isEmpty() && !exts.second.isEmpty()) {
+            selectedExt = exts.first;
+            supportedExts = tr("Output File (%1)").arg(exts.second.join(" "));
+        } else {
+            const QStringList supportedExt = tmpStr.split(",");
+            selectedExt = "." + supportedExt.first();
+            tmpStr.replace(",", " *.");
+            supportedExts = "Output File (*." + tmpStr + ")";
+        }
     }
     QString iniText = mSettings.getOutputDestination();
     if(iniText.isEmpty()) {
@@ -379,6 +391,28 @@ void RenderInstanceWidget::openRenderSettingsDialog() {
         updateFromSettings();
     }
     delete dialog;
+}
+
+const QPair<QString, QStringList> RenderInstanceWidget::getExportImageExtensions(const OutputSettings &settings)
+{
+    const auto format = settings.fOutputFormat;
+    const auto codec = settings.fVideoCodec;
+    QPair<QString,QStringList> ext;
+    if (!format) { return ext; }
+    if (QString(format->long_name).startsWith("image2") && codec) {
+        const auto codecName = QString(codec->name);
+        if (codecName == "png") {
+            ext.first = ".png";
+            ext.second << "*.png";
+        } else if (codecName == "tiff") {
+            ext.first = ".tif";
+            ext.second << "*.tif" << "*.tiff";
+        } else if (codecName.endsWith("jpeg")) {
+            ext.first = ".jpg";
+            ext.second << "*.jpg" << "*.jpeg";
+        }
+    }
+    return ext;
 }
 
 void RenderInstanceWidget::write(eWriteStream &dst) const {

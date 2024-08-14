@@ -95,6 +95,8 @@ private:
     void openOutputSettingsDialog();
     void openOutputDestinationDialog();
     void openRenderSettingsDialog();
+
+    const QPair<QString,QStringList> getExportImageExtensions(const OutputSettings &settings);
 };
 
 #endif // RENDERINSTANCEWIDGET_H
