@@ -56,19 +56,18 @@ RenderInstanceWidget::RenderInstanceWidget(const RenderInstanceSettings& sett,
     updateFromSettings();
 }
 
-void RenderInstanceWidget::iniGUI() {
-    if(!OutputSettingsProfile::sOutputProfilesLoaded) {
+void RenderInstanceWidget::iniGUI()
+{
+    if (!OutputSettingsProfile::sOutputProfilesLoaded) {
         OutputSettingsProfile::sOutputProfilesLoaded = true;
-        const QString dirPath = AppSupport::getAppOutputProfilesPath();
-        QDirIterator dirIt(dirPath, QDirIterator::NoIteratorFlags);
-        while(dirIt.hasNext()) {
-            const auto path = dirIt.next();
-            const QFileInfo fileInfo(path);
-            if(!fileInfo.isFile()) continue;
-            if(!fileInfo.completeSuffix().contains("conf")) continue;
+        QDir dirPath(AppSupport::getAppOutputProfilesPath());
+        dirPath.setSorting(QDir::SortFlag::Name);
+        for (const auto &fileInfo : dirPath.entryInfoList()) {
+            if (!fileInfo.isFile()) { continue; }
+            if (!fileInfo.completeSuffix().contains("conf")) { continue; }
             const auto profile = enve::make_shared<OutputSettingsProfile>();
             try {
-                profile->load(path);
+                profile->load(fileInfo.absoluteFilePath());
             } catch(const std::exception& e) {
                 gPrintExceptionCritical(e);
             }
