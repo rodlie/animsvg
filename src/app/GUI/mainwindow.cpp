@@ -1371,7 +1371,21 @@ void MainWindow::checkAutoSaveTimer()
     if (mAutoSave &&
         mChangedSinceSaving &&
         !mDocument.fEvFile.isEmpty())
-    { saveFile(mDocument.fEvFile); }
+    {
+        const int projectVersion = AppSupport::getProjectVersion(mDocument.fEvFile);
+        const int newProjectVersion = AppSupport::getProjectVersion();
+        if (newProjectVersion > projectVersion && projectVersion > 0) {
+            QMessageBox::warning(this,
+                                 tr("Auto Save canceled"),
+                                 tr("Auto Save is not allowed to break"
+                                    " project format compatibility (%1 vs. %2)."
+                                    " Please save the project to confirm"
+                                    " project format changes.").arg(QString::number(newProjectVersion),
+                                                                    QString::number(projectVersion)));
+            return;
+        }
+        saveFile(mDocument.fEvFile);
+    }
 }
 
 void MainWindow::openAboutWindow()
@@ -2000,7 +2014,22 @@ void MainWindow::openFile(const QString& openPath)
 void MainWindow::saveFile()
 {
     if (mDocument.fEvFile.isEmpty()) { saveFileAs(true); }
-    else { saveFile(mDocument.fEvFile); }
+    else {
+        const int projectVersion = AppSupport::getProjectVersion(mDocument.fEvFile);
+        const int newProjectVersion = AppSupport::getProjectVersion();
+        if (newProjectVersion > projectVersion && projectVersion > 0) {
+            const auto result = QMessageBox::question(this,
+                                                      tr("Project version"),
+                                                      tr("Saving this project file will change the project"
+                                                         " format from version %1 to version %2."
+                                                         " This breaks compatibility with older versions of Friction."
+                                                         "\n\nAre you sure you want"
+                                                         " to save this project file?").arg(QString::number(projectVersion),
+                                                                                            QString::number(newProjectVersion)));
+            if (result != QMessageBox::Yes) { return; }
+        }
+        saveFile(mDocument.fEvFile);
+    }
 }
 
 void MainWindow::saveFile(const QString& path,
