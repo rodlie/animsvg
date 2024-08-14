@@ -105,6 +105,7 @@ public:
     static bool removeResolutionPreset(const int w, const int h);
     static QPair<bool, bool> getResolutionPresetStatus();
     static const QString filterTextAZW(const QString &text);
+    static int getProjectVersion(const QString &fileName = QString());
 };
 
 #endif // APPSUPPORT_H

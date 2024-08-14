@@ -23,6 +23,8 @@
 
 #include "appsupport.h"
 #include "hardwareinfo.h"
+#include "ReadWrite/evformat.h"
+#include "ReadWrite/filefooter.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -593,4 +595,21 @@ const QString AppSupport::filterTextAZW(const QString &text)
     QRegularExpression regex("\\s|\\W");
     QString output = text;
     return output.replace(regex, "");
+}
+
+int AppSupport::getProjectVersion(const QString &fileName)
+{
+    if (fileName.isEmpty()) { return EvFormat::version; }
+    if (!QFile::exists(fileName)) { return 0; }
+    QFile file(fileName);
+    if (file.open(QIODevice::ReadOnly)) {
+        try {
+            const int version = FileFooter::sReadEvFileVersion(&file);
+            file.close();
+            return version;
+        } catch(...) {
+            file.close();
+        }
+    }
+    return 0;
 }
