@@ -1282,6 +1282,38 @@ void MainWindow::closedRenderQueueWindow()
                                             tr("Queue"));
 }
 
+void MainWindow::initRenderPresets()
+{
+    if (!AppSupport::getSettings("settings",
+                                 "firstRunRenderPresets",
+                                 true).toBool()) { return; }
+    const QString path = AppSupport::getAppOutputProfilesPath();
+
+    QStringList presets;
+    presets << "001-friction-preset-mp4-h264.conf";
+    presets << "002-friction-preset-mp4-h264-mp3.conf";
+    presets << "003-friction-preset-prores-444.conf";
+    presets << "004-friction-preset-prores-444-aac.conf";
+    presets << "005-friction-preset-png.conf";
+    presets << "006-friction-preset-tiff.conf";
+
+    for (const auto &preset : presets) {
+        QString filePath(QString("%1/%2").arg(path, preset));
+        if (QFile::exists(filePath)) { continue; }
+        QFile file(filePath);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QFile res(QString(":/presets/render/%1").arg(preset));
+            if (res.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                file.write(res.readAll());
+                res.close();
+            }
+            file.close();
+        }
+    }
+
+    AppSupport::setSettings("settings", "firstRunRenderPresets", false);
+}
+
 void MainWindow::openWelcomeDialog()
 {
     mStackWidget->setCurrentIndex(mStackIndexWelcome);
@@ -1681,6 +1713,8 @@ void MainWindow::readSettings(const QString &openProject)
     else if (isMax) { showMaximized(); }
 
     updateAutoSaveBackupState();
+
+    initRenderPresets();
 
     if (!openProject.isEmpty()) {
         QTimer::singleShot(10,

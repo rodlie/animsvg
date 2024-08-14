@@ -410,6 +410,8 @@ private:
     void openRenderQueueWindow();
     void closedRenderQueueWindow();
 
+    void initRenderPresets();
+
 protected:
     void keyPressEvent(QKeyEvent *event);
     bool eventFilter(QObject *obj, QEvent *e);
