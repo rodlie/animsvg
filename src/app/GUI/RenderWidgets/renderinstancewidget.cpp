@@ -210,24 +210,37 @@ void RenderInstanceWidget::updateFromSettings() {
     bool enabled = renderState != RenderState::paused &&
        renderState != RenderState::rendering;
     setEnabled(enabled);
-    QString nameLabelTxt = QString("%1 ").arg(mSettings.getName());
+
+    QString nameLabelTxt = QString(mSettings.getName());
+    const OutputSettings &outputSettings = mSettings.getOutputRenderSettings();
+
+    const auto format = outputSettings.fOutputFormat;
+    if (format) {
+        QString formatString(format->name);
+        if (formatString == "image2") {
+            const auto codec = outputSettings.fVideoCodec;
+            if (codec) { formatString = QString(codec->name); }
+        }
+        nameLabelTxt.append(QString(" [%1]").arg(QString(formatString).toUpper()));
+    }
+
     if(renderState == RenderState::error) {
-        nameLabelTxt += tr(": Error"); //mSettings.getRenderError();
+        nameLabelTxt += tr(" : Error"); //mSettings.getRenderError();
     } else if(renderState == RenderState::finished) {
-        nameLabelTxt += tr(": Finished");
+        nameLabelTxt += tr(" : Finished");
         mCheckBox->setChecked(false);
     } else if(renderState == RenderState::rendering) {
-        nameLabelTxt += tr(": Rendering ...");
+        nameLabelTxt += tr(" : Rendering ...");
     } else if(renderState == RenderState::waiting) {
-        nameLabelTxt += tr(": Waiting ...");
+        nameLabelTxt += tr(" : Waiting ...");
     } else if(renderState == RenderState::paused) {
-        nameLabelTxt += tr(": Paused");
+        nameLabelTxt += tr(" : Paused");
     }
     mNameLabel->setText(nameLabelTxt);
 
     QString destinationTxt = mSettings.getOutputDestination();
     mOutputDestinationLineEdit->setText(destinationTxt);
-    const OutputSettings &outputSettings = mSettings.getOutputRenderSettings();
+
     /*OutputSettingsProfile *outputProfile = mSettings.getOutputSettingsProfile();
     QString outputTxt;
     if(outputProfile) {
@@ -434,6 +447,7 @@ void RenderInstanceWidget::updateRenderSettings()
         const auto label = mSettings.getTargetCanvas()->prp_getName();
         if (!label.isEmpty()) { mNameLabel->setText(label); }
     }
+    updateFromSettings();
 }
 
 #include "Private/esettings.h"
