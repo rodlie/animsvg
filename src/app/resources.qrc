@@ -25,4 +25,12 @@
     <qresource prefix="/config">
         <file>svgo.config.js</file>
     </qresource>
+    <qresource prefix="/">
+        <file>presets/render/006-friction-preset-tiff.conf</file>
+        <file>presets/render/005-friction-preset-png.conf</file>
+        <file>presets/render/004-friction-preset-prores-444-aac.conf</file>
+        <file>presets/render/003-friction-preset-prores-444.conf</file>
+        <file>presets/render/002-friction-preset-mp4-h264-mp3.conf</file>
+        <file>presets/render/001-friction-preset-mp4-h264.conf</file>
+    </qresource>
 </RCC>
