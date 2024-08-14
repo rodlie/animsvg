@@ -171,7 +171,7 @@ rpmbuild -bb rpm.spec
 cp -a ${HOME}/rpmbuild/RPMS/*/*.rpm ${DISTFILES}/builds/${VERSION}/
 
 # Portable
-FRICTION_PORTABLE=${FRICTION_PKG}-portable-linux-x86_64
+FRICTION_PORTABLE=${FRICTION_PKG}-linux-x86_64
 FRICTION_PORTABLE_DIR=${BUILD}/${FRICTION_PORTABLE}
 cd ${BUILD}
 rm -f ${FRICTION_PORTABLE_DIR} || true
@@ -186,8 +186,8 @@ ln -sf bin/friction .
 )
 cd ${BUILD}
 tar cvf ${FRICTION_PORTABLE}.tar ${FRICTION_PORTABLE}
-bzip2 -9 ${FRICTION_PORTABLE}.tar
-cp -a ${FRICTION_PORTABLE}.tar.bz2 ${DISTFILES}/builds/${VERSION}/
+xz -9 ${FRICTION_PORTABLE}.tar
+cp -a ${FRICTION_PORTABLE}.tar.xz ${DISTFILES}/builds/${VERSION}/
 
 # AppImage
 (cd ${FRICTION_PORTABLE_DIR} ;
