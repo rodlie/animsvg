@@ -645,11 +645,19 @@ QDomElement BoxTransformAnimator::saveSVG(
         const auto shearAnim = getShearAnimator();
         const auto shearXAnim = shearAnim->getXAnimator();
         const auto shearYAnim = shearAnim->getYAnimator();
-        shearXAnim->saveQrealSVG(exp, shear, visRange,
-                                 "transform", 45, true, "skewX");
-        shearYAnim->saveQrealSVG(exp, shear, visRange,
-                                 "transform", 45, true, "skewY");
-        shear.appendChild(unpivot);
+        const bool shearXStatic = !shearXAnim->anim_hasKeys() && !shearXAnim->hasExpression();
+        const bool shearYStatic = !shearYAnim->anim_hasKeys() && !shearYAnim->hasExpression();
+        if (shearXStatic || shearYStatic) {
+            shearXAnim->saveQrealSVG(exp, shear, visRange, "transform", 45, true, "skewX");
+            shearYAnim->saveQrealSVG(exp, shear, visRange, "transform", 45, true, "skewY");
+            shear.appendChild(unpivot);
+        } else {
+            shearXAnim->saveQrealSVG(exp, shear, visRange, "transform", 45, true, "skewX");
+            auto shearY = exp.createElement("g");
+            shearYAnim->saveQrealSVG(exp, shearY, visRange, "transform", 45, true, "skewY");
+            shearY.appendChild(unpivot);
+            shear.appendChild(shearY);
+        }
     }
     const auto scale = saveSVG_Split(getScaleAnimator(), visRange, 1, 1,
                                      "scale", exp, shear);
