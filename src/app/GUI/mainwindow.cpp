@@ -631,7 +631,7 @@ void MainWindow::setupMenuBar()
                              Qt::ALT + Qt::Key_A, mEditMenu));
     mEditMenu->addSeparator();
 
-    const auto addKeyAct = mEditMenu->addAction(tr("Add Key(s)"), [this]() {
+    mEditMenu->addAction(tr("Add Key(s)"), [this]() {
         const auto scene = *mDocument.fActiveScene;
         if (!scene) { return; }
         scene->addKeySelectedProperties();
