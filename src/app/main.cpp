@@ -217,6 +217,15 @@ int main(int argc, char *argv[])
         gPrintExceptionCritical(e);
     }
 
+    // check permissions
+    const auto perms = AppSupport::hasWriteAccess();
+    if (!perms.second) {
+        QMessageBox::warning(nullptr,
+                             QObject::tr("Permission issue"),
+                             QObject::tr("Friction needs read/write access to:<br><br>- %1").arg(perms.first.join("<br>- ")));
+        return -1;
+    }
+
     eFilterSettings filterSettings;
 
     eWidgetsImpl widImpl;

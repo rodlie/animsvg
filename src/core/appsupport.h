@@ -104,6 +104,7 @@ public:
     static bool removeResolutionPreset(const int w, const int h);
     static QPair<bool, bool> getResolutionPresetStatus();
     static const QString filterTextAZW(const QString &text);
+    static const QPair<QStringList,bool> hasWriteAccess();
 };
 
 #endif // APPSUPPORT_H

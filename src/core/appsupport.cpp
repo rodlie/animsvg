@@ -579,3 +579,26 @@ const QString AppSupport::filterTextAZW(const QString &text)
     QString output = text;
     return output.replace(regex, "");
 }
+
+const QPair<QStringList, bool> AppSupport::hasWriteAccess()
+{
+    QPair<QStringList,bool> result(QStringList(), true);
+
+    QStringList dirs;
+    dirs << getAppConfigPath();
+    dirs << getAppOutputProfilesPath();
+    dirs << getAppShaderEffectsPath();
+    for (const auto &dir : dirs) {
+        if (dir.isEmpty()) { continue; }
+        QFileInfo info(dir);
+        if (!info.isDir() ||
+            !info.exists() ||
+            !info.isReadable() ||
+            !info.isWritable()) {
+            result.second = false;
+            result.first << info.absoluteFilePath();
+        }
+    }
+
+    return result;
+}
