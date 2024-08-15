@@ -106,6 +106,7 @@ public:
     static QPair<bool, bool> getResolutionPresetStatus();
     static const QString filterTextAZW(const QString &text);
     static int getProjectVersion(const QString &fileName = QString());
+    static const QPair<QStringList,bool> hasWriteAccess();
 };
 
 #endif // APPSUPPORT_H

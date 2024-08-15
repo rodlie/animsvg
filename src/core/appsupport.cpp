@@ -613,3 +613,26 @@ int AppSupport::getProjectVersion(const QString &fileName)
     }
     return 0;
 }
+
+const QPair<QStringList, bool> AppSupport::hasWriteAccess()
+{
+    QPair<QStringList,bool> result(QStringList(), true);
+
+    QStringList dirs;
+    dirs << getAppConfigPath();
+    dirs << getAppOutputProfilesPath();
+    dirs << getAppShaderEffectsPath();
+    for (const auto &dir : dirs) {
+        if (dir.isEmpty()) { continue; }
+        QFileInfo info(dir);
+        if (!info.isDir() ||
+            !info.exists() ||
+            !info.isReadable() ||
+            !info.isWritable()) {
+            result.second = false;
+            result.first << info.absoluteFilePath();
+        }
+    }
+
+    return result;
+}
