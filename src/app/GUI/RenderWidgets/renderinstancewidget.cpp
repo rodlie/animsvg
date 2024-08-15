@@ -79,8 +79,9 @@ void RenderInstanceWidget::iniGUI()
     setObjectName("darkWidget");
     mNameLabel = new QLineEdit(this);
     mNameLabel->setFocusPolicy(Qt::NoFocus);
+    mNameLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     mNameLabel->setFixedHeight(eSizesUI::button);
-    mNameLabel->setObjectName("RenderTitleWidget");
+    //mNameLabel->setObjectName("RenderTitleWidget");
     mNameLabel->setReadOnly(true);
     //mNameLabel->setFrame(false);
 
@@ -161,7 +162,7 @@ void RenderInstanceWidget::iniGUI()
                                             this);
     //mPlayButton->setObjectName("FlatButton");
     mPlayButton->setFocusPolicy(Qt::NoFocus);
-    mPlayButton->setToolTip(tr("Open in default application"));
+    mPlayButton->setToolTip(tr("View/Play in default application"));
     connect(mPlayButton, &QPushButton::pressed,
             this, [this]() {
         QString dst = mOutputDestinationLineEdit->text();
@@ -176,7 +177,7 @@ void RenderInstanceWidget::iniGUI()
                                               QSizePolicy::Preferred);
     mOutputDestinationLineEdit->setReadOnly(true);
     mOutputDestinationLineEdit->setPlaceholderText(tr("Destination ..."));
-    mOutputDestinationLineEdit->setObjectName(QString::fromUtf8("OutputDestinationLineEdit"));
+    //mOutputDestinationLineEdit->setObjectName(QString::fromUtf8("OutputDestinationLineEdit"));
 
     eSizesUI::widget.add(mOutputSettingsProfilesButton, [this](const int size) {
         Q_UNUSED(size)
@@ -194,8 +195,8 @@ void RenderInstanceWidget::iniGUI()
     outputDesinationLayout->setMargin(0);
 
     outputDesinationLayout->addWidget(mOutputDestinationButton);
-    outputDesinationLayout->addWidget(mPlayButton);
     outputDesinationLayout->addWidget(mOutputDestinationLineEdit);
+    outputDesinationLayout->addWidget(mPlayButton);
 
     outputSettingsLayout->addWidget(outputDestinationWidget);
 
@@ -267,23 +268,34 @@ RenderInstanceSettings &RenderInstanceWidget::getSettings() {
     return mSettings;
 }
 
-void RenderInstanceWidget::mousePressEvent(QMouseEvent *e) {
-    if(e->button() == Qt::RightButton) {
+void RenderInstanceWidget::mousePressEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::RightButton) {
         QMenu menu(this);
-        menu.addAction("Duplicate");
+
         const auto state = mSettings.getCurrentState();
-        const bool deletable = state != RenderState::rendering &&
-                               state != RenderState::paused;
-        menu.addAction("Delete")->setEnabled(deletable);
+        const bool deletable = (state != RenderState::rendering && state != RenderState::paused);
+
+        const auto dupAct = menu.addAction(QIcon::fromTheme("duplicate"), tr("Duplicate"));
+        dupAct->setData(0);
+
+        const auto delAct = menu.addAction(QIcon::fromTheme("minus"), tr("Remove"));
+        delAct->setData(1);
+        delAct->setEnabled(deletable);
+
         const auto act = menu.exec(e->globalPos());
-        if(act) {
-            if(act->text() == "Duplicate") {
+        if (act) {
+            switch (act->data().toInt()) {
+            case 0:
                 emit duplicate(mSettings);
-            } else if(act->text() == "Delete") {
+                break;
+            case 1:
                 deleteLater();
+                break;
+            default:;
             }
         }
-    } else return ClosableContainer::mousePressEvent(e);
+    } else { return ClosableContainer::mousePressEvent(e); }
 }
 
 void RenderInstanceWidget::openOutputSettingsDialog() {

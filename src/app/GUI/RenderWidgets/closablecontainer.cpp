@@ -49,6 +49,8 @@ ClosableContainer::ClosableContainer(QWidget *parent) : QWidget(parent) {
     mContWidget->setLayout(mContLayout);
     //mContLayout->setMargin(0);
     mContLayout->setAlignment(Qt::AlignTop);
+    mContLayout->setContentsMargins(0, 0, 0, 0);
+    mContLayout->setSpacing(0);
     mVLayout->setSpacing(0);
     mVLayout->setMargin(0);
     mVLayout->setContentsMargins(0, 0, 0, 0);
