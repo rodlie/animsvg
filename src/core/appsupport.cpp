@@ -597,6 +597,14 @@ const QString AppSupport::filterTextAZW(const QString &text)
     return output.replace(regex, "");
 }
 
+const QString AppSupport::filterFormatsName(const QString &text)
+{
+    QString output(text);
+    if (output == "image2") { output = "image"; }
+    else if (output == "image2 sequence") { output = "Image Sequence"; }
+    return output;
+}
+
 int AppSupport::getProjectVersion(const QString &fileName)
 {
     if (fileName.isEmpty()) { return EvFormat::version; }
