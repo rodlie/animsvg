@@ -139,8 +139,8 @@ RenderWidget::RenderWidget(QWidget *parent)
     mScrollArea->setWidgetResizable(true);
     mScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    topLayout->addStretch();
     topLayout->addWidget(mAddRenderButton);
+    topLayout->addStretch();
     topLayout->addWidget(mClearQueueButton);
 
     bottomLayout->addWidget(mStartRenderButton);

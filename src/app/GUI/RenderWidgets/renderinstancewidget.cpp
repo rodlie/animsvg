@@ -130,7 +130,7 @@ void RenderInstanceWidget::iniGUI()
             this, &RenderInstanceWidget::outputSettingsProfileSelected);
 
     mOutputSettingsButton = new QPushButton(QIcon::fromTheme("file_movie"),
-                                            tr("Edit Profile"));
+                                            tr("Format"));
     mOutputSettingsButton->setFocusPolicy(Qt::NoFocus);
     mOutputSettingsButton->setSizePolicy(QSizePolicy::Expanding,
                                          QSizePolicy::Preferred);
