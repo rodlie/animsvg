@@ -28,7 +28,6 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QHBoxLayout>
-#include <QSettings>
 #include <QDebug>
 
 #define UI_CONF_GROUP "uiLayout"
@@ -182,11 +181,8 @@ void UIDock::addWidget(QWidget *widget)
 void UIDock::writeSettings()
 {
     qDebug() << "==> write dock conf" << mLabel << mPos << mIndex;
-    QSettings settings;
-    settings.beginGroup(UI_CONF_GROUP);
-    settings.setValue(QString(UI_CONF_KEY_POS).arg(getId()), mPos);
-    settings.setValue(QString(UI_CONF_KEY_INDEX).arg(getId()), mIndex);
-    settings.endGroup();
+    AppSupport::setSettings(UI_CONF_GROUP, QString(UI_CONF_KEY_POS).arg(getId()), mPos);
+    AppSupport::setSettings(UI_CONF_GROUP, QString(UI_CONF_KEY_INDEX).arg(getId()), mIndex);
 }
 
 UILayout::UILayout(QWidget *parent)
@@ -228,16 +224,13 @@ UILayout::~UILayout()
 
 void UILayout::readSettings()
 {
-    QSettings settings;
-    settings.beginGroup(UI_CONF_GROUP);
-    bool firstrun = settings.value(UI_CONF_KEY_MAIN).isNull();
-    restoreState(settings.value(UI_CONF_KEY_MAIN).toByteArray());
-    mLeft->restoreState(settings.value(UI_CONF_KEY_LEFT).toByteArray());
-    mMiddle->restoreState(settings.value(UI_CONF_KEY_MIDDLE).toByteArray());
-    mRight->restoreState(settings.value(UI_CONF_KEY_RIGHT).toByteArray());
-    mTop->restoreState(settings.value(UI_CONF_KEY_TOP).toByteArray());
-    mBottom->restoreState(settings.value(UI_CONF_KEY_BOTTOM).toByteArray());
-    settings.endGroup();
+    bool firstrun = AppSupport::getSettings(UI_CONF_GROUP, UI_CONF_KEY_MAIN).isNull();
+    restoreState(AppSupport::getSettings(UI_CONF_GROUP, UI_CONF_KEY_MAIN).toByteArray());
+    mLeft->restoreState(AppSupport::getSettings(UI_CONF_GROUP, UI_CONF_KEY_LEFT).toByteArray());
+    mMiddle->restoreState(AppSupport::getSettings(UI_CONF_GROUP, UI_CONF_KEY_MIDDLE).toByteArray());
+    mRight->restoreState(AppSupport::getSettings(UI_CONF_GROUP, UI_CONF_KEY_RIGHT).toByteArray());
+    mTop->restoreState(AppSupport::getSettings(UI_CONF_GROUP, UI_CONF_KEY_TOP).toByteArray());
+    mBottom->restoreState(AppSupport::getSettings(UI_CONF_GROUP, UI_CONF_KEY_BOTTOM).toByteArray());
 
     if (firstrun) {
         setSizes({300, 1024, 300});
@@ -246,15 +239,12 @@ void UILayout::readSettings()
 
 void UILayout::writeSettings()
 {
-    QSettings settings;
-    settings.beginGroup(UI_CONF_GROUP);
-    settings.setValue(UI_CONF_KEY_MAIN, saveState());
-    settings.setValue(UI_CONF_KEY_LEFT, mLeft->saveState());
-    settings.setValue(UI_CONF_KEY_MIDDLE, mMiddle->saveState());
-    settings.setValue(UI_CONF_KEY_RIGHT, mRight->saveState());
-    settings.setValue(UI_CONF_KEY_TOP, mTop->saveState());
-    settings.setValue(UI_CONF_KEY_BOTTOM, mBottom->saveState());
-    settings.endGroup();
+    AppSupport::setSettings(UI_CONF_GROUP, UI_CONF_KEY_MAIN, saveState());
+    AppSupport::setSettings(UI_CONF_GROUP, UI_CONF_KEY_LEFT, mLeft->saveState());
+    AppSupport::setSettings(UI_CONF_GROUP, UI_CONF_KEY_MIDDLE, mMiddle->saveState());
+    AppSupport::setSettings(UI_CONF_GROUP, UI_CONF_KEY_RIGHT, mRight->saveState());
+    AppSupport::setSettings(UI_CONF_GROUP, UI_CONF_KEY_TOP, mTop->saveState());
+    AppSupport::setSettings(UI_CONF_GROUP, UI_CONF_KEY_BOTTOM, mBottom->saveState());
 }
 
 void UILayout::addDocks(std::vector<Item> items)

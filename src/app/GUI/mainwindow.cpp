@@ -36,7 +36,6 @@
 #include <QMessageBox>
 #include <QAudioOutput>
 #include <QSpacerItem>
-#include <QSettings>
 #include <QMargins>
 #include <iostream>
 

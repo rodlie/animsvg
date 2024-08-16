@@ -30,6 +30,7 @@
 #include <QVariant>
 #include <QPair>
 #include <QStringList>
+#include <QSettings>
 
 #include "hardwareenums.h"
 
@@ -50,7 +51,16 @@ public:
     static QVariant getSettings(const QString &group,
                                 const QString &key,
                                 const QVariant &fallback = QVariant());
+    static QVariant getSettings(QSettings *settings,
+                                const QString &group,
+                                const QString &key,
+                                const QVariant &fallback = QVariant());
     static void setSettings(const QString &group,
+                            const QString &key,
+                            const QVariant &value,
+                            bool append = false);
+    static void setSettings(QSettings *settings,
+                            const QString &group,
                             const QString &key,
                             const QVariant &value,
                             bool append = false);
@@ -108,6 +118,7 @@ public:
     static const QString filterFormatsName(const QString &text);
     static int getProjectVersion(const QString &fileName = QString());
     static const QPair<QStringList,bool> hasWriteAccess();
+    static bool isAppPortable();
 };
 
 #endif // APPSUPPORT_H

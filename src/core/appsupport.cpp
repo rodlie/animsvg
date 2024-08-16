@@ -51,11 +51,25 @@ QVariant AppSupport::getSettings(const QString &group,
                                  const QString &key,
                                  const QVariant &fallback)
 {
-    QVariant variant;
+    if (AppSupport::isAppPortable()) {
+        QSettings settings(QString("%1/friction.conf").arg(getAppConfigPath()),
+                           QSettings::IniFormat);
+        return getSettings(&settings, group, key, fallback);
+    }
     QSettings settings;
-    settings.beginGroup(group);
-    variant = settings.value(key, fallback);
-    settings.endGroup();
+    return getSettings(&settings, group, key, fallback);
+}
+
+QVariant AppSupport::getSettings(QSettings *settings,
+                                 const QString &group,
+                                 const QString &key,
+                                 const QVariant &fallback)
+{
+    QVariant variant;
+    if (!settings) { return variant; }
+    settings->beginGroup(group);
+    variant = settings->value(key, fallback);
+    settings->endGroup();
     return variant;
 }
 
@@ -64,8 +78,24 @@ void AppSupport::setSettings(const QString &group,
                              const QVariant &value,
                              bool append)
 {
+    if (AppSupport::isAppPortable()) {
+        QSettings settings(QString("%1/friction.conf").arg(getAppConfigPath()),
+                           QSettings::IniFormat);
+        setSettings(&settings, group, key, value, append);
+        return;
+    }
     QSettings settings;
-    settings.beginGroup(group);
+    setSettings(&settings, group, key, value, append);
+}
+
+void AppSupport::setSettings(QSettings *settings,
+                             const QString &group,
+                             const QString &key,
+                             const QVariant &value,
+                             bool append)
+{
+    if (!settings) { return; }
+    settings->beginGroup(group);
     QVariant result;
     if (append) {
         QVariant orig = getSettings(group, key);
@@ -80,8 +110,8 @@ void AppSupport::setSettings(const QString &group,
             result = text;
         } else { append = false; }
     }
-    settings.setValue(key, append ? result : value);
-    settings.endGroup();
+    settings->setValue(key, append ? result : value);
+    settings->endGroup();
 }
 
 const QString AppSupport::getAppName()
@@ -187,6 +217,9 @@ const QString AppSupport::getAppConfigPath()
     QString path = QString::fromUtf8("%1/%2")
                    .arg(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation),
                         getAppName());
+    if (isAppPortable()) {
+        path = QString("%1/config").arg(getAppPath());
+    }
     QDir dir(path);
     if (!dir.exists()) { dir.mkpath(path); }
     return path;
@@ -643,4 +676,9 @@ const QPair<QStringList, bool> AppSupport::hasWriteAccess()
     }
 
     return result;
+}
+
+bool AppSupport::isAppPortable()
+{
+    return QFile::exists(QString("%1/portable.txt").arg(getAppPath()));
 }

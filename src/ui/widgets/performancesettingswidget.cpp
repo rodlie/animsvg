@@ -275,15 +275,12 @@ void PerformanceSettingsWidget::setupRasterEffectWidgets()
 
 void PerformanceSettingsWidget::saveRasterEffectsSupport()
 {
-    QSettings settings;
-    settings.beginGroup("RasterEffects");
     for (const auto &box : mRasterEffectsHardwareSupport) {
-        settings.setValue(QString("%1HardwareSupport")
-                          .arg(box->itemData(0,
-                                             RASTER_HW_SUPPORT_ID).toString()),
-                          box->currentData());
+        AppSupport::setSettings("RasterEffects",
+                                QString("%1HardwareSupport")
+                                    .arg(box->itemData(0, RASTER_HW_SUPPORT_ID).toString()),
+                                box->currentData());
     }
-    settings.endGroup();
 }
 
 void PerformanceSettingsWidget::restoreDefaultRasterEffectsSupport()
