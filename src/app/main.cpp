@@ -216,7 +216,6 @@ int main(int argc, char *argv[])
         QMessageBox::warning(nullptr,
                              QObject::tr("Permission issue"),
                              QObject::tr("Friction needs read/write access to:<br><br>- %1").arg(perms.first.join("<br>- ")));
-        return -1;
     }
 
     eFilterSettings filterSettings;
