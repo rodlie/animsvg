@@ -343,8 +343,8 @@ void KeysView::mousePressEvent(QMouseEvent *e) {
                 QMenu menu;
                 const QString editStr = tr("Edit duration");
                 const QString splitStr = tr("Split Clip");
-                menu.addAction(editStr);
-                menu.addAction(splitStr);
+                menu.addAction(QIcon::fromTheme("sequence"), editStr);
+                menu.addAction(QIcon::fromTheme("image-missing"), splitStr);
                 const auto selectedAction = menu.exec(e->globalPos());
                 if (selectedAction) {
                     if (selectedAction->text() == editStr) {

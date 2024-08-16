@@ -665,6 +665,7 @@ void MainWindow::setupMenuBar()
     {
         const auto qAct = new NoShortcutAction(tr("Duplicate", "MenuBar_Edit"));
         mEditMenu->addAction(qAct);
+        qAct->setIcon(QIcon::fromTheme("duplicate"));
         qAct->setShortcut(Qt::CTRL + Qt::Key_D);
         mActions.duplicateAction->connect(qAct);
         cmdAddAction(qAct);
@@ -729,14 +730,16 @@ void MainWindow::setupMenuBar()
 
     mEditMenu->addSeparator();
 
-    const auto clearCacheAct = mEditMenu->addAction(tr("Clear Cache", "MenuBar_Edit"), [this]() {
+    const auto clearCacheAct = mEditMenu->addAction(QIcon::fromTheme("trash"),
+                                                    tr("Clear Cache", "MenuBar_Edit"), [this]() {
         const auto m = MemoryHandler::sInstance;
         m->clearMemory();
         mTimeline->update();
     }, QKeySequence(tr("Ctrl+R")));
     cmdAddAction(clearCacheAct);
 
-    const auto clearRecentAct = mEditMenu->addAction(tr("Clear Recent Files"), [this]() {
+    const auto clearRecentAct = mEditMenu->addAction(QIcon::fromTheme("trash"),
+                                                     tr("Clear Recent Files"), [this]() {
         mRecentFiles.clear();
         writeRecentFiles();
         updateRecentMenu();
@@ -1006,8 +1009,7 @@ void MainWindow::setupMenuBar()
         mToolbar->addWidget(sceneToolBtn);
     }
 
-    const auto zoomMenu = mViewMenu->addMenu(
-                tr("Zoom","MenuBar_View"));
+    const auto zoomMenu = mViewMenu->addMenu(QIcon::fromTheme("zoom"), tr("Zoom","MenuBar_View"));
 
     mZoomInAction = zoomMenu->addAction(tr("Zoom In", "MenuBar_View_Zoom"));
     mZoomInAction->setShortcut(QKeySequence("Ctrl+Shift++"));
@@ -1290,6 +1292,7 @@ void MainWindow::setupMenuBar()
         QMessageBox::aboutQt(this, tr("About Qt"));
     });
 
+    help->addSeparator();
     help->addAction(QIcon::fromTheme("cmd"),
                     tr("Command Palette"), this, [this]() {
         CommandPalette dialog(mDocument, this);

@@ -318,24 +318,32 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
 
         //menu.addSeparator();
 
-        QAction *timeAction = new QAction(tr("Display Timecodes"), this);
+        QAction *timeAction = new QAction(QIcon::fromTheme("visible"),
+                                          tr("Display Timecodes"), this);
         timeAction->setCheckable(true);
         timeAction->setChecked(mDisplayTime);
         menu.addAction(timeAction);
 
-        QAction *framesAction = new QAction(tr("Display Frames"), this);
+        QAction *framesAction = new QAction(QIcon::fromTheme("visible"),
+                                            tr("Display Frames"), this);
         framesAction->setCheckable(true);
         framesAction->setChecked(!mDisplayTime);
         menu.addAction(framesAction);
 
         bool hasMarker = mCurrentCanvas ? mCurrentCanvas->hasMarker(mCurrentCanvas->getCurrentFrame()) : false;
 
-        const auto setFrameInAct = new QAction(tr("Set Frame In"), this);
-        const auto setFrameOutAct = new QAction(tr("Set Frame Out"), this);
-        const auto clearFrameOutAct = new QAction(tr("Clear Frame In/Out"), this);
-        const auto setMarkerAct = new QAction(tr(hasMarker ? "Remove Marker" : "Add Marker"), this);
-        const auto clearMarkersAct = new QAction(tr("Clear Markers"), this);
-        const auto splitDurationAct = new QAction(tr("Split Clip"), this);
+        const auto setFrameInAct = new QAction(QIcon::fromTheme("sequence"),
+                                               tr("Set In"), this);
+        const auto setFrameOutAct = new QAction(QIcon::fromTheme("sequence"),
+                                                tr("Set Out"), this);
+        const auto clearFrameOutAct = new QAction(QIcon::fromTheme("trash"),
+                                                  tr("Clear In/Out"), this);
+        const auto setMarkerAct = new QAction(QIcon::fromTheme("dialog-information"),
+                                              tr(hasMarker ? "Remove Marker" : "Add Marker"), this);
+        const auto clearMarkersAct = new QAction(QIcon::fromTheme("trash"),
+                                                 tr("Clear Markers"), this);
+        const auto splitDurationAct = new QAction(QIcon::fromTheme("image-missing"),
+                                                  tr("Split Clip"), this);
 
         menu.addSeparator();
         menu.addAction(setFrameInAct);

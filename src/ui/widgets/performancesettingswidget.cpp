@@ -149,6 +149,7 @@ PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
         mCpuThreadsCapCheck->setFixedHeight(size);
         mRamMBCapCheck->setFixedHeight(size);
         mPathGpuAccCheck->setFixedHeight(size);
+        mAudioDevicesCombo->setFixedHeight(eSizesUI::button);
     });
 
     QTimer::singleShot(250, this,

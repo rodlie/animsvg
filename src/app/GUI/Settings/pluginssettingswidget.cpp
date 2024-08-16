@@ -56,14 +56,14 @@ PluginsSettingsWidget::PluginsSettingsWidget(QWidget *parent)
     mShaderLabel->setToolTip(tr("This location will be scanned for shader plugins during startup."));
     mShaderPath = new QLineEdit(this);
     mShaderPath->setText(AppSupport::getAppShaderEffectsPath());
-    const auto mShaderPathButton = new QPushButton(QIcon::fromTheme("dots"),
+    const auto mShaderPathButton = new QPushButton(QIcon::fromTheme("file_folder"),
                                                    QString(),
                                                    this);
-    mShaderPathButton->setObjectName("FlatButton");
     mShaderPathButton->setFocusPolicy(Qt::NoFocus);
 
     eSizesUI::widget.add(mShaderPathButton, [mShaderPathButton](const int size) {
-        mShaderPathButton->setFixedSize(size, size);
+        Q_UNUSED(size)
+        mShaderPathButton->setFixedSize(eSizesUI::button, eSizesUI::button);
     });
 
     mShaderLayout->addWidget(mShaderLabel);

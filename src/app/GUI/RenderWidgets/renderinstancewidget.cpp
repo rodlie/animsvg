@@ -468,7 +468,7 @@ OutputProfilesListButton::OutputProfilesListButton(RenderInstanceWidget *parent)
     QPushButton(parent) {
     mParentWidget = parent;
     setText(tr("Profiles"));
-    setIcon(QIcon::fromTheme("file_movie"));
+    setIcon(QIcon::fromTheme("renderlayers"));
     setToolTip(tr("Select output profile"));
 }
 
