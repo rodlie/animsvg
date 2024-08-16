@@ -1298,6 +1298,11 @@ void MainWindow::setupMenuBar()
                                             "cmdPalette",
                                             "Ctrl+Space").toString()));
 
+    help->addSeparator();
+    help->addAction(QIcon::fromTheme("renderlayers"),
+                    tr("Reinstall default render profiles"),
+                    this, &MainWindow::askInstallRenderPresets);
+
     if (eSettings::instance().fToolBarActionRender) {
         mRenderVideoAct = mToolbar->addAction(QIcon::fromTheme("render_animation"),
                                               tr("Render"),
@@ -1474,12 +1479,14 @@ void MainWindow::closedRenderQueueWindow()
                                             tr("Queue"));
 }
 
-void MainWindow::initRenderPresets()
+void MainWindow::initRenderPresets(const bool reinstall)
 {
-    if (!AppSupport::getSettings("settings",
-                                 "firstRunRenderPresets",
-                                 true).toBool()) { return; }
+    const bool doInstall = reinstall ? true : AppSupport::getSettings("settings",
+                                                                      "firstRunRenderPresets",
+                                                                      true).toBool();
+    if (!doInstall) { return; }
     const QString path = AppSupport::getAppOutputProfilesPath();
+    if (path.isEmpty() || !QFileInfo(path).isWritable()) { return; }
 
     QStringList presets;
     presets << "001-friction-preset-mp4-h264.conf";
@@ -1491,9 +1498,9 @@ void MainWindow::initRenderPresets()
 
     for (const auto &preset : presets) {
         QString filePath(QString("%1/%2").arg(path, preset));
-        if (QFile::exists(filePath)) { continue; }
+        if (QFile::exists(filePath) && !reinstall) { continue; }
         QFile file(filePath);
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
             QFile res(QString(":/presets/render/%1").arg(preset));
             if (res.open(QIODevice::ReadOnly | QIODevice::Text)) {
                 file.write(res.readAll());
@@ -1504,6 +1511,16 @@ void MainWindow::initRenderPresets()
     }
 
     AppSupport::setSettings("settings", "firstRunRenderPresets", false);
+}
+
+void MainWindow::askInstallRenderPresets()
+{
+    const auto result = QMessageBox::question(this,
+                                              tr("Install Render Profiles"),
+                                              tr("Are you sure you want to install the default render profiles?"
+                                                 "<br><br><i>Note that a restart of the application is required to detect new profiles.</i>"));
+    if (result != QMessageBox::Yes) { return; }
+    initRenderPresets(true);
 }
 
 void MainWindow::openWelcomeDialog()

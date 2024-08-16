@@ -439,7 +439,8 @@ private:
     void openRenderQueueWindow();
     void closedRenderQueueWindow();
 
-    void initRenderPresets();
+    void initRenderPresets(const bool reinstall = false);
+    void askInstallRenderPresets();
 
 protected:
     void keyPressEvent(QKeyEvent *event);
