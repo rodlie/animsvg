@@ -100,9 +100,9 @@ void RenderInstanceWidget::iniGUI()
     renderSettingsLabelWidget->setObjectName("darkWidget");
     QVBoxLayout *renderSettingsLayout = new QVBoxLayout(renderSettingsLabelWidget);
 
-    mRenderSettingsButton = new QPushButton(tr("Scene ..."));
+    mRenderSettingsButton = new QPushButton(QIcon::fromTheme("sequence"), tr("Scene Properties"));
     mRenderSettingsButton->setFocusPolicy(Qt::NoFocus);
-    mRenderSettingsButton->setObjectName("renderSettings");
+    //mRenderSettingsButton->setObjectName("renderSettings");
     mRenderSettingsButton->setSizePolicy(QSizePolicy::Preferred,
                                         QSizePolicy::Preferred);
     connect(mRenderSettingsButton, &QPushButton::pressed,
@@ -121,12 +121,14 @@ void RenderInstanceWidget::iniGUI()
     QVBoxLayout *outputSettingsLayout = new QVBoxLayout(outputSettingsLabelWidget);
 
     mOutputSettingsProfilesButton = new OutputProfilesListButton(this);
-    mOutputSettingsProfilesButton->setObjectName("FlatButton");
+    //mOutputSettingsProfilesButton->setObjectName("FlatButton");
     mOutputSettingsProfilesButton->setFocusPolicy(Qt::NoFocus);
+    mOutputSettingsProfilesButton->setSizePolicy(QSizePolicy::Expanding,
+                                                 QSizePolicy::Preferred);
     connect(mOutputSettingsProfilesButton, &OutputProfilesListButton::profileSelected,
             this, &RenderInstanceWidget::outputSettingsProfileSelected);
 
-    mOutputSettingsButton = new QPushButton(tr("Output ..."));
+    mOutputSettingsButton = new QPushButton(QIcon::fromTheme("file_movie"), tr("Format"));
     mOutputSettingsButton->setFocusPolicy(Qt::NoFocus);
     mOutputSettingsButton->setSizePolicy(QSizePolicy::Expanding,
                                          QSizePolicy::Preferred);
@@ -143,10 +145,10 @@ void RenderInstanceWidget::iniGUI()
     outputSettingsLayout->addWidget(outputSettingsOptWidget);
     outputSettingsLayout->addWidget(mOutputSettingsDisplayWidget);
 
-    mOutputDestinationButton = new QPushButton(QIcon::fromTheme("dots"),
+    mOutputDestinationButton = new QPushButton(QIcon::fromTheme("disk_drive"),
                                                QString(),
                                                this);
-    mOutputDestinationButton->setObjectName("FlatButton");
+    //mOutputDestinationButton->setObjectName("FlatButton");
     mOutputDestinationButton->setFocusPolicy(Qt::NoFocus);
     mOutputDestinationButton->setToolTip(tr("Select output file"));
     connect(mOutputDestinationButton, &QPushButton::pressed,
@@ -155,7 +157,7 @@ void RenderInstanceWidget::iniGUI()
     mPlayButton = new QPushButton(QIcon::fromTheme("play"),
                                             QString(),
                                             this);
-    mPlayButton->setObjectName("FlatButton");
+    //mPlayButton->setObjectName("FlatButton");
     mPlayButton->setFocusPolicy(Qt::NoFocus);
     mPlayButton->setToolTip(tr("Open in default application"));
     connect(mPlayButton, &QPushButton::pressed,
@@ -177,15 +179,15 @@ void RenderInstanceWidget::iniGUI()
     eSizesUI::widget.add(mOutputSettingsProfilesButton, [this](const int size) {
         mRenderSettingsButton->setFixedHeight(size);
         mOutputSettingsButton->setFixedHeight(size);
-        mOutputSettingsProfilesButton->setFixedSize(QSize(size, size));
+        mOutputSettingsProfilesButton->setFixedHeight(size);
         mOutputDestinationButton->setFixedSize(QSize(size, size));
         mPlayButton->setFixedSize(QSize(size, size));
         mOutputDestinationLineEdit->setFixedHeight(size);
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
+        /*if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
             mOutputSettingsProfilesButton->setIconSize(QSize(size, size));
             mOutputDestinationButton->setIconSize(QSize(size, size));
             mPlayButton->setIconSize(QSize(size, size));
-        }
+        }*/
     });
 
     QWidget *outputDestinationWidget = new QWidget(this);
@@ -194,8 +196,8 @@ void RenderInstanceWidget::iniGUI()
     outputDesinationLayout->setMargin(0);
 
     outputDesinationLayout->addWidget(mOutputDestinationButton);
-    outputDesinationLayout->addWidget(mPlayButton);
     outputDesinationLayout->addWidget(mOutputDestinationLineEdit);
+    outputDesinationLayout->addWidget(mPlayButton);
 
     outputSettingsLayout->addWidget(outputDestinationWidget);
 
@@ -454,7 +456,8 @@ void RenderInstanceWidget::updateRenderSettings()
 OutputProfilesListButton::OutputProfilesListButton(RenderInstanceWidget *parent) :
     QPushButton(parent) {
     mParentWidget = parent;
-    setIcon(QIcon::fromTheme("dots"));
+    setText(tr("Profiles"));
+    setIcon(QIcon::fromTheme("renderlayers"));
     setToolTip(tr("Select output profile"));
 }
 
