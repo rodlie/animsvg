@@ -197,6 +197,21 @@ int main(int argc, char *argv[])
 
     ThemeSupport::setupTheme(eSizesUI::widget);
 
+#ifdef Q_OS_LINUX
+    if (AppSupport::isAppPortable()) {
+        if (!AppSupport::hasXDGDesktopIntegration()) {
+            const auto ask = QMessageBox::question(nullptr,
+                                                   QObject::tr("Setup Desktop Integration?"),
+                                                   QObject::tr("Would you like to setup desktop integration?"
+                                                               " This will add Friction to your application launcher"
+                                                               " and add mime type for project files."));
+            if (ask == QMessageBox::Yes) {
+                AppSupport::setupXDGDesktopIntegration();
+            }
+        }
+    }
+#endif
+
     //#ifdef QT_DEBUG
     //    const qint64 pId = QCoreApplication::applicationPid();
     //    QProcess * const process = new QProcess(&w);

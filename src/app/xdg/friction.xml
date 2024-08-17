@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+  <mime-type type="application/x-graphics.friction.Friction">
+    <comment>Friction</comment>
+    <glob pattern="*.friction"/>
+  </mime-type>
+</mime-info>

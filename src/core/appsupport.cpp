@@ -682,3 +682,183 @@ bool AppSupport::isAppPortable()
 {
     return QFile::exists(QString("%1/portable.txt").arg(getAppPath()));
 }
+
+bool AppSupport::hasXDGDesktopIntegration()
+{
+    QString path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    if (path.isEmpty() ||
+        !path.startsWith(QDir::homePath())) { path = QString("%1/.local/share").arg(QDir::homePath()); }
+
+    QStringList files;
+    QString desktop = "applications/graphics.friction.Friction.desktop";
+    files << desktop;
+    files << "mime/packages/graphics.friction.Friction.xml";
+    files << "icons/hicolor/scalable/apps/graphics.friction.Friction.svg";
+    files << "icons/hicolor/256x256/apps/graphics.friction.Friction.png";
+    files << "icons/hicolor/scalable/mimetypes/application-x-graphics.friction.Friction.svg";
+    files << "icons/hicolor/256x256/mimetypes/application-x-graphics.friction.Friction.png";
+
+    for (const auto &file : files) {
+        if (!QFile::exists(QString("%1/%2").arg(path, file))) {
+            qDebug() << "not found!" << file;
+            return false;
+        }
+    }
+
+    QString desktopFilePath(QString("%1/%2").arg(path, desktop));
+    if (QFile::exists(desktopFilePath)) {
+        QSettings dotDesktop(desktopFilePath, QSettings::IniFormat);
+        dotDesktop.beginGroup("Desktop Entry");
+        QString exec = dotDesktop.value("Exec").toString().simplified();
+        dotDesktop.endGroup();
+        if (exec.isEmpty() || !exec.startsWith(getAppPath())) { return false; }
+    }
+    return true;
+}
+
+bool AppSupport::setupXDGDesktopIntegration()
+{
+    QString path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    if (path.isEmpty() ||
+        !path.startsWith(QDir::homePath())) { path = QString("%1/.local/share").arg(QDir::homePath()); }
+
+    if (!QFile::exists(path)) {
+        QDir dir(path);
+        if (!dir.mkpath(path)) { return false; }
+    }
+
+    const QString resDesktop = ":/xdg/friction.desktop";
+    const QString resMime = ":/xdg/friction.xml";
+    const QString resSvg = ":/icons/hicolor/scalable/apps/graphics.friction.Friction.svg";
+    const QString resPng = ":/icons/hicolor/256x256/apps/graphics.friction.Friction.png";
+
+    {
+        const QString dirName(QString("%1/applications").arg(path));
+        const QString fileName(QString("%1/graphics.friction.Friction.desktop").arg(dirName));
+        qDebug() << "Checking:" << fileName;
+        if (!QFile::exists(dirName)) {
+            QDir dir(dirName);
+            if (!dir.mkpath(dirName)) { return false; }
+        }
+        bool wrongPath = false;
+        QSettings desktop(fileName, QSettings::IniFormat);
+        desktop.beginGroup("Desktop Entry");
+        QString exec = desktop.value("Exec").toString().simplified();
+        if (!exec.startsWith(getAppPath())) { wrongPath = true; }
+        desktop.endGroup();
+        if (!QFile::exists(fileName) || wrongPath) {
+            QFile file(fileName);
+            if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+                QFile res(resDesktop);
+                if (res.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                    file.write(res.readAll().replace("__FRICTION__",
+                                                     qApp->applicationFilePath().toUtf8()));
+                    res.close();
+                } else { return false; }
+                file.close();
+            } else { return false; }
+        }
+    }
+    {
+        const QString dirName(QString("%1/mime/packages").arg(path));
+        const QString fileName(QString("%1/graphics.friction.Friction.xml").arg(dirName));
+        qDebug() << "Checking:" << fileName;
+        if (!QFile::exists(dirName)) {
+            QDir dir(dirName);
+            if (!dir.mkpath(dirName)) { return false; }
+        }
+        if (!QFile::exists(fileName)) {
+            QFile file(fileName);
+            if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                QFile res(resMime);
+                if (res.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                    file.write(res.readAll());
+                    res.close();
+                } else { return false; }
+                file.close();
+            } else { return false; }
+        }
+    }
+    {
+        const QString dirName(QString("%1/icons/hicolor/scalable/apps").arg(path));
+        const QString fileName(QString("%1/graphics.friction.Friction.svg").arg(dirName));
+        qDebug() << "Checking:" << fileName;
+        if (!QFile::exists(dirName)) {
+            QDir dir(dirName);
+            if (!dir.mkpath(dirName)) { return false; }
+        }
+        if (!QFile::exists(fileName)) {
+            QFile file(fileName);
+            if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                QFile res(resSvg);
+                if (res.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                    file.write(res.readAll());
+                    res.close();
+                } else { return false; }
+                file.close();
+            } else { return false; }
+        }
+    }
+    {
+        const QString dirName(QString("%1/icons/hicolor/256x256/apps").arg(path));
+        const QString fileName(QString("%1/graphics.friction.Friction.png").arg(dirName));
+        qDebug() << "Checking:" << fileName;
+        if (!QFile::exists(dirName)) {
+            QDir dir(dirName);
+            if (!dir.mkpath(dirName)) { return false; }
+        }
+        if (!QFile::exists(fileName)) {
+            QFile file(fileName);
+            if (file.open(QIODevice::WriteOnly)) {
+                QFile res(resPng);
+                if (res.open(QIODevice::ReadOnly)) {
+                    file.write(res.readAll());
+                    res.close();
+                } else { return false; }
+                file.close();
+            } else { return false; }
+        }
+    }
+    {
+        const QString dirName(QString("%1/icons/hicolor/scalable/mimetypes").arg(path));
+        const QString fileName(QString("%1/application-x-graphics.friction.Friction.svg").arg(dirName));
+        qDebug() << "Checking:" << fileName;
+        if (!QFile::exists(dirName)) {
+            QDir dir(dirName);
+            if (!dir.mkpath(dirName)) { return false; }
+        }
+        if (!QFile::exists(fileName)) {
+            QFile file(fileName);
+            if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                QFile res(resSvg);
+                if (res.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                    file.write(res.readAll());
+                    res.close();
+                } else { return false; }
+                file.close();
+            } else { return false; }
+        }
+    }
+    {
+        const QString dirName(QString("%1/icons/hicolor/256x256/mimetypes").arg(path));
+        const QString fileName(QString("%1/application-x-graphics.friction.Friction.png").arg(dirName));
+        qDebug() << dirName << fileName;
+        if (!QFile::exists(dirName)) {
+            QDir dir(dirName);
+            if (!dir.mkpath(dirName)) { return false; }
+        }
+        if (!QFile::exists(fileName)) {
+            QFile file(fileName);
+            if (file.open(QIODevice::WriteOnly)) {
+                QFile res(resPng);
+                if (res.open(QIODevice::ReadOnly)) {
+                    file.write(res.readAll());
+                    res.close();
+                } else { return false; }
+                file.close();
+            } else { return false; }
+        }
+    }
+
+    return true;
+}

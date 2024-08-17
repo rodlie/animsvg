@@ -119,6 +119,8 @@ public:
     static int getProjectVersion(const QString &fileName = QString());
     static const QPair<QStringList,bool> hasWriteAccess();
     static bool isAppPortable();
+    static bool hasXDGDesktopIntegration();
+    static bool setupXDGDesktopIntegration();
 };
 
 #endif // APPSUPPORT_H

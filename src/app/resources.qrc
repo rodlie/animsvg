@@ -32,5 +32,8 @@
         <file>presets/render/003-friction-preset-prores-444.conf</file>
         <file>presets/render/002-friction-preset-mp4-h264-mp3.conf</file>
         <file>presets/render/001-friction-preset-mp4-h264.conf</file>
+        <file>xdg/friction.xml</file>
+        <file>xdg/friction.desktop</file>
+        <file>icons/hicolor/scalable/apps/graphics.friction.Friction.svg</file>
     </qresource>
 </RCC>
