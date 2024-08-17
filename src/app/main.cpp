@@ -130,10 +130,15 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_LINUX
     if (AppSupport::isAppPortable()) {
-        if (QApplication::arguments().contains("--xdg-remove")) {
+        const auto args = QApplication::arguments();
+        if (args.contains("--xdg-remove")) {
             const bool removedXDG = AppSupport::removeXDGDesktopIntegration();
             qWarning() << "Removed XDG Integration:" << removedXDG;
             return removedXDG ? 0 : -1;
+        } else if (args.contains("--xdg-install")) {
+            const bool installedXDG = AppSupport::setupXDGDesktopIntegration();
+            qWarning() << "Installed XDG Integration:" << installedXDG;
+            return installedXDG ? 0 : -1;
         }
     }
 #endif
@@ -208,10 +213,13 @@ int main(int argc, char *argv[])
     if (AppSupport::isAppPortable()) {
         if (!AppSupport::hasXDGDesktopIntegration()) {
             const auto ask = QMessageBox::question(nullptr,
-                                                   QObject::tr("Setup Desktop Integration?"),
+                                                   QObject::tr("Setup Desktop Integration"),
                                                    QObject::tr("Would you like to setup desktop integration?"
                                                                " This will add Friction to your application launcher"
-                                                               " and add mime type for project files."));
+                                                               " and add required mime types.<br><br>"
+                                                               "You also can manage the desktop integration with:"
+                                                               "<br><br><code>friction --xdg-install</code>"
+                                                               "<br><code>friction --xdg-remove</code>"));
             if (ask == QMessageBox::Yes) {
                 if (!AppSupport::setupXDGDesktopIntegration()) {
                     QMessageBox::warning(nullptr,
@@ -219,6 +227,8 @@ int main(int argc, char *argv[])
                                          QObject::tr("Failed to install the required files for desktop integration,"
                                                      " please check your permissions."));
                 }
+            } else {
+                AppSupport::setSettings("portable", "ignoreXDG", true);
             }
         }
     }

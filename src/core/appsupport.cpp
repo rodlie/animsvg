@@ -686,6 +686,9 @@ bool AppSupport::isAppPortable()
 
 bool AppSupport::hasXDGDesktopIntegration()
 {
+    const bool ignoreXDG = getSettings("portable", "ignoreXDG", false).toBool();
+    if (ignoreXDG) { return true; }
+
     QString path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
     if (path.isEmpty() ||
         !path.startsWith(QDir::homePath())) { path = QString("%1/.local/share").arg(QDir::homePath()); }
@@ -881,7 +884,10 @@ bool AppSupport::removeXDGDesktopIntegration()
     for (const auto &file : files) {
         QFile fileName(QString("%1/%2").arg(path, file));
         if (fileName.exists()) {
-            if (!fileName.remove()) { return false; }
+            if (!fileName.remove()) {
+                qWarning() << "Failed to remove" << fileName;
+                return false;
+            }
         }
     }
     return true;
