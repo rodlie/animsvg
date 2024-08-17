@@ -85,6 +85,9 @@ copy "%SDK_DIR%\bin\avutil-56.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\swresample-3.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\swscale-5.dll" "%OUTPUT_DIR%\"
 
+REM enable portable mode
+type NUL > "%OUTPUT_DIR%\portable.txt"
+
 cd "%CWD%\build\output"
 
 7z a -mx9 friction-%VERSION%-windows-x64.7z friction-%VERSION%
