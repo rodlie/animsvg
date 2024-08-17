@@ -250,10 +250,8 @@ const QSize ThemeSupport::getIconSize(const int size)
     QSize requestedSize(size, size);
     const auto iconSizes = getAvailableIconSizes();
     bool hasIconSize = iconSizes.contains(requestedSize);
-    qDebug() << "requested icon size" << size  << hasIconSize << "available" << iconSizes;
     if (hasIconSize) { return requestedSize; }
     const auto foundIconSize = findClosestIconSize(size);
-    qDebug() << "found icon size replacement" << foundIconSize;
     return foundIconSize;
 }
 

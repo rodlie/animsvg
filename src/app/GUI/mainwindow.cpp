@@ -2296,7 +2296,6 @@ void MainWindow::openRendererWindow()
 void MainWindow::cmdAddAction(QAction *act)
 {
     if (!act || eSettings::instance().fCommandPalette.contains(act)) { return; }
-    qDebug() << "command palette add action" << act->text() << act->toolTip();
     eSettings::sInstance->fCommandPalette.append(act);
 }
 
