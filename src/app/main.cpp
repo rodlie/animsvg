@@ -128,11 +128,18 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     setlocale(LC_NUMERIC, "C");
 
+#ifdef Q_OS_LINUX
+    if (AppSupport::isAppPortable()) {
+        if (QApplication::arguments().contains("--xdg-remove")) {
+            const bool removedXDG = AppSupport::removeXDGDesktopIntegration();
+            qWarning() << "Removed XDG Integration:" << removedXDG;
+            return removedXDG ? 0 : -1;
+        }
+    }
+#endif
+
 #ifdef Q_OS_WIN
-// we ship a custom build of Qt 5.12.12 (with this feature backported) on Windows, so ignore this check
-// #if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
     QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
-// #endif
 #endif
 
 #ifndef Q_OS_DARWIN
@@ -206,7 +213,12 @@ int main(int argc, char *argv[])
                                                                " This will add Friction to your application launcher"
                                                                " and add mime type for project files."));
             if (ask == QMessageBox::Yes) {
-                AppSupport::setupXDGDesktopIntegration();
+                if (!AppSupport::setupXDGDesktopIntegration()) {
+                    QMessageBox::warning(nullptr,
+                                         QObject::tr("Desktop Integration Failed"),
+                                         QObject::tr("Failed to install the required files for desktop integration,"
+                                                     " please check your permissions."));
+                }
             }
         }
     }

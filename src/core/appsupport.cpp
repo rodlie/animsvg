@@ -862,3 +862,26 @@ bool AppSupport::setupXDGDesktopIntegration()
 
     return true;
 }
+
+bool AppSupport::removeXDGDesktopIntegration()
+{
+    QString path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    if (path.isEmpty() ||
+        !path.startsWith(QDir::homePath())) { path = QString("%1/.local/share").arg(QDir::homePath()); }
+
+    QStringList files;
+    files << "applications/graphics.friction.Friction.desktop";
+    files << "mime/packages/graphics.friction.Friction.xml";
+    files << "icons/hicolor/scalable/apps/graphics.friction.Friction.svg";
+    files << "icons/hicolor/256x256/apps/graphics.friction.Friction.png";
+    files << "icons/hicolor/scalable/mimetypes/application-x-graphics.friction.Friction.svg";
+    files << "icons/hicolor/256x256/mimetypes/application-x-graphics.friction.Friction.png";
+
+    for (const auto &file : files) {
+        QFile fileName(QString("%1/%2").arg(path, file));
+        if (fileName.exists()) {
+            if (!fileName.remove()) { return false; }
+        }
+    }
+    return true;
+}

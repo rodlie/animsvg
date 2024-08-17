@@ -121,6 +121,7 @@ public:
     static bool isAppPortable();
     static bool hasXDGDesktopIntegration();
     static bool setupXDGDesktopIntegration();
+    static bool removeXDGDesktopIntegration();
 };
 
 #endif // APPSUPPORT_H

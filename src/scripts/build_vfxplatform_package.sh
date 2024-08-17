@@ -171,14 +171,13 @@ rpmbuild -bb rpm.spec
 cp -a ${HOME}/rpmbuild/RPMS/*/*.rpm ${DISTFILES}/builds/${VERSION}/
 
 # Portable
-FRICTION_PORTABLE=${FRICTION_PKG}-portable-linux-x86_64
+FRICTION_PORTABLE=${FRICTION_PKG}-linux-x86_64
 FRICTION_PORTABLE_DIR=${BUILD}/${FRICTION_PORTABLE}
 cd ${BUILD}
 rm -f ${FRICTION_PORTABLE_DIR} || true
 mv ${BUILD}/${FRICTION_PKG} ${FRICTION_PORTABLE_DIR}
 (cd ${FRICTION_PORTABLE_DIR} ;
-cp ${BUILD}/friction/src/scripts/desktop_integration.sh .
-chmod +x desktop_integration.sh
+touch bin/portable.txt
 rm -rf usr
 mv opt/friction/* .
 rm -rf opt share/doc
@@ -186,12 +185,12 @@ ln -sf bin/friction .
 )
 cd ${BUILD}
 tar cvf ${FRICTION_PORTABLE}.tar ${FRICTION_PORTABLE}
-bzip2 -9 ${FRICTION_PORTABLE}.tar
-cp -a ${FRICTION_PORTABLE}.tar.bz2 ${DISTFILES}/builds/${VERSION}/
+xz -9 ${FRICTION_PORTABLE}.tar
+cp -a ${FRICTION_PORTABLE}.tar.xz ${DISTFILES}/builds/${VERSION}/
 
 # AppImage
 (cd ${FRICTION_PORTABLE_DIR} ;
-rm -f desktop_integration.sh
+rm -f bin/portable.txt
 rm -f friction
 mkdir usr
 mv lib bin plugins share usr/
@@ -202,14 +201,6 @@ ln -sf usr/share/icons/hicolor/256x256/apps/${APPID}.png .DirIcon
 )
 tar xf ${DISTFILES}/linux/appimagetool-${APPIMAGETOOL}.tar.bz2
 ARCH=x86_64 ./appimagetool/AppRun --verbose --runtime-file=${DISTFILES}/linux/runtime-x86_64-${APPIMAGERUNTIME}.bin ${FRICTION_PORTABLE}
-
-# TODO
-# FRICTION_ISO=${FRICTION_PKG}-x86_64.squashfs
-# FRICTION_APP=${FRICTION_PKG}-test-x86_64.AppImage
-# mksquashfs ${FRICTION_PORTABLE} ${FRICTION_ISO} -comp zstd -root-owned -noappend -b 1M -mkfs-time 0
-# cat ${DISTFILES}/linux/runtime-x86_64-${APPIMAGERUNTIME}.bin > ${FRICTION_APP}
-# cat ${FRICTION_ISO} >> ${FRICTION_APP}
-# chmod a+x ${FRICTION_ISO}
 
 cp -a *.AppImage ${DISTFILES}/builds/${VERSION}/
 
