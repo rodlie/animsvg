@@ -680,7 +680,8 @@ const QPair<QStringList, bool> AppSupport::hasWriteAccess()
 
 bool AppSupport::isAppPortable()
 {
-    return QFile::exists(QString("%1/portable.txt").arg(getAppPath()));
+    const QString path = getAppPath();
+    return QFile::exists(QString("%1/portable.txt").arg(path)) && QFileInfo(path).isWritable();
 }
 
 bool AppSupport::hasXDGDesktopIntegration()
