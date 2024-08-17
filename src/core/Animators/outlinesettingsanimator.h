@@ -113,6 +113,8 @@ public:
                  QDomElement& parent,
                  const FrameRange& visRange,
                  const bool asFill = false) const;
+    void saveCapsSVG(QDomElement& parent) const;
+
 protected:
     QDomElement writeBrushPaint(const XevExporter& exp) const;
     void readBrushPaint(const QDomElement& ele,
