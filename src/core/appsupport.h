@@ -119,7 +119,6 @@ public:
     static int getProjectVersion(const QString &fileName = QString());
     static const QPair<QStringList,bool> hasWriteAccess();
     static bool isAppPortable();
-    static bool isAppImage();
     static const QString getAppImagePath();
     static bool hasXDGDesktopIntegration();
     static bool setupXDGDesktopIntegration();

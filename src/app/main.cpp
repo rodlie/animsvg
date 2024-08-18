@@ -129,7 +129,6 @@ int main(int argc, char *argv[])
     setlocale(LC_NUMERIC, "C");
 
 #ifdef Q_OS_LINUX
-    qWarning() << "AppImage?" << AppSupport::getAppImagePath();
     if (AppSupport::isAppPortable()) {
         const auto args = QApplication::arguments();
         if (args.contains("--xdg-remove")) {
@@ -213,14 +212,18 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_LINUX
     if (AppSupport::isAppPortable()) {
         if (!AppSupport::hasXDGDesktopIntegration()) {
+            QString appPath = AppSupport::getAppPath();
+            const QString appimage = AppSupport::getAppImagePath();
+            if (!appimage.isEmpty()) { appPath = appimage; }
+            else { appPath.append("/friction"); }
             const auto ask = QMessageBox::question(nullptr,
                                                    QObject::tr("Setup Desktop Integration"),
                                                    QObject::tr("Would you like to setup desktop integration?"
                                                                " This will add Friction to your application launcher"
                                                                " and add required mime types.<br><br>"
                                                                "You also can manage the desktop integration with:"
-                                                               "<br><br><code>friction --xdg-install</code>"
-                                                               "<br><code>friction --xdg-remove</code>"));
+                                                               "<br><br><code>%1 --xdg-install</code>"
+                                                               "<br><code>%1 --xdg-remove</code>").arg(appPath));
             if (ask == QMessageBox::Yes) {
                 if (!AppSupport::setupXDGDesktopIntegration()) {
                     QMessageBox::warning(nullptr,

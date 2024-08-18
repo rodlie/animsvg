@@ -219,6 +219,10 @@ const QString AppSupport::getAppConfigPath()
                         getAppName());
     if (isAppPortable()) {
         path = QString("%1/config").arg(getAppPath());
+#ifdef Q_OS_LINUX
+        const QString appimage = getAppImagePath();
+        if (!appimage.isEmpty() && QFileInfo(appimage).isWritable()) { path = QString("%1.config").arg(appimage); }
+#endif
     }
     QDir dir(path);
     if (!dir.exists()) { dir.mkpath(path); }
@@ -681,12 +685,13 @@ const QPair<QStringList, bool> AppSupport::hasWriteAccess()
 bool AppSupport::isAppPortable()
 {
     const QString path = getAppPath();
+#ifdef Q_OS_LINUX
+    const QString appimage = getAppImagePath();
+    if (!appimage.isEmpty()) {
+        return QFile::exists(appimage);// && QFileInfo(appimage).isWritable();
+    }
+#endif
     return QFile::exists(QString("%1/portable.txt").arg(path)) && QFileInfo(path).isWritable();
-}
-
-bool AppSupport::isAppImage()
-{
-    return !getAppImagePath().isEmpty();
 }
 
 const QString AppSupport::getAppImagePath()
@@ -721,11 +726,14 @@ bool AppSupport::hasXDGDesktopIntegration()
 
     QString desktopFilePath(QString("%1/%2").arg(path, desktop));
     if (QFile::exists(desktopFilePath)) {
+        QString appPath(qApp->applicationFilePath());
+        const QString appimage = getAppImagePath();
+        if (!appimage.isEmpty() && QFile::exists(appimage)) { appPath = appimage; }
         QSettings dotDesktop(desktopFilePath, QSettings::IniFormat);
         dotDesktop.beginGroup("Desktop Entry");
         QString exec = dotDesktop.value("Exec").toString().simplified();
         dotDesktop.endGroup();
-        if (exec.isEmpty() || !exec.startsWith(getAppPath())) { return false; }
+        if (exec.isEmpty() || !exec.startsWith(appPath)) { return false; }
     }
     return true;
 }
@@ -764,9 +772,12 @@ bool AppSupport::setupXDGDesktopIntegration()
             QFile file(fileName);
             if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
                 QFile res(resDesktop);
+                QString appPath(qApp->applicationFilePath());
+                const QString appimage = getAppImagePath();
+                if (!appimage.isEmpty() && QFile::exists(appimage)) { appPath = appimage; }
                 if (res.open(QIODevice::ReadOnly | QIODevice::Text)) {
                     file.write(res.readAll().replace("__FRICTION__",
-                                                     qApp->applicationFilePath().toUtf8()));
+                                                     appPath.toUtf8()));
                     res.close();
                 } else { return false; }
                 file.close();
