@@ -177,11 +177,11 @@ cd ${BUILD}
 rm -f ${FRICTION_PORTABLE_DIR} || true
 mv ${BUILD}/${FRICTION_PKG} ${FRICTION_PORTABLE_DIR}
 (cd ${FRICTION_PORTABLE_DIR} ;
-touch bin/portable.txt
 rm -rf usr
 mv opt/friction/* .
 rm -rf opt share/doc
 ln -sf bin/friction .
+touch bin/portable.txt
 )
 cd ${BUILD}
 tar cvf ${FRICTION_PORTABLE}.tar ${FRICTION_PORTABLE}
