@@ -684,6 +684,16 @@ bool AppSupport::isAppPortable()
     return QFile::exists(QString("%1/portable.txt").arg(path)) && QFileInfo(path).isWritable();
 }
 
+bool AppSupport::isAppImage()
+{
+    return !getAppImagePath().isEmpty();
+}
+
+const QString AppSupport::getAppImagePath()
+{
+    return QString(qgetenv("APPIMAGE"));
+}
+
 bool AppSupport::hasXDGDesktopIntegration()
 {
     const bool ignoreXDG = getSettings("portable", "ignoreXDG", false).toBool();

@@ -129,6 +129,7 @@ int main(int argc, char *argv[])
     setlocale(LC_NUMERIC, "C");
 
 #ifdef Q_OS_LINUX
+    qWarning() << "AppImage?" << AppSupport::getAppImagePath();
     if (AppSupport::isAppPortable()) {
         const auto args = QApplication::arguments();
         if (args.contains("--xdg-remove")) {
