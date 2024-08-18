@@ -218,12 +218,14 @@ const QString AppSupport::getAppConfigPath()
                    .arg(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation),
                         getAppName());
     if (isAppPortable()) {
-        path = QString("%1/config").arg(getAppPath());
+        const QString appPath = getAppPath();
+        if (QFileInfo(appPath).isWritable()) { path = QString("%1/config").arg(appPath); }
 #ifdef Q_OS_LINUX
         const QString appimage = getAppImagePath();
         if (!appimage.isEmpty() && QFileInfo(appimage).isWritable()) { path = QString("%1.config").arg(appimage); }
 #endif
     }
+    qWarning() << "Friction configuration path" << path;
     QDir dir(path);
     if (!dir.exists()) { dir.mkpath(path); }
     return path;
