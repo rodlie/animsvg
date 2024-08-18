@@ -225,7 +225,6 @@ const QString AppSupport::getAppConfigPath()
         if (!appimage.isEmpty() && QFileInfo(appimage).isWritable()) { path = QString("%1.config").arg(appimage); }
 #endif
     }
-    qWarning() << "Friction configuration path" << path;
     QDir dir(path);
     if (!dir.exists()) { dir.mkpath(path); }
     return path;

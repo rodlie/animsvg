@@ -212,10 +212,9 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_LINUX
     if (AppSupport::isAppPortable()) {
         if (!AppSupport::hasXDGDesktopIntegration()) {
-            QString appPath = AppSupport::getAppPath();
+            QString appPath("friction");
             const QString appimage = AppSupport::getAppImagePath();
-            if (!appimage.isEmpty()) { appPath = appimage; }
-            else { appPath.append("/friction"); }
+            if (!appimage.isEmpty()) { appPath = appimage.split("/").takeLast(); }
             const auto ask = QMessageBox::question(nullptr,
                                                    QObject::tr("Setup Desktop Integration"),
                                                    QObject::tr("Would you like to setup desktop integration?"
