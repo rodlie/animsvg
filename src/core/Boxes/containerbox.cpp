@@ -177,36 +177,57 @@ OutlineSettingsAnimator *ContainerBox::getStrokeSettings() const {
     return mContainedBoxes.last()->getStrokeSettings();
 }
 
-class GroupSaverSVG : public ComplexTask {
+class GroupSaverSVG : public ComplexTask
+{
 public:
-    GroupSaverSVG(const ContainerBox* const src, SvgExporter& exp,
-                  QDomElement& ele, const FrameRange& visRange) :
-        ComplexTask(src->getContainedBoxesCount(),
-                    "SVG " + src->prp_getName()),
-        mSrc(src), mExp(exp), mEle(ele), mVisRange(visRange) {}
+    GroupSaverSVG(const ContainerBox* const src,
+                  SvgExporter& exp,
+                  QDomElement& ele,
+                  const FrameRange& visRange)
+        : ComplexTask(src->getContainedBoxesCount(), "SVG " + src->prp_getName())
+        , mSrc(src)
+        , mExp(exp)
+        , mEle(ele)
+        , mVisRange(visRange)
+    {
+        // check for mask (DstIn)
+        if (mSrc->isLayer()) {
+            const auto& boxes = mSrc->getContainedBoxes();
+            for (const auto &box : boxes) {
+                if (box->getBlendMode() == SkBlendMode::kDstIn) {
+                    mItemMaskId = box->prp_getName();
+                    break;
+                }
+            }
+            if (!mItemMaskId.isEmpty()) {
+                mEle.setAttribute("mask", QString("url(#%1)").arg(mItemMaskId));
+            }
+        }
+    }
 
     void nextStep() override {
-        if(!mSrc) return cancel();
-        if(setValue(mI)) return;
-        if(done()) return;
+        if (!mSrc) { return cancel(); }
+        if (setValue(mI)) { return; }
+        if (done()) { return; }
 
         const auto& boxes = mSrc->getContainedBoxes();
         const int id = boxes.count() - ++mI;
-        if(id >= boxes.count()) return finish();
+        if (id >= boxes.count()) { return finish(); }
         const auto& box = boxes.at(id);
-        if(!box->isVisible()) return nextStep();
-        const auto task = box->saveSVGWithTransform(mExp, mEle, mVisRange);
-        if(task) {
-            addTask(task->ref<eTask>());
-        } else {
-            addEmptyTask();
-        }
+        if (!box->isVisible()) { return nextStep(); }
+        const auto task = box->saveSVGWithTransform(mExp,
+                                                    mEle,
+                                                    mVisRange,
+                                                    mItemMaskId);
+        if (task) { addTask(task->ref<eTask>()); }
+        else { addEmptyTask(); }
     }
 private:
     const QPointer<const ContainerBox> mSrc;
     SvgExporter& mExp;
     QDomElement& mEle;
     const FrameRange mVisRange;
+    QString mItemMaskId;
 
     int mI = 0;
 };
