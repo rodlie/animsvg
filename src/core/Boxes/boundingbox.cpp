@@ -1344,8 +1344,11 @@ void BoundingBox::renderDataFinished(BoxRenderData *renderData) {
 //    }
 //}
 
-eTask* BoundingBox::saveSVGWithTransform(SvgExporter& exp, QDomElement& parent,
-                                         const FrameRange& parentVisRange) const {
+eTask* BoundingBox::saveSVGWithTransform(SvgExporter& exp,
+                                         QDomElement& parent,
+                                         const FrameRange& parentVisRange,
+                                         const QString &maskId) const
+{
     const auto visRange = parentVisRange*prp_absInfluenceRange();
     const auto task = enve::make_shared<DomEleTask>(exp, visRange);
     exp.addNextTask(task);
@@ -1353,15 +1356,23 @@ eTask* BoundingBox::saveSVGWithTransform(SvgExporter& exp, QDomElement& parent,
     const QPointer<const BoundingBox> ptr = this;
     const auto expPtr = &exp;
     const auto parentPtr = &parent;
-    taskPtr->addDependent({[ptr, taskPtr, expPtr, parentPtr, visRange]() {
+    taskPtr->addDependent({[ptr, taskPtr, expPtr, parentPtr, visRange, maskId]() {
         auto& ele = taskPtr->element();
-        if(ptr) {
+        if (ptr) {
             SvgExportHelpers::assignVisibility(*expPtr, ele, visRange);
             const auto transform = ptr->mTransformAnimator.get();
             const auto transformed = transform->saveSVG(*expPtr, visRange, ele);
             const auto effects = ptr->mRasterEffectsAnimators.get();
             const auto withEffects = effects->saveEffectsSVG(*expPtr, visRange, transformed);
-            parentPtr->appendChild(withEffects);
+
+            if (maskId == ptr->prp_getName()) { // move mask to defs
+                auto& eleMask = taskPtr->initialize("mask");
+                eleMask.setAttribute("id", ptr->prp_getName());
+                eleMask.appendChild(withEffects);
+                expPtr->addToDefs(eleMask);
+            } else {
+                parentPtr->appendChild(withEffects);
+            }
         }
     }, nullptr});
     saveSVG(exp, taskPtr);

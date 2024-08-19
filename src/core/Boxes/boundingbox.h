@@ -434,7 +434,8 @@ public:
     ContainerBox* getFirstParentLayer() const;
 
     eTask* saveSVGWithTransform(SvgExporter& exp, QDomElement& parent,
-                                const FrameRange& parentVisRange) const;
+                                const FrameRange& parentVisRange,
+                                const QString &maskId = QString()) const;
 private:
     void cancelWaitingTasks();
     void afterTotalTransformChanged(const UpdateReason reason);
