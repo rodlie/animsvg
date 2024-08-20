@@ -416,7 +416,7 @@ ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
                                  tr("No preset selected."));
             return;
         }
-        const auto preset = readEasingPreset(filename);
+        const auto preset = AppSupport::readEasingPreset(filename);
         if (!preset.valid) { return; }
         QString script = preset.script;
         script.replace("__START_VALUE__",
@@ -437,7 +437,8 @@ ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
         if (valid) {
             if (easingPresetConvertOnApply->isChecked()) {
                 mTarget->applyExpression(FrameRange{mEasingPresetStartFrameSpin->value(),
-                                                    mEasingPresetEndFrameSpin->value()}, 10, true);
+                                                    mEasingPresetEndFrameSpin->value()},
+                                         10, true, true);
             }
             accept();
         }
@@ -646,57 +647,9 @@ void ExpressionDialog::setCurrentTabId(const int id) {
     mDefinitionsError->setVisible(!first);
 }
 
-const QStringList ExpressionDialog::generateEasingPresets()
-{
-    /*QDir userDir(QString::fromUtf8("%1/easing").arg(AppSupport::getAppUserExPresetsPath()));
-    QDir appDir(QString::fromUtf8("%1/easing").arg(AppSupport::getAppExPresetsPath()));
-    const auto userPresets = userDir.entryInfoList(QStringList() << "*.js", QDir::Files);
-    const auto appPresets = appDir.entryInfoList(QStringList() << "*.js", QDir::Files);
-    QFileInfoList presets;
-    QStringList usable;
-    presets << userPresets << appPresets;
-    for (int i = 0; i < presets.size(); ++i) {
-        qDebug() << "Checking expression preset" << presets.at(i).absoluteFilePath();
-        if (!readEasingPreset(presets.at(i).absoluteFilePath()).valid) { continue; }
-        usable << presets.at(i).absoluteFilePath();
-    }*/
-    QStringList presets;
-    presets << ":/easing/presets/easeInBack.js"
-            << ":/easing/presets/easeInBounce.js"
-            << ":/easing/presets/easeInCirc.js"
-            << ":/easing/presets/easeInCubic.js"
-            << ":/easing/presets/easeInElastic.js"
-            << ":/easing/presets/easeInExpo.js"
-            << ":/easing/presets/easeInOutBack.js"
-            << ":/easing/presets/easeInOutBounce.js"
-            << ":/easing/presets/easeInOutCirc.js"
-            << ":/easing/presets/easeInOutCubic.js"
-            << ":/easing/presets/easeInOutElastic.js"
-            << ":/easing/presets/easeInOutExpo.js"
-            << ":/easing/presets/easeInOutQuad.js"
-            << ":/easing/presets/easeInOutQuart.js"
-            << ":/easing/presets/easeInOutQuint.js"
-            << ":/easing/presets/easeInOutSine.js"
-            << ":/easing/presets/easeInQuad.js"
-            << ":/easing/presets/easeInQuart.js"
-            << ":/easing/presets/easeInQuint.js"
-            << ":/easing/presets/easeInSine.js"
-            << ":/easing/presets/easeOutBack.js"
-            << ":/easing/presets/easeOutBounce.js"
-            << ":/easing/presets/easeOutCirc.js"
-            << ":/easing/presets/easeOutCubic.js"
-            << ":/easing/presets/easeOutElastic.js"
-            << ":/easing/presets/easeOutExpo.js"
-            << ":/easing/presets/easeOutQuad.js"
-            << ":/easing/presets/easeOutQuart.js"
-            << ":/easing/presets/easeOutQuint.js"
-            << ":/easing/presets/easeOutSine.js";
-    return presets;
-}
-
 bool ExpressionDialog::populateEasingPresets()
 {
-    const auto presets = generateEasingPresets();
+    const auto presets = AppSupport::getEasingPresets();
     if (presets.size() < 1) { return false; }
     else {
         mEasingPresetsBox->clear();
@@ -866,26 +819,4 @@ bool ExpressionDialog::apply(const bool action) {
 
     Document::sInstance->actionFinished();
     return true;
-}
-
-const ExpressionDialog::ExPreset ExpressionDialog::readEasingPreset(const QString &filename)
-{
-    ExPreset preset;
-    preset.valid = false;
-    if (!QFile::exists(filename)) { return preset; }
-    QFile file(filename);
-    QString js;
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        js = file.readAll();
-        file.close();
-    }
-    if (js.isEmpty()) { return preset; }
-    QStringList parts = js.split("/*_FRICTION_EXPRESSION_PRESET_*/",
-                                 QT_SKIP_EMPTY);
-    if (parts.size() != 3) { return preset; }
-    preset.valid = true;
-    preset.definitions = parts.at(0).trimmed();
-    preset.bindings = parts.at(1).trimmed();
-    preset.script = parts.at(2).trimmed();
-    return preset;
 }

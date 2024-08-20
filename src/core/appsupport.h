@@ -47,6 +47,13 @@ class CORE_EXPORT AppSupport : public QObject
     Q_OBJECT
 
 public:
+    struct ExPreset
+    {
+        bool valid = false;
+        QString definitions;
+        QString bindings;
+        QString script;
+    };
     explicit AppSupport(QObject *parent = nullptr);
     static QVariant getSettings(const QString &group,
                                 const QString &key,
@@ -123,6 +130,8 @@ public:
     static bool hasXDGDesktopIntegration();
     static bool setupXDGDesktopIntegration();
     static bool removeXDGDesktopIntegration();
+    static const ExPreset readEasingPreset(const QString &filename);
+    static const QStringList getEasingPresets();
 };
 
 #endif // APPSUPPORT_H

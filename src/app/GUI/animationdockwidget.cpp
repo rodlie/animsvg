@@ -24,11 +24,10 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "animationdockwidget.h"
+#include "GUI/keysview.h"
+#include "appsupport.h"
 
-#include "GUI/global.h"
-#include "keysview.h"
-#include "widgets/actionbutton.h"
-#include "Private/esettings.h"
+#include <QMenu>
 
 AnimationDockWidget::AnimationDockWidget(QWidget *parent,
                                          KeysView *keysView)
@@ -38,7 +37,10 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
     setSizePolicy(QSizePolicy::Maximum,
                   QSizePolicy::Maximum);
 
-    const QString iconsDir = eSettings::sIconsDir() + "/toolbarButtons";
+    const auto easingButton = new QPushButton(QIcon::fromTheme("easing"),
+                                              QString(), this);
+    easingButton->setFocusPolicy(Qt::NoFocus);
+    generateEasingActions(easingButton, keysView);
 
     QAction *mLineButton = new QAction(QIcon::fromTheme("segmentLine"),
                                        tr("Make Segment Line"), this);
@@ -94,6 +96,7 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
     connect(onlySelectedAct, &QAction::triggered,
             keysView, &KeysView::graphSetOnlySelectedVisible);
 
+    addWidget(easingButton);
     addAction(mLineButton);
     addAction(mCurveButton);
     addAction(mSymmetricButton);
@@ -102,4 +105,24 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
     addAction(mFitToHeightButton);
     //addWidget(valueLines);
     addAction(onlySelectedAct);
+}
+
+void AnimationDockWidget::generateEasingActions(QPushButton *button,
+                                                KeysView *keysView)
+{
+    const auto presets = AppSupport::getEasingPresets();
+    const auto menu = new QMenu(this);
+    for (const auto &preset : presets) {
+        QString title = preset;
+        const auto presetAct = new QAction(QIcon::fromTheme("easing"),
+                                           title.split("/").takeLast().remove(".js"),
+                                           this);
+        presetAct->setData(preset);
+        menu->addAction(presetAct);
+        connect(presetAct, &QAction::triggered,
+                this, [presetAct, keysView]() {
+            keysView->graphEasingAction(presetAct->data().toString());
+        });
+    }
+    if (!menu->isEmpty()) { button->setMenu(menu); }
 }

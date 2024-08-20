@@ -53,23 +53,14 @@ public:
                      QWidget * const parent = nullptr);
 
 private:
-    struct ExPreset
-    {
-        bool valid = false;
-        QString definitions;
-        QString bindings;
-        QString script;
-    };
     using PropertyBindingMap = std::map<QString, QSharedPointer<PropertyBindingBase>>;
     bool getBindings(PropertyBindingMap& bindings);
     void updateScriptBindings();
     void updateScriptDefinitions();
     void updateAllScript();
     void setCurrentTabId(const int id);
-    const QStringList generateEasingPresets();
     bool populateEasingPresets();
     bool apply(const bool action);
-    const ExPreset readEasingPreset(const QString &filename);
 
     QrealAnimator* const mTarget;
 

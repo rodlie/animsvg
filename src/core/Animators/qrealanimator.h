@@ -168,9 +168,11 @@ public:
 
     void setExpression(const qsptr<Expression>& expression);
     void setExpressionAction(const qsptr<Expression>& expression);
+    void setExpressionEasingAction(const qsptr<Expression>& expression);
     void applyExpression(const FrameRange& relRange,
                          const qreal accuracy,
-                         const bool action);
+                         const bool action,
+                         const bool easing = false);
 
     void saveQrealSVG(SvgExporter& exp,
                       QDomElement& parent,

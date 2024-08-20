@@ -914,3 +914,61 @@ bool AppSupport::removeXDGDesktopIntegration()
     }
     return true;
 }
+
+const AppSupport::ExPreset AppSupport::readEasingPreset(const QString &filename)
+{
+    ExPreset preset;
+    preset.valid = false;
+    if (!QFile::exists(filename)) { return preset; }
+    QFile file(filename);
+    QString js;
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        js = file.readAll();
+        file.close();
+    }
+    if (js.isEmpty()) { return preset; }
+    QStringList parts = js.split("/*_FRICTION_EXPRESSION_PRESET_*/",
+                                 QT_SKIP_EMPTY);
+    if (parts.size() != 3) { return preset; }
+    preset.valid = true;
+    preset.definitions = parts.at(0).trimmed();
+    preset.bindings = parts.at(1).trimmed();
+    preset.script = parts.at(2).trimmed();
+    return preset;
+}
+
+const QStringList AppSupport::getEasingPresets()
+{
+    QStringList presets;
+    presets << ":/easing/presets/easeInBack.js"
+            << ":/easing/presets/easeInBounce.js"
+            << ":/easing/presets/easeInCirc.js"
+            << ":/easing/presets/easeInCubic.js"
+            << ":/easing/presets/easeInElastic.js"
+            << ":/easing/presets/easeInExpo.js"
+            << ":/easing/presets/easeInOutBack.js"
+            << ":/easing/presets/easeInOutBounce.js"
+            << ":/easing/presets/easeInOutCirc.js"
+            << ":/easing/presets/easeInOutCubic.js"
+            << ":/easing/presets/easeInOutElastic.js"
+            << ":/easing/presets/easeInOutExpo.js"
+            << ":/easing/presets/easeInOutQuad.js"
+            << ":/easing/presets/easeInOutQuart.js"
+            << ":/easing/presets/easeInOutQuint.js"
+            << ":/easing/presets/easeInOutSine.js"
+            << ":/easing/presets/easeInQuad.js"
+            << ":/easing/presets/easeInQuart.js"
+            << ":/easing/presets/easeInQuint.js"
+            << ":/easing/presets/easeInSine.js"
+            << ":/easing/presets/easeOutBack.js"
+            << ":/easing/presets/easeOutBounce.js"
+            << ":/easing/presets/easeOutCirc.js"
+            << ":/easing/presets/easeOutCubic.js"
+            << ":/easing/presets/easeOutElastic.js"
+            << ":/easing/presets/easeOutExpo.js"
+            << ":/easing/presets/easeOutQuad.js"
+            << ":/easing/presets/easeOutQuart.js"
+            << ":/easing/presets/easeOutQuint.js"
+            << ":/easing/presets/easeOutSine.js";
+    return presets;
+}

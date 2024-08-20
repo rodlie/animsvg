@@ -26,7 +26,10 @@
 #ifndef ANIMATIONDOCKWIDGET_H
 #define ANIMATIONDOCKWIDGET_H
 
+#include "GUI/global.h"
+
 #include <QToolBar>
+#include <QPushButton>
 
 class KeysView;
 
@@ -37,6 +40,9 @@ class AnimationDockWidget : public QToolBar
 public:
     explicit AnimationDockWidget(QWidget *parent,
                                  KeysView *keysView);
+private:
+    void generateEasingActions(QPushButton *button,
+                               KeysView *keysView);
 };
 
 #endif // ANIMATIONDOCKWIDGET_H

@@ -165,6 +165,13 @@ public:
     void graphUpdateVisbile();
     void graphSetOnlySelectedVisible(const bool selectedOnly);
     bool graphIsSelected(GraphAnimator * const anim);
+    void graphEasingAction(const QString &easing);
+    void graphEasingApply(QrealAnimator *anim,
+                          const FrameRange &range,
+                          const QString &easing);
+    bool graphEasingApplyExpression(QrealAnimator *anim,
+                                    const FrameRange &range,
+                                    const QString &easing);
 
     TimelineHighlightWidget *requestHighlighter();
 private:

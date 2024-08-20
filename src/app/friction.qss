@@ -409,7 +409,8 @@ QToolBar#animationDockWidget {
     background: transparent;
 }
 
-QToolBar#animationDockWidget QToolButton {
+QToolBar#animationDockWidget QToolButton,
+QToolBar#animationDockWidget QPushButton {
     background-color: %3;
 }
 
