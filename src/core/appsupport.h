@@ -131,7 +131,7 @@ public:
     static bool setupXDGDesktopIntegration();
     static bool removeXDGDesktopIntegration();
     static const ExPreset readEasingPreset(const QString &filename);
-    static const QStringList getEasingPresets();
+    static const QList<QPair<QString,QString>> getEasingPresets();
 };
 
 #endif // APPSUPPORT_H

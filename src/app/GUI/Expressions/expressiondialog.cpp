@@ -656,12 +656,13 @@ bool ExpressionDialog::populateEasingPresets()
         mEasingPresetsBox->addItem(tr("Select preset ..."));
     }
     for (int i = 0; i < presets.size(); ++i) {
-        QFileInfo file(presets.at(i));
+        QFileInfo file(presets.at(i).second);
         if (mEasingPresetsBox->findText(file.baseName(), Qt::MatchExactly) > -1) {
             qWarning() << "expression preset already exists, skip:" << file.absoluteFilePath();
             continue;
         }
-        mEasingPresetsBox->addItem(file.baseName(),
+        mEasingPresetsBox->addItem(QIcon::fromTheme("easing"),
+                                   presets.at(i).first,
                                    file.absoluteFilePath());
     }
     return true;

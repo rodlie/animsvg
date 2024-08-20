@@ -46,8 +46,10 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
 
     const auto easingButton = new QPushButton(QIcon::fromTheme("easing"),
                                               QString(), this);
-    easingButton->setToolTip(tr("Ease between two keyframes"));
+    easingButton->setToolTip(tr("Ease between keyframes"));
     easingButton->setFocusPolicy(Qt::NoFocus);
+    easingButton->setSizePolicy(QSizePolicy::Expanding,
+                                QSizePolicy::Expanding);
     generateEasingActions(easingButton, keysView);
 
     mLineButton = new QAction(QIcon::fromTheme("segmentLine"),
@@ -113,6 +115,10 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
     addAction(mFitToHeightButton);
     //addWidget(valueLines);
     addAction(mOnlySelectedAct);
+
+    eSizesUI::widget.add(this, [this](const int size) {
+        setIconSize(QSize(size, size));
+    });
 }
 
 void AnimationDockWidget::showGraph(const bool show)
@@ -129,19 +135,44 @@ void AnimationDockWidget::showGraph(const bool show)
 void AnimationDockWidget::generateEasingActions(QPushButton *button,
                                                 KeysView *keysView)
 {
-    const auto presets = AppSupport::getEasingPresets();
+    const QIcon easeIcon(QIcon::fromTheme("easing"));
+    const QString easeInText = tr("Ease In ");
+    const QString easeOutText = tr("Ease Out ");
+    const QString easeInOutText = tr("Ease In/Out ");
+
     const auto menu = new QMenu(this);
+    const auto menuIn = new QMenu(easeInText, menu);
+    const auto menuOut = new QMenu(easeOutText, menu);
+    const auto menuInOut = new QMenu(easeInOutText, menu);
+
+    menuIn->setIcon(easeIcon);
+    menuOut->setIcon(easeIcon);
+    menuInOut->setIcon(easeIcon);
+
+    const auto presets = AppSupport::getEasingPresets();
     for (const auto &preset : presets) {
-        QString title = preset;
-        const auto presetAct = new QAction(QIcon::fromTheme("easing"),
-                                           title.split("/").takeLast().remove(".js"),
-                                           this);
-        presetAct->setData(preset);
-        menu->addAction(presetAct);
+        const auto presetAct = new QAction(easeIcon, QString(), this);
+        presetAct->setData(preset.second);
+        QString title = preset.first;
+        if (title.startsWith(easeInText)) {
+            title.replace(easeInText, "");
+            menuIn->addAction(presetAct);
+        } else if (title.startsWith(easeOutText)) {
+            title.replace(easeOutText, "");
+            menuOut->addAction(presetAct);
+        } else if (title.startsWith(easeInOutText)) {
+            title.replace(easeInOutText, "");
+            menuInOut->addAction(presetAct);
+        }
+        presetAct->setText(title.simplified());
+
         connect(presetAct, &QAction::triggered,
                 this, [presetAct, keysView]() {
             keysView->graphEasingAction(presetAct->data().toString());
         });
     }
-    if (!menu->isEmpty()) { button->setMenu(menu); }
+    menu->addMenu(menuIn);
+    menu->addMenu(menuOut);
+    menu->addMenu(menuInOut);
+    button->setMenu(menu);
 }

@@ -404,14 +404,19 @@ QScrollBar::sub-line:horizontal {
 }
 
 QToolBar#animationDockWidget {
-    margin-bottom: 1em;
-    margin-right: 1em;
     background: transparent;
 }
 
 QToolBar#animationDockWidget QToolButton,
 QToolBar#animationDockWidget QPushButton {
     background-color: %3;
+    border-radius: 2%;
+    border-color: %2;
+}
+
+QToolBar#animationDockWidget QToolButton::hover,
+QToolBar#animationDockWidget QPushButton::hover {
+    border-color: %4;
 }
 
 QTabWidget#TabWidgetWide QTabBar {

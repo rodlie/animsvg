@@ -937,38 +937,42 @@ const AppSupport::ExPreset AppSupport::readEasingPreset(const QString &filename)
     return preset;
 }
 
-const QStringList AppSupport::getEasingPresets()
+const QList<QPair<QString, QString> > AppSupport::getEasingPresets()
 {
-    QStringList presets;
-    presets << ":/easing/presets/easeInBack.js"
-            << ":/easing/presets/easeInBounce.js"
-            << ":/easing/presets/easeInCirc.js"
-            << ":/easing/presets/easeInCubic.js"
-            << ":/easing/presets/easeInElastic.js"
-            << ":/easing/presets/easeInExpo.js"
-            << ":/easing/presets/easeInOutBack.js"
-            << ":/easing/presets/easeInOutBounce.js"
-            << ":/easing/presets/easeInOutCirc.js"
-            << ":/easing/presets/easeInOutCubic.js"
-            << ":/easing/presets/easeInOutElastic.js"
-            << ":/easing/presets/easeInOutExpo.js"
-            << ":/easing/presets/easeInOutQuad.js"
-            << ":/easing/presets/easeInOutQuart.js"
-            << ":/easing/presets/easeInOutQuint.js"
-            << ":/easing/presets/easeInOutSine.js"
-            << ":/easing/presets/easeInQuad.js"
-            << ":/easing/presets/easeInQuart.js"
-            << ":/easing/presets/easeInQuint.js"
-            << ":/easing/presets/easeInSine.js"
-            << ":/easing/presets/easeOutBack.js"
-            << ":/easing/presets/easeOutBounce.js"
-            << ":/easing/presets/easeOutCirc.js"
-            << ":/easing/presets/easeOutCubic.js"
-            << ":/easing/presets/easeOutElastic.js"
-            << ":/easing/presets/easeOutExpo.js"
-            << ":/easing/presets/easeOutQuad.js"
-            << ":/easing/presets/easeOutQuart.js"
-            << ":/easing/presets/easeOutQuint.js"
-            << ":/easing/presets/easeOutSine.js";
+    QList<QPair<QString, QString> > presets;
+
+    presets.push_back({tr("Ease In Back"), ":/easing/presets/easeInBack.js"});
+    presets.push_back({tr("Ease In Bounce"), ":/easing/presets/easeInBounce.js"});
+    presets.push_back({tr("Ease In Circ"), ":/easing/presets/easeInCirc.js"});
+    presets.push_back({tr("Ease In Cubic"), ":/easing/presets/easeInCubic.js"});
+    presets.push_back({tr("Ease In Elastic"), ":/easing/presets/easeInElastic.js"});
+    presets.push_back({tr("Ease In Expo"), ":/easing/presets/easeInExpo.js"});
+    presets.push_back({tr("Ease In Quad"), ":/easing/presets/easeInQuad.js"});
+    presets.push_back({tr("Ease In Quart"), ":/easing/presets/easeInQuart.js"});
+    presets.push_back({tr("Ease In Quint"), ":/easing/presets/easeInQuint.js"});
+    presets.push_back({tr("Ease In Sine"), ":/easing/presets/easeInSine.js"});
+
+    presets.push_back({tr("Ease Out Back"), ":/easing/presets/easeOutBack.js"});
+    presets.push_back({tr("Ease Out Bounce"), ":/easing/presets/easeOutBounce.js"});
+    presets.push_back({tr("Ease Out Circ"), ":/easing/presets/easeOutCirc.js"});
+    presets.push_back({tr("Ease Out Cubic"), ":/easing/presets/easeOutCubic.js"});
+    presets.push_back({tr("Ease Out Elastic"), ":/easing/presets/easeOutElastic.js"});
+    presets.push_back({tr("Ease Out Expo"), ":/easing/presets/easeOutExpo.js"});
+    presets.push_back({tr("Ease Out Quad"), ":/easing/presets/easeOutQuad.js"});
+    presets.push_back({tr("Ease Out Quart"), ":/easing/presets/easeOutQuart.js"});
+    presets.push_back({tr("Ease Out Quint"), ":/easing/presets/easeOutQuint.js"});
+    presets.push_back({tr("Ease Out Sine"), ":/easing/presets/easeOutSine.js"});
+
+    presets.push_back({tr("Ease In/Out Back"), ":/easing/presets/easeInOutBack.js"});
+    presets.push_back({tr("Ease In/Out Bounce"), ":/easing/presets/easeInOutBounce.js"});
+    presets.push_back({tr("Ease In/Out Circ"), ":/easing/presets/easeInOutCirc.js"});
+    presets.push_back({tr("Ease In/Out Cubis"), ":/easing/presets/easeInOutCubic.js"});
+    presets.push_back({tr("Ease In/Out Elastic"), ":/easing/presets/easeInOutElastic.js"});
+    presets.push_back({tr("Ease In/Out Expo"), ":/easing/presets/easeInOutExpo.js"});
+    presets.push_back({tr("Ease In/Out Quad"), ":/easing/presets/easeInOutQuad.js"});
+    presets.push_back({tr("Ease In/Out Quart"), ":/easing/presets/easeInOutQuart.js"});
+    presets.push_back({tr("Ease In/Out Quint"), ":/easing/presets/easeInOutQuint.js"});
+    presets.push_back({tr("Ease In/Out Sine"), ":/easing/presets/easeInOutSine.js"});
+
     return presets;
 }
