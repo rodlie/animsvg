@@ -409,6 +409,11 @@ public:
         mPathEffectsVisible = bT;
     }
 
+    void setEasingAction(const QString &easing)
+    {
+        emit requestEasingAction(easing);
+    }
+
 protected:
     void setCurrentSmartEndPoint(SmartNodePoint* const point);
 
@@ -433,6 +438,7 @@ signals:
     void gradientCreated(SceneBoundGradient*);
     void gradientRemoved(SceneBoundGradient*);
     void openTextEditor();
+    void requestEasingAction(const QString &easing);
 
 public:
     void makePointCtrlsSymmetric();

@@ -505,5 +505,20 @@ void MainWindow::setupMenuExtras()
             cmdAddAction(act);
         }
     }
-    //
+    // Easing
+    {
+        const QIcon easeIcon(QIcon::fromTheme("easing"));
+        const auto presets = AppSupport::getEasingPresets();
+        for (const auto &preset : presets) {
+            const auto presetAct = new QAction(easeIcon, preset.second, this);
+            presetAct->setData(preset.first);
+            cmdAddAction(presetAct);
+            connect(presetAct, &QAction::triggered,
+                    this, [this, presetAct]() {
+                const auto scene = *mDocument.fActiveScene;
+                if (!scene) { return; }
+                scene->setEasingAction(presetAct->text());
+            });
+        }
+    }
 }
