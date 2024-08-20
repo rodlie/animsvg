@@ -384,12 +384,24 @@ ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
     const auto easingPresetButtonLayout = new QHBoxLayout(easingPresetButtonWidget);
     easingPresetButtonLayout->setMargin(0);
 
+    const auto easingPresetConvertOnApply = new QCheckBox(tr("Convert to Keys"), this);
+    easingPresetConvertOnApply->setChecked(AppSupport::getSettings("settings",
+                                                                   "easingPresetConvertOnApply",
+                                                                   true).toBool());
+    easingPresetButtonLayout->addWidget(easingPresetConvertOnApply);
+    connect(easingPresetConvertOnApply, &QCheckBox::clicked,
+            this, [easingPresetConvertOnApply] {
+        AppSupport::setSettings("settings",
+                                "easingPresetConvertOnApply",
+                                easingPresetConvertOnApply->isChecked());
+    });
+
     const auto easingPresetButtonApply = new QPushButton(tr("Apply"), this);
     easingPresetButtonLayout->addWidget(easingPresetButtonApply);
     connect(easingPresetButtonApply,
             &QPushButton::released,
             this,
-            [this]()
+            [this, easingPresetConvertOnApply]()
     {
         if (mEasingPresetEndFrameSpin->value() <= mEasingPresetStartFrameSpin->value()) {
             QMessageBox::warning(this,
@@ -422,7 +434,13 @@ ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
         mScript->clearFillerText();
         mScript->setText(script);
         const bool valid = apply(true);
-        if (valid) { accept(); }
+        if (valid) {
+            if (easingPresetConvertOnApply->isChecked()) {
+                mTarget->applyExpression(FrameRange{mEasingPresetStartFrameSpin->value(),
+                                                    mEasingPresetEndFrameSpin->value()}, 10, true);
+            }
+            accept();
+        }
         else  { mTab->setCurrentIndex(mTabEditor); }
     });
 
