@@ -53,20 +53,32 @@ bool KeysView::graphIsSelected(GraphAnimator * const anim) {
 void KeysView::graphEasingAction(const QString &easing)
 {
     if (mSelectedKeysAnimators.isEmpty()) { return; }
-    for (const auto& anim : mGraphAnimators) {
-        QList<QList<GraphKey*>> segments;
-        anim->graph_getSelectedSegments(segments);
-        for (const auto& segment : segments) {
-            Q_ASSERT(segment.length() > 1);
-            auto firstKey = segment.first();
-            auto lastKey = segment.last();
-            graphEasingApply(static_cast<QrealAnimator*>(anim),
-                             {firstKey->getRelFrame(),
-                              lastKey->getRelFrame()},
-                             easing);
+    if (mGraphViewed) {
+        for (const auto& anim : mGraphAnimators) {
+            QList<QList<GraphKey*>> segments;
+            anim->graph_getSelectedSegments(segments);
+            for (const auto& segment : segments) {
+                Q_ASSERT(segment.length() > 1);
+                auto firstKey = segment.first();
+                auto lastKey = segment.last();
+                graphEasingApply(static_cast<QrealAnimator*>(anim),
+                                 {firstKey->getRelFrame(),
+                                  lastKey->getRelFrame()},
+                                 easing);
+            }
+        }
+    } else {
+        for (const auto& anim : mSelectedKeysAnimators) {
+            const auto &segments = anim->anim_getSelectedKeys();
+            Q_ASSERT(segments.length() > 1);
+            auto firstKey = segments.first();
+            auto lastKey = segments.last();
+                graphEasingApply(static_cast<QrealAnimator*>(anim),
+                                 {firstKey->getRelFrame(),
+                                  lastKey->getRelFrame()},
+                                 easing);
         }
     }
-
 }
 
 void KeysView::graphEasingApply(QrealAnimator *anim,

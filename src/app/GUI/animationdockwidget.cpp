@@ -32,6 +32,13 @@
 AnimationDockWidget::AnimationDockWidget(QWidget *parent,
                                          KeysView *keysView)
     : QToolBar(parent)
+    , mLineButton(nullptr)
+    , mCurveButton(nullptr)
+    , mSymmetricButton(nullptr)
+    , mSmoothButton(nullptr)
+    , mCornerButton(nullptr)
+    , mFitToHeightButton(nullptr)
+    , mOnlySelectedAct(nullptr)
 {
     setObjectName(QString::fromUtf8("animationDockWidget"));
     setSizePolicy(QSizePolicy::Maximum,
@@ -39,36 +46,37 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
 
     const auto easingButton = new QPushButton(QIcon::fromTheme("easing"),
                                               QString(), this);
+    easingButton->setToolTip(tr("Ease between two keyframes"));
     easingButton->setFocusPolicy(Qt::NoFocus);
     generateEasingActions(easingButton, keysView);
 
-    QAction *mLineButton = new QAction(QIcon::fromTheme("segmentLine"),
-                                       tr("Make Segment Line"), this);
+    mLineButton = new QAction(QIcon::fromTheme("segmentLine"),
+                              tr("Make Segment Line"), this);
     connect(mLineButton, &QAction::triggered,
             keysView, &KeysView::graphMakeSegmentsLinearAction);
 
-    QAction *mCurveButton = new QAction(QIcon::fromTheme("segmentCurve"),
-                                        tr("Make Segment Curve"), this);
+    mCurveButton = new QAction(QIcon::fromTheme("segmentCurve"),
+                               tr("Make Segment Curve"), this);
     connect(mCurveButton, &QAction::triggered,
             keysView, qOverload<>(&KeysView::graphMakeSegmentsSmoothAction));
 
-    QAction *mSymmetricButton = new QAction(QIcon::fromTheme("nodeSymmetric"),
-                                            tr("Symmetric Nodes"), this);
+    mSymmetricButton = new QAction(QIcon::fromTheme("nodeSymmetric"),
+                                   tr("Symmetric Nodes"), this);
     connect(mSymmetricButton, &QAction::triggered,
             keysView, &KeysView::graphSetSymmetricCtrlAction);
 
-    QAction *mSmoothButton = new QAction(QIcon::fromTheme("nodeSmooth"),
-                                         tr("Smooth Nodes"), this);
+    mSmoothButton = new QAction(QIcon::fromTheme("nodeSmooth"),
+                                tr("Smooth Nodes"), this);
     connect(mSmoothButton, &QAction::triggered,
             keysView, &KeysView::graphSetSmoothCtrlAction);
 
-    QAction *mCornerButton = new QAction(QIcon::fromTheme("nodeCorner"),
-                                         tr("Corner Nodes"), this);
+    mCornerButton = new QAction(QIcon::fromTheme("nodeCorner"),
+                                tr("Corner Nodes"), this);
     connect(mCornerButton, &QAction::triggered,
             keysView, &KeysView::graphSetCornerCtrlAction);
 
-    QAction *mFitToHeightButton = new QAction(QIcon::fromTheme("zoom"),
-                                              tr("Fit Vertical"), this);
+    mFitToHeightButton = new QAction(QIcon::fromTheme("zoom"),
+                                     tr("Fit Vertical"), this);
     connect(mFitToHeightButton, &QAction::triggered,
             keysView, &KeysView::graphResetValueScaleAndMinShownAction);
 
@@ -88,12 +96,12 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
     connect(selectedVisible, &SwitchButton::toggled,
             keysView, &KeysView::graphSetOnlySelectedVisible);*/
 
-    QAction *onlySelectedAct = new QAction(QIcon::fromTheme("onlySelectedVisible"),
+    mOnlySelectedAct = new QAction(QIcon::fromTheme("onlySelectedVisible"),
                                            QString(),
                                            this);
-    onlySelectedAct->setCheckable(true);
-    onlySelectedAct->setToolTip(tr("View only selected"));
-    connect(onlySelectedAct, &QAction::triggered,
+    mOnlySelectedAct->setCheckable(true);
+    mOnlySelectedAct->setToolTip(tr("View only selected"));
+    connect(mOnlySelectedAct, &QAction::triggered,
             keysView, &KeysView::graphSetOnlySelectedVisible);
 
     addWidget(easingButton);
@@ -104,7 +112,18 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
     addAction(mCornerButton);
     addAction(mFitToHeightButton);
     //addWidget(valueLines);
-    addAction(onlySelectedAct);
+    addAction(mOnlySelectedAct);
+}
+
+void AnimationDockWidget::showGraph(const bool show)
+{
+    mLineButton->setVisible(show);
+    mCurveButton->setVisible(show);
+    mSymmetricButton->setVisible(show);
+    mSmoothButton->setVisible(show);
+    mCornerButton->setVisible(show);
+    mFitToHeightButton->setVisible(show);
+    mOnlySelectedAct->setVisible(show);
 }
 
 void AnimationDockWidget::generateEasingActions(QPushButton *button,
