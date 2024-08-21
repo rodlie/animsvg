@@ -130,6 +130,7 @@ AboutWidget::AboutWidget(QWidget *parent)
     #endif
 #endif
     parties << "icons";
+    parties << "easing";
 
     for (const auto &doc: parties) {
         QFile file(doc == "friction" ? QString(":/docs/LICENSE") : QString(":/docs/3rdparty/%1.html").arg(doc));
