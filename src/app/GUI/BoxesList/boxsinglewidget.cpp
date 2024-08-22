@@ -769,10 +769,9 @@ void BoxSingleWidget::paintEvent(QPaintEvent *) {
     int nameX = mFillWidget->x();
 
     const auto bsTarget = enve_cast<eBoxOrSound*>(prop);
-    if(!bsTarget) {
-        if(prop->prp_isSelected()) {
-            p.fillRect(mFillWidget->geometry(), QColor(0, 0, 0, 55));
-        }
+    if (!bsTarget && prop->prp_isSelected()) {
+        p.fillRect(mFillWidget->geometry(),
+                   ThemeSupport::getThemeHighlightSelectedColor(25));
     }
     if (bsTarget) {
         nameX += eSizesUI::widget/4;
