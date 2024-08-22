@@ -704,11 +704,10 @@ void BoxSingleWidget::mouseReleaseEvent(QMouseEvent *event) {
     }
 }
 
-void BoxSingleWidget::mouseDoubleClickEvent(QMouseEvent *e) {
-    if(!mTarget) return;
-    if(e->modifiers() & Qt::ShiftModifier) {
-        //mousePressEvent(e);
-    } else Document::sInstance->actionFinished();
+void BoxSingleWidget::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    Q_UNUSED(e)
+    switchContentVisibleAction();
 }
 
 void BoxSingleWidget::prp_drawTimelineControls(QPainter * const p,
