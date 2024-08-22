@@ -209,6 +209,7 @@ int main(int argc, char *argv[])
 
     ThemeSupport::setupTheme(eSizesUI::widget);
 
+    AppSupport::handlePortableFirstRun();
 #ifdef Q_OS_LINUX
     if (AppSupport::isAppPortable()) {
         if (!AppSupport::hasXDGDesktopIntegration()) {

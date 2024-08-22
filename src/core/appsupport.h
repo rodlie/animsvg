@@ -47,7 +47,7 @@ class CORE_EXPORT AppSupport : public QObject
     Q_OBJECT
 
 public:
-    struct ExPreset
+    struct ExpressionPreset
     {
         bool valid = false;
         QString definitions;
@@ -130,8 +130,9 @@ public:
     static bool hasXDGDesktopIntegration();
     static bool setupXDGDesktopIntegration();
     static bool removeXDGDesktopIntegration();
-    static const ExPreset readEasingPreset(const QString &filename);
+    static const ExpressionPreset readEasingPreset(const QString &filename);
     static const QList<QPair<QString,QString>> getEasingPresets();
+    static void handlePortableFirstRun();
 };
 
 #endif // APPSUPPORT_H

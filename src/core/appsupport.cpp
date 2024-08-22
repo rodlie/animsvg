@@ -40,6 +40,7 @@
 #include <QDirIterator>
 #include <QtMath>
 #include <QRegularExpression>
+#include <QMessageBox>
 
 AppSupport::AppSupport(QObject *parent)
     : QObject{parent}
@@ -294,7 +295,7 @@ const QString AppSupport::getAppExPresetsPath()
 
 const QString AppSupport::getAppUserExPresetsPath()
 {
-    QString path = QString::fromUtf8("%1/ExPresets").arg(getAppConfigPath());
+    QString path = QString::fromUtf8("%1/ExpressionPresets").arg(getAppConfigPath());
     QDir dir(path);
     if (!dir.exists()) { dir.mkpath(path); }
     return path;
@@ -915,9 +916,9 @@ bool AppSupport::removeXDGDesktopIntegration()
     return true;
 }
 
-const AppSupport::ExPreset AppSupport::readEasingPreset(const QString &filename)
+const AppSupport::ExpressionPreset AppSupport::readEasingPreset(const QString &filename)
 {
-    ExPreset preset;
+    ExpressionPreset preset;
     preset.valid = false;
     if (!QFile::exists(filename)) { return preset; }
     QFile file(filename);
@@ -975,4 +976,16 @@ const QList<QPair<QString, QString> > AppSupport::getEasingPresets()
     presets.push_back({tr("Ease In/Out Sine"), ":/easing/presets/easeInOutSine.js"});
 
     return presets;
+}
+
+void AppSupport::handlePortableFirstRun()
+{
+    if (!isAppPortable()) { return; }
+    const bool firstRun = getSettings("portable", "PortableFirstRun", true).toBool();
+    if (!firstRun) { return; }
+    QMessageBox::information(nullptr,
+                             tr("Portable Mode"),
+                             tr("You are in portable mode, your config directory is:"
+                                "<br><br><code>%1</code>").arg(getAppConfigPath()));
+    setSettings("portable", "PortableFirstRun", false);
 }
