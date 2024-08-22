@@ -1422,7 +1422,7 @@ eTask* BoundingBox::saveSVGWithTransform(SvgExporter& exp,
 
             if (maskId == ptr->prp_getName()) { // move mask to defs
                 auto& eleMask = taskPtr->initialize("mask");
-                eleMask.setAttribute("id", ptr->prp_getName());
+                eleMask.setAttribute("id", QString(ptr->prp_getName()).simplified().replace(" ", ""));
                 eleMask.appendChild(withEffects);
                 expPtr->addToDefs(eleMask);
             } else {
