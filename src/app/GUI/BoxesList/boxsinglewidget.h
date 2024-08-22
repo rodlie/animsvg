@@ -101,6 +101,9 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
 
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
+
     void paintEvent(QPaintEvent *);
     void mouseDoubleClickEvent(QMouseEvent *e);
     void resizeEvent(QResizeEvent *);
@@ -135,6 +138,8 @@ private:
 
     bool mDragPressPos = false;
     QPoint mDragStartPos;
+
+    bool mHover = false;
 
     PixmapActionButton *mRecordButton;
     PixmapActionButton *mContentButton;

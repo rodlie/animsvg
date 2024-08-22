@@ -704,6 +704,18 @@ void BoxSingleWidget::mouseReleaseEvent(QMouseEvent *event) {
     }
 }
 
+void BoxSingleWidget::enterEvent(QEvent *)
+{
+    mHover = true;
+    update();
+}
+
+void BoxSingleWidget::leaveEvent(QEvent *)
+{
+    mHover = false;
+    update();
+}
+
 void BoxSingleWidget::mouseDoubleClickEvent(QMouseEvent *e)
 {
     Q_UNUSED(e)
@@ -767,6 +779,8 @@ void BoxSingleWidget::paintEvent(QPaintEvent *) {
 
     int nameX = mFillWidget->x();
 
+    if (mHover) { p.fillRect(rect(), ThemeSupport::getThemeHighlightColor(40)); }
+
     const auto bsTarget = enve_cast<eBoxOrSound*>(prop);
     if (!bsTarget && prop->prp_isSelected()) {
         p.fillRect(mFillWidget->geometry(),
@@ -779,7 +793,7 @@ void BoxSingleWidget::paintEvent(QPaintEvent *) {
             p.fillRect(rect(), QColor(0, 0, 0, 50));
             if (bsTarget->isSelected()) {
                 p.fillRect(mFillWidget->geometry(),
-                           ThemeSupport::getThemeButtonBaseColor());
+                           ThemeSupport::getThemeHighlightSelectedColor(50));
                 p.setPen(Qt::white);
             } else {
                 p.setPen(Qt::white);
