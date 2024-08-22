@@ -25,6 +25,7 @@ BUILD_DIR=${CWD}/build-source
 BUILD_TMP=${CWD}/build-tmp
 COMMIT=`git rev-parse --short=8 HEAD`
 CUSTOM=${CUSTOM:-""}
+REL=${REL:-0}
 
 if [ -d "${BUILD_DIR}" ]; then
     rm -rf ${BUILD_DIR}
@@ -47,7 +48,7 @@ cmake -G Ninja \
 ..
 VERSION=`cat version.txt`
 
-if [ "${COMMIT}" != "" ] && [ "${CUSTOM}" = "" ]; then
+if [ "${COMMIT}" != "" ] && [ "${CUSTOM}" = "" ] && [ "${REL}" != 1 ]; then
     VERSION="${VERSION}-${COMMIT}"
 fi
 
