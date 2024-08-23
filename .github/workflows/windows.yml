@@ -14,4 +14,6 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: friction-ci-windows-x64
-        path: build\output\*.7z
+        path: |
+          build\output\friction-*.7z
+          build\output\friction-*.exe
