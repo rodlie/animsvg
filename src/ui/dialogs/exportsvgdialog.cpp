@@ -99,7 +99,7 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
     mOptimize->setEnabled(hasSVGO);
     if (!hasSVGO) {
         mOptimize->setChecked(false);
-        mOptimize->setToolTip(tr("SVGO binary missing."));
+        mOptimize->setToolTip(tr("SVG Optimizer is missing."));
     }
 
     connect(mBackground, &QCheckBox::stateChanged,

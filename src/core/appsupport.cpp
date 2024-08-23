@@ -313,19 +313,15 @@ const QString AppSupport::getSVGO()
 #else
     const QString svgo = "svgo-linux";
 #endif
-    const QString path = QString("%1%2%3").arg(getAppPath(),
-                                               QDir::separator(),
-                                               svgo);
-    qDebug() << "check for svgo" << path;
+    const QString path = QString("%1/%2").arg(getAppPath(), svgo);
     if (QFile::exists(path)) { return path; }
-    return QString();
+    return QStandardPaths::findExecutable("svgo");
 }
 
 const QString AppSupport::getSVGOConfig()
 {
     QString filename = "svgo.config.js";
     QString path = getAppConfigPath() + QDir::separator() + filename;
-    qDebug() << "check for" << filename;
     if (!QFile::exists(path)) {
         QString config;
         QFile file(":/config/" + filename);
@@ -764,7 +760,6 @@ bool AppSupport::setupXDGDesktopIntegration()
     {
         const QString dirName(QString("%1/applications").arg(path));
         const QString fileName(QString("%1/graphics.friction.Friction.desktop").arg(dirName));
-        qDebug() << "Checking:" << fileName;
         if (!QFile::exists(dirName)) {
             QDir dir(dirName);
             if (!dir.mkpath(dirName)) { return false; }
@@ -794,7 +789,6 @@ bool AppSupport::setupXDGDesktopIntegration()
     {
         const QString dirName(QString("%1/mime/packages").arg(path));
         const QString fileName(QString("%1/graphics.friction.Friction.xml").arg(dirName));
-        qDebug() << "Checking:" << fileName;
         if (!QFile::exists(dirName)) {
             QDir dir(dirName);
             if (!dir.mkpath(dirName)) { return false; }
@@ -814,7 +808,6 @@ bool AppSupport::setupXDGDesktopIntegration()
     {
         const QString dirName(QString("%1/icons/hicolor/scalable/apps").arg(path));
         const QString fileName(QString("%1/graphics.friction.Friction.svg").arg(dirName));
-        qDebug() << "Checking:" << fileName;
         if (!QFile::exists(dirName)) {
             QDir dir(dirName);
             if (!dir.mkpath(dirName)) { return false; }
@@ -834,7 +827,6 @@ bool AppSupport::setupXDGDesktopIntegration()
     {
         const QString dirName(QString("%1/icons/hicolor/256x256/apps").arg(path));
         const QString fileName(QString("%1/graphics.friction.Friction.png").arg(dirName));
-        qDebug() << "Checking:" << fileName;
         if (!QFile::exists(dirName)) {
             QDir dir(dirName);
             if (!dir.mkpath(dirName)) { return false; }
@@ -854,7 +846,6 @@ bool AppSupport::setupXDGDesktopIntegration()
     {
         const QString dirName(QString("%1/icons/hicolor/scalable/mimetypes").arg(path));
         const QString fileName(QString("%1/application-x-graphics.friction.Friction.svg").arg(dirName));
-        qDebug() << "Checking:" << fileName;
         if (!QFile::exists(dirName)) {
             QDir dir(dirName);
             if (!dir.mkpath(dirName)) { return false; }
@@ -874,7 +865,6 @@ bool AppSupport::setupXDGDesktopIntegration()
     {
         const QString dirName(QString("%1/icons/hicolor/256x256/mimetypes").arg(path));
         const QString fileName(QString("%1/application-x-graphics.friction.Friction.png").arg(dirName));
-        qDebug() << dirName << fileName;
         if (!QFile::exists(dirName)) {
             QDir dir(dirName);
             if (!dir.mkpath(dirName)) { return false; }
