@@ -107,7 +107,8 @@ copy "%CWD%\build\src\app\%BDIR%\friction.iss" "%OUTPUT_DIR%\"
 copy "%CWD%\src\app\icons\friction.ico" "%OUTPUT_DIR%\"
 copy "%CWD%\src\app\icons\friction.bmp" "%OUTPUT_DIR%\"
 copy "%CWD%\LICENSE.md" "%OUTPUT_DIR%\"
-copy "%SDK_DIR%\bin\svgo-win.exe" "%OUTPUT_DIR%\"
+copy "%BUILD_OUTPUT%\svgo-win.exe" "%OUTPUT_DIR%\"
+copy "%BUILD_OUTPUT%\svgo-license.txt" "%OUTPUT_DIR%\"
 
 cd "%OUTPUT_DIR%"
 
