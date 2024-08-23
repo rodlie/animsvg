@@ -86,6 +86,8 @@ copy "%SDK_DIR%\bin\avutil-56.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\swresample-3.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\swscale-5.dll" "%OUTPUT_DIR%\"
 
+copy "%SDK_DIR%\bin\svgo-win.exe" "%CWD%\build\output\"
+
 REM enable qt svg support (not recommended)
 REM mkdir "%OUTPUT_DIR%\imageformats"
 REM copy "%SDK_DIR%\bin\Qt5Svg.dll" "%OUTPUT_DIR%\"
@@ -96,8 +98,5 @@ type NUL > "%OUTPUT_DIR%\portable.txt"
 
 REM zip it up
 cd "%CWD%\build\output"
+7z a -mx9 friction-svgo-windows-x64.7z svgo-win.exe
 7z a -mx9 friction-%VERSION%-windows-x64.7z friction-%VERSION%
-
-REM svgo bundle
-copy "%SDK_DIR%\bin\svgo-win.exe" "%OUTPUT_DIR%\"
-7z a -mx9 friction-%VERSION%-svgo-windows-x64.7z friction-%VERSION%
