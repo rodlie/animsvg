@@ -22,8 +22,3 @@ jobs:
     - name: Build
       shell: cmd
       run: .\src\scripts\build_ci.bat debug
-    - name: Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: friction-ci-debug-windows-x64
-        path: build\output\*.7z
