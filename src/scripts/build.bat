@@ -56,7 +56,9 @@ if "%REL%" == "OFF" (
     set VERSION="%VERSION%-%COMMIT%"
 )
 
-set OUTPUT_DIR="%CWD%\build\output\friction-%VERSION%"
+set BUILD_OUTPUT="%CWD%\build\output"
+set OUTPUT_DIR="%BUILD_OUTPUT%\friction-%VERSION%"
+
 mkdir "%OUTPUT_DIR%"
 mkdir "%OUTPUT_DIR%\audio"
 mkdir "%OUTPUT_DIR%\platforms"
@@ -89,15 +91,25 @@ copy "%SDK_DIR%\bin\avutil-56.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\swresample-3.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\swscale-5.dll" "%OUTPUT_DIR%\"
 
-copy "%SDK_DIR%\bin\svgo-win.exe" "%CWD%\build\output\"
-
 echo "Delete this file if you want to disable portable mode" > "%OUTPUT_DIR%\portable.txt"
 
-cd "%CWD%\build\output"
+cd "%BUILD_OUTPUT%"
 
+copy "%SDK_DIR%\bin\svgo-win.exe" "%BUILD_OUTPUT%\"
 if not exist "svgo-license.txt" ( 
     curl -OL "https://raw.githubusercontent.com/friction2d/friction-svgo/main/svgo-license.txt"
 )
 
 7z a -mx9 friction-svgo-windows-x64.7z svgo-win.exe svgo-license.txt
 7z a -mx9 friction-%VERSION%-windows-x64.7z friction-%VERSION%
+
+copy "%CWD%\build\src\app\%BDIR%\friction.iss" "%OUTPUT_DIR%\"
+copy "%CWD%\src\app\icons\friction.ico" "%OUTPUT_DIR%\"
+copy "%CWD%\src\app\icons\friction.bmp" "%OUTPUT_DIR%\"
+copy "%CWD%\LICENSE.md" "%OUTPUT_DIR%\"
+copy "%SDK_DIR%\bin\svgo-win.exe" "%OUTPUT_DIR%\"
+
+cd "%OUTPUT_DIR%"
+
+iscc friction.iss
+copy "setup\friction.exe" "%BUILD_OUTPUT%\friction-%VERSION%-setup-win64.exe"
