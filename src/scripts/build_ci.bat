@@ -94,9 +94,12 @@ REM copy "%SDK_DIR%\bin\Qt5Svg.dll" "%OUTPUT_DIR%\"
 REM copy "%SDK_DIR%\plugins\imageformats\qsvg.dll" "%OUTPUT_DIR%\imageformats\"
 
 REM enable default portable mode
-type NUL > "%OUTPUT_DIR%\portable.txt"
+echo "Delete this file if you want to disable portable mode" > "%OUTPUT_DIR%\portable.txt"
 
 REM zip it up
 cd "%CWD%\build\output"
-7z a -mx9 friction-svgo-windows-x64.7z svgo-win.exe
+if not exist "svgo-license.txt" ( 
+    curl -OL "https://raw.githubusercontent.com/friction2d/friction-svgo/main/svgo-license.txt"
+)
+7z a -mx9 friction-svgo-windows-x64.7z svgo-win.exe svgo-license.txt
 7z a -mx9 friction-%VERSION%-windows-x64.7z friction-%VERSION%
