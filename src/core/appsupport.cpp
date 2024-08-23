@@ -147,7 +147,12 @@ const QString AppSupport::getAppVersion()
     version.append(QString("-%1").arg(CUSTOM_BUILD));
 #endif
 #ifndef PROJECT_OFFICIAL
+#ifndef CUSTOM_BUILD
     version.append("-dev");
+#endif
+#ifdef PROJECT_COMMIT
+    version.append(QString("-%1").arg(PROJECT_COMMIT));
+#endif
 #endif
     return version;
 }
