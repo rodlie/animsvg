@@ -8,11 +8,14 @@ set OPT=%1
 set REL=OFF
 set BTYPE=Release
 set BDIR=release
+set CBUILD=
 
 if "%OPT%" == "release" (
     set REL=ON
 )
-
+if "%OPT%" == "ci" (
+    set CBUILD=CI
+)
 if "%OPT%" == "debug" (
     set BTYPE=Debug
     set BDIR=debug
@@ -45,7 +48,7 @@ mkdir build
 cd "%CWD%\build"
 mkdir output
 
-cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_BUILD_TYPE=%BTYPE% -DCMAKE_PREFIX_PATH=%SDK_DIR% -DBUILD_ENGINE=OFF -DFRICTION_OFFICIAL_RELEASE=%REL% -DWIN_DEPLOY=ON -DGIT_COMMIT=%COMMIT% -DGIT_BRANCH=%BRANCH% ..
+cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_BUILD_TYPE=%BTYPE% -DCMAKE_PREFIX_PATH=%SDK_DIR% -DCUSTOM_BUILD=%CBUILD% -DBUILD_ENGINE=OFF -DFRICTION_OFFICIAL_RELEASE=%REL% -DWIN_DEPLOY=ON -DGIT_COMMIT=%COMMIT% -DGIT_BRANCH=%BRANCH% ..
 set /p VERSION=<version.txt
 cmake --build . --config %BTYPE%
 
@@ -88,18 +91,13 @@ copy "%SDK_DIR%\bin\swscale-5.dll" "%OUTPUT_DIR%\"
 
 copy "%SDK_DIR%\bin\svgo-win.exe" "%CWD%\build\output\"
 
-REM enable qt svg support (not recommended)
-REM mkdir "%OUTPUT_DIR%\imageformats"
-REM copy "%SDK_DIR%\bin\Qt5Svg.dll" "%OUTPUT_DIR%\"
-REM copy "%SDK_DIR%\plugins\imageformats\qsvg.dll" "%OUTPUT_DIR%\imageformats\"
-
-REM enable default portable mode
 echo "Delete this file if you want to disable portable mode" > "%OUTPUT_DIR%\portable.txt"
 
-REM zip it up
 cd "%CWD%\build\output"
+
 if not exist "svgo-license.txt" ( 
     curl -OL "https://raw.githubusercontent.com/friction2d/friction-svgo/main/svgo-license.txt"
 )
+
 7z a -mx9 friction-svgo-windows-x64.7z svgo-win.exe svgo-license.txt
 7z a -mx9 friction-%VERSION%-windows-x64.7z friction-%VERSION%
