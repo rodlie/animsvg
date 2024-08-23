@@ -15,10 +15,3 @@ jobs:
       with:
         name: friction-ci-windows-x64
         path: build\output\*.7z
-  debug:
-    runs-on: windows-2019
-    steps:
-    - uses: actions/checkout@v3
-    - name: Build
-      shell: cmd
-      run: .\src\scripts\build_ci.bat debug
