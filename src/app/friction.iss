@@ -39,6 +39,7 @@ Name: "svgo"; Description: "SVG Optimizer"; Types: full
 Source: "{#MyAppExeName}"; DestDir: "{app}"; Components: friction ; Flags: ignoreversion
 Source: "frictioncore.dll"; DestDir: "{app}"; Components: friction ; Flags: ignoreversion
 Source: "frictionui.dll"; DestDir: "{app}"; Components: friction ; Flags: ignoreversion
+Source: "skia.dll"; DestDir: "{app}"; Components: friction ; Flags: ignoreversion
 
 Source: "svgo-win.exe"; DestDir: "{app}"; Components: svgo ; Flags: ignoreversion
 Source: "svgo-license.txt"; DestDir: "{app}"; Components: svgo ; Flags: ignoreversion
