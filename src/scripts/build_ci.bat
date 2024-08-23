@@ -57,13 +57,13 @@ set OUTPUT_DIR="%CWD%\build\output\friction-%VERSION%"
 mkdir "%OUTPUT_DIR%"
 mkdir "%OUTPUT_DIR%\audio"
 mkdir "%OUTPUT_DIR%\platforms"
-REM mkdir "%OUTPUT_DIR%\imageformats"
 
 copy "%CWD%\build\src\core\%BDIR%\frictioncore.dll" "%OUTPUT_DIR%\"
 copy "%CWD%\build\src\ui\%BDIR%\frictionui.dll" "%OUTPUT_DIR%\"
 copy "%CWD%\build\src\app\%BDIR%\friction.exe" "%OUTPUT_DIR%\"
-copy "%SDK_DIR%\bin\svgo-win.exe" "%OUTPUT_DIR%\"
+
 copy "%SDK_DIR%\bin\skia.dll" "%OUTPUT_DIR%\"
+
 copy "%SDK_DIR%\bin\Qt5Core.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\Qt5Gui.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\Qt5Multimedia.dll" "%OUTPUT_DIR%\"
@@ -71,13 +71,14 @@ copy "%SDK_DIR%\bin\Qt5Network.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\Qt5OpenGL.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\Qt5PrintSupport.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\Qt5Qml.dll" "%OUTPUT_DIR%\"
-REM copy "%SDK_DIR%\bin\Qt5Svg.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\Qt5Widgets.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\Qt5Xml.dll" "%OUTPUT_DIR%\"
-copy "%SDK_DIR%\bin\qscintilla2_qt5.dll" "%OUTPUT_DIR%\"
+
 copy "%SDK_DIR%\plugins\audio\qtaudio_wasapi.dll" "%OUTPUT_DIR%\audio\"
 copy "%SDK_DIR%\plugins\platforms\qwindows.dll" "%OUTPUT_DIR%\platforms\"
-REM copy "%SDK_DIR%\plugins\imageformats\qsvg.dll" "%OUTPUT_DIR%\imageformats\"
+
+copy "%SDK_DIR%\bin\qscintilla2_qt5.dll" "%OUTPUT_DIR%\"
+
 copy "%SDK_DIR%\bin\avcodec-58.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\avdevice-58.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\avformat-58.dll" "%OUTPUT_DIR%\"
@@ -85,9 +86,18 @@ copy "%SDK_DIR%\bin\avutil-56.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\swresample-3.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\swscale-5.dll" "%OUTPUT_DIR%\"
 
-REM enable portable mode
+REM enable qt svg support (not recommended)
+REM mkdir "%OUTPUT_DIR%\imageformats"
+REM copy "%SDK_DIR%\bin\Qt5Svg.dll" "%OUTPUT_DIR%\"
+REM copy "%SDK_DIR%\plugins\imageformats\qsvg.dll" "%OUTPUT_DIR%\imageformats\"
+
+REM enable default portable mode
 type NUL > "%OUTPUT_DIR%\portable.txt"
 
+REM zip it up
 cd "%CWD%\build\output"
-
 7z a -mx9 friction-%VERSION%-windows-x64.7z friction-%VERSION%
+
+REM svgo bundle
+copy "%SDK_DIR%\bin\svgo-win.exe" "%OUTPUT_DIR%\"
+7z a -mx9 friction-%VERSION%-svgo-windows-x64.7z friction-%VERSION%
