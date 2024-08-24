@@ -38,7 +38,6 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
     , mSmoothButton(nullptr)
     , mCornerButton(nullptr)
     , mFitToHeightButton(nullptr)
-    , mOnlySelectedAct(nullptr)
 {
     setObjectName(QString::fromUtf8("animationDockWidget"));
     setSizePolicy(QSizePolicy::Maximum,
@@ -98,14 +97,6 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
     connect(selectedVisible, &SwitchButton::toggled,
             keysView, &KeysView::graphSetOnlySelectedVisible);*/
 
-    mOnlySelectedAct = new QAction(QIcon::fromTheme("onlySelectedVisible"),
-                                           QString(),
-                                           this);
-    mOnlySelectedAct->setCheckable(true);
-    mOnlySelectedAct->setToolTip(tr("View only selected"));
-    connect(mOnlySelectedAct, &QAction::triggered,
-            keysView, &KeysView::graphSetOnlySelectedVisible);
-
     addWidget(easingButton);
     addAction(mLineButton);
     addAction(mCurveButton);
@@ -114,7 +105,6 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
     addAction(mCornerButton);
     addAction(mFitToHeightButton);
     //addWidget(valueLines);
-    addAction(mOnlySelectedAct);
 
     eSizesUI::widget.add(this, [this](const int size) {
         setIconSize(QSize(size, size));
@@ -129,7 +119,6 @@ void AnimationDockWidget::showGraph(const bool show)
     mSmoothButton->setVisible(show);
     mCornerButton->setVisible(show);
     mFitToHeightButton->setVisible(show);
-    mOnlySelectedAct->setVisible(show);
 }
 
 void AnimationDockWidget::generateEasingActions(QPushButton *button,
