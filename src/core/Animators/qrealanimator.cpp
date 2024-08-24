@@ -294,13 +294,13 @@ void QrealAnimator::setExpressionAction(const qsptr<Expression> &expression) {
 
 void QrealAnimator::setExpressionEasingAction(const qsptr<Expression> &expression)
 {
-    {
+    /*{
         prp_pushUndoRedoName("Change Easing");
         UndoRedo ur;
         ur.fUndo = [this]() { setExpression(nullptr); };
         ur.fRedo = [this, expression]() { setExpression(expression); };
         prp_addUndoRedo(ur);
-    }
+    }*/
     setExpression(expression);
 }
 
