@@ -362,6 +362,16 @@ bool Property::prp_isParentBoxSelected() const {
     return false;
 }
 
+bool Property::prp_isParentBoxContained() const
+{
+    const auto pBox = getFirstAncestor<eBoxOrSound>();
+    if (pBox && mParentScene) {
+        const auto contained = mParentScene->getContainedBoxes();
+        for (const auto &box : contained) { if (box == pBox) { return true; } }
+    }
+    return false;
+}
+
 #include "canvas.h"
 void Property::prp_selectionChangeTriggered(const bool shiftPressed) {
     if(!mParentScene) return;

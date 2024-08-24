@@ -249,6 +249,7 @@ public:
     }
 
     bool prp_isParentBoxSelected() const;
+    bool prp_isParentBoxContained() const;
 
     bool prp_drawsOnCanvas() const
     { return mDrawOnCanvas; }
