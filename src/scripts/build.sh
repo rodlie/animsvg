@@ -25,6 +25,7 @@ MKJOBS=${MKJOBS:-2}
 COMMIT=`git rev-parse --short=8 HEAD`
 BRANCH=`git rev-parse --abbrev-ref HEAD`
 
+REL=${REL:-0}
 ASDK=20240401
 SDK=20240609
 URL=https://github.com/friction2d/friction-sdk/releases/download/${SDK}
@@ -48,4 +49,4 @@ fi
 
 cd ${CWD}
 
-MKJOBS=${MKJOBS} REL=0 BRANCH=${BRANCH} COMMIT=${COMMIT} ./src/scripts/run_vfxplatform.sh
+LOCAL_BUILD=0 MKJOBS=${MKJOBS} REL=${REL} BRANCH=${BRANCH} COMMIT=${COMMIT} ./src/scripts/run_vfxplatform.sh

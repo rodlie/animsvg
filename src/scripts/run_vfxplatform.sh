@@ -28,7 +28,7 @@ TAG=${TAG:-""}
 CUSTOM=${CUSTOM:-""}
 MKJOBS=${MKJOBS:-32}
 ONLY_SDK=${ONLY_SDK:-0}
-VFX_BUILD=${VFX_BUILD:-1}
+LOCAL_BUILD=${LOCAL_BUILD:-1}
 DOWNLOAD_SDK=${DOWNLOAD_SDK:-0}
 SDK_VERSION="20240609"
 TAR_VERSION=${TAR_VERSION:-""}
@@ -43,8 +43,13 @@ if [ ! -d "${CWD}/distfiles" ]; then
     mkdir -p ${CWD}/distfiles/sdk || true
 fi
 
-if [ "${VFX_BUILD}" = 1 ]; then
+
+if [ "${LOCAL_BUILD}" = 1 ]; then
     (cd src/scripts; docker build -t friction-vfxplatform -f Dockerfile.vfxplatform .)
+    ${DOCKER} friction-vfxplatform
+else
+    docker pull frictiongraphics/friction-vfxplatform-sdk
+    ${DOCKER} friction-vfxplatform-sdk
 fi
 
-${DOCKER} friction-vfxplatform
+
