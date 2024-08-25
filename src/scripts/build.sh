@@ -25,14 +25,17 @@ MKJOBS=${MKJOBS:-2}
 COMMIT=`git rev-parse --short=8 HEAD`
 BRANCH=`git rev-parse --abbrev-ref HEAD`
 
+BUILD_ENGINE=${BUILD_ENGINE:-"OFF"}
 REL=${REL:-0}
-ASDK=20240401
+APPIMG=20240401
 SDK=20240609
+SKIA=7e480cd3
 URL=https://github.com/friction2d/friction-sdk/releases/download/${SDK}
-APPIMAGE_TAR=friction-appimage-tools-${ASDK}.tar.xz
+APPIMAGE_TAR=friction-appimage-tools-${APPIMG}.tar.xz
 SDK_TAR=friction-vfxplatform-CY2021-sdk-${SDK}.tar.bz2
+SKIA_TAR=skia-build-${SKIA}.tar.xz
 
-mkdir -p distfiles/sdk
+mkdir -p distfiles/sdk || true
 
 cd distfiles
 if [ ! -d "linux" ]; then
@@ -42,6 +45,13 @@ if [ ! -d "linux" ]; then
     tar xvf ${APPIMAGE_TAR}
 fi
 
+if [ ! -d "skia" ]; then
+    if [ ! -f "${SKIA_TAR}" ]; then
+        wget ${URL}/${SKIA_TAR}
+    fi
+    tar xvf ${SKIA_TAR}
+fi
+
 cd sdk
 if [ ! -f "${SDK_TAR}" ]; then
     wget ${URL}/${SDK_TAR}
@@ -49,4 +59,4 @@ fi
 
 cd ${CWD}
 
-LOCAL_BUILD=0 MKJOBS=${MKJOBS} REL=${REL} BRANCH=${BRANCH} COMMIT=${COMMIT} ./src/scripts/run_vfxplatform.sh
+BUILD_ENGINE=${BUILD_ENGINE} LOCAL_BUILD=0 MKJOBS=${MKJOBS} REL=${REL} BRANCH=${BRANCH} COMMIT=${COMMIT} ./src/scripts/run_vfxplatform.sh

@@ -21,6 +21,7 @@
 set -e -x
 
 CWD=`pwd`
+BUILD_ENGINE=${BUILD_ENGINE:-"ON"}
 REL=${REL:-0}
 BRANCH=${BRANCH:-""}
 COMMIT=${COMMIT:-""}
@@ -34,7 +35,7 @@ SDK_VERSION="20240609"
 TAR_VERSION=${TAR_VERSION:-""}
 
 DOCKER="docker run"
-DOCKER="${DOCKER} -e REL=${REL} -e MKJOBS=${MKJOBS} -e TAR_VERSION=${TAR_VERSION} -e SDK_VERSION=${SDK_VERSION} -e ONLY_SDK=${ONLY_SDK} -e DOWNLOAD_SDK=${DOWNLOAD_SDK} -e BRANCH=${BRANCH} -e COMMIT=${COMMIT} -e TAG=${TAG} -e CUSTOM=${CUSTOM}"
+DOCKER="${DOCKER} -e BUILD_ENGINE=${BUILD_ENGINE} -e REL=${REL} -e MKJOBS=${MKJOBS} -e TAR_VERSION=${TAR_VERSION} -e SDK_VERSION=${SDK_VERSION} -e ONLY_SDK=${ONLY_SDK} -e DOWNLOAD_SDK=${DOWNLOAD_SDK} -e BRANCH=${BRANCH} -e COMMIT=${COMMIT} -e TAG=${TAG} -e CUSTOM=${CUSTOM}"
 DOCKER="${DOCKER} -t --mount type=bind,source=${CWD}/distfiles,target=/mnt"
 
 if [ ! -d "${CWD}/distfiles" ]; then
@@ -51,5 +52,3 @@ else
     docker pull frictiongraphics/friction-vfxplatform-sdk
     ${DOCKER} frictiongraphics/friction-vfxplatform-sdk
 fi
-
-
