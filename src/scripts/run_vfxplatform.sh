@@ -49,7 +49,7 @@ if [ "${LOCAL_BUILD}" = 1 ]; then
     ${DOCKER} friction-vfxplatform
 else
     docker pull frictiongraphics/friction-vfxplatform-sdk
-    ${DOCKER} friction-vfxplatform-sdk
+    ${DOCKER} frictiongraphics/friction-vfxplatform-sdk
 fi
 
 
