@@ -28,7 +28,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 option(LINUX_DEPLOY "Linux Deploy" OFF)
 option(WIN_DEPLOY "Windows Deploy" OFF)
 option(BUILD_ENGINE "Build Engine" ON)
-set(ENGINE_LIB_PATH "/mnt/skia-build" CACHE STRING "Path to prebuilt skia library")
+set(ENGINE_LIB_PATH "/mnt/skia" CACHE STRING "Path to prebuilt skia library")
 
 if(${LINUX_DEPLOY})
     add_definitions(-DLINUX_DEPLOY)
