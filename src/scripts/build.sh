@@ -31,9 +31,9 @@ URL=https://github.com/friction2d/friction-sdk/releases/download/${SDK}
 APPIMAGE_TAR=friction-appimage-tools-${ASDK}.tar.xz
 SDK_TAR=friction-vfxplatform-CY2021-sdk-${SDK}.tar.bz2
 
-mkdir distfiles
-cd distfiles
+mkdir -p distfiles/sdk
 
+cd distfiles
 if [ ! -d "linux" ]; then
     if [ ! -f "${APPIMAGE_TAR}" ]; then
         wget ${URL}/${APPIMAGE_TAR}
@@ -41,6 +41,7 @@ if [ ! -d "linux" ]; then
     tar xvf ${APPIMAGE_TAR}
 fi
 
+cd sdk
 if [ ! -f "${SDK_TAR}" ]; then
     wget ${URL}/${SDK_TAR}
 fi
