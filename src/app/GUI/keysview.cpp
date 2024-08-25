@@ -91,18 +91,27 @@ void KeysView::setCurrentScene(Canvas * const scene)
 {
     if (mCurrentScene) {
         disconnect(mCurrentScene.data(), &Canvas::objectSelectionChanged,
-                   this, &KeysView::graphUpdateVisbile);
+                   this, &KeysView::graphUpdateVisible);
+        disconnect(mCurrentScene.data(), &Canvas::requestUpdate,
+                   this, &KeysView::sceneRequestedUpdate);
         disconnect(mCurrentScene.data(), &Canvas::requestEasingAction,
                    this, &KeysView::graphEasingAction);
     }
     mCurrentScene = scene;
     if (mCurrentScene) {
         connect(mCurrentScene.data(), &Canvas::objectSelectionChanged,
-                this, &KeysView::graphUpdateVisbile);
+                this, &KeysView::graphUpdateVisible);
+        connect(mCurrentScene.data(), &Canvas::requestUpdate,
+                this, &KeysView::sceneRequestedUpdate);
         connect(mCurrentScene.data(), &Canvas::requestEasingAction,
                 this, &KeysView::graphEasingAction);
     }
-    graphUpdateVisbile();
+    graphUpdateVisible();
+}
+
+void KeysView::sceneRequestedUpdate()
+{
+    graphUpdateVisible();
 }
 
 void KeysView::setGraphViewed(const bool bT) {
