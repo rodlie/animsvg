@@ -1,5 +1,7 @@
 # Friction
 
+[![Windows](https://github.com/friction2d/friction/actions/workflows/windows.yml/badge.svg)](https://github.com/friction2d/friction/actions/workflows/windows.yml) [![Linux](https://github.com/friction2d/friction/actions/workflows/linux.yml/badge.svg)](https://github.com/friction2d/friction/actions/workflows/linux.yml) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/friction2d/friction/latest)
+
 [Friction](https://friction.graphics) is a powerful and versatile motion graphics application that allows you to create vector and raster animations for web and video platforms with ease.
 
 ![Screenshot of Friction 1.0.0 Beta 1](https://friction.graphics/assets/screenshots/100/friction-100b1-screenshot.png?v=1)

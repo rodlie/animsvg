@@ -26,6 +26,7 @@ clang -v
 SDK=${SDK:-"/opt/friction"}
 BUILD=${BUILD:-"${HOME}"}
 
+BUILD_ENGINE=${BUILD_ENGINE:-"ON"}
 REL=${REL:-1}
 BRANCH=${BRANCH:-""}
 COMMIT=${COMMIT:-""}
@@ -98,6 +99,7 @@ cmake -GNinja \
 -DGIT_COMMIT=${GIT_COMMIT} \
 -DGIT_BRANCH=${GIT_BRANCH} \
 -DCUSTOM_BUILD=${CUSTOM} \
+-DBUILD_ENGINE=${BUILD_ENGINE} \
 ..
 
 VERSION=`cat version.txt`
@@ -106,6 +108,15 @@ if [ "${REL}" != 1 ] && [ "${CUSTOM}" = "" ]; then
 fi
 
 cmake --build .
+
+# TODO: add option to keep skia build for reuse
+#if [ "${BUILD_ENGINE}" = "ON" ]; then
+#    (cd src/engine ;
+#        tar cvvf skia-build-${GIT_COMMIT}.tar skia
+#        mkdir -p /mnt/builds/${VERSION} || true
+#        mv skia-build-${GIT_COMMIT}.tar /mnt/builds/${VERSION}
+#    )
+#fi
 
 FRICTION_INSTALL_DIR=friction-${VERSION}
 mkdir -p ${BUILD}/${FRICTION_INSTALL_DIR}/opt/friction/{bin,lib,share} || true

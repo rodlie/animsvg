@@ -1,6 +1,6 @@
-name: Ubuntu
+name: CI
 
-on: [push, pull_request]
+on: workflow_dispatch
 
 jobs:
   build:
@@ -10,4 +10,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build
-      run: APT=1 CI=1 MKJOBS=2 ./src/scripts/build_ci.sh
+      run: APT=1 CI=1 MKJOBS=2 ./src/scripts/ci.sh
