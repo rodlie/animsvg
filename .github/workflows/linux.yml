@@ -16,6 +16,5 @@ jobs:
       with:
         name: friction-ci-linux-x86_64
         path: |
-          distfiles/builds/*/*.rpm
           distfiles/builds/*/*.xz
           distfiles/builds/*/*.AppImage
