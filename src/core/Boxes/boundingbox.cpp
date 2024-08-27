@@ -1414,15 +1414,29 @@ eTask* BoundingBox::saveSVGWithTransform(SvgExporter& exp,
     taskPtr->addDependent({[ptr, taskPtr, expPtr, parentPtr, visRange, maskId]() {
         auto& ele = taskPtr->element();
         if (ptr) {
+            ele.setAttribute("id", AppSupport::filterId(ptr->prp_getName()));
             SvgExportHelpers::assignVisibility(*expPtr, ele, visRange);
+
+            const auto transformEffects = ptr->mTransformEffectCollection.get();
+            const bool hasTransformEffects = transformEffects->hasEffectsSVG();
+
             const auto transform = ptr->mTransformAnimator.get();
             const auto transformed = transform->saveSVG(*expPtr, visRange, ele);
             const auto effects = ptr->mRasterEffectsAnimators.get();
-            const auto withEffects = effects->saveEffectsSVG(*expPtr, visRange, transformed);
+            const auto withEffects = hasTransformEffects ?
+                                         transformEffects->saveEffectsSVG(*expPtr,
+                                                                          visRange,
+                                                                          ele,
+                                                                          effects->saveEffectsSVG(*expPtr,
+                                                                                                  visRange,
+                                                                                                  transformed)) :
+                                         effects->saveEffectsSVG(*expPtr,
+                                                                 visRange,
+                                                                 transformed);
 
             if (maskId == ptr->prp_getName()) { // move mask to defs
                 auto& eleMask = taskPtr->initialize("mask");
-                eleMask.setAttribute("id", QString(ptr->prp_getName()).simplified().replace(" ", ""));
+                eleMask.setAttribute("id", AppSupport::filterId(ptr->prp_getName()));
                 eleMask.appendChild(withEffects);
                 expPtr->addToDefs(eleMask);
             } else {
