@@ -111,7 +111,10 @@ public:
                          const bool transform = false,
                          const QString& type = "",
                          const QString& beginEvent = "",
-                         const QString& endEvent = "") const;
+                         const QString& endEvent = "",
+                         const bool motion = false,
+                         const bool motionRotate = false,
+                         const QString & motionPath = QString()) const;
     void saveQPointFSVGY(SvgExporter& exp,
                          QDomElement& parent,
                          const FrameRange& visRange,
@@ -121,7 +124,10 @@ public:
                          const bool transform = false,
                          const QString& type = "",
                          const QString& beginEvent = "",
-                         const QString& endEvent = "") const;
+                         const QString& endEvent = "",
+                         const bool motion = false,
+                         const bool motionRotate = false,
+                         const QString & motionPath = QString()) const;
     QDomElement prp_writePropertyXEV_impl(const XevExporter& exp) const;
 protected:
     qsptr<QrealAnimator> mXAnimator;

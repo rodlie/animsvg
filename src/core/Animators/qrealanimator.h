@@ -183,7 +183,10 @@ public:
                       const QString& type = "",
                       const QString& templ = "%1",
                       const QString& beginEvent = "",
-                      const QString& endEvent = "");
+                      const QString& endEvent = "",
+                      const bool motion = false,
+                      const bool motionRotate = false,
+                      const QString & motionPath = QString());
     using Mangler = std::function<qreal(qreal)>;
     void saveQrealSVG(SvgExporter& exp,
                       QDomElement& parent,
@@ -194,7 +197,10 @@ public:
                       const QString& type = "",
                       const QString& templ = "%1",
                       const QString& beginEvent = "",
-                      const QString& endEvent = "");
+                      const QString& endEvent = "",
+                      const bool motion = false,
+                      const bool motionRotate = false,
+                      const QString & motionPath = QString());
 private:
     qreal calculateBaseValueAtRelFrame(const qreal frame) const;
     void startBaseValueTransform();
