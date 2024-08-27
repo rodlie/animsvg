@@ -133,6 +133,7 @@ public:
     static const ExpressionPreset readEasingPreset(const QString &filename);
     static const QList<QPair<QString,QString>> getEasingPresets();
     static void handlePortableFirstRun();
+    static const QString filterId(const QString &input);
 };
 
 #endif // APPSUPPORT_H

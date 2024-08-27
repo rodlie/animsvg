@@ -984,3 +984,8 @@ void AppSupport::handlePortableFirstRun()
                                 "<br><br><code>%1</code>").arg(getAppConfigPath()));
     setSettings("portable", "PortableFirstRun", false);
 }
+
+const QString AppSupport::filterId(const QString &input)
+{
+    return QString(input).simplified().replace(" ", "");
+}
