@@ -59,7 +59,14 @@ public:
     void prp_readProperty_impl(eReadStream &src);
 
     bool hasEffects();
+    bool hasEffectsSVG();
+
     void readTransformEffect(eReadStream &target);
+
+    QDomElement saveEffectsSVG(SvgExporter& exp,
+                               const FrameRange& visRange,
+                               QDomElement &childElement,
+                               const QDomElement &parentElement) const;
 
     void applyEffects(const qreal relFrame,
                       qreal& pivotX, qreal& pivotY,

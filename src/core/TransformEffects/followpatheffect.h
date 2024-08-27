@@ -42,6 +42,12 @@ public:
                      qreal &shearX, qreal &shearY,
                      QMatrix& postTransform,
                      BoundingBox* const parent) override;
+
+    QDomElement saveFollowPathSVG(SvgExporter& exp,
+                                  const FrameRange& visRange,
+                                  QDomElement &childElement,
+                                  QDomElement &parentElement) const;
+
 private:
     void setRotScaleAfterTargetChange(
                 BoundingBox* const oldTarget,
