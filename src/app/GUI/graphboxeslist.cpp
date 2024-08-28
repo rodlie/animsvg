@@ -553,20 +553,15 @@ void KeysView::graphResetValueScaleAndMinShown() {
     graphUpdateDimensions();
 }
 
-void KeysView::graphSetOnlySelectedVisible(const bool selectedOnly) {
-    if(graph_mOnlySelectedVisible == selectedOnly) return;
-    graph_mOnlySelectedVisible = selectedOnly;
-    graphUpdateVisbile();
-}
-
-bool KeysView::graphValidateVisible(GraphAnimator* const animator) {
-    if(graph_mOnlySelectedVisible){
-        return animator->prp_isParentBoxSelected();
-    }
-    return true;
+bool KeysView::graphValidateVisible(GraphAnimator* const animator)
+{
+    if (animator->prp_isSelected() &&
+        animator->prp_isParentBoxContained()) { return true; }
+    return false;
 }
 
 void KeysView::graphAddToViewedAnimatorList(GraphAnimator * const animator) {
+    if (mGraphAnimators.contains(animator)) { return; }
     auto& connContext = mGraphAnimators.addObj(animator);
     connContext << connect(animator, &QObject::destroyed,
                            this, [this, animator]() {
@@ -574,16 +569,18 @@ void KeysView::graphAddToViewedAnimatorList(GraphAnimator * const animator) {
     });
 }
 
-void KeysView::graphUpdateVisbile() {
-    mGraphAnimators.clear();
-    if(mCurrentScene) {
+void KeysView::graphUpdateVisible()
+{
+    qDebug() << "graphUpdateVisible";
+    //mGraphAnimators.clear();
+    if (mCurrentScene) {
         const int id = mBoxesListWidget->getId();
         const auto all = mCurrentScene->getSelectedForGraph(id);
-        if(all) {
-            for(const auto anim : *all) {
-                if(graphValidateVisible(anim)) {
-                    graphAddToViewedAnimatorList(anim);
-                }
+        if (all) {
+            qDebug() << "selected for graph" << all->count();
+            for (const auto anim : *all) {
+                if (graphValidateVisible(anim)) { graphAddToViewedAnimatorList(anim); }
+                else { graphRemoveViewedAnimator(anim); }
             }
         }
     }
@@ -605,6 +602,7 @@ void KeysView::graphAddViewedAnimator(GraphAnimator * const animator) {
 }
 
 void KeysView::graphRemoveViewedAnimator(GraphAnimator * const animator) {
+    if (!mGraphAnimators.contains(animator)) { return; }
     if(!mCurrentScene) return Q_ASSERT(false);
     const int id = mBoxesListWidget->getId();
     mCurrentScene->removeSelectedForGraph(id, animator);
