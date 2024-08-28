@@ -1597,8 +1597,13 @@ void MainWindow::enable()
 
 void MainWindow::newFile()
 {
-    if (askForSaving()) {
-        closeProject();
+    if (mChangedSinceSaving || !mDocument.fEvFile.isEmpty()) {
+        const int ask = QMessageBox::question(this,
+                                              tr("New Project"),
+                                              tr("Are you sure you want to create a new project?"));
+        if (ask == QMessageBox::No) { return; }
+    }
+    if (closeProject()) {
         SceneSettingsDialog::sNewSceneDialog(mDocument, this);
     }
 }
