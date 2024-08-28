@@ -134,6 +134,8 @@ private:
 
     void setComboProperty(ComboBoxProperty * const combo);
 
+    void handlePropertySelectedChanged(const Property *prop);
+
     BoxScroller* const mParent;
 
     bool mDragPressPos = false;
