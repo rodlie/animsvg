@@ -486,11 +486,7 @@ void KeysView::graphWheelEvent(QWheelEvent *event) {
     if(event->modifiers() & Qt::ControlModifier) {
         qreal valUnderMouse;
         qreal frame;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         const auto ePos = event->position();
-#else
-        const auto ePos = event->posF();
-#endif
         graphGetValueAndFrameFromPos(ePos,
                                      valUnderMouse, frame);
         qreal graphScaleInc;

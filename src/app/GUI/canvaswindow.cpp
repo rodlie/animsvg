@@ -314,11 +314,7 @@ void CanvasWindow::mouseMoveEvent(QMouseEvent *event)
 void CanvasWindow::wheelEvent(QWheelEvent *event)
 {
     if (!mCurrentCanvas) { return; }
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     const auto ePos = event->position();
-#else
-    const auto ePos = event->posF();
-#endif
     if (event->angleDelta().y() > 0) {
         zoomView(1.1, ePos);
     } else {

@@ -34,14 +34,6 @@
 
 #include "hardwareenums.h"
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-#define QT_ENDL Qt::endl
-#define QT_SKIP_EMPTY Qt::SkipEmptyParts
-#else
-#define QT_ENDL endl
-#define QT_SKIP_EMPTY QString::SkipEmptyParts
-#endif
-
 class CORE_EXPORT AppSupport : public QObject
 {
     Q_OBJECT

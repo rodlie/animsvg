@@ -924,7 +924,7 @@ const AppSupport::ExpressionPreset AppSupport::readEasingPreset(const QString &f
     }
     if (js.isEmpty()) { return preset; }
     QStringList parts = js.split("/*_FRICTION_EXPRESSION_PRESET_*/",
-                                 QT_SKIP_EMPTY);
+                                 Qt::SkipEmptyParts);
     if (parts.size() != 3) { return preset; }
     preset.valid = true;
     preset.definitions = parts.at(0).trimmed();

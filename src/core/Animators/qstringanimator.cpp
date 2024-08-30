@@ -79,7 +79,7 @@ void QStringAnimator::prp_readPropertyXEV_impl(
         const QDomElement& ele, const XevImporter& imp) {
     if(ele.hasAttribute("frames")) {
         const auto framesStr = ele.attribute("frames");
-        const auto frameStrs = framesStr.splitRef(' ', QT_SKIP_EMPTY);
+        const auto frameStrs = framesStr.splitRef(' ', Qt::SkipEmptyParts);
 
         for(const QStringRef& frame : frameStrs) {
             const int iFrame = XmlExportHelpers::stringToInt(frame);
