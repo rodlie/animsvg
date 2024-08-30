@@ -79,7 +79,7 @@ void RenderInstanceWidget::iniGUI()
     setObjectName("darkWidget");
     mNameLabel = new QLineEdit(this);
     mNameLabel->setFocusPolicy(Qt::NoFocus);
-    mNameLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    //mNameLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     mNameLabel->setFixedHeight(eSizesUI::button);
     //mNameLabel->setObjectName("RenderTitleWidget");
     mNameLabel->setReadOnly(true);
