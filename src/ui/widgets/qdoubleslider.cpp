@@ -37,11 +37,9 @@
 SliderEdit::SliderEdit(QWidget* const parent) :
     QLineEdit(parent) {
     setAttribute(Qt::WA_TranslucentBackground);
-    setStyleSheet("background-color: rgba(0, 0, 0, 0);"
-                  "color: black;");
-    /*eSizesUI::widget.add(this, [this](const int size) {
+    eSizesUI::widget.add(this, [this](const int size) {
         setFixedHeight(size);
-    });*/
+    });
 
     connect(this, &QLineEdit::editingFinished,
             this, &SliderEdit::lineEditingFinished);
