@@ -253,7 +253,7 @@ void QDoubleSlider::paint(QPainter *p,
                                adjusted(0, heightRemoval,
                                         0, -heightRemoval), xR, xR);
         }
-        p->setPen(text);
+        p->setPen(mHovered ? Qt::white : text);
         if(mShowName) {
             p->drawText(rect(), Qt::AlignCenter,
                         mName + ": " + mValueString);
