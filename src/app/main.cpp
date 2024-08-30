@@ -326,6 +326,7 @@ int main(int argc, char *argv[])
                                 *videoEncoder, memoryHandler);
     std::cout << "Render handler initialized" << std::endl;
 
+    av_log_set_level(AV_LOG_ERROR);
 #ifndef QT_DEBUG
     if (avformat_version() >= 3812708) {
         QMessageBox::critical(nullptr,
