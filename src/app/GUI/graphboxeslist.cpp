@@ -574,9 +574,12 @@ void KeysView::graphUpdateVisible()
         const auto all = mCurrentScene->getSelectedForGraph(id);
         if (all) {
             qDebug() << "selected for graph" << all->count();
-            for (const auto anim : *all) {
+            for (auto anim : *all) {
                 if (graphValidateVisible(anim)) { graphAddToViewedAnimatorList(anim); }
-                else { graphRemoveViewedAnimator(anim); }
+                else {
+                    anim->prp_setSelected(false);
+                    graphRemoveViewedAnimator(anim);
+                }
             }
         }
     }
