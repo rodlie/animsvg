@@ -250,6 +250,8 @@ public:
 
     bool prp_isParentBoxSelected() const;
     bool prp_isParentBoxContained() const;
+    bool prp_isParentBoxContained(BoundingBox *box,
+                                  eBoxOrSound *ebox) const;
 
     bool prp_drawsOnCanvas() const
     { return mDrawOnCanvas; }

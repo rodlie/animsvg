@@ -367,7 +367,22 @@ bool Property::prp_isParentBoxContained() const
     const auto pBox = getFirstAncestor<eBoxOrSound>();
     if (pBox && mParentScene) {
         const auto contained = mParentScene->getContainedBoxes();
-        for (const auto &box : contained) { if (box == pBox) { return true; } }
+        for (const auto &box : contained) {
+            if (box == pBox) { return true; }
+            if (prp_isParentBoxContained(box, pBox)) { return true; }
+        }
+    }
+    return false;
+}
+
+bool Property::prp_isParentBoxContained(BoundingBox *box,
+                                        eBoxOrSound *ebox) const
+{
+    if (box == ebox) { return true; }
+    if (const auto cbox = enve_cast<ContainerBox*>(box)) {
+        for (const auto &bbox : cbox->getContainedBoxes()) {
+            if (prp_isParentBoxContained(bbox, ebox)) { return true; }
+        }
     }
     return false;
 }
