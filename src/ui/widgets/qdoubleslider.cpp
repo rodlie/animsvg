@@ -66,6 +66,7 @@ void SliderEdit::keyPressEvent(QKeyEvent* e) {
 void SliderEdit::hideEvent(QHideEvent* e) {
     releaseMouse();
     unsetCursor();
+    emit hoverChanged();
     QLineEdit::hideEvent(e);
 }
 
@@ -73,6 +74,12 @@ void SliderEdit::showEvent(QShowEvent* e) {
     grabMouse();
     setCursor(Qt::IBeamCursor);
     QLineEdit::showEvent(e);
+}
+
+void SliderEdit::leaveEvent(QEvent *e)
+{
+    emit hoverChanged();
+    QLineEdit::leaveEvent(e);
 }
 
 void SliderEdit::lineEditingFinished() {
@@ -104,6 +111,12 @@ QDoubleSlider::QDoubleSlider(const qreal minVal, const qreal maxVal,
     mLineEdit = new SliderEdit(this);
     mLineEdit->hide();
 
+    connect(mLineEdit, &SliderEdit::hoverChanged,
+            this, [this] {
+        mHovered = false;
+        unsetCursor();
+        update();
+    });
     connect(mLineEdit, &SliderEdit::valueSet,
             this, [this](const qreal value) {
         const qreal clampedValue = clamped(value);
@@ -210,7 +223,8 @@ void QDoubleSlider::paint(QPainter *p,
     p->setRenderHint(QPainter::Antialiasing);
     QRectF boundingRect = rect().adjusted(1, 1, -1, -1);
     p->setPen(Qt::NoPen);
-    p->setBrush(allFill);
+    if (mHovered) { p->setBrush(ThemeSupport::getThemeBaseDarkerColor()); }
+    else { p->setBrush(allFill); }
     if(mLeftNeighbour) {
         p->setClipRect(width()/2, 0, width()/2, height());
     } else if(mRightNeighbour) {
@@ -232,7 +246,8 @@ void QDoubleSlider::paint(QPainter *p,
             p->setPen(Qt::NoPen);
             const qreal valFrac = (mValue - mMinValue)/(mMaxValue - mMinValue);
             const qreal valWidth = clamp(valFrac*width(), 0, width() - 3);
-            p->setBrush(sliderFill);
+            if (mHovered) { p->setBrush(ThemeSupport::getThemeHighlightDarkerColor()); }
+            else { p->setBrush(sliderFill); }
             const qreal heightRemoval = qMax(0., eSizesUI::widget/2 - valWidth)*0.5;
             p->drawRoundedRect(QRectF(1, 1, valWidth, height() - 2).
                                adjusted(0, heightRemoval,
@@ -404,4 +419,18 @@ void QDoubleSlider::mouseMoveEvent(QMouseEvent *event) {
 
     cursor().setPos(mGlobalPressPos);
     Document::sInstance->updateScenes();
+}
+
+void QDoubleSlider::enterEvent(QEvent *)
+{
+    mHovered = true;
+    setCursor(Qt::SizeHorCursor);
+    update();
+}
+
+void QDoubleSlider::leaveEvent(QEvent *)
+{
+    mHovered = false;
+    unsetCursor();
+    update();
 }
