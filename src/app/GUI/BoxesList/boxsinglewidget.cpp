@@ -48,7 +48,7 @@
 #include "BlendEffects/blendeffectcollection.h"
 #include "BlendEffects/blendeffectboxshadow.h"
 #include "Sound/eindependentsound.h"
-
+#include "GUI/propertynamedialog.h"
 #include "Animators/SmartPath/smartpathcollection.h"
 
 #include "typemenu.h"
@@ -707,19 +707,29 @@ void BoxSingleWidget::mouseMoveEvent(QMouseEvent *event) {
     drag->exec(Qt::CopyAction | Qt::MoveAction);
 }
 
-void BoxSingleWidget::mouseReleaseEvent(QMouseEvent *event) {
-    if(!mTarget) return;
-    if(event->x() < mFillWidget->x() ||
-       event->x() > mFillWidget->x() + mFillWidget->width()) return;
-    setSelected(false);
-    if(pointToLen(event->pos() - mDragStartPos) > eSizesUI::widget/2) return;
-    const bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
+void BoxSingleWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (!mTarget) { return; }
     const auto target = mTarget->getTarget();
-    if(enve_cast<BoundingBox*>(target) || enve_cast<eIndependentSound*>(target)) {
+
+    const auto bbox = enve_cast<BoundingBox*>(target);
+    if (event->button() == Qt::MidButton && bbox) {
+        PropertyNameDialog::sRenameBox(bbox, this);
+        return;
+    }
+
+    if (event->x() < mFillWidget->x() ||
+        event->x() > mFillWidget->x() + mFillWidget->width()) { return; }
+    setSelected(false);
+
+    if (pointToLen(event->pos() - mDragStartPos) > eSizesUI::widget/2) { return; }
+
+    const bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
+    if (enve_cast<BoundingBox*>(target) || enve_cast<eIndependentSound*>(target)) {
         const auto boxTarget = static_cast<eBoxOrSound*>(target);
         boxTarget->selectionChangeTriggered(shiftPressed);
         Document::sInstance->actionFinished();
-    } else if(const auto pTarget = enve_cast<Property*>(target)) {
+    } else if (const auto pTarget = enve_cast<Property*>(target)) {
         pTarget->prp_selectionChangeTriggered(shiftPressed);
     }
 }
