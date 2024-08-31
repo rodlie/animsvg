@@ -67,7 +67,6 @@ public:
                       QWidget *parent = nullptr);
 
     void setCurrentScene(Canvas* const scene);
-    void sceneRequestedUpdate();
 
     void setGraphViewed(const bool bT);
 

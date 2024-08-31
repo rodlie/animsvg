@@ -92,8 +92,6 @@ void KeysView::setCurrentScene(Canvas * const scene)
     if (mCurrentScene) {
         disconnect(mCurrentScene.data(), &Canvas::objectSelectionChanged,
                    this, &KeysView::graphUpdateVisible);
-        disconnect(mCurrentScene.data(), &Canvas::requestUpdate,
-                   this, &KeysView::sceneRequestedUpdate);
         disconnect(mCurrentScene.data(), &Canvas::requestEasingAction,
                    this, &KeysView::graphEasingAction);
     }
@@ -101,16 +99,9 @@ void KeysView::setCurrentScene(Canvas * const scene)
     if (mCurrentScene) {
         connect(mCurrentScene.data(), &Canvas::objectSelectionChanged,
                 this, &KeysView::graphUpdateVisible);
-        connect(mCurrentScene.data(), &Canvas::requestUpdate,
-                this, &KeysView::sceneRequestedUpdate);
         connect(mCurrentScene.data(), &Canvas::requestEasingAction,
                 this, &KeysView::graphEasingAction);
     }
-    graphUpdateVisible();
-}
-
-void KeysView::sceneRequestedUpdate()
-{
     graphUpdateVisible();
 }
 
