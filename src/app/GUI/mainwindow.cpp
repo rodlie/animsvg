@@ -504,7 +504,7 @@ void MainWindow::setupMenuBar()
         loadToolBtn->setDefaultAction(openAct);
 
         loadToolMenu->addAction(mLinkedAct);
-        loadToolMenu->addAction(mImportSeqAct);
+        loadToolMenu->addAction(mImportAct);
         loadToolMenu->addAction(mImportSeqAct);
         loadToolMenu->addMenu(mRecentMenu);
 
