@@ -57,7 +57,8 @@ void PaintSettingsAnimator::prp_writeProperty_impl(eWriteStream& dst) const {
     mGradientTransform->prp_writeProperty_impl(dst);
 }
 
-void PaintSettingsAnimator::prp_readProperty_impl(eReadStream& src) {
+void PaintSettingsAnimator::prp_readProperty_impl(eReadStream& src)
+{
     mColor->prp_readProperty_impl(src);
     PaintType paintType;
     src.read(&paintType, sizeof(PaintType));
@@ -65,18 +66,27 @@ void PaintSettingsAnimator::prp_readProperty_impl(eReadStream& src) {
     int gradRWId; src >> gradRWId;
     int gradDocId; src >> gradDocId;
     SimpleTask::sScheduleContexted(this, [this, gradRWId, gradDocId]() {
-        const auto parentScene = getParentScene();
-        if(!parentScene) return;
+        auto parentScene = getParentScene();
+        if (!parentScene) { return; }
         SceneBoundGradient* gradient = nullptr;
-        if(gradRWId != -1)
+        if (gradRWId != -1) {
             gradient = parentScene->getGradientWithRWId(gradRWId);
-        if(!gradient && gradDocId != -1)
+        }
+        if (!gradient && gradDocId != -1) {
             gradient = parentScene->getGradientWithDocumentId(gradDocId);
+            if (!gradient) { // gradient is in a different scene
+                gradient = parentScene->getGradientWithDocumentSceneId(gradDocId);
+                const auto newGrad = parentScene->createNewGradient();
+                const auto clipboard = enve::make_shared<PropertyClipboard>(gradient);
+                clipboard->paste(newGrad);
+                gradient = newGrad;
+            }
+        }
         setGradientVar(gradient);
     });
 
     mGradientPoints->prp_readProperty_impl(src);
-    if(src.evFileVersion() > 7) {
+    if (src.evFileVersion() > 7) {
         mGradientTransform->prp_readProperty_impl(src);
     }
     setPaintType(paintType);
