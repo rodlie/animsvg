@@ -1663,11 +1663,10 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
         if (keyEvent->modifiers() & Qt::SHIFT && key == Qt::Key_D) {
             return processKeyEvent(keyEvent);
         }
-        if (keyEvent->modifiers() & Qt::CTRL) {
-            if (key == Qt::Key_C || key == Qt::Key_V ||
-                key == Qt::Key_X || key == Qt::Key_D) {
-                return processKeyEvent(keyEvent);
-            }
+        if (keyEvent->modifiers() & Qt::CTRL &&
+            (key == Qt::Key_C || key == Qt::Key_V ||
+             key == Qt::Key_X || key == Qt::Key_D)) {
+            return processKeyEvent(keyEvent);
         } else if (key == Qt::Key_A || key == Qt::Key_I ||
                    key == Qt::Key_Delete) {
               return processKeyEvent(keyEvent);
