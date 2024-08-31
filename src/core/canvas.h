@@ -671,6 +671,7 @@ public:
 
     SceneBoundGradient * getGradientWithRWId(const int rwId) const;
     SceneBoundGradient * getGradientWithDocumentId(const int id) const;
+    SceneBoundGradient * getGradientWithDocumentSceneId(const int id) const;
 
     void addNullObject(NullObject* const obj);
     void removeNullObject(NullObject* const obj);
