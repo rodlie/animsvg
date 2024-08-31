@@ -414,6 +414,7 @@ void Canvas::removeSelectedBoxesAndClearList() {
         removeBoxFromSelection(box);
         box->removeFromParent_k();
     }
+    emit objectSelectionChanged();
 }
 
 void Canvas::setCurrentBox(BoundingBox* const box) {
