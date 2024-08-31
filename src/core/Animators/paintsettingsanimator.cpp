@@ -76,10 +76,12 @@ void PaintSettingsAnimator::prp_readProperty_impl(eReadStream& src)
             gradient = parentScene->getGradientWithDocumentId(gradDocId);
             if (!gradient) { // gradient is in a different scene
                 gradient = parentScene->getGradientWithDocumentSceneId(gradDocId);
-                const auto newGrad = parentScene->createNewGradient();
-                const auto clipboard = enve::make_shared<PropertyClipboard>(gradient);
-                clipboard->paste(newGrad);
-                gradient = newGrad;
+                if (gradient) {
+                    const auto newGrad = parentScene->createNewGradient();
+                    const auto clipboard = enve::make_shared<PropertyClipboard>(gradient);
+                    clipboard->paste(newGrad);
+                    gradient = newGrad;
+                }
             }
         }
         setGradientVar(gradient);
