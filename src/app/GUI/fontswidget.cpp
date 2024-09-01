@@ -424,12 +424,12 @@ void FontsWidget::setBoxTarget(TextBox * const target)
             Document::sInstance->actionFinished();
         });
         mBoxTarget << connect(this, &FontsWidget::textAlignmentChanged,
-                              target, [target](const Qt::Alignment align) {
+                              target, [target](const Qt::Alignment &align) {
             target->setTextHAlignment(align);
             Document::sInstance->actionFinished();
         });
         mBoxTarget << connect(this, &FontsWidget::textVAlignmentChanged,
-                              target, [target](const Qt::Alignment align) {
+                              target, [target](const Qt::Alignment &align) {
             target->setTextVAlignment(align);
             Document::sInstance->actionFinished();
         });
