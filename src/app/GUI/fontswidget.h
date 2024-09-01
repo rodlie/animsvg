@@ -33,6 +33,8 @@
 #include <QPushButton>
 #include <QPlainTextEdit>
 
+#include "Boxes/boundingbox.h"
+#include "Boxes/textbox.h"
 #include "GUI/coloranimatorbutton.h"
 
 class SkFontStyle;
@@ -49,6 +51,8 @@ public:
     QString fontStyle() const;
     QString fontFamily() const;
 
+    void setCurrentBox(BoundingBox * const box);
+
     void setDisplayedSettings(const float size,
                               const QString &family,
                               const SkFontStyle &style,
@@ -58,6 +62,7 @@ public:
     void setTextFocus();
     void clearText();
     void setColorTarget(ColorAnimator * const target);
+    void setBoxTarget(TextBox * const target);
 
 signals:
     void fontFamilyAndStyleChanged(const QString &family,
@@ -80,6 +85,7 @@ private:
     const QStringList filterFonts();
 
     int mBlockEmit;
+    bool mBlockTextUpdate;
 
     QVBoxLayout *mMainLayout;
 
@@ -100,6 +106,8 @@ private:
     QPlainTextEdit *mTextInput;
 
     ColorAnimatorButton *mColorButton;
+
+    ConnContextQPtr<TextBox> mBoxTarget;
 };
 
 #endif // FONTSWIDGET_H

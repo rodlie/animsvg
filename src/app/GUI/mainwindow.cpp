@@ -254,8 +254,6 @@ MainWindow::MainWindow(Document& document,
     setupToolBar();
     setupMenuBar();
 
-    connectToolBarActions();
-
     readRecentFiles();
     updateRecentMenu();
 
@@ -614,20 +612,6 @@ void MainWindow::setupMenuBar()
     undoQAct->setShortcut(Qt::CTRL + Qt::Key_Z);
     mActions.undoAction->connect(undoQAct);
     cmdAddAction(undoQAct);
-
-    // workaround
-    // if we undo text changes we also want the font widget to reflect this
-    connect(undoQAct, &QAction::triggered,
-            this, [this]() {
-        const auto scene = *mDocument.fActiveScene;
-        if (!scene) { return; }
-        if (const auto txtBox = enve_cast<TextBox*>(scene->getCurrentBox())) {
-            mFontWidget->setDisplayedSettings(txtBox->getFontSize(),
-                                              txtBox->getFontFamily(),
-                                              txtBox->getFontStyle(),
-                                              txtBox->getCurrentValue());
-        }
-    });
 
     const auto redoQAct = mEditMenu->addAction(QIcon::fromTheme("loop_forwards"),
                                                tr("Redo", "MenuBar_Edit"));
@@ -1614,11 +1598,6 @@ void MainWindow::setupToolBar()
     spacer1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     mToolBar->addWidget(spacer1);*/
 
-
-    // fontWidget
-    //mFontWidget = new FontsWidget(this);
-    //mFontWidgetAct = mToolBar->addWidget(mFontWidget);
-
     // newEmpty
     /*mActionNewEmptyPaintFrameAct = new QAction(QIcon::fromTheme("newEmpty"),
                                                tr("New Empty Frame"),
@@ -1636,20 +1615,6 @@ void MainWindow::setupToolBar()
     //addToolBar(mToolBar);
 }
 
-void MainWindow::connectToolBarActions()
-{
-    connect(mFontWidget, &FontsWidget::fontSizeChanged,
-            &mActions, &Actions::setFontSize);
-    connect(mFontWidget, &FontsWidget::textChanged,
-            &mActions, &Actions::setFontText);
-    connect(mFontWidget, &FontsWidget::fontFamilyAndStyleChanged,
-            &mActions, &Actions::setFontFamilyAndStyle);
-    connect(mFontWidget, &FontsWidget::textAlignmentChanged,
-            &mActions, &Actions::setTextAlignment);
-    connect(mFontWidget, &FontsWidget::textVAlignmentChanged,
-            &mActions, &Actions::setTextVAlignment);
-}
-
 MainWindow *MainWindow::sGetInstance()
 {
     return sInstance;
@@ -1659,9 +1624,6 @@ void MainWindow::updateCanvasModeButtonsChecked()
 {
     const CanvasMode mode = mDocument.fCanvasMode;
     //mCentralWidget->setCanvasMode(mode);
-
-
-    //mFontWidgetAct->setVisible(boxMode);
 
     const bool boxMode = mode == CanvasMode::boxTransform;
     const bool pointMode = mode == CanvasMode::pointTransform;
@@ -1714,18 +1676,7 @@ SimpleBrushWrapper *MainWindow::getCurrentBrush() const
 void MainWindow::setCurrentBox(BoundingBox *box)
 {
     mFillStrokeSettings->setCurrentBox(box);
-    if (const auto txtBox = enve_cast<TextBox*>(box)) {
-        mFontWidget->setEnabled(true);
-        mFontWidget->setDisplayedSettings(txtBox->getFontSize(),
-                                          txtBox->getFontFamily(),
-                                          txtBox->getFontStyle(),
-                                          txtBox->getCurrentValue());
-        mFontWidget->setColorTarget(txtBox->getFillSettings()->getColorAnimator());
-    } else {
-        mFontWidget->clearText();
-        mFontWidget->setDisabled(true);
-        mFontWidget->setColorTarget(nullptr);
-    }
+    mFontWidget->setCurrentBox(box);
 }
 
 FillStrokeSettingsWidget *MainWindow::getFillStrokeSettings()

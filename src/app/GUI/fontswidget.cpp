@@ -24,7 +24,6 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "fontswidget.h"
-
 #include "mainwindow.h"
 
 #include <QLineEdit>
@@ -36,6 +35,7 @@
 FontsWidget::FontsWidget(QWidget *parent)
     : QWidget(parent)
     , mBlockEmit(0)
+    , mBlockTextUpdate(false)
     , mMainLayout(nullptr)
     , mFontFamilyCombo(nullptr)
     , mFontStyleCombo(nullptr)
@@ -282,6 +282,32 @@ QString FontsWidget::fontFamily() const
     return mFontFamilyCombo->currentText();
 }
 
+void FontsWidget::setCurrentBox(BoundingBox * const box)
+{
+    SkScalar fontSize = 0.;
+    QString fontFamily;
+    SkFontStyle fontStyle;
+    QString fontText;
+    if (const auto tBox = enve_cast<TextBox*>(box)) {
+        fontSize = tBox->getFontSize();
+        fontFamily = tBox->getFontFamily();
+        fontStyle = tBox->getFontStyle();
+        fontText = tBox->getCurrentValue();
+        setEnabled(true);
+        setColorTarget(tBox->getFillSettings()->getColorAnimator());
+        setBoxTarget(tBox);
+    } else {
+        clearText();
+        setDisabled(true);
+        setColorTarget(nullptr);
+        setBoxTarget(nullptr);
+    }
+    setDisplayedSettings(fontSize,
+                         fontFamily,
+                         fontStyle,
+                         fontText);
+}
+
 static QString styleStringHelper(const int weight,
                                  const SkFontStyle::Slant slant)
 {
@@ -371,6 +397,51 @@ void FontsWidget::clearText()
 void FontsWidget::setColorTarget(ColorAnimator * const target)
 {
     mColorButton->setColorTarget(target);
+}
+
+void FontsWidget::setBoxTarget(TextBox * const target)
+{
+    mBoxTarget.assign(target);
+    if (target) {
+        connect(this, &FontsWidget::fontSizeChanged,
+                target, [target](const qreal &value) {
+            target->setFontSize(value);
+            Document::sInstance->actionFinished();
+        });
+        mBoxTarget << connect(this, &FontsWidget::textChanged,
+                              target, [target, this](const QString &value) {
+            mBlockTextUpdate = true;
+            target->prp_startTransform();
+            target->setCurrentValue(value);
+            target->prp_finishTransform();
+            Document::sInstance->actionFinished();
+            mBlockTextUpdate = false;
+        });
+        mBoxTarget << connect(this, &FontsWidget::fontFamilyAndStyleChanged,
+                              target, [target](const QString &family,
+                                               const SkFontStyle &style) {
+            target->setFontFamilyAndStyle(family, style);
+            Document::sInstance->actionFinished();
+        });
+        mBoxTarget << connect(this, &FontsWidget::textAlignmentChanged,
+                              target, [target](const Qt::Alignment align) {
+            target->setTextHAlignment(align);
+            Document::sInstance->actionFinished();
+        });
+        mBoxTarget << connect(this, &FontsWidget::textVAlignmentChanged,
+                              target, [target](const Qt::Alignment align) {
+            target->setTextVAlignment(align);
+            Document::sInstance->actionFinished();
+        });
+        mBoxTarget << connect(target, &Property::prp_currentFrameChanged,
+                              this, [this, target]() {
+            if (mBlockTextUpdate) { return; }
+            setDisplayedSettings(target->getFontSize(),
+                                 target->getFontFamily(),
+                                 target->getFontStyle(),
+                                 target->getCurrentValue());
+        });
+    }
 }
 
 void FontsWidget::emitFamilyAndStyleChanged()

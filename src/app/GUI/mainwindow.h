@@ -377,7 +377,6 @@ private:
     ScrollArea *mObjectSettingsScrollArea;
 
     void setupToolBar();
-    void connectToolBarActions();
     void setupMenuBar();
     void setupMenuEffects();
     void setupMenuExtras();
