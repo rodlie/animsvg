@@ -185,10 +185,7 @@ MainWindow::MainWindow(Document& document,
     connect(&mDocument, &Document::sceneCreated,
             this, &MainWindow::closeWelcomeDialog);
     connect(&mDocument, &Document::openTextEditor,
-            this, [this] () {
-        mTabColorText->setCurrentIndex(mTabTextIndex);
-        mFontWidget->setTextFocus();
-    });
+            this, [this] () { focusFontWidget(true); });
     connect(&mDocument, &Document::newVideo,
             this, &MainWindow::handleNewVideoClip);
 
@@ -1677,6 +1674,17 @@ void MainWindow::setCurrentBox(BoundingBox *box)
 {
     mFillStrokeSettings->setCurrentBox(box);
     mFontWidget->setCurrentBox(box);
+    setCurrentBoxFocus(box);
+}
+
+void MainWindow::setCurrentBoxFocus(BoundingBox *box)
+{
+    if (!box) { return; }
+    if (const auto target = enve_cast<TextBox*>(box)) {
+        focusFontWidget(mDocument.fCanvasMode == CanvasMode::textCreate);
+    } else {
+        focusColorWidget();
+    }
 }
 
 FillStrokeSettingsWidget *MainWindow::getFillStrokeSettings()
@@ -2262,6 +2270,17 @@ LayoutHandler *MainWindow::getLayoutHandler()
 TimelineDockWidget *MainWindow::getTimeLineWidget()
 {
     return mTimeline;
+}
+
+void MainWindow::focusFontWidget(const bool focus)
+{
+    mTabColorText->setCurrentIndex(mTabTextIndex);
+    if (focus) { mFontWidget->setTextFocus(); }
+}
+
+void MainWindow::focusColorWidget()
+{
+    mTabColorText->setCurrentIndex(mTabColorIndex);
 }
 
 stdsptr<void> MainWindow::lock()

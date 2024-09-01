@@ -715,7 +715,7 @@ private:
 
     void clearGradientRWIds() const;
     QList<SmartNodePoint*> getSortedSelectedNodes();
-    void openTextEditorForTextBox(TextBox *textBox);
+    //void openTextEditorForTextBox(TextBox *textBox);
 
     void scaleSelected(const eMouseEvent &e);
     void rotateSelected(const eMouseEvent &e);

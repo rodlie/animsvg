@@ -79,7 +79,7 @@ TextBox::TextBox() : PathBox("Text", eBoxType::text) {
 #include <QDesktopWidget>
 
 void TextBox::openTextEditor(QWidget* dialogParent) {
-    bool ok;
+    /*bool ok;
     const QString text =
             QInputDialog::getMultiLineText(
                 dialogParent, prp_getName() + " text",
@@ -88,7 +88,8 @@ void TextBox::openTextEditor(QWidget* dialogParent) {
         mText->prp_startTransform();
         mText->setCurrentValue(text);
         mText->prp_finishTransform();
-    }
+    }*/
+    Q_UNUSED(dialogParent)
 }
 
 void TextBox::getMotionBlurProperties(QList<Property*> &list) const {

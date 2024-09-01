@@ -116,6 +116,7 @@ public:
 
     //void addBoxAwaitingUpdate(BoundingBox *box);
     void setCurrentBox(BoundingBox *box);
+    void setCurrentBoxFocus(BoundingBox *box);
 
 //    void nextSaveOutputFrame();
 //    void nextPlayPreviewFrame();
@@ -195,6 +196,8 @@ public:
     void cmdAddAction(QAction *act);
     LayoutHandler* getLayoutHandler();
     TimelineDockWidget* getTimeLineWidget();
+    void focusFontWidget(const bool focus = true);
+    void focusColorWidget();
 
 protected:
     void lockFinished();
