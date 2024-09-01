@@ -403,8 +403,8 @@ void FontsWidget::setBoxTarget(TextBox * const target)
 {
     mBoxTarget.assign(target);
     if (target) {
-        connect(this, &FontsWidget::fontSizeChanged,
-                target, [target](const qreal &value) {
+        mBoxTarget << connect(this, &FontsWidget::fontSizeChanged,
+                              target, [target](const qreal &value) {
             target->setFontSize(value);
             Document::sInstance->actionFinished();
         });
