@@ -20,11 +20,17 @@
 cmake_minimum_required(VERSION 3.12)
 project(friction.graphics)
 
+option(BUILD_ENGINE "Build Engine" ON)
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/src/cmake")
 include(friction-version)
 include(friction-meta)
 
-write_file(version.txt ${PROJECT_VERSION})
+if (CUSTOM_BUILD STREQUAL "")
+    write_file(version.txt ${PROJECT_VERSION})
+else()
+    write_file(version.txt ${PROJECT_VERSION}-${CUSTOM_BUILD})
+endif()
 
 if(UNIX AND NOT APPLE)
     set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
@@ -51,7 +57,9 @@ if(UNIX AND NOT APPLE)
     include(CPack)
 endif()
 
-add_subdirectory(src/engine)
+if(${BUILD_ENGINE})
+    add_subdirectory(src/engine)
+endif()
 if(UNIX)
     option(BUILD_TESTING "Don't build gperftools tests" OFF)
     add_subdirectory(src/gperftools)
@@ -60,4 +68,6 @@ add_subdirectory(src/core)
 add_subdirectory(src/ui)
 add_subdirectory(src/app)
 
-add_dependencies(frictioncore Engine)
+if(${BUILD_ENGINE})
+    add_dependencies(frictioncore Engine)
+endif()

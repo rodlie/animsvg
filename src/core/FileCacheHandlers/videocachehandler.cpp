@@ -100,10 +100,14 @@ void VideoFrameHandler::removeFrameLoader(const int frame) {
     mNeededFrames.erase(frame);
 }
 
-void VideoFrameHandler::openVideoStream() {
+void VideoFrameHandler::openVideoStream()
+{
     const auto filePath = mDataHandler->getFilePath();
     mVideoStreamsData = VideoStreamsData::sOpen(filePath);
     mDataHandler->setFrameCount(mVideoStreamsData->fFrameCount);
+    mDataHandler->setFps(mVideoStreamsData->fFps);
+    mDataHandler->setDim(QSize(mVideoStreamsData->fWidth,
+                               mVideoStreamsData->fHeight));
 }
 
 eTask* VideoFrameHandler::scheduleFrameLoad(const int frame) {
@@ -215,6 +219,27 @@ ImageCacheContainer* VideoDataHandler::getFrameAtOrBeforeFrame(const int relFram
 int VideoDataHandler::getFrameCount() const { return mFrameCount; }
 
 void VideoDataHandler::setFrameCount(const int count) { mFrameCount = count; }
+
+qreal VideoDataHandler::getFps() const
+{
+    return mFrameFps;
+}
+
+void VideoDataHandler::setFps(const qreal fps)
+{
+    mFrameFps = fps;
+}
+
+const QSize VideoDataHandler::getDim()
+{
+    return QSize(mFrameWidth, mFrameHeight);
+}
+
+void VideoDataHandler::setDim(const QSize dim)
+{
+    mFrameWidth = dim.width();
+    mFrameHeight = dim.height();
+}
 
 bool hasSound(const char* path) {
     // get format from audio file

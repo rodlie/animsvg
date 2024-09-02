@@ -69,19 +69,12 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     connect(&mDocument, &Document::selectedPaintSettingsChanged,
             this, &FillStrokeSettingsWidget::updateCurrentSettings);
 
-    const auto iconsDir = eSettings::sIconsDir(); // remove when new icons have been added
-
     // main buttons
-    mFillTargetButton = new QPushButton(QIcon(iconsDir + "/properties_fill.png"),
-                                        tr("Fill"), this);
-    mStrokeTargetButton = new QPushButton(QIcon(iconsDir + "/properties_stroke_paint.png"),
-                                          tr("Stroke"), this);
-    mFillNoneButton = new QPushButton(QIcon(iconsDir + "/fill_none.png"),
-                                      tr("None"), this);
-    mFillFlatButton = new QPushButton(QIcon(iconsDir + "/fill_flat.png"),
-                                      tr("Flat"), this);
-    mFillGradientButton = new QPushButton(QIcon(iconsDir + "/fill_gradient.png"),
-                                          tr("Gradient"), this);
+    mFillTargetButton = new QPushButton(QIcon::fromTheme("fill_flat_2"), tr("Fill"), this);
+    mStrokeTargetButton = new QPushButton(QIcon::fromTheme("stroke_flat_2"), tr("Stroke"), this);
+    mFillNoneButton = new QPushButton(QIcon::fromTheme("fill_none_2"), tr("None"), this);
+    mFillFlatButton = new QPushButton(QIcon::fromTheme("fill_flat_2"), tr("Flat"), this);
+    mFillGradientButton = new QPushButton(QIcon::fromTheme("fill_gradient_2"), tr("Gradient"), this);
 
     mFillTargetButton->setCheckable(true);
     mFillNoneButton->setCheckable(true);
@@ -155,11 +148,11 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     mJoinStyleWidget->setContentsMargins(0, 0, 0, 0);
     mJoinStyleLayout->setMargin(0);
 
-    mBevelJoinStyleButton = new QPushButton(QIcon(iconsDir + "/joinBevel.png"),
+    mBevelJoinStyleButton = new QPushButton(QIcon::fromTheme("joinBevel"),
                                             QString(), this);
-    mMiterJointStyleButton = new QPushButton(QIcon(iconsDir + "/joinMiter.png"),
+    mMiterJointStyleButton = new QPushButton(QIcon::fromTheme("joinMiter"),
                                              QString(), this);
-    mRoundJoinStyleButton = new QPushButton(QIcon(iconsDir + "/joinRound.png"),
+    mRoundJoinStyleButton = new QPushButton(QIcon::fromTheme("joinRound"),
                                             QString(), this);
 
     mBevelJoinStyleButton->setToolTip(tr("Bevel"));
@@ -194,11 +187,11 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     mCapStyleWidget->setContentsMargins(0, 0, 0, 0);
     mCapStyleLayout->setMargin(0);
 
-    mFlatCapStyleButton = new QPushButton(QIcon(iconsDir + "/capFlat.png"),
+    mFlatCapStyleButton = new QPushButton(QIcon::fromTheme("capFlat"),
                                           QString(), this);
-    mSquareCapStyleButton = new QPushButton(QIcon(iconsDir + "/capSquare.png"),
+    mSquareCapStyleButton = new QPushButton(QIcon::fromTheme("capSquare"),
                                             QString(), this);
-    mRoundCapStyleButton = new QPushButton(QIcon(iconsDir + "/capRound.png"),
+    mRoundCapStyleButton = new QPushButton(QIcon::fromTheme("capRound"),
                                            QString(), this);
 
     mFlatCapStyleButton->setToolTip(tr("Flat"));
@@ -236,10 +229,8 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     mGradientTypeWidget->setContentsMargins(0, 0, 0, 0);
     mGradientTypeLayout->setMargin(0);
 
-    mLinearGradientButton = new QPushButton(QIcon(iconsDir + "/fill_gradient.png"),
-                                            tr("Linear"), this);
-    mRadialGradientButton = new QPushButton(QIcon(iconsDir + "/fill_gradient_radial.png"),
-                                            tr("Radial"), this);
+    mLinearGradientButton = new QPushButton(QIcon::fromTheme("fill_gradient_2"), tr("Linear"), this);
+    mRadialGradientButton = new QPushButton(QIcon::fromTheme("fill_gradient_radial_2"), tr("Radial"), this);
 
     mLinearGradientButton->setCheckable(true);
     mRadialGradientButton->setCheckable(true);
@@ -265,20 +256,20 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
 
     // adjust sizes
     eSizesUI::widget.add(mBevelJoinStyleButton, [this](const int size) {
-        mBevelJoinStyleButton->setFixedHeight(size);
-        mMiterJointStyleButton->setFixedHeight(size);
-        mRoundJoinStyleButton->setFixedHeight(size);
-        mFlatCapStyleButton->setFixedHeight(size);
-        mSquareCapStyleButton->setFixedHeight(size);
-        mRoundCapStyleButton->setFixedHeight(size);
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            mBevelJoinStyleButton->setIconSize(QSize(size, size));
-            mMiterJointStyleButton->setIconSize(QSize(size, size));
-            mRoundJoinStyleButton->setIconSize(QSize(size, size));
-            mFlatCapStyleButton->setIconSize(QSize(size, size));
-            mSquareCapStyleButton->setIconSize(QSize(size, size));
-            mRoundCapStyleButton->setIconSize(QSize(size, size));
-        }
+        Q_UNUSED(size)
+        mBevelJoinStyleButton->setFixedHeight(eSizesUI::button);
+        mMiterJointStyleButton->setFixedHeight(eSizesUI::button);
+        mRoundJoinStyleButton->setFixedHeight(eSizesUI::button);
+        mFlatCapStyleButton->setFixedHeight(eSizesUI::button);
+        mSquareCapStyleButton->setFixedHeight(eSizesUI::button);
+        mRoundCapStyleButton->setFixedHeight(eSizesUI::button);
+        mFillTargetButton->setFixedHeight(eSizesUI::button);
+        mStrokeTargetButton->setFixedHeight(eSizesUI::button);
+        mFillNoneButton->setFixedHeight(eSizesUI::button);
+        mFillFlatButton->setFixedHeight(eSizesUI::button);
+        mFillGradientButton->setFixedHeight(eSizesUI::button);
+        mLinearGradientButton->setFixedHeight(eSizesUI::button);
+        mRadialGradientButton->setFixedHeight(eSizesUI::button);
     });
 
     // layout
@@ -311,6 +302,8 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     mColorTypeLayout->addWidget(mFillGradientButton);
 
     const auto mFillAndStrokeWidget = new QWidget(this);
+    mFillAndStrokeWidget->setContentsMargins(0, 0, 0, 0);
+
     const auto mMainLayout = new QVBoxLayout(mFillAndStrokeWidget);
 
     mMainLayout->addWidget(mTargetWidget);
@@ -322,10 +315,11 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     mMainLayout->addStretch();
 
     const auto mFillStrokeArea = new ScrollArea(this);
+    mFillAndStrokeWidget->setObjectName("DarkWidget");
     mFillStrokeArea->setWidget(mFillAndStrokeWidget);
 
     const auto mLayout = new QVBoxLayout(this);
-
+    mLayout->setContentsMargins(0,0,0,0);
     mLayout->setMargin(0);
     mLayout->addWidget(mFillStrokeArea);
 
@@ -356,6 +350,14 @@ void FillStrokeSettingsWidget::setGradientFillAction()
     mFillFlatButton->setChecked(false);
     mFillNoneButton->setChecked(false);
     paintTypeSet(GRADIENTPAINT);
+
+    const auto scene = *mDocument.fActiveScene;
+    if (scene && scene->gradients().count() < 1) {
+        const auto grad = scene->createNewGradient();
+        grad->addColor(Qt::black);
+        grad->addColor(Qt::white);
+    }
+
     mDocument.actionFinished();
 }
 
@@ -516,8 +518,14 @@ void FillStrokeSettingsWidget::setCurrentSettings(PaintSettingsAnimator *fillPai
 {
     setFillValuesFromFillSettings(fillPaintSettings);
     setStrokeValuesFromStrokeSettings(strokePaintSettings);
-    if (mTarget == PaintSetting::FILL) { setFillTarget(); }
-    else { setStrokeTarget(); }
+
+    const bool hasFill = fillPaintSettings ? fillPaintSettings->getPaintType() != PaintType::NOPAINT : false;
+    const bool hasStroke = strokePaintSettings ? strokePaintSettings->getPaintType() != PaintType::NOPAINT : false;
+    if (hasStroke && !hasFill) { setStrokeTarget(); }
+    else { setFillTarget(); }
+
+    //if (mTarget == PaintSetting::FILL) { setFillTarget(); }
+    //else { setStrokeTarget(); }
 }
 
 void FillStrokeSettingsWidget::clearAll()

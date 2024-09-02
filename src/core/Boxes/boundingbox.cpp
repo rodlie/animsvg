@@ -74,6 +74,7 @@ BoundingBox::BoundingBox(const QString& name, const eBoxType type) :
     mCustomProperties->SWT_setVisible(false);
 
     mTransformAnimator->ca_addChild(mTransformEffectCollection);
+    setSVGPropertiesVisible(false);
 
     ca_addChild(mBlendEffectCollection);
     mBlendEffectCollection->SWT_hide();
@@ -312,6 +313,25 @@ bool BoundingBox::blendEffectsEnabled() const {
 
 bool BoundingBox::hasBlendEffects() const {
     return mBlendEffectCollection->ca_hasChildren();
+}
+
+const QStringList BoundingBox::checkRasterEffectsForSVGSupport()
+{
+    QStringList result;
+    const int totalEffects = mRasterEffectsAnimators->ca_getNumberOfChildren();
+    for (int i = 0; i < totalEffects; ++i) {
+        const auto effect = enve_cast<RasterEffect*>(mRasterEffectsAnimators->getChild(i));
+        if (!effect) { continue; }
+        if (!effect->isVisible()) { continue; }
+        bool isSafeForSVG = false;
+        if (const auto blur = enve_cast<BlurEffect*>(effect)) {
+            isSafeForSVG = true;
+        } else if (const auto shadow = enve_cast<ShadowEffect*>(effect)) {
+            isSafeForSVG = true;
+        }
+        if (!isSafeForSVG) { result.append(effect->prp_getName()); }
+    }
+    return result;
 }
 
 void BoundingBox::applyTransformEffects(
@@ -712,6 +732,16 @@ void BoundingBox::scale(const qreal scaleXBy, const qreal scaleYBy) {
     mTransformAnimator->scale(scaleXBy, scaleYBy);
 }
 
+void BoundingBox::setScale(const qreal scale)
+{
+    mTransformAnimator->setScale(scale, scale);
+}
+
+void BoundingBox::setRotate(const qreal rot)
+{
+    mTransformAnimator->setRotation(rot);
+}
+
 void BoundingBox::rotateBy(const qreal rot) {
     mTransformAnimator->rotateRelativeToSavedValue(rot);
 }
@@ -995,6 +1025,16 @@ void BoundingBox::removeRasterEffect(const qsptr<RasterEffect> &effect) {
     mRasterEffectsAnimators->removeChild(effect);
 }
 
+void BoundingBox::addBlendEffect(const qsptr<BlendEffect> &blendEffect)
+{
+    mBlendEffectCollection->addChild(blendEffect);
+}
+
+void BoundingBox::addTransformEffect(const qsptr<TransformEffect> &transformEffect)
+{
+    mTransformEffectCollection->addChild(transformEffect);
+}
+
 //int BoundingBox::prp_getParentFrameShift() const {
 //    if(!mParentGroup) {
 //        return 0;
@@ -1066,6 +1106,31 @@ void BoundingBox::setBlendEffectsVisible(const bool visible) {
     prp_afterWholeInfluenceRangeChanged();
 }
 
+void BoundingBox::setSVGPropertiesVisible(const bool visible)
+{
+    const auto& children = mTransformAnimator->ca_getNumberOfChildren();
+    const auto properties = QStringList() << "begin event" << "end event";
+    for (int i = 0; i < children; i++) {
+        const auto child = mTransformAnimator->ca_getChildAt(i);
+        if (!child) { continue; }
+        if (!properties.contains(child->prp_getName())) { continue; }
+        child->SWT_setVisible(visible);
+    }
+}
+
+bool BoundingBox::getSVGPropertiesVisible()
+{
+    const auto& children = mTransformAnimator->ca_getNumberOfChildren();
+    const auto properties = QStringList() << "begin event" << "end event";
+    for (int i = 0; i < children; i++) {
+        const auto child = mTransformAnimator->ca_getChildAt(i);
+        if (!child) { continue; }
+        if (!properties.contains(child->prp_getName())) { continue; }
+        return child->SWT_isVisible();
+    }
+    return false;
+}
+
 #include <QInputDialog>
 void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu) {
     if(menu->hasActionsForType<BoundingBox>()) return;
@@ -1075,6 +1140,15 @@ void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu) {
         PropertyNameDialog::sRenameBox(this, parentWidget);
     });
     menu->addSeparator();
+    {
+        const PropertyMenu::CheckSelectedOp<BoundingBox> visRangeOp =
+            [](BoundingBox* const box, const bool checked) {
+                box->setSVGPropertiesVisible(checked);
+            };
+        menu->addCheckableAction(tr("SVG Properties"),
+                                 getSVGPropertiesVisible(),
+                                 visRangeOp);
+    }
     {
         const PropertyMenu::CheckSelectedOp<BoundingBox> visRangeOp =
         [](BoundingBox* const box, const bool checked) {
@@ -1325,8 +1399,11 @@ void BoundingBox::renderDataFinished(BoxRenderData *renderData) {
 //    }
 //}
 
-eTask* BoundingBox::saveSVGWithTransform(SvgExporter& exp, QDomElement& parent,
-                                         const FrameRange& parentVisRange) const {
+eTask* BoundingBox::saveSVGWithTransform(SvgExporter& exp,
+                                         QDomElement& parent,
+                                         const FrameRange& parentVisRange,
+                                         const QString &maskId) const
+{
     const auto visRange = parentVisRange*prp_absInfluenceRange();
     const auto task = enve::make_shared<DomEleTask>(exp, visRange);
     exp.addNextTask(task);
@@ -1334,15 +1411,23 @@ eTask* BoundingBox::saveSVGWithTransform(SvgExporter& exp, QDomElement& parent,
     const QPointer<const BoundingBox> ptr = this;
     const auto expPtr = &exp;
     const auto parentPtr = &parent;
-    taskPtr->addDependent({[ptr, taskPtr, expPtr, parentPtr, visRange]() {
+    taskPtr->addDependent({[ptr, taskPtr, expPtr, parentPtr, visRange, maskId]() {
         auto& ele = taskPtr->element();
-        if(ptr) {
+        if (ptr) {
             SvgExportHelpers::assignVisibility(*expPtr, ele, visRange);
             const auto transform = ptr->mTransformAnimator.get();
             const auto transformed = transform->saveSVG(*expPtr, visRange, ele);
             const auto effects = ptr->mRasterEffectsAnimators.get();
             const auto withEffects = effects->saveEffectsSVG(*expPtr, visRange, transformed);
-            parentPtr->appendChild(withEffects);
+
+            if (maskId == ptr->prp_getName()) { // move mask to defs
+                auto& eleMask = taskPtr->initialize("mask");
+                eleMask.setAttribute("id", QString(ptr->prp_getName()).simplified().replace(" ", ""));
+                eleMask.appendChild(withEffects);
+                expPtr->addToDefs(eleMask);
+            } else {
+                parentPtr->appendChild(withEffects);
+            }
         }
     }, nullptr});
     saveSVG(exp, taskPtr);

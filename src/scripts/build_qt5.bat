@@ -7,9 +7,9 @@ REM # GPLv3+
 set CWD=%cd%
 set SRC_DIR=%CWD%\src
 set QT_DIR=%SRC_DIR%\qt
-set QT_V=5.15.12
+set QT_V=5.15.14
 
-set PATH=%ProgramFiles%\Python311;%ProgramFiles%\CMake\bin;%PATH%
+set PATH=C:\Python;%ProgramFiles%\CMake\bin;%PATH%
 
 cd "%SRC_DIR%\qt-everywhere-src-%QT_V%"
 nmake

@@ -528,7 +528,10 @@ void GraphAnimator::graph_saveSVG(SvgExporter& exp,
                                   const QString& attrName,
                                   const ValueGetter& valueGetter,
                                   const bool transform,
-                                  const QString& type) const {
+                                  const QString& type,
+                                  const QString &beginEvent,
+                                  const QString &endEvent) const
+{
     Q_ASSERT(!transform || attrName == "transform");
     const auto relRange = prp_absRangeToRelRange(exp.fAbsRange);
     const auto idRange = prp_getIdenticalRelRange(visRange.fMin);
@@ -543,6 +546,10 @@ void GraphAnimator::graph_saveSVG(SvgExporter& exp,
     } else {
         const auto tagName = transform ? "animateTransform" : "animate";
         auto anim = exp.createElement(tagName);
+
+        if (!beginEvent.isEmpty()) { anim.setAttribute("begin", beginEvent); }
+        if (!endEvent.isEmpty()) { anim.setAttribute("end", endEvent); }
+
         anim.setAttribute("attributeName", attrName);
         if(!type.isEmpty()) anim.setAttribute("type", type);
         const qreal div = span - 1;
@@ -570,7 +577,7 @@ void GraphAnimator::graph_saveSVG(SvgExporter& exp,
                     }
                     const int prevRelFrame = prevKey->getRelFrame();
                     const qreal t = (prevRelFrame - relRange.fMin)/div;
-                    keyTimes << QString::number(t);
+                    keyTimes << QString::number(t).replace("-", "");
                     values << valueGetter(prevRelFrame);
                 }
                 const auto xSeg = getGraphXSegment(prevKey, nextKey);
@@ -595,7 +602,7 @@ void GraphAnimator::graph_saveSVG(SvgExporter& exp,
                                      arg(xKeySplines.c2()).arg(yC2);
                     const qreal relFrame = subSeg.first.p1();
                     const qreal t = (relFrame - relRange.fMin)/div;
-                    keyTimes << QString::number(t);
+                    keyTimes << QString::number(t).replace("-", "");
                     values << valueGetter(relFrame);
                 }
                 if(nextKeyRelFrame >= visRange.fMax) break;
@@ -606,6 +613,11 @@ void GraphAnimator::graph_saveSVG(SvgExporter& exp,
             keySplines << ks.arg(0).arg(0).arg(1).arg(1);
             keyTimes << QString::number(1);
             values << valueGetter(visRange.fMax);
+        }
+
+        // https://github.com/friction2d/friction/issues/165
+        if (parent.tagName() == "path" && !parent.hasAttribute("d")) {
+            parent.setAttribute("d", "M0 0");
         }
 
         anim.setAttribute("calcMode", "spline");

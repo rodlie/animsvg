@@ -91,7 +91,7 @@ void DisplayedGradientsWidget::paintGL() {
     const int nVisible = qMin(mGradients.count() - mTopGradientId,
                               mMaxVisibleGradients);
     int gradY = mDisplayedTop;
-    glClearColor(0.3f, 0.3f, 0.3f, 1);
+    glClearColor(0.075f, 0.075f, 0.082f, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(GRADIENT_PROGRAM.fID);
     glBindVertexArray(mPlainSquareVAO);
@@ -160,6 +160,15 @@ void DisplayedGradientsWidget::setSelectedGradient(Gradient *gradient) {
     update();
 }
 
+void DisplayedGradientsWidget::newGradient()
+{
+    if (!mScene) { return; }
+    const auto newGrad = mScene->createNewGradient();
+    newGrad->addColor(Qt::black);
+    newGrad->addColor(Qt::white);
+    setSelectedGradient(newGrad);
+}
+
 void DisplayedGradientsWidget::addGradient(Gradient * const gradient) {
     auto& conn = mGradients.addObj(gradient);
     conn << connect(gradient, &Gradient::prp_absFrameRangeChanged,
@@ -178,6 +187,20 @@ void DisplayedGradientsWidget::removeGradient(Gradient * const gradient) {
     }
     updateHeight();
     update();
+}
+
+void DisplayedGradientsWidget::removeSelectedGradient()
+{
+    removeGradient(mSelectedGradient);
+}
+
+void DisplayedGradientsWidget::duplicateSelectedGradient()
+{
+    if (!mScene) { return; }
+    const auto newGrad = mScene->createNewGradient();
+    const auto clipboard = enve::make_shared<PropertyClipboard>(mSelectedGradient);
+    clipboard->paste(newGrad);
+    setSelectedGradient(newGrad);
 }
 
 void DisplayedGradientsWidget::gradientLeftPressed(const int gradId) {

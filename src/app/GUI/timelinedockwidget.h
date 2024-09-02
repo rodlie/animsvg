@@ -48,6 +48,7 @@
 #include "timelinebasewrappernode.h"
 #include "widgets/qdoubleslider.h"
 #include "renderhandler.h"
+#include "widgets/framespinbox.h"
 
 class FrameScrollBar;
 class TimelineWidget;
@@ -82,6 +83,11 @@ public:
 
     void stopPreview();
 
+    void setIn();
+    void setOut();
+    void setMarker();
+    void splitClip();
+
 private:
     void setLoop(const bool loop);
     void interruptPreview();
@@ -111,13 +117,13 @@ private:
     QAction *mStopButton;
     QAction *mLoopButton;
 
-    QSpinBox *mFrameStartSpin;
-    QSpinBox *mFrameEndSpin;
+    FrameSpinBox *mFrameStartSpin;
+    FrameSpinBox *mFrameEndSpin;
 
     QAction *mFrameRewindAct;
     QAction *mFrameFastForwardAct;
     QAction *mCurrentFrameSpinAct;
-    QSpinBox *mCurrentFrameSpin;
+    FrameSpinBox *mCurrentFrameSpin;
 
     QAction *mRenderProgressAct;
     QProgressBar *mRenderProgress;

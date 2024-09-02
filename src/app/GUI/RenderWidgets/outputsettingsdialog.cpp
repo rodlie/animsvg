@@ -26,6 +26,7 @@
 #include "outputsettingsdialog.h"
 #include "GUI/mainwindow.h"
 #include "GUI/global.h"
+#include "appsupport.h"
 
 OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
                                            QWidget *parent) :
@@ -80,6 +81,7 @@ OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
     mOutputFormatsLayout->addWidget(mOutputFormatsComboBox);
 
     mVideoGroupBox = new QGroupBox(tr("Video"), this);
+    mVideoGroupBox->setObjectName("BlueBoxLeft");
     mVideoGroupBox->setCheckable(true);
     mVideoGroupBox->setChecked(true);
     mVideoSettingsLayout = new TwoColumnLayout();
@@ -106,6 +108,7 @@ OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
                                   mBitrateSpinBox);
 
     mAudioGroupBox = new QGroupBox(tr("Audio"), this);
+    mAudioGroupBox->setObjectName("BlueBoxLeft");
     mAudioGroupBox->setCheckable(true);
     mAudioSettingsLayout = new TwoColumnLayout();
     mAudioCodecsLabel = new QLabel(tr("Codec"), this);
@@ -426,8 +429,8 @@ void OutputSettingsDialog::updateAvailableOutputFormats() {
 //            if(supportedCodecs == 0) continue;
             //if(currentFormat->query_codec == nullptr) continue;
             mOutputFormatsList << currentFormat;
-            QString formatName = QString(currentFormat->long_name);
-            mOutputFormatsComboBox->addItem(formatName);
+            QString formatName = AppSupport::filterFormatsName(QString(currentFormat->long_name));
+            mOutputFormatsComboBox->addItem(QIcon::fromTheme("file_movie"), formatName);
             if(formatName == currentFormatName) {
                 mOutputFormatsComboBox->setCurrentText(formatName);
             }
@@ -451,8 +454,8 @@ void OutputSettingsDialog::updateAvailableOutputFormats() {
 //            if(supportedCodecs == 0) continue;
             //if(currentFormat->query_codec == nullptr) continue;
             mOutputFormatsList << currentFormat;
-            QString formatName = QString(currentFormat->long_name);
-            mOutputFormatsComboBox->addItem(formatName);
+            QString formatName = AppSupport::filterFormatsName(QString(currentFormat->long_name));
+            mOutputFormatsComboBox->addItem(QIcon::fromTheme("file_movie"), formatName);
             if(formatName == currentFormatName) {
                 mOutputFormatsComboBox->setCurrentText(formatName);
             }
@@ -649,7 +652,7 @@ void OutputSettingsDialog::restoreInitialSettings() {
     if(!currentOutputFormat) {
         mOutputFormatsComboBox->setCurrentIndex(0);
     } else {
-        QString currentOutputFormatName = QString(currentOutputFormat->long_name);
+        QString currentOutputFormatName = AppSupport::filterFormatsName(QString(currentOutputFormat->long_name));
         mOutputFormatsComboBox->setCurrentText(currentOutputFormatName);
     }
     const AVCodec *currentVideoCodec = mInitialSettings.fVideoCodec;

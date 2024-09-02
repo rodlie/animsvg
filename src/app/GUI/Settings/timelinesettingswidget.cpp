@@ -34,7 +34,7 @@
 
 TimelineSettingsWidget::TimelineSettingsWidget(QWidget *parent) :
     SettingsWidget(parent) {
-    mAlternateRowCheck = new QCheckBox("Alternate row color", this);
+    /*mAlternateRowCheck = new QCheckBox("Alternate row color", this);
     mAlternateRowColor = new ColorAnimatorButton(
                 mSett.fTimelineAlternateRowColor);
     add2HWidgets(mAlternateRowCheck, mAlternateRowColor);
@@ -44,7 +44,7 @@ TimelineSettingsWidget::TimelineSettingsWidget(QWidget *parent) :
                 mSett.fTimelineHighlightRowColor);
     add2HWidgets(mHighlightRowCheck, mHighlightRowColor);
 
-    addSeparator();
+    addSeparator();*/
 
     mObjectKeyframeColor = new ColorAnimatorButton(
                                mSett.fObjectKeyframeColor);
@@ -64,7 +64,7 @@ TimelineSettingsWidget::TimelineSettingsWidget(QWidget *parent) :
     add2HWidgets(new QLabel("Selected keyframe color"),
                  mSelectedKeyframeColor);
 
-    addSeparator();
+    /*addSeparator();
 
     mVisibilityRangeColor = new ColorAnimatorButton(
                                mSett.fVisibilityRangeColor);
@@ -78,48 +78,48 @@ TimelineSettingsWidget::TimelineSettingsWidget(QWidget *parent) :
     add2HWidgets(new QLabel("Selected visibility range color"),
                  mSelectedVisibilityRangeColor);
     add2HWidgets(new QLabel("Animation range color"),
-                 mAnimationRangeColor);
+                 mAnimationRangeColor);*/
 
-    eSizesUI::widget.add(mAlternateRowCheck, [this](const int size) {
+    /*eSizesUI::widget.add(mAlternateRowCheck, [this](const int size) {
         mAlternateRowCheck->setFixedHeight(size);
         mAlternateRowCheck->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
         mHighlightRowCheck->setFixedHeight(size);
         mHighlightRowCheck->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
-    });
+    });*/
 }
 
 void TimelineSettingsWidget::applySettings() {
-    mSett.fTimelineAlternateRow = mAlternateRowCheck->isChecked();
-    mSett.fTimelineAlternateRowColor = mAlternateRowColor->color();
+    //mSett.fTimelineAlternateRow = mAlternateRowCheck->isChecked();
+    //mSett.fTimelineAlternateRowColor = mAlternateRowColor->color();
 
-    mSett.fTimelineHighlightRow = mHighlightRowCheck->isChecked();
-    mSett.fTimelineHighlightRowColor = mHighlightRowColor->color();
+    //mSett.fTimelineHighlightRow = mHighlightRowCheck->isChecked();
+    //mSett.fTimelineHighlightRowColor = mHighlightRowColor->color();
 
     mSett.fObjectKeyframeColor = mObjectKeyframeColor->color();
     mSett.fPropertyGroupKeyframeColor = mPropertyGroupKeyframeColor->color();
     mSett.fPropertyKeyframeColor = mPropertyKeyframeColor->color();
     mSett.fSelectedKeyframeColor = mSelectedKeyframeColor->color();
 
-    mSett.fVisibilityRangeColor = mVisibilityRangeColor->color();
-    mSett.fSelectedVisibilityRangeColor = mSelectedVisibilityRangeColor->color();
-    mSett.fAnimationRangeColor = mAnimationRangeColor->color();
+    //mSett.fVisibilityRangeColor = mVisibilityRangeColor->color();
+    //mSett.fSelectedVisibilityRangeColor = mSelectedVisibilityRangeColor->color();
+    //mSett.fAnimationRangeColor = mAnimationRangeColor->color();
 }
 
 void TimelineSettingsWidget::updateSettings(bool restore)
 {
     Q_UNUSED(restore)
-    mAlternateRowCheck->setChecked(mSett.fTimelineAlternateRow);
-    mAlternateRowColor->setColor(mSett.fTimelineAlternateRowColor);
+    //mAlternateRowCheck->setChecked(mSett.fTimelineAlternateRow);
+    //mAlternateRowColor->setColor(mSett.fTimelineAlternateRowColor);
 
-    mHighlightRowCheck->setChecked(mSett.fTimelineHighlightRow);
-    mHighlightRowColor->setColor(mSett.fTimelineHighlightRowColor);
+    //mHighlightRowCheck->setChecked(mSett.fTimelineHighlightRow);
+    //mHighlightRowColor->setColor(mSett.fTimelineHighlightRowColor);
 
     mObjectKeyframeColor->setColor(mSett.fObjectKeyframeColor);
     mPropertyGroupKeyframeColor->setColor(mSett.fPropertyGroupKeyframeColor);
     mPropertyKeyframeColor->setColor(mSett.fPropertyKeyframeColor);
     mSelectedKeyframeColor->setColor(mSett.fSelectedKeyframeColor);
 
-    mVisibilityRangeColor->setColor(mSett.fVisibilityRangeColor);
-    mSelectedVisibilityRangeColor->setColor(mSett.fSelectedVisibilityRangeColor);
-    mAnimationRangeColor->setColor(mSett.fAnimationRangeColor);
+    //mVisibilityRangeColor->setColor(mSett.fVisibilityRangeColor);
+    //mSelectedVisibilityRangeColor->setColor(mSett.fSelectedVisibilityRangeColor);
+    //mAnimationRangeColor->setColor(mSett.fAnimationRangeColor);
 }

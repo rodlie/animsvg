@@ -41,6 +41,8 @@ public:
     QrealAnimatorValueSlider(qreal minVal, qreal maxVal, qreal prefferedStep,
                              QWidget *parent);
     QrealAnimatorValueSlider(qreal minVal, qreal maxVal, qreal prefferedStep,
+                             QWidget *parent, bool autoAdjust);
+    QrealAnimatorValueSlider(qreal minVal, qreal maxVal, qreal prefferedStep,
                              QrealAnimator* animator, QWidget *parent = nullptr);
     QrealAnimatorValueSlider(QrealAnimator* animator, QWidget *parent = nullptr);
     QrealAnimatorValueSlider(QWidget *parent = nullptr);

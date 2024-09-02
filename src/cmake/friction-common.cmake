@@ -27,6 +27,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(LINUX_DEPLOY "Linux Deploy" OFF)
 option(WIN_DEPLOY "Windows Deploy" OFF)
+option(BUILD_ENGINE "Build Engine" ON)
+set(ENGINE_LIB_PATH "/mnt/skia" CACHE STRING "Path to prebuilt skia library")
+
+if(${LINUX_DEPLOY})
+    add_definitions(-DLINUX_DEPLOY)
+endif()
+if(${WIN_DEPLOY})
+    add_definitions(-DWIN_DEPLOY)
+endif()
 
 if(UNIX AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     message(FATAL_ERROR "Only Clang is supported.")
@@ -72,7 +81,7 @@ find_package(PkgConfig QUIET)
 find_package(QT NAMES Qt5 COMPONENTS Core REQUIRED)
 find_package(
     Qt${QT_VERSION_MAJOR}
-    5.12.12
+    5.15.3
     COMPONENTS
     Gui
     Widgets
@@ -80,7 +89,7 @@ find_package(
     Multimedia
     Qml
     Xml
-    Svg
+    #Svg
     REQUIRED
 )
 set(QT_LIBRARIES
@@ -91,13 +100,16 @@ set(QT_LIBRARIES
     Qt${QT_VERSION_MAJOR}::Multimedia
     Qt${QT_VERSION_MAJOR}::Qml
     Qt${QT_VERSION_MAJOR}::Xml
-    Qt${QT_VERSION_MAJOR}::Svg)
+    #Qt${QT_VERSION_MAJOR}::Svg
+)
 
 if(WIN32)
     set(SKIA_LIBRARIES
         skia
         user32
         opengl32)
+    add_definitions(-DSKIA_DLL)
+    set(SKIA_LIBRARIES_DIRS ${CMAKE_SOURCE_DIR}/sdk/bin)
 else()
     if(APPLE)
         set(SKIA_LIBRARIES skia)
@@ -109,5 +121,10 @@ else()
         pkg_check_modules(UNWIND REQUIRED libunwind)
         set(GPERF_INCLUDE_DIRS ${CMAKE_CURRENT_BINARY_DIR}/../gperftools ${UNWIND_INCLUDE_DIRS})
         set(GPERF_LIBRARIES tcmalloc_static ${UNWIND_LIBRARIES})
+    endif()
+    if(${BUILD_ENGINE})
+        set(SKIA_LIBRARIES_DIRS ${CMAKE_CURRENT_BINARY_DIR}/../engine/skia)
+    else()
+        set(SKIA_LIBRARIES_DIRS ${ENGINE_LIB_PATH})
     endif()
 endif()

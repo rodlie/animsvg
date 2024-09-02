@@ -258,10 +258,13 @@ void QPointFAnimator::saveQPointFSVGX(SvgExporter& exp,
                                       const qreal y,
                                       const qreal multiplier,
                                       const bool transform,
-                                      const QString& type) const {
+                                      const QString& type,
+                                      const QString &beginEvent,
+                                      const QString &endEvent) const
+{
     const QString templ = "%1 " + QString::number(y);
     mXAnimator->saveQrealSVG(exp, parent, visRange, name, multiplier,
-                             transform, type, templ);
+                             transform, type, templ, beginEvent, endEvent);
 }
 
 void QPointFAnimator::saveQPointFSVGY(SvgExporter& exp,
@@ -271,10 +274,14 @@ void QPointFAnimator::saveQPointFSVGY(SvgExporter& exp,
                                       const qreal x,
                                       const qreal multiplier,
                                       const bool transform,
-                                      const QString& type) const {
+                                      const QString& type,
+                                      const QString &beginEvent,
+                                      const QString &endEvent) const
+{
     const QString templ = QString::number(x) + " %1";
     mYAnimator->saveQrealSVG(exp, parent, visRange, name, multiplier,
-                             transform, type, templ);
+                             transform, type, templ,
+                             beginEvent, endEvent);
 }
 
 QDomElement QPointFAnimator::prp_writePropertyXEV_impl(const XevExporter& exp) const {

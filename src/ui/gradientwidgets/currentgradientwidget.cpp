@@ -55,7 +55,7 @@ void CurrentGradientWidget::setCurrentGradient(Gradient * const gradient) {
 
 void CurrentGradientWidget::paintGL() {
     qreal pixelRatio = devicePixelRatioF();
-    glClearColor(0.3f, 0.3f, 0.3f, 1);
+    glClearColor(0.075f, 0.075f, 0.082f, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     if(!mGradient) return;
     const int nColors = mGradient->ca_getNumberOfChildren();
@@ -177,6 +177,22 @@ void CurrentGradientWidget::setCurrentColorId(const int id) {
     mColor = mGradient->getChild(mColorId);
     emit selectedColorChanged(mColor);
     update();
+}
+
+void CurrentGradientWidget::colorAdd()
+{
+    if (!mGradient) { return; }
+    mGradient->addColor(Qt::black);
+}
+
+void CurrentGradientWidget::colorRemove()
+{
+    if (!mGradient) { return; }
+    if (mGradient->ca_getNumberOfChildren() < 2) {
+        mColor->setColor(Qt::black);
+    } else {
+        mGradient->removeChild(mColor->ref<ColorAnimator>());
+    }
 }
 
 ColorAnimator *CurrentGradientWidget::getColorAnimator() {

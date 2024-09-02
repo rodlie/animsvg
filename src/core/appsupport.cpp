@@ -23,6 +23,8 @@
 
 #include "appsupport.h"
 #include "hardwareinfo.h"
+#include "ReadWrite/evformat.h"
+#include "ReadWrite/filefooter.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -38,6 +40,7 @@
 #include <QDirIterator>
 #include <QtMath>
 #include <QRegularExpression>
+#include <QMessageBox>
 
 AppSupport::AppSupport(QObject *parent)
     : QObject{parent}
@@ -45,58 +48,29 @@ AppSupport::AppSupport(QObject *parent)
 
 }
 
-void AppSupport::setupTheme()
-{
-    QIcon::setThemeName(QString::fromUtf8("hicolor"));
-    qApp->setStyle(QString::fromUtf8("fusion"));
-
-    QPalette palette;
-    palette.setColor(QPalette::Window, QColor(40, 40, 47));
-    palette.setColor(QPalette::WindowText, Qt::white);
-    palette.setColor(QPalette::Base, QColor(33, 33, 38));
-    palette.setColor(QPalette::AlternateBase, QColor(40, 40, 47));
-    palette.setColor(QPalette::Link, Qt::white);
-    palette.setColor(QPalette::LinkVisited, Qt::white);
-    palette.setColor(QPalette::ToolTipText, Qt::white);
-    palette.setColor(QPalette::ToolTipBase, Qt::black);
-    palette.setColor(QPalette::Text, Qt::white);
-    palette.setColor(QPalette::Button, QColor(33, 33, 38));
-    palette.setColor(QPalette::ButtonText, Qt::white);
-    palette.setColor(QPalette::BrightText, Qt::red);
-    palette.setColor(QPalette::Highlight, QColor(177, 16, 20));
-    palette.setColor(QPalette::HighlightedText, Qt::white);
-    palette.setColor(QPalette::Disabled, QPalette::Text, Qt::darkGray);
-    palette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
-    qApp->setPalette(palette);
-}
-
-const QPalette AppSupport::getDarkPalette()
-{
-    QPalette pal = QPalette();
-    pal.setColor(QPalette::Window, QColor(33, 33, 38));
-    pal.setColor(QPalette::Base, QColor(33, 33, 38));
-    pal.setColor(QPalette::Button, QColor(33, 33, 38));
-    return pal;
-}
-
-const QPalette AppSupport::getNotSoDarkPalette()
-{
-    QPalette pal = QPalette();
-    pal.setColor(QPalette::Window, QColor(40, 40, 47));
-    pal.setColor(QPalette::Base, QColor(33, 33, 38));
-    pal.setColor(QPalette::Button, QColor(33, 33, 38));
-    return pal;
-}
-
 QVariant AppSupport::getSettings(const QString &group,
                                  const QString &key,
                                  const QVariant &fallback)
 {
-    QVariant variant;
+    if (AppSupport::isAppPortable()) {
+        QSettings settings(QString("%1/friction.conf").arg(getAppConfigPath()),
+                           QSettings::IniFormat);
+        return getSettings(&settings, group, key, fallback);
+    }
     QSettings settings;
-    settings.beginGroup(group);
-    variant = settings.value(key, fallback);
-    settings.endGroup();
+    return getSettings(&settings, group, key, fallback);
+}
+
+QVariant AppSupport::getSettings(QSettings *settings,
+                                 const QString &group,
+                                 const QString &key,
+                                 const QVariant &fallback)
+{
+    QVariant variant;
+    if (!settings) { return variant; }
+    settings->beginGroup(group);
+    variant = settings->value(key, fallback);
+    settings->endGroup();
     return variant;
 }
 
@@ -105,8 +79,24 @@ void AppSupport::setSettings(const QString &group,
                              const QVariant &value,
                              bool append)
 {
+    if (AppSupport::isAppPortable()) {
+        QSettings settings(QString("%1/friction.conf").arg(getAppConfigPath()),
+                           QSettings::IniFormat);
+        setSettings(&settings, group, key, value, append);
+        return;
+    }
     QSettings settings;
-    settings.beginGroup(group);
+    setSettings(&settings, group, key, value, append);
+}
+
+void AppSupport::setSettings(QSettings *settings,
+                             const QString &group,
+                             const QString &key,
+                             const QVariant &value,
+                             bool append)
+{
+    if (!settings) { return; }
+    settings->beginGroup(group);
     QVariant result;
     if (append) {
         QVariant orig = getSettings(group, key);
@@ -121,8 +111,8 @@ void AppSupport::setSettings(const QString &group,
             result = text;
         } else { append = false; }
     }
-    settings.setValue(key, append ? result : value);
-    settings.endGroup();
+    settings->setValue(key, append ? result : value);
+    settings->endGroup();
 }
 
 const QString AppSupport::getAppName()
@@ -142,7 +132,7 @@ const QString AppSupport::getAppDomain()
 
 const QString AppSupport::getAppID()
 {
-    return QString::fromUtf8("graphics.friction");
+    return QString::fromUtf8("graphics.friction.Friction");
 }
 
 const QString AppSupport::getAppUrl()
@@ -153,8 +143,16 @@ const QString AppSupport::getAppUrl()
 const QString AppSupport::getAppVersion()
 {
     QString version = QString::fromUtf8(PROJECT_VERSION);
+#ifdef CUSTOM_BUILD
+    version.append(QString("-%1").arg(CUSTOM_BUILD));
+#endif
 #ifndef PROJECT_OFFICIAL
+#ifndef CUSTOM_BUILD
     version.append("-dev");
+#endif
+#ifdef PROJECT_COMMIT
+    version.append(QString("-%1").arg(PROJECT_COMMIT));
+#endif
 #endif
     return version;
 }
@@ -172,9 +170,9 @@ const QString AppSupport::getAppBuildInfo(bool html)
                                            branch);
     } else {
         return QString("%1 <a href=\"%5/%2\">%2</a> %3 <a href=\"%6/%4\">%4</a>.")
-                      .arg(tr("Built from"),
+                      .arg(tr("Built from commit"),
                            commit,
-                           tr("on"),
+                           tr("on branch"),
                            branch,
                            getAppCommitUrl(),
                            getAppBranchUrl());
@@ -225,9 +223,22 @@ const QString AppSupport::getAppConfigPath()
     QString path = QString::fromUtf8("%1/%2")
                    .arg(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation),
                         getAppName());
+    if (isAppPortable()) {
+        const QString appPath = getAppPath();
+        if (QFileInfo(appPath).isWritable()) { path = QString("%1/config").arg(appPath); }
+#ifdef Q_OS_LINUX
+        const QString appimage = getAppImagePath();
+        if (!appimage.isEmpty() && QFileInfo(appimage).isWritable()) { path = QString("%1.config").arg(appimage); }
+#endif
+    }
     QDir dir(path);
     if (!dir.exists()) { dir.mkpath(path); }
     return path;
+}
+
+const QString AppSupport::getAppPath()
+{
+    return QApplication::applicationDirPath();
 }
 
 const QString AppSupport::getAppOutputProfilesPath()
@@ -267,7 +278,7 @@ const QString AppSupport::getAppShaderEffectsPath(bool restore)
 
 const QString AppSupport::getAppShaderPresetsPath()
 {
-    QString path1 = QApplication::applicationDirPath();
+    QString path1 = getAppPath();
     QString path2 = path1;
     path1.append(QString::fromUtf8("/plugins/shaders"));
     path2.append(QString::fromUtf8("/../share/friction/plugins/shaders"));
@@ -278,7 +289,7 @@ const QString AppSupport::getAppShaderPresetsPath()
 
 const QString AppSupport::getAppExPresetsPath()
 {
-    QString path1 = QApplication::applicationDirPath();
+    QString path1 = getAppPath();
     QString path2 = path1;
     path1.append(QString::fromUtf8("/presets/expressions"));
     path2.append(QString::fromUtf8("/../share/friction/presets/expressions"));
@@ -289,9 +300,43 @@ const QString AppSupport::getAppExPresetsPath()
 
 const QString AppSupport::getAppUserExPresetsPath()
 {
-    QString path = QString::fromUtf8("%1/ExPresets").arg(getAppConfigPath());
+    QString path = QString::fromUtf8("%1/ExpressionPresets").arg(getAppConfigPath());
     QDir dir(path);
     if (!dir.exists()) { dir.mkpath(path); }
+    return path;
+}
+
+const QString AppSupport::getSVGO()
+{
+#ifdef Q_OS_WIN
+    const QString svgo = "svgo-win.exe";
+#else
+    const QString svgo = "svgo-linux";
+#endif
+    const QString path = QString("%1/%2").arg(getAppPath(), svgo);
+    if (QFile::exists(path)) { return path; }
+    return QStandardPaths::findExecutable("svgo");
+}
+
+const QString AppSupport::getSVGOConfig()
+{
+    QString filename = "svgo.config.js";
+    QString path = getAppConfigPath() + QDir::separator() + filename;
+    if (!QFile::exists(path)) {
+        QString config;
+        QFile file(":/config/" + filename);
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            config = file.readAll();
+            file.close();
+        }
+        if (!config.isEmpty()) {
+            QFile file(path);
+            if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                file.write(config.toUtf8());
+                file.close();
+            }
+        }
+    }
     return path;
 }
 
@@ -349,16 +394,46 @@ const QStringList AppSupport::getFilesFromPath(const QString &path,
     return result;
 }
 
-const QString AppSupport::getTimeCodeFromFrame(int frame, float fps)
+const QString AppSupport::getTimeCodeFromFrame(int frame,
+                                               float fps)
 {
-    int ss = qFloor(frame / fps);
-    int mm = qFloor(ss / 60);
-    int hh = qFloor(mm / 60);
-    int ff = frame - (ss * fps);
-    return QString("%1:%2:%3:%4").arg(QString::number(hh).rightJustified(2, '0'),
-                                      QString::number(mm).rightJustified(2, '0'),
-                                      QString::number(ss).rightJustified(2, '0'),
-                                      QString::number(ff).rightJustified(2, '0'));
+    if (fps <= 0) { return "00:00:00:00"; }
+    bool negative = frame < 0;
+    if (negative) { frame = qAbs(frame); }
+    double totalSeconds = static_cast<double>(frame) / fps;
+    int hours = static_cast<int>(totalSeconds / 3600);
+    int minutes = static_cast<int>((totalSeconds - hours * 3600) / 60);
+    int seconds = static_cast<int>(totalSeconds - hours * 3600 - minutes * 60);
+    int frames = static_cast<int>((totalSeconds - static_cast<int>(totalSeconds)) * fps);
+    QString timecode = QString("%1:%2:%3:%4")
+                           .arg(hours, 2, 10, QChar('0'))
+                           .arg(minutes, 2, 10, QChar('0'))
+                           .arg(seconds, 2, 10, QChar('0'))
+                           .arg(frames, 2, 10, QChar('0'));
+    if (negative) { timecode.prepend("-"); }
+    //qDebug() << frame << "=" << timecode;
+    return timecode;
+}
+
+int AppSupport::getFrameFromTimeCode(const QString &timecode,
+                                     float fps)
+{
+    const auto list = timecode.split(":");
+    bool negative = timecode.startsWith("-");
+    if (fps > 0. && list.count() == 4) {
+        int hh = negative ? QString(list.at(0)).replace("-", "").toInt() : list.at(0).toInt();
+        int mm = list.at(1).toInt();
+        int ss = list.at(2).toInt();
+        int ff = list.at(3).toInt();
+        double totalSeconds = hh * 3600 + mm * 60 + ss + static_cast<double>(ff) / fps;
+        int frame = static_cast<int>(totalSeconds * fps);
+        //qDebug() << timecode << "=" << negative ? -frame : frame;
+        return negative ? -frame : frame;
+    } else {
+        // assume it's just a frame number
+        return timecode.toInt();
+    }
+    return 0;
 }
 
 HardwareSupport AppSupport::getRasterEffectHardwareSupport(const QString &effect,
@@ -560,4 +635,352 @@ const QString AppSupport::filterTextAZW(const QString &text)
     QRegularExpression regex("\\s|\\W");
     QString output = text;
     return output.replace(regex, "");
+}
+
+const QString AppSupport::filterFormatsName(const QString &text)
+{
+    QString output(text);
+    if (output == "image2") { output = "image"; }
+    else if (output == "image2 sequence") { output = "Image Sequence"; }
+    return output;
+}
+
+int AppSupport::getProjectVersion(const QString &fileName)
+{
+    if (fileName.isEmpty()) { return EvFormat::version; }
+    if (!QFile::exists(fileName)) { return 0; }
+    QFile file(fileName);
+    if (file.open(QIODevice::ReadOnly)) {
+        try {
+            const int version = FileFooter::sReadEvFileVersion(&file);
+            file.close();
+            return version;
+        } catch(...) {
+            file.close();
+        }
+    }
+    return 0;
+}
+
+const QPair<QStringList, bool> AppSupport::hasWriteAccess()
+{
+    QPair<QStringList,bool> result(QStringList(), true);
+
+    QStringList dirs;
+    dirs << getAppConfigPath();
+    dirs << getAppOutputProfilesPath();
+    dirs << getAppShaderEffectsPath();
+    for (const auto &dir : dirs) {
+        if (dir.isEmpty()) { continue; }
+        QFileInfo info(dir);
+        if (!info.isDir() ||
+            !info.exists() ||
+            !info.isReadable() ||
+            !info.isWritable()) {
+            result.second = false;
+            result.first << info.absoluteFilePath();
+        }
+    }
+
+    return result;
+}
+
+bool AppSupport::isAppPortable()
+{
+    const QString path = getAppPath();
+#ifdef Q_OS_LINUX
+    const QString appimage = getAppImagePath();
+    if (!appimage.isEmpty()) {
+        return QFile::exists(appimage);// && QFileInfo(appimage).isWritable();
+    }
+#endif
+    return QFile::exists(QString("%1/portable.txt").arg(path)) && QFileInfo(path).isWritable();
+}
+
+const QString AppSupport::getAppImagePath()
+{
+    return QString(qgetenv("APPIMAGE"));
+}
+
+bool AppSupport::hasXDGDesktopIntegration()
+{
+    const bool ignoreXDG = getSettings("portable", "ignoreXDG", false).toBool();
+    if (ignoreXDG) { return true; }
+
+    QString path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    if (path.isEmpty() ||
+        !path.startsWith(QDir::homePath())) { path = QString("%1/.local/share").arg(QDir::homePath()); }
+
+    QStringList files;
+    QString desktop = "applications/graphics.friction.Friction.desktop";
+    files << desktop;
+    files << "mime/packages/graphics.friction.Friction.xml";
+    files << "icons/hicolor/scalable/apps/graphics.friction.Friction.svg";
+    files << "icons/hicolor/256x256/apps/graphics.friction.Friction.png";
+    files << "icons/hicolor/scalable/mimetypes/application-x-graphics.friction.Friction.svg";
+    files << "icons/hicolor/256x256/mimetypes/application-x-graphics.friction.Friction.png";
+
+    for (const auto &file : files) {
+        if (!QFile::exists(QString("%1/%2").arg(path, file))) {
+            qDebug() << "not found!" << file;
+            return false;
+        }
+    }
+
+    QString desktopFilePath(QString("%1/%2").arg(path, desktop));
+    if (QFile::exists(desktopFilePath)) {
+        QString appPath(qApp->applicationFilePath());
+        const QString appimage = getAppImagePath();
+        if (!appimage.isEmpty() && QFile::exists(appimage)) { appPath = appimage; }
+        QSettings dotDesktop(desktopFilePath, QSettings::IniFormat);
+        dotDesktop.beginGroup("Desktop Entry");
+        QString exec = dotDesktop.value("Exec").toString().simplified();
+        dotDesktop.endGroup();
+        if (exec.isEmpty() || !exec.startsWith(appPath)) { return false; }
+    }
+    return true;
+}
+
+bool AppSupport::setupXDGDesktopIntegration()
+{
+    QString path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    if (path.isEmpty() ||
+        !path.startsWith(QDir::homePath())) { path = QString("%1/.local/share").arg(QDir::homePath()); }
+
+    if (!QFile::exists(path)) {
+        QDir dir(path);
+        if (!dir.mkpath(path)) { return false; }
+    }
+
+    const QString resDesktop = ":/xdg/friction.desktop";
+    const QString resMime = ":/xdg/friction.xml";
+    const QString resSvg = ":/icons/hicolor/scalable/apps/graphics.friction.Friction.svg";
+    const QString resPng = ":/icons/hicolor/256x256/apps/graphics.friction.Friction.png";
+
+    {
+        const QString dirName(QString("%1/applications").arg(path));
+        const QString fileName(QString("%1/graphics.friction.Friction.desktop").arg(dirName));
+        if (!QFile::exists(dirName)) {
+            QDir dir(dirName);
+            if (!dir.mkpath(dirName)) { return false; }
+        }
+        bool wrongPath = false;
+        QSettings desktop(fileName, QSettings::IniFormat);
+        desktop.beginGroup("Desktop Entry");
+        QString exec = desktop.value("Exec").toString().simplified();
+        if (!exec.startsWith(getAppPath())) { wrongPath = true; }
+        desktop.endGroup();
+        if (!QFile::exists(fileName) || wrongPath) {
+            QFile file(fileName);
+            if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+                QFile res(resDesktop);
+                QString appPath(qApp->applicationFilePath());
+                const QString appimage = getAppImagePath();
+                if (!appimage.isEmpty() && QFile::exists(appimage)) { appPath = appimage; }
+                if (res.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                    file.write(res.readAll().replace("__FRICTION__",
+                                                     appPath.toUtf8()));
+                    res.close();
+                } else { return false; }
+                file.close();
+            } else { return false; }
+        }
+    }
+    {
+        const QString dirName(QString("%1/mime/packages").arg(path));
+        const QString fileName(QString("%1/graphics.friction.Friction.xml").arg(dirName));
+        if (!QFile::exists(dirName)) {
+            QDir dir(dirName);
+            if (!dir.mkpath(dirName)) { return false; }
+        }
+        if (!QFile::exists(fileName)) {
+            QFile file(fileName);
+            if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                QFile res(resMime);
+                if (res.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                    file.write(res.readAll());
+                    res.close();
+                } else { return false; }
+                file.close();
+            } else { return false; }
+        }
+    }
+    {
+        const QString dirName(QString("%1/icons/hicolor/scalable/apps").arg(path));
+        const QString fileName(QString("%1/graphics.friction.Friction.svg").arg(dirName));
+        if (!QFile::exists(dirName)) {
+            QDir dir(dirName);
+            if (!dir.mkpath(dirName)) { return false; }
+        }
+        if (!QFile::exists(fileName)) {
+            QFile file(fileName);
+            if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                QFile res(resSvg);
+                if (res.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                    file.write(res.readAll());
+                    res.close();
+                } else { return false; }
+                file.close();
+            } else { return false; }
+        }
+    }
+    {
+        const QString dirName(QString("%1/icons/hicolor/256x256/apps").arg(path));
+        const QString fileName(QString("%1/graphics.friction.Friction.png").arg(dirName));
+        if (!QFile::exists(dirName)) {
+            QDir dir(dirName);
+            if (!dir.mkpath(dirName)) { return false; }
+        }
+        if (!QFile::exists(fileName)) {
+            QFile file(fileName);
+            if (file.open(QIODevice::WriteOnly)) {
+                QFile res(resPng);
+                if (res.open(QIODevice::ReadOnly)) {
+                    file.write(res.readAll());
+                    res.close();
+                } else { return false; }
+                file.close();
+            } else { return false; }
+        }
+    }
+    {
+        const QString dirName(QString("%1/icons/hicolor/scalable/mimetypes").arg(path));
+        const QString fileName(QString("%1/application-x-graphics.friction.Friction.svg").arg(dirName));
+        if (!QFile::exists(dirName)) {
+            QDir dir(dirName);
+            if (!dir.mkpath(dirName)) { return false; }
+        }
+        if (!QFile::exists(fileName)) {
+            QFile file(fileName);
+            if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                QFile res(resSvg);
+                if (res.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                    file.write(res.readAll());
+                    res.close();
+                } else { return false; }
+                file.close();
+            } else { return false; }
+        }
+    }
+    {
+        const QString dirName(QString("%1/icons/hicolor/256x256/mimetypes").arg(path));
+        const QString fileName(QString("%1/application-x-graphics.friction.Friction.png").arg(dirName));
+        if (!QFile::exists(dirName)) {
+            QDir dir(dirName);
+            if (!dir.mkpath(dirName)) { return false; }
+        }
+        if (!QFile::exists(fileName)) {
+            QFile file(fileName);
+            if (file.open(QIODevice::WriteOnly)) {
+                QFile res(resPng);
+                if (res.open(QIODevice::ReadOnly)) {
+                    file.write(res.readAll());
+                    res.close();
+                } else { return false; }
+                file.close();
+            } else { return false; }
+        }
+    }
+
+    return true;
+}
+
+bool AppSupport::removeXDGDesktopIntegration()
+{
+    QString path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    if (path.isEmpty() ||
+        !path.startsWith(QDir::homePath())) { path = QString("%1/.local/share").arg(QDir::homePath()); }
+
+    QStringList files;
+    files << "applications/graphics.friction.Friction.desktop";
+    files << "mime/packages/graphics.friction.Friction.xml";
+    files << "icons/hicolor/scalable/apps/graphics.friction.Friction.svg";
+    files << "icons/hicolor/256x256/apps/graphics.friction.Friction.png";
+    files << "icons/hicolor/scalable/mimetypes/application-x-graphics.friction.Friction.svg";
+    files << "icons/hicolor/256x256/mimetypes/application-x-graphics.friction.Friction.png";
+
+    for (const auto &file : files) {
+        QFile fileName(QString("%1/%2").arg(path, file));
+        if (fileName.exists()) {
+            if (!fileName.remove()) {
+                qWarning() << "Failed to remove" << fileName;
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+const AppSupport::ExpressionPreset AppSupport::readEasingPreset(const QString &filename)
+{
+    ExpressionPreset preset;
+    preset.valid = false;
+    if (!QFile::exists(filename)) { return preset; }
+    QFile file(filename);
+    QString js;
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        js = file.readAll();
+        file.close();
+    }
+    if (js.isEmpty()) { return preset; }
+    QStringList parts = js.split("/*_FRICTION_EXPRESSION_PRESET_*/",
+                                 Qt::SkipEmptyParts);
+    if (parts.size() != 3) { return preset; }
+    preset.valid = true;
+    preset.definitions = parts.at(0).trimmed();
+    preset.bindings = parts.at(1).trimmed();
+    preset.script = parts.at(2).trimmed();
+    return preset;
+}
+
+const QList<QPair<QString, QString> > AppSupport::getEasingPresets()
+{
+    QList<QPair<QString, QString> > presets;
+
+    presets.push_back({tr("Ease In Back"), ":/easing/presets/easeInBack.js"});
+    presets.push_back({tr("Ease In Bounce"), ":/easing/presets/easeInBounce.js"});
+    presets.push_back({tr("Ease In Circ"), ":/easing/presets/easeInCirc.js"});
+    presets.push_back({tr("Ease In Cubic"), ":/easing/presets/easeInCubic.js"});
+    presets.push_back({tr("Ease In Elastic"), ":/easing/presets/easeInElastic.js"});
+    presets.push_back({tr("Ease In Expo"), ":/easing/presets/easeInExpo.js"});
+    presets.push_back({tr("Ease In Quad"), ":/easing/presets/easeInQuad.js"});
+    presets.push_back({tr("Ease In Quart"), ":/easing/presets/easeInQuart.js"});
+    presets.push_back({tr("Ease In Quint"), ":/easing/presets/easeInQuint.js"});
+    presets.push_back({tr("Ease In Sine"), ":/easing/presets/easeInSine.js"});
+
+    presets.push_back({tr("Ease Out Back"), ":/easing/presets/easeOutBack.js"});
+    presets.push_back({tr("Ease Out Bounce"), ":/easing/presets/easeOutBounce.js"});
+    presets.push_back({tr("Ease Out Circ"), ":/easing/presets/easeOutCirc.js"});
+    presets.push_back({tr("Ease Out Cubic"), ":/easing/presets/easeOutCubic.js"});
+    presets.push_back({tr("Ease Out Elastic"), ":/easing/presets/easeOutElastic.js"});
+    presets.push_back({tr("Ease Out Expo"), ":/easing/presets/easeOutExpo.js"});
+    presets.push_back({tr("Ease Out Quad"), ":/easing/presets/easeOutQuad.js"});
+    presets.push_back({tr("Ease Out Quart"), ":/easing/presets/easeOutQuart.js"});
+    presets.push_back({tr("Ease Out Quint"), ":/easing/presets/easeOutQuint.js"});
+    presets.push_back({tr("Ease Out Sine"), ":/easing/presets/easeOutSine.js"});
+
+    presets.push_back({tr("Ease In/Out Back"), ":/easing/presets/easeInOutBack.js"});
+    presets.push_back({tr("Ease In/Out Bounce"), ":/easing/presets/easeInOutBounce.js"});
+    presets.push_back({tr("Ease In/Out Circ"), ":/easing/presets/easeInOutCirc.js"});
+    presets.push_back({tr("Ease In/Out Cubis"), ":/easing/presets/easeInOutCubic.js"});
+    presets.push_back({tr("Ease In/Out Elastic"), ":/easing/presets/easeInOutElastic.js"});
+    presets.push_back({tr("Ease In/Out Expo"), ":/easing/presets/easeInOutExpo.js"});
+    presets.push_back({tr("Ease In/Out Quad"), ":/easing/presets/easeInOutQuad.js"});
+    presets.push_back({tr("Ease In/Out Quart"), ":/easing/presets/easeInOutQuart.js"});
+    presets.push_back({tr("Ease In/Out Quint"), ":/easing/presets/easeInOutQuint.js"});
+    presets.push_back({tr("Ease In/Out Sine"), ":/easing/presets/easeInOutSine.js"});
+
+    return presets;
+}
+
+void AppSupport::handlePortableFirstRun()
+{
+    if (!isAppPortable()) { return; }
+    const bool firstRun = getSettings("portable", "PortableFirstRun", true).toBool();
+    if (!firstRun) { return; }
+    QMessageBox::information(nullptr,
+                             tr("Portable Mode"),
+                             tr("You are in portable mode, your config directory is:"
+                                "<br><br><code>%1</code>").arg(getAppConfigPath()));
+    setSettings("portable", "PortableFirstRun", false);
 }

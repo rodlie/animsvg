@@ -20,12 +20,12 @@
 #
 
 set(FRICTION_NAME "friction")
-set(FRICTION_NAME_GENERIC "Motion Graphics")
+set(FRICTION_NAME_GENERIC "Friction Graphics")
 set(FRICTION_DISPLAY_NAME "Friction")
 set(PROJECT_COPYRIGHT "Friction contributors")
 set(PROJECT_IDENTIFIER "graphics.friction")
 set(PROJECT_SUMMARY "Motion graphics and animation")
-set(PROJECT_DESCRIPTION "Powerful and versatile motion graphics and animation application that allows you to create stunning vector and raster animations for web and video platforms with ease")
+set(PROJECT_DESCRIPTION "Powerful and versatile motion graphics and animation application that allows you to create vector and raster animations for web and video platforms with ease")
 set(PROJECT_LICENSE "GPLv3+")
 set(PROJECT_HOMEPAGE_URL "https://friction.graphics")
 set(PROJECT_FREEDESKTOP "${PROJECT_IDENTIFIER}.${FRICTION_DISPLAY_NAME}")

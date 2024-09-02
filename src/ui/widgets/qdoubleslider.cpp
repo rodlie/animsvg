@@ -32,15 +32,14 @@
 #include "Private/document.h"
 #include "pointhelpers.h"
 #include "GUI/global.h"
+#include "themesupport.h"
 
 SliderEdit::SliderEdit(QWidget* const parent) :
     QLineEdit(parent) {
     setAttribute(Qt::WA_TranslucentBackground);
-    setStyleSheet("background-color: rgba(0, 0, 0, 0);"
-                  "color: black;");
-    /*eSizesUI::widget.add(this, [this](const int size) {
+    eSizesUI::widget.add(this, [this](const int size) {
         setFixedHeight(size);
-    });*/
+    });
 
     connect(this, &QLineEdit::editingFinished,
             this, &SliderEdit::lineEditingFinished);
@@ -67,6 +66,7 @@ void SliderEdit::keyPressEvent(QKeyEvent* e) {
 void SliderEdit::hideEvent(QHideEvent* e) {
     releaseMouse();
     unsetCursor();
+    emit hoverChanged();
     QLineEdit::hideEvent(e);
 }
 
@@ -74,6 +74,12 @@ void SliderEdit::showEvent(QShowEvent* e) {
     grabMouse();
     setCursor(Qt::IBeamCursor);
     QLineEdit::showEvent(e);
+}
+
+void SliderEdit::leaveEvent(QEvent *e)
+{
+    emit hoverChanged();
+    QLineEdit::leaveEvent(e);
 }
 
 void SliderEdit::lineEditingFinished() {
@@ -105,6 +111,12 @@ QDoubleSlider::QDoubleSlider(const qreal minVal, const qreal maxVal,
     mLineEdit = new SliderEdit(this);
     mLineEdit->hide();
 
+    connect(mLineEdit, &SliderEdit::hoverChanged,
+            this, [this] {
+        mHovered = false;
+        unsetCursor();
+        update();
+    });
     connect(mLineEdit, &SliderEdit::valueSet,
             this, [this](const qreal value) {
         const qreal clampedValue = clamped(value);
@@ -179,10 +191,10 @@ void QDoubleSlider::setValueRange(const qreal min, const qreal max) {
 }
 
 void QDoubleSlider::paint(QPainter * const p, const bool enabled) {
-    paint(p, enabled ? QColor(255, 255, 255) : QColor(220, 220, 220),
-          enabled ? QColor(220, 220, 220) : QColor(200, 200, 200),
-          enabled ? Qt::black : Qt::darkGray,
-          enabled ? Qt::black : Qt::darkGray);
+    paint(p, enabled ? ThemeSupport::getThemeButtonBaseColor() : ThemeSupport::getThemeAlternateColor(),
+          enabled ? ThemeSupport::getThemeButtonBorderColor(150) : ThemeSupport::getThemeBaseColor(),
+          enabled ? ThemeSupport::getThemeButtonBorderColor() : Qt::darkGray,
+          enabled ? Qt::white : Qt::darkGray);
 }
 
 QString QDoubleSlider::valueToText(const qreal value) const {
@@ -211,13 +223,15 @@ void QDoubleSlider::paint(QPainter *p,
     p->setRenderHint(QPainter::Antialiasing);
     QRectF boundingRect = rect().adjusted(1, 1, -1, -1);
     p->setPen(Qt::NoPen);
-    p->setBrush(allFill);
+    if (mHovered) { p->setBrush(ThemeSupport::getThemeBaseDarkerColor()); }
+    else { p->setBrush(allFill); }
     if(mLeftNeighbour) {
         p->setClipRect(width()/2, 0, width()/2, height());
     } else if(mRightNeighbour) {
         p->setClipRect(0, 0, width()/2, height());
     }
-    p->drawRoundedRect(boundingRect, 5, 5);
+    const int xR = 2;
+    p->drawRoundedRect(boundingRect, xR, xR);
     if(mLeftNeighbour || mRightNeighbour) {
         if(mLeftNeighbour) {
             p->setClipRect(0, 0, width()/2, height());
@@ -232,13 +246,14 @@ void QDoubleSlider::paint(QPainter *p,
             p->setPen(Qt::NoPen);
             const qreal valFrac = (mValue - mMinValue)/(mMaxValue - mMinValue);
             const qreal valWidth = clamp(valFrac*width(), 0, width() - 3);
-            p->setBrush(sliderFill);
+            if (mHovered) { p->setBrush(ThemeSupport::getThemeHighlightDarkerColor()); }
+            else { p->setBrush(sliderFill); }
             const qreal heightRemoval = qMax(0., eSizesUI::widget/2 - valWidth)*0.5;
             p->drawRoundedRect(QRectF(1, 1, valWidth, height() - 2).
                                adjusted(0, heightRemoval,
-                                        0, -heightRemoval), 5, 5.);
+                                        0, -heightRemoval), xR, xR);
         }
-        p->setPen(text);
+        p->setPen(mHovered ? Qt::white : text);
         if(mShowName) {
             p->drawText(rect(), Qt::AlignCenter,
                         mName + ": " + mValueString);
@@ -254,7 +269,7 @@ void QDoubleSlider::paint(QPainter *p,
     } else if(mRightNeighbour) {
         p->setClipRect(0, 0, width()/2, height());
     }
-    p->drawRoundedRect(boundingRect, 5, 5);
+    p->drawRoundedRect(boundingRect, xR, xR);
     if(mLeftNeighbour || mRightNeighbour) {
         if(mLeftNeighbour) {
             boundingRect.adjust(-1, 0, 0, 0);
@@ -404,4 +419,18 @@ void QDoubleSlider::mouseMoveEvent(QMouseEvent *event) {
 
     cursor().setPos(mGlobalPressPos);
     Document::sInstance->updateScenes();
+}
+
+void QDoubleSlider::enterEvent(QEvent *)
+{
+    mHovered = true;
+    setCursor(Qt::SizeHorCursor);
+    update();
+}
+
+void QDoubleSlider::leaveEvent(QEvent *)
+{
+    mHovered = false;
+    unsetCursor();
+    update();
 }

@@ -28,17 +28,18 @@ REL=${REL:-1}
 BRANCH=${BRANCH:-""}
 COMMIT=${COMMIT:-""}
 TAG=${TAG:-""}
-MKJOBS=${MKJOBS:-4}
+CUSTOM=${CUSTOM:-""}
+MKJOBS=${MKJOBS:-32}
 SDK_VERSION=${SDK_VERSION:-""}
 ONLY_SDK=${ONLY_SDK:-0}
-SDK_TAR="${DISTFILES}/friction-vfxplatform-sdk-${SDK_VERSION}.tar"
+SDK_TAR="${DISTFILES}/sdk/friction-vfxplatform-CY2021-sdk-${SDK_VERSION}.tar"
 DOWNLOAD_SDK=${DOWNLOAD_SDK:-0}
 TAR_VERSION=${TAR_VERSION:-""}
 
 # Download SDK
 if [ "${DOWNLOAD_SDK}" = 1 ] && [ ! -f "${SDK_TAR}.bz2" ]; then
-    (cd ${DISTFILES} ;
-        wget https://download.friction.graphics/distfiles/vfxplatform/friction-vfxplatform-sdk-${SDK_VERSION}.tar.bz2
+    (cd ${DISTFILES}/sdk ;
+        wget https://download.friction.graphics/distfiles/vfxplatform/friction-vfxplatform-CY2021-sdk-${SDK_VERSION}.tar.bz2
     )
 fi
 
@@ -73,12 +74,13 @@ REL=${REL} \
 BRANCH=${BRANCH} \
 COMMIT=${COMMIT} \
 TAG=${TAG} \
+CUSTOM=${CUSTOM} \
 TAR_VERSION=${TAR_VERSION} \
 ${BUILD}/build_vfxplatform_friction.sh
 
 # Get Friction version
 VERSION=`cat ${BUILD}/friction/build-vfxplatform/version.txt`
-if [ "${REL}" != 1 ]; then
+if [ "${REL}" != 1 ] && [ "${CUSTOM}" = "" ]; then
     GIT_COMMIT=`(cd ${BUILD}/friction ; git rev-parse --short=8 HEAD)`
     VERSION="${VERSION}-${GIT_COMMIT}"
 fi

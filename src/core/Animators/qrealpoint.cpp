@@ -25,6 +25,7 @@
 
 #include "qrealpoint.h"
 #include "graphkey.h"
+#include "themesupport.h"
 
 QrealPoint::QrealPoint(QrealPointType type,
                        GraphKey * const parentKey,
@@ -148,17 +149,25 @@ void QrealPoint::setFrameAndValue(const qreal relFrame, const qreal value,
     mParentKey->updateCtrlFromCtrl(mType, pixelsPerFrame, pixelsPerValue);
 }
 
-void QrealPoint::draw(QPainter * const p, const QColor &paintColor) {
+void QrealPoint::draw(QPainter * const p,
+                      const QColor &paintColor)
+{
+    Q_UNUSED(paintColor)
     const QPointF center(getAbsFrame(), getValue());
 
-    p->setBrush(Qt::black);
-    if(mHovered) gDrawCosmeticEllipse(p, center, mRadius + 1, mRadius + 1);
-    else gDrawCosmeticEllipse(p, center, mRadius, mRadius);
+    p->setBrush(ThemeSupport::getThemeBaseDarkColor());
+    if (mHovered) { gDrawCosmeticEllipse(p, center, mRadius + 1, mRadius + 1); }
+    else { gDrawCosmeticEllipse(p, center, mRadius, mRadius); }
 
-    p->setBrush(paintColor);
-    if(!isSelected()) p->setBrush(paintColor.lighter());
+    if (isSelected() || mHovered) { p->setBrush(Qt::white); }
+    else { p->setBrush(Qt::gray); }
 
     gDrawCosmeticEllipse(p, center, mRadius - 1, mRadius - 1);
+
+    if (isSelected() || mHovered) {
+        p->setBrush(paintColor);
+        gDrawCosmeticEllipse(p, center, mRadius/2 - 1, mRadius/2 - 1);
+    }
 }
 
 void QrealPoint::setSelected(const bool selected) {

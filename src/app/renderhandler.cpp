@@ -176,9 +176,13 @@ void RenderHandler::renderPreview() {
 
     mSavedCurrentFrame = mCurrentScene->getCurrentFrame();
 
-    mMinRenderFrame = mLoop ? mCurrentScene->getMinFrame() - 1:
-                              mSavedCurrentFrame;
-    mMaxRenderFrame = mCurrentScene->getMaxFrame();
+    const auto fIn = mCurrentScene->getFrameIn();
+    const auto fOut = mCurrentScene->getFrameOut();
+
+    mMinRenderFrame = mLoop ? (fIn.enabled? fIn.frame : mCurrentScene->getMinFrame()) - 1:
+                          (fIn.enabled ? fIn.frame : mSavedCurrentFrame);
+
+    mMaxRenderFrame = fOut.enabled ? fOut.frame : mCurrentScene->getMaxFrame();
 
     mCurrentRenderFrame = mMinRenderFrame;
     mCurrRenderRange = {mCurrentRenderFrame, mCurrentRenderFrame};
@@ -279,11 +283,13 @@ void RenderHandler::playPreview() {
     if(!mCurrentScene) return;
     //setFrameAction(mSavedCurrentFrame);
     TaskScheduler::sClearAllFinishedFuncs();
-    const int minPreviewFrame = mSavedCurrentFrame;
+    const auto fIn = mCurrentScene->getFrameIn();
+    const auto fOut = mCurrentScene->getFrameOut();
+    const int minPreviewFrame = fIn.enabled? (fIn.frame < mSavedCurrentFrame && mSavedCurrentFrame < mCurrentRenderFrame ? mSavedCurrentFrame : fIn.frame) : mSavedCurrentFrame;
     const int maxPreviewFrame = qMin(mMaxRenderFrame, mCurrentRenderFrame);
     if(minPreviewFrame >= maxPreviewFrame) return;
-    mMinPreviewFrame = mLoop ? mCurrentScene->getMinFrame() : minPreviewFrame;
-    mMaxPreviewFrame = maxPreviewFrame;
+    mMinPreviewFrame = mLoop ? (fIn.enabled? fIn.frame : mCurrentScene->getMinFrame()) : (fIn.enabled? (fIn.frame < minPreviewFrame && minPreviewFrame < mCurrentRenderFrame ? minPreviewFrame : fIn.frame) : minPreviewFrame);
+    mMaxPreviewFrame = fOut.enabled ? fOut.frame : maxPreviewFrame;
     mCurrentPreviewFrame = minPreviewFrame;
     mCurrentScene->setSceneFrame(mCurrentPreviewFrame);
 

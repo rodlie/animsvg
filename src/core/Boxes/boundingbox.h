@@ -284,6 +284,8 @@ public:
     void rotateBy(const qreal rot);
     void scale(const qreal scaleBy);
     void scale(const qreal scaleXBy, const qreal scaleYBy);
+    void setScale(const qreal scale);
+    void setRotate(const qreal rot);
     void saveTransformPivotAbsPos(const QPointF &absPivot);
 
     void startPosTransform();
@@ -366,6 +368,9 @@ public:
     void addRasterEffect(const qsptr<RasterEffect> &rasterEffect);
     void removeRasterEffect(const qsptr<RasterEffect> &effect);
 
+    void addBlendEffect(const qsptr<BlendEffect> &blendEffect);
+    void addTransformEffect(const qsptr<TransformEffect> &transformEffect);
+
     void setBlendModeSk(const SkBlendMode blendMode);
 
     QPointF mapRelPosToAbs(const QPointF &relPos) const;
@@ -419,6 +424,8 @@ public:
     bool hasEnabledBlendEffects() const
     { return blendEffectsEnabled() && hasBlendEffects(); }
 
+    const QStringList checkRasterEffectsForSVGSupport();
+
     void applyTransformEffects(const qreal relFrame,
                                qreal& pivotX, qreal& pivotY,
                                qreal& posX, qreal& posY,
@@ -432,7 +439,8 @@ public:
     ContainerBox* getFirstParentLayer() const;
 
     eTask* saveSVGWithTransform(SvgExporter& exp, QDomElement& parent,
-                                const FrameRange& parentVisRange) const;
+                                const FrameRange& parentVisRange,
+                                const QString &maskId = QString()) const;
 private:
     void cancelWaitingTasks();
     void afterTotalTransformChanged(const UpdateReason reason);
@@ -471,6 +479,8 @@ private:
     void setCustomPropertiesVisible(const bool visible);
     void setBlendEffectsVisible(const bool visible);
     void setTransformEffectsVisible(const bool visible);
+    void setSVGPropertiesVisible(const bool visible);
+    bool getSVGPropertiesVisible();
 
     SkBlendMode mBlendMode = SkBlendMode::kSrcOver;
 

@@ -153,17 +153,17 @@ private:
     QLabel *rLabel = new QLabel("R");
     ColorValueRect *rRect = nullptr;
     QrealAnimatorValueSlider *rSpin =
-            new QrealAnimatorValueSlider(0., 1., 0.01, this);
+            new QrealAnimatorValueSlider(0., 1., 0.01, this, false);
     QHBoxLayout *gLayout = new QHBoxLayout();
     QLabel *gLabel = new QLabel("G");
     ColorValueRect *gRect = nullptr;
     QrealAnimatorValueSlider *gSpin =
-            new QrealAnimatorValueSlider(0., 1., 0.01, this);
+            new QrealAnimatorValueSlider(0., 1., 0.01, this, false);
     QHBoxLayout *bLayout = new QHBoxLayout();
     QLabel *bLabel = new QLabel("B");
     ColorValueRect *bRect = nullptr;
     QrealAnimatorValueSlider *bSpin =
-            new QrealAnimatorValueSlider(0., 1., 0.01, this);
+            new QrealAnimatorValueSlider(0., 1., 0.01, this, false);
 
     QWidget *mHSVWidget = new QWidget();
     QVBoxLayout *mHSVLayout = new QVBoxLayout();
@@ -171,17 +171,17 @@ private:
     QLabel *hLabel = new QLabel("H");
     ColorValueRect *hRect = nullptr;
     QrealAnimatorValueSlider *hSpin =
-            new QrealAnimatorValueSlider(0., 1., 0.01, this);
+            new QrealAnimatorValueSlider(0., 1., 0.01, this, false);
     QHBoxLayout *hsvSLayout = new QHBoxLayout();
     QLabel *hsvSLabel = new QLabel("S");
     ColorValueRect *hsvSatRect = nullptr;
     QrealAnimatorValueSlider *hsvSSpin =
-            new QrealAnimatorValueSlider(0., 1., 0.01, this);
+            new QrealAnimatorValueSlider(0., 1., 0.01, this, false);
     QHBoxLayout *vLayout = new QHBoxLayout();
     QLabel *vLabel = new QLabel("V");
     ColorValueRect *vRect = nullptr;
     QrealAnimatorValueSlider *vSpin =
-            new QrealAnimatorValueSlider(0., 1., 0.01, this);
+            new QrealAnimatorValueSlider(0., 1., 0.01, this, false);
 
     QWidget *mHSLWidget = new QWidget();
     QVBoxLayout *mHSLLayout = new QVBoxLayout();
@@ -190,19 +190,19 @@ private:
     QLabel *hslSLabel = new QLabel("S");
     ColorValueRect *hslSatRect = nullptr;
     QrealAnimatorValueSlider *hslSSpin =
-            new QrealAnimatorValueSlider(0., 1., 0.01, this);
+            new QrealAnimatorValueSlider(0., 1., 0.01, this, false);
     QHBoxLayout *lLayout = new QHBoxLayout();
     QLabel *lLabel = new QLabel("L");
     ColorValueRect *lRect = nullptr;
     QrealAnimatorValueSlider *lSpin =
-            new QrealAnimatorValueSlider(0., 1., 0.01, this);
+            new QrealAnimatorValueSlider(0., 1., 0.01, this, false);
 
     bool mAlphaHidden = false;
     QHBoxLayout *aLayout = new QHBoxLayout();
     QLabel *aLabel = new QLabel("A");
     ColorValueRect *aRect = nullptr;
     QrealAnimatorValueSlider *aSpin =
-            new QrealAnimatorValueSlider(0., 1., 0.01, this);
+            new QrealAnimatorValueSlider(0., 1., 0.01, this, false);
 
     QHBoxLayout *hexLayout;
     QLineEdit *mHexEdit;

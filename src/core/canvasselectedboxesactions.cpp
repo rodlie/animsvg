@@ -23,6 +23,8 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
+#include "Boxes/svglinkbox.h"
+#include "Boxes/videobox.h"
 #include "canvas.h"
 #include "MovablePoints/pathpivot.h"
 #include "PathEffects/patheffectsinclude.h"
@@ -171,7 +173,6 @@ void Canvas::setSelectedTextVAlignment(const Qt::Alignment alignment) const {
 void Canvas::setSelectedFontFamilyAndStyle(const QString& family,
                                            const SkFontStyle& style)
 {
-#pragma message("FIXME: undo for font family is broken")
     pushUndoRedoName("Change Font");
     for(const auto &box : mSelectedBoxes) {
         box->setFontFamilyAndStyle(family, style);
@@ -293,11 +294,13 @@ NormalSegment Canvas::getSegment(const eMouseEvent& e) const {
     return NormalSegment();
 }
 
-void Canvas::rotateSelectedBoxesStartAndFinish(const qreal rotBy) {
+void Canvas::rotateSelectedBoxesStartAndFinish(const qreal rotBy,
+                                               bool inc) {
     if(mDocument.fLocalPivot) {
         for(const auto &box : mSelectedBoxes) {
             box->startRotTransform();
-            box->rotateBy(rotBy);
+            if (inc) { box->rotateBy(rotBy); }
+            else { box->setRotate(rotBy); }
             box->finishTransform();
         }
     } else {
@@ -308,6 +311,34 @@ void Canvas::rotateSelectedBoxesStartAndFinish(const qreal rotBy) {
             box->rotateRelativeToSavedPivot(rotBy);
             box->finishTransform();
         }
+    }
+}
+
+void Canvas::scaleSelectedBoxesStartAndFinish(const qreal scaleBy)
+{
+    if (mDocument.fLocalPivot) {
+        for(const auto &box : mSelectedBoxes) {
+            box->startScaleTransform();
+            box->setScale(scaleBy);
+            box->finishTransform();
+        }
+    } else {
+        for (const auto &box : mSelectedBoxes) {
+            box->startRotTransform();
+            box->startPosTransform();
+            box->saveTransformPivotAbsPos(mRotPivot->getAbsolutePos());
+            box->scaleRelativeToSavedPivot(scaleBy);
+            box->finishTransform();
+        }
+    }
+}
+
+void Canvas::moveSelectedBoxesStartAndFinish(const QPointF moveBy)
+{
+    for (const auto &box : mSelectedBoxes) {
+        box->startPosTransform();
+        box->moveByAbs(moveBy);
+        box->finishTransform();
     }
 }
 
@@ -412,6 +443,7 @@ void Canvas::removeSelectedBoxesAndClearList() {
         removeBoxFromSelection(box);
         box->removeFromParent_k();
     }
+    emit objectSelectionChanged();
 }
 
 void Canvas::setCurrentBox(BoundingBox* const box) {
@@ -483,6 +515,61 @@ void Canvas::clearBoxesSelectionList() {
     mSelectedBoxes.clear();
     emit selectedPaintSettingsChanged();
     emit objectSelectionChanged();
+}
+
+const QString Canvas::checkForUnsupportedBoxSVG(BoundingBox * const box)
+{
+    QString result;
+    if (!box) { return result; }
+    qDebug() << "check" << box->prp_getName() << "for SVG support";
+    if (box->hasTransformEffects()) {
+        result.append(QString("- %1 => %2 : %3\n").arg(prp_getName(),
+                                                       box->prp_getName(),
+                                                       tr("Transform effects are unsupported")));
+    }
+    if (box->hasEnabledBlendEffects()) {
+        result.append(QString("- %1 => %2 : %3\n").arg(prp_getName(),
+                                                       box->prp_getName(),
+                                                       tr("Blend effects are unsupported")));
+    }
+    const auto rasterEffects = box->checkRasterEffectsForSVGSupport();
+    if (rasterEffects.size() > 0) {
+        result.append(QString("- %1 => %2 : %3 %4\n").arg(prp_getName(),
+                                                          box->prp_getName(),
+                                                          rasterEffects.join(", "),
+                                                          tr("is unsupported")));
+    }
+    if (const auto bbox = enve_cast<TextBox*>(box)) {
+        if (bbox->hasTextEffects()) {
+            result.append(QString("- %1 => %2 : %3\n").arg(prp_getName(),
+                                                           box->prp_getName(),
+                                                           tr("Text effects are unsupported")));
+        }
+        result.append(QString("- %1 => %2 : %3\n").arg(prp_getName(),
+                                                       box->prp_getName(),
+                                                       tr("For best compatibility convert text to path")));
+    }
+    return result;
+}
+
+const QString Canvas::checkForUnsupportedBoxesSVG(const QList<BoundingBox *> boxes)
+{
+    QString result;
+    for (const auto &box : boxes) {
+        if (!box->isVisible()) { continue; }
+        if (const auto bbox = enve_cast<ContainerBox*>(box)) {
+            const auto warnings = checkForUnsupportedBoxesSVG(bbox->getContainedBoxes());
+            if (!warnings.isEmpty()) { result.append(warnings); }
+        }
+        const auto warnings = checkForUnsupportedBoxSVG(box);
+        if (!warnings.isEmpty()) { result.append(warnings); }
+    }
+    return result;
+}
+
+const QString Canvas::checkForUnsupportedSVG()
+{
+    return checkForUnsupportedBoxesSVG(getContainedBoxes());
 }
 
 void Canvas::applyCurrentTransformToSelected() {

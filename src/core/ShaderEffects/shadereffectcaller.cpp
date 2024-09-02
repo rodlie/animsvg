@@ -24,23 +24,36 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "shadereffectcaller.h"
-
 #include "shadereffectprogram.h"
 
 ShaderEffectCaller::ShaderEffectCaller(std::unique_ptr<ShaderEffectJS>&& engine,
-                                       const ShaderEffectProgram &program) :
-    RasterEffectCaller(HardwareSupport::gpuOnly, false, QMargins()),
-    mEngine(std::move(engine)), mProgramId(program.fId), mProgram(program) {
+                                       const ShaderEffectProgram &program,
+                                       const ShaderEffect *parentEffect,
+                                       const qreal &relFrame,
+                                       const qreal &resolution,
+                                       const qreal &influence)
+    : RasterEffectCaller(HardwareSupport::gpuOnly,
+                         false,
+                         QMargins())
+    , mEngine(std::move(engine))
+    , mProgramId(program.fId)
+    , mProgram(program)
+{
     Q_ASSERT(mEngine.get());
+    calc(parentEffect,
+         relFrame,
+         resolution,
+         influence);
 }
 
-ShaderEffectCaller::~ShaderEffectCaller() {
+ShaderEffectCaller::~ShaderEffectCaller()
+{
     mProgram.fEngines.push_back(std::move(mEngine));
 }
 
 void ShaderEffectCaller::processGpu(QGL33 * const gl,
-                                    GpuRenderTools &renderTools) {
-
+                                    GpuRenderTools &renderTools)
+{
     renderTools.switchToOpenGL(gl);
 
     renderTools.requestTargetFbo().bind(gl);
@@ -57,34 +70,45 @@ void ShaderEffectCaller::processGpu(QGL33 * const gl,
     renderTools.swapTextures();
 }
 
-QMargins ShaderEffectCaller::getMargin(const SkIRect &srcRect) {
-    mEngine->setSceneRect(srcRect);
-    mEngine->evaluate();
-    const auto jsVal = mEngine->getMarginValue();
-    if(jsVal.isNumber()) {
-        return QMargins() + qCeil(jsVal.toNumber());
-    } else if(jsVal.isArray()) {
-        const int len = jsVal.property("length").toInt();
-        if(len == 2) {
-            const int valX = qCeil(jsVal.property(0).toNumber());
-            const int valY = qCeil(jsVal.property(1).toNumber());
-
-            return QMargins(valX, valY, valX, valY);
-        } else if(len == 4) {
-            const int valLeft = qCeil(jsVal.property(0).toNumber());
-            const int valTop = qCeil(jsVal.property(1).toNumber());
-            const int valRight = qCeil(jsVal.property(2).toNumber());
-            const int valBottom = qCeil(jsVal.property(3).toNumber());
-
-            return QMargins(valLeft, valTop, valRight, valBottom);
-        } else {
-            RuntimeThrow("Invalid Margin script");
-        }
-    } else RuntimeThrow("Invalid Margin script result type");
-    return QMargins();
+void ShaderEffectCaller::calc(const ShaderEffect *pEff,
+                              const qreal relFrame,
+                              const qreal resolution,
+                              const qreal influence)
+{
+    if (!pEff) { return; }
+    mEngine->clearSetters();
+    UniformSpecifiers& uniSpecs = mUniformSpecifiers;
+    const int argsCount = mProgram.fPropUniLocs.count();
+    for (int i = 0; i < argsCount; i++) {
+        const GLint loc = mProgram.fPropUniLocs.at(i);
+        const auto prop = pEff->ca_getChildAt(i);
+        const auto& uniformC = mProgram.fPropUniCreators.at(i);
+        uniformC->create(getJSEngine(),
+                         loc,
+                         prop,
+                         relFrame,
+                         resolution,
+                         influence,
+                         uniSpecs);
+    }
+    mEngine->updateValues();
+    const int valsCount = mProgram.fValueHandlers.count();
+    for (int i = 0; i < valsCount; i++) {
+        const GLint loc = mProgram.fValueLocs.at(i);
+        const auto& value = mProgram.fValueHandlers.at(i);
+        uniSpecs << value->create(loc, getJSEngine(), i);
+    }
 }
 
-void ShaderEffectCaller::setupProgram(QGL33 * const gl) {
+QMargins ShaderEffectCaller::getMargin(const SkIRect &srcRect)
+{
+    mEngine->setSceneRect(srcRect);
+    mEngine->evaluate();
+    return mEngine->getMargins();
+}
+
+void ShaderEffectCaller::setupProgram(QGL33 * const gl)
+{
     gl->glUseProgram(mProgramId);
-    for(const auto& uni : mUniformSpecifiers) uni(gl);
+    for (const auto& uni : mUniformSpecifiers) { uni(gl); }
 }

@@ -25,7 +25,6 @@
 #include "appsupport.h"
 
 #include <QDebug>
-#include <QVBoxLayout>
 #include <QWindow>
 
 #include "mainwindow.h"
@@ -38,6 +37,7 @@ Window::Window(QWidget *parent,
                bool blockEscKey,
                bool forwardKeys)
     : QDialog(parent)
+    , mLayout(nullptr)
     , mBlockEscKey(blockEscKey)
     , mForwardKeys(forwardKeys)
 {
@@ -51,7 +51,7 @@ Window::Window(QWidget *parent,
     setObjectName(id);
 
     setContentsMargins(0, 0, 0, 0);
-    QVBoxLayout *mLayout = new QVBoxLayout(this);
+    mLayout = new QVBoxLayout(this);
     mLayout->setMargin(0);
     mLayout->addWidget(child);
 
@@ -69,6 +69,12 @@ void Window::focusWindow()
     if (windowHandle()) { windowHandle()->requestActivate(); }
 }
 
+void Window::addWidget(QWidget *child)
+{
+    if (!child) { return; }
+    mLayout->addWidget(child);
+}
+
 void Window::keyPressEvent(QKeyEvent *event)
 {
     if (mForwardKeys) {
@@ -82,6 +88,7 @@ void Window::closeEvent(QCloseEvent *event)
 {
     qDebug() << "closed window" << objectName();
     saveState();
+    emit closed();
     QDialog::closeEvent(event);
 }
 

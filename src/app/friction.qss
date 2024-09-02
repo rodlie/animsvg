@@ -1,7 +1,7 @@
 /*
-# enve2d - https://github.com/enve2d
+# Friction - https://friction.graphics
 #
-# Copyright (c) enve2d developers
+# Copyright (c) Friction contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,25 +18,229 @@
 #
 */
 
+/*
+
+Colors and icon size from 'src/core/themesupport.cpp'.
+
+%1 = getThemeButtonBaseColor
+%2 = getThemeButtonBorderColor
+%3 = getThemeBaseDarkerColor
+%4 = getThemeHighlightColor
+%5 = getThemeBaseColor
+%6 = getThemeAlternateColor
+%7 = icon size
+%8 = getThemeColorOrange
+%9 = getThemeRangeSelectedColor
+%10 = half icon size
+%11 = icon pixel ratio
+%12 = half icon pixel ratio
+%13 = getThemeColorTextDisabled
+
+*/
+
+QDoubleSpinBox,
+QSpinBox {
+    border-radius: 2%;
+    border: 1px solid transparent;
+}
+QDoubleSpinBox:hover,
+QSpinBox:hover {
+    border-color: %4;
+}
+QDoubleSpinBox::up-button,
+QSpinBox::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    width: %7px;
+    border-width: 1px;
+}
+QDoubleSpinBox::down-button,
+QSpinBox::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    width: %7px;
+    border-width: 1px;
+    border-top-width: 0;
+}
+QDoubleSpinBox::up-arrow,
+QSpinBox::up-arrow {
+    image: url(:/icons/hicolor/%11x%11/actions/go-up.png);
+    width: %10px;
+    height: %10px;
+}
+QDoubleSpinBox::down-arrow,
+QSpinBox::down-arrow {
+    image: url(:/icons/hicolor/%11x%11/actions/go-down.png);
+    width: %10px;
+    height: %10px;
+}
+QSpinBox#SpinBoxNoButtons::up-arrow,
+QSpinBox#SpinBoxNoButtons::down-arrow,
+QSpinBox#SpinBoxNoButtons::up-button,
+QSpinBox#SpinBoxNoButtons::down-button {
+    width: 0;
+    height: 0;
+}
+
+QTabWidget#TabWidgetCenter::tab-bar {
+    alignment: center;
+}
+QTabBar#TabWidgetCenter::tab:bottom:first {
+    border-bottom-left-radius: 2%;
+}
+QTabBar#TabWidgetCenter::tab:bottom:last {
+    border-bottom-right-radius: 2%;
+}
+QTabBar#TabWidgetCenter::tab:bottom:only-one {
+    border-bottom-left-radius: 2%;
+    border-bottom-right-radius: 2%;
+}
+
+QTabWidget::pane,
+QTabBar {
+    padding: .2em;
+    background-color: %5;
+    border: none;
+}
+QTabBar::tab {
+    padding: .3em;
+    border-radius: 2%;
+    border: 2px solid %5;
+    background-color: %5;
+}
+QTabBar::tab:selected {
+    background-color: %5;
+}
+QTabBar::tab:hover {
+    background-color: %3;
+}
+QTabBar::tab:bottom:hover {
+    border-top-color: transparent;
+}
+QTabBar::tab:top:hover {
+    border-bottom-color: transparent;
+}
+QTabBar::tab:bottom:!hover {
+    border-top-color: transparent;
+}
+QTabBar::tab:top:!hover {
+    border-bottom-color: transparent;
+}
+QTabBar::tab:bottom {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+QTabBar::tab:top {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+QTabWidget::pane {
+    border-radius: 2%;
+}
+
+QTabWidget#ColorTabWidget::pane {
+    border-radius: unset;
+    border: unset;
+    margin: 0;
+    padding: 0;
+}
+
+QTabBar::tab:top:selected {
+    border-bottom: 2px solid %4;
+}
+
+QTabBar::tab:bottom:selected {
+    border-top: 2px solid %4;
+}
+
+QTabBar::tab:top:!selected:hover {
+    border-bottom: 2px solid %8;
+}
+
+QTabBar::tab:bottom:!selected:hover {
+    border-top: 2px solid %8;
+}
+
+QMenuBar::item:selected,
+QMenu::item:selected {
+    background-color: %1;
+}
+
 QStatusBar::item,
 QToolBar
 {
     border: 0;
 }
 
+QComboBox,
+QPushButton,
+QToolButton,
+QAction {
+    background-color: %1;
+    border-radius: 2%;
+    border: 1px solid %2;
+}
+
+QToolButton,
+QAction {
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
+}
+
+QPushButton {
+    padding: .2em;
+}
+
+QToolButton:unchecked,
+QAction:unchecked {
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
+}
+
+QComboBox:hover,
 QPushButton:hover,
 QToolButton:hover,
+QPushButton:checked,
 QToolButton:checked,
 QAction:checked,
-QComboBox:hover,
-QPushButton#QActionButton:checked
+QCheckBox::indicator:unchecked:hover
 {
-    background-color: rgb(112, 8, 10);
+    background-color: %3;
+    border-color: %4;
+    
+}
+
+QDoubleSpinBox,
+QSpinBox,
+QLineEdit {
+    background-color: %3;
+}
+
+QDoubleSpinBox:hover,
+QSpinBox:hover,
+QLineEdit:hover {
+    background-color: black;
+}
+
+QComboBox::drop-down:button{
+    background-color: transparent;
+    width: %7px;
+    border: 0;
+}
+
+QToolButton::menu-arrow,
+QComboBox::down-arrow {
+    image: url(:/icons/hicolor/%11x%11/actions/go-down.png);
+    width: %7px;
+    height: %7px;
+}
+
+QComboBox#blendModeCombo,
+QWidget#menuBarWidget QPushButton {
+    background-color: %5;
 }
 
 QToolBar#animationDockWidget,
-/*QToolBar#ViewerNodeBar,
-QToolBar#ViewerDrawBar,*/
 #darkWidget
 {
     background-color: rgb(33, 33, 38);
@@ -46,11 +250,11 @@ QToolBar::separator {
     border-color: none;
 }
 
-QComboBox#blendModeCombo,
-QWidget#menuBarWidget QPushButton,
-QLineEdit#SearchLine,
-AlignWidget QComboBox {
-    background-color: rgb(23, 23, 28);
+QToolButton[popupMode="1"] {
+    padding-right: .3em;
+}
+QToolButton::menu-button {
+    background-color: transparent;
 }
 
 QPushButton::menu-indicator,
@@ -62,6 +266,7 @@ QLineEdit#SearchLine {
     border: 0;
 }
 
+QLineEdit#SearchLine,
 BoxScrollWidget,
 BoxScroller {
     background-color: transparent;
@@ -77,24 +282,12 @@ QLineEdit#OutputDestinationLineEdit {
     background-color: rgb(40, 40, 47);
 }
 
-FillStrokeSettingsWidget {
-    border: 0;
+QPushButton#WelcomeButton,
+QPushButton#WelcomeRecentButton {
+    background-color: transparent;
 }
 
-QSpinBox#SpinBoxNoButtons::up-button,
-QSpinBox#SpinBoxNoButtons::down-button {
-    width: 0;
-}
-
-QPushButton#WelcomeButton {
-    padding: 0.25em;
-    border: 2px solid #666;
-    border-radius: 10%;
-    color: #ebebeb;
-    font-weight: bold;
-}
-
-QPushButton#WelcomeButton:hover {
+/*QPushButton#WelcomeButton:hover {
     border-color: #ebebeb;
 }
 
@@ -108,14 +301,13 @@ QPushButton#WelcomeRecentButton {
 
 QPushButton#WelcomeRecentButton:hover {
     border: 2px solid #ebebeb;
-}
+}*/
 
-AlignWidget QPushButton,
 QPushButton#FlatButton,
 QToolButton#FlatButton {
     background-color: none;
     border: 0;
-    border-radius: 10%;
+    border-radius: 2%;
 }
 
 QPushButton#FlatButton,
@@ -126,11 +318,13 @@ QToolButton#FlatButton {
 QCheckBox::indicator:unchecked:hover,
 QPushButton#FlatButton:hover,
 QToolButton#FlatButton:hover {
-    background-color: rgb(112, 8, 10);
+    background-color: rgb(19, 19, 21);
+    border-color: rgb(104, 144, 206);
 }
 
 QTabWidget#ThirdPartyBrowser { border: 0; }
 
+QWidget#TimelineMenu QPushButton,
 QToolButton#AutoPopupButton,
 QToolButton#AutoPopupButton:focus,
 QToolButton#AutoPopupButton:hover,
@@ -140,3 +334,191 @@ QToolButton#AutoPopupButton:pressed {
 }
 QToolButton#AutoPopupButton::menu-indicator { width: 0px; }
 QToolButton#AutoPopupButton QMenu { border: 1.5px solid rgb(74, 74, 79); }
+
+QSplitter::handle:horizontal {
+    background-color: transparent;
+}
+QSplitter::handle:vertical {
+    background-color: transparent;
+}
+
+#TimelineMenu QPushButton:hover,
+#TimelineMenu QPushButton:checked {
+    background-color: %4;
+}
+
+QTabWidget#TabWidgetWide::tab-bar {
+    min-width: 1000;
+}
+QTabWidget#TabWidgetWide QTabBar::tab:!selected {
+    background-color: transparent;
+}
+QTabWidget#TabWidgetWide QTabBar::tab:hover {
+    background-color: %3;
+}
+
+QSpinBox#LeftSpinBox::up-button {
+    subcontrol-position: top left;
+}
+QSpinBox#LeftSpinBox::down-button {
+    subcontrol-position: bottom left;
+}
+
+QScrollBar:vertical {
+    border: 0px;
+    background: transparent;
+    width: 10px;
+    margin: 2px;
+}
+
+#NoMarginVerticalScrollBar QScrollBar:vertical {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+QScrollBar:horizontal {
+    border: 0px;
+    background: transparent;
+    height: 10px;
+    margin: 2px;
+}
+
+QScrollBar::handle:vertical,
+QScrollBar::handle:horizontal {
+    background-color: %2;
+    border: 0;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::add-line:horizontal {
+    width: 0px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical,
+QScrollBar::sub-line:horizontal {
+    width: 0px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QToolBar#animationDockWidget {
+    background: transparent;
+}
+
+QToolBar#animationDockWidget QToolButton,
+QToolBar#animationDockWidget QPushButton {
+    background-color: %3;
+    border-radius: 2%;
+    border-color: %2;
+}
+
+QToolBar#animationDockWidget QToolButton::hover,
+QToolBar#animationDockWidget QPushButton::hover {
+    border-color: %4;
+}
+
+QTabWidget#TabWidgetWide QTabBar {
+    border: 0;
+}
+
+QLineEdit#CommandPaletteInput {
+    border-radius: 10%;
+    border: 2px solid %4;
+    padding: .5em;
+}
+
+QListWidget#CommandPaletteSuggestions,
+QLabel#CommandPaletteLabel {
+    border: 2px solid %2;
+    background-color: %5;
+}
+
+QLabel#CommandPaletteLabel {
+    padding: .5em;
+}
+
+QMenu::separator {
+  width: 1px;
+  height: 1px;
+  margin: 4px;
+  background-color: %4;
+}
+
+QMenu::item:disabled {
+    background: transparent;
+}
+
+QWidget#DarkWidget {
+    background-color: %5;
+}
+
+QGroupBox#BlueBox,
+QGroupBox#BlueBoxLeft {
+    background-color: %6;
+    border: 1px solid %1;
+    border-bottom-left-radius: 2%;
+    border-bottom-right-radius: 2%;
+    padding-top: 4em;
+}
+
+QGroupBox#BlueBox::title,
+QGroupBox#BlueBoxLeft::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    border-top-left-radius: 2%;
+    border-top-right-radius: 2%;
+    padding-top: .2em;
+    background-color: transparent;
+    border-bottom: 2px solid %4;
+}
+
+QGroupBox#BlueBoxLeft {
+    border: none;
+}
+
+QGroupBox#BlueBoxLeft::title {
+    subcontrol-position: top left;
+}
+
+QLineEdit#RenderTitleWidget {
+    border: 1px solid %6;
+}
+
+QWidget#RenderContentWidget {
+    background-color: %6;
+    border: 1px solid %1;
+}
+
+QCheckBox::indicator:hover,
+QCheckBox::indicator:hover:unchecked {
+    background-color: %4;
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/icons/hicolor/%11x%11/actions/dialog-ok.png);
+    width: %7px;
+    height: %7px;
+}
+
+QCheckBox::indicator:unchecked {
+    image: url(:/icons/hicolor/%11x%11/actions/dialog-cancel.png);
+    width: %7px;
+    height: %7px;
+}
+
+QProgressBar {
+    background-color: transparent;
+    border: 0;
+    text-align: center;
+}
+
+QProgressBar::chunk {
+    background-color: %9;
+    width: 5px;
+}
+
+QCheckBox::disabled {
+    color: %13;
+}

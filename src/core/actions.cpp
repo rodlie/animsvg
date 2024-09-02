@@ -737,6 +737,13 @@ eBoxOrSound *Actions::importFile(const QString &path,
         RuntimeThrow("File " + path + " does not exit.");
 
     QFileInfo fInfo(path);
+
+    if (fInfo.dir().absolutePath() != QDir::homePath()) {
+        AppSupport::setSettings("files",
+                                "recentImportDir",
+                                fInfo.dir().absolutePath());
+    }
+
     if(fInfo.isDir()) {
         result = createImageSequenceBox(path);
         target->insertContained(insertId, result);
@@ -769,6 +776,9 @@ eBoxOrSound *Actions::importFile(const QString &path,
             importedBox->startPosTransform();
             importedBox->moveByAbs(relDropPos);
             importedBox->finishTransform();
+        }
+        if (const auto videoBox = enve_cast<VideoBox*>(result)) {
+            Document::sInstance->newVideo(videoBox->getSpecs());
         }
     }
     afterAction();

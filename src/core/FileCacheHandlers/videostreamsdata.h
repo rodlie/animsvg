@@ -53,6 +53,8 @@ public:
     AVCodecContext * fCodecContext = nullptr;
     struct SwsContext * fSwsContext = nullptr;
     int fLastFrame = 0;
+    int fWidth = 0;
+    int fHeight = 0;
 
     stdsptr<const AudioStreamsData> fAudioData;
 

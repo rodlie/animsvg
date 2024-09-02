@@ -30,6 +30,13 @@
 #include <QtCore>
 
 #define TEN_MIL 10000000
+
+struct CORE_EXPORT FrameMarker {
+    QString title;
+    bool enabled;
+    int frame;
+};
+
 //! @brief Inclusive range
 struct CORE_EXPORT iValueRange {
     static int EMIN;

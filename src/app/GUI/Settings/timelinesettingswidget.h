@@ -39,20 +39,20 @@ public:
     void applySettings();
     void updateSettings(bool restore = false);
 private:
-    QCheckBox* mAlternateRowCheck = nullptr;
-    ColorAnimatorButton* mAlternateRowColor = nullptr;
+    //QCheckBox* mAlternateRowCheck = nullptr;
+    //ColorAnimatorButton* mAlternateRowColor = nullptr;
 
-    QCheckBox* mHighlightRowCheck = nullptr;
-    ColorAnimatorButton* mHighlightRowColor = nullptr;
+    //QCheckBox* mHighlightRowCheck = nullptr;
+    //ColorAnimatorButton* mHighlightRowColor = nullptr;
 
     ColorAnimatorButton* mObjectKeyframeColor = nullptr;
     ColorAnimatorButton* mPropertyGroupKeyframeColor = nullptr;
     ColorAnimatorButton* mPropertyKeyframeColor = nullptr;
     ColorAnimatorButton* mSelectedKeyframeColor = nullptr;
 
-    ColorAnimatorButton* mVisibilityRangeColor = nullptr;
-    ColorAnimatorButton* mSelectedVisibilityRangeColor = nullptr;
-    ColorAnimatorButton* mAnimationRangeColor = nullptr;
+    //ColorAnimatorButton* mVisibilityRangeColor = nullptr;
+    //ColorAnimatorButton* mSelectedVisibilityRangeColor = nullptr;
+    //ColorAnimatorButton* mAnimationRangeColor = nullptr;
 };
 
 #endif // TIMELINESETTINGSWIDGET_H

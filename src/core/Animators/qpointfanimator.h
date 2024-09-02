@@ -109,7 +109,9 @@ public:
                          const qreal y,
                          const qreal multiplier,
                          const bool transform = false,
-                         const QString& type = "") const;
+                         const QString& type = "",
+                         const QString& beginEvent = "",
+                         const QString& endEvent = "") const;
     void saveQPointFSVGY(SvgExporter& exp,
                          QDomElement& parent,
                          const FrameRange& visRange,
@@ -117,7 +119,9 @@ public:
                          const qreal x,
                          const qreal multiplier,
                          const bool transform = false,
-                         const QString& type = "") const;
+                         const QString& type = "",
+                         const QString& beginEvent = "",
+                         const QString& endEvent = "") const;
     QDomElement prp_writePropertyXEV_impl(const XevExporter& exp) const;
 protected:
     qsptr<QrealAnimator> mXAnimator;

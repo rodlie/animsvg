@@ -25,6 +25,7 @@
 
 #include <QToolButton>
 #include <QStackedLayout>
+#include <QDesktopWidget>
 
 #include "timelinewidget.h"
 #include "widgets/framescrollbar.h"
@@ -43,55 +44,41 @@
 #include "widgets/scenechooser.h"
 #include "widgets/changewidthwidget.h"
 #include "timelinehighlightwidget.h"
+#include "themesupport.h"
 
 TimelineWidget::TimelineWidget(Document &document,
                                QWidget * const menu,
-                               QWidget *parent) :
-    QWidget(parent), mDocument(document) {
+                               QWidget *parent)
+    : QWidget(parent)
+    , mDocument(document)
+{
+    setPalette(ThemeSupport::getDarkerPalette());
+    setAutoFillBackground(true);
+
     mMainLayout = new QGridLayout(this);
     mMainLayout->setSpacing(0);
     mMainLayout->setMargin(0);
 
     mMenuLayout = new QHBoxLayout();
-    mMenuLayout->setSpacing(0);
+    //mMenuLayout->setSpacing(0);
     mMenuLayout->setMargin(0);
+
     mBoxesListMenuBar = new FakeMenuBar(this);
     mBoxesListMenuBar->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-//    ((QToolButton*)mBoxesListMenuBar->children()[0])->setStyleSheet(
-//                "QToolButton {"
-//                    "padding: 0px 0px;"
-//                    "background: transparent;"
-//                    "border-radius: 4px;"
-//                    "margin-top: 0;"
-//                    "border-bottom-right-radius: 0px;"
-//                    "border-bottom-left-radius: 0px;"
-//                    "padding-bottom: 0;"
-//                    "margin-bottom: 0;"
-//                "}"
-//                "QToolButton:hover {"
-//                    "background-color: rgba(0, 0, 0, 30);"
-//                "}"
 
-//                "QToolButton:pressed {"
-//                    "background-color: rgba(0, 0, 0, 50);"
-//                "}"
-
-//                "QToolButton:checked {"
-//                    "background-color: rgb(60, 60, 60);"
-//                    "color: white;"
-//                "}");
     mSceneChooser = new SceneChooser(mDocument, true,
                                      mBoxesListMenuBar);
     mBoxesListMenuBar->addMenu(mSceneChooser);
 
     mCornerMenuBar = new FakeMenuBar(this);
-  //  mCornerMenuBar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    //mCornerMenuBar->setStyleSheet("QMenuBar::item { padding: 1px 0px; }");
+
+    mCornerMenuBar->setObjectName("TimelineMenu");
+    menu->setObjectName("TimelineMenu");
 
     const auto iconsDir = eSettings::sIconsDir();
 
-    QMenu * const settingsMenu = mCornerMenuBar->addMenu(QIcon::fromTheme("dots"),
-                                                         tr("Settings"));
+    QMenu * const settingsMenu = mCornerMenuBar->addMenu(QIcon::fromTheme("filter"),
+                                                         tr("Filters"));
     QMenu * const objectsMenu = settingsMenu->addMenu(tr("State"));
 
     const auto ruleActionAdder = [this, objectsMenu](
@@ -186,9 +173,7 @@ TimelineWidget::TimelineWidget(Document &document,
     mSearchLine->setMinimumHeight(0);
     mSearchLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     MainWindow::sGetInstance()->installLineFilter(mSearchLine);
-//    mSearchLine->setStyleSheet("border-radius: 0;"
-//                               "border: 0;");
-    mSearchLine->setPlaceholderText(tr("Search"));
+    mSearchLine->setPlaceholderText(tr("Search ..."));
     connect(mSearchLine, &QLineEdit::textChanged,
             this, &TimelineWidget::setSearchText);
     mSearchLine->setFocusPolicy(Qt::ClickFocus);
@@ -208,7 +193,7 @@ TimelineWidget::TimelineWidget(Document &document,
     mBoxesListWidget->setCurrentTarget(nullptr, SWT_Target::canvas);
 
     mBoxesListScrollArea->setWidget(mBoxesListWidget);
-    mMainLayout->addWidget(mMenuWidget, 0, 0);
+    mMainLayout->addWidget(mMenuWidget, 0, 0, Qt::AlignTop);
     mMainLayout->addWidget(mBoxesListScrollArea, 1, 0);
 
     mKeysViewLayout = new QVBoxLayout();
@@ -222,7 +207,7 @@ TimelineWidget::TimelineWidget(Document &document,
     high2->setOther(high1);
 
     mAnimationDockWidget = new AnimationDockWidget(this, mKeysView);
-    mAnimationDockWidget->hide();
+    mAnimationDockWidget->showGraph(false);
     mMainLayout->addLayout(mKeysViewLayout, 1, 1);
 
     const auto keysViewScrollbarLayout = new QHBoxLayout();
@@ -234,7 +219,7 @@ TimelineWidget::TimelineWidget(Document &document,
     keysViewScrollbarLayout->setAlignment(Qt::AlignRight);
     /*keysViewScrollbarLayout->addWidget(
                 mBoxesListScrollArea->verticalScrollBar());*/
-    mBoxesListScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    mBoxesListScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     keysViewScrollbarLayout->setContentsMargins(0, 0, 0, 0);
 
     connect(mBoxesListScrollArea->verticalScrollBar(),
@@ -265,6 +250,10 @@ TimelineWidget::TimelineWidget(Document &document,
     mFrameScrollBar = new FrameScrollBar(1, 1, false, false, false, this);
     mFrameScrollBar->setSizePolicy(QSizePolicy::Minimum,
                                    QSizePolicy::Preferred);
+
+    const qreal dpi = QApplication::desktop()->logicalDpiX() / 96.0;
+    mFrameScrollBar->setFixedHeight(40 * dpi);
+
 //    connect(MemoryHandler::sGetInstance(), &MemoryHandler::memoryFreed,
 //            frameScrollBar,
 //            qOverload<>(&FrameScrollBar::update));
@@ -347,7 +336,7 @@ void TimelineWidget::setCurrentScene(Canvas * const scene) {
 
 void TimelineWidget::setGraphEnabled(const bool enabled) {
     mKeysView->setGraphViewed(enabled);
-    mAnimationDockWidget->setVisible(enabled);
+    mAnimationDockWidget->showGraph(enabled);
     //const auto iconsDir = eSettings::sIconsDir();
     //if(enabled) mGraphAct->setIcon(QIcon(iconsDir + "/graphEnabled.png"));
     //else mGraphAct->setIcon(QIcon(iconsDir + "/graphDisabled.png"));

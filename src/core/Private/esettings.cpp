@@ -25,8 +25,6 @@
 
 #include "esettings.h"
 
-#include "appsupport.h"
-
 #include "GUI/global.h"
 #include "exceptions.h"
 
@@ -198,6 +196,15 @@ eSettings::eSettings(const int cpuThreads,
                      fDefaultInterfaceScaling,
                      "defaultInterfaceScaling", true);
 
+    gSettings << std::make_shared<eIntSetting>(fImportFileDirOpt, "ImportFileDirOpt", ImportFileDirRecent);
+    gSettings << std::make_shared<eBoolSetting>(fToolBarActionNew, "ToolBarActionNew", true);
+    gSettings << std::make_shared<eBoolSetting>(fToolBarActionOpen, "ToolBarActionOpen", true);
+    gSettings << std::make_shared<eBoolSetting>(fToolBarActionSave, "ToolBarActionSave", true);
+    gSettings << std::make_shared<eBoolSetting>(fToolBarActionScene, "ToolBarActionScene", true);
+    gSettings << std::make_shared<eBoolSetting>(fToolBarActionRender, "ToolBarActionRender", true);
+    gSettings << std::make_shared<eBoolSetting>(fToolBarActionPreview, "ToolBarActionPreview", true);
+    gSettings << std::make_shared<eBoolSetting>(fToolBarActionExport, "ToolBarActionExport", true);
+
     gSettings << std::make_shared<eBoolSetting>(
                      fCanvasRtlSupport,
                      "rtlTextSupport", false);
@@ -238,7 +245,11 @@ eSettings::eSettings(const int cpuThreads,
                      fPathControlScaling,
                      "pathControlScaling", 1.);
 
-    gSettings << std::make_shared<eBoolSetting>(
+    gSettings << std::make_shared<eIntSetting>(fAdjustSceneFromFirstClip,
+                                               "AdjustSceneFromFirstClip",
+                                               AdjustSceneAsk);
+
+    /*gSettings << std::make_shared<eBoolSetting>(
                      fTimelineAlternateRow,
                      "timelineAlternateRow", true);
     gSettings << std::make_shared<eColorSetting>(
@@ -251,26 +262,26 @@ eSettings::eSettings(const int cpuThreads,
     gSettings << std::make_shared<eColorSetting>(
                      fTimelineHighlightRowColor,
                      "timelineHighlightRowColor",
-                     QColor(255, 0, 0, 15));
+                     QColor(255, 0, 0, 15));*/
 
     gSettings << std::make_shared<eColorSetting>(
                      fObjectKeyframeColor,
                      "objectKeyframeColor",
-                     QColor(0, 125, 255));
+                     ThemeSupport::getThemeColorBlue());
     gSettings << std::make_shared<eColorSetting>(
                      fPropertyGroupKeyframeColor,
                      "propertyGroupKeyframeColor",
-                     QColor(0, 255, 0));
+                     ThemeSupport::getThemeColorGreen());
     gSettings << std::make_shared<eColorSetting>(
                      fPropertyKeyframeColor,
                      "propertyKeyframeColor",
-                     QColor(255, 0, 0));
+                     ThemeSupport::getThemeColorRed());
     gSettings << std::make_shared<eColorSetting>(
                      fSelectedKeyframeColor,
                      "selectedKeyframeColor",
-                     QColor(255, 255, 0));
+                     ThemeSupport::getThemeColorYellow());
 
-    gSettings << std::make_shared<eColorSetting>(
+    /*gSettings << std::make_shared<eColorSetting>(
                      fVisibilityRangeColor,
                      "visibilityRangeColor",
                      QColor(131, 92, 255, 255));
@@ -281,7 +292,7 @@ eSettings::eSettings(const int cpuThreads,
     gSettings << std::make_shared<eColorSetting>(
                      fAnimationRangeColor,
                      "animationRangeColor",
-                     QColor(0, 0, 0, 55));
+                     QColor(0, 0, 0, 55));*/
 
     loadDefaults();
 
@@ -347,5 +358,15 @@ void eSettings::saveToFile()
 {
     for (const auto& setting : gSettings) {
         setting->writeValue();
+    }
+}
+
+void eSettings::saveKeyToFile(const QString &key)
+{
+    for (const auto& setting : gSettings) {
+        if (key == setting->fName) {
+            setting->writeValue();
+            return;
+        }
     }
 }

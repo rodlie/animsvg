@@ -28,7 +28,6 @@
 #include <QPainter>
 #include "GUI/global.h"
 #include "colorhelpers.h"
-
 #include "appsupport.h"
 
 FrameScrollBar::FrameScrollBar(const int minSpan,
@@ -38,6 +37,7 @@ FrameScrollBar::FrameScrollBar(const int minSpan,
                                const bool bottom,
                                QWidget *parent)
     : QWidget(parent)
+    , mFm(QFontMetrics(font()))
 {
     mDisplayTime = AppSupport::getSettings("ui",
                                            "DisplayTimecode",
@@ -68,12 +68,12 @@ void FrameScrollBar::setCurrentCanvas(Canvas * const canvas)
 
 void FrameScrollBar::paintEvent(QPaintEvent *) {
     QPainter p(this);
-    p.fillRect(rect(), QColor(25, 25, 25));
+    p.fillRect(rect(), ThemeSupport::getThemeBaseDarkerColor());
 
     const int dFrame = mFrameRange.fMax - mFrameRange.fMin + (mRange ? 0 : 1);
-    if(dFrame <= 0) return;
+    if (dFrame <= 0) { return; }
     const qreal pixPerFrame = (width() - 2.*eSizesUI::widget)/dFrame;
-    if(pixPerFrame < 0 || isZero2Dec(pixPerFrame)) return;
+    if (pixPerFrame < 0) { return; }
 
     const int f0 = -qCeil(0.5*eSizesUI::widget/pixPerFrame);
     const int minFrame = mFrameRange.fMin + f0;
@@ -105,21 +105,10 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     const qreal inc = mDrawFrameInc*pixPerFrame;
     const int minMod = minFrame%mDrawFrameInc;
     qreal xL = (-minMod + (mRange ? 0. : 0.5))*pixPerFrame + x0;
-    qreal xxL = xL;
     int currentFrame = minFrame - minMod;
     const qreal threeFourthsHeight = height()*0.75;
     const qreal maxX = width() + eSizesUI::widget;
 
-    // draw minor ticks
-    if (!mRange) {
-        p.setPen(QPen(Qt::white, 2));
-        while (xxL < maxX) {
-            p.drawLine(QPointF(xxL, threeFourthsHeight + 2), QPointF(xxL, height()));
-            xxL += inc/5;
-        }
-    }
-
-    // draw handle
     QRectF handleRect;
     const int hLeftFrames = mFirstViewedFrame - minFrame;
     const qreal handleFixedWidth = 16;
@@ -129,32 +118,93 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     handleRect.setLeft(handleLeft);
     handleRect.setTop(mBottom ? 2 : 0);
     handleRect.setWidth(mBottom ? handleWidth : handleFixedWidth);
-    handleRect.setBottom(mBottom ? 6 : height()/2);
+    handleRect.setBottom(mBottom ? 6 : height()/3);
     if (mRange) { p.fillRect(handleRect, col); }
-    else { // triangle
+
+    // draw the stuff ...
+    if (!mRange) {
+        const auto colOrange = ThemeSupport::getThemeFrameMarkerColor();
+        const auto colGreen = ThemeSupport::getThemeColorGreen();
+        const auto frameIn = getFrameIn();
+        const auto frameOut = getFrameOut();
+
+        p.translate(eSizesUI::widget/2, 0);
+        qreal xT = pixPerFrame*0.5;
+        int iInc = 1;
+        bool mult5 = true;
+        while (iInc*pixPerFrame < eSizesUI::widget/2) {
+            if (mult5) { iInc *= 5; }
+            else { iInc *= 2; }
+        }
+        int mMinFrame = mFrameRange.fMin;
+        int mMaxFrame = mFrameRange.fMax;
+        mMinFrame += qCeil((-xT)/pixPerFrame);
+        mMinFrame = mMinFrame - mMinFrame%iInc - 1;
+        mMaxFrame += qFloor((width() - 40 - xT)/pixPerFrame) - mMaxFrame%iInc;
+
+        // draw in/out range
+        if (frameIn.first && frameOut.first) {
+            p.setPen(Qt::NoPen);
+            const qreal xTT1 = xT + (frameIn.second - mFrameRange.fMin) * pixPerFrame;
+            const qreal xTT2 = xT + (frameOut.second - mFrameRange.fMin) * pixPerFrame;
+            const int h = mFm.height();
+            const auto rect = QRectF(xTT1, h, xTT2 - xTT1, height() - h);
+            p.fillRect(rect, QBrush(ThemeSupport::getThemeColorGreenDark(),
+                                    Qt::SolidPattern));
+            p.drawRect(rect);
+        }
+
+        // draw markers (and in/out)
+        for (int i = minFrame; i <= maxFrame; i++) {
+            bool hasIn = frameIn.first ? hasFrameIn(i) : false;
+            bool hasOut = frameOut.first ? hasFrameOut(i) : false;
+            bool hasMark = hasFrameMarker(i);
+            if (!hasIn && !hasOut && !hasMark) { continue; }
+            const QColor col = hasMark ? colOrange : colGreen;
+            p.setPen(QPen(col, 2, Qt::SolidLine));
+            const qreal xTT = xT + (i - mFrameRange.fMin + 1)*pixPerFrame;
+            p.drawLine(QPointF(xTT, 0), QPointF(xTT, mFm.height() + 4));
+
+            const QString drawValue = hasIn ? tr("In") : hasOut ? tr("Out") : getFrameMarkerText(i);
+            p.setPen(Qt::NoPen);
+            const auto rect = QRectF(xTT + 1, 0,
+                                     mFm.horizontalAdvance(drawValue) + 2,
+                                     mFm.height());
+            p.fillRect(rect, QBrush(col, Qt::SolidPattern));
+            p.drawRect(rect);
+            p.setPen(Qt::black);
+            p.drawText(rect, Qt::AlignCenter, drawValue);
+        }
+
+        // draw minor
+        p.setPen(QPen(Qt::darkGray, 2));
+        for (int i = mMinFrame; i <= mMaxFrame; i += iInc) {
+            const qreal xTT = xT + (i - mFrameRange.fMin + 1)*pixPerFrame;
+            p.drawLine(QPointF(xTT, threeFourthsHeight + 6), QPointF(xTT, height()));
+        }
+
+        // draw main
+        p.setPen(QPen(Qt::white, 2));
+        p.translate(-(eSizesUI::widget/2), 0);
+        bool timecode = mDisplayTime && mFps > 0;
+        if (qAbs(pixPerFrame) > 0.11) {
+            while (xL < maxX) {
+                p.drawLine(QPointF(xL, threeFourthsHeight + 4), QPointF(xL, height()));
+                QString drawValue = QString::number(currentFrame);
+                if (timecode) { drawValue = AppSupport::getTimeCodeFromFrame(currentFrame, mFps); }
+                p.drawText(QRectF(xL - inc, 0, 2 * inc, threeFourthsHeight + 18), Qt::AlignCenter, drawValue);
+                xL += inc;
+                currentFrame += mDrawFrameInc;
+            }
+        }
+
+        // draw handle
         QPainterPath path;
         path.moveTo(handleRect.left() + (handleRect.width() / 2), handleRect.bottom());
         path.lineTo(handleRect.topLeft());
         path.lineTo(handleRect.topRight());
         path.lineTo(handleRect.left() + (handleRect.width() / 2), handleRect.bottom());
-        p.fillPath(path, QColor(180, 0, 0));
-    }
-
-    p.setPen(QPen(Qt::white, 2));
-
-    // draw main ticks
-    if (!mRange) {
-        while(xL < maxX) {
-            p.drawLine(QPointF(xL, threeFourthsHeight + 2), QPointF(xL, height()));
-            QString drawValue = QString::number(currentFrame);
-            if (mDisplayTime && mFps > 0) {
-                drawValue = AppSupport::getTimeCodeFromFrame(currentFrame, mFps);
-            }
-            p.drawText(QRectF(xL - inc, 0, 2*inc, height()),
-                       Qt::AlignCenter, drawValue);
-            xL += inc;
-            currentFrame += mDrawFrameInc;
-        }
+        p.fillPath(path, ThemeSupport::getThemeHighlightColor());
     }
 
     p.end();
@@ -171,6 +221,48 @@ int FrameScrollBar::getMaxFrame() {
 
 int FrameScrollBar::getMinFrame() {
     return mFrameRange.fMin;
+}
+
+bool FrameScrollBar::hasFrameIn(const int frame)
+{
+    if (!mCurrentCanvas) { return false; }
+    const auto frameIn = mCurrentCanvas->getFrameIn();
+    if ((frameIn.enabled && frame + 1 == frameIn.frame)) { return true; }
+    return false;
+}
+
+bool FrameScrollBar::hasFrameOut(const int frame)
+{
+    if (!mCurrentCanvas) { return false; }
+    const auto frameOut = mCurrentCanvas->getFrameOut();
+    if ((frameOut.enabled && frame + 1 == frameOut.frame)) { return true; }
+    return false;
+}
+
+bool FrameScrollBar::hasFrameMarker(const int frame)
+{
+    if (!mCurrentCanvas) { return false; }
+    return mCurrentCanvas->hasMarker(frame + 1);
+}
+
+const QString FrameScrollBar::getFrameMarkerText(const int frame)
+{
+    if (!mCurrentCanvas) { return QString(); }
+    return mCurrentCanvas->getMarkerText(frame + 1);
+}
+
+const QPair<bool, int> FrameScrollBar::getFrameIn()
+{
+    if (!mCurrentCanvas) { return {false, 0}; }
+    const auto in = mCurrentCanvas->getFrameIn();
+    return {in.enabled, in.frame};
+}
+
+const QPair<bool, int> FrameScrollBar::getFrameOut()
+{
+    if (!mCurrentCanvas) { return {false, 0}; }
+    const auto out = mCurrentCanvas->getFrameOut();
+    return {out.enabled, out.frame};
 }
 
 void FrameScrollBar::wheelEvent(QWheelEvent *event) {
@@ -226,15 +318,42 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
 
         //menu.addSeparator();
 
-        QAction *timeAction = new QAction(tr("Display Timecodes"), this);
+        QAction *timeAction = new QAction(QIcon::fromTheme("visible"),
+                                          tr("Display Timecodes"), this);
         timeAction->setCheckable(true);
         timeAction->setChecked(mDisplayTime);
         menu.addAction(timeAction);
 
-        QAction *framesAction = new QAction(tr("Display Frames"), this);
+        QAction *framesAction = new QAction(QIcon::fromTheme("visible"),
+                                            tr("Display Frames"), this);
         framesAction->setCheckable(true);
         framesAction->setChecked(!mDisplayTime);
         menu.addAction(framesAction);
+
+        bool hasMarker = mCurrentCanvas ? mCurrentCanvas->hasMarker(mCurrentCanvas->getCurrentFrame()) : false;
+
+        const auto setFrameInAct = new QAction(QIcon::fromTheme("sequence"),
+                                               tr("Set In"), this);
+        const auto setFrameOutAct = new QAction(QIcon::fromTheme("sequence"),
+                                                tr("Set Out"), this);
+        const auto clearFrameOutAct = new QAction(QIcon::fromTheme("trash"),
+                                                  tr("Clear In/Out"), this);
+        const auto setMarkerAct = new QAction(QIcon::fromTheme("dialog-information"),
+                                              tr(hasMarker ? "Remove Marker" : "Add Marker"), this);
+        const auto clearMarkersAct = new QAction(QIcon::fromTheme("trash"),
+                                                 tr("Clear Markers"), this);
+        const auto splitDurationAct = new QAction(QIcon::fromTheme("image-missing"),
+                                                  tr("Split Clip"), this);
+
+        menu.addSeparator();
+        menu.addAction(setFrameInAct);
+        menu.addAction(setFrameOutAct);
+        menu.addAction(clearFrameOutAct);
+        menu.addSeparator();
+        menu.addAction(setMarkerAct);
+        menu.addAction(clearMarkersAct);
+        menu.addSeparator();
+        menu.addAction(splitDurationAct);
 
         QAction* selectedAction = menu.exec(event->globalPos());
         if (selectedAction) {
@@ -254,6 +373,41 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
                     mCurrentCanvas->setDisplayTimecode(mDisplayTime);
                 }
                 AppSupport::setSettings("ui", "DisplayTimecode", mDisplayTime);
+            } else if (selectedAction == clearFrameOutAct) {
+                if (mCurrentCanvas) {
+                    mCurrentCanvas->setFrameIn(false, 0);
+                    mCurrentCanvas->setFrameOut(false, 0);
+                }
+            } else if (selectedAction == setFrameInAct) {
+                if (mCurrentCanvas) {
+                    const auto frame = mCurrentCanvas->getCurrentFrame();
+                    if (mCurrentCanvas->getFrameOut().enabled) {
+                        if (frame >= mCurrentCanvas->getFrameOut().frame) { return; }
+                    }
+                    bool apply = frame == 0 ? true : (mCurrentCanvas->getFrameIn().frame != frame);
+                    mCurrentCanvas->setFrameIn(apply, frame);
+                }
+            } else if (selectedAction == setFrameOutAct) {
+                if (mCurrentCanvas) {
+                    const auto frame = mCurrentCanvas->getCurrentFrame();
+                    if (mCurrentCanvas->getFrameIn().enabled) {
+                        if (frame <= mCurrentCanvas->getFrameIn().frame) { return; }
+                    }
+                    bool apply = (mCurrentCanvas->getFrameOut().frame != frame);
+                    mCurrentCanvas->setFrameOut(apply, frame);
+                }
+            } else if (selectedAction == setMarkerAct) {
+                if (mCurrentCanvas) {
+                    mCurrentCanvas->setMarker(mCurrentCanvas->getCurrentFrame());
+                }
+            } else if (selectedAction == clearMarkersAct) {
+                if (mCurrentCanvas) {
+                    mCurrentCanvas->clearMarkers();
+                }
+            } else if (selectedAction == splitDurationAct) {
+                if (mCurrentCanvas) {
+                    mCurrentCanvas->splitAction();
+                }
             }
         }
         return;

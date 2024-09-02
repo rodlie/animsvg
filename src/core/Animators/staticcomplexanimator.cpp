@@ -24,6 +24,7 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "staticcomplexanimator.h"
+#include "ReadWrite/evformat.h"
 
 StaticComplexAnimator::StaticComplexAnimator(const QString &name) :
     ComplexAnimator(name) {}
@@ -34,10 +35,15 @@ void StaticComplexAnimator::prp_writeProperty_impl(eWriteStream &dst) const {
         prop->prp_writeProperty(dst);
 }
 
-void StaticComplexAnimator::prp_readProperty_impl(eReadStream &src) {
+void StaticComplexAnimator::prp_readProperty_impl(eReadStream &src)
+{
     const auto& children = ca_getChildren();
-    for(const auto& prop : children)
+    const auto SVGProperties = QStringList() << "begin event" << "end event";
+    for (const auto& prop : children) {
+        if (src.evFileVersion() < EvFormat::svgBeginEnd &&
+            SVGProperties.contains(prop->prp_getName())) { continue; }
         prop->prp_readProperty(src);
+    }
 }
 
 void StaticComplexAnimator::prp_readPropertyXEV_impl(

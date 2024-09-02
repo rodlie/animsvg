@@ -26,8 +26,9 @@ BUILD=${BUILD:-"${HOME}"}
 VERSION=${VERSION:-""}
 APPID="graphics.friction.Friction"
 FRICTION_PKG=friction-${VERSION}
-PKG_RPM=${PKG_RPM:-1}
-PKG_APP=${PKG_APP:-1}
+
+APPIMAGETOOL=bfe6e0c
+APPIMAGERUNTIME=1bb1157
 
 if [ "${VERSION}" = "" ]; then
     echo "Missing version"
@@ -159,23 +160,18 @@ for pdir in ${PLUGS}; do
 done
 
 # RPM
-if [ "${PKG_RPM}" = 1 ]; then
 cd ${BUILD}
 tar cvf ${FRICTION_PKG}.tar ${FRICTION_PKG}
-
 if [ ! -d "${HOME}/rpmbuild/SOURCES" ]; then
     mkdir -p ${HOME}/rpmbuild/SOURCES
 fi
-
 mv ${FRICTION_PKG}.tar ${HOME}/rpmbuild/SOURCES/
 cat ${BUILD}/friction/src/scripts/vfxplatform.spec | sed 's/__FRICTION_PKG_VERSION__/'${PKG_VERSION}'/g;s/__FRICTION_VERSION__/'${VERSION}'/g;s/__APPID__/'${APPID}'/g' > rpm.spec
-
 rpmbuild -bb rpm.spec
 cp -a ${HOME}/rpmbuild/RPMS/*/*.rpm ${DISTFILES}/builds/${VERSION}/
-fi
 
 # Portable
-FRICTION_PORTABLE=${FRICTION_PKG}-linux-X11-x86_64
+FRICTION_PORTABLE=${FRICTION_PKG}-linux-x86_64
 FRICTION_PORTABLE_DIR=${BUILD}/${FRICTION_PORTABLE}
 cd ${BUILD}
 rm -f ${FRICTION_PORTABLE_DIR} || true
@@ -185,16 +181,16 @@ rm -rf usr
 mv opt/friction/* .
 rm -rf opt share/doc
 ln -sf bin/friction .
+touch bin/portable.txt
 )
-
 cd ${BUILD}
 tar cvf ${FRICTION_PORTABLE}.tar ${FRICTION_PORTABLE}
-bzip2 -9 ${FRICTION_PORTABLE}.tar
-cp -a ${FRICTION_PORTABLE}.tar.bz2 ${DISTFILES}/builds/${VERSION}/
+xz -9 ${FRICTION_PORTABLE}.tar
+cp -a ${FRICTION_PORTABLE}.tar.xz ${DISTFILES}/builds/${VERSION}/
 
 # AppImage
-if [ "${PKG_APP}" = 1 ]; then
 (cd ${FRICTION_PORTABLE_DIR} ;
+rm -f bin/portable.txt
 rm -f friction
 mkdir usr
 mv lib bin plugins share usr/
@@ -203,14 +199,9 @@ ln -sf usr/share/applications/${APPID}.desktop .
 ln -sf usr/share/icons/hicolor/256x256/apps/${APPID}.png .
 ln -sf usr/share/icons/hicolor/256x256/apps/${APPID}.png .DirIcon
 )
-if [ ! -f "${DISTFILES}/appimagetool.tar.bz2" ]; then
-    (cd ${DISTFILES} ;
-        wget https://download.friction.graphics/distfiles/misc/appimagetool.tar.bz2
-    )
-fi
-tar xf ${DISTFILES}/appimagetool.tar.bz2
-ARCH=x86_64 ./appimagetool/AppRun ${FRICTION_PORTABLE}
+tar xf ${DISTFILES}/linux/appimagetool-${APPIMAGETOOL}.tar.bz2
+ARCH=x86_64 ./appimagetool/AppRun --verbose --runtime-file=${DISTFILES}/linux/runtime-x86_64-${APPIMAGERUNTIME}.bin ${FRICTION_PORTABLE}
+
 cp -a *.AppImage ${DISTFILES}/builds/${VERSION}/
-fi
 
 echo "FRICTION PACKAGE DONE"

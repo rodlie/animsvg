@@ -1,0 +1,19 @@
+name: Windows
+
+on: [push, pull_request]
+
+jobs:
+  release:
+    runs-on: windows-2019
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build
+      shell: cmd
+      run: .\src\scripts\build.bat ci
+    - name: Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: friction-ci-windows-x64
+        path: |
+          build\output\friction-*.7z
+          build\output\friction-*.exe

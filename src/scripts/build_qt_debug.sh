@@ -1,0 +1,92 @@
+#!/bin/sh
+set -e
+
+MKJOBS=${MKJOBS:-4}
+
+./configure \
+    -prefix ${HOME}/qt-debug \
+    -c++std c++14 \
+    -opengl desktop \
+    -debug \
+    -shared \
+    -opensource \
+    -confirm-license \
+    -pulseaudio \
+    -fontconfig \
+    -system-freetype \
+    -system-pcre \
+    -system-zlib \
+    -xkbcommon \
+    -xcb \
+    -xcb-xlib \
+    -qpa xcb \
+    -system-libpng \
+    -no-mtdev \
+    -no-syslog \
+    -no-pch \
+    -no-glib \
+    -no-dbus \
+    -no-avx2 \
+    -no-avx512 \
+    -no-gif \
+    -no-ico \
+    -no-tiff \
+    -no-webp \
+    -no-jasper \
+    -no-libjpeg \
+    -no-ssl \
+    -no-cups \
+    -no-mng \
+    -no-gstreamer \
+    -no-alsa \
+    -no-sql-db2 \
+    -no-sql-ibase \
+    -no-sql-mysql \
+    -no-sql-oci \
+    -no-sql-odbc \
+    -no-sql-psql \
+    -no-sql-sqlite2 \
+    -no-sql-sqlite \
+    -no-sql-tds \
+    -no-gtk \
+    -no-eglfs \
+    -no-kms \
+    -no-linuxfb \
+    -nomake examples \
+    -nomake tests \
+    -skip qt3d \
+    -skip qtactiveqt \
+    -skip qtcanvas3d \
+    -skip qtcharts \
+    -skip qtconnectivity \
+    -skip qtdatavis3d \
+    -skip qtdoc \
+    -skip qtgamepad \
+    -skip qtgraphicaleffects \
+    -skip qtlocation \
+    -skip qtlottie \
+    -skip qtnetworkauth \
+    -skip qtpurchasing \
+    -skip qtquick3d \
+    -skip qtquickcontrols \
+    -skip qtquickcontrols2 \
+    -skip qtremoteobjects \
+    -skip qtscript \
+    -skip qtscxml \
+    -skip qtsensors \
+    -skip qtserialbus \
+    -skip qtserialport \
+    -skip qtspeech \
+    -skip qttools \
+    -skip qtvirtualkeyboard \
+    -skip qtwebchannel \
+    -skip qtwebengine \
+    -skip qtwebglplugin \
+    -skip qtwebsockets \
+    -skip qtwebview \
+    -skip qtx11extras \
+    -skip qtxmlpatterns \
+    -skip qttools
+make -j${MKJOBS}
+make install
+echo "OK!"

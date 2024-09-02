@@ -56,19 +56,18 @@ RenderInstanceWidget::RenderInstanceWidget(const RenderInstanceSettings& sett,
     updateFromSettings();
 }
 
-void RenderInstanceWidget::iniGUI() {
-    if(!OutputSettingsProfile::sOutputProfilesLoaded) {
+void RenderInstanceWidget::iniGUI()
+{
+    if (!OutputSettingsProfile::sOutputProfilesLoaded) {
         OutputSettingsProfile::sOutputProfilesLoaded = true;
-        const QString dirPath = AppSupport::getAppOutputProfilesPath();
-        QDirIterator dirIt(dirPath, QDirIterator::NoIteratorFlags);
-        while(dirIt.hasNext()) {
-            const auto path = dirIt.next();
-            const QFileInfo fileInfo(path);
-            if(!fileInfo.isFile()) continue;
-            if(!fileInfo.completeSuffix().contains("conf")) continue;
+        QDir dirPath(AppSupport::getAppOutputProfilesPath());
+        dirPath.setSorting(QDir::SortFlag::Name);
+        for (const auto &fileInfo : dirPath.entryInfoList()) {
+            if (!fileInfo.isFile()) { continue; }
+            if (!fileInfo.completeSuffix().contains("conf")) { continue; }
             const auto profile = enve::make_shared<OutputSettingsProfile>();
             try {
-                profile->load(path);
+                profile->load(fileInfo.absoluteFilePath());
             } catch(const std::exception& e) {
                 gPrintExceptionCritical(e);
             }
@@ -80,17 +79,18 @@ void RenderInstanceWidget::iniGUI() {
     setObjectName("darkWidget");
     mNameLabel = new QLineEdit(this);
     mNameLabel->setFocusPolicy(Qt::NoFocus);
-    mNameLabel->setFixedHeight(eSizesUI::widget);
-    mNameLabel->setObjectName("darkWidget");
+    //mNameLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    mNameLabel->setFixedHeight(eSizesUI::button);
+    //mNameLabel->setObjectName("RenderTitleWidget");
     mNameLabel->setReadOnly(true);
-    mNameLabel->setFrame(false);
+    //mNameLabel->setFrame(false);
 
     setLabelWidget(mNameLabel);
 
     QWidget *contWid = new QWidget(this);
     contWid->setContentsMargins(0, 0, 0, 0);
     contWid->setLayout(mContentLayout);
-    contWid->setObjectName("darkWidget");
+    contWid->setObjectName("RenderContentWidget");
 
     addContentWidget(contWid);
 
@@ -98,10 +98,11 @@ void RenderInstanceWidget::iniGUI() {
 
     QWidget *renderSettingsLabelWidget = new QWidget(this);
     renderSettingsLabelWidget->setContentsMargins(0, 0, 0, 0);
-    renderSettingsLabelWidget->setObjectName("darkWidget");
+    //renderSettingsLabelWidget->setObjectName("darkWidget");
     QVBoxLayout *renderSettingsLayout = new QVBoxLayout(renderSettingsLabelWidget);
 
-    mRenderSettingsButton = new QPushButton(tr("Scene ..."));
+    mRenderSettingsButton = new QPushButton(QIcon::fromTheme("sequence"),
+                                            tr("Scene Properties"));
     mRenderSettingsButton->setFocusPolicy(Qt::NoFocus);
     mRenderSettingsButton->setObjectName("renderSettings");
     mRenderSettingsButton->setSizePolicy(QSizePolicy::Preferred,
@@ -122,12 +123,15 @@ void RenderInstanceWidget::iniGUI() {
     QVBoxLayout *outputSettingsLayout = new QVBoxLayout(outputSettingsLabelWidget);
 
     mOutputSettingsProfilesButton = new OutputProfilesListButton(this);
-    mOutputSettingsProfilesButton->setObjectName("FlatButton");
+    //mOutputSettingsProfilesButton->setObjectName("FlatButton");
     mOutputSettingsProfilesButton->setFocusPolicy(Qt::NoFocus);
+    mOutputSettingsProfilesButton->setSizePolicy(QSizePolicy::Expanding,
+                                                 QSizePolicy::Preferred);
     connect(mOutputSettingsProfilesButton, &OutputProfilesListButton::profileSelected,
             this, &RenderInstanceWidget::outputSettingsProfileSelected);
 
-    mOutputSettingsButton = new QPushButton(tr("Output ..."));
+    mOutputSettingsButton = new QPushButton(QIcon::fromTheme("file_movie"),
+                                            tr("Format"));
     mOutputSettingsButton->setFocusPolicy(Qt::NoFocus);
     mOutputSettingsButton->setSizePolicy(QSizePolicy::Expanding,
                                          QSizePolicy::Preferred);
@@ -144,10 +148,10 @@ void RenderInstanceWidget::iniGUI() {
     outputSettingsLayout->addWidget(outputSettingsOptWidget);
     outputSettingsLayout->addWidget(mOutputSettingsDisplayWidget);
 
-    mOutputDestinationButton = new QPushButton(QIcon::fromTheme("dots"),
+    mOutputDestinationButton = new QPushButton(QIcon::fromTheme("disk_drive"),
                                                QString(),
                                                this);
-    mOutputDestinationButton->setObjectName("FlatButton");
+    //mOutputDestinationButton->setObjectName("FlatButton");
     mOutputDestinationButton->setFocusPolicy(Qt::NoFocus);
     mOutputDestinationButton->setToolTip(tr("Select output file"));
     connect(mOutputDestinationButton, &QPushButton::pressed,
@@ -156,9 +160,9 @@ void RenderInstanceWidget::iniGUI() {
     mPlayButton = new QPushButton(QIcon::fromTheme("play"),
                                             QString(),
                                             this);
-    mPlayButton->setObjectName("FlatButton");
+    //mPlayButton->setObjectName("FlatButton");
     mPlayButton->setFocusPolicy(Qt::NoFocus);
-    mPlayButton->setToolTip(tr("Open in default application"));
+    mPlayButton->setToolTip(tr("View/Play in default application"));
     connect(mPlayButton, &QPushButton::pressed,
             this, [this]() {
         QString dst = mOutputDestinationLineEdit->text();
@@ -173,20 +177,16 @@ void RenderInstanceWidget::iniGUI() {
                                               QSizePolicy::Preferred);
     mOutputDestinationLineEdit->setReadOnly(true);
     mOutputDestinationLineEdit->setPlaceholderText(tr("Destination ..."));
-    mOutputDestinationLineEdit->setObjectName(QString::fromUtf8("OutputDestinationLineEdit"));
+    //mOutputDestinationLineEdit->setObjectName(QString::fromUtf8("OutputDestinationLineEdit"));
 
     eSizesUI::widget.add(mOutputSettingsProfilesButton, [this](const int size) {
-        mRenderSettingsButton->setFixedHeight(size);
-        mOutputSettingsButton->setFixedHeight(size);
-        mOutputSettingsProfilesButton->setFixedSize(QSize(size, size));
-        mOutputDestinationButton->setFixedSize(QSize(size, size));
-        mPlayButton->setFixedSize(QSize(size, size));
-        mOutputDestinationLineEdit->setFixedHeight(size);
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            mOutputSettingsProfilesButton->setIconSize(QSize(size, size));
-            mOutputDestinationButton->setIconSize(QSize(size, size));
-            mPlayButton->setIconSize(QSize(size, size));
-        }
+        Q_UNUSED(size)
+        mRenderSettingsButton->setFixedHeight(eSizesUI::button);
+        mOutputSettingsButton->setFixedHeight(eSizesUI::button);
+        mOutputSettingsProfilesButton->setFixedHeight(eSizesUI::button);
+        mOutputDestinationButton->setFixedHeight(eSizesUI::button);
+        mPlayButton->setFixedSize(QSize(eSizesUI::button, eSizesUI::button));
+        mOutputDestinationLineEdit->setFixedHeight(eSizesUI::button);
     });
 
     QWidget *outputDestinationWidget = new QWidget(this);
@@ -195,8 +195,8 @@ void RenderInstanceWidget::iniGUI() {
     outputDesinationLayout->setMargin(0);
 
     outputDesinationLayout->addWidget(mOutputDestinationButton);
-    outputDesinationLayout->addWidget(mPlayButton);
     outputDesinationLayout->addWidget(mOutputDestinationLineEdit);
+    outputDesinationLayout->addWidget(mPlayButton);
 
     outputSettingsLayout->addWidget(outputDestinationWidget);
 
@@ -204,6 +204,7 @@ void RenderInstanceWidget::iniGUI() {
 
     mContentLayout->setMargin(0);
     mContentLayout->setSpacing(0);
+    mContentLayout->setContentsMargins(0, 0, 0, 0);
 }
 
 void RenderInstanceWidget::updateFromSettings() {
@@ -211,24 +212,37 @@ void RenderInstanceWidget::updateFromSettings() {
     bool enabled = renderState != RenderState::paused &&
        renderState != RenderState::rendering;
     setEnabled(enabled);
-    QString nameLabelTxt = QString("%1 ").arg(mSettings.getName());
+
+    QString nameLabelTxt = QString(mSettings.getName());
+    const OutputSettings &outputSettings = mSettings.getOutputRenderSettings();
+
+    const auto format = outputSettings.fOutputFormat;
+    if (format) {
+        QString formatString(format->name);
+        if (formatString == "image2") {
+            const auto codec = outputSettings.fVideoCodec;
+            if (codec) { formatString = QString(codec->name); }
+        }
+        nameLabelTxt.append(QString(" [%1]").arg(QString(formatString).toUpper()));
+    }
+
     if(renderState == RenderState::error) {
-        nameLabelTxt += tr(": Error"); //mSettings.getRenderError();
+        nameLabelTxt += tr(" : Error"); //mSettings.getRenderError();
     } else if(renderState == RenderState::finished) {
-        nameLabelTxt += tr(": Finished");
+        nameLabelTxt += tr(" : Finished");
         mCheckBox->setChecked(false);
     } else if(renderState == RenderState::rendering) {
-        nameLabelTxt += tr(": Rendering ...");
+        nameLabelTxt += tr(" : Rendering ...");
     } else if(renderState == RenderState::waiting) {
-        nameLabelTxt += tr(": Waiting ...");
+        nameLabelTxt += tr(" : Waiting ...");
     } else if(renderState == RenderState::paused) {
-        nameLabelTxt += tr(": Paused");
+        nameLabelTxt += tr(" : Paused");
     }
     mNameLabel->setText(nameLabelTxt);
 
     QString destinationTxt = mSettings.getOutputDestination();
     mOutputDestinationLineEdit->setText(destinationTxt);
-    const OutputSettings &outputSettings = mSettings.getOutputRenderSettings();
+
     /*OutputSettingsProfile *outputProfile = mSettings.getOutputSettingsProfile();
     QString outputTxt;
     if(outputProfile) {
@@ -254,23 +268,34 @@ RenderInstanceSettings &RenderInstanceWidget::getSettings() {
     return mSettings;
 }
 
-void RenderInstanceWidget::mousePressEvent(QMouseEvent *e) {
-    if(e->button() == Qt::RightButton) {
+void RenderInstanceWidget::mousePressEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::RightButton) {
         QMenu menu(this);
-        menu.addAction("Duplicate");
+
         const auto state = mSettings.getCurrentState();
-        const bool deletable = state != RenderState::rendering &&
-                               state != RenderState::paused;
-        menu.addAction("Delete")->setEnabled(deletable);
+        const bool deletable = (state != RenderState::rendering && state != RenderState::paused);
+
+        const auto dupAct = menu.addAction(QIcon::fromTheme("duplicate"), tr("Duplicate"));
+        dupAct->setData(0);
+
+        const auto delAct = menu.addAction(QIcon::fromTheme("minus"), tr("Remove"));
+        delAct->setData(1);
+        delAct->setEnabled(deletable);
+
         const auto act = menu.exec(e->globalPos());
-        if(act) {
-            if(act->text() == "Duplicate") {
+        if (act) {
+            switch (act->data().toInt()) {
+            case 0:
                 emit duplicate(mSettings);
-            } else if(act->text() == "Delete") {
+                break;
+            case 1:
                 deleteLater();
+                break;
+            default:;
             }
         }
-    } else return ClosableContainer::mousePressEvent(e);
+    } else { return ClosableContainer::mousePressEvent(e); }
 }
 
 void RenderInstanceWidget::openOutputSettingsDialog() {
@@ -305,7 +330,13 @@ void RenderInstanceWidget::updateOutputDestinationFromCurrentFormat() {
         outputDst = Document::sInstance->projectDirectory() + "/untitled";
     }
     const QString tmpStr = QString(format->extensions);
-    const QStringList supportedExt = tmpStr.split(",");
+    QStringList supportedExt = tmpStr.split(",");
+    if (isImgSeq) {
+        const auto exts = getExportImageExtensions(outputSettings);
+        if (!exts.second.isEmpty()) {
+            supportedExt = exts.second.join(" ").split("*.", Qt::SkipEmptyParts);
+        }
+    }
     const QString fileName = outputDst.split("/").last();
     const QStringList dividedName = fileName.split(".");
     QString currExt;
@@ -349,12 +380,18 @@ void RenderInstanceWidget::openOutputDestinationDialog() {
     QString selectedExt;
     const OutputSettings &outputSettings = mSettings.getOutputRenderSettings();
     const auto format = outputSettings.fOutputFormat;
-    if(format) {
+    if (format) {
         QString tmpStr = QString(format->extensions);
-        const QStringList supportedExt = tmpStr.split(",");
-        selectedExt = "." + supportedExt.first();
-        tmpStr.replace(",", " *.");
-        supportedExts = "Output File (*." + tmpStr + ")";
+        const auto exts = getExportImageExtensions(outputSettings);
+        if (!exts.first.isEmpty() && !exts.second.isEmpty()) {
+            selectedExt = exts.first;
+            supportedExts = tr("Output File (%1)").arg(exts.second.join(" "));
+        } else {
+            const QStringList supportedExt = tmpStr.split(",");
+            selectedExt = "." + supportedExt.first();
+            tmpStr.replace(",", " *.");
+            supportedExts = "Output File (*." + tmpStr + ")";
+        }
     }
     QString iniText = mSettings.getOutputDestination();
     if(iniText.isEmpty()) {
@@ -381,6 +418,28 @@ void RenderInstanceWidget::openRenderSettingsDialog() {
     delete dialog;
 }
 
+const QPair<QString, QStringList> RenderInstanceWidget::getExportImageExtensions(const OutputSettings &settings)
+{
+    const auto format = settings.fOutputFormat;
+    const auto codec = settings.fVideoCodec;
+    QPair<QString,QStringList> ext;
+    if (!format) { return ext; }
+    if (QString(format->long_name).startsWith("image2") && codec) {
+        const auto codecName = QString(codec->name);
+        if (codecName == "png") {
+            ext.first = ".png";
+            ext.second << "*.png";
+        } else if (codecName == "tiff") {
+            ext.first = ".tif";
+            ext.second << "*.tif" << "*.tiff";
+        } else if (codecName.endsWith("jpeg")) {
+            ext.first = ".jpg";
+            ext.second << "*.jpg" << "*.jpeg";
+        }
+    }
+    return ext;
+}
+
 void RenderInstanceWidget::write(eWriteStream &dst) const {
     mSettings.write(dst);
     dst << isChecked();
@@ -397,15 +456,19 @@ void RenderInstanceWidget::updateRenderSettings()
     const RenderSettings &renderSettings = mSettings.getRenderSettings();
     mRenderSettingsDisplayWidget->setRenderSettings(mSettings.getTargetCanvas(),
                                                     renderSettings);
-    const auto label = mSettings.getTargetCanvas()->prp_getName();
-    if (!label.isEmpty()) { mNameLabel->setText(label); }
+    if (mSettings.getTargetCanvas()) {
+        const auto label = mSettings.getTargetCanvas()->prp_getName();
+        if (!label.isEmpty()) { mNameLabel->setText(label); }
+    }
+    updateFromSettings();
 }
 
 #include "Private/esettings.h"
 OutputProfilesListButton::OutputProfilesListButton(RenderInstanceWidget *parent) :
     QPushButton(parent) {
     mParentWidget = parent;
-    setIcon(QIcon::fromTheme("dots"));
+    setText(tr("Profiles"));
+    setIcon(QIcon::fromTheme("renderlayers"));
     setToolTip(tr("Select output profile"));
 }
 

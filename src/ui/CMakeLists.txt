@@ -29,7 +29,7 @@ include(friction-ffmpeg)
 
 message("-- ffmpeg include: ${FFMPEG_INCLUDE_DIRS}")
 message("-- ffmpeg libraries: ${FFMPEG_LIBRARIES_DIRS} ${FFMPEG_LIBRARIES}")
-message("-- skia libraries: ${SKIA_LIBRARIES}")
+message("-- skia libraries: ${SKIA_LIBRARIES_DIRS} ${SKIA_LIBRARIES}")
 
 add_definitions(-DUI_LIBRARY)
 
@@ -42,7 +42,9 @@ include_directories(
 
 set(
     SOURCES
+    dialogs/adjustscenedialog.cpp
     dialogs/applyexpressiondialog.cpp
+    dialogs/commandpalette.cpp
     dialogs/durationrectsettingsdialog.cpp
     dialogs/exportsvgdialog.cpp
     dialogs/qrealpointvaluedialog.cpp
@@ -79,6 +81,7 @@ set(
     widgets/editablecombobox.cpp
     widgets/fakemenubar.cpp
     widgets/flowlayout.cpp
+    widgets/framespinbox.cpp
     widgets/glwidget.cpp
     widgets/glwindow.cpp
     widgets/labeledslider.cpp
@@ -100,7 +103,9 @@ set(
 set(
     HEADERS
     ui_global.h
+    dialogs/adjustscenedialog.h
     dialogs/applyexpressiondialog.h
+    dialogs/commandpalette.h
     dialogs/durationrectsettingsdialog.h
     dialogs/exportsvgdialog.h
     dialogs/qrealpointvaluedialog.h
@@ -137,6 +142,7 @@ set(
     widgets/editablecombobox.h
     widgets/fakemenubar.h
     widgets/flowlayout.h
+    widgets/framespinbox.h
     widgets/glwidget.h
     widgets/glwindow.h
     widgets/labeledslider.h
@@ -181,7 +187,7 @@ target_link_directories(
     ${PROJECT_NAME}
     PRIVATE
     ${FFMPEG_LIBRARIES_DIRS}
-    ${CMAKE_CURRENT_BINARY_DIR}/../engine/skia
+    ${SKIA_LIBRARIES_DIRS}
 )
 
 target_link_libraries(

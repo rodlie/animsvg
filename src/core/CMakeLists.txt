@@ -30,7 +30,7 @@ include(friction-ffmpeg)
 
 message("-- ffmpeg include: ${FFMPEG_INCLUDE_DIRS}")
 message("-- ffmpeg libraries: ${FFMPEG_LIBRARIES_DIRS} ${FFMPEG_LIBRARIES}")
-message("-- skia libraries: ${SKIA_LIBRARIES}")
+message("-- skia libraries: ${SKIA_LIBRARIES_DIRS} ${SKIA_LIBRARIES}")
 
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 add_definitions(-DPROJECT_COMMIT="${GIT_COMMIT}")
@@ -79,6 +79,7 @@ set(
     BlendEffects/blendeffectcollection.cpp
     BlendEffects/moveblendeffect.cpp
     BlendEffects/targetedblendeffect.cpp
+    BlendEffects/blendeffectmenucreator.cpp
     Boxes/animationbox.cpp
     Boxes/boundingbox.cpp
     Boxes/boxrendercontainer.cpp
@@ -168,6 +169,7 @@ set(
     PathEffects/subpatheffect.cpp
     PathEffects/sumpatheffect.cpp
     PathEffects/zigzagpatheffect.cpp
+    PathEffects/patheffectmenucreator.cpp
     Private/Tasks/complextask.cpp
     Private/Tasks/execcontroller.cpp
     Private/Tasks/gputaskexecutor.cpp
@@ -234,6 +236,7 @@ set(
     TransformEffects/trackeffect.cpp
     TransformEffects/transformeffect.cpp
     TransformEffects/transformeffectcollection.cpp
+    TransformEffects/transformeffectmenucreator.cpp
     XML/xevexporter.cpp
     XML/xevimporter.cpp
     XML/xevzipfilesaver.cpp
@@ -340,6 +343,7 @@ set(
     MovablePoints/pathpointshandler.cpp
     canvasbase.cpp
     typemenu.cpp
+    themesupport.cpp
     wrappedint.cpp
     zipfileloader.cpp
     zipfilesaver.cpp
@@ -385,6 +389,7 @@ set(
     BlendEffects/blendeffectcollection.h
     BlendEffects/moveblendeffect.h
     BlendEffects/targetedblendeffect.h
+    BlendEffects/blendeffectmenucreator.h
     Boxes/animationbox.h
     Boxes/boundingbox.h
     Boxes/boxrendercontainer.h
@@ -480,6 +485,7 @@ set(
     PathEffects/subpatheffect.h
     PathEffects/sumpatheffect.h
     PathEffects/zigzagpatheffect.h
+    PathEffects/patheffectmenucreator.h
     Private/Tasks/complextask.h
     Private/Tasks/execcontroller.h
     Private/Tasks/gputaskexecutor.h
@@ -558,6 +564,7 @@ set(
     TransformEffects/trackeffect.h
     TransformEffects/transformeffect.h
     TransformEffects/transformeffectcollection.h
+    TransformEffects/transformeffectmenucreator.h
     XML/runtimewriteid.h
     XML/xevexporter.h
     XML/xevimporter.h
@@ -617,6 +624,7 @@ set(
     swt_abstraction.h
     swt_rulescollection.h
     texteffect.h
+    threadsafeqjsengine.h
     transformvalues.h
     undoredo.h
     exceptions.h
@@ -672,6 +680,7 @@ set(
     MovablePoints/pathpointshandler.h
     canvasbase.h
     typemenu.h
+    themesupport.h
     pointtypemenu.h
     wrappedint.h
     windowsincludes.h
@@ -707,7 +716,7 @@ target_link_directories(
     ${PROJECT_NAME}
     PRIVATE
     ${FFMPEG_LIBRARIES_DIRS}
-    ${CMAKE_CURRENT_BINARY_DIR}/../engine/skia
+    ${SKIA_LIBRARIES_DIRS}
     ${QUAZIP_LIBRARIES_DIRS}
 )
 

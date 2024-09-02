@@ -36,11 +36,15 @@ class ComplexTask;
 class UI_EXPORT ExportSvgDialog : public QDialog
 {
 public:
-    ExportSvgDialog(QWidget* const parent = nullptr);
+    ExportSvgDialog(QWidget* const parent = nullptr,
+                    const QString &warnings = QString());
+    void showPreview(const bool &closeWhenDone = false);
 
 private:
     ComplexTask* exportTo(const QString& file,
                           bool preview = false);
+
+    void finishedDialog(const QString &fileName);
 
     QSharedPointer<QTemporaryFile> mPreviewFile;
     QPushButton *mPreviewButton;
@@ -53,6 +57,8 @@ private:
     QCheckBox *mBackground;
     QCheckBox *mFixedSize;
     QCheckBox *mLoop;
+    QCheckBox *mOptimize;
+    QCheckBox *mNotify;
 
     QComboBox *mImageFormat;
     QSpinBox *mImageQuality;

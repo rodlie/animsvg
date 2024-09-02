@@ -28,33 +28,38 @@
 
 #include <QObject>
 #include <QVariant>
-#include <QPalette>
 #include <QPair>
 #include <QStringList>
+#include <QSettings>
 
 #include "hardwareenums.h"
-
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-#define QT_ENDL Qt::endl
-#define QT_SKIP_EMPTY Qt::SkipEmptyParts
-#else
-#define QT_ENDL endl
-#define QT_SKIP_EMPTY QString::SkipEmptyParts
-#endif
 
 class CORE_EXPORT AppSupport : public QObject
 {
     Q_OBJECT
 
 public:
+    struct ExpressionPreset
+    {
+        bool valid = false;
+        QString definitions;
+        QString bindings;
+        QString script;
+    };
     explicit AppSupport(QObject *parent = nullptr);
-    static void setupTheme();
-    static const QPalette getDarkPalette();
-    static const QPalette getNotSoDarkPalette();
     static QVariant getSettings(const QString &group,
                                 const QString &key,
                                 const QVariant &fallback = QVariant());
+    static QVariant getSettings(QSettings *settings,
+                                const QString &group,
+                                const QString &key,
+                                const QVariant &fallback = QVariant());
     static void setSettings(const QString &group,
+                            const QString &key,
+                            const QVariant &value,
+                            bool append = false);
+    static void setSettings(QSettings *settings,
+                            const QString &group,
                             const QString &key,
                             const QVariant &value,
                             bool append = false);
@@ -73,6 +78,7 @@ public:
     static const QString getAppCommitUrl();
     static const QString getAppBranchUrl();
     static const QString getAppConfigPath();
+    static const QString getAppPath();
     static const QString getAppOutputProfilesPath();
     static const QString getAppPathEffectsPath();
     static const QString getAppRasterEffectsPath();
@@ -80,12 +86,17 @@ public:
     static const QString getAppShaderPresetsPath();
     static const QString getAppExPresetsPath();
     static const QString getAppUserExPresetsPath();
+    static const QString getSVGO();
+    static const QString getSVGOConfig();
     static const QString getFileMimeType(const QString &path);
     static const QString getFileIcon(const QString &path);
     static const QPair<QString,QString> getShaderID(const QString &path);
     static const QStringList getFilesFromPath(const QString &path,
                                               const QStringList &suffix = QStringList());
-    static const QString getTimeCodeFromFrame(int frame, float fps);
+    static const QString getTimeCodeFromFrame(int frame,
+                                              float fps);
+    static int getFrameFromTimeCode(const QString &timecode,
+                                    float fps);
     static HardwareSupport getRasterEffectHardwareSupport(const QString &effect,
                                                           HardwareSupport fallback);
     static const QString getRasterEffectHardwareSupportString(const QString &effect,
@@ -103,6 +114,17 @@ public:
     static bool removeResolutionPreset(const int w, const int h);
     static QPair<bool, bool> getResolutionPresetStatus();
     static const QString filterTextAZW(const QString &text);
+    static const QString filterFormatsName(const QString &text);
+    static int getProjectVersion(const QString &fileName = QString());
+    static const QPair<QStringList,bool> hasWriteAccess();
+    static bool isAppPortable();
+    static const QString getAppImagePath();
+    static bool hasXDGDesktopIntegration();
+    static bool setupXDGDesktopIntegration();
+    static bool removeXDGDesktopIntegration();
+    static const ExpressionPreset readEasingPreset(const QString &filename);
+    static const QList<QPair<QString,QString>> getEasingPresets();
+    static void handlePortableFirstRun();
 };
 
 #endif // APPSUPPORT_H

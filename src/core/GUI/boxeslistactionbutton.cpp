@@ -24,36 +24,45 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "boxeslistactionbutton.h"
-#include <QPainter>
-#include "GUI/global.h"
 
-BoxesListActionButton::BoxesListActionButton(QWidget * const parent) :
-    QWidget(parent) {
+#include <QPainter>
+
+#include "themesupport.h"
+
+BoxesListActionButton::BoxesListActionButton(QWidget * const parent)
+    : QWidget(parent)
+{
     eSizesUI::widget.add(this, [this](const int size) {
         setFixedSize(size, size);
     });
 }
 
-void BoxesListActionButton::mousePressEvent(QMouseEvent *) {
+void BoxesListActionButton::mousePressEvent(QMouseEvent *)
+{
     emit pressed();
 }
 
-void BoxesListActionButton::enterEvent(QEvent *) {
+void BoxesListActionButton::enterEvent(QEvent *)
+{
     mHover = true;
     update();
 }
 
-void BoxesListActionButton::leaveEvent(QEvent *) {
+void BoxesListActionButton::leaveEvent(QEvent *)
+{
     mHover = false;
     update();
 }
 
-void PixmapActionButton::paintEvent(QPaintEvent *) {
-    if(!mPixmapChooser) return;
+void PixmapActionButton::paintEvent(QPaintEvent *)
+{
+    if (!mPixmapChooser) { return; }
     const auto pix = mPixmapChooser();
-    if(!pix) return;
+    if (!pix) { return; }
 
     QPainter p(this);
-    p.drawPixmap(0, 0, *pix);
+    const int pX = 0;
+    if (mHover) { p.fillRect(QRect(QPoint(pX, pX), pix->size()), ThemeSupport::getThemeHighlightColor(50)); }
+    p.drawPixmap(pX, pX, *pix);
     p.end();
 }

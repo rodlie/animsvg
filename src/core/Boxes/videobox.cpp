@@ -151,6 +151,18 @@ QString VideoBox::getFilePath() {
     return mFileHandler.path();
 }
 
+const VideoBox::VideoSpecs VideoBox::getSpecs()
+{
+    VideoSpecs specs;
+    const auto h = mFileHandler->getFrameHandler();
+    if (!h) { return specs; }
+    int frames = h->getFrameCount();
+    specs.range = FrameRange{0, frames <= 1 ? 0 : frames - 1};
+    specs.fps = h->getFps();
+    specs.dim = h->getDim();
+    return specs;
+}
+
 void VideoBox::soundDataChanged() {
     const auto pScene = getParentScene();
     const auto soundHandler = mFileHandler ?

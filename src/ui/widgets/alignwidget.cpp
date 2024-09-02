@@ -31,37 +31,35 @@
 
 #include "GUI/global.h"
 #include "Private/esettings.h"
+#include "themesupport.h"
 
 AlignWidget::AlignWidget(QWidget* const parent)
     : QWidget(parent)
     , mAlignPivot(nullptr)
     , mRelativeTo(nullptr)
 {
-    QPalette pal = QPalette();
-    pal.setColor(QPalette::Window, QColor(33, 33, 38));
-    setAutoFillBackground(true);
-    setPalette(pal);
-
     const auto mainLayout = new QVBoxLayout(this);
     setLayout(mainLayout);
 
     const auto combosLay = new QHBoxLayout;
     mainLayout->addLayout(combosLay);
 
-    combosLay->addWidget(new QLabel(tr("Align")));
+    //combosLay->addWidget(new QLabel(tr("Align")));
     mAlignPivot = new QComboBox(this);
+    mAlignPivot->setMinimumWidth(20);
     mAlignPivot->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     mAlignPivot->setFocusPolicy(Qt::NoFocus);
-    mAlignPivot->addItem(tr("Geometry"));
-    mAlignPivot->addItem(tr("Pivot"));
+    mAlignPivot->addItem(tr("Align Geometry"));
+    mAlignPivot->addItem(tr("Align Pivot"));
     combosLay->addWidget(mAlignPivot);
 
-    combosLay->addWidget(new QLabel(tr("Relative to")));
+    //combosLay->addWidget(new QLabel(tr("Relative to")));
     mRelativeTo = new QComboBox(this);
+    mRelativeTo->setMinimumWidth(20);
     mRelativeTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     mRelativeTo->setFocusPolicy(Qt::NoFocus);
-    mRelativeTo->addItem(tr("Scene"));
-    mRelativeTo->addItem(tr("Last Selected"));
+    mRelativeTo->addItem(tr("Relative to Scene"));
+    mRelativeTo->addItem(tr("Relative to Last Selected"));
     combosLay->addWidget(mRelativeTo);
 
     const auto buttonsLay = new QHBoxLayout;
@@ -122,15 +120,20 @@ AlignWidget::AlignWidget(QWidget* const parent)
     });
     buttonsLay->addWidget(bottomButton);
 
-    if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-        int buttonSize = eSizesUI::widget;
-        leftButton->setIconSize(QSize(buttonSize, buttonSize));
-        hCenterButton->setIconSize(QSize(buttonSize, buttonSize));
-        rightButton->setIconSize(QSize(buttonSize, buttonSize));
-        topButton->setIconSize(QSize(buttonSize, buttonSize));
-        vCenterButton->setIconSize(QSize(buttonSize, buttonSize));
-        bottomButton->setIconSize(QSize(buttonSize, buttonSize));
-    }
+    eSizesUI::widget.add(leftButton, [leftButton,
+                                      hCenterButton,
+                                      rightButton,
+                                      topButton,
+                                      vCenterButton,
+                                      bottomButton](const int size) {
+        Q_UNUSED(size)
+        leftButton->setFixedHeight(eSizesUI::button);
+        hCenterButton->setFixedHeight(eSizesUI::button);
+        rightButton->setFixedHeight(eSizesUI::button);
+        topButton->setFixedHeight(eSizesUI::button);
+        vCenterButton->setFixedHeight(eSizesUI::button);
+        bottomButton->setFixedHeight(eSizesUI::button);
+    });
 }
 
 void AlignWidget::triggerAlign(const Qt::Alignment align)

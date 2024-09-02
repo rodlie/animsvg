@@ -33,6 +33,9 @@ StackWrapperMenu::StackWrapperMenu() {
 WidgetWrapperNode::WidgetWrapperNode(const WrapperNode::WidgetCreator &creator) :
     WrapperNode(WrapperNodeType::widget, creator) {
     mCornerMenu = new WidgetWrapperCornerMenu(this);
+    eSizesUI::widget.add(mCornerMenu, [this](const int size) {
+        mCornerMenu->setFixedHeight(size);
+    });
     mLayout = new QVBoxLayout(this);
     mMenuLayout = new QHBoxLayout();
     mMenuLayout->addWidget(mCornerMenu);

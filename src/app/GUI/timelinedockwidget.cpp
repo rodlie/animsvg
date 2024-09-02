@@ -88,6 +88,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mFrameRewindAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                       "rewind",
                                                                       "Shift+Left").toString()));
+    mFrameRewindAct->setData(tr("Go to First Frame"));
     connect(mFrameRewindAct, &QAction::triggered,
             this, [this]() {
         const auto scene = *mDocument.fActiveScene;
@@ -102,6 +103,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mFrameFastForwardAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                            "fastForward",
                                                                            "Shift+Right").toString()));
+    mFrameFastForwardAct->setData(tr("Go to Last Frame"));
     connect(mFrameFastForwardAct, &QAction::triggered,
             this, [this]() {
         const auto scene = *mDocument.fActiveScene;
@@ -111,7 +113,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     });
 
     mPlayFromBeginningButton = new QAction(QIcon::fromTheme("preview"),
-                                           tr("Play From the Beginning"),
+                                           tr("Play Preview From Start"),
                                            this);
     connect(mPlayFromBeginningButton, &QAction::triggered,
             this, [this]() {
@@ -124,7 +126,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     });
 
     mPlayButton = new QAction(QIcon::fromTheme("play"),
-                              tr("Render Preview"),
+                              tr("Play Preview"),
                               this);
 
     mStopButton = new QAction(QIcon::fromTheme("stop"),
@@ -134,14 +136,16 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     connect(mStopButton, &QAction::triggered,
             this, &TimelineDockWidget::interruptPreview);
 
-    mLoopButton = new QAction(QIcon::fromTheme("loop"),
-                              tr("Loop"),
+    mLoopButton = new QAction(QIcon::fromTheme("loop2"),
+                              tr("Loop Preview"),
                               this);
     mLoopButton->setCheckable(true);
     connect(mLoopButton, &QAction::triggered,
             this, &TimelineDockWidget::setLoop);
 
-    mFrameStartSpin = new QSpinBox(this);
+    mFrameStartSpin = new FrameSpinBox(this);
+    mFrameStartSpin->setKeyboardTracking(false);
+    mFrameStartSpin->setObjectName("LeftSpinBox");
     mFrameStartSpin->setAlignment(Qt::AlignHCenter);
     mFrameStartSpin->setFocusPolicy(Qt::ClickFocus);
     mFrameStartSpin->setToolTip(tr("Scene frame start"));
@@ -162,7 +166,8 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
             scene->setFrameRange(range);
     });
 
-    mFrameEndSpin = new QSpinBox(this);
+    mFrameEndSpin = new FrameSpinBox(this);
+    mFrameEndSpin->setKeyboardTracking(false);
     mFrameEndSpin->setAlignment(Qt::AlignHCenter);
     mFrameEndSpin->setFocusPolicy(Qt::ClickFocus);
     mFrameEndSpin->setToolTip(tr("Scene frame end"));
@@ -183,25 +188,20 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
             scene->setFrameRange(range);
     });
 
-    mCurrentFrameSpin = new QSpinBox(this);
+    mCurrentFrameSpin = new FrameSpinBox(this);
+    mCurrentFrameSpin->setKeyboardTracking(false);
     mCurrentFrameSpin->setAlignment(Qt::AlignHCenter);
     mCurrentFrameSpin->setObjectName(QString::fromUtf8("SpinBoxNoButtons"));
-    mCurrentFrameSpin->setFocusPolicy(Qt::ClickFocus);
+    mCurrentFrameSpin->setFocusPolicy(Qt::NoFocus);
     mCurrentFrameSpin->setToolTip(tr("Current frame"));
     mCurrentFrameSpin->setRange(-INT_MAX, INT_MAX);
-    connect(mCurrentFrameSpin,
-            &QSpinBox::editingFinished,
-            this, [this]() {
-        const auto scene = *mDocument.fActiveScene;
-        if (!scene) { return; }
-        scene->anim_setAbsFrame(mCurrentFrameSpin->value());
-        mDocument.actionFinished();
-    });
+    mCurrentFrameSpin->setReadOnly(true);
 
     const auto mPrevKeyframeAct = new QAction(QIcon::fromTheme("prev_keyframe"),
                                               QString(),
                                               this);
     mPrevKeyframeAct->setToolTip(tr("Previous Keyframe"));
+    mPrevKeyframeAct->setData(mPrevKeyframeAct->toolTip());
     connect(mPrevKeyframeAct, &QAction::triggered,
             this, [this]() {
         if (setPrevKeyframe()) {
@@ -213,6 +213,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
                                               QString(),
                                               this);
     mNextKeyframeAct->setToolTip(tr("Next Keyframe"));
+    mNextKeyframeAct->setData(mNextKeyframeAct->toolTip());
     connect(mNextKeyframeAct, &QAction::triggered,
             this, [this]() {
         if (setNextKeyframe()) {
@@ -221,20 +222,20 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     });
 
     mToolBar = new QToolBar(this);
-    eSizesUI::widget.add(mToolBar, [this](const int size) {
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            mToolBar->setIconSize(QSize(size, size));
-        }
-    });
     mToolBar->setMovable(false);
 
     mRenderProgress = new QProgressBar(this);
-    mRenderProgress->setSizePolicy(QSizePolicy::Preferred,
-                                   QSizePolicy::Preferred);
-    mRenderProgress->setMinimumWidth(150);
+    mRenderProgress->setSizePolicy(QSizePolicy::Expanding,
+                                   QSizePolicy::Expanding);
+    mRenderProgress->setFixedWidth(mCurrentFrameSpin->width());
     mRenderProgress->setFormat(tr("Cache %p%"));
 
     mToolBar->addWidget(mFrameStartSpin);
+
+    eSizesUI::widget.add(mToolBar, [this](const int size) {
+        //mRenderProgress->setFixedHeight(eSizesUI::button);
+        mToolBar->setIconSize(QSize(size, size));
+    });
 
     QWidget *spacerWidget1 = new QWidget(this);
     spacerWidget1->setSizePolicy(QSizePolicy::Expanding,
@@ -252,6 +253,15 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mToolBar->addAction(mStopButton);
     mToolBar->addAction(mLoopButton);
 
+    mMainWindow->cmdAddAction(mFrameRewindAct);
+    mMainWindow->cmdAddAction(mPrevKeyframeAct);
+    mMainWindow->cmdAddAction(mNextKeyframeAct);
+    mMainWindow->cmdAddAction(mFrameFastForwardAct);
+    mMainWindow->cmdAddAction(mPlayFromBeginningButton);
+    mMainWindow->cmdAddAction(mPlayButton);
+    mMainWindow->cmdAddAction(mStopButton);
+    mMainWindow->cmdAddAction(mLoopButton);
+
     mRenderProgressAct->setVisible(false);
 
     QWidget *spacerWidget2 = new QWidget(this);
@@ -262,6 +272,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mToolBar->addWidget(mFrameEndSpin);
 
     mMainLayout->addWidget(mToolBar);
+    mMainLayout->addSpacing(2);
 
     mPlayFromBeginningButton->setEnabled(false);
     mPlayButton->setEnabled(false);
@@ -338,6 +349,16 @@ bool TimelineDockWidget::processKeyPress(QKeyEvent *event)
             case PreviewState::playing: pausePreview(); break;
             case PreviewState::paused: resumePreview(); break;
         }
+    } else if (key == Qt::Key_K) { // split clip
+        splitClip();
+    } else if (key == Qt::Key_M) { // set marker
+        setMarker();
+    } else if (key == Qt::Key_I || key == Qt::Key_O) { // set frame in/out
+        switch(key) {
+            case Qt::Key_I: setIn(); break;
+            case Qt::Key_O: setOut(); break;
+            default:;
+        }
     } else if (key == Qt::Key_Right && !(mods & Qt::ControlModifier)) { // next frame
         mDocument.incActiveSceneFrame();
     } else if (key == Qt::Key_Left && !(mods & Qt::ControlModifier)) { // previous frame
@@ -376,7 +397,7 @@ void TimelineDockWidget::previewFinished()
     mPlayFromBeginningButton->setDisabled(false);
     mStopButton->setDisabled(true);
     mPlayButton->setIcon(QIcon::fromTheme("play"));
-    mPlayButton->setText(tr("Render Preview"));
+    mPlayButton->setText(tr("Play Preview"));
     disconnect(mPlayButton, nullptr, this, nullptr);
     connect(mPlayButton, &QAction::triggered,
             this, &TimelineDockWidget::renderPreview);
@@ -499,6 +520,27 @@ void TimelineDockWidget::updateSettingsForCurrentCanvas(Canvas* const canvas)
     updateFrameRange(range);
     handleCurrentFrameChanged(canvas->anim_getCurrentAbsFrame());
 
+    mCurrentFrameSpin->setDisplayTimeCode(canvas->getDisplayTimecode());
+    mFrameStartSpin->setDisplayTimeCode(canvas->getDisplayTimecode());
+    mFrameEndSpin->setDisplayTimeCode(canvas->getDisplayTimecode());
+
+    mCurrentFrameSpin->updateFps(canvas->getFps());
+    mFrameStartSpin->updateFps(canvas->getFps());
+    mFrameEndSpin->updateFps(canvas->getFps());
+
+    connect(canvas, &Canvas::fpsChanged,
+            this, [this](const qreal fps) {
+        mCurrentFrameSpin->updateFps(fps);
+        mFrameStartSpin->updateFps(fps);
+        mFrameEndSpin->updateFps(fps);
+    });
+    connect(canvas, &Canvas::displayTimeCodeChanged,
+            this, [this](const bool enabled) {
+        mCurrentFrameSpin->setDisplayTimeCode(enabled);
+        mFrameStartSpin->setDisplayTimeCode(enabled);
+        mFrameEndSpin->setDisplayTimeCode(enabled);
+    });
+
     connect(canvas,
             &Canvas::newFrameRange,
             this, [this](const FrameRange range) {
@@ -506,10 +548,61 @@ void TimelineDockWidget::updateSettingsForCurrentCanvas(Canvas* const canvas)
     });
     connect(canvas, &Canvas::currentFrameChanged,
             this, &TimelineDockWidget::handleCurrentFrameChanged);
+
+    update(); // needed for loaded markers
 }
 
 void TimelineDockWidget::stopPreview()
 {
     const auto state = RenderHandler::sInstance->currentPreviewState();
-    if (state != PreviewState::stopped) { interruptPreview(); }
+    switch (state) {
+    case PreviewState::paused:
+        interruptPreview();
+        break;
+    case PreviewState::playing:
+    case PreviewState::rendering:
+        interruptPreview();
+        renderPreview();
+        break;
+    default:;
+    }
+}
+
+void TimelineDockWidget::setIn()
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return; }
+    const auto frame = scene->getCurrentFrame();
+    if (scene->getFrameOut().enabled) {
+        if (frame >= scene->getFrameOut().frame) { return; }
+    }
+    bool apply = frame == 0 ? true : (scene->getFrameIn().frame != frame);
+    scene->setFrameIn(apply, frame);
+}
+
+void TimelineDockWidget::setOut()
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return; }
+    const auto frame = scene->getCurrentFrame();
+    if (scene->getFrameIn().enabled) {
+        if (frame <= scene->getFrameIn().frame) { return; }
+    }
+    bool apply = (scene->getFrameOut().frame != frame);
+    scene->setFrameOut(apply, frame);
+}
+
+void TimelineDockWidget::setMarker()
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return; }
+    const auto frame = scene->getCurrentFrame();
+    scene->setMarker(frame);
+}
+
+void TimelineDockWidget::splitClip()
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return; }
+    scene->splitAction();
 }

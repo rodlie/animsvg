@@ -21,10 +21,23 @@
 set -e -x
 
 CWD=`pwd`
-LOG=${CWD}/CHANGES.md
+LOG=${CWD}/CHANGES
 AFTER="2023-01-01"
 FORMAT="### %s%n* **Commit:** %H%d%n* **Author:** %an%n* **Date:** %ad%n%n%b"
 
-echo "# ChangeLog" > ${LOG}
-echo "" >> ${LOG}
-git log --pretty=format:"${FORMAT}" --after="${AFTER}" --no-merges >> ${LOG}
+FROM_TAG=${FROM_TAG:-""}
+TO_TAG=${TO_TAG:-""}
+
+if [ "${FROM_TAG}" != "" ] && [ "${TO_TAG}" != "" ]; then
+    echo "# ChangeLog for ${TO_TAG}" > ${LOG}-${TO_TAG}.md
+    echo "" >> ${LOG}-${TO_TAG}.md
+    git log --pretty=format:"${FORMAT}" --no-merges ${FROM_TAG}...${TO_TAG} >> ${LOG}-${TO_TAG}.md
+elif [ "${TO_TAG}" != "" ]; then
+    echo "# ChangeLog for ${TO_TAG}" > ${LOG}-${TO_TAG}.md
+    echo "" >> ${LOG}-${TO_TAG}.md
+    git log --pretty=format:"${FORMAT}" --after="${AFTER}" ${TO_TAG} --no-merges >> ${LOG}-${TO_TAG}.md
+else
+    echo "# ChangeLog" > ${LOG}
+    echo "" >> ${LOG}
+    git log --pretty=format:"${FORMAT}" --after="${AFTER}" --no-merges >> ${LOG}.md
+fi

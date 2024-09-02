@@ -31,8 +31,9 @@
 #include "videoencoder.h"
 #include "renderhandler.h"
 #include "videoencoder.h"
-#include "appsupport.h"
+#include "themesupport.h"
 #include "../mainwindow.h"
+#include "../timelinedockwidget.h"
 
 RenderWidget::RenderWidget(QWidget *parent)
     : QWidget(parent)
@@ -53,25 +54,30 @@ RenderWidget::RenderWidget(QWidget *parent)
     mMainLayout->setSpacing(0);
     setLayout(mMainLayout);
 
+    const auto topWidget = new QWidget(this);
+    topWidget->setContentsMargins(0, 0, 0, 0);
+    const auto topLayout = new QHBoxLayout(topWidget);
+
     const auto bottomWidget = new QWidget(this);
     bottomWidget->setContentsMargins(0, 0, 0, 0);
     const auto bottomLayout = new QHBoxLayout(bottomWidget);
 
-    const auto darkPal = AppSupport::getDarkPalette();
-    bottomWidget->setAutoFillBackground(true);
-    bottomWidget->setPalette(darkPal);
+    setPalette(ThemeSupport::getDarkPalette());
+    setAutoFillBackground(true);
+
     bottomWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    topWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     mRenderProgressBar = new QProgressBar(this);
+    mRenderProgressBar->setMinimumWidth(10);
     setSizePolicy(QSizePolicy::Expanding,
                   QSizePolicy::Expanding);
-    mRenderProgressBar->setFormat(tr("Idle"));
+    mRenderProgressBar->setFormat("");
     mRenderProgressBar->setValue(0);
 
     mStartRenderButton = new QPushButton(QIcon::fromTheme("render_animation"),
                                          tr("Render"),
                                          this);
-    mStartRenderButton->setObjectName("FlatButton");
     mStartRenderButton->setFocusPolicy(Qt::NoFocus);
     mStartRenderButton->setSizePolicy(QSizePolicy::Preferred,
                                       QSizePolicy::Preferred);
@@ -81,7 +87,6 @@ RenderWidget::RenderWidget(QWidget *parent)
     mStopRenderButton = new QPushButton(QIcon::fromTheme("cancel"),
                                         QString(),
                                         this);
-    mStopRenderButton->setObjectName("FlatButton");
     mStopRenderButton->setToolTip(tr("Stop Rendering"));
     mStopRenderButton->setFocusPolicy(Qt::NoFocus);
     mStopRenderButton->setSizePolicy(QSizePolicy::Preferred,
@@ -93,7 +98,6 @@ RenderWidget::RenderWidget(QWidget *parent)
     mAddRenderButton = new QPushButton(QIcon::fromTheme("plus"),
                                        QString(),
                                        this);
-    mAddRenderButton->setObjectName("FlatButton");
     mAddRenderButton->setToolTip(tr("Add current scene to queue"));
     mAddRenderButton->setFocusPolicy(Qt::NoFocus);
     mAddRenderButton->setSizePolicy(QSizePolicy::Preferred,
@@ -106,7 +110,6 @@ RenderWidget::RenderWidget(QWidget *parent)
     mClearQueueButton = new QPushButton(QIcon::fromTheme("trash"),
                                         QString(),
                                         this);
-    mClearQueueButton->setObjectName("FlatButton");
     mClearQueueButton->setToolTip(tr("Clear Queue"));
     mClearQueueButton->setFocusPolicy(Qt::NoFocus);
     mClearQueueButton->setSizePolicy(QSizePolicy::Preferred,
@@ -115,19 +118,16 @@ RenderWidget::RenderWidget(QWidget *parent)
             this, &RenderWidget::clearRenderQueue);
 
     eSizesUI::widget.add(mStartRenderButton, [this](const int size) {
-        mStartRenderButton->setFixedHeight(size);
-        mStopRenderButton->setFixedSize(QSize(size, size));
-        mAddRenderButton->setFixedSize(QSize(size, size));
-        mClearQueueButton->setFixedSize(QSize(size, size));
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            mStartRenderButton->setIconSize(QSize(size, size));
-            mStopRenderButton->setIconSize(QSize(size, size));
-            mAddRenderButton->setIconSize(QSize(size, size));
-            mClearQueueButton->setIconSize(QSize(size, size));
-        }
+        Q_UNUSED(size)
+        mStartRenderButton->setFixedHeight(eSizesUI::button);
+        mStopRenderButton->setFixedHeight(eSizesUI::button);
+        mAddRenderButton->setFixedHeight(eSizesUI::button);
+        mClearQueueButton->setFixedHeight(eSizesUI::button);
     });
 
     mContWidget = new QWidget(this);
+    mContWidget->setPalette(ThemeSupport::getDarkPalette());
+    mContWidget->setAutoFillBackground(true);
     mContWidget->setContentsMargins(0, 0, 0, 0);
     mContLayout = new QVBoxLayout(mContWidget);
     mContLayout->setAlignment(Qt::AlignTop);
@@ -139,12 +139,15 @@ RenderWidget::RenderWidget(QWidget *parent)
     mScrollArea->setWidgetResizable(true);
     mScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    topLayout->addWidget(mAddRenderButton);
+    topLayout->addStretch();
+    topLayout->addWidget(mClearQueueButton);
+
     bottomLayout->addWidget(mStartRenderButton);
     bottomLayout->addWidget(mRenderProgressBar);
     bottomLayout->addWidget(mStopRenderButton);
-    bottomLayout->addWidget(mAddRenderButton);
-    bottomLayout->addWidget(mClearQueueButton);
 
+    mMainLayout->addWidget(topWidget);
     mMainLayout->addWidget(mScrollArea);
     mMainLayout->addWidget(bottomWidget);
 
@@ -201,13 +204,10 @@ void RenderWidget::handleRenderState(const RenderState &state)
     QString renderStateFormat;
     switch (mState) {
     case RenderState::rendering:
-        renderStateFormat = tr("Rendering %p%");
+        renderStateFormat = tr("%p%");
         break;
     case RenderState::error:
         renderStateFormat = tr("Error");
-        break;
-    case RenderState::finished:
-        renderStateFormat = tr("Finished");
         break;
     case RenderState::paused:
         renderStateFormat = tr("Paused %p%");
@@ -216,7 +216,7 @@ void RenderWidget::handleRenderState(const RenderState &state)
         renderStateFormat = tr("Waiting %p%");
         break;
     default:
-        renderStateFormat = tr("Idle");
+        renderStateFormat = "";
         break;
     }
     bool isIdle = (mState == RenderState::error ||
@@ -226,11 +226,16 @@ void RenderWidget::handleRenderState(const RenderState &state)
     mStopRenderButton->setEnabled(!isIdle);
     mAddRenderButton->setEnabled(isIdle);
     mRenderProgressBar->setFormat(renderStateFormat);
+
+    const auto timeline = MainWindow::sGetInstance()->getTimeLineWidget();
+    if (timeline) { timeline->setEnabled(isIdle); }
+
     emit renderStateChanged(renderStateFormat, mState);
 
     if (isIdle) {
-        mRenderProgressBar->setValue(0);
         emit progress(mRenderProgressBar->maximum(), mRenderProgressBar->maximum());
+        mRenderProgressBar->setValue(0);
+        mRenderProgressBar->setRange(0, 100);
     }
 }
 
@@ -306,6 +311,17 @@ void RenderWidget::render(RenderInstanceSettings &settings)
     mRenderProgressBar->setValue(renderSettings.fMinFrame);
     handleRenderState(RenderState::waiting);
     mCurrentRenderedSettings = &settings;
+
+    // the scene we want to render MUST be current if multiple scenes are in queue
+    const auto scene = mCurrentRenderedSettings->getTargetCanvas();
+    if (scene) {
+        const auto handler = MainWindow::sGetInstance()->getLayoutHandler();
+        const int index = handler->getSceneId(scene);
+        if (index > -1 && !handler->isCurrentScene(index)) {
+            handler->setCurrentScene(index);
+        }
+    }
+
     RenderHandler::sInstance->renderFromSettings(&settings);
     connect(&settings, &RenderInstanceSettings::renderFrameChanged,
             this, &RenderWidget::setRenderedFrame);

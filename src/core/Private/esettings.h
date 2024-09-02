@@ -28,10 +28,13 @@
 
 #include <QtCore>
 #include <QColor>
+#include <QAction>
 
 #include "skia/skiaincludes.h"
 #include "efiltersettings.h"
 #include "memorystructs.h"
+#include "appsupport.h"
+#include "themesupport.h"
 
 enum class GpuVendor {
     intel,
@@ -53,6 +56,15 @@ class CORE_EXPORT eSettings : public QObject
     Q_OBJECT
 
 public:
+    enum AdjustSceneArgs {
+        AdjustSceneAsk,
+        AdjustSceneAlways,
+        AdjustSceneNever
+    };
+    enum ImportFileDirOpt {
+        ImportFileDirRecent,
+        ImportFileDirProject
+    };
     eSettings(const int cpuThreads,
               const intKB ramKB);
 
@@ -68,6 +80,7 @@ public:
     void loadDefaults();
     void loadFromFile();
     void saveToFile();
+    void saveKeyToFile(const QString &key);
 
     // general
     QString fUserSettingsDir;
@@ -81,6 +94,16 @@ public:
 
     AccPreference fAccPreference = AccPreference::defaultPreference;
     bool fPathGpuAcc = true;
+
+    int fImportFileDirOpt = ImportFileDirRecent;
+
+    bool fToolBarActionNew = true;
+    bool fToolBarActionOpen = true;
+    bool fToolBarActionSave = true;
+    bool fToolBarActionScene = true;
+    bool fToolBarActionRender = true;
+    bool fToolBarActionPreview = true;
+    bool fToolBarActionExport = true;
 
     bool fHddCache = true;
     QString fHddCacheFolder = ""; // "" - use system default temporary files folder
@@ -118,20 +141,26 @@ public:
     QColor fPathControlColor;
     QColor fPathControlSelectedColor;
 
+    int fAdjustSceneFromFirstClip = AdjustSceneAsk;
+
     // timeline settings
-    bool fTimelineAlternateRow;
-    QColor fTimelineAlternateRowColor;
-    bool fTimelineHighlightRow;
-    QColor fTimelineHighlightRowColor;
+    bool fTimelineAlternateRow = true;
+    QColor fTimelineAlternateRowColor = QColor(0, 0, 0, 25);
+    bool fTimelineHighlightRow = true;
+    QColor fTimelineHighlightRowColor = ThemeSupport::getThemeHighlightColor(15);
 
     QColor fObjectKeyframeColor;
     QColor fPropertyGroupKeyframeColor;
     QColor fPropertyKeyframeColor;
     QColor fSelectedKeyframeColor;
 
-    QColor fVisibilityRangeColor;
-    QColor fSelectedVisibilityRangeColor;
-    QColor fAnimationRangeColor;
+    QColor fVisibilityRangeColor = ThemeSupport::getThemeRangeColor();
+    QColor fSelectedVisibilityRangeColor = ThemeSupport::getThemeRangeSelectedColor();
+    QColor fAnimationRangeColor = QColor(0, 0, 0, 55);
+
+    // command palette
+    QList<QAction*> fCommandPalette;
+    QList<QString> fCommandHistory;
 
 signals:
     void settingsChanged();

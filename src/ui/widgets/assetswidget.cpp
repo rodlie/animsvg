@@ -35,6 +35,7 @@
 #include "FileCacheHandlers/imagecachehandler.h"
 #include "FileCacheHandlers/imagesequencecachehandler.h"
 #include "filesourcescache.h"
+#include "themesupport.h"
 
 #include "GUI/global.h"
 
@@ -53,9 +54,7 @@ AssetsTreeWidget::AssetsTreeWidget(QWidget *parent)
     header()->setStretchLastSection(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
     eSizesUI::widget.add(this, [this](const int size) {
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            setIconSize(QSize(size, size));
-        }
+        setIconSize(QSize(size, size));
     });
 }
 
@@ -152,7 +151,7 @@ AssetsWidget::AssetsWidget(QWidget *parent)
     , mTree(nullptr)
 {
     setAcceptDrops(true);
-    setPalette(AppSupport::getDarkPalette());
+    setPalette(ThemeSupport::getDarkPalette());
     setAutoFillBackground(true);
     setContentsMargins(0, 10, 0, 0);
     QVBoxLayout *mLayout = new QVBoxLayout(this);

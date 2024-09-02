@@ -41,6 +41,7 @@
 #include "zipfileloader.h"
 #include "XML/runtimewriteid.h"
 #include "XML/xevzipfilesaver.h"
+#include "Boxes/videobox.h"
 
 class SceneBoundGradient;
 class FileDataCacheHandler;
@@ -117,7 +118,7 @@ public:
 
     void setCanvasMode(const CanvasMode mode);
 
-    Canvas * createNewScene();
+    Canvas * createNewScene(const bool emitCreated = true);
     bool removeScene(const qsptr<Canvas>& scene);
     bool removeScene(const int id);
 
@@ -209,6 +210,7 @@ signals:
     void evFilePathChanged(QString);
     void documentChanged();
     void openTextEditor();
+    void newVideo(const VideoBox::VideoSpecs specs);
 };
 
 #endif // DOCUMENT_H

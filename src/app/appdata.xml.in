@@ -12,6 +12,12 @@
     <p>@PROJECT_DESCRIPTION@</p>
   </description>
   <releases>
+    <release date="2024-06-24" version="0.9.6">
+      <description>
+        <p>This release includes new features, critical fixes and generic UI/UX improvements.</p>
+      </description>
+      <url>https://friction.graphics/releases/friction-096.html</url>
+    </release>
     <release date="2023-12-24" version="0.9.5">
       <description>
         <p>This release includes new features, fixes and generic improvements.</p>
@@ -45,7 +51,7 @@
   </releases>
   <screenshots>
     <screenshot type="default">
-      <image>https://friction.graphics/assets/screenshots/friction-094-screenshot.jpg</image>
+      <image>https://friction.graphics/assets/screenshots/096/friction-096-screenshot.jpg</image>
       <caption>Friction user interface</caption>
     </screenshot>
   </screenshots>

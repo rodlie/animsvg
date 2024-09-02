@@ -246,7 +246,7 @@ void ColorSettingsWidget::moveAlphaWidgetToTab(const int tabId) {
     }/* else if(tabId == 3) {
         mWheelLayout->addLayout(hexLayout);
     }*/
-    for(int i=0;i < mTabWidget->count();i++)
+    /*for(int i=0;i < mTabWidget->count();i++)
         if(i!=tabId)
             mTabWidget->widget(i)->setSizePolicy(QSizePolicy::Minimum,
                                                  QSizePolicy::Ignored);
@@ -254,7 +254,7 @@ void ColorSettingsWidget::moveAlphaWidgetToTab(const int tabId) {
     mTabWidget->widget(tabId)->setSizePolicy(QSizePolicy::Minimum,
                                              QSizePolicy::Preferred);
     mTabWidget->widget(tabId)->resize(
-                mTabWidget->widget(tabId)->minimumSizeHint());
+                mTabWidget->widget(tabId)->minimumSizeHint());*/
 }
 
 void ColorSettingsWidget::startColorPicking() {
@@ -275,7 +275,12 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     setContentsMargins(0, 0, 0, 0);
     mWidgetsLayout->setMargin(0);
 
+    mTabWidget->setFocusPolicy(Qt::NoFocus);
+
     mColorModeCombo = new QComboBox(this);
+    mColorModeCombo->setMinimumWidth(60);
+    mColorModeCombo->setFocusPolicy(Qt::NoFocus);
+
     mWidgetsLayout->setAlignment(Qt::AlignTop);
     setLayout(mWidgetsLayout);
 
@@ -326,6 +331,9 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     mRGBLayout->addLayout(bLayout);
     mRGBWidget->setLayout(mRGBLayout);
 
+    mRGBLayout->setContentsMargins(0, 0, 0, 0);
+    mRGBWidget->setContentsMargins(0, 0, 0, 0);
+
     hRect = new ColorValueRect(HUE_PROGRAM, this);
     hLayout->addWidget(hLabel);
     hLayout->addWidget(hRect);
@@ -344,6 +352,9 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     mHSVLayout->addLayout(vLayout);
     mHSVWidget->setLayout(mHSVLayout);
 
+    mHSVLayout->setContentsMargins(0, 0, 0, 0);
+    mHSVWidget->setContentsMargins(0, 0, 0, 0);
+
     hslSatRect = new ColorValueRect(HSL_SATURATION_PROGRAM, this);
     hslSLayout->addWidget(hslSLabel);
     hslSLayout->addWidget(hslSatRect);
@@ -357,27 +368,28 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     mHSLLayout->addLayout(lLayout);
     mHSLWidget->setLayout(mHSLLayout);
 
+    mHSLLayout->setContentsMargins(0, 0, 0, 0);
+    mHSLWidget->setContentsMargins(0, 0, 0, 0);
+
     aRect = new ColorValueRect(ALPHA_PROGRAM, this);
     aLayout->addWidget(aLabel);
     aLayout->addWidget(aRect);
     aLayout->addWidget(aSpin);
 
     mPickingButton = new QPushButton(QIcon::fromTheme("pick"), QString(), this);
-    mPickingButton->setObjectName("FlatButton");
+    mPickingButton->setFocusPolicy(Qt::NoFocus);
     mPickingButton->setToolTip(tr("Pick Color"));
     connect(mPickingButton, &QPushButton::released,
             this, &ColorSettingsWidget::startColorPicking);
     eSizesUI::widget.add(mPickingButton, [this](const int size) {
-        mPickingButton->setFixedHeight(size);
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            mPickingButton->setIconSize(QSize(size, size));
-        }
+        mPickingButton->setFixedSize(size, size);
     });
 
     mColorLabelLayout->addWidget(mColorLabel);
     mColorLabelLayout->addWidget(mPickingButton);
     mWidgetsLayout->addLayout(mColorLabelLayout);
 
+    mTabWidget->setObjectName("ColorTabWidget");
     mTabWidget->setTabPosition(QTabWidget::South);
     mTabWidget->addTab(mRGBWidget, "RGB");
     mTabWidget->addTab(mHSVWidget, "HSV");
@@ -389,6 +401,7 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     hexLayout = new QHBoxLayout;
     hexLayout->addWidget(new QLabel("Hex", this));
     mHexEdit = new QLineEdit("#FF000000", this);
+    mHexEdit->setFocusPolicy(Qt::ClickFocus);
     hexLayout->addWidget(mHexEdit);
     mRGBLayout->addLayout(hexLayout);
 

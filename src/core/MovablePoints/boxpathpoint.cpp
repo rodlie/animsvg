@@ -26,6 +26,7 @@
 #include "boxpathpoint.h"
 #include "pointhelpers.h"
 #include "Animators/transformanimator.h"
+#include "themesupport.h"
 
 BoxPathPoint::BoxPathPoint(QPointFAnimator * const associatedAnimator,
                            BoxTransformAnimator * const boxTrans) :
@@ -51,23 +52,26 @@ void BoxPathPoint::finishTransform() {
     bTrans->finishPivotTransform();
 }
 
-void BoxPathPoint::drawSk(SkCanvas * const canvas, const CanvasMode mode,
-                          const float invScale, const bool keyOnCurrent,
-                          const bool ctrlPressed) {
+void BoxPathPoint::drawSk(SkCanvas * const canvas,
+                          const CanvasMode mode,
+                          const float invScale,
+                          const bool keyOnCurrent,
+                          const bool ctrlPressed)
+{
     Q_UNUSED(mode)
     Q_UNUSED(keyOnCurrent)
     Q_UNUSED(ctrlPressed)
     const SkPoint absPos = toSkPoint(getAbsolutePos());
-    const SkColor fillCol = isSelected() ?
-                SkColorSetRGB(255, 255, 0) :
-                SkColorSetRGB(255, 255, 125);
-    drawOnAbsPosSk(canvas, absPos, invScale, fillCol);
-
+    drawOnAbsPosSk(canvas,
+                   absPos,
+                   invScale,
+                   toSkColor(ThemeSupport::getThemeColorOrange(155)));
     canvas->save();
     canvas->translate(absPos.x(), absPos.y());
     SkPaint paint;
+    paint.setAntiAlias(true);
     paint.setStyle(SkPaint::kStroke_Style);
-    paint.setColor(SK_ColorBLACK);
+    paint.setColor(toSkColor(ThemeSupport::getThemeButtonBaseColor()));
     const float scaledHalfRadius = toSkScalar(getRadius()*0.5)*invScale;
     canvas->drawLine(-scaledHalfRadius, 0, scaledHalfRadius, 0, paint);
     canvas->drawLine(0, -scaledHalfRadius, 0, scaledHalfRadius, paint);

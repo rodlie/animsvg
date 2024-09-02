@@ -51,8 +51,11 @@ public:
 
     void setSelectedGradient(Gradient *gradient);
 
+    void newGradient();
     void addGradient(Gradient* const gradient);
     void removeGradient(Gradient* const gradient);
+    void removeSelectedGradient();
+    void duplicateSelectedGradient();
 
     void updateHeight();
 

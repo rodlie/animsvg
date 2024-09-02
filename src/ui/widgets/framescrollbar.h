@@ -29,8 +29,11 @@
 #include "ui_global.h"
 
 #include <QWidget>
+#include <QFontMetrics>
+
 #include "smartPointers/ememory.h"
 #include "canvas.h"
+#include "themesupport.h"
 
 class HddCachableCacheHandler;
 
@@ -49,6 +52,13 @@ public:
 
     int getMaxFrame();
     int getMinFrame();
+
+    bool hasFrameIn(const int frame);
+    bool hasFrameOut(const int frame);
+    bool hasFrameMarker(const int frame);
+    const QString getFrameMarkerText(const int frame);
+    const QPair<bool,int> getFrameIn();
+    const QPair<bool,int> getFrameOut();
 
     FrameRange getViewedRange() const;
     int getFirstViewedFrame() const;
@@ -103,7 +113,9 @@ private:
     qreal mFps;
     qreal mLastMousePressFrame;
 
-    QColor mHandleColor = QColor(100, 100, 100);
+    QFontMetrics mFm;
+
+    QColor mHandleColor = ThemeSupport::getThemeButtonBaseColor();
     qptr<Canvas> mCurrentCanvas;
 };
 

@@ -217,6 +217,9 @@ public:
     void removeBoxFromSelection(BoundingBox* const box);
     void clearBoxesSelection();
     void clearBoxesSelectionList();
+    const QString checkForUnsupportedBoxSVG(BoundingBox* const box);
+    const QString checkForUnsupportedBoxesSVG(const QList<BoundingBox*> boxes);
+    const QString checkForUnsupportedSVG();
 
     void addPointToSelection(MovablePoint * const point);
     void removePointFromSelection(MovablePoint * const point);
@@ -350,6 +353,24 @@ public:
 
     void setFrameRange(const FrameRange& range);
 
+    void setFrameIn(const bool enabled,
+                    const int frameIn);
+    void setFrameOut(const bool enabled,
+                     const int frameOut);
+    const FrameMarker getFrameIn();
+    const FrameMarker getFrameOut();
+
+    void setMarker(const QString &title,
+                   const int frame);
+    void setMarker(const int frame);
+    bool hasMarker(const int frame,
+                   const bool removeExists = false);
+    const QString getMarkerText(int frame);
+    const std::vector<FrameMarker> getMarkers();
+    void clearMarkers();
+
+    void addKeySelectedProperties();
+
     ColorAnimator *getBgColorAnimator()
     {
         return mBackgroundColor.get();
@@ -388,6 +409,11 @@ public:
         mPathEffectsVisible = bT;
     }
 
+    void setEasingAction(const QString &easing)
+    {
+        emit requestEasingAction(easing);
+    }
+
 protected:
     void setCurrentSmartEndPoint(SmartNodePoint* const point);
 
@@ -408,9 +434,11 @@ signals:
     void currentContainerSet(ContainerBox*);
     void dimensionsChanged(int, int);
     void fpsChanged(qreal);
+    void displayTimeCodeChanged(bool);
     void gradientCreated(SceneBoundGradient*);
     void gradientRemoved(SceneBoundGradient*);
     void openTextEditor();
+    void requestEasingAction(const QString &easing);
 
 public:
     void makePointCtrlsSymmetric();
@@ -491,6 +519,7 @@ public:
     void setDisplayTimecode(bool timecode)
     {
         mDisplayTimeCode = timecode;
+        emit displayTimeCodeChanged(timecode);
     }
 
     BoundingBox *getBoxAt(const QPointF &absPos)
@@ -517,10 +546,15 @@ public:
     void copyAction();
     void pasteAction();
     void cutAction();
+    void splitAction();
     void duplicateAction();
     void selectAllAction();
     void clearSelectionAction();
-    void rotateSelectedBoxesStartAndFinish(const qreal rotBy);
+    void rotateSelectedBoxesStartAndFinish(const qreal rotBy,
+                                           bool inc = true);
+    void scaleSelectedBoxesStartAndFinish(const qreal scaleBy);
+    void moveSelectedBoxesStartAndFinish(const QPointF moveBy);
+
     bool shouldScheduleUpdate()
     {
         return mSceneFrameOutdated;
@@ -533,6 +567,8 @@ public:
     void readSettings(eReadStream &src);
     void writeBoundingBox(eWriteStream& dst) const;
     void readBoundingBox(eReadStream& src);
+    void writeMarkers(eWriteStream &dst) const;
+    void readMarkers(eReadStream &src);
 
     void writeBoxOrSoundXEV(const stdsptr<XevZipFileSaver> &xevFileSaver,
                             const RuntimeIdToWriteId &objListIdConv,
@@ -666,6 +702,7 @@ public:
 
     SceneBoundGradient * getGradientWithRWId(const int rwId) const;
     SceneBoundGradient * getGradientWithDocumentId(const int id) const;
+    SceneBoundGradient * getGradientWithDocumentSceneId(const int id) const;
 
     void addNullObject(NullObject* const obj);
     void removeNullObject(NullObject* const obj);
@@ -678,7 +715,7 @@ private:
 
     void clearGradientRWIds() const;
     QList<SmartNodePoint*> getSortedSelectedNodes();
-    void openTextEditorForTextBox(TextBox *textBox);
+    //void openTextEditorForTextBox(TextBox *textBox);
 
     void scaleSelected(const eMouseEvent &e);
     void rotateSelected(const eMouseEvent &e);
@@ -779,6 +816,10 @@ protected:
     CanvasMode mCurrentMode = CanvasMode::boxTransform;
 
     std::map<int, stdsptr<ConnContextObjList<GraphAnimator*>>> mSelectedForGraph;
+
+    FrameMarker mIn{tr("In"), false, 0};
+    FrameMarker mOut{tr("Out"), false, 0};
+    std::vector<FrameMarker> mMarkers;
 
     void handleMovePointMousePressEvent(const eMouseEvent &e);
     void handleMovePointMouseMove(const eMouseEvent &e);

@@ -116,6 +116,7 @@ public:
 
     //void addBoxAwaitingUpdate(BoundingBox *box);
     void setCurrentBox(BoundingBox *box);
+    void setCurrentBoxFocus(BoundingBox *box);
 
 //    void nextSaveOutputFrame();
 //    void nextPlayPreviewFrame();
@@ -179,7 +180,8 @@ public:
                   const bool setPath = true);
     void saveFileAs(const bool setPath = true);
     void saveBackup();
-    void exportSVG();
+    const QString checkBeforeExportSVG();
+    void exportSVG(const bool &preview = false);
     void updateLastOpenDir(const QString &path);
     void updateLastSaveDir(const QString &path);
     const QString getLastOpenDir();
@@ -191,6 +193,11 @@ public:
     void revert();
     void updateAutoSaveBackupState();
     void openRendererWindow();
+    void cmdAddAction(QAction *act);
+    LayoutHandler* getLayoutHandler();
+    TimelineDockWidget* getTimeLineWidget();
+    void focusFontWidget(const bool focus = true);
+    void focusColorWidget();
 
 protected:
     void lockFinished();
@@ -198,6 +205,7 @@ protected:
     void showEvent(QShowEvent *e);
 
 private:
+    bool mShutdown;
     QWidget *mWelcomeDialog;
     //CentralWidget *mCentralWidget;
     QStackedWidget *mStackWidget;
@@ -233,6 +241,8 @@ private:
     void updateAudioDevices();
 
     QStringList mRecentFiles;
+
+    void handleNewVideoClip(const VideoBox::VideoSpecs &specs);
 
 //    bool mRendering = false;
 
@@ -280,6 +290,20 @@ private:
     UILayout *mUI;
 
     QAction *mSaveAct;
+    QAction *mSaveAsAct;
+    QAction *mSaveBackAct;
+    QAction *mPreviewSVGAct;
+    QAction *mExportSVGAct;
+    QAction *mRenderVideoAct;
+    QAction *mCloseProjectAct;
+    QAction *mLinkedAct;
+    QAction *mImportAct;
+    QAction *mImportSeqAct;
+    QAction *mRevertAct;
+    QAction *mSelectAllAct;
+    QAction *mInvertSelAct;
+    QAction *mClearSelAct;
+    QAction *mAddKeyAct;
 
     QAction *mActionConnectPointsAct;
     QAction *mActionDisconnectPointsAct;
@@ -356,8 +380,19 @@ private:
     ScrollArea *mObjectSettingsScrollArea;
 
     void setupToolBar();
-    void connectToolBarActions();
     void setupMenuBar();
+    void setupMenuEffects();
+    void setupMenuExtras();
+
+    BoundingBox* getCurrentBox();
+
+    void addRasterEffect(const qsptr<RasterEffect> &effect);
+    void addBlendEffect(const qsptr<BlendEffect> &effect);
+    void addTransformEffect(const qsptr<TransformEffect> &effect);
+    void addPathEffect(const qsptr<PathEffect> &effect);
+    void addFillPathEffect(const qsptr<PathEffect> &effect);
+    void addOutlineBasePathEffect(const qsptr<PathEffect> &effect);
+    void addOutlinePathEffect(const qsptr<PathEffect> &effect);
 
     QList<SceneBoundGradient*> mLoadedGradientsList;
 
@@ -395,13 +430,19 @@ private:
     Window *mAboutWindow;
     void openAboutWindow();
 
+    QAction *mViewTimelineAct;
     Window *mTimelineWindow;
     QAction *mTimelineWindowAct;
     void openTimelineWindow();
+    void closedTimelineWindow();
 
     Window *mRenderWindow;
     QAction *mRenderWindowAct;
-    void openRenderQueueWindow(const bool &focus = true);
+    void openRenderQueueWindow();
+    void closedRenderQueueWindow();
+
+    void initRenderPresets(const bool reinstall = false);
+    void askInstallRenderPresets();
 
 protected:
     void keyPressEvent(QKeyEvent *event);

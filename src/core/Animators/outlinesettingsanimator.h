@@ -113,6 +113,8 @@ public:
                  QDomElement& parent,
                  const FrameRange& visRange,
                  const bool asFill = false) const;
+    void saveCapsSVG(QDomElement& parent) const;
+
 protected:
     QDomElement writeBrushPaint(const XevExporter& exp) const;
     void readBrushPaint(const QDomElement& ele,
@@ -127,6 +129,6 @@ private:
     qsptr<BrushSettingsAnimator> mBrushSettings =
             enve::make_shared<BrushSettingsAnimator>();
     qsptr<QrealAnimator> mLineWidth =
-            enve::make_shared<QrealAnimator>(2, 0, 999, 1, "thickness");
+            enve::make_shared<QrealAnimator>(10, 0, 999, 1, "thickness");
 };
 #endif // OUTLINESETTINGSANIMATOR_H

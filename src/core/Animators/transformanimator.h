@@ -25,6 +25,7 @@
 
 #ifndef TRANSFORMANIMATOR_H
 #define TRANSFORMANIMATOR_H
+#include "Properties/comboboxproperty.h"
 #include "staticcomplexanimator.h"
 #include "../skia/skiaincludes.h"
 #include "transformvalues.h"
@@ -119,6 +120,9 @@ protected:
     qsptr<QPointFAnimator> mPosAnimator;
     qsptr<QPointFAnimator> mScaleAnimator;
     qsptr<QrealAnimator> mRotAnimator;
+    qsptr<ComboBoxProperty> mSVGBeginProperty;
+    qsptr<ComboBoxProperty> mSVGEndProperty;
+
 private:
     bool rotationFlipped() const;
 signals:
@@ -201,6 +205,7 @@ class CORE_EXPORT BoxTransformAnimator : public AdvancedTransformAnimator {
 protected:
     BoxTransformAnimator();
 public:
+    static const QString getSVGPropertyAction(const int value);
     QDomElement saveSVG(SvgExporter& exp, const FrameRange& visRange,
                         const QDomElement& child) const;
 };

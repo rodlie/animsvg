@@ -195,11 +195,43 @@ void OutlineSettingsAnimator::duplicateStrokeSettingsNotAnim(
 void OutlineSettingsAnimator::saveSVG(SvgExporter& exp,
                                       QDomElement& parent,
                                       const FrameRange& visRange,
-                                      const bool asFill) const {
+                                      const bool asFill) const
+{
     PaintSettingsAnimator::saveSVG(exp, parent, visRange,
                                    asFill ? "fill" : "stroke");
-    if(asFill) return;
+    if (asFill) { return; }
+
     mLineWidth->saveQrealSVG(exp, parent, visRange, "stroke-width");
+    saveCapsSVG(parent);
+}
+
+void OutlineSettingsAnimator::saveCapsSVG(QDomElement &parent) const
+{
+    QString linecap;
+    switch(mCapStyle) {
+    case SkPaint::kRound_Cap:
+        linecap = "round";
+        break;
+    case SkPaint::kSquare_Cap:
+        linecap = "square";
+        break;
+    default:
+        linecap = "butt";
+    }
+    parent.setAttribute("stroke-linecap", linecap);
+
+    QString linejoin;
+    switch(mJoinStyle) {
+    case SkPaint::kRound_Join:
+        linejoin = "round";
+        break;
+    case SkPaint::kBevel_Join:
+        linejoin = "bevel";
+        break;
+    default:
+        linejoin = "miter";
+    }
+    parent.setAttribute("stroke-linejoin", linejoin);
 }
 
 QDomElement OutlineSettingsAnimator::writeBrushPaint(const XevExporter& exp) const {

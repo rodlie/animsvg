@@ -21,41 +21,34 @@
 set -e -x
 
 CWD=`pwd`
-
+BUILD_ENGINE=${BUILD_ENGINE:-"ON"}
 REL=${REL:-0}
 BRANCH=${BRANCH:-""}
 COMMIT=${COMMIT:-""}
 TAG=${TAG:-""}
-MKJOBS=${MKJOBS:-4}
+CUSTOM=${CUSTOM:-""}
+MKJOBS=${MKJOBS:-32}
+ONLY_SDK=${ONLY_SDK:-0}
+LOCAL_BUILD=${LOCAL_BUILD:-1}
+DOWNLOAD_SDK=${DOWNLOAD_SDK:-0}
+SDK_VERSION="20240609"
+TAR_VERSION=${TAR_VERSION:-""}
 
-JAMMY=${JAMMY:-1}
-MANTIC=${MANTIC:-1}
-NOBLE=${NOBLE:-1}
+DOCKER="docker run"
+DOCKER="${DOCKER} -e BUILD_ENGINE=${BUILD_ENGINE} -e REL=${REL} -e MKJOBS=${MKJOBS} -e TAR_VERSION=${TAR_VERSION} -e SDK_VERSION=${SDK_VERSION} -e ONLY_SDK=${ONLY_SDK} -e DOWNLOAD_SDK=${DOWNLOAD_SDK} -e BRANCH=${BRANCH} -e COMMIT=${COMMIT} -e TAG=${TAG} -e CUSTOM=${CUSTOM}"
+DOCKER="${DOCKER} -t --mount type=bind,source=${CWD}/distfiles,target=/mnt"
 
-MOUNT_DIR="distfiles"
-DOCKER_MOUNT="-t --mount type=bind,source=${CWD}/${MOUNT_DIR},target=/${MOUNT_DIR}"
-DOCKER="docker run -e REL=${REL} -e MKJOBS=${MKJOBS}"
+if [ ! -d "${CWD}/distfiles" ]; then
+    mkdir -p ${CWD}/distfiles
+    mkdir -p ${CWD}/distfiles/builds || true
+    mkdir -p ${CWD}/distfiles/sdk || true
+fi
 
-if [ "${BRANCH}" != "" ]; then
-    DOCKER="${DOCKER} -e FRICTION_BRANCH=${BRANCH}"
-fi
-if [ "${COMMIT}" != "" ]; then
-    DOCKER="${DOCKER} -e FRICTION_COMMIT=${COMMIT}"
-fi
-if [ "${TAG}" != "" ]; then
-    DOCKER="${DOCKER} -e FRICTION_TAG=${TAG}"
-fi
-DOCKER="${DOCKER} ${DOCKER_MOUNT}"
 
-if [ "${JAMMY}" = 1 ]; then
-    (cd ${CWD}/src/scripts; docker build -t friction-jammy -f Dockerfile.jammy .)
-    $DOCKER friction-jammy
-fi
-if [ "${MANTIC}" = 1 ]; then
-    (cd ${CWD}/src/scripts; docker build -t friction-mantic -f Dockerfile.mantic .)
-    $DOCKER friction-mantic
-fi
-if [ "${NOBLE}" = 1 ]; then
-    (cd ${CWD}/src/scripts; docker build -t friction-noble -f Dockerfile.noble .)
-    $DOCKER friction-noble
+if [ "${LOCAL_BUILD}" = 1 ]; then
+    (cd src/scripts; docker build -t friction-vfxplatform -f Dockerfile.vfxplatform .)
+    ${DOCKER} friction-vfxplatform
+else
+    docker pull frictiongraphics/friction-vfxplatform-sdk
+    ${DOCKER} frictiongraphics/friction-vfxplatform-sdk
 fi

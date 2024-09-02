@@ -29,6 +29,7 @@
 #include "core_global.h"
 
 #include <exception>
+#include <stdexcept>
 #include <csignal>
 #include <QDebug>
 

@@ -26,6 +26,7 @@
 #include "boolpropertywidget.h"
 #include "GUI/mainwindow.h"
 #include "GUI/global.h"
+#include "themesupport.h"
 
 BoolPropertyWidget::BoolPropertyWidget(QWidget *parent) :
     QWidget(parent) {
@@ -64,11 +65,11 @@ void BoolPropertyWidget::paintEvent(QPaintEvent *) {
     }
 
     p.setRenderHint(QPainter::Antialiasing);
-    p.setBrush(Qt::white);
+    p.setBrush(ThemeSupport::getThemeButtonBorderColor());
     if(mHovered) {
-        p.setPen(Qt::white);
+        p.setPen(ThemeSupport::getThemeHighlightSelectedColor());
     } else {
-        p.setPen(Qt::black);
+        p.setPen(ThemeSupport::getThemeButtonBaseColor());
     }
 
     p.drawRoundedRect(rect().adjusted(1, 1, -1, -1), 5., 5.);
@@ -80,7 +81,7 @@ void BoolPropertyWidget::paintEvent(QPaintEvent *) {
         value = mTarget->getValue();
     }
     if(value) {
-        p.setPen(QPen(Qt::black, 2.));
+        p.setPen(QPen(Qt::white, 2.));
         p.drawLine(QPoint(6, height()/2), QPoint(width()/2, height() - 6));
         p.drawLine(QPoint(width()/2, height() - 6), QPoint(width() - 6, 6));
     }

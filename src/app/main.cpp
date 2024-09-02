@@ -27,6 +27,9 @@
 #include <QProcess>
 #include <QDesktopWidget>
 //#include <QScreen>
+#include <QMessageBox>
+
+#include <libavutil/ffversion.h>
 
 #include "hardwareinfo.h"
 #include "Private/esettings.h"
@@ -36,8 +39,8 @@
 #include "memoryhandler.h"
 #include "ShaderEffects/shadereffectprogram.h"
 #include "videoencoder.h"
-#include "iconloader.h"
 #include "appsupport.h"
+#include "themesupport.h"
 
 #ifdef Q_OS_WIN
 #include "windowsincludes.h"
@@ -86,8 +89,20 @@ void generateAlphaMesh(QPixmap& alphaMesh,
 
 int main(int argc, char *argv[])
 {
+#ifdef Q_OS_WIN
+#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
+    // Set window title bar color based on dark/light theme
+    // https://www.qt.io/blog/dark-mode-on-windows-11-with-qt-6.5
+    // https://learn.microsoft.com/en-us/answers/questions/1161597/how-to-detect-windows-application-dark-mode
+    QSettings registry("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+                       QSettings::NativeFormat);
+    if (registry.value("AppsUseLightTheme", 0).toInt() == 0) { qputenv("QT_QPA_PLATFORM",
+                                                                       "windows:darkmode=1"); }
+#endif
+#endif
+
 #ifdef Q_OS_LINUX
-    // Force XCB on Linux
+    // Force XCB on Linux until we support Wayland
     qputenv("QT_QPA_PLATFORM", "xcb");
 #endif
 
@@ -105,6 +120,7 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif
+    QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
     QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     QApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
 
@@ -112,14 +128,24 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     setlocale(LC_NUMERIC, "C");
 
-#ifdef Q_OS_WIN
-// we ship a custom build of Qt 5.12.12 (with this feature backported) on Windows, so ignore this check
-// #if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
-    QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
-// #endif
+#ifdef Q_OS_LINUX
+    if (AppSupport::isAppPortable()) {
+        const auto args = QApplication::arguments();
+        if (args.contains("--xdg-remove")) {
+            const bool removedXDG = AppSupport::removeXDGDesktopIntegration();
+            qWarning() << "Removed XDG Integration:" << removedXDG;
+            return removedXDG ? 0 : -1;
+        } else if (args.contains("--xdg-install")) {
+            const bool installedXDG = AppSupport::setupXDGDesktopIntegration();
+            qWarning() << "Installed XDG Integration:" << installedXDG;
+            return installedXDG ? 0 : -1;
+        }
+    }
 #endif
 
-    AppSupport::setupTheme();
+#ifdef Q_OS_WIN
+    QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
+#endif
 
 #ifndef Q_OS_DARWIN
     const bool threadedOpenGL = QOpenGLContext::supportsThreadedOpenGL();
@@ -145,18 +171,9 @@ int main(int argc, char *argv[])
                        HardwareInfo::sRamKB());
 
     OS_FONT = QApplication::font();
-    eSizesUI::font.setEvaluator([&settings]() {
-        qreal dpi = 1.0;
-        if (!settings.fDefaultInterfaceScaling) {
-            dpi = settings.fInterfaceScaling;
-        } else {
-            dpi = qApp->desktop()->logicalDpiX() / 96.0; //QGuiApplication::primaryScreen()->logicalDotsPerInch() / 96.0
-        }
-        settings.fCurrentInterfaceDPI = dpi;
-        qDebug() << "DPI" << dpi;
+    eSizesUI::font.setEvaluator([]() {
         const auto fm = QFontMetrics(OS_FONT);
-        const qreal scaling = qBound(0.5, dpi, 1.5);
-        return qRound(fm.height()*scaling);
+        return fm.height();
     });
     eSizesUI::widget.setEvaluator([]() {
         return eSizesUI::font.size()*4/3;
@@ -190,6 +207,37 @@ int main(int argc, char *argv[])
     ALPHA_MESH_PIX = &alphaMesh;
     std::cout << "Generated Alpha Mesh" << std::endl;
 
+    ThemeSupport::setupTheme(eSizesUI::widget);
+
+    AppSupport::handlePortableFirstRun();
+#ifdef Q_OS_LINUX
+    if (AppSupport::isAppPortable()) {
+        if (!AppSupport::hasXDGDesktopIntegration()) {
+            QString appPath("friction");
+            const QString appimage = AppSupport::getAppImagePath();
+            if (!appimage.isEmpty()) { appPath = appimage.split("/").takeLast(); }
+            const auto ask = QMessageBox::question(nullptr,
+                                                   QObject::tr("Setup Desktop Integration"),
+                                                   QObject::tr("Would you like to setup desktop integration?"
+                                                               " This will add Friction to your application launcher"
+                                                               " and add required mime types.<br><br>"
+                                                               "You also can manage the desktop integration with:"
+                                                               "<br><br><code>%1 --xdg-install</code>"
+                                                               "<br><code>%1 --xdg-remove</code>").arg(appPath));
+            if (ask == QMessageBox::Yes) {
+                if (!AppSupport::setupXDGDesktopIntegration()) {
+                    QMessageBox::warning(nullptr,
+                                         QObject::tr("Desktop Integration Failed"),
+                                         QObject::tr("Failed to install the required files for desktop integration,"
+                                                     " please check your permissions."));
+                }
+            } else {
+                AppSupport::setSettings("portable", "ignoreXDG", true);
+            }
+        }
+    }
+#endif
+
     //#ifdef QT_DEBUG
     //    const qint64 pId = QCoreApplication::applicationPid();
     //    QProcess * const process = new QProcess(&w);
@@ -203,15 +251,15 @@ int main(int argc, char *argv[])
         gPrintExceptionCritical(e);
     }
 
+    // check permissions
+    const auto perms = AppSupport::hasWriteAccess();
+    if (!perms.second) {
+        QMessageBox::warning(nullptr,
+                             QObject::tr("Permission issue"),
+                             QObject::tr("Friction needs read/write access to:<br><br>- %1").arg(perms.first.join("<br>- ")));
+    }
+
     eFilterSettings filterSettings;
-
-    // remove when we have moved over to QIcon:
-    QDir(eSettings::sSettingsDir()).mkpath(eSettings::sIconsDir());
-
-    // remove when we have moved over to QIcon:
-    eSizesUI::button.add([](const int size) {
-        IconLoader::generateAll(eSizesUI::widget, size);
-    });
 
     eWidgetsImpl widImpl;
     ImportHandler importHandler;
@@ -277,6 +325,15 @@ int main(int argc, char *argv[])
     RenderHandler renderHandler(document, audioHandler,
                                 *videoEncoder, memoryHandler);
     std::cout << "Render handler initialized" << std::endl;
+
+    av_log_set_level(AV_LOG_ERROR);
+#ifndef QT_DEBUG
+    if (avformat_version() >= 3812708) {
+        QMessageBox::critical(nullptr,
+                              QObject::tr("Unsupported FFmpeg version"),
+                              QObject::tr("Friction is built against an unsupported FFmpeg version. Use at own risk and don't report any issues upstream."));
+    }
+#endif
 
     const QString openProject = argc > 1 ? argv[1] : QString();
     MainWindow w(document,

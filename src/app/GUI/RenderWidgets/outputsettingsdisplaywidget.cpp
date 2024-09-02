@@ -25,6 +25,7 @@
 
 #include "outputsettingsdisplaywidget.h"
 #include "GUI/global.h"
+#include "appsupport.h"
 
 OutputSettingsDisplayWidget::OutputSettingsDisplayWidget(QWidget *parent)
     : QWidget(parent)
@@ -79,7 +80,7 @@ void OutputSettingsDisplayWidget::setOutputSettings(const OutputSettings &settin
     if(!settings.fOutputFormat) {
         setOutputFormatText("-");
     } else {
-        setOutputFormatText(QString(settings.fOutputFormat->name));
+        setOutputFormatText(AppSupport::filterFormatsName(QString(settings.fOutputFormat->name)));
     }
     if(!mAlwaysShowAll) {
         setVideoLabelsVisible(settings.fVideoEnabled);

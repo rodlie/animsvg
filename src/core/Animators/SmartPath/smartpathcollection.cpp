@@ -68,7 +68,11 @@ void SmartPathCollection::savePathsSVG(SvgExporter& exp,
                                        const EffectApplier& applier,
                                        const bool forceDumbIncrement,
                                        const FrameRange& visRange,
-                                       QList<Animator*> const extInfl) {
+                                       QList<Animator*> const extInfl)
+{
+    if (mFillType == SkPathFillType::kEvenOdd) {
+        parent.setAttribute("fill-rule", "evenodd");
+    }
     if(!forceDumbIncrement && ca_getNumberOfChildren() == 1) {
         const auto path0 = getChild(0);
         path0->graph_saveSVG(exp, parent, visRange, "d",

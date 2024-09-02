@@ -24,7 +24,6 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "fontswidget.h"
-
 #include "mainwindow.h"
 
 #include <QLineEdit>
@@ -36,6 +35,7 @@
 FontsWidget::FontsWidget(QWidget *parent)
     : QWidget(parent)
     , mBlockEmit(0)
+    , mBlockTextUpdate(false)
     , mMainLayout(nullptr)
     , mFontFamilyCombo(nullptr)
     , mFontStyleCombo(nullptr)
@@ -50,14 +50,17 @@ FontsWidget::FontsWidget(QWidget *parent)
     , mColorButton(nullptr)
 {
     mFontStyleCombo = new QComboBox(this);
+    mFontStyleCombo->setMinimumWidth(20);
     mFontStyleCombo->setFocusPolicy(Qt::NoFocus);
     mFontStyleCombo->setToolTip(tr("Font style"));
 
     mFontFamilyCombo = new QComboBox(this);
+    mFontFamilyCombo->setMinimumWidth(20);
     mFontFamilyCombo->setFocusPolicy(Qt::NoFocus);
     mFontFamilyCombo->setToolTip(tr("Font family"));
 
     mFontSizeCombo = new EditableComboBox(this, true);
+    mFontSizeCombo->setMinimumWidth(20);
     mFontSizeCombo->setCompleter(nullptr);
     mFontSizeCombo->setMinimumContentsLength(3);
     mFontSizeCombo->setToolTip(tr("Font size"));
@@ -89,15 +92,15 @@ FontsWidget::FontsWidget(QWidget *parent)
     mFontStyleCombo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     mFontSizeCombo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
-    QLabel *fontFamilyLabel = new QLabel(tr("Family"), this);
-    QLabel *fontStyleLabel = new QLabel(tr("Style"), this);
-    QLabel *fontSizeLabel = new QLabel(tr("Size"), this);
+   // QLabel *fontFamilyLabel = new QLabel(tr("Family"), this);
+   // QLabel *fontStyleLabel = new QLabel(tr("Style"), this);
+  //  QLabel *fontSizeLabel = new QLabel(tr("Size"), this);
 
     QWidget *fontFamilyWidget = new QWidget(this);
     fontFamilyWidget->setContentsMargins(0, 0, 0, 0);
     QHBoxLayout *fontFamilyLayout = new QHBoxLayout(fontFamilyWidget);
     fontFamilyLayout->setMargin(0);
-    fontFamilyLayout->addWidget(fontFamilyLabel);
+   // fontFamilyLayout->addWidget(fontFamilyLabel);
     fontFamilyLayout->addWidget(mFontFamilyCombo);
 
     QWidget *fontStyleWidget = new QWidget(this);
@@ -105,9 +108,9 @@ FontsWidget::FontsWidget(QWidget *parent)
     QHBoxLayout *fontStyleLayout = new QHBoxLayout(fontStyleWidget);
     fontStyleLayout->setMargin(0);
 
-    fontStyleLayout->addWidget(fontStyleLabel);
+  //  fontStyleLayout->addWidget(fontStyleLabel);
     fontStyleLayout->addWidget(mFontStyleCombo);
-    fontStyleLayout->addWidget(fontSizeLabel);
+  //  fontStyleLayout->addWidget(fontSizeLabel);
     fontStyleLayout->addWidget(mFontSizeCombo);
     fontStyleLayout->addWidget(mColorButton);
 
@@ -157,23 +160,18 @@ FontsWidget::FontsWidget(QWidget *parent)
             this, [this]() { emit textVAlignmentChanged(Qt::AlignBottom); });
 
     eSizesUI::widget.add(mAlignLeft, [this](const int size) {
-        mAlignLeft->setFixedHeight(size);
-        mAlignCenter->setFixedHeight(size);
-        mAlignRight->setFixedHeight(size);
-        mAlignTop->setFixedHeight(size);
-        mAlignVCenter->setFixedHeight(size);
-        mAlignBottom->setFixedHeight(size);
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            mAlignLeft->setIconSize(QSize(size, size));
-            mAlignCenter->setIconSize(QSize(size, size));
-            mAlignRight->setIconSize(QSize(size, size));
-            mAlignTop->setIconSize(QSize(size, size));
-            mAlignVCenter->setIconSize(QSize(size, size));
-            mAlignBottom->setIconSize(QSize(size, size));
-        }
+        Q_UNUSED(size)
+        mAlignLeft->setFixedHeight(eSizesUI::button);
+        mAlignCenter->setFixedHeight(eSizesUI::button);
+        mAlignRight->setFixedHeight(eSizesUI::button);
+        mAlignTop->setFixedHeight(eSizesUI::button);
+        mAlignVCenter->setFixedHeight(eSizesUI::button);
+        mAlignBottom->setFixedHeight(eSizesUI::button);
     });
 
     mTextInput = new QPlainTextEdit(this);
+    mTextInput->setPalette(ThemeSupport::getDarkerPalette());
+    mTextInput->setAutoFillBackground(true);
     mTextInput->setFocusPolicy(Qt::ClickFocus);
     mTextInput->setPlaceholderText(tr("Enter text ..."));
     connect(mTextInput, &QPlainTextEdit::textChanged,
@@ -284,6 +282,32 @@ QString FontsWidget::fontFamily() const
     return mFontFamilyCombo->currentText();
 }
 
+void FontsWidget::setCurrentBox(BoundingBox * const box)
+{
+    SkScalar fontSize = 0.;
+    QString fontFamily;
+    SkFontStyle fontStyle;
+    QString fontText;
+    if (const auto tBox = enve_cast<TextBox*>(box)) {
+        fontSize = tBox->getFontSize();
+        fontFamily = tBox->getFontFamily();
+        fontStyle = tBox->getFontStyle();
+        fontText = tBox->getCurrentValue();
+        setEnabled(true);
+        setColorTarget(tBox->getFillSettings()->getColorAnimator());
+        setBoxTarget(tBox);
+    } else {
+        clearText();
+        setDisabled(true);
+        setColorTarget(nullptr);
+        setBoxTarget(nullptr);
+    }
+    setDisplayedSettings(fontSize,
+                         fontFamily,
+                         fontStyle,
+                         fontText);
+}
+
 static QString styleStringHelper(const int weight,
                                  const SkFontStyle::Slant slant)
 {
@@ -373,6 +397,51 @@ void FontsWidget::clearText()
 void FontsWidget::setColorTarget(ColorAnimator * const target)
 {
     mColorButton->setColorTarget(target);
+}
+
+void FontsWidget::setBoxTarget(TextBox * const target)
+{
+    mBoxTarget.assign(target);
+    if (target) {
+        mBoxTarget << connect(this, &FontsWidget::fontSizeChanged,
+                              target, [target](const qreal &value) {
+            target->setFontSize(value);
+            Document::sInstance->actionFinished();
+        });
+        mBoxTarget << connect(this, &FontsWidget::textChanged,
+                              target, [target, this](const QString &value) {
+            mBlockTextUpdate = true;
+            target->prp_startTransform();
+            target->setCurrentValue(value);
+            target->prp_finishTransform();
+            Document::sInstance->actionFinished();
+            mBlockTextUpdate = false;
+        });
+        mBoxTarget << connect(this, &FontsWidget::fontFamilyAndStyleChanged,
+                              target, [target](const QString &family,
+                                               const SkFontStyle &style) {
+            target->setFontFamilyAndStyle(family, style);
+            Document::sInstance->actionFinished();
+        });
+        mBoxTarget << connect(this, &FontsWidget::textAlignmentChanged,
+                              target, [target](const Qt::Alignment &align) {
+            target->setTextHAlignment(align);
+            Document::sInstance->actionFinished();
+        });
+        mBoxTarget << connect(this, &FontsWidget::textVAlignmentChanged,
+                              target, [target](const Qt::Alignment &align) {
+            target->setTextVAlignment(align);
+            Document::sInstance->actionFinished();
+        });
+        mBoxTarget << connect(target, &Property::prp_currentFrameChanged,
+                              this, [this, target]() {
+            if (mBlockTextUpdate) { return; }
+            setDisplayedSettings(target->getFontSize(),
+                                 target->getFontFamily(),
+                                 target->getFontStyle(),
+                                 target->getCurrentValue());
+        });
+    }
 }
 
 void FontsWidget::emitFamilyAndStyleChanged()

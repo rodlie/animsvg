@@ -26,7 +26,7 @@ clang -v
 SDK=${SDK:-"/opt/friction"}
 SRC=${SDK}/src
 DIST=${DIST:-"/mnt"}
-JOBS=${JOBS:-4}
+MKJOBS=${MKJOBS:-32}
 
 NINJA_V=1.11.1
 #GN_V=82d673ac
@@ -70,7 +70,7 @@ if [ ! -f "${NINJA_BIN}" ]; then
     cd ${SRC}
     NINJA_SRC=ninja-${NINJA_V}
     rm -rf ${NINJA_SRC} || true
-    tar xf ${DIST}/${NINJA_SRC}.tar.gz
+    tar xf ${DIST}/tools/${NINJA_SRC}.tar.gz
     cd ${NINJA_SRC}
     ./configure.py --bootstrap
     cp -a ninja ${NINJA_BIN}
@@ -98,7 +98,7 @@ fi # ninja
 #     mv ${SKIA_SRC} ${SKIA_DIR}
 #     cd ${SKIA_DIR}
 #     ${GN_BIN} gen out/build --args='is_official_build=true is_debug=false cc="clang" cxx="clang++" extra_cflags=["-Wno-error"] target_os="linux" target_cpu="x64" skia_use_system_expat=false skia_use_system_freetype2=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_icu=false skia_use_system_harfbuzz=false skia_use_dng_sdk=false'
-#     ${NINJA_BIN} -C out/build -j${JOBS} skia
+#     ${NINJA_BIN} -C out/build -j${MKJOBS} skia
 # fi # skia
 
 # libunwind
@@ -106,10 +106,10 @@ if [ ! -f "${SDK}/lib/pkgconfig/libunwind.pc" ]; then
     cd ${SRC}
     UNWIND_SRC=libunwind-${UNWIND_V}
     rm -rf ${UNWIND_SRC} || true
-    tar xf ${DIST}/${UNWIND_SRC}.tar.gz
+    tar xf ${DIST}/linux/${UNWIND_SRC}.tar.gz
     cd ${UNWIND_SRC}
     CC=clang CXX=clang++ ./configure ${DEFAULT_CONFIGURE} --disable-minidebuginfo --disable-tests
-    make -j${JOBS}
+    make -j${MKJOBS}
     make install
 fi # libunwind
 
@@ -128,7 +128,7 @@ fi # libunwind
 #     CXXFLAGS="${DEFAULT_CFLAGS}" \
 #     LDFLAGS="${DEFAULT_LDFLAGS} -lunwind" \
 #     ./configure ${STATIC_CONFIGURE} --enable-libunwind
-#     make -j${JOBS}
+#     make -j${MKJOBS}
 # fi # gperftools
 
 echo "SDK PART 1 DONE"

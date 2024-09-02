@@ -26,6 +26,7 @@
 #ifndef BOXSINGLEWIDGET_H
 #define BOXSINGLEWIDGET_H
 
+#include "GUI/boxeslistactionbutton.h"
 #include "optimalscrollarena/singlewidget.h"
 #include <QLabel>
 #include <QHBoxLayout>
@@ -40,8 +41,6 @@ class QrealAnimatorValueSlider;
 class TimelineMovable;
 class Key;
 class BoxTargetWidget;
-class BoxesListActionButton;
-class PixmapActionButton;
 class BoolPropertyWidget;
 class ComboBoxProperty;
 class ColorAnimator;
@@ -55,27 +54,27 @@ public:
 
     void setTargetAbstraction(SWT_Abstraction *abs);
 
-    static QPixmap* VISIBLE_PIXMAP;
-    static QPixmap* INVISIBLE_PIXMAP;
-    static QPixmap* BOX_CHILDREN_VISIBLE;
-    static QPixmap* BOX_CHILDREN_HIDDEN;
-    static QPixmap* ANIMATOR_CHILDREN_VISIBLE;
-    static QPixmap* ANIMATOR_CHILDREN_HIDDEN;
-    static QPixmap* LOCKED_PIXMAP;
-    static QPixmap* UNLOCKED_PIXMAP;
-    static QPixmap* MUTED_PIXMAP;
-    static QPixmap* UNMUTED_PIXMAP;
-    static QPixmap* ANIMATOR_RECORDING;
-    static QPixmap* ANIMATOR_NOT_RECORDING;
-    static QPixmap* ANIMATOR_DESCENDANT_RECORDING;
-    static QPixmap* C_PIXMAP;
-    static QPixmap* G_PIXMAP;
-    static QPixmap* CG_PIXMAP;
-    static QPixmap* GRAPH_PROPERTY;
-    static QPixmap* PROMOTE_TO_LAYER_PIXMAP;
+    static QPixmap* VISIBLE_ICON;
+    static QPixmap* INVISIBLE_ICON;
+    static QPixmap* BOX_CHILDREN_VISIBLE_ICON;
+    static QPixmap* BOX_CHILDREN_HIDDEN_ICON;
+    static QPixmap* ANIMATOR_CHILDREN_VISIBLE_ICON;
+    static QPixmap* ANIMATOR_CHILDREN_HIDDEN_ICON;
+    static QPixmap* LOCKED_ICON;
+    static QPixmap* UNLOCKED_ICON;
+    static QPixmap* MUTED_ICON;
+    static QPixmap* UNMUTED_ICON;
+    static QPixmap* ANIMATOR_RECORDING_ICON;
+    static QPixmap* ANIMATOR_NOT_RECORDING_ICON;
+    static QPixmap* ANIMATOR_DESCENDANT_RECORDING_ICON;
+    static QPixmap* C_ICON;
+    static QPixmap* G_ICON;
+    static QPixmap* CG_ICON;
+    static QPixmap* GRAPH_PROPERTY_ICON;
+    static QPixmap* PROMOTE_TO_LAYER_ICON;
 
     static bool sStaticPixmapsLoaded;
-    static void loadStaticPixmaps();
+    static void loadStaticPixmaps(int iconSize);
     static void clearStaticPixmaps();
 
     void prp_drawTimelineControls(QPainter * const p,
@@ -101,6 +100,9 @@ protected:
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
 
     void paintEvent(QPaintEvent *);
     void mouseDoubleClickEvent(QMouseEvent *e);
@@ -132,10 +134,14 @@ private:
 
     void setComboProperty(ComboBoxProperty * const combo);
 
+    void handlePropertySelectedChanged(const Property *prop);
+
     BoxScroller* const mParent;
 
     bool mDragPressPos = false;
     QPoint mDragStartPos;
+
+    bool mHover = false;
 
     PixmapActionButton *mRecordButton;
     PixmapActionButton *mContentButton;

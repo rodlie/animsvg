@@ -34,10 +34,6 @@ add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 
 if(${LINUX_DEPLOY})
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
-    add_definitions(-DLINUX_DEPLOY)
-endif()
-if(${WIN_DEPLOY})
-    add_definitions(-DWIN_DEPLOY)
 endif()
 
 option(USE_SKIA_SYSTEM_LIBS "Use skia (third-party) system libraries on Linux" ON)
@@ -70,9 +66,9 @@ if(APPLE)
 endif()
 
 if(WIN32)
-    set(QSCINTILLA_LIBRARIES_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../qscintilla/src/release)
+    set(QSCINTILLA_LIBRARIES_DIRS ${CMAKE_SOURCE_DIR}/sdk/bin)
     set(QSCINTILLA_LIBRARIES qscintilla2_qt5)
-    set(QSCINTILLA_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../qscintilla/src)
+    set(QSCINTILLA_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/sdk/include)
     add_definitions(-DQSCINTILLA_DLL)
 else()
     set(QSCINTILLA_LIBRARIES_DIRS "/usr/lib" CACHE STRING "qscintilla library path")
@@ -98,6 +94,10 @@ if(WIN32)
     set(WINDOWS_RESOURCE_FILE ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${FRICTION_NAME}.rc)
     configure_file(${FRICTION_NAME}.rc.in
         ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${FRICTION_NAME}.rc
+        @ONLY
+    )
+    configure_file(${FRICTION_NAME}.iss
+        ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${FRICTION_NAME}.iss
         @ONLY
     )
     configure_file(icons/${FRICTION_NAME}.ico
@@ -179,7 +179,6 @@ set(
     effectsloader.cpp
     eimporters.cpp
     evfileio.cpp
-    iconloader.cpp
     renderhandler.cpp
     GUI/BoxesList/boxsinglewidget.cpp
     GUI/BoxesList/boxscrollwidget.cpp
@@ -202,6 +201,8 @@ set(
     GUI/fontswidget.cpp
     GUI/fillstrokesettings.cpp
     GUI/toolbox.cpp
+    GUI/extraactions.cpp
+    GUI/effectactions.cpp
 )
 
 set(
@@ -232,7 +233,6 @@ set(
     GUI/ColorWidgets/colorpickingwidget.h
     effectsloader.h
     eimporters.h
-    iconloader.h
     renderhandler.h
     GUI/BoxesList/boxsinglewidget.h
     GUI/BoxesList/boxscrollwidget.h
@@ -259,11 +259,9 @@ set(
 set(
     RESOURCES
     resources.qrc
-    icons.qrc
-    hicolor.qrc
+    icons/hicolor.qrc
     ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/easing.qrc
 )
-
 if(${LINUX_DEPLOY})
     list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs_lin.qrc)
 elseif(${WIN_DEPLOY})
@@ -295,7 +293,7 @@ target_link_directories(
     ${FFMPEG_LIBRARIES_DIRS}
     ${QSCINTILLA_LIBRARIES_DIRS}
     ${QUAZIP_LIBRARIES_DIRS}
-    ${CMAKE_CURRENT_BINARY_DIR}/../engine/skia
+    ${SKIA_LIBRARIES_DIRS}
 )
 
 if(${USE_SKIA_SYSTEM_LIBS} AND UNIX)
@@ -391,7 +389,7 @@ if(UNIX AND NOT APPLE)
     foreach(HICOLOR_DIR ${HICOLOR_DIRS})
         install(
             FILES
-            icons/hicolor/${HICOLOR_DIR}/apps/${PROJECT_NAME}.png
+            icons/hicolor/${HICOLOR_DIR}/apps/${PROJECT_FREEDESKTOP}.png
             DESTINATION
             ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${HICOLOR_DIR}/apps
             RENAME
@@ -399,7 +397,7 @@ if(UNIX AND NOT APPLE)
         )
         install(
             FILES
-            icons/hicolor/${HICOLOR_DIR}/mimetypes/application-x-${PROJECT_NAME}.png
+            icons/hicolor/${HICOLOR_DIR}/mimetypes/application-x-${PROJECT_FREEDESKTOP}.png
             DESTINATION
             ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${HICOLOR_DIR}/mimetypes
             RENAME
@@ -408,7 +406,7 @@ if(UNIX AND NOT APPLE)
     endforeach()
     install(
         FILES
-        icons/hicolor/scalable/apps/${PROJECT_NAME}.svg
+        icons/hicolor/scalable/apps/${PROJECT_FREEDESKTOP}.svg
         DESTINATION
         ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps
         RENAME
@@ -416,7 +414,7 @@ if(UNIX AND NOT APPLE)
     )
     install(
         FILES
-        icons/hicolor/scalable/mimetypes/application-x-${PROJECT_NAME}.svg
+        icons/hicolor/scalable/mimetypes/application-x-${PROJECT_FREEDESKTOP}.svg
         DESTINATION
         ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/mimetypes
         RENAME

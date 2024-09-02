@@ -24,11 +24,13 @@
 #include <QMouseEvent>
 #include <QDebug>
 #include <QApplication>
+#include "Boxes/videobox.h"
 #include "MovablePoints/pathpivot.h"
 #include "Boxes/imagebox.h"
 #include "Sound/soundcomposition.h"
 #include "Boxes/textbox.h"
 #include "GUI/global.h"
+#include "appsupport.h"
 #include "pointhelpers.h"
 #include "Boxes/internallinkbox.h"
 #include "clipboardcontainer.h"
@@ -45,6 +47,7 @@
 #include "eevent.h"
 #include "Boxes/nullobject.h"
 #include "simpletask.h"
+#include "themesupport.h"
 
 Canvas::Canvas(Document &document,
                const int canvasWidth,
@@ -263,7 +266,7 @@ void Canvas::renderSk(SkCanvas* const canvas,
         canvas->clear(SK_ColorBLACK);
         canvas->clipRect(canvasRect);
     } else {
-        canvas->clear(SkColorSetARGB(255, 33, 33, 38));
+        canvas->clear(ThemeSupport::getThemeBaseSkColor());
         paint.setColor(SK_ColorGRAY);
         paint.setStyle(SkPaint::kStroke_Style);
         paint.setPathEffect(dashPathEffect);
@@ -420,9 +423,95 @@ void Canvas::renderSk(SkCanvas* const canvas,
         mValueInput.draw(canvas, drawRect.height() - eSizesUI::widget);
 }
 
-void Canvas::setFrameRange(const FrameRange &range) {
+void Canvas::setFrameRange(const FrameRange &range)
+{
     mRange = range;
     emit newFrameRange(range);
+}
+
+void Canvas::setFrameIn(const bool enabled,
+                        const int frameIn)
+{
+    mIn.enabled = enabled;
+    mIn.frame = frameIn;
+    emit requestUpdate();
+}
+
+void Canvas::setFrameOut(const bool enabled,
+                         const int frameOut)
+{
+    mOut.enabled = enabled;
+    mOut.frame = frameOut;
+    emit requestUpdate();
+}
+
+const FrameMarker Canvas::getFrameIn()
+{
+    return mIn;
+}
+
+const FrameMarker Canvas::getFrameOut()
+{
+    return mOut;
+}
+
+void Canvas::setMarker(const QString &title,
+                       const int frame)
+{
+    if (hasMarker(frame, true)) { return; }
+    mMarkers.push_back({title.isEmpty() ? QString::number(mMarkers.size()) : title, true, frame});
+    emit requestUpdate();
+}
+
+void Canvas::setMarker(const int frame)
+{
+    setMarker(QString::number(mMarkers.size()), frame);
+}
+
+bool Canvas::hasMarker(const int frame,
+                       const bool removeExists)
+{
+    int index = 0;
+    for (const auto &mark: mMarkers) {
+        if (mark.frame == frame) {
+            if (removeExists) {
+                mMarkers.erase(mMarkers.begin() + index);
+                emit newFrameRange(mRange);
+            }
+            return true;
+        }
+        index++;
+    }
+    return false;
+}
+
+const QString Canvas::getMarkerText(int frame)
+{
+    for (const auto &mark: mMarkers) {
+        if (mark.frame == frame) { return mark.title; }
+    }
+    return QString();
+}
+
+const std::vector<FrameMarker> Canvas::getMarkers()
+{
+    return mMarkers;
+}
+
+void Canvas::clearMarkers()
+{
+    mMarkers.clear();
+    emit requestUpdate();
+}
+
+void Canvas::addKeySelectedProperties()
+{
+    for (const auto &prop : mSelectedProps.getList()) {
+        const auto asAnim = enve_cast<Animator*>(prop);
+        if (!asAnim) { continue; }
+        asAnim->anim_saveCurrentValueAsKey();
+    }
+    mDocument.actionFinished();
 }
 
 stdsptr<BoxRenderData> Canvas::createRenderData() {
@@ -721,6 +810,50 @@ void Canvas::cutAction()
     if (mSelectedBoxes.isEmpty()) { return; }
     copyAction();
     deleteAction();
+}
+
+void Canvas::splitAction()
+{
+    if (mSelectedBoxes.isEmpty() || mSelectedBoxes.count() > 1) { return; }
+
+    const auto vidBox = enve_cast<VideoBox*>(mSelectedBoxes.getList().at(0));
+    if (!vidBox) { return; }
+
+    const auto dRect = vidBox->getDurationRectangle();
+    if (!dRect) { return; }
+
+    const auto frame = getCurrentFrame();
+    const auto values = dRect->getValues();
+    const auto range = dRect->getAbsFrameRange();
+
+    if (!range.inRange(frame)) { return; }
+
+    int offset = values.fMax - (range.fMax - frame);
+
+    copyAction();
+    pasteAction();
+
+    if (mCurrentContainer->getContainedBoxesCount() < 1) { return; }
+
+    const auto box = mCurrentContainer->getContainedBoxes().at(0);
+    if (!box) { return; }
+
+    const auto cRect = box->getDurationRectangle();
+    if (!cRect) { return; }
+
+    dRect->setValues({values.fShift, offset, values.fMax});
+    cRect->setValues({values.fShift, values.fMin, offset});
+
+    for (int i = box->getZIndex(); i < vidBox->getZIndex(); i = box->getZIndex()) {
+        box->moveDown();
+    }
+
+    mSelectedBoxes.removeObj(box);
+    box->setSelected(false);
+    mSelectedBoxes.addObj(vidBox);
+    vidBox->setSelected(true);
+
+    mDocument.actionFinished();
 }
 
 void Canvas::duplicateAction()
@@ -1068,16 +1201,23 @@ void Canvas::writeSettings(eWriteStream& dst) const
     dst << mHeight;
     dst << mFps;
     dst << mRange;
+
+    writeMarkers(dst);
 }
 
 void Canvas::readSettings(eReadStream& src)
 {
-    int currFrame; src >> currFrame;
+    int currFrame;
+    src >> currFrame;
     src >> mClipToCanvasSize;
     src >> mWidth;
     src >> mHeight;
     src >> mFps;
-    FrameRange range; src >> range;
+    FrameRange range;
+    src >> range;
+    if (src.evFileVersion() >= EvFormat::markers) {
+        readMarkers(src);
+    }
     setFrameRange(range);
     anim_setAbsFrame(currFrame);
 }
@@ -1097,6 +1237,40 @@ void Canvas::readBoundingBox(eReadStream& src)
         readSettings(src);
     }
     clearGradientRWIds();
+}
+
+void Canvas::writeMarkers(eWriteStream &dst) const
+{
+    dst << mIn.enabled;
+    dst << mIn.frame;
+    dst << mOut.enabled;
+    dst << mOut.frame;
+    QStringList markers;
+    for (auto &marker: mMarkers) {
+        QString title = marker.title.isEmpty() ? tr("Marker") : marker.title;
+        markers << QString("%1:%2").arg(title, QString::number(marker.frame));
+    }
+    dst << markers.join(",").toUtf8();
+}
+
+void Canvas::readMarkers(eReadStream &src)
+{
+    src >> mIn.enabled;
+    src >> mIn.frame;
+    src >> mOut.enabled;
+    src >> mOut.frame;
+    QByteArray markerData;
+    src >> markerData;
+    mMarkers.clear();
+    const auto markers = QString::fromUtf8(markerData).split(",");
+    for (auto &marker: markers) {
+        const auto content = marker.split(":");
+        if (content.size() != 2) { continue; }
+        QString title = content.at(0).isEmpty() ? tr("Marker") : content.at(0);
+        int frame = content.at(1).toInt();
+        if (hasMarker(frame)) { continue; }
+        mMarkers.push_back({title, true, frame});
+    }
 }
 
 void Canvas::writeBoxOrSoundXEV(const stdsptr<XevZipFileSaver>& xevFileSaver,
@@ -1225,6 +1399,16 @@ SceneBoundGradient *Canvas::getGradientWithDocumentId(const int id) const
 {
     for (const auto &grad : mGradients) {
         if (grad->getDocumentId() == id) { return grad.get(); }
+    }
+    return nullptr;
+}
+
+SceneBoundGradient *Canvas::getGradientWithDocumentSceneId(const int id) const
+{
+    for (const auto &scene : mDocument.fScenes) {
+        for (const auto &grad : scene->mGradients) {
+            if (grad->getDocumentId() == id) { return grad.get(); }
+        }
     }
     return nullptr;
 }

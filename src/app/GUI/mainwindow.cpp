@@ -36,7 +36,6 @@
 #include <QMessageBox>
 #include <QAudioOutput>
 #include <QSpacerItem>
-#include <QSettings>
 #include <QMargins>
 #include <iostream>
 
@@ -69,8 +68,11 @@
 #include "efiltersettings.h"
 #include "Settings/settingsdialog.h"
 #include "appsupport.h"
+#include "themesupport.h"
 
 #include "widgets/assetswidget.h"
+#include "dialogs/adjustscenedialog.h"
+#include "dialogs/commandpalette.h"
 
 MainWindow *MainWindow::sInstance = nullptr;
 
@@ -86,6 +88,7 @@ MainWindow::MainWindow(Document& document,
                        const QString &openProject,
                        QWidget * const parent)
     : QMainWindow(parent)
+    , mShutdown(false)
     , mWelcomeDialog(nullptr)
     //, mCentralWidget(nullptr)
     , mStackWidget(nullptr)
@@ -111,6 +114,20 @@ MainWindow::MainWindow(Document& document,
     //, mFilesDockBar(nullptr)
     //, mBrushSettingsDockBar(nullptr)
     , mSaveAct(nullptr)
+    , mSaveAsAct(nullptr)
+    , mSaveBackAct(nullptr)
+    , mPreviewSVGAct(nullptr)
+    , mExportSVGAct(nullptr)
+    , mRenderVideoAct(nullptr)
+    , mCloseProjectAct(nullptr)
+    , mLinkedAct(nullptr)
+    , mImportAct(nullptr)
+    , mImportSeqAct(nullptr)
+    , mRevertAct(nullptr)
+    , mSelectAllAct(nullptr)
+    , mInvertSelAct(nullptr)
+    , mClearSelAct(nullptr)
+    , mAddKeyAct(nullptr)
     , mAddToQueAct(nullptr)
     , mViewFullScreenAct(nullptr)
     , mLocalPivotAct(nullptr)
@@ -138,6 +155,7 @@ MainWindow::MainWindow(Document& document,
     , mAutoSaveTimer(nullptr)
     , mAboutWidget(nullptr)
     , mAboutWindow(nullptr)
+    , mViewTimelineAct(nullptr)
     , mTimelineWindow(nullptr)
     , mTimelineWindowAct(nullptr)
     , mRenderWindow(nullptr)
@@ -167,32 +185,25 @@ MainWindow::MainWindow(Document& document,
     connect(&mDocument, &Document::sceneCreated,
             this, &MainWindow::closeWelcomeDialog);
     connect(&mDocument, &Document::openTextEditor,
-            this, [this] () {
-        mTabColorText->setCurrentIndex(mTabTextIndex);
-        mFontWidget->setTextFocus();
-    });
+            this, [this] () { focusFontWidget(true); });
+    connect(&mDocument, &Document::newVideo,
+            this, &MainWindow::handleNewVideoClip);
 
     setWindowIcon(QIcon::fromTheme(AppSupport::getAppName()));
-    setMinimumSize(1024, 576);
+    //setMinimumSize(1024, 576);
 
     mAutoSaveTimer = new QTimer(this);
     connect (mAutoSaveTimer, &QTimer::timeout,
              this, &MainWindow::checkAutoSaveTimer);
 
-    QFile stylesheet(QString::fromUtf8(":/styles/%1.qss").arg(AppSupport::getAppName()));
-    if (stylesheet.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        setStyleSheet(stylesheet.readAll());
-        stylesheet.close();
-    }
-
-    BoxSingleWidget::loadStaticPixmaps(); // TODO: remove when everything is QIcon
+    BoxSingleWidget::loadStaticPixmaps(eSizesUI::widget);
 
     mDocument.setPath("");
 
-    int sideBarMin = 300;
+    //int sideBarMin = 320;
 
     mFillStrokeSettings = new FillStrokeSettingsWidget(mDocument, this);
-    mFillStrokeSettings->setMinimumWidth(sideBarMin);
+    //mFillStrokeSettings->setMinimumWidth(sideBarMin);
 
     mFontWidget = new FontsWidget(this);
     mFontWidget->setDisabled(true);
@@ -240,8 +251,6 @@ MainWindow::MainWindow(Document& document,
     setupToolBar();
     setupMenuBar();
 
-    connectToolBarActions();
-
     readRecentFiles();
     updateRecentMenu();
 
@@ -268,6 +277,7 @@ MainWindow::MainWindow(Document& document,
     statusBar()->addPermanentWidget(resolutionLabel);
 
     mResolutionComboBox = new EditableComboBox(this);
+    mResolutionComboBox->setMinimumWidth(100);
     mResolutionComboBox->setFocusPolicy(Qt::ClickFocus);
     mResolutionComboBox->addItem("100 %");
     mResolutionComboBox->addItem("75 %");
@@ -290,7 +300,7 @@ MainWindow::MainWindow(Document& document,
 
     const auto fontWidget = new QWidget(this);
     fontWidget->setAutoFillBackground(true);
-    fontWidget->setPalette(AppSupport::getNotSoDarkPalette());
+    fontWidget->setPalette(ThemeSupport::getDarkPalette());
 
     const auto fontLayout = new QVBoxLayout(fontWidget);
     fontLayout->addWidget(mFontWidget);
@@ -298,20 +308,21 @@ MainWindow::MainWindow(Document& document,
     QMargins frictionMargins(0, 0, 0, 0);
     int frictionSpacing = 0;
 
-    const auto darkPal = AppSupport::getDarkPalette();
+    fontWidget->setContentsMargins(frictionMargins);
+
+    const auto darkPal = ThemeSupport::getDarkPalette();
     mObjectSettingsScrollArea->setAutoFillBackground(true);
     mObjectSettingsScrollArea->setPalette(darkPal);
 
     // setup "Fill and Stroke" and "Text and Font" tab
     mTabColorText = new QTabWidget(this);
+    mTabColorText->setObjectName("TabWidgetWide");
     mTabColorText->tabBar()->setFocusPolicy(Qt::NoFocus);
     mTabColorText->setContentsMargins(frictionMargins);
-    mTabColorText->setMinimumWidth(sideBarMin);
+    //mTabColorText->setMinimumWidth(sideBarMin);
     mTabColorText->setTabPosition(QTabWidget::South);
     eSizesUI::widget.add(mTabColorText, [this](const int size) {
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            mTabColorText->setIconSize(QSize(size, size));
-        }
+        mTabColorText->setIconSize(QSize(size, size));
     });
 
     mTabColorIndex = mTabColorText->addTab(mFillStrokeSettings,
@@ -323,14 +334,13 @@ MainWindow::MainWindow(Document& document,
 
     // setup "Properties", "Assets", "Queue" tab
     mTabProperties = new QTabWidget(this);
+    mTabProperties->setObjectName("TabWidgetWide");
     mTabProperties->tabBar()->setFocusPolicy(Qt::NoFocus);
     mTabProperties->setContentsMargins(frictionMargins);
-    mTabProperties->setMinimumWidth(sideBarMin);
+    //mTabProperties->setMinimumWidth(sideBarMin);
     mTabProperties->setTabPosition(QTabWidget::South);
     eSizesUI::widget.add(mTabProperties, [this](const int size) {
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            mTabProperties->setIconSize(QSize(size, size));
-        }
+        mTabProperties->setIconSize(QSize(size, size));
     });
 
     const auto propertiesWidget = new QWidget(this);
@@ -422,6 +432,7 @@ MainWindow::MainWindow(Document& document,
 
 MainWindow::~MainWindow()
 {
+    mShutdown = true;
     std::cout << "Closing Friction, please wait ... " << std::endl;
     if (mAutoSaveTimer->isActive()) { mAutoSaveTimer->stop(); }
     writeSettings();
@@ -442,106 +453,154 @@ void MainWindow::setupMenuBar()
                                              tr("New", "MenuBar_File"),
                                              this, &MainWindow::newFile,
                                              Qt::CTRL + Qt::Key_N);
-    mToolbar->addAction(newAct);
-
+    newAct->setData(tr("New Project"));
+    cmdAddAction(newAct);
+    if (eSettings::instance().fToolBarActionNew) {
+        mToolbar->addAction(newAct);
+    }
     const auto openAct = mFileMenu->addAction(QIcon::fromTheme("file_folder"),
                                               tr("Open", "MenuBar_File"),
                                               this, qOverload<>(&MainWindow::openFile),
                                               Qt::CTRL + Qt::Key_O);
-
-    const auto loadToolBtn = new QToolButton(this);
-    loadToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
-    loadToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    loadToolBtn->setFocusPolicy(Qt::NoFocus);
-    const auto loadToolMenu = new QMenu(this);
-    loadToolBtn->setMenu(loadToolMenu);
-
-    mToolbar->addWidget(loadToolBtn);
-    loadToolBtn->setDefaultAction(openAct);
-
+    openAct->setData(tr("Open Project"));
+    cmdAddAction(openAct);
     mRecentMenu = mFileMenu->addMenu(QIcon::fromTheme("file_folder"),
                                      tr("Open Recent", "MenuBar_File"));
 
-    mFileMenu->addSeparator();
-    const auto linkedAct = mFileMenu->addAction(QIcon::fromTheme("linked"),
+    mLinkedAct = mFileMenu->addAction(QIcon::fromTheme("linked"),
                                                 tr("Link"),
                                                 this, &MainWindow::linkFile,
                                                 Qt::CTRL + Qt::Key_L);
+    mLinkedAct->setEnabled(false);
+    mLinkedAct->setData(tr("Link File"));
+    cmdAddAction(mLinkedAct);
 
-    const auto importAct = mFileMenu->addAction(QIcon::fromTheme("file_blank"),
-                                                tr("Import File", "MenuBar_File"),
-                                                this, qOverload<>(&MainWindow::importFile),
-                                                Qt::CTRL + Qt::Key_I);
+    mImportAct = mFileMenu->addAction(QIcon::fromTheme("file_blank"),
+                                      tr("Import File", "MenuBar_File"),
+                                      this, qOverload<>(&MainWindow::importFile),
+                                      Qt::CTRL + Qt::Key_I);
+    mImportAct->setEnabled(false);
+    cmdAddAction(mImportAct);
 
-    const auto importSeqAct = mFileMenu->addAction(QIcon::fromTheme("renderlayers"),
-                                                   tr("Import Image Sequence", "MenuBar_File"),
-                                                   this, &MainWindow::importImageSequence);
+    mImportSeqAct = mFileMenu->addAction(QIcon::fromTheme("renderlayers"),
+                                         tr("Import Image Sequence", "MenuBar_File"),
+                                         this, &MainWindow::importImageSequence);
+    mImportSeqAct->setEnabled(false);
+    cmdAddAction(mImportSeqAct);
 
-    loadToolMenu->addAction(linkedAct);
-    loadToolMenu->addAction(importAct);
-    loadToolMenu->addAction(importSeqAct);
-    loadToolMenu->addMenu(mRecentMenu);
+    if (eSettings::instance().fToolBarActionOpen) {
+        const auto loadToolBtn = new QToolButton(this);
+        loadToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
+        loadToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        loadToolBtn->setFocusPolicy(Qt::NoFocus);
+
+        const auto loadToolMenu = new QMenu(this);
+        loadToolBtn->setMenu(loadToolMenu);
+        loadToolBtn->setDefaultAction(openAct);
+
+        loadToolMenu->addAction(mLinkedAct);
+        loadToolMenu->addAction(mImportAct);
+        loadToolMenu->addAction(mImportSeqAct);
+        loadToolMenu->addMenu(mRecentMenu);
+
+        mToolbar->addWidget(loadToolBtn);
+    }
+
+    mRevertAct = mFileMenu->addAction(QIcon::fromTheme("loop_back"),
+                                      tr("Revert", "MenuBar_File"),
+                                      this, &MainWindow::revert);
+    mRevertAct->setEnabled(false);
+    mRevertAct->setData(tr("Revert Project"));
+    cmdAddAction(mRevertAct);
 
     mFileMenu->addSeparator();
-    mFileMenu->addAction(QIcon::fromTheme("loop_back"),
-                         tr("Revert", "MenuBar_File"),
-                         this, &MainWindow::revert);
 
-    const auto saveToolBtn = new QToolButton(this);
-    saveToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
-    saveToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    saveToolBtn->setFocusPolicy(Qt::NoFocus);
-    const auto saveToolMenu = new QMenu(this);
-    saveToolBtn->setMenu(saveToolMenu);
-    mToolbar->addWidget(saveToolBtn);
-
-    mFileMenu->addSeparator();
     mSaveAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
                                     tr("Save", "MenuBar_File"),
                                     this, qOverload<>(&MainWindow::saveFile),
                                     Qt::CTRL + Qt::Key_S);
+    mSaveAct->setEnabled(false);
+    mSaveAct->setData(tr("Save Project"));
+    cmdAddAction(mSaveAct);
 
-    const auto saveAsAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
-                                                tr("Save As", "MenuBar_File"),
-                                                this, [this]() { saveFileAs(); },
-                                                Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+    mSaveAsAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
+                                      tr("Save As", "MenuBar_File"),
+                                      this, [this]() { saveFileAs(); },
+                                      Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+    mSaveAsAct->setEnabled(false);
+    mSaveAsAct->setData(tr("Save Project As ..."));
+    cmdAddAction(mSaveAsAct);
 
-    const auto saveBackAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
-                                                  tr("Save Backup", "MenuBar_File"),
-                                                  this, &MainWindow::saveBackup);
+    mSaveBackAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
+                                        tr("Save Backup", "MenuBar_File"),
+                                        this, &MainWindow::saveBackup);
+    mSaveBackAct->setEnabled(false);
+    mSaveBackAct->setData(tr("Save Project Backup"));
+    cmdAddAction(mSaveBackAct);
 
-    const auto exportMenu = mFileMenu->addMenu(QIcon::fromTheme("output"),
-                                               tr("Export", "MenuBar_File"));
+    mPreviewSVGAct = mFileMenu->addAction(QIcon::fromTheme("seq_preview"),
+                                          tr("Preview", "MenuBar_File"),
+                                          this,[this]{ exportSVG(true); },
+                                          QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                               "previewSVG",
+                                                                               "Ctrl+F12").toString()));
+    mPreviewSVGAct->setEnabled(false);
+    mPreviewSVGAct->setToolTip(tr("Preview SVG Animation in Web Browser"));
+    mPreviewSVGAct->setData(mPreviewSVGAct->toolTip());
+    cmdAddAction(mPreviewSVGAct);
 
-    const auto exportSvgAct = exportMenu->addAction(QIcon::fromTheme("seq_preview"),
-                                                    tr("Web Animation (SVG + SMIL)", "MenuBar_File"),
-                                                    this, &MainWindow::exportSVG,
-                                                    QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                                         "exportSVG",
-                                                                                         "Shift+F12").toString()));
-    saveToolBtn->setDefaultAction(mSaveAct);
-    saveToolMenu->addAction(saveAsAct);
-    saveToolMenu->addAction(saveBackAct);
-    saveToolMenu->addAction(exportSvgAct);
-    saveToolMenu->addSeparator();
+    mExportSVGAct = mFileMenu->addAction(QIcon::fromTheme("seq_preview"),
+                                        tr("Export", "MenuBar_File"),
+                                        this, &MainWindow::exportSVG,
+                                        QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                             "exportSVG",
+                                                                             "Shift+F12").toString()));
+    mExportSVGAct->setEnabled(false);
+    mExportSVGAct->setToolTip(tr("Export SVG Animation for the Web"));
+    mExportSVGAct->setData(mExportSVGAct->toolTip());
+    cmdAddAction(mExportSVGAct);
+
+    if (eSettings::instance().fToolBarActionSave) {
+        const auto saveToolBtn = new QToolButton(this);
+        saveToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
+        saveToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        saveToolBtn->setFocusPolicy(Qt::NoFocus);
+
+        const auto saveToolMenu = new QMenu(this);
+        saveToolBtn->setMenu(saveToolMenu);
+        saveToolBtn->setDefaultAction(mSaveAct);
+
+        saveToolMenu->addAction(mSaveAsAct);
+        saveToolMenu->addAction(mSaveBackAct);
+        //saveToolMenu->addAction(exportSvgAct);
+        saveToolMenu->addSeparator();
+
+        mToolbar->addWidget(saveToolBtn);
+    }
 
     mFileMenu->addSeparator();
-    mFileMenu->addAction(QIcon::fromTheme("cancel"),
-                         tr("Close", "MenuBar_File"),
-                         this, &MainWindow::closeProject,
-                         QKeySequence(tr("Ctrl+W")));
-    mFileMenu->addSeparator();
-    mFileMenu->addAction(QIcon::fromTheme("preferences"),
-                         tr("Preferences", "MenuBar_Edit"), [this]() {
+    mCloseProjectAct = mFileMenu->addAction(QIcon::fromTheme("dialog-cancel"),
+                                                      tr("Close", "MenuBar_File"),
+                                                      this, &MainWindow::closeProject,
+                                                      QKeySequence(tr("Ctrl+W")));
+    mCloseProjectAct->setEnabled(false);
+    mCloseProjectAct->setData(tr("Close Project"));
+    cmdAddAction(mCloseProjectAct);
+
+    const auto prefsAct = mFileMenu->addAction(QIcon::fromTheme("preferences"),
+                                               tr("Preferences", "MenuBar_Edit"), [this]() {
         const auto settDial = new SettingsDialog(this);
         settDial->setAttribute(Qt::WA_DeleteOnClose);
         settDial->show();
     }, QKeySequence(tr("Ctrl+P")));
-    mFileMenu->addSeparator();
-    mFileMenu->addAction(QIcon::fromTheme("quit"),
-                         tr("Exit", "MenuBar_File"),
-                         this, &MainWindow::close,
-                         QKeySequence(tr("Ctrl+Q")));
+    cmdAddAction(prefsAct);
+
+    const auto quitAppAct = mFileMenu->addAction(QIcon::fromTheme("quit"),
+                                                 tr("Exit", "MenuBar_File"),
+                                                 this, &MainWindow::close,
+                                                 QKeySequence(tr("Ctrl+Q")));
+    quitAppAct->setData(tr("Quit Friction"));
+    cmdAddAction(quitAppAct);
 
     mEditMenu = mMenuBar->addMenu(tr("Edit", "MenuBar"));
 
@@ -549,25 +608,13 @@ void MainWindow::setupMenuBar()
                                                tr("Undo", "MenuBar_Edit"));
     undoQAct->setShortcut(Qt::CTRL + Qt::Key_Z);
     mActions.undoAction->connect(undoQAct);
-
-    // workaround
-    // if we undo text changes we also want the font widget to reflect this
-    connect(undoQAct, &QAction::triggered,
-            this, [this]() {
-        const auto scene = *mDocument.fActiveScene;
-        if (!scene) { return; }
-        if (const auto txtBox = enve_cast<TextBox*>(scene->getCurrentBox())) {
-            mFontWidget->setDisplayedSettings(txtBox->getFontSize(),
-                                              txtBox->getFontFamily(),
-                                              txtBox->getFontStyle(),
-                                              txtBox->getCurrentValue());
-        }
-    });
+    cmdAddAction(undoQAct);
 
     const auto redoQAct = mEditMenu->addAction(QIcon::fromTheme("loop_forwards"),
                                                tr("Redo", "MenuBar_Edit"));
     redoQAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Z);
     mActions.redoAction->connect(redoQAct);
+    cmdAddAction(redoQAct);
 
     mEditMenu->addSeparator();
 
@@ -576,6 +623,7 @@ void MainWindow::setupMenuBar()
         mEditMenu->addAction(qAct);
         qAct->setShortcut(Qt::CTRL + Qt::Key_C);
         mActions.copyAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     {
@@ -583,6 +631,7 @@ void MainWindow::setupMenuBar()
         mEditMenu->addAction(qAct);
         qAct->setShortcut(Qt::CTRL + Qt::Key_X);
         mActions.cutAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     {
@@ -590,45 +639,92 @@ void MainWindow::setupMenuBar()
         mEditMenu->addAction(qAct);
         qAct->setShortcut(Qt::CTRL + Qt::Key_V);
         mActions.pasteAction->connect(qAct);
+        cmdAddAction(qAct);
     }
-
-    mEditMenu->addSeparator();
 
     {
         const auto qAct = new NoShortcutAction(tr("Duplicate", "MenuBar_Edit"));
         mEditMenu->addAction(qAct);
+        qAct->setIcon(QIcon::fromTheme("duplicate"));
         qAct->setShortcut(Qt::CTRL + Qt::Key_D);
         mActions.duplicateAction->connect(qAct);
+        cmdAddAction(qAct);
     }
-
-    mEditMenu->addSeparator();
 
     {
         const auto qAct = new NoShortcutAction(tr("Delete", "MenuBar_Edit"));
         mEditMenu->addAction(qAct);
         qAct->setShortcut(Qt::Key_Delete);
         mActions.deleteAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     mEditMenu->addSeparator();
-    mEditMenu->addAction(new NoShortcutAction(
-                             tr("Select All", "MenuBar_Edit"),
-                             &mActions, &Actions::selectAllAction,
-                             Qt::Key_A, mEditMenu));
-    mEditMenu->addAction(new NoShortcutAction(
-                             tr("Invert Selection", "MenuBar_Edit"),
-                             &mActions, &Actions::invertSelectionAction,
-                             Qt::Key_I, mEditMenu));
-    mEditMenu->addAction(new NoShortcutAction(
-                             tr("Clear Selection", "MenuBar_Edit"),
-                             &mActions, &Actions::clearSelectionAction,
-                             Qt::ALT + Qt::Key_A, mEditMenu));
+
+    {
+        mSelectAllAct = new NoShortcutAction(tr("Select All",
+                                                "MenuBar_Edit"),
+                                             &mActions,
+                                             &Actions::selectAllAction,
+                                             Qt::Key_A,
+                                             mEditMenu);
+        mSelectAllAct->setEnabled(false);
+        mEditMenu->addAction(mSelectAllAct);
+        cmdAddAction(mSelectAllAct);
+    }
+
+    {
+        mInvertSelAct = new NoShortcutAction(tr("Invert Selection",
+                                                "MenuBar_Edit"),
+                                             &mActions,
+                                             &Actions::invertSelectionAction,
+                                             Qt::SHIFT + Qt::Key_A,
+                                             mEditMenu);
+        mInvertSelAct->setEnabled(false);
+        mEditMenu->addAction(mInvertSelAct);
+        cmdAddAction(mInvertSelAct);
+    }
+
+    {
+        mClearSelAct = new NoShortcutAction(tr("Clear Selection",
+                                               "MenuBar_Edit"),
+                                            &mActions,
+                                            &Actions::clearSelectionAction,
+                                            Qt::ALT + Qt::Key_A,
+                                            mEditMenu);
+        mClearSelAct->setEnabled(false);
+        mEditMenu->addAction(mClearSelAct);
+        cmdAddAction(mClearSelAct);
+    }
+
     mEditMenu->addSeparator();
-    mEditMenu->addAction(tr("Clear Cache", "MenuBar_Edit"), [this]() {
+
+    mAddKeyAct = mEditMenu->addAction(QIcon::fromTheme("plus"),
+                                      tr("Add Key(s)"), [this]() {
+        const auto scene = *mDocument.fActiveScene;
+        if (!scene) { return; }
+        scene->addKeySelectedProperties();
+    }, QKeySequence(tr("Insert")));
+    mAddKeyAct->setEnabled(false);
+    cmdAddAction(mAddKeyAct);
+
+    mEditMenu->addSeparator();
+
+    const auto clearCacheAct = mEditMenu->addAction(QIcon::fromTheme("trash"),
+                                                    tr("Clear Cache", "MenuBar_Edit"), [this]() {
         const auto m = MemoryHandler::sInstance;
         m->clearMemory();
         mTimeline->update();
     }, QKeySequence(tr("Ctrl+R")));
+    cmdAddAction(clearCacheAct);
+
+    const auto clearRecentAct = mEditMenu->addAction(QIcon::fromTheme("trash"),
+                                                     tr("Clear Recent Files"), [this]() {
+        mRecentFiles.clear();
+        writeRecentFiles();
+        updateRecentMenu();
+    });
+    cmdAddAction(clearRecentAct);
 
 //    mSelectSameMenu = mEditMenu->addMenu("Select Same");
 //    mSelectSameMenu->addAction("Fill and Stroke");
@@ -650,21 +746,29 @@ void MainWindow::setupMenuBar()
                 tr("Raise", "MenuBar_Object"));
     raiseQAct->setShortcut(Qt::Key_PageUp);
     mActions.raiseAction->connect(raiseQAct);
+    raiseQAct->setData(tr("Raise Object"));
+    cmdAddAction(raiseQAct);
 
     const auto lowerQAct = mObjectMenu->addAction(
                 tr("Lower", "MenuBar_Object"));
     lowerQAct->setShortcut(Qt::Key_PageDown);
     mActions.lowerAction->connect(lowerQAct);
+    lowerQAct->setData(tr("Lower Object"));
+    cmdAddAction(lowerQAct);
 
     const auto rttQAct = mObjectMenu->addAction(
                 tr("Raise to Top", "MenuBar_Object"));
     rttQAct->setShortcut(Qt::Key_Home);
     mActions.raiseToTopAction->connect(rttQAct);
+    rttQAct->setData(tr("Raise Object to Top"));
+    cmdAddAction(rttQAct);
 
     const auto ltbQAct = mObjectMenu->addAction(
                 tr("Lower to Bottom", "MenuBar_Object"));
     ltbQAct->setShortcut(Qt::Key_End);
     mActions.lowerToBottomAction->connect(ltbQAct);
+    ltbQAct->setData(tr("Lower Object to Bottom"));
+    cmdAddAction(ltbQAct);
 
     mObjectMenu->addSeparator();
 
@@ -672,12 +776,14 @@ void MainWindow::setupMenuBar()
         const auto qAct = mObjectMenu->addAction(
                     tr("Rotate 90° CW", "MenuBar_Object"));
         mActions.rotate90CWAction->connect(qAct);
+        //cmdAddAction(qAct);
     }
 
     {
         const auto qAct = mObjectMenu->addAction(
                     tr("Rotate 90° CCW", "MenuBar_Object"));
         mActions.rotate90CCWAction->connect(qAct);
+        //cmdAddAction(qAct);
     }
 
     {
@@ -685,6 +791,7 @@ void MainWindow::setupMenuBar()
                     tr("Flip Horizontal", "MenuBar_Object"));
         qAct->setShortcut(Qt::Key_H);
         mActions.flipHorizontalAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     {
@@ -692,6 +799,7 @@ void MainWindow::setupMenuBar()
                     tr("Flip Vertical", "MenuBar_Object"));
         qAct->setShortcut(Qt::Key_V);
         mActions.flipVerticalAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     mObjectMenu->addSeparator();
@@ -700,11 +808,14 @@ void MainWindow::setupMenuBar()
                 tr("Group", "MenuBar_Object"));
     groupQAct->setShortcut(Qt::CTRL + Qt::Key_G);
     mActions.groupAction->connect(groupQAct);
+    groupQAct->setData(tr("Group Selected"));
+    cmdAddAction(groupQAct);
 
     const auto ungroupQAct = mObjectMenu->addAction(
                 tr("Ungroup", "MenuBar_Object"));
     ungroupQAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_G);
     mActions.ungroupAction->connect(ungroupQAct);
+    cmdAddAction(ungroupQAct);
 
     mObjectMenu->addSeparator();
 
@@ -714,23 +825,33 @@ void MainWindow::setupMenuBar()
                 tr("Move", "MenuBar_Object_Transform"));
     moveAct->setShortcut(Qt::Key_G);
     moveAct->setDisabled(true);
+    //cmdAddAction(moveAct);
+
     const auto rotateAct = transformMenu->addAction(
                 tr("Rotate", "MenuBar_Object_Transform"));
     rotateAct->setShortcut(Qt::Key_R);
     rotateAct->setDisabled(true);
+    //cmdAddAction(rotateAct);
+
     const auto scaleAct = transformMenu->addAction(
                 tr("Scale", "MenuBar_Object_Transform"));
     scaleAct->setShortcut(Qt::Key_S);
     scaleAct->setDisabled(true);
+    //cmdAddAction(scaleAct);
+
     transformMenu->addSeparator();
+
     const auto xAct = transformMenu->addAction(
                 tr("X-Axis Only", "MenuBar_Object_Transform"));
     xAct->setShortcut(Qt::Key_X);
     xAct->setDisabled(true);
+    //cmdAddAction(xAct);
+
     const auto yAct = transformMenu->addAction(
                 tr("Y-Axis Only", "MenuBar_Object_Transform"));
     yAct->setShortcut(Qt::Key_Y);
     yAct->setDisabled(true);
+    //cmdAddAction(yAct);
 
 
     mPathMenu = mMenuBar->addMenu(tr("Path", "MenuBar"));
@@ -738,10 +859,12 @@ void MainWindow::setupMenuBar()
     const auto otpQAct = mPathMenu->addAction(
                 tr("Object to Path", "MenuBar_Path"));
     mActions.objectsToPathAction->connect(otpQAct);
+    cmdAddAction(otpQAct);
 
     const auto stpQAct = mPathMenu->addAction(
                 tr("Stroke to Path", "MenuBar_Path"));
     mActions.strokeToPathAction->connect(stpQAct);
+    cmdAddAction(stpQAct);
 
     mPathMenu->addSeparator();
 
@@ -750,6 +873,7 @@ void MainWindow::setupMenuBar()
                     tr("Union", "MenuBar_Path"));
         qAct->setShortcut(Qt::CTRL + Qt::Key_Plus);
         mActions.pathsUnionAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     {
@@ -757,6 +881,7 @@ void MainWindow::setupMenuBar()
                     tr("Difference", "MenuBar_Path"));
         qAct->setShortcut(Qt::CTRL + Qt::Key_Minus);
         mActions.pathsDifferenceAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     {
@@ -764,6 +889,7 @@ void MainWindow::setupMenuBar()
                     tr("Intersection", "MenuBar_Path"));
         qAct->setShortcut(Qt::CTRL + Qt::Key_Asterisk);
         mActions.pathsIntersectionAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     {
@@ -771,6 +897,7 @@ void MainWindow::setupMenuBar()
                     tr("Exclusion", "MenuBar_Path"));
         qAct->setShortcut(Qt::CTRL + Qt::Key_AsciiCircum);
         mActions.pathsExclusionAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     {
@@ -778,6 +905,7 @@ void MainWindow::setupMenuBar()
                     tr("Division", "MenuBar_Path"));
         qAct->setShortcut(Qt::CTRL + Qt::Key_Slash);
         mActions.pathsDivisionAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
 
@@ -791,6 +919,7 @@ void MainWindow::setupMenuBar()
                     tr("Combine", "MenuBar_Path"));
         qAct->setShortcut(Qt::CTRL + Qt::Key_K);
         mActions.pathsCombineAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
     {
@@ -798,37 +927,33 @@ void MainWindow::setupMenuBar()
                     tr("Break Apart", "MenuBar_Path"));
         qAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_K);
         mActions.pathsBreakApartAction->connect(qAct);
+        cmdAddAction(qAct);
     }
 
-//    mEffectsMenu = mMenuBar->addMenu("Effects");
 
-//    mEffectsMenu->addAction("Blur");
-
-    const auto sceneToolBtn = new QToolButton(this);
-    sceneToolBtn->setText(tr("Scene"));
-    sceneToolBtn->setIcon(QIcon::fromTheme("sequence"));
-    sceneToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
-    sceneToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    sceneToolBtn->setFocusPolicy(Qt::NoFocus);
-    const auto sceneToolMenu = new QMenu(this);
-    sceneToolBtn->setMenu(sceneToolMenu);
-    mToolbar->addWidget(sceneToolBtn);
-
-    mSceneMenu = new QMenu(this); //mMenuBar->addMenu(tr("Scene", "MenuBar"));
+    mSceneMenu = mMenuBar->addMenu(tr("Scene", "MenuBar"));
+    mEffectsMenu = mMenuBar->addMenu(tr("Effects"));
+    mEffectsMenu->setEnabled(false);
+    setupMenuEffects();
 
     const auto newSceneAct = mSceneMenu->addAction(QIcon::fromTheme("file_new"),
                                                    tr("New Scene", "MenuBar_Scene"),
                                                    this, [this]() {
         SceneSettingsDialog::sNewSceneDialog(mDocument, this);
     });
-    sceneToolMenu->addAction(newSceneAct);
+    cmdAddAction(newSceneAct);
 
-    {
-        const auto qAct = mSceneMenu->addAction(QIcon::fromTheme("cancel"),
-                                                tr("Delete Scene", "MenuBar_Scene"));
-        mActions.deleteSceneAction->connect(qAct);
-        sceneToolMenu->addAction(qAct);
-    }
+
+
+    const auto deleteSceneAct = mSceneMenu->addAction(QIcon::fromTheme("cancel"),
+                                                      tr("Delete Scene", "MenuBar_Scene"));
+    mActions.deleteSceneAction->connect(deleteSceneAct);
+    cmdAddAction(deleteSceneAct);
+
+    const auto scenePropAct = mSceneMenu->addAction(QIcon::fromTheme("sequence"),
+                                                    tr("Scene Properties", "MenuBar_Scene"));
+    mActions.sceneSettingsAction->connect(scenePropAct);
+    cmdAddAction(scenePropAct);
 
     mSceneMenu->addSeparator();
 
@@ -838,25 +963,37 @@ void MainWindow::setupMenuBar()
                                          QKeySequence(AppSupport::getSettings("shortcuts",
                                                                               "addToQue",
                                                                               "F12").toString()));
-    sceneToolMenu->addAction(mAddToQueAct);
+    mAddToQueAct->setEnabled(false);
+    cmdAddAction(mAddToQueAct);
 
-    mSceneMenu->addSeparator();
-
-    {
-        const auto qAct = mSceneMenu->addAction(QIcon::fromTheme("sequence"),
-                                                tr("Scene Properties", "MenuBar_Scene"));
-        mActions.sceneSettingsAction->connect(qAct);
-        sceneToolBtn->setDefaultAction(qAct);
+    if (eSettings::instance().fToolBarActionScene) {
+        const auto sceneToolBtn = new QToolButton(this);
         sceneToolBtn->setText(tr("Scene"));
-        connect(qAct, &QAction::changed,
+        sceneToolBtn->setIcon(QIcon::fromTheme("sequence"));
+        sceneToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
+        sceneToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        sceneToolBtn->setFocusPolicy(Qt::NoFocus);
+        const auto sceneToolMenu = new QMenu(this);
+        sceneToolBtn->setMenu(sceneToolMenu);
+
+        sceneToolMenu->addAction(newSceneAct);
+        sceneToolMenu->addAction(mAddToQueAct);
+        sceneToolMenu->addAction(deleteSceneAct);
+
+        sceneToolBtn->setDefaultAction(scenePropAct);
+        sceneToolBtn->setText(tr("Scene"));
+
+        connect(scenePropAct, &QAction::changed,
                 this, [sceneToolBtn]() { sceneToolBtn->setText(tr("Scene")); });
+
+        mToolbar->addWidget(sceneToolBtn);
     }
 
-    const auto zoomMenu = mViewMenu->addMenu(
-                tr("Zoom","MenuBar_View"));
+    const auto zoomMenu = mViewMenu->addMenu(QIcon::fromTheme("zoom"), tr("Zoom","MenuBar_View"));
 
     mZoomInAction = zoomMenu->addAction(tr("Zoom In", "MenuBar_View_Zoom"));
     mZoomInAction->setShortcut(QKeySequence("Ctrl+Shift++"));
+    cmdAddAction(mZoomInAction);
     connect(mZoomInAction, &QAction::triggered,
             this, [](){
         const auto target = KeyFocusTarget::KFT_getCurrentTarget();
@@ -867,6 +1004,7 @@ void MainWindow::setupMenuBar()
 
     mZoomOutAction = zoomMenu->addAction(tr("Zoom Out", "MenuBar_View_Zoom"));
     mZoomOutAction->setShortcut(QKeySequence("Ctrl+Shift+-"));
+    cmdAddAction(mZoomOutAction);
     connect(mZoomOutAction, &QAction::triggered,
             this, [](){
         const auto target = KeyFocusTarget::KFT_getCurrentTarget();
@@ -884,6 +1022,7 @@ void MainWindow::setupMenuBar()
         if (!cwTarget) { return; }
         cwTarget->fitCanvasToSize();
     });
+    cmdAddAction(mFitViewAction);
 
     mResetZoomAction = zoomMenu->addAction(tr("Reset Zoom", "MenuBar_View_Zoom"));
     mResetZoomAction->setShortcut(QKeySequence("Ctrl+1"));
@@ -894,6 +1033,7 @@ void MainWindow::setupMenuBar()
         if (!cwTarget) { return; }
         cwTarget->resetTransformation();
     });
+    cmdAddAction(mResetZoomAction);
 
     const auto filteringMenu = mViewMenu->addMenu(
                 tr("Filtering", "MenuBar_View"));
@@ -972,6 +1112,7 @@ void MainWindow::setupMenuBar()
     mClipViewToCanvas->setCheckable(true);
     //mClipViewToCanvas->setChecked(true);
     mClipViewToCanvas->setShortcut(QKeySequence(Qt::Key_C));
+    cmdAddAction(mClipViewToCanvas);
     connect(mClipViewToCanvas, &QAction::triggered,
             &mActions, &Actions::setClipToCanvas);
 
@@ -994,55 +1135,43 @@ void MainWindow::setupMenuBar()
     mViewFullScreenAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                          "fullScreen",
                                                                          "F11").toString()));
+    cmdAddAction(mViewFullScreenAct);
     connect(mViewFullScreenAct, &QAction::triggered,
             this, [this](const bool checked) {
         if (checked) { showFullScreen(); }
         else { showNormal(); }
     });
 
-    const auto viewTimelineAct = mViewMenu->addAction(tr("View Timeline"));
-    viewTimelineAct->setCheckable(true);
-    viewTimelineAct->setChecked(true);
-    viewTimelineAct->setShortcut(QKeySequence(Qt::Key_T));
-    connect(viewTimelineAct, &QAction::triggered,
+    mViewTimelineAct = mViewMenu->addAction(tr("View Timeline"));
+    mViewTimelineAct->setCheckable(true);
+    mViewTimelineAct->setChecked(true);
+    mViewTimelineAct->setShortcut(QKeySequence(Qt::Key_T));
+    connect(mViewTimelineAct, &QAction::triggered,
             this, [this](bool triggered) {
         if (mTimelineWindowAct->isChecked()) {
-            openTimelineWindow();
+            mViewTimelineAct->setChecked(true); // ignore if window
         } else {
             mUI->setDockVisible(tr("Timeline"), triggered);
         }
     });
+    cmdAddAction(mViewTimelineAct);
 
     mTimelineWindowAct = mViewMenu->addAction(tr("Timeline Window"));
     mTimelineWindowAct->setCheckable(true);
     connect(mTimelineWindowAct, &QAction::triggered,
             this, [this](bool triggered) {
-        if (!triggered) {
-            mUI->addDockWidget(tr("Timeline"), mTimeline);
-            mTimelineWindow->deleteLater();
-        } else {
-            openTimelineWindow();
-        }
-        AppSupport::setSettings("ui",
-                                "TimelineWindow",
-                                triggered);
+        if (mShutdown) { return; }
+        if (!triggered) { mTimelineWindow->close(); }
+        else { openTimelineWindow(); }
     });
 
     mRenderWindowAct = mViewMenu->addAction(tr("Queue Window"));
     mRenderWindowAct->setCheckable(true);
     connect(mRenderWindowAct, &QAction::triggered,
             this, [this](bool triggered) {
-        if (!triggered) {
-            mTabQueueIndex = mTabProperties->addTab(mRenderWidget,
-                                                    QIcon::fromTheme("render_animation"),
-                                                    tr("Queue"));
-            mRenderWindow->deleteLater();
-        } else {
-            openRenderQueueWindow();
-        }
-        AppSupport::setSettings("ui",
-                                "RenderWindow",
-                                triggered);
+        if (mShutdown) { return; }
+        if (!triggered) { mRenderWindow->close(); }
+        else { openRenderQueueWindow(); }
     });
 
     /*mPanelsMenu = mViewMenu->addMenu(tr("Docks", "MenuBar_View"));
@@ -1128,20 +1257,49 @@ void MainWindow::setupMenuBar()
     connect(mBrushColorBookmarksAction, &QAction::toggled,
             mCentralWidget, &CentralWidget::setSidesVisibilitySetting);*/
 
+
+    setupMenuExtras();
+
     const auto help = mMenuBar->addMenu(tr("Help", "MenuBar"));
 
-    const auto aboutAct = help->addAction(QIcon::fromTheme("friction"),
+    const auto aboutAct = help->addAction(QIcon::fromTheme(AppSupport::getAppID()),
                                           tr("About", "MenuBar_Help"),
                                           this,
                                           &MainWindow::openAboutWindow);
+    cmdAddAction(aboutAct);
     help->addAction(QIcon::fromTheme("question"),
                     tr("About Qt", "MenuBar_Help"), this, [this]() {
         QMessageBox::aboutQt(this, tr("About Qt"));
     });
 
-    mToolbar->addAction(QIcon::fromTheme("render_animation"),
-                        tr("Render"),
-                        this, &MainWindow::openRendererWindow);
+    help->addSeparator();
+    help->addAction(QIcon::fromTheme("cmd"),
+                    tr("Command Palette"), this, [this]() {
+        CommandPalette dialog(mDocument, this);
+        dialog.exec();
+    }, QKeySequence(AppSupport::getSettings("shortcuts",
+                                            "cmdPalette",
+                                            "Ctrl+Space").toString()));
+
+    help->addSeparator();
+    help->addAction(QIcon::fromTheme("renderlayers"),
+                    tr("Reinstall default render profiles"),
+                    this, &MainWindow::askInstallRenderPresets);
+
+    if (eSettings::instance().fToolBarActionRender) {
+        mRenderVideoAct = mToolbar->addAction(QIcon::fromTheme("render_animation"),
+                                              tr("Render"),
+                                              this, &MainWindow::openRendererWindow);
+        mRenderVideoAct->setEnabled(false);
+    }
+
+    if (eSettings::instance().fToolBarActionPreview) {
+        mToolbar->addAction(mPreviewSVGAct);
+    }
+
+    if (eSettings::instance().fToolBarActionExport) {
+        mToolbar->addAction(mExportSVGAct);
+    }
 
     setMenuBar(mMenuBar);
 
@@ -1154,14 +1312,22 @@ void MainWindow::setupMenuBar()
     const auto frictionButton = new QToolButton(this);
     frictionButton->setObjectName(QString::fromUtf8("ToolButton"));
     frictionButton->setPopupMode(QToolButton::InstantPopup);
-    if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-        frictionButton->setIconSize(QSize(eSizesUI::widget, eSizesUI::widget));
-    }
-    frictionButton->setIcon(QIcon::fromTheme("friction"));
+    frictionButton->setIcon(QIcon::fromTheme(AppSupport::getAppID()));
     frictionButton->setDefaultAction(aboutAct);
     frictionButton->setToolTip(QString());
     frictionButton->setFocusPolicy(Qt::NoFocus);
     mToolbar->addWidget(frictionButton);
+}
+
+BoundingBox *MainWindow::getCurrentBox()
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return nullptr; }
+
+    const auto box = scene->getCurrentBox();
+    if (!box) { return nullptr; }
+
+    return box;
 }
 
 void MainWindow::setResolutionText(QString text)
@@ -1188,11 +1354,26 @@ void MainWindow::setResolutionText(QString text)
 
 void MainWindow::checkAutoSaveTimer()
 {
-    qDebug() << "check auto save timer" << mAutoSave << mAutoSaveTimeout;
+    if (mShutdown) { return; }
+
     if (mAutoSave &&
         mChangedSinceSaving &&
         !mDocument.fEvFile.isEmpty())
-    { saveFile(mDocument.fEvFile); }
+    {
+        const int projectVersion = AppSupport::getProjectVersion(mDocument.fEvFile);
+        const int newProjectVersion = AppSupport::getProjectVersion();
+        if (newProjectVersion > projectVersion && projectVersion > 0) {
+            QMessageBox::warning(this,
+                                 tr("Auto Save canceled"),
+                                 tr("Auto Save is not allowed to break"
+                                    " project format compatibility (%1 vs. %2)."
+                                    " Please save the project to confirm"
+                                    " project format changes.").arg(QString::number(newProjectVersion),
+                                                                    QString::number(projectVersion)));
+            return;
+        }
+        saveFile(mDocument.fEvFile);
+    }
 }
 
 void MainWindow::openAboutWindow()
@@ -1214,6 +1395,9 @@ void MainWindow::openAboutWindow()
 
 void MainWindow::openTimelineWindow()
 {
+    AppSupport::setSettings("ui",
+                            "TimelineWindow",
+                            true);
     if (!mTimelineWindow) {
         mTimelineWindow = new Window(this,
                                      mTimeline,
@@ -1222,26 +1406,104 @@ void MainWindow::openTimelineWindow()
                                      true,
                                      true,
                                      true);
-        mUI->setDockVisible(tr("Timeline"), false);
+        connect(mTimelineWindow, &Window::closed,
+                this, [this]() { closedTimelineWindow(); });
+    } else {
+        mTimelineWindow->addWidget(mTimeline);
     }
+    mTimelineWindowAct->setChecked(true);
+    mUI->setDockVisible(tr("Timeline"), false);
     mTimelineWindow->focusWindow();
 }
 
-void MainWindow::openRenderQueueWindow(const bool &focus)
+void MainWindow::closedTimelineWindow()
 {
+    if (mShutdown) { return; }
+    AppSupport::setSettings("ui",
+                            "TimelineWindow",
+                            false);
+    mTimelineWindowAct->setChecked(false);
+    mUI->addDockWidget(tr("Timeline"), mTimeline);
+}
+
+void MainWindow::openRenderQueueWindow()
+{
+    AppSupport::setSettings("ui",
+                            "RenderWindow",
+                            true);
+    mRenderWindowAct->setChecked(true);
+    mTabProperties->removeTab(mTabQueueIndex);
+    mRenderWidget->setVisible(true);
     if (!mRenderWindow) {
-        mTabProperties->removeTab(mTabQueueIndex);
-        mRenderWidget->setVisible(true);
         mRenderWindow = new Window(this,
                                    mRenderWidget,
                                    tr("Renderer"),
                                    QString("RenderWindow"),
-                                   focus,
+                                   true,
                                    true,
                                    false);
+        connect(mRenderWindow, &Window::closed,
+                this, [this]() { closedRenderQueueWindow(); });
+    } else {
+        mRenderWindow->addWidget(mRenderWidget);
     }
-    if (!focus) { return; }
     mRenderWindow->focusWindow();
+}
+
+void MainWindow::closedRenderQueueWindow()
+{
+    if (mShutdown) { return; }
+    AppSupport::setSettings("ui",
+                            "RenderWindow",
+                            false);
+    mRenderWindowAct->setChecked(false);
+    mTabQueueIndex = mTabProperties->addTab(mRenderWidget,
+                                            QIcon::fromTheme("render_animation"),
+                                            tr("Queue"));
+}
+
+void MainWindow::initRenderPresets(const bool reinstall)
+{
+    const bool doInstall = reinstall ? true : AppSupport::getSettings("settings",
+                                                                      "firstRunRenderPresets",
+                                                                      true).toBool();
+    if (!doInstall) { return; }
+    const QString path = AppSupport::getAppOutputProfilesPath();
+    if (path.isEmpty() || !QFileInfo(path).isWritable()) { return; }
+
+    QStringList presets;
+    presets << "001-friction-preset-mp4-h264.conf";
+    presets << "002-friction-preset-mp4-h264-mp3.conf";
+    presets << "003-friction-preset-prores-444.conf";
+    presets << "004-friction-preset-prores-444-aac.conf";
+    presets << "005-friction-preset-png.conf";
+    presets << "006-friction-preset-tiff.conf";
+
+    for (const auto &preset : presets) {
+        QString filePath(QString("%1/%2").arg(path, preset));
+        if (QFile::exists(filePath) && !reinstall) { continue; }
+        QFile file(filePath);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+            QFile res(QString(":/presets/render/%1").arg(preset));
+            if (res.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                file.write(res.readAll());
+                res.close();
+            }
+            file.close();
+        }
+    }
+
+    AppSupport::setSettings("settings", "firstRunRenderPresets", false);
+}
+
+void MainWindow::askInstallRenderPresets()
+{
+    const auto result = QMessageBox::question(this,
+                                              tr("Install Render Profiles"),
+                                              tr("Are you sure you want to install the default render profiles?"
+                                                 "<br><br><i>Note that a restart of the application is required to detect new profiles.</i>"));
+    if (result != QMessageBox::Yes) { return; }
+    initRenderPresets(true);
 }
 
 void MainWindow::openWelcomeDialog()
@@ -1265,7 +1527,25 @@ void MainWindow::addCanvasToRenderQue()
 void MainWindow::updateSettingsForCurrentCanvas(Canvas* const scene)
 {
     mObjectSettingsWidget->setCurrentScene(scene);
-    if(!scene) {
+    if (mPreviewSVGAct) { mPreviewSVGAct->setEnabled(scene); }
+    if (mExportSVGAct) { mExportSVGAct->setEnabled(scene); }
+    if (mSaveAct) { mSaveAct->setEnabled(scene); }
+    if (mSaveAsAct) { mSaveAsAct->setEnabled(scene); }
+    if (mSaveBackAct) { mSaveBackAct->setEnabled(scene); }
+    if (mAddToQueAct) { mAddToQueAct->setEnabled(scene); }
+    if (mRenderVideoAct) { mRenderVideoAct->setEnabled(scene); }
+    if (mCloseProjectAct) { mCloseProjectAct->setEnabled(scene); }
+    if (mLinkedAct) { mLinkedAct->setEnabled(scene); }
+    if (mImportAct) { mImportAct->setEnabled(scene); }
+    if (mImportSeqAct) { mImportSeqAct->setEnabled(scene); }
+    if (mRevertAct) { mRevertAct->setEnabled(scene); }
+    if (mSelectAllAct) { mSelectAllAct->setEnabled(scene); }
+    if (mInvertSelAct) { mInvertSelAct->setEnabled(scene); }
+    if (mClearSelAct) { mClearSelAct->setEnabled(scene); }
+    if (mAddKeyAct) { mAddKeyAct->setEnabled(scene); }
+    if (mEffectsMenu) { mEffectsMenu->setEnabled(scene); }
+
+    if (!scene) {
         mObjectSettingsWidget->setMainTarget(nullptr);
         mTimeline->updateSettingsForCurrentCanvas(nullptr);
         return;
@@ -1299,9 +1579,7 @@ void MainWindow::setupToolBar()
     mToolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     mToolbar->setMovable(false);
     eSizesUI::widget.add(mToolbar, [this](const int size) {
-        if (eSettings::instance().fCurrentInterfaceDPI != 1.) {
-            mToolbar->setIconSize(QSize(size, size));
-        }
+        mToolbar->setIconSize(QSize(size, size));
     });
     addToolBar(mToolbar);
 
@@ -1316,11 +1594,6 @@ void MainWindow::setupToolBar()
     /*QWidget* spacer1 = new QWidget(this);
     spacer1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     mToolBar->addWidget(spacer1);*/
-
-
-    // fontWidget
-    //mFontWidget = new FontsWidget(this);
-    //mFontWidgetAct = mToolBar->addWidget(mFontWidget);
 
     // newEmpty
     /*mActionNewEmptyPaintFrameAct = new QAction(QIcon::fromTheme("newEmpty"),
@@ -1339,20 +1612,6 @@ void MainWindow::setupToolBar()
     //addToolBar(mToolBar);
 }
 
-void MainWindow::connectToolBarActions()
-{
-    connect(mFontWidget, &FontsWidget::fontSizeChanged,
-            &mActions, &Actions::setFontSize);
-    connect(mFontWidget, &FontsWidget::textChanged,
-            &mActions, &Actions::setFontText);
-    connect(mFontWidget, &FontsWidget::fontFamilyAndStyleChanged,
-            &mActions, &Actions::setFontFamilyAndStyle);
-    connect(mFontWidget, &FontsWidget::textAlignmentChanged,
-            &mActions, &Actions::setTextAlignment);
-    connect(mFontWidget, &FontsWidget::textVAlignmentChanged,
-            &mActions, &Actions::setTextVAlignment);
-}
-
 MainWindow *MainWindow::sGetInstance()
 {
     return sInstance;
@@ -1362,9 +1621,6 @@ void MainWindow::updateCanvasModeButtonsChecked()
 {
     const CanvasMode mode = mDocument.fCanvasMode;
     //mCentralWidget->setCanvasMode(mode);
-
-
-    //mFontWidgetAct->setVisible(boxMode);
 
     const bool boxMode = mode == CanvasMode::boxTransform;
     const bool pointMode = mode == CanvasMode::pointTransform;
@@ -1417,17 +1673,17 @@ SimpleBrushWrapper *MainWindow::getCurrentBrush() const
 void MainWindow::setCurrentBox(BoundingBox *box)
 {
     mFillStrokeSettings->setCurrentBox(box);
-    if (const auto txtBox = enve_cast<TextBox*>(box)) {
-        mFontWidget->setEnabled(true);
-        mFontWidget->setDisplayedSettings(txtBox->getFontSize(),
-                                          txtBox->getFontFamily(),
-                                          txtBox->getFontStyle(),
-                                          txtBox->getCurrentValue());
-        mFontWidget->setColorTarget(txtBox->getFillSettings()->getColorAnimator());
+    mFontWidget->setCurrentBox(box);
+    setCurrentBoxFocus(box);
+}
+
+void MainWindow::setCurrentBoxFocus(BoundingBox *box)
+{
+    if (!box) { return; }
+    if (const auto target = enve_cast<TextBox*>(box)) {
+        focusFontWidget(mDocument.fCanvasMode == CanvasMode::textCreate);
     } else {
-        mFontWidget->clearText();
-        mFontWidget->setDisabled(true);
-        mFontWidget->setColorTarget(nullptr);
+        focusColorWidget();
     }
 }
 
@@ -1500,8 +1756,13 @@ void MainWindow::enable()
 
 void MainWindow::newFile()
 {
-    if (askForSaving()) {
-        closeProject();
+    if (mChangedSinceSaving || !mDocument.fEvFile.isEmpty()) {
+        const int ask = QMessageBox::question(this,
+                                              tr("New Project"),
+                                              tr("Are you sure you want to create a new project?"));
+        if (ask == QMessageBox::No) { return; }
+    }
+    if (closeProject()) {
         SceneSettingsDialog::sNewSceneDialog(mDocument, this);
     }
 }
@@ -1561,11 +1822,10 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
         if (keyEvent->modifiers() & Qt::SHIFT && key == Qt::Key_D) {
             return processKeyEvent(keyEvent);
         }
-        if (keyEvent->modifiers() & Qt::CTRL) {
-            if (key == Qt::Key_C || key == Qt::Key_V ||
-                key == Qt::Key_X || key == Qt::Key_D) {
-                return processKeyEvent(keyEvent);
-            }
+        if (keyEvent->modifiers() & Qt::CTRL &&
+            (key == Qt::Key_C || key == Qt::Key_V ||
+             key == Qt::Key_X || key == Qt::Key_D)) {
+            return processKeyEvent(keyEvent);
         } else if (key == Qt::Key_A || key == Qt::Key_I ||
                    key == Qt::Key_Delete) {
               return processKeyEvent(keyEvent);
@@ -1583,6 +1843,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
 void MainWindow::closeEvent(QCloseEvent *e)
 {
     if (!closeProject()) { e->ignore(); }
+    else { mShutdown = true; }
 }
 
 bool MainWindow::processKeyEvent(QKeyEvent *event)
@@ -1636,12 +1897,14 @@ void MainWindow::readSettings(const QString &openProject)
     mRenderWindowAct->blockSignals(false);
 
     if (isTimelineWindow) { openTimelineWindow(); }
-    if (isRenderWindow) { openRenderQueueWindow(false); }
+    if (isRenderWindow) { openRenderQueueWindow(); }
 
     if (isFull) { showFullScreen(); }
     else if (isMax) { showMaximized(); }
 
     updateAutoSaveBackupState();
+
+    initRenderPresets();
 
     if (!openProject.isEmpty()) {
         QTimer::singleShot(10,
@@ -1733,7 +1996,22 @@ void MainWindow::openFile(const QString& openPath)
 void MainWindow::saveFile()
 {
     if (mDocument.fEvFile.isEmpty()) { saveFileAs(true); }
-    else { saveFile(mDocument.fEvFile); }
+    else {
+        const int projectVersion = AppSupport::getProjectVersion(mDocument.fEvFile);
+        const int newProjectVersion = AppSupport::getProjectVersion();
+        if (newProjectVersion > projectVersion && projectVersion > 0) {
+            const auto result = QMessageBox::question(this,
+                                                      tr("Project version"),
+                                                      tr("Saving this project file will change the project"
+                                                         " format from version %1 to version %2."
+                                                         " This breaks compatibility with older versions of Friction."
+                                                         "\n\nAre you sure you want"
+                                                         " to save this project file?").arg(QString::number(projectVersion),
+                                                                                            QString::number(newProjectVersion)));
+            if (result != QMessageBox::Yes) { return; }
+        }
+        saveFile(mDocument.fEvFile);
+    }
 }
 
 void MainWindow::saveFile(const QString& path,
@@ -1798,11 +2076,26 @@ void MainWindow::saveBackup()
     }
 }
 
-void MainWindow::exportSVG()
+const QString MainWindow::checkBeforeExportSVG()
 {
-    const auto dialog = new ExportSvgDialog(this);
-    dialog->show();
+    QStringList result;
+    for (const auto& scene : mDocument.fScenes) {
+        const auto warnings = scene->checkForUnsupportedSVG();
+        if (!warnings.isEmpty()) { result.append(warnings); }
+    }
+    return result.join("");
+}
+
+void MainWindow::exportSVG(const bool &preview)
+{
+    const auto dialog = new ExportSvgDialog(this,
+                                            preview ? QString() : checkBeforeExportSVG());
     dialog->setAttribute(Qt::WA_DeleteOnClose);
+    if (!preview) {
+        dialog->show();
+    } else {
+        dialog->showPreview(true /* close when done */);
+    }
 }
 
 void MainWindow::updateLastOpenDir(const QString &path)
@@ -1849,8 +2142,20 @@ bool MainWindow::closeProject()
 void MainWindow::importFile()
 {
     disableEventFilter();
-    const QString defPath = mDocument.fEvFile.isEmpty() ?
-                QDir::homePath() : mDocument.fEvFile;
+
+    const auto recentDir = AppSupport::getSettings("files",
+                                                   "recentImportDir",
+                                                   QDir::homePath()).toString();
+    QString defPath = QDir::homePath();
+    switch (eSettings::instance().fImportFileDirOpt) {
+    case eSettings::ImportFileDirRecent:
+        defPath = recentDir;
+        break;
+    case eSettings::ImportFileDirProject:
+        defPath = mDocument.fEvFile.isEmpty() ? recentDir : mDocument.fEvFile;
+        break;
+    default:;
+    }
 
     const QString title = tr("Import File(s)", "ImportDialog_Title");
     const QString fileType = tr("Files %1", "ImportDialog_FileTypes");
@@ -1915,6 +2220,8 @@ void MainWindow::revert()
 
 void MainWindow::updateAutoSaveBackupState()
 {
+    if (mShutdown) { return; }
+
     mBackupOnSave = AppSupport::getSettings("files",
                                             "BackupOnSave",
                                             false).toBool();
@@ -1947,6 +2254,33 @@ void MainWindow::openRendererWindow()
         if (mRenderWindowAct->isChecked()) { openRenderQueueWindow(); }
         else { mTabProperties->setCurrentIndex(mTabQueueIndex); }
     }
+}
+
+void MainWindow::cmdAddAction(QAction *act)
+{
+    if (!act || eSettings::instance().fCommandPalette.contains(act)) { return; }
+    eSettings::sInstance->fCommandPalette.append(act);
+}
+
+LayoutHandler *MainWindow::getLayoutHandler()
+{
+    return mLayoutHandler;
+}
+
+TimelineDockWidget *MainWindow::getTimeLineWidget()
+{
+    return mTimeline;
+}
+
+void MainWindow::focusFontWidget(const bool focus)
+{
+    mTabColorText->setCurrentIndex(mTabTextIndex);
+    if (focus) { mFontWidget->setTextFocus(); }
+}
+
+void MainWindow::focusColorWidget()
+{
+    mTabColorText->setCurrentIndex(mTabColorIndex);
 }
 
 stdsptr<void> MainWindow::lock()
@@ -1986,7 +2320,8 @@ void MainWindow::updateRecentMenu()
     mRecentMenu->clear();
     for (const auto &path : mRecentFiles) {
         QFileInfo info(path);
-        mRecentMenu->addAction(QIcon::fromTheme("friction"), info.baseName(), [path, this]() {
+        if (!info.exists()) { continue; }
+        mRecentMenu->addAction(QIcon::fromTheme(AppSupport::getAppID()), info.baseName(), [path, this]() {
             openFile(path);
         });
     }
@@ -2018,3 +2353,38 @@ void MainWindow::writeRecentFiles()
     for (const auto &file : mRecentFiles) { files.append(file); }
     AppSupport::setSettings("files", "recentSaved", files);
 }
+
+void MainWindow::handleNewVideoClip(const VideoBox::VideoSpecs &specs)
+{
+    int act = eSettings::instance().fAdjustSceneFromFirstClip;
+
+    // never apply or bad specs?
+    if (act == eSettings::AdjustSceneNever ||
+        specs.fps < 1 ||
+        specs.dim.height() < 1 ||
+        specs.dim.width() < 1) { return; }
+
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return; }
+
+    // only continue if this is the only clip
+    if (scene->getContainedBoxes().count() != 1) { return; }
+
+    // is identical?
+    if (scene->getCanvasSize() == specs.dim &&
+        scene->getFps() == specs.fps &&
+        scene->getFrameRange().fMax == specs.range.fMax) { return; }
+
+    // always apply?
+    if (act == eSettings::AdjustSceneAlways) {
+        scene->setCanvasSize(specs.dim.width(),
+                             specs.dim.height());
+        scene->setFps(specs.fps);
+        scene->setFrameRange(specs.range);
+        return;
+    }
+
+    // open dialog if ask
+    AdjustSceneDialog dialog(scene, specs, this);
+    dialog.exec();
+ }

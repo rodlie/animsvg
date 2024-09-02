@@ -292,6 +292,18 @@ void QrealAnimator::setExpressionAction(const qsptr<Expression> &expression) {
     setExpression(expression);
 }
 
+void QrealAnimator::setExpressionEasingAction(const qsptr<Expression> &expression)
+{
+    {
+        prp_pushUndoRedoName("Change Easing");
+        UndoRedo ur;
+        ur.fUndo = [this]() { setExpression(nullptr); };
+        ur.fRedo = [this, expression]() { setExpression(expression); };
+        prp_addUndoRedo(ur);
+    }
+    setExpression(expression);
+}
+
 void QrealAnimator::applyExpressionSub(const FrameRange& relRange,
                                        const int sampleInc,
                                        const bool action,
@@ -363,14 +375,17 @@ void QrealAnimator::applyExpressionSub(const FrameRange& relRange,
 
 void QrealAnimator::applyExpression(const FrameRange& relRange,
                                     const qreal accuracy,
-                                    const bool action) {
+                                    const bool action,
+                                    const bool easing)
+{
+    qDebug() << "applyExpression" << prp_getName() << relRange.fMin << relRange.fMax << accuracy << action << easing;
     if(!hasValidExpression()) {}
     else if(!relRange.isValid()) {}
     else if(isZero4Dec(accuracy) || accuracy < 0) {}
     else {
         const int sampleInc = qMax(1, qRound(1/accuracy));
 
-        prp_pushUndoRedoName("Apply Expression");
+        prp_pushUndoRedoName(easing ? "Apply Easing" : "Apply Expression");
 
         const bool isStatic = mExpression->isStatic();
         if(isStatic) {
@@ -394,8 +409,9 @@ void QrealAnimator::applyExpression(const FrameRange& relRange,
         }
     }
 
-    if(action) setExpressionAction(nullptr);
-    else setExpression(nullptr);
+    if (easing) { setExpressionEasingAction(nullptr); }
+    else if (action) { setExpressionAction(nullptr); }
+    else { setExpression(nullptr); }
 }
 
 void QrealAnimator::setExpression(const qsptr<Expression>& expression) {
@@ -778,18 +794,23 @@ void QrealAnimator::saveQrealSVG(SvgExporter& exp,
                                  const qreal multiplier,
                                  const bool transform,
                                  const QString& type,
-                                 const QString& templ) {
+                                 const QString& templ,
+                                 const QString &beginEvent,
+                                 const QString &endEvent)
+{
     const auto mangler = [multiplier](const qreal value) {
         return value*multiplier;
     };
     saveQrealSVG(exp, parent, visRange, attrName,
-                 mangler, transform, type, templ);
+                 mangler, transform, type, templ, beginEvent, endEvent);
 }
 
 void QrealAnimator::saveQrealSVG(SvgExporter& exp, QDomElement& parent,
                                  const FrameRange& visRange, const QString& attrName,
                                  const Mangler& mangler, const bool transform,
-                                 const QString& type, const QString& templ) {
+                                 const QString& type, const QString& templ,
+                                 const QString &beginEvent, const QString &endEvent)
+{
     if(hasValidExpression()) {
         const auto copy = enve::make_shared<QrealAnimator>("");
         const auto relRange = prp_absRangeToRelRange(exp.fAbsRange);
@@ -797,14 +818,15 @@ void QrealAnimator::saveQrealSVG(SvgExporter& exp, QDomElement& parent,
         copy->setExpression(mExpression.sptr());
         copy->applyExpression(relRange, 10, false);
         copy->saveQrealSVG(exp, parent, visRange, attrName,
-                           mangler, transform, type, templ);
+                           mangler, transform, type, templ,
+                           beginEvent, endEvent);
         setExpression(mExpression.sptr());
     } else {
         graph_saveSVG(exp, parent, visRange, attrName,
                       [this, mangler, &templ](const int relFrame) {
             const qreal val = mangler(getEffectiveValue(relFrame));
             return templ.arg(val);
-        }, transform, type);
+        }, transform, type, beginEvent, endEvent);
     }
 }
 

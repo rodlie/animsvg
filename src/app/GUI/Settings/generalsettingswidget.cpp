@@ -25,9 +25,9 @@
 #include "appsupport.h"
 
 #include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <QLabel>
 #include <QGroupBox>
+#include <QScrollArea>
 
 #include "Private/esettings.h"
 #include "GUI/global.h"
@@ -39,56 +39,59 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     , mAutoBackup(nullptr)
     , mAutoSave(nullptr)
     , mAutoSaveTimer(nullptr)
-    , mDefaultInterfaceScaling(nullptr)
-    , mInterfaceScaling(nullptr)
+    //, mDefaultInterfaceScaling(nullptr)
+    //, mInterfaceScaling(nullptr)
+    , mImportFileDir(nullptr)
+    , mToolBarActionNew(nullptr)
+    , mToolBarActionOpen(nullptr)
+    , mToolBarActionSave(nullptr)
+    , mToolBarActionScene(nullptr)
+    , mToolBarActionRender(nullptr)
+    , mToolBarActionPreview(nullptr)
+    , mToolBarActionExport(nullptr)
 {
     const auto mGeneralWidget = new QWidget(this);
     mGeneralWidget->setContentsMargins(0, 0, 0, 0);
     const auto mGeneralLayout = new QVBoxLayout(mGeneralWidget);
     mGeneralLayout->setContentsMargins(0, 0, 0, 0);
 
-    const auto mAutoBackupWidget = new QGroupBox(this);
-    mAutoBackupWidget->setTitle(tr("Backup"));
-    mAutoBackupWidget->setContentsMargins(0, 0, 0, 0);
-    const auto mAutoBackupLayout = new QHBoxLayout(mAutoBackupWidget);
+    const auto mProjectWidget = new QGroupBox(this);
+    mProjectWidget->setObjectName("BlueBox");
+    mProjectWidget->setTitle(tr("Project I/O"));
+    mProjectWidget->setContentsMargins(0, 0, 0, 0);
+    const auto mProjectLayout = new QVBoxLayout(mProjectWidget);
 
-    const auto mAutoBackupLabel = new QLabel(tr("Enable Backup on Save"), this);
-    mAutoBackupLabel->setToolTip(tr("Creates a backup file after each successful save.\n\n"
-                                    "Backup files are stored in a folder called PROJECT.friction_backup."));
-
-    mAutoBackup = new QCheckBox(this);
+    mAutoBackup = new QCheckBox(tr("Enable Backup on Save"), this);
     mAutoBackup->setCheckable(true);
+    mAutoBackup->setToolTip(tr("Creates a backup file after each successful save.\n\n"
+                               "Backup files are stored in a folder called PROJECT.friction_backup."));
+    mProjectLayout->addWidget(mAutoBackup);
 
-    mAutoBackupLayout->addWidget(mAutoBackupLabel);
-    mAutoBackupLayout->addStretch();
-    mAutoBackupLayout->addWidget(mAutoBackup);
+    mGeneralLayout->addWidget(mProjectWidget);
 
-    mGeneralLayout->addWidget(mAutoBackupWidget);
-
-    const auto mAutoSaveWidget = new QGroupBox(this);
-    mAutoSaveWidget->setTitle(tr("Auto Save"));
+    const auto mAutoSaveWidget = new QWidget(this);
     mAutoSaveWidget->setContentsMargins(0, 0, 0, 0);
     const auto mAutoSaveLayout = new QHBoxLayout(mAutoSaveWidget);
+    mAutoSaveLayout->setContentsMargins(0, 0, 0, 0);
+    mAutoSaveLayout->setMargin(0);
 
-    const auto mAutoSaveLabel = new QLabel(tr("Enable Auto Save"), this);
-    mAutoSaveLabel->setToolTip(tr("Will auto save each X min if project is unsaved.\n\n"
-                                  "Enable Backup on Save for incremental saves (and as a failsafe)."));
-
-    mAutoSave = new QCheckBox(this);
+    mAutoSave = new QCheckBox(tr("Enable Auto Save"), this);
     mAutoSave->setCheckable(true);
+    mAutoSave->setToolTip(tr("Will auto save each X min if project is unsaved.\n\n"
+                             "Enable Backup on Save for incremental saves (and as a failsafe)."));
 
     mAutoSaveTimer = new QSpinBox(this);
     mAutoSaveTimer->setRange(1, 60);
     mAutoSaveTimer->setSuffix(tr(" min"));
 
-    mAutoSaveLayout->addWidget(mAutoSaveLabel);
-    mAutoSaveLayout->addStretch();
     mAutoSaveLayout->addWidget(mAutoSave);
+    mAutoSaveLayout->addStretch();
     mAutoSaveLayout->addWidget(mAutoSaveTimer);
 
-    mGeneralLayout->addWidget(mAutoSaveWidget);
+    mProjectLayout->addWidget(mAutoSaveWidget);
 
-    const auto mScaleWidget = new QGroupBox(this);
+    /*const auto mScaleWidget = new QGroupBox(this);
+    mScaleWidget->setObjectName("BlueBox");
     mScaleWidget->setTitle(tr("Interface Scaling"));
     mScaleWidget->setContentsMargins(0, 0, 0, 0);
     const auto mScaleLayout = new QVBoxLayout(mScaleWidget);
@@ -120,18 +123,34 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     infoLabel->setText(tr("Changes here will require a restart of Friction."));
     mScaleLayout->addWidget(infoLabel);
 
-    mGeneralLayout->addWidget(mScaleWidget);
+    mGeneralLayout->addWidget(mScaleWidget);*/
+
+    const auto mImportFileWidget = new QWidget(this);
+    mImportFileWidget->setContentsMargins(0, 0, 0, 0);
+    const auto mImportFileLayout = new QHBoxLayout(mImportFileWidget);
+    mImportFileLayout->setContentsMargins(0, 0, 0, 0);
+    mImportFileLayout->setMargin(0);
+
+    const auto mImportFileLabel = new QLabel(tr("Default import directory"), this);
+    mImportFileDir = new QComboBox(this);
+    mImportFileDir->addItem(tr("Last used directory"), eSettings::ImportFileDirRecent);
+    mImportFileDir->addItem(tr("Project directory"), eSettings::ImportFileDirProject);
+
+    mImportFileLayout->addWidget(mImportFileLabel);
+    mImportFileLayout->addWidget(mImportFileDir);
+
+    mProjectLayout->addSpacing(10);
+    mProjectLayout->addWidget(mImportFileWidget);
+
+    setupToolBarWidgets(mGeneralLayout);
 
     mGeneralLayout->addStretch();
     addWidget(mGeneralWidget);
 
     eSizesUI::widget.add(mAutoBackup, [this](const int size) {
-        mAutoBackup->setFixedSize(QSize(size, size));
-        mAutoBackup->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
-        mAutoSave->setFixedSize(QSize(size, size));
-        mAutoSave->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
-        mDefaultInterfaceScaling->setFixedHeight(size);
-        mDefaultInterfaceScaling->setStyleSheet(QString("QCheckBox::indicator { width: %1px; height: %1px;}").arg(size/1.5));
+        mAutoBackup->setFixedHeight(size);
+        mAutoSave->setFixedHeight(size);
+        //mDefaultInterfaceScaling->setFixedHeight(size);
     });
 }
 
@@ -148,8 +167,18 @@ void GeneralSettingsWidget::applySettings()
                             (mAutoSaveTimer->value() * 60) * 1000);
     MainWindow::sGetInstance()->updateAutoSaveBackupState();
 
-    mSett.fDefaultInterfaceScaling = mDefaultInterfaceScaling->isChecked();
-    mSett.fInterfaceScaling = mInterfaceScaling->value() * 0.01;
+    //mSett.fDefaultInterfaceScaling = mDefaultInterfaceScaling->isChecked();
+    //mSett.fInterfaceScaling = mInterfaceScaling->value() * 0.01;
+    mSett.fImportFileDirOpt = mImportFileDir->currentData().toInt();
+
+    mSett.fToolBarActionNew = mToolBarActionNew->isChecked();
+    mSett.fToolBarActionOpen = mToolBarActionOpen->isChecked();
+    mSett.fToolBarActionSave = mToolBarActionSave->isChecked();
+    mSett.fToolBarActionScene = mToolBarActionScene->isChecked();
+    mSett.fToolBarActionRender = mToolBarActionRender->isChecked();
+    mSett.fToolBarActionPreview = mToolBarActionPreview->isChecked();
+    mSett.fToolBarActionExport = mToolBarActionExport->isChecked();
+
     eSizesUI::font.updateSize();
     eSizesUI::widget.updateSize();
 }
@@ -168,6 +197,70 @@ void GeneralSettingsWidget::updateSettings(bool restore)
     if (ms < 60000) { ms = 60000; }
     mAutoSaveTimer->setValue((ms / 1000) / 60);
 
-    mDefaultInterfaceScaling->setChecked(mSett.fDefaultInterfaceScaling);
-    mInterfaceScaling->setValue(mDefaultInterfaceScaling->isChecked() ? 100 : 100 * mSett.fInterfaceScaling);
+    //mDefaultInterfaceScaling->setChecked(mSett.fDefaultInterfaceScaling);
+    //mInterfaceScaling->setValue(mDefaultInterfaceScaling->isChecked() ? 100 : 100 * mSett.fInterfaceScaling);
+
+    mToolBarActionNew->setChecked(mSett.fToolBarActionNew);
+    mToolBarActionOpen->setChecked(mSett.fToolBarActionOpen);
+    mToolBarActionSave->setChecked(mSett.fToolBarActionSave);
+    mToolBarActionScene->setChecked(mSett.fToolBarActionScene);
+    mToolBarActionRender->setChecked(mSett.fToolBarActionRender);
+    mToolBarActionPreview->setChecked(mSett.fToolBarActionPreview);
+    mToolBarActionExport->setChecked(mSett.fToolBarActionExport);
+
+    for (int i = 0; i < mImportFileDir->count(); i++) {
+        if (mImportFileDir->itemData(i).toInt() == mSett.fImportFileDirOpt) {
+            mImportFileDir->setCurrentIndex(i);
+            return;
+        }
+    }
+}
+
+void GeneralSettingsWidget::setupToolBarWidgets(QVBoxLayout *lay)
+{
+    if (!lay) { return; }
+
+    const auto area = new QScrollArea(this);
+    const auto container = new QGroupBox(this);
+    container->setObjectName("BlueBox");
+    const auto containerLayout = new QVBoxLayout(container);
+    const auto containerInner = new QWidget(this);
+    const auto containerInnerLayout = new QVBoxLayout(containerInner);
+
+    area->setWidget(containerInner);
+    area->setWidgetResizable(true);
+    area->setContentsMargins(0, 0, 0, 0);
+    area->setFrameShape(QFrame::NoFrame);
+
+    container->setTitle(tr("Toolbar Actions"));
+
+    container->setContentsMargins(0, 0, 0, 0);
+
+    containerInnerLayout->setMargin(5);
+    //containerLayout->setMargin(0);
+
+    containerLayout->addWidget(area);
+
+    mToolBarActionNew = new QCheckBox(tr("New"), this);
+    containerInnerLayout->addWidget(mToolBarActionNew);
+
+    mToolBarActionOpen = new QCheckBox(tr("Open"), this);
+    containerInnerLayout->addWidget(mToolBarActionOpen);
+
+    mToolBarActionSave = new QCheckBox(tr("Save"), this);
+    containerInnerLayout->addWidget(mToolBarActionSave);
+
+    mToolBarActionScene = new QCheckBox(tr("Scene"), this);
+    containerInnerLayout->addWidget(mToolBarActionScene);
+
+    mToolBarActionRender = new QCheckBox(tr("Render"), this);
+    containerInnerLayout->addWidget(mToolBarActionRender);
+
+    mToolBarActionPreview = new QCheckBox(tr("Preview"), this);
+    containerInnerLayout->addWidget(mToolBarActionPreview);
+
+    mToolBarActionExport = new QCheckBox(tr("Export"), this);
+    containerInnerLayout->addWidget(mToolBarActionExport);
+
+    lay->addWidget(container);
 }

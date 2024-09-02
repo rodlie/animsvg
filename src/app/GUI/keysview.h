@@ -33,10 +33,13 @@
 #include "smartPointers/ememory.h"
 #include "framerange.h"
 #include "conncontextobjlist.h"
+#include "themesupport.h"
 
-const QList<QColor> ANIMATOR_COLORS = {QColor(255, 0, 0) , QColor(0, 255, 255),
-                                      QColor(255, 255, 0), QColor(255, 0, 255),
-                                      QColor(0, 255, 0)};
+const QList<QColor> ANIMATOR_COLORS = {ThemeSupport::getThemeColorRed(),
+                                       ThemeSupport::getThemeColorBlue(),
+                                       ThemeSupport::getThemeColorYellow(),
+                                       ThemeSupport::getThemeColorPink(),
+                                       ThemeSupport::getThemeColorGreen()};
 
 class Key;
 class QrealKey;
@@ -77,6 +80,10 @@ public:
     void removeKeyFromSelection(Key * const key);
     void clearKeySelection();
     void selectKeysInSelectionRect();
+
+    bool hasFrameIn(const int frame);
+    bool hasFrameOut(const int frame);
+    bool hasFrameMarker(const int frame);
 
     // graph
 
@@ -155,9 +162,15 @@ public:
     int graphGetAnimatorId(GraphAnimator * const anim);
     QrealPoint *graphGetPointAtPos(const QPointF &pressPos) const;
     bool graphValidateVisible(GraphAnimator * const animator);
-    void graphUpdateVisbile();
-    void graphSetOnlySelectedVisible(const bool selectedOnly);
+    void graphUpdateVisible();
     bool graphIsSelected(GraphAnimator * const anim);
+    void graphEasingAction(const QString &easing);
+    void graphEasingApply(QrealAnimator *anim,
+                          const FrameRange &range,
+                          const QString &easing);
+    bool graphEasingApplyExpression(QrealAnimator *anim,
+                                    const FrameRange &range,
+                                    const QString &easing);
 
     TimelineHighlightWidget *requestHighlighter();
 private:
@@ -255,7 +268,6 @@ private:
 
     // graph
 
-    bool graph_mOnlySelectedVisible = false;
     bool graph_mValueLinesVisible = true;
     qreal mPixelsPerValUnit = 0;
     qreal mMinShownVal = 0;
