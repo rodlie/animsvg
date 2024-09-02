@@ -55,6 +55,9 @@
 #include "svgexporthelpers.h"
 #include "internallinkcanvas.h"
 
+#include <QInputDialog>
+#include <QMessageBox>
+
 int BoundingBox::sNextDocumentId = 0;
 QList<BoundingBox*> BoundingBox::sDocumentBoxes;
 int BoundingBox::sNextWriteId;
@@ -1131,14 +1134,27 @@ bool BoundingBox::getSVGPropertiesVisible()
     return false;
 }
 
-#include <QInputDialog>
-void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu) {
-    if(menu->hasActionsForType<BoundingBox>()) return;
+void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu)
+{
+    if (menu->hasActionsForType<BoundingBox>()) { return; }
     menu->addedActionsForType<BoundingBox>();
+
     const auto parentWidget = menu->getParentWidget();
-    menu->addPlainAction("Rename", [this, parentWidget]() {
+    menu->addPlainAction(tr("Rename"), [this, parentWidget]() {
         PropertyNameDialog::sRenameBox(this, parentWidget);
     });
+
+    const auto pScene = getParentScene();
+    if (pScene) {
+        menu->addPlainAction(tr("Delete"), [pScene]() {
+            /*const int ask = QMessageBox::question(nullptr,
+                                                  tr("Delete?"),
+                                                  tr("Are you sure you want to delete selected item(s)?"));
+            if (ask != QMessageBox::Yes) { return; }*/
+            pScene->removeSelectedBoxesAndClearList();
+        })->setShortcut(Qt::Key_Delete);
+    }
+
     menu->addSeparator();
     {
         const PropertyMenu::CheckSelectedOp<BoundingBox> visRangeOp =
@@ -1154,7 +1170,7 @@ void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu) {
         [](BoundingBox* const box, const bool checked) {
             box->setCustomPropertiesVisible(checked);
         };
-        menu->addCheckableAction("Custom Properties",
+        menu->addCheckableAction(tr("Custom Properties"),
                                  mCustomProperties->SWT_isVisible(),
                                  visRangeOp);
     }
@@ -1163,31 +1179,34 @@ void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu) {
         [](BoundingBox* const box, const bool checked) {
             box->setBlendEffectsVisible(checked);
         };
-        menu->addCheckableAction("Blend Effects",
+        menu->addCheckableAction(tr("Blend Effects"),
                                  mBlendEffectCollection->SWT_isVisible(),
                                  visRangeOp);
     }
     menu->addSeparator();
+
     const PropertyMenu::CheckSelectedOp<BoundingBox> visRangeOp =
     [](BoundingBox* const box, const bool checked) {
-        if(box->durationRectangleLocked()) return;
+        if (box->durationRectangleLocked()) { return; }
         const bool hasDur = box->hasDurationRectangle();
-        if(hasDur == checked) return;
-        if(checked) box->createDurationRectangle();
-        else box->setDurationRectangle(nullptr);
+        if (hasDur == checked) { return; }
+        if (checked) { box->createDurationRectangle(); }
+        else { box->setDurationRectangle(nullptr); }
     };
-    menu->addCheckableAction("Visibility Range",
+    menu->addCheckableAction(tr("Visibility Range"),
                              hasDurationRectangle(),
                              visRangeOp)->setEnabled(!durationRectangleLocked());
-    menu->addPlainAction("Visibility Range Settings...",
+
+    menu->addPlainAction(tr("Visibility Range Settings"),
                          [this]() {
         const auto durRect = getDurationRectangle();
-        if(!durRect) return;
+        if (!durRect) { return; }
         const auto& instance = DialogsInterface::instance();
         instance.showDurationSettingsDialog(durRect);
     })->setEnabled(hasDurationRectangle());
+
     menu->addSeparator();
-    setupCanvasMenu(menu->addMenu("Actions"));
+    setupCanvasMenu(menu->addMenu(tr("Actions")));
 }
 
 void BoundingBox::getMotionBlurProperties(QList<Property*> &list) const {
