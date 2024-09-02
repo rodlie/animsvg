@@ -1093,6 +1093,12 @@ void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu) {
     menu->addPlainAction("Rename", [this, parentWidget]() {
         PropertyNameDialog::sRenameBox(this, parentWidget);
     });
+    const auto pScene = getParentScene();
+    if (pScene) {
+        menu->addPlainAction(tr("Delete"), [pScene]() {
+            pScene->removeSelectedBoxesAndClearList();
+        })->setShortcut(Qt::Key_Delete);
+    }
     menu->addSeparator();
     {
         const PropertyMenu::CheckSelectedOp<BoundingBox> visRangeOp =
