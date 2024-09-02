@@ -764,43 +764,42 @@ void ContainerBox::ungroupAbandomTransform_k() {
     removeFromParent_k();
 }
 
-void ContainerBox::setupCanvasMenu(PropertyMenu * const menu) {
-    if(menu->hasActionsForType<ContainerBox>()) return;
+void ContainerBox::setupCanvasMenu(PropertyMenu * const menu)
+{
+    if (menu->hasActionsForType<ContainerBox>()) { return; }
     menu->addedActionsForType<ContainerBox>();
 
-    menu->addSection("Layer & Group");
-
-    menu->addPlainAction<ContainerBox>("Promote to Layer",
+    menu->addPlainAction<ContainerBox>(tr("Promote to Layer"),
                                        [](ContainerBox * box) {
         box->promoteToLayer();
     })->setEnabled(isGroup());
 
-    menu->addPlainAction<ContainerBox>("Demote to Group",
+    menu->addPlainAction<ContainerBox>(tr("Demote to Group"),
                                        [](ContainerBox * box) {
         box->demoteToGroup();
     })->setDisabled(isGroup());
 
 
-    if(!isLink()) {
+    if (!isLink()) {
         menu->addSeparator();
 
-        const auto ungroupAbandonAction = menu->addPlainAction<ContainerBox>(
-                    "Ungroup", [](ContainerBox * box) {
-            if(box->isLink()) return;
+        const auto ungroupAbandonAction = menu->addPlainAction<ContainerBox>(tr("Ungroup"),
+                                                                             [](ContainerBox * box) {
+            if (box->isLink()) { return; }
             box->ungroupAbandomTransform_k();
         });
 
-        const auto ungroupKeepAction = menu->addPlainAction<ContainerBox>(
-                    "Ungroup (Keep Transform)", [](ContainerBox * box) {
-            if(box->isLink()) return;
+        const auto ungroupKeepAction = menu->addPlainAction<ContainerBox>(tr("Ungroup (Keep Transform)"),
+                                                                          [](ContainerBox * box) {
+            if (box->isLink()) { return; }
             box->ungroupKeepTransform_k();
         });
 
         QAction* defaultUngroup;
-        if(areAllChildrenStatic()) {
-            defaultUngroup = ungroupKeepAction;
-        } else defaultUngroup = ungroupAbandonAction;
+        if (areAllChildrenStatic()) { defaultUngroup = ungroupKeepAction; }
+        else { defaultUngroup = ungroupAbandonAction; }
         defaultUngroup->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_G);
+        menu->addSeparator();
     }
 
     BoxWithPathEffects::setupCanvasMenu(menu);

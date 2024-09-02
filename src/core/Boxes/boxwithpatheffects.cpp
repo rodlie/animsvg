@@ -49,8 +49,9 @@ BoxWithPathEffects::BoxWithPathEffects(
 }
 
 #include "patheffectsmenu.h"
-void BoxWithPathEffects::setupCanvasMenu(PropertyMenu * const menu) {
-    if(menu->hasActionsForType<BoxWithPathEffects>()) return;
+void BoxWithPathEffects::setupCanvasMenu(PropertyMenu * const menu)
+{
+    if (menu->hasActionsForType<BoxWithPathEffects>()) { return; }
     menu->addedActionsForType<BoxWithPathEffects>();
 
     BoundingBox::setupCanvasMenu(menu);

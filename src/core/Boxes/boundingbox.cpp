@@ -765,48 +765,48 @@ QPointF BoundingBox::mapRelPosToAbs(const QPointF &relPos) const {
     return mTransformAnimator->mapRelPosToAbs(relPos);
 }
 
-void BoundingBox::setupCanvasMenu(PropertyMenu * const menu) {
-    if(menu->hasActionsForType<BoundingBox>()) return;
+void BoundingBox::setupCanvasMenu(PropertyMenu * const menu)
+{
+    if (menu->hasActionsForType<BoundingBox>()) { return; }
     menu->addedActionsForType<BoundingBox>();
+
     const auto pScene = getParentScene();
     Q_ASSERT(pScene);
 
-    menu->addSection("Box");
-
-    menu->addPlainAction("Create Link", [pScene]() {
+    menu->addPlainAction(tr("Create Link"), [pScene]() {
         pScene->createLinkBoxForSelected();
     });
-    menu->addPlainAction("Center Pivot", [pScene]() {
+    menu->addPlainAction(tr("Center Pivot"), [pScene]() {
         pScene->centerPivotForSelected();
     });
 
     menu->addSeparator();
 
-    menu->addPlainAction("Copy", [pScene]() {
+    menu->addPlainAction(tr("Copy"), [pScene]() {
         pScene->copyAction();
     })->setShortcut(Qt::CTRL + Qt::Key_C);
 
-    menu->addPlainAction("Cut", [pScene]() {
+    menu->addPlainAction(tr("Cut"), [pScene]() {
         pScene->cutAction();
     })->setShortcut(Qt::CTRL + Qt::Key_X);
 
-    menu->addPlainAction("Duplicate", [pScene]() {
+    menu->addPlainAction(tr("Duplicate"), [pScene]() {
         pScene->duplicateAction();
     })->setShortcut(Qt::CTRL + Qt::Key_D);
 
-    menu->addPlainAction("Delete", [pScene]() {
+    menu->addPlainAction(tr("Delete"), [pScene]() {
         pScene->removeSelectedBoxesAndClearList();
     })->setShortcut(Qt::Key_Delete);
 
     menu->addSeparator();
 
-    menu->addPlainAction("Group", [pScene]() {
+    menu->addPlainAction(tr("Group"), [pScene]() {
         pScene->groupSelectedBoxes();
     })->setShortcut(Qt::CTRL + Qt::Key_G);
 
     menu->addSeparator();
 
-    const auto rasterEffectsMenu = menu->addMenu("Raster Effects");
+    const auto rasterEffectsMenu = menu->addMenu(tr("Raster Effects"));
     RasterEffectMenuCreator::addEffects(
                 rasterEffectsMenu, &BoundingBox::addRasterEffect);
 }
