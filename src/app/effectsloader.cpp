@@ -355,13 +355,13 @@ void EffectsLoader::iniShaderEffectProgramExec(const QString &grePath)
     if (shaderID.first.isEmpty() || shaderID.second.isEmpty()) { return; }
 
     if (mShadersDisabled.contains(grePath)) {
-        qDebug() << "SKIP DISABLED SHADER:" << shaderID.first << shaderID.second << grePath;
+        //qDebug() << "SKIP DISABLED SHADER:" << shaderID.first << shaderID.second << grePath;
         mLoadedGREPaths << grePath;
         return;
     }
 
     if (mLoadedShaders.contains(shaderID)) {
-        qDebug() << "SKIP DUPLICATE SHADER:" << shaderID.first << shaderID.second << grePath;
+        //qDebug() << "SKIP DUPLICATE SHADER:" << shaderID.first << shaderID.second << grePath;
         return;
     }
 
@@ -369,7 +369,7 @@ void EffectsLoader::iniShaderEffectProgramExec(const QString &grePath)
     const QString fragPath = QString::fromUtf8("%1/%2.frag").arg(fileInfo.path(),
                                                                  fileInfo.completeBaseName());
     if (!QFile::exists(fragPath)) { return; }
-    qDebug() << "Loading Shader" << shaderID.first << shaderID.second << grePath;
+    //qDebug() << "Loading Shader" << shaderID.first << shaderID.second << grePath;
     try {
         // TODO: we should keep each creator in an list, replace shaderID
         /*const auto loaded =*/ ShaderEffectCreator::sLoadFromFile(this, grePath).get();
