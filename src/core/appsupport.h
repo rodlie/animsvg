@@ -123,6 +123,9 @@ public:
     static bool hasXDGDesktopIntegration();
     static bool setupXDGDesktopIntegration();
     static bool removeXDGDesktopIntegration();
+    static bool hasArg(int argc,
+                       char *argv[],
+                       const QString &find);
 };
 
 #endif // APPSUPPORT_H

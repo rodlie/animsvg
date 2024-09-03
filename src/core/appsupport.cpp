@@ -914,3 +914,14 @@ bool AppSupport::removeXDGDesktopIntegration()
     }
     return true;
 }
+
+bool AppSupport::hasArg(int argc,
+                        char *argv[],
+                        const QString &find)
+{
+    for (int i = 0; i < argc; i++) {
+        const QString val = argv[i];
+        if (val.contains(find)) { return true; }
+    }
+    return false;
+}
