@@ -129,6 +129,10 @@ public:
                        const QString &find);
     static void checkPerms(const bool &isRenderer);
     static void checkFFmpeg(const bool &isRenderer);
+    static void initEnv(const bool &isRenderer);
+    static QPair<bool,int> handleXDGArgs(const bool &isRenderer,
+                                         const QStringList &args);
+    static void printVersion();
 };
 
 #endif // APPSUPPORT_H

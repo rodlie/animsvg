@@ -41,7 +41,9 @@
 #include <QtMath>
 #include <QRegularExpression>
 #include <QMessageBox>
+#include <iostream>
 #include <libavformat/avformat.h>
+#include <ostream>
 
 AppSupport::AppSupport(QObject *parent)
     : QObject{parent}
@@ -983,4 +985,52 @@ void AppSupport::checkFFmpeg(const bool &isRenderer)
 #else
     Q_UNUSED(isRenderer)
 #endif
+}
+
+void AppSupport::initEnv(const bool &isRenderer)
+{
+    // windows theme integration
+#ifdef Q_OS_WIN
+#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
+    // Set window title bar color based on dark/light theme
+    // https://www.qt.io/blog/dark-mode-on-windows-11-with-qt-6.5
+    // https://learn.microsoft.com/en-us/answers/questions/1161597/how-to-detect-windows-application-dark-mode
+    QSettings registry("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+                       QSettings::NativeFormat);
+    if (registry.value("AppsUseLightTheme", 0).toInt() == 0) { qputenv("QT_QPA_PLATFORM",
+                "windows:darkmode=1"); }
+#endif
+#else
+    if (isRenderer) { // Force Mesa if Renderer
+        qputenv("LIBGL_ALWAYS_SOFTWARE", "1");
+    }
+    // Force XCB on Linux until we support Wayland
+    qputenv("QT_QPA_PLATFORM", isRenderer ? "offscreen" : "xcb");
+#endif
+}
+
+QPair<bool, int> AppSupport::handleXDGArgs(const bool &isRenderer,
+                                           const QStringList &args)
+{
+    QPair<bool,int> status(false, 0);
+    if (!AppSupport::isAppPortable() || isRenderer) { return status; }
+    if (args.contains("--xdg-remove")) {
+        const bool removedXDG = AppSupport::removeXDGDesktopIntegration();
+        qWarning() << "Removed XDG Integration:" << removedXDG;
+        status.first = true;
+        status.second = removedXDG ? 0 : -1;
+    } else if (args.contains("--xdg-install")) {
+        const bool installedXDG = AppSupport::setupXDGDesktopIntegration();
+        qWarning() << "Installed XDG Integration:" << installedXDG;
+        status.first = true;
+        status.second = installedXDG ? 0 : -1;
+    }
+    return status;
+}
+
+void AppSupport::printVersion()
+{
+    std::cout << QString("%1 %2 - %3").arg(getAppDisplayName(),
+                                           getAppVersion(),
+                                           getAppUrl()).toStdString() << std::endl;
 }
