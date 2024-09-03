@@ -123,9 +123,12 @@ public:
     static bool hasXDGDesktopIntegration();
     static bool setupXDGDesktopIntegration();
     static bool removeXDGDesktopIntegration();
+    static void initXDGDesktop(const bool &isRenderer);
     static bool hasArg(int argc,
                        char *argv[],
                        const QString &find);
+    static void checkPerms(const bool &isRenderer);
+    static void checkFFmpeg(const bool &isRenderer);
 };
 
 #endif // APPSUPPORT_H

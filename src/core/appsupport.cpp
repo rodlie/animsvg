@@ -40,6 +40,8 @@
 #include <QDirIterator>
 #include <QtMath>
 #include <QRegularExpression>
+#include <QMessageBox>
+#include <libavformat/avformat.h>
 
 AppSupport::AppSupport(QObject *parent)
     : QObject{parent}
@@ -915,6 +917,33 @@ bool AppSupport::removeXDGDesktopIntegration()
     return true;
 }
 
+void AppSupport::initXDGDesktop(const bool &isRenderer)
+{
+    if (!isAppPortable() || isRenderer) { return; }
+    if (AppSupport::hasXDGDesktopIntegration()) { return; }
+    QString appPath("friction");
+    const QString appimage = AppSupport::getAppImagePath();
+    if (!appimage.isEmpty()) { appPath = appimage.split("/").takeLast(); }
+    const auto ask = QMessageBox::question(nullptr,
+                                           QObject::tr("Setup Desktop Integration"),
+                                           QObject::tr("Would you like to setup desktop integration?"
+                                                       " This will add Friction to your application launcher"
+                                                       " and add required mime types.<br><br>"
+                                                       "You also can manage the desktop integration with:"
+                                                       "<br><br><code>%1 --xdg-install</code>"
+                                                       "<br><code>%1 --xdg-remove</code>").arg(appPath));
+    if (ask == QMessageBox::Yes) {
+        if (!AppSupport::setupXDGDesktopIntegration()) {
+            QMessageBox::warning(nullptr,
+                                 QObject::tr("Desktop Integration Failed"),
+                                 QObject::tr("Failed to install the required files for desktop integration,"
+                                             " please check your permissions."));
+        }
+    } else {
+        AppSupport::setSettings("portable", "ignoreXDG", true);
+    }
+}
+
 bool AppSupport::hasArg(int argc,
                         char *argv[],
                         const QString &find)
@@ -924,4 +953,34 @@ bool AppSupport::hasArg(int argc,
         if (val.contains(find)) { return true; }
     }
     return false;
+}
+
+void AppSupport::checkPerms(const bool &isRenderer)
+{
+    const auto perms = hasWriteAccess();
+    if (perms.second) { return; }
+    if (isRenderer) {
+        qWarning() << QObject::tr("Friction needs read/write access to:\n- %1").arg(perms.first.join("\n- "));
+    } else {
+        QMessageBox::warning(nullptr,
+                             QObject::tr("Permission issue"),
+                             QObject::tr("Friction needs read/write access to:<br><br>- %1").arg(perms.first.join("<br>- ")));
+    }
+}
+
+void AppSupport::checkFFmpeg(const bool &isRenderer)
+{
+#ifndef QT_DEBUG
+    const QString warning = QObject::tr("Friction is built against an unsupported FFmpeg version. Use at own risk and don't report any issues upstream.");
+    if (avformat_version() >= 3812708) {
+        if (isRenderer) { qWarning() << warning; }
+        else {
+            QMessageBox::critical(nullptr,
+                                  QObject::tr("Unsupported FFmpeg version"),
+                                  warning);
+        }
+    }
+#else
+    Q_UNUSED(isRenderer)
+#endif
 }
