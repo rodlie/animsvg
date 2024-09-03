@@ -967,7 +967,7 @@ void AppSupport::checkPerms(const bool &isRenderer)
 
 void AppSupport::checkFFmpeg(const bool &isRenderer)
 {
-    av_log_set_level(AV_LOG_ERROR);
+    //av_log_set_level(AV_LOG_ERROR);
 #ifndef QT_DEBUG
     const QString warning = QObject::tr("Friction is built against an unsupported FFmpeg version. Use at own risk and don't report any issues upstream.");
     if (avformat_version() >= 3812708) {
@@ -1034,6 +1034,8 @@ void AppSupport::printVersion()
 void AppSupport::printHelp(const bool &isRenderer)
 {
     Q_UNUSED(isRenderer)
+}
+
 const AppSupport::ExpressionPreset AppSupport::readEasingPreset(const QString &filename)
 {
     ExpressionPreset preset;
