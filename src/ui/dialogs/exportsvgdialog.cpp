@@ -294,11 +294,13 @@ void ExportSvgDialog::showPreview(const bool &closeWhenDone)
     const auto fileName = mPreviewFile->fileName();
     const auto task = exportTo(fileName, true);
     if (!task) {
+        emit exportDone(false);
         if (closeWhenDone) { close(); }
         return;
     }
     task->addDependent({[fileName, this, closeWhenDone]() {
                             QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
+                            emit exportDone(true);
                             if (closeWhenDone) { close(); }
                         }, nullptr});
 }

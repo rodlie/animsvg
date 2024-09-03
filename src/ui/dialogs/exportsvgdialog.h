@@ -35,10 +35,15 @@ class ComplexTask;
 
 class UI_EXPORT ExportSvgDialog : public QDialog
 {
+    Q_OBJECT
+
 public:
     ExportSvgDialog(QWidget* const parent = nullptr,
                     const QString &warnings = QString());
     void showPreview(const bool &closeWhenDone = false);
+
+signals:
+    void exportDone(bool success);
 
 private:
     ComplexTask* exportTo(const QString& file,
