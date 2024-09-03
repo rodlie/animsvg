@@ -572,10 +572,11 @@ void BoxSingleWidget::setTargetAbstraction(SWT_Abstraction *abs) {
     updateFillTypeBoxVisible();
 }
 
-void BoxSingleWidget::loadStaticPixmaps(int iconSize)
+void BoxSingleWidget::loadStaticPixmaps(int iconSize,
+                                        const bool noWarn)
 {
     if (sStaticPixmapsLoaded) { return; }
-    if (!ThemeSupport::hasIconSize(iconSize)) {
+    if (!ThemeSupport::hasIconSize(iconSize) && !noWarn) {
         QMessageBox::warning(nullptr,
                              tr("Icon issues"),
                              tr("<p>Requested icon size <b>%1</b> is not available,"
@@ -585,7 +586,7 @@ void BoxSingleWidget::loadStaticPixmaps(int iconSize)
                                 " If you still have issues after restarting please report this issue.</p>").arg(iconSize));
     }
     const auto pixmapSize = ThemeSupport::getIconSize(iconSize);
-    qDebug() << "pixmaps size" << pixmapSize;
+    //qDebug() << "pixmaps size" << pixmapSize;
     VISIBLE_ICON = new QPixmap(QIcon::fromTheme("visible").pixmap(pixmapSize));
     INVISIBLE_ICON = new QPixmap(QIcon::fromTheme("hidden").pixmap(pixmapSize));
     BOX_CHILDREN_VISIBLE_ICON = new QPixmap(QIcon::fromTheme("visible-child").pixmap(pixmapSize));

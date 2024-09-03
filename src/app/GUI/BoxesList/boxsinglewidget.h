@@ -74,7 +74,8 @@ public:
     static QPixmap* PROMOTE_TO_LAYER_ICON;
 
     static bool sStaticPixmapsLoaded;
-    static void loadStaticPixmaps(int iconSize);
+    static void loadStaticPixmaps(int iconSize,
+                                  const bool noWarn = false);
     static void clearStaticPixmaps();
 
     void prp_drawTimelineControls(QPainter * const p,
