@@ -88,26 +88,26 @@ EffectsLoader::~EffectsLoader()
 
 void EffectsLoader::initializeGpu()
 {
-    std::cout << "Entered initializeGpu" << std::endl;
+    //std::cout << "Entered initializeGpu" << std::endl;
 
     OffscreenQGL33c::initialize();
-    std::cout << "OffscreenQGL33c initialized" << std::endl;
+    //std::cout << "OffscreenQGL33c initialized" << std::endl;
     makeCurrent();
-    std::cout << "Make OffscreenQGL33c current" << std::endl;
+    //std::cout << "Make OffscreenQGL33c current" << std::endl;
 
     iniPlainVShaderVBO(this);
-    std::cout << "iniPlainVShaderVBO" << std::endl;
+    //std::cout << "iniPlainVShaderVBO" << std::endl;
     iniPlainVShaderVAO(this, mPlainSquareVAO);
-    std::cout << "iniPlainVShaderVAO" << std::endl;
+    //std::cout << "iniPlainVShaderVAO" << std::endl;
     iniTexturedVShaderVBO(this);
-    std::cout << "iniTexturedVShaderVBO" << std::endl;
+    //std::cout << "iniTexturedVShaderVBO" << std::endl;
     iniTexturedVShaderVAO(this, mTexturedSquareVAO);
-    std::cout << "iniTexturedVShaderVAO" << std::endl;
+    //std::cout << "iniTexturedVShaderVAO" << std::endl;
     iniColorPrograms(this);
-    std::cout << "iniColorPrograms" << std::endl;
+    //std::cout << "iniColorPrograms" << std::endl;
 
     doneCurrent();
-    std::cout << "Done OffscreenQGL33c current" << std::endl;
+    //std::cout << "Done OffscreenQGL33c current" << std::endl;
 }
 
 void iniCustomBox(const QString &path)
@@ -296,7 +296,7 @@ void EffectsLoader::iniShaderEffects()
     }
 
     //qDebug() << "Shaders paths" << mLoadedGREPaths;
-    qDebug() << "Shaders total" << mLoadedShaders.count();
+    //qDebug() << "Shaders total" << mLoadedShaders.count();
 
     // TODO: rewrite this
     /*const auto newFileWatcher = QSharedPointer<QFileSystemModel>(
