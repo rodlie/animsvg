@@ -310,7 +310,7 @@ const QString AppSupport::getSVGO()
     const QString path = QString("%1%2%3").arg(getAppPath(),
                                                QDir::separator(),
                                                svgo);
-    qDebug() << "check for svgo" << path;
+    //qDebug() << "check for svgo" << path;
     if (QFile::exists(path)) { return path; }
     return QString();
 }
@@ -319,7 +319,7 @@ const QString AppSupport::getSVGOConfig()
 {
     QString filename = "svgo.config.js";
     QString path = getAppConfigPath() + QDir::separator() + filename;
-    qDebug() << "check for" << filename;
+    //qDebug() << "check for" << filename;
     if (!QFile::exists(path)) {
         QString config;
         QFile file(":/config/" + filename);
