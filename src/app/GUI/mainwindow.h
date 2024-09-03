@@ -86,7 +86,8 @@ public:
                AudioHandler &audioHandler,
                RenderHandler &renderHandler,
                const QString &openProject = QString(),
-               QWidget * const parent = nullptr);
+               QWidget * const parent = nullptr,
+               const bool &isRenderer = false);
     ~MainWindow();
 
 //    void (MainWindow::*mBoxesUpdateFinishedFunction)(void) = nullptr;
@@ -202,6 +203,7 @@ protected:
     void showEvent(QShowEvent *e);
 
 private:
+    bool mIsRenderer;
     bool mShutdown;
     QWidget *mWelcomeDialog;
     //CentralWidget *mCentralWidget;
@@ -441,6 +443,9 @@ private:
 
     void initRenderPresets(const bool reinstall = false);
     void askInstallRenderPresets();
+
+    void runRenderer(const bool &detach = false);
+    void printProjectInfo();
 
 protected:
     void keyPressEvent(QKeyEvent *event);

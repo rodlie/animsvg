@@ -193,6 +193,7 @@ set(
     GUI/graphboxeslist.cpp
     GUI/keysview.cpp
     GUI/mainwindow.cpp
+    GUI/renderer.cpp
     GUI/qrealanimatorvalueslider.cpp
     GUI/fontswidget.cpp
     GUI/fillstrokesettings.cpp

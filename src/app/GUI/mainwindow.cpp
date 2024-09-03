@@ -86,8 +86,10 @@ MainWindow::MainWindow(Document& document,
                        AudioHandler& audioHandler,
                        RenderHandler& renderHandler,
                        const QString &openProject,
-                       QWidget * const parent)
+                       QWidget * const parent,
+                       const bool &isRenderer)
     : QMainWindow(parent)
+    , mIsRenderer(isRenderer)
     , mShutdown(false)
     , mWelcomeDialog(nullptr)
     //, mCentralWidget(nullptr)
@@ -169,37 +171,41 @@ MainWindow::MainWindow(Document& document,
     ImportHandler::sInstance->addImporter<eSvgImporter>();
     //ImportHandler::sInstance->addImporter<eOraImporter>(); // removed, will be added back soonish
 
-    connect(&mDocument, &Document::evFilePathChanged,
-            this, &MainWindow::updateTitle);
-    connect(&mDocument, &Document::documentChanged,
-            this, [this]() {
-        setFileChangedSinceSaving(true);
-        mTimeline->stopPreview();
-    });
-    connect(&mDocument, &Document::activeSceneSet,
-            this, &MainWindow::updateSettingsForCurrentCanvas);
-    connect(&mDocument, &Document::currentBoxChanged,
-            this, &MainWindow::setCurrentBox);
-    connect(&mDocument, &Document::canvasModeSet,
-            this, &MainWindow::updateCanvasModeButtonsChecked);
-    connect(&mDocument, &Document::sceneCreated,
-            this, &MainWindow::closeWelcomeDialog);
-    connect(&mDocument, &Document::openTextEditor,
-            this, [this] () {
-        mTabColorText->setCurrentIndex(mTabTextIndex);
-        mFontWidget->setTextFocus();
-    });
-    connect(&mDocument, &Document::newVideo,
-            this, &MainWindow::handleNewVideoClip);
+    if (!mIsRenderer) {
+        connect(&mDocument, &Document::evFilePathChanged,
+                this, &MainWindow::updateTitle);
+        connect(&mDocument, &Document::documentChanged,
+                this, [this]() {
+            setFileChangedSinceSaving(true);
+            mTimeline->stopPreview();
+        });
+        connect(&mDocument, &Document::activeSceneSet,
+                this, &MainWindow::updateSettingsForCurrentCanvas);
+        connect(&mDocument, &Document::currentBoxChanged,
+                this, &MainWindow::setCurrentBox);
+        connect(&mDocument, &Document::canvasModeSet,
+                this, &MainWindow::updateCanvasModeButtonsChecked);
+        connect(&mDocument, &Document::sceneCreated,
+                this, &MainWindow::closeWelcomeDialog);
+        connect(&mDocument, &Document::openTextEditor,
+                this, [this] () {
+            mTabColorText->setCurrentIndex(mTabTextIndex);
+            mFontWidget->setTextFocus();
+        });
+        connect(&mDocument, &Document::newVideo,
+                this, &MainWindow::handleNewVideoClip);
+    }
 
     setWindowIcon(QIcon::fromTheme(AppSupport::getAppName()));
     //setMinimumSize(1024, 576);
 
     mAutoSaveTimer = new QTimer(this);
-    connect (mAutoSaveTimer, &QTimer::timeout,
-             this, &MainWindow::checkAutoSaveTimer);
+    if (!mIsRenderer) {
+        connect (mAutoSaveTimer, &QTimer::timeout,
+                 this, &MainWindow::checkAutoSaveTimer);
+    }
 
-    BoxSingleWidget::loadStaticPixmaps(eSizesUI::widget);
+    BoxSingleWidget::loadStaticPixmaps(eSizesUI::widget, mIsRenderer);
 
     mDocument.setPath("");
 
@@ -240,33 +246,38 @@ MainWindow::MainWindow(Document& document,
     mObjectSettingsWidget->setCurrentRule(SWT_BoxRule::selected);
     mObjectSettingsWidget->setCurrentTarget(nullptr, SWT_Target::group);
 
-    connect(mObjectSettingsScrollArea->verticalScrollBar(),
-            &QScrollBar::valueChanged,
-            mObjectSettingsWidget, &BoxScrollWidget::changeVisibleTop);
-    connect(mObjectSettingsScrollArea, &ScrollArea::heightChanged,
-            mObjectSettingsWidget, &BoxScrollWidget::changeVisibleHeight);
-    connect(mObjectSettingsScrollArea, &ScrollArea::widthChanged,
-            mObjectSettingsWidget, &BoxScrollWidget::setWidth);
+    if (!mIsRenderer) {
+        connect(mObjectSettingsScrollArea->verticalScrollBar(),
+                &QScrollBar::valueChanged,
+                mObjectSettingsWidget, &BoxScrollWidget::changeVisibleTop);
+        connect(mObjectSettingsScrollArea, &ScrollArea::heightChanged,
+                mObjectSettingsWidget, &BoxScrollWidget::changeVisibleHeight);
+        connect(mObjectSettingsScrollArea, &ScrollArea::widthChanged,
+                mObjectSettingsWidget, &BoxScrollWidget::setWidth);
+    }
 
-    const auto assets = new AssetsWidget(this);
+
 
     setupToolBox();
     setupToolBar();
     setupMenuBar();
 
-    connectToolBarActions();
-
-    readRecentFiles();
-    updateRecentMenu();
+    if (!mIsRenderer) {
+        connectToolBarActions();
+        readRecentFiles();
+        updateRecentMenu();
+    }
 
     mEventFilterDisabled = false;
 
     installEventFilter(this);
 
-    connect(&mAudioHandler, &AudioHandler::deviceChanged,
-            this, [this]() { statusBar()->showMessage(tr("Changed audio output: %1")
-                                                      .arg(mAudioHandler.getDeviceName()),
-                                                      10000); });
+    if (!mIsRenderer) {
+        connect(&mAudioHandler, &AudioHandler::deviceChanged,
+                this, [this]() { statusBar()->showMessage(tr("Changed audio output: %1")
+                                                          .arg(mAudioHandler.getDeviceName()),
+                                                          10000); });
+    }
 
     mWelcomeDialog = new WelcomeDialog(mRecentMenu,
        [this]() { SceneSettingsDialog::sNewSceneDialog(mDocument, this); },
@@ -356,15 +367,18 @@ MainWindow::MainWindow(Document& document,
     propertiesLayout->addWidget(mObjectSettingsScrollArea);
     propertiesLayout->addWidget(alignWidget);
 
-    mTabPropertiesIndex = mTabProperties->addTab(propertiesWidget,
-                                                 QIcon::fromTheme("drawPathAutoChecked"),
-                                                 tr("Properties"));
-    mTabAssetsIndex = mTabProperties->addTab(assets,
-                                             QIcon::fromTheme("asset_manager"),
-                                             tr("Assets"));
-    mTabQueueIndex = mTabProperties->addTab(mRenderWidget,
-                                            QIcon::fromTheme("render_animation"),
-                                            tr("Queue"));
+    if (!mIsRenderer) {
+        mTabPropertiesIndex = mTabProperties->addTab(propertiesWidget,
+                                                     QIcon::fromTheme("drawPathAutoChecked"),
+                                                     tr("Properties"));
+        const auto assets = new AssetsWidget(this);
+        mTabAssetsIndex = mTabProperties->addTab(assets,
+                                                 QIcon::fromTheme("asset_manager"),
+                                                 tr("Assets"));
+        mTabQueueIndex = mTabProperties->addTab(mRenderWidget,
+                                                QIcon::fromTheme("render_animation"),
+                                                tr("Queue"));
+    }
 
     // setup toolbox and viewer
     const auto viewerWidget = new QWidget(this);
@@ -400,36 +414,38 @@ MainWindow::MainWindow(Document& document,
 
     // final layout
     mUI = new UILayout(this);
-    std::vector<UILayout::Item> docks;
-    docks.push_back({UIDock::Position::Up,
-                     -1,
-                     tr("Viewer"),
-                     viewerWidget,
-                     false,
-                     false,
-                     false});
-    docks.push_back({UIDock::Position::Down,
-                     -1,
-                     tr("Timeline"),
-                     mTimeline,
-                     false,
-                     false,
-                     false});
-    docks.push_back({UIDock::Position::Right,
-                     -1,
-                     tr("Color and Text"),
-                     mTabColorText,
-                     false,
-                     true,
-                     false});
-    docks.push_back({UIDock::Position::Right,
-                     -1,
-                     tr("Properties"),
-                     mTabProperties,
-                     false,
-                     true,
-                     false});
-    mUI->addDocks(docks);
+    if (!mIsRenderer) {
+        std::vector<UILayout::Item> docks;
+        docks.push_back({UIDock::Position::Up,
+                         -1,
+                         tr("Viewer"),
+                         viewerWidget,
+                         false,
+                         false,
+                         false});
+        docks.push_back({UIDock::Position::Down,
+                         -1,
+                         tr("Timeline"),
+                         mTimeline,
+                         false,
+                         false,
+                         false});
+        docks.push_back({UIDock::Position::Right,
+                         -1,
+                         tr("Color and Text"),
+                         mTabColorText,
+                         false,
+                         true,
+                         false});
+        docks.push_back({UIDock::Position::Right,
+                         -1,
+                         tr("Properties"),
+                         mTabProperties,
+                         false,
+                         true,
+                         false});
+        mUI->addDocks(docks);
+    }
     setCentralWidget(mUI);
 
     readSettings(openProject);
@@ -438,13 +454,11 @@ MainWindow::MainWindow(Document& document,
 MainWindow::~MainWindow()
 {
     mShutdown = true;
-    std::cout << "Closing Friction, please wait ... " << std::endl;
+    if (mIsRenderer) { return; }
     if (mAutoSaveTimer->isActive()) { mAutoSaveTimer->stop(); }
+    std::cout << "Closing Friction, please wait ... " << std::endl;
     writeSettings();
     sInstance = nullptr;
-//    mtaskExecutorThread->terminate();
-//    mtaskExecutorThread->quit();
-    //BoxSingleWidget::clearStaticPixmaps();
 }
 
 void MainWindow::setupMenuBar()
@@ -471,6 +485,8 @@ void MainWindow::setupMenuBar()
     cmdAddAction(openAct);
     mRecentMenu = mFileMenu->addMenu(QIcon::fromTheme("file_folder"),
                                      tr("Open Recent", "MenuBar_File"));
+
+    if (mIsRenderer) { return; }
 
     mLinkedAct = mFileMenu->addAction(QIcon::fromTheme("linked"),
                                                 tr("Link"),
@@ -1351,6 +1367,7 @@ BoundingBox *MainWindow::getCurrentBox()
 
 void MainWindow::setResolutionText(QString text)
 {
+    if (mIsRenderer) { return; }
     text = text.remove(" %");
     const qreal res = clamp(text.toDouble(), 1, 200)/100;
     setResolutionValue(res);
@@ -1373,7 +1390,7 @@ void MainWindow::setResolutionText(QString text)
 
 void MainWindow::checkAutoSaveTimer()
 {
-    if (mShutdown) { return; }
+    if (mShutdown | mIsRenderer) { return; }
 
     if (mAutoSave &&
         mChangedSinceSaving &&
@@ -1397,6 +1414,7 @@ void MainWindow::checkAutoSaveTimer()
 
 void MainWindow::openAboutWindow()
 {
+    if (mIsRenderer) { return; }
     if (!mAboutWidget) {
         mAboutWidget = new AboutWidget(this);
     }
@@ -1414,6 +1432,7 @@ void MainWindow::openAboutWindow()
 
 void MainWindow::openTimelineWindow()
 {
+    if (mIsRenderer) { return; }
     AppSupport::setSettings("ui",
                             "TimelineWindow",
                             true);
@@ -1437,7 +1456,7 @@ void MainWindow::openTimelineWindow()
 
 void MainWindow::closedTimelineWindow()
 {
-    if (mShutdown) { return; }
+    if (mShutdown | mIsRenderer) { return; }
     AppSupport::setSettings("ui",
                             "TimelineWindow",
                             false);
@@ -1447,6 +1466,7 @@ void MainWindow::closedTimelineWindow()
 
 void MainWindow::openRenderQueueWindow()
 {
+    if (mIsRenderer) { return; }
     AppSupport::setSettings("ui",
                             "RenderWindow",
                             true);
@@ -1471,7 +1491,7 @@ void MainWindow::openRenderQueueWindow()
 
 void MainWindow::closedRenderQueueWindow()
 {
-    if (mShutdown) { return; }
+    if (mShutdown || mIsRenderer) { return; }
     AppSupport::setSettings("ui",
                             "RenderWindow",
                             false);
@@ -1483,6 +1503,7 @@ void MainWindow::closedRenderQueueWindow()
 
 void MainWindow::initRenderPresets(const bool reinstall)
 {
+    if (mIsRenderer) { return; }
     const bool doInstall = reinstall ? true : AppSupport::getSettings("settings",
                                                                       "firstRunRenderPresets",
                                                                       true).toBool();
@@ -1517,6 +1538,7 @@ void MainWindow::initRenderPresets(const bool reinstall)
 
 void MainWindow::askInstallRenderPresets()
 {
+    if (mIsRenderer) { return; }
     const auto result = QMessageBox::question(this,
                                               tr("Install Render Profiles"),
                                               tr("Are you sure you want to install the default render profiles?"
@@ -1527,11 +1549,13 @@ void MainWindow::askInstallRenderPresets()
 
 void MainWindow::openWelcomeDialog()
 {
+    if (mIsRenderer) { return; }
     mStackWidget->setCurrentIndex(mStackIndexWelcome);
 }
 
 void MainWindow::closeWelcomeDialog()
 {
+    if (mIsRenderer) { return; }
     mStackWidget->setCurrentIndex(mStackIndexScene);
 }
 
@@ -1902,6 +1926,10 @@ bool MainWindow::processKeyEvent(QKeyEvent *event)
 
 void MainWindow::readSettings(const QString &openProject)
 {
+    if (mIsRenderer) {
+        runRenderer();
+        return;
+    }
     mUI->readSettings();
     restoreState(AppSupport::getSettings("ui",
                                          "state").toByteArray());
@@ -2285,6 +2313,7 @@ void MainWindow::updateAutoSaveBackupState()
 
 void MainWindow::openRendererWindow()
 {
+    if (mIsRenderer) { return; }
     if (mRenderWidget->count() < 1) {
         addCanvasToRenderQue();
     } else {
@@ -2295,7 +2324,7 @@ void MainWindow::openRendererWindow()
 
 void MainWindow::cmdAddAction(QAction *act)
 {
-    if (!act || eSettings::instance().fCommandPalette.contains(act)) { return; }
+    if (mIsRenderer || !act || eSettings::instance().fCommandPalette.contains(act)) { return; }
     eSettings::sInstance->fCommandPalette.append(act);
 }
 
