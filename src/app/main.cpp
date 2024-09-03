@@ -75,7 +75,7 @@ void generateAlphaMesh(QPixmap& alphaMesh,
 int main(int argc, char *argv[])
 {
     // check if renderer
-    const bool isRenderer = AppSupport::hasArg(argc, argv, "--render");
+    const bool isRenderer = AppSupport::hasArg(argc, argv, "--renderer");
 
     // init env variables
     AppSupport::initEnv(isRenderer);
@@ -271,7 +271,9 @@ int main(int argc, char *argv[])
                  actions,
                  audioHandler,
                  renderHandler,
-                 argc > 1 ? argv[1] : QString());
+                 argc > 1 ? argv[1] : QString(),
+                 nullptr,
+                 isRenderer);
     if (!isRenderer) { w.show(); }
     try { return app.exec(); }
     catch (const std::exception& e) {
