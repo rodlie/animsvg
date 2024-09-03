@@ -521,7 +521,7 @@ const QString Canvas::checkForUnsupportedBoxSVG(BoundingBox * const box)
 {
     QString result;
     if (!box) { return result; }
-    qDebug() << "check" << box->prp_getName() << "for SVG support";
+    //qDebug() << "check" << box->prp_getName() << "for SVG support";
     if (box->hasTransformEffects()) {
         result.append(QString("- %1 => %2 : %3\n").arg(prp_getName(),
                                                        box->prp_getName(),
