@@ -41,9 +41,10 @@ public:
     ExportSvgDialog(QWidget* const parent = nullptr,
                     const QString &warnings = QString());
     void showPreview(const bool &closeWhenDone = false);
+    void exportSVG(const QString &fileName);
 
 signals:
-    void exportDone(bool success);
+    void exportDone();
 
 private:
     ComplexTask* exportTo(const QString& file,

@@ -294,15 +294,29 @@ void ExportSvgDialog::showPreview(const bool &closeWhenDone)
     const auto fileName = mPreviewFile->fileName();
     const auto task = exportTo(fileName, true);
     if (!task) {
-        emit exportDone(false);
+        emit exportDone();
         if (closeWhenDone) { close(); }
         return;
     }
     task->addDependent({[fileName, this, closeWhenDone]() {
                             QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
-                            emit exportDone(true);
+                            emit exportDone();
                             if (closeWhenDone) { close(); }
                         }, nullptr});
+}
+
+void ExportSvgDialog::exportSVG(const QString &fileName)
+{
+    if (fileName.isEmpty()) {
+        emit exportDone();
+        return;
+    }
+    const auto task = exportTo(fileName, false);
+    if (!task) {
+        emit exportDone();
+        return;
+    }
+    task->addDependent({[fileName, this]() { emit exportDone(); }, nullptr});
 }
 
 ComplexTask* ExportSvgDialog::exportTo(const QString& file,
