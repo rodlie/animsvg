@@ -48,7 +48,8 @@ public:
     RenderHandler(Document &document,
                   AudioHandler &audioHandler,
                   VideoEncoder &videoEncoder,
-                  MemoryHandler &memoryHandler);
+                  MemoryHandler &memoryHandler,
+                  const bool noAudio = false);
 
     void interruptPreview();
     void outOfMemory();
@@ -100,6 +101,7 @@ private:
     // AUDIO
     AudioHandler& mAudioHandler;
     VideoEncoder& mVideoEncoder;
+    bool mNoAudio;
     qptr<SoundComposition> mCurrentSoundComposition;
     // AUDIO
 

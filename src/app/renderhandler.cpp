@@ -38,10 +38,13 @@ RenderHandler* RenderHandler::sInstance = nullptr;
 RenderHandler::RenderHandler(Document &document,
                              AudioHandler& audioHandler,
                              VideoEncoder& videoEncoder,
-                             MemoryHandler& memoryHandler) :
-    mDocument(document),
-    mAudioHandler(audioHandler),
-    mVideoEncoder(videoEncoder) {
+                             MemoryHandler& memoryHandler,
+                             const bool noAudio)
+    : mDocument(document)
+    , mAudioHandler(audioHandler)
+    , mVideoEncoder(videoEncoder)
+    , mNoAudio(noAudio)
+{
     Q_ASSERT(!sInstance);
     sInstance = this;
 
@@ -54,8 +57,11 @@ RenderHandler::RenderHandler(Document &document,
             this, &RenderHandler::nextPreviewFrame);
     connect(mPreviewFPSTimer, &QTimer::timeout,
             this, &RenderHandler::audioPushTimerExpired);
-    connect(audioHandler.audioOutput(), &QAudioOutput::notify,
-            this, &RenderHandler::audioPushTimerExpired);
+
+    if (!mNoAudio) {
+        connect(audioHandler.audioOutput(), &QAudioOutput::notify,
+                this, &RenderHandler::audioPushTimerExpired);
+    }
 
     const auto vidEmitter = videoEncoder.getEmitter();
 //    connect(vidEmitter, &VideoEncoderEmitter::encodingStarted,
@@ -249,7 +255,7 @@ void RenderHandler::stopPreview() {
 
 void RenderHandler::pausePreview() {
     if(mPreviewing) {
-        mAudioHandler.pauseAudio();
+        if (!mNoAudio) { mAudioHandler.pauseAudio(); }
         mPreviewFPSTimer->stop();
         emit previewPaused();
         setPreviewState(PreviewState::paused);
@@ -258,7 +264,7 @@ void RenderHandler::pausePreview() {
 
 void RenderHandler::resumePreview() {
     if(mPreviewing) {
-        mAudioHandler.resumeAudio();
+        if (!mNoAudio) { mAudioHandler.resumeAudio(); }
         mPreviewFPSTimer->start();
         emit previewBeingPlayed();
         setPreviewState(PreviewState::playing);
@@ -400,19 +406,19 @@ void RenderHandler::nextSaveOutputFrame() {
 }
 
 void RenderHandler::startAudio() {
-    mAudioHandler.startAudio();
+    if (!mNoAudio) { mAudioHandler.startAudio(); }
     if(mCurrentSoundComposition)
         mCurrentSoundComposition->start(mCurrentPreviewFrame);
     audioPushTimerExpired();
 }
 
 void RenderHandler::stopAudio() {
-    mAudioHandler.stopAudio();
+    if (!mNoAudio) { mAudioHandler.stopAudio(); }
     if(mCurrentSoundComposition) mCurrentSoundComposition->stop();
 }
 
 void RenderHandler::audioPushTimerExpired() {
-    if(!mCurrentSoundComposition) return;
+    if(!mCurrentSoundComposition | mNoAudio) return;
     while(auto request = mAudioHandler.dataRequest()) {
         const qint64 len = mCurrentSoundComposition->read(
                     request.fData, request.fSize);
