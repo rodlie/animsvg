@@ -133,6 +133,7 @@ public:
     static QPair<bool,int> handleXDGArgs(const bool &isRenderer,
                                          const QStringList &args);
     static void printVersion();
+    static void printHelp(const bool &isRenderer);
 };
 
 #endif // APPSUPPORT_H

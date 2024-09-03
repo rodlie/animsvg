@@ -1034,3 +1034,8 @@ void AppSupport::printVersion()
                                            getAppVersion(),
                                            getAppUrl()).toStdString() << std::endl;
 }
+
+void AppSupport::printHelp(const bool &isRenderer)
+{
+    Q_UNUSED(isRenderer)
+}
