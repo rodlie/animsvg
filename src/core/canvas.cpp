@@ -1403,6 +1403,16 @@ SceneBoundGradient *Canvas::getGradientWithDocumentId(const int id) const
     return nullptr;
 }
 
+SceneBoundGradient *Canvas::getGradientWithDocumentSceneId(const int id) const
+{
+    for (const auto &scene : mDocument.fScenes) {
+        for (const auto &grad : scene->mGradients) {
+            if (grad->getDocumentId() == id) { return grad.get(); }
+        }
+    }
+    return nullptr;
+}
+
 void Canvas::addNullObject(NullObject* const obj)
 {
     mNullObjects.append(obj);

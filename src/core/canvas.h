@@ -409,6 +409,11 @@ public:
         mPathEffectsVisible = bT;
     }
 
+    void setEasingAction(const QString &easing)
+    {
+        emit requestEasingAction(easing);
+    }
+
 protected:
     void setCurrentSmartEndPoint(SmartNodePoint* const point);
 
@@ -433,6 +438,7 @@ signals:
     void gradientCreated(SceneBoundGradient*);
     void gradientRemoved(SceneBoundGradient*);
     void openTextEditor();
+    void requestEasingAction(const QString &easing);
 
 public:
     void makePointCtrlsSymmetric();
@@ -696,6 +702,7 @@ public:
 
     SceneBoundGradient * getGradientWithRWId(const int rwId) const;
     SceneBoundGradient * getGradientWithDocumentId(const int id) const;
+    SceneBoundGradient * getGradientWithDocumentSceneId(const int id) const;
 
     void addNullObject(NullObject* const obj);
     void removeNullObject(NullObject* const obj);
@@ -708,7 +715,7 @@ private:
 
     void clearGradientRWIds() const;
     QList<SmartNodePoint*> getSortedSelectedNodes();
-    void openTextEditorForTextBox(TextBox *textBox);
+    //void openTextEditorForTextBox(TextBox *textBox);
 
     void scaleSelected(const eMouseEvent &e);
     void rotateSelected(const eMouseEvent &e);

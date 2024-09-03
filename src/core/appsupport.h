@@ -34,19 +34,18 @@
 
 #include "hardwareenums.h"
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-#define QT_ENDL Qt::endl
-#define QT_SKIP_EMPTY Qt::SkipEmptyParts
-#else
-#define QT_ENDL endl
-#define QT_SKIP_EMPTY QString::SkipEmptyParts
-#endif
-
 class CORE_EXPORT AppSupport : public QObject
 {
     Q_OBJECT
 
 public:
+    struct ExpressionPreset
+    {
+        bool valid = false;
+        QString definitions;
+        QString bindings;
+        QString script;
+    };
     explicit AppSupport(QObject *parent = nullptr);
     static QVariant getSettings(const QString &group,
                                 const QString &key,
@@ -134,6 +133,9 @@ public:
                                          const QStringList &args);
     static void printVersion();
     static void printHelp(const bool &isRenderer);
+    static const ExpressionPreset readEasingPreset(const QString &filename);
+    static const QList<QPair<QString,QString>> getEasingPresets();
+    static void handlePortableFirstRun();
 };
 
 #endif // APPSUPPORT_H

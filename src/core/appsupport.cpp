@@ -150,7 +150,12 @@ const QString AppSupport::getAppVersion()
     version.append(QString("-%1").arg(CUSTOM_BUILD));
 #endif
 #ifndef PROJECT_OFFICIAL
+#ifndef CUSTOM_BUILD
     version.append("-dev");
+#endif
+#ifdef PROJECT_COMMIT
+    version.append(QString("-%1").arg(PROJECT_COMMIT));
+#endif
 #endif
     return version;
 }
@@ -298,7 +303,7 @@ const QString AppSupport::getAppExPresetsPath()
 
 const QString AppSupport::getAppUserExPresetsPath()
 {
-    QString path = QString::fromUtf8("%1/ExPresets").arg(getAppConfigPath());
+    QString path = QString::fromUtf8("%1/ExpressionPresets").arg(getAppConfigPath());
     QDir dir(path);
     if (!dir.exists()) { dir.mkpath(path); }
     return path;
@@ -311,19 +316,15 @@ const QString AppSupport::getSVGO()
 #else
     const QString svgo = "svgo-linux";
 #endif
-    const QString path = QString("%1%2%3").arg(getAppPath(),
-                                               QDir::separator(),
-                                               svgo);
-    //qDebug() << "check for svgo" << path;
+    const QString path = QString("%1/%2").arg(getAppPath(), svgo);
     if (QFile::exists(path)) { return path; }
-    return QString();
+    return QStandardPaths::findExecutable("svgo");
 }
 
 const QString AppSupport::getSVGOConfig()
 {
     QString filename = "svgo.config.js";
     QString path = getAppConfigPath() + QDir::separator() + filename;
-    //qDebug() << "check for" << filename;
     if (!QFile::exists(path)) {
         QString config;
         QFile file(":/config/" + filename);
@@ -762,7 +763,6 @@ bool AppSupport::setupXDGDesktopIntegration()
     {
         const QString dirName(QString("%1/applications").arg(path));
         const QString fileName(QString("%1/graphics.friction.Friction.desktop").arg(dirName));
-        qDebug() << "Checking:" << fileName;
         if (!QFile::exists(dirName)) {
             QDir dir(dirName);
             if (!dir.mkpath(dirName)) { return false; }
@@ -792,7 +792,6 @@ bool AppSupport::setupXDGDesktopIntegration()
     {
         const QString dirName(QString("%1/mime/packages").arg(path));
         const QString fileName(QString("%1/graphics.friction.Friction.xml").arg(dirName));
-        qDebug() << "Checking:" << fileName;
         if (!QFile::exists(dirName)) {
             QDir dir(dirName);
             if (!dir.mkpath(dirName)) { return false; }
@@ -812,7 +811,6 @@ bool AppSupport::setupXDGDesktopIntegration()
     {
         const QString dirName(QString("%1/icons/hicolor/scalable/apps").arg(path));
         const QString fileName(QString("%1/graphics.friction.Friction.svg").arg(dirName));
-        qDebug() << "Checking:" << fileName;
         if (!QFile::exists(dirName)) {
             QDir dir(dirName);
             if (!dir.mkpath(dirName)) { return false; }
@@ -832,7 +830,6 @@ bool AppSupport::setupXDGDesktopIntegration()
     {
         const QString dirName(QString("%1/icons/hicolor/256x256/apps").arg(path));
         const QString fileName(QString("%1/graphics.friction.Friction.png").arg(dirName));
-        qDebug() << "Checking:" << fileName;
         if (!QFile::exists(dirName)) {
             QDir dir(dirName);
             if (!dir.mkpath(dirName)) { return false; }
@@ -852,7 +849,6 @@ bool AppSupport::setupXDGDesktopIntegration()
     {
         const QString dirName(QString("%1/icons/hicolor/scalable/mimetypes").arg(path));
         const QString fileName(QString("%1/application-x-graphics.friction.Friction.svg").arg(dirName));
-        qDebug() << "Checking:" << fileName;
         if (!QFile::exists(dirName)) {
             QDir dir(dirName);
             if (!dir.mkpath(dirName)) { return false; }
@@ -872,7 +868,6 @@ bool AppSupport::setupXDGDesktopIntegration()
     {
         const QString dirName(QString("%1/icons/hicolor/256x256/mimetypes").arg(path));
         const QString fileName(QString("%1/application-x-graphics.friction.Friction.png").arg(dirName));
-        qDebug() << dirName << fileName;
         if (!QFile::exists(dirName)) {
             QDir dir(dirName);
             if (!dir.mkpath(dirName)) { return false; }
@@ -972,6 +967,7 @@ void AppSupport::checkPerms(const bool &isRenderer)
 
 void AppSupport::checkFFmpeg(const bool &isRenderer)
 {
+    av_log_set_level(AV_LOG_ERROR);
 #ifndef QT_DEBUG
     const QString warning = QObject::tr("Friction is built against an unsupported FFmpeg version. Use at own risk and don't report any issues upstream.");
     if (avformat_version() >= 3812708) {
@@ -1038,4 +1034,76 @@ void AppSupport::printVersion()
 void AppSupport::printHelp(const bool &isRenderer)
 {
     Q_UNUSED(isRenderer)
+const AppSupport::ExpressionPreset AppSupport::readEasingPreset(const QString &filename)
+{
+    ExpressionPreset preset;
+    preset.valid = false;
+    if (!QFile::exists(filename)) { return preset; }
+    QFile file(filename);
+    QString js;
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        js = file.readAll();
+        file.close();
+    }
+    if (js.isEmpty()) { return preset; }
+    QStringList parts = js.split("/*_FRICTION_EXPRESSION_PRESET_*/",
+                                 Qt::SkipEmptyParts);
+    if (parts.size() != 3) { return preset; }
+    preset.valid = true;
+    preset.definitions = parts.at(0).trimmed();
+    preset.bindings = parts.at(1).trimmed();
+    preset.script = parts.at(2).trimmed();
+    return preset;
+}
+
+const QList<QPair<QString, QString> > AppSupport::getEasingPresets()
+{
+    QList<QPair<QString, QString> > presets;
+
+    presets.push_back({tr("Ease In Back"), ":/easing/presets/easeInBack.js"});
+    presets.push_back({tr("Ease In Bounce"), ":/easing/presets/easeInBounce.js"});
+    presets.push_back({tr("Ease In Circ"), ":/easing/presets/easeInCirc.js"});
+    presets.push_back({tr("Ease In Cubic"), ":/easing/presets/easeInCubic.js"});
+    presets.push_back({tr("Ease In Elastic"), ":/easing/presets/easeInElastic.js"});
+    presets.push_back({tr("Ease In Expo"), ":/easing/presets/easeInExpo.js"});
+    presets.push_back({tr("Ease In Quad"), ":/easing/presets/easeInQuad.js"});
+    presets.push_back({tr("Ease In Quart"), ":/easing/presets/easeInQuart.js"});
+    presets.push_back({tr("Ease In Quint"), ":/easing/presets/easeInQuint.js"});
+    presets.push_back({tr("Ease In Sine"), ":/easing/presets/easeInSine.js"});
+
+    presets.push_back({tr("Ease Out Back"), ":/easing/presets/easeOutBack.js"});
+    presets.push_back({tr("Ease Out Bounce"), ":/easing/presets/easeOutBounce.js"});
+    presets.push_back({tr("Ease Out Circ"), ":/easing/presets/easeOutCirc.js"});
+    presets.push_back({tr("Ease Out Cubic"), ":/easing/presets/easeOutCubic.js"});
+    presets.push_back({tr("Ease Out Elastic"), ":/easing/presets/easeOutElastic.js"});
+    presets.push_back({tr("Ease Out Expo"), ":/easing/presets/easeOutExpo.js"});
+    presets.push_back({tr("Ease Out Quad"), ":/easing/presets/easeOutQuad.js"});
+    presets.push_back({tr("Ease Out Quart"), ":/easing/presets/easeOutQuart.js"});
+    presets.push_back({tr("Ease Out Quint"), ":/easing/presets/easeOutQuint.js"});
+    presets.push_back({tr("Ease Out Sine"), ":/easing/presets/easeOutSine.js"});
+
+    presets.push_back({tr("Ease In/Out Back"), ":/easing/presets/easeInOutBack.js"});
+    presets.push_back({tr("Ease In/Out Bounce"), ":/easing/presets/easeInOutBounce.js"});
+    presets.push_back({tr("Ease In/Out Circ"), ":/easing/presets/easeInOutCirc.js"});
+    presets.push_back({tr("Ease In/Out Cubis"), ":/easing/presets/easeInOutCubic.js"});
+    presets.push_back({tr("Ease In/Out Elastic"), ":/easing/presets/easeInOutElastic.js"});
+    presets.push_back({tr("Ease In/Out Expo"), ":/easing/presets/easeInOutExpo.js"});
+    presets.push_back({tr("Ease In/Out Quad"), ":/easing/presets/easeInOutQuad.js"});
+    presets.push_back({tr("Ease In/Out Quart"), ":/easing/presets/easeInOutQuart.js"});
+    presets.push_back({tr("Ease In/Out Quint"), ":/easing/presets/easeInOutQuint.js"});
+    presets.push_back({tr("Ease In/Out Sine"), ":/easing/presets/easeInOutSine.js"});
+
+    return presets;
+}
+
+void AppSupport::handlePortableFirstRun()
+{
+    if (!isAppPortable()) { return; }
+    const bool firstRun = getSettings("portable", "PortableFirstRun", true).toBool();
+    if (!firstRun) { return; }
+    QMessageBox::information(nullptr,
+                             tr("Portable Mode"),
+                             tr("You are in portable mode, your config directory is:"
+                                "<br><br><code>%1</code>").arg(getAppConfigPath()));
+    setSettings("portable", "PortableFirstRun", false);
 }

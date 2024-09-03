@@ -96,6 +96,10 @@ if(WIN32)
         ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${FRICTION_NAME}.rc
         @ONLY
     )
+    configure_file(${FRICTION_NAME}.iss
+        ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${FRICTION_NAME}.iss
+        @ONLY
+    )
     configure_file(icons/${FRICTION_NAME}.ico
         ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${FRICTION_NAME}.ico
         COPYONLY

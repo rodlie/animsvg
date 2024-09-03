@@ -43,6 +43,7 @@ public:
     static const QColor getThemeBaseDarkerColor(int alpha = 255);
     static const QColor getThemeAlternateColor(int alpha = 255);
     static const QColor getThemeHighlightColor(int alpha = 255);
+    static const QColor getThemeHighlightDarkerColor(int alpha = 255);
     static const QColor getThemeHighlightAlternativeColor(int alpha = 255);
     static const QColor getThemeHighlightSelectedColor(int alpha = 255);
     static SkColor getThemeHighlightSkColor(int alpha = 255);

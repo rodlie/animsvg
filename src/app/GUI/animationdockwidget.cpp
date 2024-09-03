@@ -24,49 +24,60 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "animationdockwidget.h"
+#include "GUI/keysview.h"
+#include "appsupport.h"
 
-#include "GUI/global.h"
-#include "keysview.h"
-#include "widgets/actionbutton.h"
-#include "Private/esettings.h"
+#include <QMenu>
 
 AnimationDockWidget::AnimationDockWidget(QWidget *parent,
                                          KeysView *keysView)
     : QToolBar(parent)
+    , mLineButton(nullptr)
+    , mCurveButton(nullptr)
+    , mSymmetricButton(nullptr)
+    , mSmoothButton(nullptr)
+    , mCornerButton(nullptr)
+    , mFitToHeightButton(nullptr)
 {
     setObjectName(QString::fromUtf8("animationDockWidget"));
     setSizePolicy(QSizePolicy::Maximum,
                   QSizePolicy::Maximum);
 
-    const QString iconsDir = eSettings::sIconsDir() + "/toolbarButtons";
+    const auto easingButton = new QPushButton(QIcon::fromTheme("easing"),
+                                              QString(), this);
+    easingButton->setToolTip(tr("Ease between keyframes"));
+    easingButton->setFocusPolicy(Qt::NoFocus);
+    easingButton->setSizePolicy(QSizePolicy::Expanding,
+                                QSizePolicy::Expanding);
+    generateEasingActions(easingButton, keysView);
 
-    QAction *mLineButton = new QAction(QIcon::fromTheme("segmentLine"),
-                                       tr("Make Segment Line"), this);
+    mLineButton = new QAction(QIcon::fromTheme("segmentLine"),
+                              tr("Make Segment Line"), this);
     connect(mLineButton, &QAction::triggered,
             keysView, &KeysView::graphMakeSegmentsLinearAction);
 
-    QAction *mCurveButton = new QAction(QIcon::fromTheme("segmentCurve"),
-                                        tr("Make Segment Curve"), this);
+    mCurveButton = new QAction(QIcon::fromTheme("segmentCurve"),
+                               tr("Make Segment Curve"), this);
     connect(mCurveButton, &QAction::triggered,
             keysView, qOverload<>(&KeysView::graphMakeSegmentsSmoothAction));
 
-    QAction *mSymmetricButton = new QAction(QIcon::fromTheme("nodeSymmetric"),
-                                            tr("Symmetric Nodes"), this);
+    mSymmetricButton = new QAction(QIcon::fromTheme("nodeSymmetric"),
+                                   tr("Symmetric Nodes"), this);
     connect(mSymmetricButton, &QAction::triggered,
             keysView, &KeysView::graphSetSymmetricCtrlAction);
 
-    QAction *mSmoothButton = new QAction(QIcon::fromTheme("nodeSmooth"),
-                                         tr("Smooth Nodes"), this);
+    mSmoothButton = new QAction(QIcon::fromTheme("nodeSmooth"),
+                                tr("Smooth Nodes"), this);
     connect(mSmoothButton, &QAction::triggered,
             keysView, &KeysView::graphSetSmoothCtrlAction);
 
-    QAction *mCornerButton = new QAction(QIcon::fromTheme("nodeCorner"),
-                                         tr("Corner Nodes"), this);
+    mCornerButton = new QAction(QIcon::fromTheme("nodeCorner"),
+                                tr("Corner Nodes"), this);
     connect(mCornerButton, &QAction::triggered,
             keysView, &KeysView::graphSetCornerCtrlAction);
 
-    QAction *mFitToHeightButton = new QAction(QIcon::fromTheme("zoom"),
-                                              tr("Fit Vertical"), this);
+    mFitToHeightButton = new QAction(QIcon::fromTheme("zoom"),
+                                     tr("Fit Vertical"), this);
     connect(mFitToHeightButton, &QAction::triggered,
             keysView, &KeysView::graphResetValueScaleAndMinShownAction);
 
@@ -86,14 +97,7 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
     connect(selectedVisible, &SwitchButton::toggled,
             keysView, &KeysView::graphSetOnlySelectedVisible);*/
 
-    QAction *onlySelectedAct = new QAction(QIcon::fromTheme("onlySelectedVisible"),
-                                           QString(),
-                                           this);
-    onlySelectedAct->setCheckable(true);
-    onlySelectedAct->setToolTip(tr("View only selected"));
-    connect(onlySelectedAct, &QAction::triggered,
-            keysView, &KeysView::graphSetOnlySelectedVisible);
-
+    addWidget(easingButton);
     addAction(mLineButton);
     addAction(mCurveButton);
     addAction(mSymmetricButton);
@@ -101,5 +105,63 @@ AnimationDockWidget::AnimationDockWidget(QWidget *parent,
     addAction(mCornerButton);
     addAction(mFitToHeightButton);
     //addWidget(valueLines);
-    addAction(onlySelectedAct);
+
+    eSizesUI::widget.add(this, [this](const int size) {
+        setIconSize(QSize(size, size));
+    });
+}
+
+void AnimationDockWidget::showGraph(const bool show)
+{
+    mLineButton->setVisible(show);
+    mCurveButton->setVisible(show);
+    mSymmetricButton->setVisible(show);
+    mSmoothButton->setVisible(show);
+    mCornerButton->setVisible(show);
+    mFitToHeightButton->setVisible(show);
+}
+
+void AnimationDockWidget::generateEasingActions(QPushButton *button,
+                                                KeysView *keysView)
+{
+    const QIcon easeIcon(QIcon::fromTheme("easing"));
+    const QString easeInText = tr("Ease In ");
+    const QString easeOutText = tr("Ease Out ");
+    const QString easeInOutText = tr("Ease In/Out ");
+
+    const auto menu = new QMenu(this);
+    const auto menuIn = new QMenu(easeInText, menu);
+    const auto menuOut = new QMenu(easeOutText, menu);
+    const auto menuInOut = new QMenu(easeInOutText, menu);
+
+    menuIn->setIcon(easeIcon);
+    menuOut->setIcon(easeIcon);
+    menuInOut->setIcon(easeIcon);
+
+    const auto presets = AppSupport::getEasingPresets();
+    for (const auto &preset : presets) {
+        const auto presetAct = new QAction(easeIcon, QString(), this);
+        presetAct->setData(preset.second);
+        QString title = preset.first;
+        if (title.startsWith(easeInText)) {
+            title.replace(easeInText, "");
+            menuIn->addAction(presetAct);
+        } else if (title.startsWith(easeOutText)) {
+            title.replace(easeOutText, "");
+            menuOut->addAction(presetAct);
+        } else if (title.startsWith(easeInOutText)) {
+            title.replace(easeInOutText, "");
+            menuInOut->addAction(presetAct);
+        }
+        presetAct->setText(title.simplified());
+
+        connect(presetAct, &QAction::triggered,
+                this, [presetAct, keysView]() {
+            keysView->graphEasingAction(presetAct->data().toString());
+        });
+    }
+    menu->addMenu(menuIn);
+    menu->addMenu(menuOut);
+    menu->addMenu(menuInOut);
+    button->setMenu(menu);
 }

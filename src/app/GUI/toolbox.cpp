@@ -258,7 +258,7 @@ void MainWindow::setupToolBoxMain()
             this,
             [this, textModeAct]() {
                 if (mDocument.fCanvasMode == CanvasMode::textCreate) {
-                    mTabColorText->setCurrentIndex(mTabTextIndex);
+                    focusFontWidget(true);
                     textModeAct->setChecked(true);
                 }
             });

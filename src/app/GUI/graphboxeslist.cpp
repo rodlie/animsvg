@@ -25,6 +25,9 @@
 
 #include <QPainter>
 #include <QMouseEvent>
+#include "Animators/transformanimator.h"
+#include "Expressions/expression.h"
+#include "Expressions/propertybindingparser.h"
 #include "mainwindow.h"
 #include "dialogs/qrealpointvaluedialog.h"
 #include "keysview.h"
@@ -45,6 +48,90 @@ bool KeysView::graphIsSelected(GraphAnimator * const anim) {
         if(all) return all->contains(anim);
     }
     return false;
+}
+
+void KeysView::graphEasingAction(const QString &easing)
+{
+    if (mSelectedKeysAnimators.isEmpty()) { return; }
+    if (mGraphViewed) {
+        for (const auto& anim : mGraphAnimators) {
+            const auto segments = anim->anim_getSelectedKeys();
+            if (segments.count() < 2) { continue; }
+            auto firstKey = segments.first();
+            auto lastKey = segments.last();
+            graphEasingApply(static_cast<QrealAnimator*>(anim),
+                             {firstKey->getRelFrame(),
+                              lastKey->getRelFrame()},
+                             easing);
+        }
+    } else {
+        for (const auto& anim : mSelectedKeysAnimators) {
+            const auto &segments = anim->anim_getSelectedKeys();
+            if (segments.count() < 2) { continue; }
+            auto firstKey = segments.first();
+            auto lastKey = segments.last();
+                graphEasingApply(static_cast<QrealAnimator*>(anim),
+                                 {firstKey->getRelFrame(),
+                                  lastKey->getRelFrame()},
+                                 easing);
+        }
+    }
+}
+
+void KeysView::graphEasingApply(QrealAnimator *anim,
+                                const FrameRange &range,
+                                const QString &easing)
+{
+    if (!graphEasingApplyExpression(anim, range, easing)) {
+        // add warning or something
+    }
+}
+
+bool KeysView::graphEasingApplyExpression(QrealAnimator *anim,
+                                          const FrameRange &range,
+                                          const QString &easing)
+{
+    if (!anim || easing.isEmpty() || !QFile::exists(easing)) { return false; }
+    qDebug() << "graphEasingApplyExpression" << anim->prp_getName() << range.fMin << range.fMax << easing;
+
+    const auto preset = AppSupport::readEasingPreset(easing);
+    if (!preset.valid) { return false; }
+    QString script = preset.script;
+    script.replace("__START_VALUE__",
+                   QString::number(anim->getBaseValue(range.fMin)));
+    script.replace("__END_VALUE__",
+                   QString::number(anim->getBaseValue(range.fMax)));
+    script.replace("__START_FRAME__",
+                   QString::number(range.fMin));
+    script.replace("__END_FRAME__",
+                   QString::number(range.fMax));
+
+    PropertyBindingMap bindings;
+    try { bindings = PropertyBindingParser::parseBindings(preset.bindings, nullptr, anim); }
+    catch (const std::exception& e) { return false; }
+
+    auto engine = std::make_unique<QJSEngine>();
+    try { Expression::sAddDefinitionsTo(preset.definitions, *engine); }
+    catch (const std::exception& e) { return false; }
+
+    QJSValue eEvaluate;
+    try {
+        Expression::sAddScriptTo(script, bindings, *engine, eEvaluate,
+                                 Expression::sQrealAnimatorTester);
+    } catch(const std::exception& e) { return false; }
+
+    try {
+        auto expr = Expression::sCreate(preset.definitions,
+                                        script, std::move(bindings),
+                                        std::move(engine),
+                                        std::move(eEvaluate));
+        if (expr && !expr->isValid()) { expr = nullptr; }
+        anim->setExpression(expr);
+        anim->applyExpression(range, 10, true, true);
+        Document::sInstance->actionFinished();
+    } catch (const std::exception& e) { return false; }
+
+    return true;
 }
 
 int KeysView::graphGetAnimatorId(GraphAnimator * const anim) {
@@ -399,11 +486,7 @@ void KeysView::graphWheelEvent(QWheelEvent *event) {
     if(event->modifiers() & Qt::ControlModifier) {
         qreal valUnderMouse;
         qreal frame;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         const auto ePos = event->position();
-#else
-        const auto ePos = event->posF();
-#endif
         graphGetValueAndFrameFromPos(ePos,
                                      valUnderMouse, frame);
         qreal graphScaleInc;
@@ -466,20 +549,15 @@ void KeysView::graphResetValueScaleAndMinShown() {
     graphUpdateDimensions();
 }
 
-void KeysView::graphSetOnlySelectedVisible(const bool selectedOnly) {
-    if(graph_mOnlySelectedVisible == selectedOnly) return;
-    graph_mOnlySelectedVisible = selectedOnly;
-    graphUpdateVisbile();
-}
-
-bool KeysView::graphValidateVisible(GraphAnimator* const animator) {
-    if(graph_mOnlySelectedVisible){
-        return animator->prp_isParentBoxSelected();
-    }
-    return true;
+bool KeysView::graphValidateVisible(GraphAnimator* const animator)
+{
+    if (animator->prp_isSelected() &&
+        animator->prp_isParentBoxContained()) { return true; }
+    return false;
 }
 
 void KeysView::graphAddToViewedAnimatorList(GraphAnimator * const animator) {
+    if (mGraphAnimators.contains(animator)) { return; }
     auto& connContext = mGraphAnimators.addObj(animator);
     connContext << connect(animator, &QObject::destroyed,
                            this, [this, animator]() {
@@ -487,15 +565,20 @@ void KeysView::graphAddToViewedAnimatorList(GraphAnimator * const animator) {
     });
 }
 
-void KeysView::graphUpdateVisbile() {
-    mGraphAnimators.clear();
-    if(mCurrentScene) {
+void KeysView::graphUpdateVisible()
+{
+    qDebug() << "graphUpdateVisible";
+    //mGraphAnimators.clear();
+    if (mCurrentScene) {
         const int id = mBoxesListWidget->getId();
         const auto all = mCurrentScene->getSelectedForGraph(id);
-        if(all) {
-            for(const auto anim : *all) {
-                if(graphValidateVisible(anim)) {
-                    graphAddToViewedAnimatorList(anim);
+        if (all) {
+            qDebug() << "selected for graph" << all->count();
+            for (auto anim : *all) {
+                if (graphValidateVisible(anim)) { graphAddToViewedAnimatorList(anim); }
+                else {
+                    anim->prp_setSelected(false);
+                    graphRemoveViewedAnimator(anim);
                 }
             }
         }
@@ -518,6 +601,7 @@ void KeysView::graphAddViewedAnimator(GraphAnimator * const animator) {
 }
 
 void KeysView::graphRemoveViewedAnimator(GraphAnimator * const animator) {
+    if (!mGraphAnimators.contains(animator)) { return; }
     if(!mCurrentScene) return Q_ASSERT(false);
     const int id = mBoxesListWidget->getId();
     mCurrentScene->removeSelectedForGraph(id, animator);

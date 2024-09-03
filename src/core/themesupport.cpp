@@ -67,6 +67,11 @@ const QColor ThemeSupport::getThemeHighlightColor(int alpha)
     return getQColor(104, 144, 206, alpha);
 }
 
+const QColor ThemeSupport::getThemeHighlightDarkerColor(int alpha)
+{
+    return getQColor(53, 101, 176, alpha);
+}
+
 const QColor ThemeSupport::getThemeHighlightAlternativeColor(int alpha)
 {
     return getQColor(167, 185, 222, alpha);

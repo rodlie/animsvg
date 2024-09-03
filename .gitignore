@@ -23,3 +23,6 @@ distfiles
 backup
 CHANGES.md
 friction-distfiles
+svgo-linux
+svgo-win.exe
+skia-build

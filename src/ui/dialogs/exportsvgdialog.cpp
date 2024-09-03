@@ -99,8 +99,13 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
     mOptimize->setEnabled(hasSVGO);
     if (!hasSVGO) {
         mOptimize->setChecked(false);
-        mOptimize->setToolTip(tr("SVGO binary missing."));
+        mOptimize->setToolTip(tr("SVG Optimizer is missing."));
     }
+
+    mNotify = new QCheckBox(tr("Notify when done"), this);
+    mNotify->setChecked(AppSupport::getSettings("exportSVG",
+                                                "notify",
+                                                true).toBool());
 
     connect(mBackground, &QCheckBox::stateChanged,
             this, [this] {
@@ -125,6 +130,12 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
         AppSupport::setSettings("exportSVG",
                                 "optimize",
                                 mOptimize->isChecked());
+    });
+    connect(mNotify, &QCheckBox::stateChanged,
+            this, [this] {
+        AppSupport::setSettings("exportSVG",
+                                "notify",
+                                mNotify->isChecked());
     });
 
     twoColLayout->addPair(new QLabel(tr("Scene")), sceneButton);
@@ -179,6 +190,7 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
     optsTwoCol->addPair(mImageFormat, mImageQuality);
     optsTwoCol->addPair(mBackground, mFixedSize);
     optsTwoCol->addPair(mLoop, mOptimize);
+    optsTwoCol->addPair(mNotify, new QWidget());
     optsTwoCol->addSpacing(4);
 
     sceneWidget->setLayout(twoColLayout);
@@ -237,6 +249,7 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
                                          tr("Failed to launch SVG optimizer."));
                 }
             }
+            if (mNotify->isChecked()) { finishedDialog(saveAs); }
             accept();
         }
     });
@@ -359,4 +372,30 @@ ComplexTask* ExportSvgDialog::exportTo(const QString& file,
         gPrintExceptionCritical(e);
         return nullptr;
     }
+}
+
+void ExportSvgDialog::finishedDialog(const QString &fileName)
+{
+    const QString askOpenFile = tr("Open File");
+    const QString askOpenFolder = tr("Open Folder");
+    const QString askClose = tr("Close");
+    const int ask = QMessageBox::information(this,
+                                             tr("SVG export finished"),
+                                             tr("Project exported to <code>%1</code>.").arg(fileName),
+                                             askOpenFile,
+                                             askOpenFolder,
+                                             askClose,
+                                             2,
+                                             2);
+    QUrl url;
+    switch (ask) {
+    case 0:
+        url = QUrl::fromLocalFile(fileName);
+        break;
+    case 1:
+        url = QUrl::fromLocalFile(QFileInfo(fileName).absolutePath());
+        break;
+    default:;
+    }
+    if (!url.isEmpty()) { QDesktopServices::openUrl(url); }
 }

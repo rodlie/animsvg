@@ -79,7 +79,7 @@ TextBox::TextBox() : PathBox("Text", eBoxType::text) {
 #include <QDesktopWidget>
 
 void TextBox::openTextEditor(QWidget* dialogParent) {
-    bool ok;
+    /*bool ok;
     const QString text =
             QInputDialog::getMultiLineText(
                 dialogParent, prp_getName() + " text",
@@ -88,7 +88,8 @@ void TextBox::openTextEditor(QWidget* dialogParent) {
         mText->prp_startTransform();
         mText->setCurrentValue(text);
         mText->prp_finishTransform();
-    }
+    }*/
+    Q_UNUSED(dialogParent)
 }
 
 void TextBox::getMotionBlurProperties(QList<Property*> &list) const {
@@ -98,8 +99,10 @@ void TextBox::getMotionBlurProperties(QList<Property*> &list) const {
     list.append(mTextEffects.get());
 }
 
-void TextBox::setTextHAlignment(const Qt::Alignment alignment) {
-    if(mHAlignment == alignment) return;
+void TextBox::setTextHAlignment(const Qt::Alignment alignment)
+{
+    if (mHAlignment == alignment) { return; }
+    prp_pushUndoRedoName(tr("Change Text Alignment"));
     {
         UndoRedo ur;
         const auto oldValue = mHAlignment;
@@ -116,8 +119,10 @@ void TextBox::setTextHAlignment(const Qt::Alignment alignment) {
     setPathsOutdated(UpdateReason::userChange);
 }
 
-void TextBox::setTextVAlignment(const Qt::Alignment alignment) {
-    if(mVAlignment == alignment) return;
+void TextBox::setTextVAlignment(const Qt::Alignment alignment)
+{
+    if (mVAlignment == alignment) { return; }
+    prp_pushUndoRedoName(tr("Change Text Alignment"));
     {
         UndoRedo ur;
         const auto oldValue = mVAlignment;
@@ -136,7 +141,7 @@ void TextBox::setTextVAlignment(const Qt::Alignment alignment) {
 
 void TextBox::setFont(const SkFont &font) {
     if(mFont == font) return;
-    {
+    /*{ // undo must be set in setFontFamilyAndStyle, not here
         UndoRedo ur;
         const auto oldValue = mFont;
         const auto newValue = font;
@@ -147,7 +152,7 @@ void TextBox::setFont(const SkFont &font) {
             setFont(newValue);
         };
         prp_addUndoRedo(ur);
-    }
+    }*/
     mFont = font;
     mQFont = toQFont(font, 72, 96);
 
@@ -155,12 +160,42 @@ void TextBox::setFont(const SkFont &font) {
     setPathsOutdated(UpdateReason::userChange);
 }
 
-void TextBox::setFontSize(const qreal size) {
+void TextBox::setFontSize(const qreal size)
+{
+    prp_pushUndoRedoName(tr("Change Font Size"));
+    {
+        UndoRedo ur;
+        const auto oldValue = mFont.getSize();
+        const auto newValue = size;
+        ur.fUndo = [this, oldValue]() {
+            setFontSize(oldValue);
+        };
+        ur.fRedo = [this, newValue]() {
+            setFontSize(newValue);
+        };
+        prp_addUndoRedo(ur);
+    }
     setFont(mFont.makeWithSize(size));
 }
 
 void TextBox::setFontFamilyAndStyle(const QString &fontFamily,
-                                    const SkFontStyle& style) {
+                                    const SkFontStyle& style)
+{
+    prp_pushUndoRedoName(tr("Change Font"));
+    {
+        UndoRedo ur;
+        const auto oldValue1 = mFamily;
+        const auto oldValue2 = mStyle;
+        const auto newValue1 = fontFamily;
+        const auto newValue2 = style;
+        ur.fUndo = [this, oldValue1, oldValue2]() {
+            setFontFamilyAndStyle(oldValue1, oldValue2);
+        };
+        ur.fRedo = [this, newValue1, newValue2]() {
+            setFontFamilyAndStyle(newValue1, newValue2);
+        };
+        prp_addUndoRedo(ur);
+    }
     mFamily = fontFamily;
     mStyle = style;
     SkFont newFont = mFont;
@@ -226,20 +261,18 @@ const QString& TextBox::getCurrentValue() const {
     return mText->getCurrentValue();
 }
 
-void TextBox::setupCanvasMenu(PropertyMenu * const menu) {
-    if(menu->hasActionsForType<TextBox>()) return;
+void TextBox::setupCanvasMenu(PropertyMenu * const menu)
+{
+    if (menu->hasActionsForType<TextBox>()) { return; }
     menu->addedActionsForType<TextBox>();
+
     PathBox::setupCanvasMenu(menu);
-    //const auto widget = menu->getParentWidget();
     menu->addSeparator();
+
     PropertyMenu::PlainSelectedOp<TextBox> txtEff = [](TextBox * box) {
         box->mTextEffects->addChild(enve::make_shared<TextEffect>());
     };
-    menu->addPlainAction("Add Text Effect", txtEff);
-    /*PropertyMenu::PlainSelectedOp<TextBox> setText = [widget](TextBox * box) {
-        box->openTextEditor(widget);
-    };
-    menu->addPlainAction("Set Text...", setText);*/
+    menu->addPlainAction(tr("Add Text Effect"), txtEff);
 }
 
 void TextBox::textToPath(const qreal x, const qreal y,

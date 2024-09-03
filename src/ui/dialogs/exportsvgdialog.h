@@ -50,6 +50,8 @@ private:
     ComplexTask* exportTo(const QString& file,
                           bool preview = false);
 
+    void finishedDialog(const QString &fileName);
+
     QSharedPointer<QTemporaryFile> mPreviewFile;
     QPushButton *mPreviewButton;
 
@@ -62,6 +64,7 @@ private:
     QCheckBox *mFixedSize;
     QCheckBox *mLoop;
     QCheckBox *mOptimize;
+    QCheckBox *mNotify;
 
     QComboBox *mImageFormat;
     QSpinBox *mImageQuality;

@@ -177,36 +177,57 @@ OutlineSettingsAnimator *ContainerBox::getStrokeSettings() const {
     return mContainedBoxes.last()->getStrokeSettings();
 }
 
-class GroupSaverSVG : public ComplexTask {
+class GroupSaverSVG : public ComplexTask
+{
 public:
-    GroupSaverSVG(const ContainerBox* const src, SvgExporter& exp,
-                  QDomElement& ele, const FrameRange& visRange) :
-        ComplexTask(src->getContainedBoxesCount(),
-                    "SVG " + src->prp_getName()),
-        mSrc(src), mExp(exp), mEle(ele), mVisRange(visRange) {}
+    GroupSaverSVG(const ContainerBox* const src,
+                  SvgExporter& exp,
+                  QDomElement& ele,
+                  const FrameRange& visRange)
+        : ComplexTask(src->getContainedBoxesCount(), "SVG " + src->prp_getName())
+        , mSrc(src)
+        , mExp(exp)
+        , mEle(ele)
+        , mVisRange(visRange)
+    {
+        // check for mask (DstIn)
+        if (mSrc->isLayer()) {
+            const auto& boxes = mSrc->getContainedBoxes();
+            for (const auto &box : boxes) {
+                if (box->getBlendMode() == SkBlendMode::kDstIn) {
+                    mItemMaskId = box->prp_getName();
+                    break;
+                }
+            }
+            if (!mItemMaskId.isEmpty()) {
+                mEle.setAttribute("mask", QString("url(#%1)").arg(QString(mItemMaskId).simplified().replace(" ", "")));
+            }
+        }
+    }
 
     void nextStep() override {
-        if(!mSrc) return cancel();
-        if(setValue(mI)) return;
-        if(done()) return;
+        if (!mSrc) { return cancel(); }
+        if (setValue(mI)) { return; }
+        if (done()) { return; }
 
         const auto& boxes = mSrc->getContainedBoxes();
         const int id = boxes.count() - ++mI;
-        if(id >= boxes.count()) return finish();
+        if (id >= boxes.count()) { return finish(); }
         const auto& box = boxes.at(id);
-        if(!box->isVisible()) return nextStep();
-        const auto task = box->saveSVGWithTransform(mExp, mEle, mVisRange);
-        if(task) {
-            addTask(task->ref<eTask>());
-        } else {
-            addEmptyTask();
-        }
+        if (!box->isVisible()) { return nextStep(); }
+        const auto task = box->saveSVGWithTransform(mExp,
+                                                    mEle,
+                                                    mVisRange,
+                                                    mItemMaskId);
+        if (task) { addTask(task->ref<eTask>()); }
+        else { addEmptyTask(); }
     }
 private:
     const QPointer<const ContainerBox> mSrc;
     SvgExporter& mExp;
     QDomElement& mEle;
     const FrameRange mVisRange;
+    QString mItemMaskId;
 
     int mI = 0;
 };
@@ -743,43 +764,42 @@ void ContainerBox::ungroupAbandomTransform_k() {
     removeFromParent_k();
 }
 
-void ContainerBox::setupCanvasMenu(PropertyMenu * const menu) {
-    if(menu->hasActionsForType<ContainerBox>()) return;
+void ContainerBox::setupCanvasMenu(PropertyMenu * const menu)
+{
+    if (menu->hasActionsForType<ContainerBox>()) { return; }
     menu->addedActionsForType<ContainerBox>();
 
-    menu->addSection("Layer & Group");
-
-    menu->addPlainAction<ContainerBox>("Promote to Layer",
+    menu->addPlainAction<ContainerBox>(tr("Promote to Layer"),
                                        [](ContainerBox * box) {
         box->promoteToLayer();
     })->setEnabled(isGroup());
 
-    menu->addPlainAction<ContainerBox>("Demote to Group",
+    menu->addPlainAction<ContainerBox>(tr("Demote to Group"),
                                        [](ContainerBox * box) {
         box->demoteToGroup();
     })->setDisabled(isGroup());
 
 
-    if(!isLink()) {
+    if (!isLink()) {
         menu->addSeparator();
 
-        const auto ungroupAbandonAction = menu->addPlainAction<ContainerBox>(
-                    "Ungroup", [](ContainerBox * box) {
-            if(box->isLink()) return;
+        const auto ungroupAbandonAction = menu->addPlainAction<ContainerBox>(tr("Ungroup"),
+                                                                             [](ContainerBox * box) {
+            if (box->isLink()) { return; }
             box->ungroupAbandomTransform_k();
         });
 
-        const auto ungroupKeepAction = menu->addPlainAction<ContainerBox>(
-                    "Ungroup (Keep Transform)", [](ContainerBox * box) {
-            if(box->isLink()) return;
+        const auto ungroupKeepAction = menu->addPlainAction<ContainerBox>(tr("Ungroup (Keep Transform)"),
+                                                                          [](ContainerBox * box) {
+            if (box->isLink()) { return; }
             box->ungroupKeepTransform_k();
         });
 
         QAction* defaultUngroup;
-        if(areAllChildrenStatic()) {
-            defaultUngroup = ungroupKeepAction;
-        } else defaultUngroup = ungroupAbandonAction;
+        if (areAllChildrenStatic()) { defaultUngroup = ungroupKeepAction; }
+        else { defaultUngroup = ungroupAbandonAction; }
         defaultUngroup->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_G);
+        menu->addSeparator();
     }
 
     BoxWithPathEffects::setupCanvasMenu(menu);

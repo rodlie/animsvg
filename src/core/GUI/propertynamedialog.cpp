@@ -39,6 +39,7 @@ PropertyNameDialog::PropertyNameDialog(
             this, &PropertyNameDialog::reject);
 
     validate();
+    mName->setSelection(0, mName->text().length());
 }
 
 bool PropertyNameDialog::sGetPropertyName(QString& name,

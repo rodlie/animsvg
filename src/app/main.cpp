@@ -183,6 +183,7 @@ int main(int argc, char *argv[])
     // check permissions
     AppSupport::checkPerms(isRenderer);
 
+    AppSupport::handlePortableFirstRun();
     // check XDG integration
 #ifdef Q_OS_LINUX
     AppSupport::initXDGDesktop(isRenderer);

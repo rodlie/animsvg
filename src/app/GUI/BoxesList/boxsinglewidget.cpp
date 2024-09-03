@@ -177,12 +177,12 @@ BoxSingleWidget::BoxSingleWidget(BoxScroller * const parent)
         } else if (const auto eEff = enve_cast<eEffect*>(target)) {
             if (eEff->isVisible()) { return BoxSingleWidget::VISIBLE_ICON; }
             return BoxSingleWidget::INVISIBLE_ICON;
-        } else if (enve_cast<GraphAnimator*>(target)) {
+        } /*else if (enve_cast<GraphAnimator*>(target)) {
             const auto bsvt = static_cast<BoxScroller*>(mParent);
             const auto keysView = bsvt->getKeysView();
             if (keysView) { return BoxSingleWidget::GRAPH_PROPERTY_ICON; }
             return static_cast<QPixmap*>(nullptr);
-        }
+        }*/
         return static_cast<QPixmap*>(nullptr);
     });
 
@@ -382,6 +382,24 @@ void BoxSingleWidget::setComboProperty(ComboBoxProperty* const combo) {
     mPropertyComboBox->show();
 }
 
+void BoxSingleWidget::handlePropertySelectedChanged(const Property *prop)
+{
+    if (const auto graph = enve_cast<GraphAnimator*>(prop)) {
+        const auto bsvt = static_cast<BoxScroller*>(mParent);
+        const auto keysView = bsvt->getKeysView();
+        if (keysView) {
+            const bool graphSelected = keysView->graphIsSelected(graph);
+            const bool isSelected = prop->prp_isSelected();
+            if (graphSelected) {
+                if (!isSelected) { keysView->graphRemoveViewedAnimator(graph); }
+            } else {
+                if (isSelected) { keysView->graphAddViewedAnimator(graph); }
+            }
+            Document::sInstance->actionFinished();
+        }
+    }
+}
+
 ColorAnimator *BoxSingleWidget::getColorTarget() const {
     const auto swt = mTarget->getTarget();
     ColorAnimator * color = nullptr;
@@ -561,6 +579,8 @@ void BoxSingleWidget::setTargetAbstraction(SWT_Abstraction *abs) {
     if(!boundingBox && !eindependentSound) {
         mTargetConn << connect(prop, &Property::prp_selectionChanged,
                                this, qOverload<>(&QWidget::update));
+        mTargetConn << connect(prop, &Property::prp_selectionChanged,
+                               this, [this, prop]() { handlePropertySelectedChanged(prop); });
     }
 
     mValueSlider->setVisible(valueSliderVisible);
@@ -705,11 +725,22 @@ void BoxSingleWidget::mouseReleaseEvent(QMouseEvent *event) {
     }
 }
 
-void BoxSingleWidget::mouseDoubleClickEvent(QMouseEvent *e) {
-    if(!mTarget) return;
-    if(e->modifiers() & Qt::ShiftModifier) {
-        //mousePressEvent(e);
-    } else Document::sInstance->actionFinished();
+void BoxSingleWidget::enterEvent(QEvent *)
+{
+    mHover = true;
+    update();
+}
+
+void BoxSingleWidget::leaveEvent(QEvent *)
+{
+    mHover = false;
+    update();
+}
+
+void BoxSingleWidget::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    Q_UNUSED(e)
+    switchContentVisibleAction();
 }
 
 void BoxSingleWidget::prp_drawTimelineControls(QPainter * const p,
@@ -769,11 +800,12 @@ void BoxSingleWidget::paintEvent(QPaintEvent *) {
 
     int nameX = mFillWidget->x();
 
+    if (mHover) { p.fillRect(rect(), ThemeSupport::getThemeHighlightColor(40)); }
+
     const auto bsTarget = enve_cast<eBoxOrSound*>(prop);
-    if(!bsTarget) {
-        if(prop->prp_isSelected()) {
-            p.fillRect(mFillWidget->geometry(), QColor(0, 0, 0, 55));
-        }
+    if (!bsTarget && prop->prp_isSelected()) {
+        p.fillRect(mFillWidget->geometry(),
+                   ThemeSupport::getThemeHighlightSelectedColor(25));
     }
     if (bsTarget) {
         nameX += eSizesUI::widget/4;
@@ -782,7 +814,7 @@ void BoxSingleWidget::paintEvent(QPaintEvent *) {
             p.fillRect(rect(), QColor(0, 0, 0, 50));
             if (bsTarget->isSelected()) {
                 p.fillRect(mFillWidget->geometry(),
-                           ThemeSupport::getThemeButtonBaseColor());
+                           ThemeSupport::getThemeHighlightSelectedColor(50));
                 p.setPen(Qt::white);
             } else {
                 p.setPen(Qt::white);
@@ -867,7 +899,7 @@ void BoxSingleWidget::switchBoxVisibleAction() {
         ebos->switchVisible();
     } else if(const auto eEff = enve_cast<eEffect*>(target)) {
         eEff->switchVisible();
-    } else if(const auto graph = enve_cast<GraphAnimator*>(target)) {
+    } /*else if(const auto graph = enve_cast<GraphAnimator*>(target)) {
         const auto bsvt = static_cast<BoxScroller*>(mParent);
         const auto keysView = bsvt->getKeysView();
         if(keysView) {
@@ -878,7 +910,7 @@ void BoxSingleWidget::switchBoxVisibleAction() {
             }
             Document::sInstance->actionFinished();
         }
-    }
+    }*/
     Document::sInstance->actionFinished();
     update();
 }

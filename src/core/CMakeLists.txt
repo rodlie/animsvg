@@ -30,7 +30,7 @@ include(friction-ffmpeg)
 
 message("-- ffmpeg include: ${FFMPEG_INCLUDE_DIRS}")
 message("-- ffmpeg libraries: ${FFMPEG_LIBRARIES_DIRS} ${FFMPEG_LIBRARIES}")
-message("-- skia libraries: ${SKIA_LIBRARIES}")
+message("-- skia libraries: ${SKIA_LIBRARIES_DIRS} ${SKIA_LIBRARIES}")
 
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 add_definitions(-DPROJECT_COMMIT="${GIT_COMMIT}")

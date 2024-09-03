@@ -518,8 +518,14 @@ void FillStrokeSettingsWidget::setCurrentSettings(PaintSettingsAnimator *fillPai
 {
     setFillValuesFromFillSettings(fillPaintSettings);
     setStrokeValuesFromStrokeSettings(strokePaintSettings);
-    if (mTarget == PaintSetting::FILL) { setFillTarget(); }
-    else { setStrokeTarget(); }
+
+    const bool hasFill = fillPaintSettings ? fillPaintSettings->getPaintType() != PaintType::NOPAINT : false;
+    const bool hasStroke = strokePaintSettings ? strokePaintSettings->getPaintType() != PaintType::NOPAINT : false;
+    if (hasStroke && !hasFill) { setStrokeTarget(); }
+    else { setFillTarget(); }
+
+    //if (mTarget == PaintSetting::FILL) { setFillTarget(); }
+    //else { setStrokeTarget(); }
 }
 
 void FillStrokeSettingsWidget::clearAll()

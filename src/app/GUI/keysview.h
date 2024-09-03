@@ -162,9 +162,15 @@ public:
     int graphGetAnimatorId(GraphAnimator * const anim);
     QrealPoint *graphGetPointAtPos(const QPointF &pressPos) const;
     bool graphValidateVisible(GraphAnimator * const animator);
-    void graphUpdateVisbile();
-    void graphSetOnlySelectedVisible(const bool selectedOnly);
+    void graphUpdateVisible();
     bool graphIsSelected(GraphAnimator * const anim);
+    void graphEasingAction(const QString &easing);
+    void graphEasingApply(QrealAnimator *anim,
+                          const FrameRange &range,
+                          const QString &easing);
+    bool graphEasingApplyExpression(QrealAnimator *anim,
+                                    const FrameRange &range,
+                                    const QString &easing);
 
     TimelineHighlightWidget *requestHighlighter();
 private:
@@ -262,7 +268,6 @@ private:
 
     // graph
 
-    bool graph_mOnlySelectedVisible = false;
     bool graph_mValueLinesVisible = true;
     qreal mPixelsPerValUnit = 0;
     qreal mMinShownVal = 0;

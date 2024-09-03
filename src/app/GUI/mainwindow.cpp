@@ -188,10 +188,7 @@ MainWindow::MainWindow(Document& document,
         connect(&mDocument, &Document::sceneCreated,
                 this, &MainWindow::closeWelcomeDialog);
         connect(&mDocument, &Document::openTextEditor,
-                this, [this] () {
-            mTabColorText->setCurrentIndex(mTabTextIndex);
-            mFontWidget->setTextFocus();
-        });
+                this, [this] () { focusFontWidget(true); });
         connect(&mDocument, &Document::newVideo,
                 this, &MainWindow::handleNewVideoClip);
     }
@@ -263,7 +260,6 @@ MainWindow::MainWindow(Document& document,
     setupMenuBar();
 
     if (!mIsRenderer) {
-        connectToolBarActions();
         readRecentFiles();
         updateRecentMenu();
     }
@@ -520,7 +516,7 @@ void MainWindow::setupMenuBar()
         loadToolBtn->setDefaultAction(openAct);
 
         loadToolMenu->addAction(mLinkedAct);
-        loadToolMenu->addAction(mImportSeqAct);
+        loadToolMenu->addAction(mImportAct);
         loadToolMenu->addAction(mImportSeqAct);
         loadToolMenu->addMenu(mRecentMenu);
 
@@ -630,20 +626,6 @@ void MainWindow::setupMenuBar()
     undoQAct->setShortcut(Qt::CTRL + Qt::Key_Z);
     mActions.undoAction->connect(undoQAct);
     cmdAddAction(undoQAct);
-
-    // workaround
-    // if we undo text changes we also want the font widget to reflect this
-    connect(undoQAct, &QAction::triggered,
-            this, [this]() {
-        const auto scene = *mDocument.fActiveScene;
-        if (!scene) { return; }
-        if (const auto txtBox = enve_cast<TextBox*>(scene->getCurrentBox())) {
-            mFontWidget->setDisplayedSettings(txtBox->getFontSize(),
-                                              txtBox->getFontFamily(),
-                                              txtBox->getFontStyle(),
-                                              txtBox->getCurrentValue());
-        }
-    });
 
     const auto redoQAct = mEditMenu->addAction(QIcon::fromTheme("loop_forwards"),
                                                tr("Redo", "MenuBar_Edit"));
@@ -1638,11 +1620,6 @@ void MainWindow::setupToolBar()
     spacer1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     mToolBar->addWidget(spacer1);*/
 
-
-    // fontWidget
-    //mFontWidget = new FontsWidget(this);
-    //mFontWidgetAct = mToolBar->addWidget(mFontWidget);
-
     // newEmpty
     /*mActionNewEmptyPaintFrameAct = new QAction(QIcon::fromTheme("newEmpty"),
                                                tr("New Empty Frame"),
@@ -1660,20 +1637,6 @@ void MainWindow::setupToolBar()
     //addToolBar(mToolBar);
 }
 
-void MainWindow::connectToolBarActions()
-{
-    connect(mFontWidget, &FontsWidget::fontSizeChanged,
-            &mActions, &Actions::setFontSize);
-    connect(mFontWidget, &FontsWidget::textChanged,
-            &mActions, &Actions::setFontText);
-    connect(mFontWidget, &FontsWidget::fontFamilyAndStyleChanged,
-            &mActions, &Actions::setFontFamilyAndStyle);
-    connect(mFontWidget, &FontsWidget::textAlignmentChanged,
-            &mActions, &Actions::setTextAlignment);
-    connect(mFontWidget, &FontsWidget::textVAlignmentChanged,
-            &mActions, &Actions::setTextVAlignment);
-}
-
 MainWindow *MainWindow::sGetInstance()
 {
     return sInstance;
@@ -1683,9 +1646,6 @@ void MainWindow::updateCanvasModeButtonsChecked()
 {
     const CanvasMode mode = mDocument.fCanvasMode;
     //mCentralWidget->setCanvasMode(mode);
-
-
-    //mFontWidgetAct->setVisible(boxMode);
 
     const bool boxMode = mode == CanvasMode::boxTransform;
     const bool pointMode = mode == CanvasMode::pointTransform;
@@ -1738,17 +1698,17 @@ SimpleBrushWrapper *MainWindow::getCurrentBrush() const
 void MainWindow::setCurrentBox(BoundingBox *box)
 {
     mFillStrokeSettings->setCurrentBox(box);
-    if (const auto txtBox = enve_cast<TextBox*>(box)) {
-        mFontWidget->setEnabled(true);
-        mFontWidget->setDisplayedSettings(txtBox->getFontSize(),
-                                          txtBox->getFontFamily(),
-                                          txtBox->getFontStyle(),
-                                          txtBox->getCurrentValue());
-        mFontWidget->setColorTarget(txtBox->getFillSettings()->getColorAnimator());
+    mFontWidget->setCurrentBox(box);
+    setCurrentBoxFocus(box);
+}
+
+void MainWindow::setCurrentBoxFocus(BoundingBox *box)
+{
+    if (!box) { return; }
+    if (const auto target = enve_cast<TextBox*>(box)) {
+        focusFontWidget(mDocument.fCanvasMode == CanvasMode::textCreate);
     } else {
-        mFontWidget->clearText();
-        mFontWidget->setDisabled(true);
-        mFontWidget->setColorTarget(nullptr);
+        focusColorWidget();
     }
 }
 
@@ -1821,8 +1781,13 @@ void MainWindow::enable()
 
 void MainWindow::newFile()
 {
-    if (askForSaving()) {
-        closeProject();
+    if (mChangedSinceSaving || !mDocument.fEvFile.isEmpty()) {
+        const int ask = QMessageBox::question(this,
+                                              tr("New Project"),
+                                              tr("Are you sure you want to create a new project?"));
+        if (ask == QMessageBox::No) { return; }
+    }
+    if (closeProject()) {
         SceneSettingsDialog::sNewSceneDialog(mDocument, this);
     }
 }
@@ -1882,11 +1847,10 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *e)
         if (keyEvent->modifiers() & Qt::SHIFT && key == Qt::Key_D) {
             return processKeyEvent(keyEvent);
         }
-        if (keyEvent->modifiers() & Qt::CTRL) {
-            if (key == Qt::Key_C || key == Qt::Key_V ||
-                key == Qt::Key_X || key == Qt::Key_D) {
-                return processKeyEvent(keyEvent);
-            }
+        if (keyEvent->modifiers() & Qt::CTRL &&
+            (key == Qt::Key_C || key == Qt::Key_V ||
+             key == Qt::Key_X || key == Qt::Key_D)) {
+            return processKeyEvent(keyEvent);
         } else if (key == Qt::Key_A || key == Qt::Key_I ||
                    key == Qt::Key_Delete) {
               return processKeyEvent(keyEvent);
@@ -2336,6 +2300,17 @@ LayoutHandler *MainWindow::getLayoutHandler()
 TimelineDockWidget *MainWindow::getTimeLineWidget()
 {
     return mTimeline;
+}
+
+void MainWindow::focusFontWidget(const bool focus)
+{
+    mTabColorText->setCurrentIndex(mTabTextIndex);
+    if (focus) { mFontWidget->setTextFocus(); }
+}
+
+void MainWindow::focusColorWidget()
+{
+    mTabColorText->setCurrentIndex(mTabColorIndex);
 }
 
 stdsptr<void> MainWindow::lock()

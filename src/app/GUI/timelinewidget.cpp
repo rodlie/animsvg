@@ -207,7 +207,7 @@ TimelineWidget::TimelineWidget(Document &document,
     high2->setOther(high1);
 
     mAnimationDockWidget = new AnimationDockWidget(this, mKeysView);
-    mAnimationDockWidget->hide();
+    mAnimationDockWidget->showGraph(false);
     mMainLayout->addLayout(mKeysViewLayout, 1, 1);
 
     const auto keysViewScrollbarLayout = new QHBoxLayout();
@@ -336,7 +336,7 @@ void TimelineWidget::setCurrentScene(Canvas * const scene) {
 
 void TimelineWidget::setGraphEnabled(const bool enabled) {
     mKeysView->setGraphViewed(enabled);
-    mAnimationDockWidget->setVisible(enabled);
+    mAnimationDockWidget->showGraph(enabled);
     //const auto iconsDir = eSettings::sIconsDir();
     //if(enabled) mGraphAct->setIcon(QIcon(iconsDir + "/graphEnabled.png"));
     //else mGraphAct->setIcon(QIcon(iconsDir + "/graphDisabled.png"));

@@ -55,6 +55,9 @@
 #include "svgexporthelpers.h"
 #include "internallinkcanvas.h"
 
+#include <QInputDialog>
+#include <QMessageBox>
+
 int BoundingBox::sNextDocumentId = 0;
 QList<BoundingBox*> BoundingBox::sDocumentBoxes;
 int BoundingBox::sNextWriteId;
@@ -765,48 +768,48 @@ QPointF BoundingBox::mapRelPosToAbs(const QPointF &relPos) const {
     return mTransformAnimator->mapRelPosToAbs(relPos);
 }
 
-void BoundingBox::setupCanvasMenu(PropertyMenu * const menu) {
-    if(menu->hasActionsForType<BoundingBox>()) return;
+void BoundingBox::setupCanvasMenu(PropertyMenu * const menu)
+{
+    if (menu->hasActionsForType<BoundingBox>()) { return; }
     menu->addedActionsForType<BoundingBox>();
+
     const auto pScene = getParentScene();
     Q_ASSERT(pScene);
 
-    menu->addSection("Box");
-
-    menu->addPlainAction("Create Link", [pScene]() {
+    menu->addPlainAction(tr("Create Link"), [pScene]() {
         pScene->createLinkBoxForSelected();
     });
-    menu->addPlainAction("Center Pivot", [pScene]() {
+    menu->addPlainAction(tr("Center Pivot"), [pScene]() {
         pScene->centerPivotForSelected();
     });
 
     menu->addSeparator();
 
-    menu->addPlainAction("Copy", [pScene]() {
+    menu->addPlainAction(tr("Copy"), [pScene]() {
         pScene->copyAction();
     })->setShortcut(Qt::CTRL + Qt::Key_C);
 
-    menu->addPlainAction("Cut", [pScene]() {
+    menu->addPlainAction(tr("Cut"), [pScene]() {
         pScene->cutAction();
     })->setShortcut(Qt::CTRL + Qt::Key_X);
 
-    menu->addPlainAction("Duplicate", [pScene]() {
+    menu->addPlainAction(tr("Duplicate"), [pScene]() {
         pScene->duplicateAction();
     })->setShortcut(Qt::CTRL + Qt::Key_D);
 
-    menu->addPlainAction("Delete", [pScene]() {
+    menu->addPlainAction(tr("Delete"), [pScene]() {
         pScene->removeSelectedBoxesAndClearList();
     })->setShortcut(Qt::Key_Delete);
 
     menu->addSeparator();
 
-    menu->addPlainAction("Group", [pScene]() {
+    menu->addPlainAction(tr("Group"), [pScene]() {
         pScene->groupSelectedBoxes();
     })->setShortcut(Qt::CTRL + Qt::Key_G);
 
     menu->addSeparator();
 
-    const auto rasterEffectsMenu = menu->addMenu("Raster Effects");
+    const auto rasterEffectsMenu = menu->addMenu(tr("Raster Effects"));
     RasterEffectMenuCreator::addEffects(
                 rasterEffectsMenu, &BoundingBox::addRasterEffect);
 }
@@ -1131,14 +1134,27 @@ bool BoundingBox::getSVGPropertiesVisible()
     return false;
 }
 
-#include <QInputDialog>
-void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu) {
-    if(menu->hasActionsForType<BoundingBox>()) return;
+void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu)
+{
+    if (menu->hasActionsForType<BoundingBox>()) { return; }
     menu->addedActionsForType<BoundingBox>();
+
     const auto parentWidget = menu->getParentWidget();
-    menu->addPlainAction("Rename", [this, parentWidget]() {
+    menu->addPlainAction(tr("Rename"), [this, parentWidget]() {
         PropertyNameDialog::sRenameBox(this, parentWidget);
     });
+
+    const auto pScene = getParentScene();
+    if (pScene) {
+        menu->addPlainAction(tr("Delete"), [pScene]() {
+            /*const int ask = QMessageBox::question(nullptr,
+                                                  tr("Delete?"),
+                                                  tr("Are you sure you want to delete selected item(s)?"));
+            if (ask != QMessageBox::Yes) { return; }*/
+            pScene->removeSelectedBoxesAndClearList();
+        })->setShortcut(Qt::Key_Delete);
+    }
+
     menu->addSeparator();
     {
         const PropertyMenu::CheckSelectedOp<BoundingBox> visRangeOp =
@@ -1154,7 +1170,7 @@ void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu) {
         [](BoundingBox* const box, const bool checked) {
             box->setCustomPropertiesVisible(checked);
         };
-        menu->addCheckableAction("Custom Properties",
+        menu->addCheckableAction(tr("Custom Properties"),
                                  mCustomProperties->SWT_isVisible(),
                                  visRangeOp);
     }
@@ -1163,31 +1179,34 @@ void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu) {
         [](BoundingBox* const box, const bool checked) {
             box->setBlendEffectsVisible(checked);
         };
-        menu->addCheckableAction("Blend Effects",
+        menu->addCheckableAction(tr("Blend Effects"),
                                  mBlendEffectCollection->SWT_isVisible(),
                                  visRangeOp);
     }
     menu->addSeparator();
+
     const PropertyMenu::CheckSelectedOp<BoundingBox> visRangeOp =
     [](BoundingBox* const box, const bool checked) {
-        if(box->durationRectangleLocked()) return;
+        if (box->durationRectangleLocked()) { return; }
         const bool hasDur = box->hasDurationRectangle();
-        if(hasDur == checked) return;
-        if(checked) box->createDurationRectangle();
-        else box->setDurationRectangle(nullptr);
+        if (hasDur == checked) { return; }
+        if (checked) { box->createDurationRectangle(); }
+        else { box->setDurationRectangle(nullptr); }
     };
-    menu->addCheckableAction("Visibility Range",
+    menu->addCheckableAction(tr("Visibility Range"),
                              hasDurationRectangle(),
                              visRangeOp)->setEnabled(!durationRectangleLocked());
-    menu->addPlainAction("Visibility Range Settings...",
+
+    menu->addPlainAction(tr("Visibility Range Settings"),
                          [this]() {
         const auto durRect = getDurationRectangle();
-        if(!durRect) return;
+        if (!durRect) { return; }
         const auto& instance = DialogsInterface::instance();
         instance.showDurationSettingsDialog(durRect);
     })->setEnabled(hasDurationRectangle());
+
     menu->addSeparator();
-    setupCanvasMenu(menu->addMenu("Actions"));
+    setupCanvasMenu(menu->addMenu(tr("Actions")));
 }
 
 void BoundingBox::getMotionBlurProperties(QList<Property*> &list) const {
@@ -1399,8 +1418,11 @@ void BoundingBox::renderDataFinished(BoxRenderData *renderData) {
 //    }
 //}
 
-eTask* BoundingBox::saveSVGWithTransform(SvgExporter& exp, QDomElement& parent,
-                                         const FrameRange& parentVisRange) const {
+eTask* BoundingBox::saveSVGWithTransform(SvgExporter& exp,
+                                         QDomElement& parent,
+                                         const FrameRange& parentVisRange,
+                                         const QString &maskId) const
+{
     const auto visRange = parentVisRange*prp_absInfluenceRange();
     const auto task = enve::make_shared<DomEleTask>(exp, visRange);
     exp.addNextTask(task);
@@ -1408,15 +1430,23 @@ eTask* BoundingBox::saveSVGWithTransform(SvgExporter& exp, QDomElement& parent,
     const QPointer<const BoundingBox> ptr = this;
     const auto expPtr = &exp;
     const auto parentPtr = &parent;
-    taskPtr->addDependent({[ptr, taskPtr, expPtr, parentPtr, visRange]() {
+    taskPtr->addDependent({[ptr, taskPtr, expPtr, parentPtr, visRange, maskId]() {
         auto& ele = taskPtr->element();
-        if(ptr) {
+        if (ptr) {
             SvgExportHelpers::assignVisibility(*expPtr, ele, visRange);
             const auto transform = ptr->mTransformAnimator.get();
             const auto transformed = transform->saveSVG(*expPtr, visRange, ele);
             const auto effects = ptr->mRasterEffectsAnimators.get();
             const auto withEffects = effects->saveEffectsSVG(*expPtr, visRange, transformed);
-            parentPtr->appendChild(withEffects);
+
+            if (maskId == ptr->prp_getName()) { // move mask to defs
+                auto& eleMask = taskPtr->initialize("mask");
+                eleMask.setAttribute("id", QString(ptr->prp_getName()).simplified().replace(" ", ""));
+                eleMask.appendChild(withEffects);
+                expPtr->addToDefs(eleMask);
+            } else {
+                parentPtr->appendChild(withEffects);
+            }
         }
     }, nullptr});
     saveSVG(exp, taskPtr);

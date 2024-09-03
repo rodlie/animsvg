@@ -38,11 +38,13 @@ public:
     SliderEdit(QWidget* const parent);
 signals:
     void valueSet(const qreal value);
+    void hoverChanged();
 protected:
     void mousePressEvent(QMouseEvent* e) override;
     void keyPressEvent(QKeyEvent *e) override;
     void hideEvent(QHideEvent *e) override;
     void showEvent(QShowEvent *e) override;
+    void leaveEvent(QEvent *e) override;
 private:
     void lineEditingFinished();
 
@@ -107,6 +109,9 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
 
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
+
     void paint(QPainter *p,
                const QColor &allFill,
                const QColor &sliderFill,
@@ -151,6 +156,8 @@ private:
     qreal mLastValue;
     bool mShowValueSlider = true;
     bool mAutoAdjustWidth = true;
+
+    bool mHovered = false;
 };
 
 #endif // QDOUBLESLIDER_H

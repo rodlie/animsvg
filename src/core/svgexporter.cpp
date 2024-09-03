@@ -58,19 +58,19 @@ void SvgExporter::nextStep()
         if (mFile.open(QIODevice::WriteOnly)) {
             mStream.setDevice(&mFile);
             if (mHtml) {
-                mStream << QString::fromUtf8("<!DOCTYPE html>") << QT_ENDL;
-                mStream << QString::fromUtf8("<html>") << QT_ENDL;
-                mStream << QString::fromUtf8("<head>") << QT_ENDL;
-                mStream << QString::fromUtf8("<meta charset=\"utf-8\" />") << QT_ENDL;
-                mStream << QString::fromUtf8("<title>%1</title>").arg(tr("Preview")) << QT_ENDL;
-                mStream << QString::fromUtf8("<style>html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; } html { background: repeating-conic-gradient(#b0b0b0 0% 25%, transparent 0% 50%) 50% / 40px 40px; } svg { margin: auto; width: 100%; height: 100%; object-fit: contain; overflow: hidden; }</style>") << QT_ENDL;
-                mStream << QString::fromUtf8("</head>") << QT_ENDL;
-                mStream << QString::fromUtf8("<body>") << QT_ENDL;
+                mStream << QString::fromUtf8("<!DOCTYPE html>") << Qt::endl;
+                mStream << QString::fromUtf8("<html>") << Qt::endl;
+                mStream << QString::fromUtf8("<head>") << Qt::endl;
+                mStream << QString::fromUtf8("<meta charset=\"utf-8\" />") << Qt::endl;
+                mStream << QString::fromUtf8("<title>%1</title>").arg(tr("Preview")) << Qt::endl;
+                mStream << QString::fromUtf8("<style>html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; } html { background: repeating-conic-gradient(#b0b0b0 0% 25%, transparent 0% 50%) 50% / 40px 40px; } svg { margin: auto; width: 100%; height: 100%; object-fit: contain; overflow: hidden; }</style>") << Qt::endl;
+                mStream << QString::fromUtf8("</head>") << Qt::endl;
+                mStream << QString::fromUtf8("<body>") << Qt::endl;
             } else {
-                mStream << QString::fromUtf8("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>") << QT_ENDL;
+                mStream << QString::fromUtf8("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>") << Qt::endl;
             }
             mStream << QString::fromUtf8("<!-- Created with %1 - %2 -->").arg(AppSupport::getAppDisplayName(),
-                                                                              AppSupport::getAppUrl()) << QT_ENDL << QT_ENDL;
+                                                                              AppSupport::getAppUrl()) << Qt::endl << Qt::endl;
             fScene->saveSceneSVG(*this);
         } else {
             RuntimeThrow("Could not open:\n\"" + mFile.fileName() + "\"");
@@ -94,8 +94,8 @@ void SvgExporter::finish()
         mDoc.appendChild(mSvg);
         mStream << mDoc.toString();
         if (mHtml) {
-            mStream << QString::fromUtf8("</body>") << QT_ENDL;
-            mStream << QString::fromUtf8("</html>") << QT_ENDL;
+            mStream << QString::fromUtf8("</body>") << Qt::endl;
+            mStream << QString::fromUtf8("</html>") << Qt::endl;
         }
         mStream.flush();
         mFile.close();

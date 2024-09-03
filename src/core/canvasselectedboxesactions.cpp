@@ -173,7 +173,6 @@ void Canvas::setSelectedTextVAlignment(const Qt::Alignment alignment) const {
 void Canvas::setSelectedFontFamilyAndStyle(const QString& family,
                                            const SkFontStyle& style)
 {
-#pragma message("FIXME: undo for font family is broken")
     pushUndoRedoName("Change Font");
     for(const auto &box : mSelectedBoxes) {
         box->setFontFamilyAndStyle(family, style);
@@ -444,6 +443,7 @@ void Canvas::removeSelectedBoxesAndClearList() {
         removeBoxFromSelection(box);
         box->removeFromParent_k();
     }
+    emit objectSelectionChanged();
 }
 
 void Canvas::setCurrentBox(BoundingBox* const box) {
