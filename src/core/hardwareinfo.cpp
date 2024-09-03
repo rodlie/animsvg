@@ -26,6 +26,8 @@
 #include "hardwareinfo.h"
 
 #include <QThread>
+#include <iostream>
+#include <ostream>
 
 #include "exceptions.h"
 
@@ -111,7 +113,8 @@ const QPair<GpuVendor, QStringList> gpuVendor()
     return QPair<GpuVendor, QStringList>(gpu, specs);
 }
 
-void HardwareInfo::sUpdateInfo() {
+void HardwareInfo::sUpdateInfo()
+{
     mCpuThreads = QThread::idealThreadCount();
     mRamKB = getTotalRamBytes();
     const auto gpu = gpuVendor();
@@ -119,4 +122,9 @@ void HardwareInfo::sUpdateInfo() {
     mGpuVendorString = gpu.second.at(0);
     mGpuRendererString = gpu.second.at(1);
     mGpuVersionString = gpu.second.at(2);
+    std::cout << "---" << std::endl
+              << "OpenGL Vendor: " << mGpuVendorString.toStdString() << std::endl
+              << "OpenGL Renderer: " << mGpuRendererString.toStdString() << std::endl
+              << "OpenGL Version: " << mGpuVersionString.toStdString() << std::endl
+              << "---" << std::endl;
 }
