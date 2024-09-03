@@ -207,7 +207,7 @@ void OutputSettingsProfile::save()
 
 void OutputSettingsProfile::load(const QString &path)
 {
-    qDebug() << "load output profile" << path;
+    //qDebug() << "load output profile" << path;
     if (!QFile::exists(path)) { RuntimeThrow(tr("Failed to load profile: %1").arg(path)); }
 
     bool validProfile = false;
