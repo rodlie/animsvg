@@ -29,6 +29,7 @@
 #include "Private/esettings.h"
 #include "smartPointers/ememory.h"
 #include "ReadWrite/basicreadwrite.h"
+#include "formatoptions.h"
 
 extern "C" {
     #include <libavcodec/avcodec.h>
@@ -56,6 +57,7 @@ struct CORE_EXPORT OutputSettings
     AVPixelFormat fVideoPixelFormat = AV_PIX_FMT_NONE;
     int fVideoBitrate = 0;
     int fVideoProfile = FF_PROFILE_UNKNOWN;
+    FormatOptions fVideoOptions;
 
     bool fAudioEnabled = false;
     const AVCodec *fAudioCodec = nullptr;
