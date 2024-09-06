@@ -206,6 +206,27 @@ static void addVideoStream(OutputStream * const ost,
         c->profile = outSettings.fVideoProfile;
     }
 
+    for (const auto &opt : outSettings.fVideoOptions.fValues) {
+        switch (opt.fType) {
+        case FormatType::fTypeCodec:
+            av_opt_set(c->priv_data,
+                       opt.fKey.toStdString().c_str(),
+                       opt.fValue.toStdString().c_str(), 0);
+            break;
+        case FormatType::fTypeFormat:
+            av_opt_set(oc->priv_data,
+                       opt.fKey.toStdString().c_str(),
+                       opt.fValue.toStdString().c_str(), 0);
+            break;
+        case FormatType::fTypeMeta:
+            av_dict_set(&oc->metadata,
+                        opt.fKey.toStdString().c_str(),
+                        opt.fValue.toStdString().c_str(), 0);
+            break;
+        default:;
+        }
+    }
+
     c->gop_size      = 12; /* emit one intra frame every twelve frames at most */
     c->pix_fmt       = outSettings.fVideoPixelFormat;//RGBA;
     if(c->codec_id == AV_CODEC_ID_MPEG2VIDEO) {
