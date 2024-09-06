@@ -140,3 +140,8 @@ eWriteStream &eWriteStream::operator<<(SimpleBrushWrapper * const brush) {
     *this << (brush ? brush->getBrushName() : "");
     return *this;
 }
+
+eWriteStream &eWriteStream::operator<<(const FormatOptions &val) {
+    write(&val, sizeof(FormatOptions));
+    return *this;
+}

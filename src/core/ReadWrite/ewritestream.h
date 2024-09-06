@@ -6,6 +6,8 @@
 
 #include "efuturepos.h"
 #include "../XML/runtimewriteid.h"
+#include "formatoptions.h"
+
 #include <functional>
 
 class SimpleBrushWrapper;
@@ -79,6 +81,7 @@ public:
     eWriteStream& operator<<(const QString& val);
     eWriteStream& operator<<(const QByteArray& val);
     eWriteStream& operator<<(SimpleBrushWrapper* const brush);
+    eWriteStream& operator<<(const FormatOptions &val);
 
     void writeFilePath(const QString& absPath);
 
