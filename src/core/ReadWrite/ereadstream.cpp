@@ -160,4 +160,9 @@ eReadStream &eReadStream::operator>>(SimpleBrushWrapper *&brush) {
     return *this;
 }
 
+eReadStream &eReadStream::operator>>(FormatOptions &val) {
+    read(&val, sizeof(FormatOptions));
+    return *this;
+}
+
 int eReadStream::evFileVersion() const { return mEvFileVersion; }
