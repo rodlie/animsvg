@@ -94,6 +94,7 @@ public:
 
     static Friction::Core::FormatOptions toFormatOptions(const Friction::Core::FormatOptionsList &list);
     static Friction::Core::FormatOptionsList toFormatOptionsList(const Friction::Core::FormatOptions &options);
+    static bool isValidFormatOptionsList(const Friction::Core::FormatOptionsList &list);
 
 signals:
     void changed();

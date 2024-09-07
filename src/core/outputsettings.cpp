@@ -191,6 +191,13 @@ void OutputSettingsProfile::save()
                          mSettings.fVideoBitrate);
         profile.setValue(QString::fromUtf8("video_profile"),
                          mSettings.fVideoProfile);
+
+        const auto options = toFormatOptionsList(mSettings.fVideoOptions);
+        if (isValidFormatOptionsList(options)) {
+            profile.setValue(QString::fromUtf8("video_options_types"), options.fTypes);
+            profile.setValue(QString::fromUtf8("video_options_keys"), options.fKeys);
+            profile.setValue(QString::fromUtf8("video_options_values"), options.fValues);
+        }
     }
     profile.setValue(QString::fromUtf8("audio_enabled"),
                      mSettings.fAudioEnabled);
@@ -261,6 +268,13 @@ void OutputSettingsProfile::load(const QString &path)
             mSettings.fVideoBitrate = profile.value(QString::fromUtf8("video_bitrate")).toInt();
             mSettings.fVideoProfile = profile.value(QString::fromUtf8("video_profile"),
                                                     FF_PROFILE_UNKNOWN).toInt();
+
+            const auto options = FormatOptionsList{profile.value("video_options_types").toStringList(),
+                                                   profile.value("video_options_keys").toStringList(),
+                                                   profile.value("video_options_values").toStringList()};
+            if (isValidFormatOptionsList(options)) {
+                mSettings.fVideoOptions = toFormatOptions(options);
+            }
         }
         mSettings.fAudioEnabled = profileAudioEnabled;
         if (mSettings.fAudioEnabled) {
@@ -305,11 +319,34 @@ OutputSettingsProfile *OutputSettingsProfile::sGetByName(const QString &name)
 FormatOptions OutputSettingsProfile::toFormatOptions(const FormatOptionsList &list)
 {
     FormatOptions options;
+    if (!isValidFormatOptionsList(list)) { return options; }
+    for (int i = 0; i < list.fKeys.count(); i++) {
+        if (list.fKeys.at(i).isEmpty()) { continue; }
+        options.fValues.push_back({list.fKeys.at(i),
+                                   list.fValues.at(i),
+                                   list.fTypes.at(i).toInt()});
+    }
     return options;
 }
 
 FormatOptionsList OutputSettingsProfile::toFormatOptionsList(const FormatOptions &options)
 {
     FormatOptionsList list;
+    for (const auto &option : options.fValues) {
+        if (option.fKey.isEmpty()) { continue; }
+        list.fKeys << option.fKey;
+        list.fValues << option.fValue;
+        list.fTypes << QString::number(option.fType);
+    }
     return list;
+}
+
+bool OutputSettingsProfile::isValidFormatOptionsList(const Friction::Core::FormatOptionsList &list)
+{
+    if (list.fTypes.count() > 0 &&
+        list.fTypes.count() == list.fKeys.count() &&
+        list.fTypes.count() == list.fValues.count()) {
+        return true;
+    }
+    return false;
 }
