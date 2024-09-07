@@ -27,6 +27,7 @@
 #include "GUI/mainwindow.h"
 #include "GUI/global.h"
 #include "appsupport.h"
+#include "themesupport.h"
 #include "formatoptions.h"
 
 OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
@@ -69,8 +70,6 @@ OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
                      QList<AVCodecID>() << AV_CODEC_ID_MP3 << AV_CODEC_ID_AAC << AV_CODEC_ID_AC3 << AV_CODEC_ID_FLAC << AV_CODEC_ID_VORBIS << AV_CODEC_ID_WAVPACK,
         "*.aiff")
     };
-
-    setStyleSheet(MainWindow::sGetInstance()->styleSheet());
 
     mMainLayout = new QVBoxLayout(this);
     setLayout(mMainLayout);
@@ -318,6 +317,10 @@ void OutputSettingsDialog::updateAvailableCodecs() {
 
 void OutputSettingsDialog::setupFormatOptionsTree()
 {
+    mFormatOptionsTree->setPalette(
+        ThemeSupport::getDefaultPalette(
+            ThemeSupport::getThemeComboBaseColor()));
+
     const auto area = new QScrollArea(this);
     const auto container = new QWidget(this);
     const auto containerLayout = new QVBoxLayout(container);
@@ -348,26 +351,32 @@ void OutputSettingsDialog::setupFormatOptionsTree()
     mFormatOptionsTree->setRootIsDecorated(false);
     mFormatOptionsTree->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
-    const auto mPushButtonAddFOpt = new QPushButton(QIcon::fromTheme("plus"),
-                                                    QString(),
-                                                    this);
-    const auto mPushButtonRemFOpt = new QPushButton(QIcon::fromTheme("minus"),
-                                                    QString(),
-                                                    this);
+    const auto addButton = new QPushButton(QIcon::fromTheme("plus"),
+                                           QString(),
+                                           this);
+    const auto remButton = new QPushButton(QIcon::fromTheme("minus"),
+                                           QString(),
+                                           this);
 
-    mPushButtonAddFOpt->setObjectName("FlatButton");
-    mPushButtonAddFOpt->setFocusPolicy(Qt::NoFocus);
-    mPushButtonRemFOpt->setObjectName("FlatButton");
-    mPushButtonRemFOpt->setFocusPolicy(Qt::NoFocus);
+    addButton->setObjectName("FlatButton");
+    addButton->setFocusPolicy(Qt::NoFocus);
+    remButton->setObjectName("FlatButton");
+    remButton->setFocusPolicy(Qt::NoFocus);
 
-    connect(mPushButtonAddFOpt, &QPushButton::pressed, this, [this]() {
+    eSizesUI::widget.add(addButton, [addButton,
+                                     remButton](const int size) {
+        addButton->setFixedHeight(size);
+        remButton->setFixedHeight(size);
+    });
+
+    connect(addButton, &QPushButton::pressed, this, [this]() {
         QTreeWidgetItem *item = new QTreeWidgetItem(mFormatOptionsTree);
         item->setFlags(item->flags() | Qt::ItemIsEditable);
         mFormatOptionsTree->addTopLevelItem(item);
         mFormatOptionsTree->setItemWidget(item, 0,
                                           createComboBoxFormatOptType());
     });
-    connect(mPushButtonRemFOpt, &QPushButton::pressed, this, [this]() {
+    connect(remButton, &QPushButton::pressed, this, [this]() {
         auto item = mFormatOptionsTree->selectedItems().count() > 0 ?
                         mFormatOptionsTree->selectedItems().at(0) : nullptr;
         if (!item) { return; }
@@ -375,9 +384,9 @@ void OutputSettingsDialog::setupFormatOptionsTree()
             mFormatOptionsTree->indexOfTopLevelItem(item));
     });
 
-    mFormatOptionsTree->addScrollBarWidget(mPushButtonRemFOpt,
+    mFormatOptionsTree->addScrollBarWidget(remButton,
                                            Qt::AlignBottom);
-    mFormatOptionsTree->addScrollBarWidget(mPushButtonAddFOpt,
+    mFormatOptionsTree->addScrollBarWidget(addButton,
                                            Qt::AlignBottom);
 
     containerInnerLayout->addWidget(mFormatOptionsTree);
