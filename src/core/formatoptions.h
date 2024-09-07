@@ -21,33 +21,44 @@
 #
 */
 
-// Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
+#ifndef FRICTION_FORMAT_OPTIONS_H
+#define FRICTION_FORMAT_OPTIONS_H
 
-#ifndef EVFORMAT_H
-#define EVFORMAT_H
+#include "core_global.h"
 
-namespace EvFormat {
-    enum {
-        dataCompression = 16,
-        textSkFont = 17,
-        oilEffectImprov = 18,
-        betterSWTAbsReadWrite = 19,
-        readSceneSettingsBeforeContent = 20,
-        relativeFilePathSave = 21,
-        flipBook = 22,
-        colorizeInfluence = 23,
-        transformEffects = 24,
-        transformEffects2 = 25,
-        codecProfile = 26,
-        effectCustomName = 27,
-        markers = 28,
-        svgBeginEnd = 29,
-        formatOptions = 30,
+#include <QList>
+#include <QStringList>
 
-        nextVersion
-    };
+namespace Friction
+{
+    namespace Core
+    {
+        enum CORE_EXPORT FormatType
+        {
+            fTypeMeta,
+            fTypeFormat,
+            fTypeCodec
+        };
 
-    const int version = nextVersion - 1;
+        struct CORE_EXPORT FormatOption
+        {
+            QString fKey;
+            QString fValue;
+            int fType;
+        };
+
+        struct CORE_EXPORT FormatOptions
+        {
+            QList<FormatOption> fValues;
+        };
+
+        struct CORE_EXPORT FormatOptionsList
+        {
+            QStringList fTypes;
+            QStringList fKeys;
+            QStringList fValues;
+        };
+    }
 }
 
-#endif // EVFORMAT_H
+#endif // FRICTION_FORMAT_OPTIONS_H

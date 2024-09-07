@@ -27,6 +27,10 @@
 #include "GUI/mainwindow.h"
 #include "GUI/global.h"
 #include "appsupport.h"
+#include "themesupport.h"
+#include "formatoptions.h"
+
+using namespace Friction::Core;
 
 OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
                                            QWidget *parent) :
@@ -68,8 +72,6 @@ OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
                      QList<AVCodecID>() << AV_CODEC_ID_MP3 << AV_CODEC_ID_AAC << AV_CODEC_ID_AC3 << AV_CODEC_ID_FLAC << AV_CODEC_ID_VORBIS << AV_CODEC_ID_WAVPACK,
         "*.aiff")
     };
-
-    setStyleSheet(MainWindow::sGetInstance()->styleSheet());
 
     mMainLayout = new QVBoxLayout(this);
     setLayout(mMainLayout);
@@ -162,11 +164,16 @@ OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
     eSizesUI::widget.addSpacing(mMainLayout);
     mVideoGroupBox->setLayout(mVideoSettingsLayout);
     mMainLayout->addWidget(mVideoGroupBox);
+
+    mFormatOptionsTree = new QTreeWidget(this);
+    setupFormatOptionsTree();
+
     mAudioGroupBox->setLayout(mAudioSettingsLayout);
     mMainLayout->addWidget(mAudioGroupBox);
     eSizesUI::widget.addSpacing(mMainLayout);
     mMainLayout->addLayout(mShowLayout);
     eSizesUI::widget.addSpacing(mMainLayout);
+    mMainLayout->addStretch();
     mMainLayout->addLayout(mButtonsLayout);
 
     connect(mVideoCodecsComboBox, &QComboBox::currentTextChanged, [this]() {
@@ -211,6 +218,7 @@ OutputSettings OutputSettingsDialog::getSettings() {
     settings.fVideoPixelFormat = currentPixelFormat;
     settings.fVideoBitrate = qRound(mBitrateSpinBox->value()*1000000);
     settings.fVideoProfile = mVideoProfileComboBox->currentData().toInt();
+    settings.fVideoOptions = getFormatOptions();
 
     settings.fAudioEnabled = mAudioGroupBox->isChecked();
     const AVCodec *currentAudioCodec = nullptr;
@@ -307,6 +315,149 @@ void OutputSettingsDialog::addAudioCodec(const AVCodecID &codecId,
 void OutputSettingsDialog::updateAvailableCodecs() {
     updateAvailableAudioCodecs();
     updateAvailableVideoCodecs();
+}
+
+void OutputSettingsDialog::setupFormatOptionsTree()
+{
+    mFormatOptionsTree->setPalette(
+        ThemeSupport::getDefaultPalette(
+            ThemeSupport::getThemeComboBaseColor()));
+
+    const auto area = new QScrollArea(this);
+    const auto container = new QWidget(this);
+    const auto containerLayout = new QVBoxLayout(container);
+    const auto containerInner = new QWidget(this);
+    const auto containerInnerLayout = new QVBoxLayout(containerInner);
+
+    area->setWidget(containerInner);
+    area->setWidgetResizable(true);
+    area->setContentsMargins(0, 0, 0, 0);
+    area->setFrameShape(QFrame::NoFrame);
+
+    container->setContentsMargins(10, 0, 10, 0);
+    container->setMinimumHeight(150);
+    containerLayout->setMargin(0);
+    containerLayout->addWidget(area);
+
+    containerInner->setContentsMargins(0, 0, 0, 0);
+    containerInnerLayout->setMargin(0);
+
+    mFormatOptionsTree->setHeaderLabels(QStringList()
+                                        << tr("Type")
+                                        << tr("Key")
+                                        << tr("Value"));
+    mFormatOptionsTree->setTabKeyNavigation(true);
+    mFormatOptionsTree->setAlternatingRowColors(true);
+    mFormatOptionsTree->setSortingEnabled(false);
+    mFormatOptionsTree->setHeaderHidden(false);
+    mFormatOptionsTree->setRootIsDecorated(false);
+    mFormatOptionsTree->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+    const auto addButton = new QPushButton(QIcon::fromTheme("plus"),
+                                           QString(),
+                                           this);
+    const auto remButton = new QPushButton(QIcon::fromTheme("minus"),
+                                           QString(),
+                                           this);
+
+    addButton->setObjectName("FlatButton");
+    addButton->setFocusPolicy(Qt::NoFocus);
+    remButton->setObjectName("FlatButton");
+    remButton->setFocusPolicy(Qt::NoFocus);
+
+    eSizesUI::widget.add(addButton, [addButton,
+                                     remButton](const int size) {
+        addButton->setFixedHeight(size);
+        remButton->setFixedHeight(size);
+    });
+
+    connect(addButton, &QPushButton::pressed, this, [this]() {
+        QTreeWidgetItem *item = new QTreeWidgetItem(mFormatOptionsTree);
+        item->setFlags(item->flags() | Qt::ItemIsEditable);
+        mFormatOptionsTree->addTopLevelItem(item);
+        mFormatOptionsTree->setItemWidget(item, 0,
+                                          createComboBoxFormatOptType());
+    });
+    connect(remButton, &QPushButton::pressed, this, [this]() {
+        auto item = mFormatOptionsTree->selectedItems().count() > 0 ?
+                        mFormatOptionsTree->selectedItems().at(0) : nullptr;
+        if (!item) { return; }
+        delete mFormatOptionsTree->takeTopLevelItem(
+            mFormatOptionsTree->indexOfTopLevelItem(item));
+    });
+
+    mFormatOptionsTree->addScrollBarWidget(remButton,
+                                           Qt::AlignBottom);
+    mFormatOptionsTree->addScrollBarWidget(addButton,
+                                           Qt::AlignBottom);
+
+    containerInnerLayout->addWidget(mFormatOptionsTree);
+
+    const auto showHideWidget = new QWidget(this);
+    const auto showHideLayout = new QHBoxLayout(showHideWidget);
+    const auto showHideButton = new QPushButton(QIcon::fromTheme("go-down"),
+                                                tr("Advanced Options"),
+                                                this);
+
+    showHideButton->setCheckable(true);
+    showHideButton->setFocusPolicy(Qt::NoFocus);
+    connect(showHideButton, &QPushButton::released,
+            this, [container, showHideButton]() {
+        container->setVisible(showHideButton->isChecked());
+        showHideButton->setIcon(showHideButton->isChecked() ?
+                                    QIcon::fromTheme("go-up") :
+                                    QIcon::fromTheme("go-down"));
+    });
+
+    showHideWidget->setContentsMargins(0, 0, 10, 0);
+    showHideLayout->setMargin(0);
+    showHideLayout->addStretch();
+    showHideLayout->addWidget(showHideButton);
+
+    container->setVisible(false);
+    mMainLayout->addWidget(showHideWidget);
+    mMainLayout->addWidget(container);
+}
+
+void OutputSettingsDialog::populateFormatOptionsTree(const FormatOptions &options)
+{
+    mFormatOptionsTree->clear();
+    for (const auto &option : options.fValues) {
+        if (option.fKey.isEmpty()) { continue; }
+        QTreeWidgetItem *item = new QTreeWidgetItem(mFormatOptionsTree);
+        item->setFlags(item->flags() | Qt::ItemIsEditable);
+        item->setText(1, option.fKey);
+        item->setText(2, option.fValue);
+        auto combo = createComboBoxFormatOptType(option.fType);
+        mFormatOptionsTree->addTopLevelItem(item);
+        mFormatOptionsTree->setItemWidget(item, 0, combo);
+    }
+}
+
+QComboBox *OutputSettingsDialog::createComboBoxFormatOptType(int selected)
+{
+    auto box = new QComboBox(mFormatOptionsTree);
+    box->addItem(tr("Meta"), FormatType::fTypeMeta);
+    box->addItem(tr("Format"), FormatType::fTypeFormat);
+    box->addItem(tr("Codec"), FormatType::fTypeCodec);
+    box->setCurrentIndex(selected);
+    return box;
+}
+
+FormatOptions OutputSettingsDialog::getFormatOptions()
+{
+    FormatOptions options;
+    for (int i = 0; i < mFormatOptionsTree->topLevelItemCount(); i++) {
+        const auto item = mFormatOptionsTree->topLevelItem(i);
+        const auto combo = qobject_cast<QComboBox*>(mFormatOptionsTree->itemWidget(item, 0));
+        if (!combo) { continue; }
+        const auto key = item->text(1);
+        const auto val = item->text(2);
+        if (key.isEmpty()) { continue; }
+        options.fValues.push_back({key, val,
+                                   combo->currentData().toInt()});
+    }
+    return options;
 }
 
 void OutputSettingsDialog::updateAvailableVideoCodecs() {
@@ -749,6 +900,8 @@ void OutputSettingsDialog::restoreInitialSettings() {
     const bool noAudioCodecs = mAudioCodecsComboBox->count() == 0;
     mAudioGroupBox->setChecked(mInitialSettings.fAudioEnabled &&
                                !noAudioCodecs);
+
+    populateFormatOptionsTree(mInitialSettings.fVideoOptions);
 }
 
 void OutputSettingsDialog::restoreVideoProfileSettings()
