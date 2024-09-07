@@ -30,6 +30,8 @@
 #include "themesupport.h"
 #include "formatoptions.h"
 
+using namespace Friction::Core;
+
 OutputSettingsDialog::OutputSettingsDialog(const OutputSettings &settings,
                                            QWidget *parent) :
     QDialog(parent), mInitialSettings(settings) {

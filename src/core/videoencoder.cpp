@@ -41,6 +41,8 @@
     } \
 }
 
+using namespace Friction::Core;
+
 VideoEncoder *VideoEncoder::sInstance = nullptr;
 
 VideoEncoder::VideoEncoder() {

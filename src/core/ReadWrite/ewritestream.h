@@ -81,7 +81,7 @@ public:
     eWriteStream& operator<<(const QString& val);
     eWriteStream& operator<<(const QByteArray& val);
     eWriteStream& operator<<(SimpleBrushWrapper* const brush);
-    eWriteStream& operator<<(const FormatOptions &val);
+    eWriteStream& operator<<(const Friction::Core::FormatOptions &val);
 
     void writeFilePath(const QString& absPath);
 

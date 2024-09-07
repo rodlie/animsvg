@@ -57,7 +57,7 @@ struct CORE_EXPORT OutputSettings
     AVPixelFormat fVideoPixelFormat = AV_PIX_FMT_NONE;
     int fVideoBitrate = 0;
     int fVideoProfile = FF_PROFILE_UNKNOWN;
-    FormatOptions fVideoOptions;
+    Friction::Core::FormatOptions fVideoOptions;
 
     bool fAudioEnabled = false;
     const AVCodec *fAudioCodec = nullptr;
@@ -92,12 +92,15 @@ public:
     static QList<qsptr<OutputSettingsProfile>> sOutputProfiles;
     static bool sOutputProfilesLoaded;
 
+    static Friction::Core::FormatOptions toFormatOptions(const Friction::Core::FormatOptionsList &list);
+    static Friction::Core::FormatOptionsList toFormatOptionsList(const Friction::Core::FormatOptions &options);
+
 signals:
     void changed();
 
 private:
     QString mPath;
-    QString mName = "Untitled";
+    QString mName = tr("Untitled");
     OutputSettings mSettings;
 };
 

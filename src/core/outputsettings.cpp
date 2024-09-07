@@ -24,6 +24,8 @@
 #include "ReadWrite/evformat.h"
 #include "appsupport.h"
 
+using namespace Friction::Core;
+
 QList<qsptr<OutputSettingsProfile>> OutputSettingsProfile::sOutputProfiles;
 bool OutputSettingsProfile::sOutputProfilesLoaded = false;
 
@@ -298,4 +300,16 @@ OutputSettingsProfile *OutputSettingsProfile::sGetByName(const QString &name)
         if (profile->getName() == name) { return profile.get(); }
     }
     return nullptr;
+}
+
+FormatOptions OutputSettingsProfile::toFormatOptions(const FormatOptionsList &list)
+{
+    FormatOptions options;
+    return options;
+}
+
+FormatOptionsList OutputSettingsProfile::toFormatOptionsList(const FormatOptions &options)
+{
+    FormatOptionsList list;
+    return list;
 }

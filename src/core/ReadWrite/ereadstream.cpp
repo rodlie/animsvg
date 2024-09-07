@@ -6,6 +6,8 @@
 #include "evformat.h"
 #include "Boxes/boundingbox.h"
 
+using namespace Friction::Core;
+
 eReadFutureTable::eReadFutureTable(QIODevice * const main) : mMain(main) {}
 
 void eReadFutureTable::read() {

@@ -133,9 +133,9 @@ protected:
 
     QTreeWidget *mFormatOptionsTree;
     void setupFormatOptionsTree();
-    void populateFormatOptionsTree(const FormatOptions &options);
-    QComboBox *createComboBoxFormatOptType(int selected = FormatType::fTypeMeta);
-    FormatOptions getFormatOptions();
+    void populateFormatOptionsTree(const Friction::Core::FormatOptions &options);
+    QComboBox *createComboBoxFormatOptType(int selected = Friction::Core::FormatType::fTypeMeta);
+    Friction::Core::FormatOptions getFormatOptions();
 
     void addVideoCodec(const AVCodec * const codec,
                        const AVOutputFormat *outputFormat,

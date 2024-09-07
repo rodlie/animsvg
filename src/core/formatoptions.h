@@ -21,31 +21,44 @@
 #
 */
 
-#ifndef FORMATOPTIONS_H
-#define FORMATOPTIONS_H
+#ifndef FRICTION_FORMAT_OPTIONS_H
+#define FRICTION_FORMAT_OPTIONS_H
 
 #include "core_global.h"
 
 #include <QList>
-#include <QString>
+#include <QStringList>
 
-enum CORE_EXPORT FormatType
+namespace Friction
 {
-    fTypeMeta,
-    fTypeFormat,
-    fTypeCodec
-};
+    namespace Core
+    {
+        enum CORE_EXPORT FormatType
+        {
+            fTypeMeta,
+            fTypeFormat,
+            fTypeCodec
+        };
 
-struct CORE_EXPORT FormatOption
-{
-    QString fKey;
-    QString fValue;
-    int fType;
-};
+        struct CORE_EXPORT FormatOption
+        {
+            QString fKey;
+            QString fValue;
+            int fType;
+        };
 
-struct CORE_EXPORT FormatOptions
-{
-    QList<FormatOption> fValues;
-};
+        struct CORE_EXPORT FormatOptions
+        {
+            QList<FormatOption> fValues;
+        };
 
-#endif // FORMATOPTIONS_H
+        struct CORE_EXPORT FormatOptionsList
+        {
+            QStringList fTypes;
+            QStringList fKeys;
+            QStringList fValues;
+        };
+    }
+}
+
+#endif // FRICTION_FORMAT_OPTIONS_H
