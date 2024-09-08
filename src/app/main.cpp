@@ -21,6 +21,7 @@
 
 #include "GUI/mainwindow.h"
 
+#include <iostream>
 #include <QApplication>
 #include <QSurfaceFormat>
 #include <QDesktopWidget>
