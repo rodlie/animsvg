@@ -41,6 +41,7 @@
 #include "videoencoder.h"
 #include "appsupport.h"
 #include "themesupport.h"
+#include "actions.h"
 
 #ifdef Q_OS_WIN
 #include "windowsincludes.h"

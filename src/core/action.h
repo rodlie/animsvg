@@ -23,8 +23,8 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef ACTION_H
-#define ACTION_H
+#ifndef FRICTION_ACTION_H
+#define FRICTION_ACTION_H
 
 #include "core_global.h"
 
@@ -32,47 +32,49 @@
 #include <functional>
 #include <QAction>
 
-class CORE_EXPORT Action : public QObject {
-    Q_OBJECT
-public:
-    explicit Action(const std::function<bool()>& canExecuteFunc,
-                    const std::function<void()>& executeFunc,
-                    const std::function<QString()>& textFunc,
-                    QObject *parent = nullptr);
-    explicit Action(const std::function<bool()>& canExecuteFunc,
-                    const std::function<void()>& executeFunc,
-                    const QString& textVal,
-                    QObject *parent = nullptr);
-
-    const std::function<bool()> canExecute;
-    const std::function<void()> execute;
-    const std::function<QString()> text;
-
-    void connect(QAction* const action);
-
-    void operator()() const { if(canExecute()) execute(); }
-
-    void raiseCanExecuteChanged()
-    { emit canExecuteChanged(canExecute()); }
-    void raiseTextChanged()
-    { emit textChanged(text()); }
-signals:
-    void canExecuteChanged(bool can);
-    void textChanged(const QString& text);
-};
-
-class CORE_EXPORT UndoableAction : public Action {
-public:
-    explicit UndoableAction(const std::function<bool()>& canExecuteFunc,
+namespace Friction
+{
+    namespace Core
+    {
+        class CORE_EXPORT Action : public QObject
+        {
+            Q_OBJECT
+        public:
+            explicit Action(const std::function<bool()>& canExecuteFunc,
                             const std::function<void()>& executeFunc,
                             const std::function<QString()>& textFunc,
-                            const std::function<void(const QString&)>& pushNameFunc,
                             QObject *parent = nullptr);
-    explicit UndoableAction(const std::function<bool()>& canExecuteFunc,
+            explicit Action(const std::function<bool()>& canExecuteFunc,
                             const std::function<void()>& executeFunc,
                             const QString& textVal,
-                            const std::function<void(const QString&)>& pushNameFunc,
                             QObject *parent = nullptr);
-};
+            const std::function<bool()> canExecute;
+            const std::function<void()> execute;
+            const std::function<QString()> text;
+            void connect(QAction* const action);
+            void operator()() const;
+            void raiseCanExecuteChanged();
+            void raiseTextChanged();
+        signals:
+            void canExecuteChanged(bool can);
+            void textChanged(const QString& text);
+        };
 
-#endif // ACTION_H
+        class CORE_EXPORT UndoableAction : public Action
+        {
+        public:
+            explicit UndoableAction(const std::function<bool()>& canExecuteFunc,
+                                    const std::function<void()>& executeFunc,
+                                    const std::function<QString()>& textFunc,
+                                    const std::function<void(const QString&)>& pushNameFunc,
+                                    QObject *parent = nullptr);
+            explicit UndoableAction(const std::function<bool()>& canExecuteFunc,
+                                    const std::function<void()>& executeFunc,
+                                    const QString& textVal,
+                                    const std::function<void(const QString&)>& pushNameFunc,
+                                    QObject *parent = nullptr);
+        };
+    }
+}
+
+#endif // FRICTION_ACTION_H

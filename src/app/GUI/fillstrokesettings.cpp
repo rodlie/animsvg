@@ -35,6 +35,8 @@
 
 #include "GUI/global.h"
 
+using namespace Friction::Core;
+
 FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
                                                    QWidget * const parent)
     : QWidget(parent)

@@ -23,18 +23,17 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef ACTIONS_H
-#define ACTIONS_H
+#ifndef FRICTION_ACTIONS_H
+#define FRICTION_ACTIONS_H
 
 #include <QString>
-
-class QDropEvent;
 
 #include "colorhelpers.h"
 #include "skia/skiaincludes.h"
 #include "action.h"
 #include "conncontextptr.h"
 
+class QDropEvent;
 class PaintSettingsApplier;
 class Document;
 class Canvas;
@@ -43,125 +42,132 @@ class eBoxOrSound;
 class ContainerBox;
 class ExternalLinkBox;
 
-class CORE_EXPORT Actions : public QObject {
-public:
-    Actions(Document& document);
+namespace Friction
+{
+    namespace Core
+    {
+        class CORE_EXPORT Actions : public QObject
+        {
+        public:
+            Actions(Document& document);
 
-    static Actions* sInstance;
+            static Actions* sInstance;
 
-    void setTextAlignment(const Qt::Alignment alignment) const;
-    void setTextVAlignment(const Qt::Alignment alignment) const;
-    void setFontFamilyAndStyle(const QString& family,
-                               const SkFontStyle& style) const;
-    void setFontSize(const qreal size) const;
-    void setFontText(const QString &text);
+            void setTextAlignment(const Qt::Alignment alignment) const;
+            void setTextVAlignment(const Qt::Alignment alignment) const;
+            void setFontFamilyAndStyle(const QString& family,
+                                       const SkFontStyle& style) const;
+            void setFontSize(const qreal size) const;
+            void setFontText(const QString &text);
 
-    void connectPointsSlot() const;
-    void disconnectPointsSlot() const;
-    void mergePointsSlot() const;
-    void subdivideSegments() const;
+            void connectPointsSlot() const;
+            void disconnectPointsSlot() const;
+            void mergePointsSlot() const;
+            void subdivideSegments() const;
 
-    void makePointCtrlsSymmetric() const;
-    void makePointCtrlsSmooth() const;
-    void makePointCtrlsCorner() const;
+            void makePointCtrlsSymmetric() const;
+            void makePointCtrlsSmooth() const;
+            void makePointCtrlsCorner() const;
 
-    void makeSegmentLine() const;
-    void makeSegmentCurve() const;
+            void makeSegmentLine() const;
+            void makeSegmentCurve() const;
 
-    void newEmptyPaintFrame() const;
+            void newEmptyPaintFrame() const;
 
-    void selectAllAction() const;
-    void invertSelectionAction() const;
-    void clearSelectionAction() const;
+            void selectAllAction() const;
+            void invertSelectionAction() const;
+            void clearSelectionAction() const;
 
-    void startSelectedStrokeColorTransform() const;
-    void startSelectedFillColorTransform() const;
+            void startSelectedStrokeColorTransform() const;
+            void startSelectedFillColorTransform() const;
 
-    void strokeCapStyleChanged(const SkPaint::Cap capStyle) const;
-    void strokeJoinStyleChanged(const SkPaint::Join joinStyle) const;
+            void strokeCapStyleChanged(const SkPaint::Cap capStyle) const;
+            void strokeJoinStyleChanged(const SkPaint::Join joinStyle) const;
 
-    void strokeWidthAction(const QrealAction& action) const;
+            void strokeWidthAction(const QrealAction& action) const;
 
-    void applyPaintSettingToSelected(
-            const PaintSettingsApplier &setting) const;
+            void applyPaintSettingToSelected(const PaintSettingsApplier &setting) const;
 
-    void updateAfterFrameChanged(const int currentFrame) const;
+            void updateAfterFrameChanged(const int currentFrame) const;
 
-    void setClipToCanvas(const bool clip);
+            void setClipToCanvas(const bool clip);
 
-    void setRasterEffectsVisible(const bool bT);
-    void setPathEffectsVisible(const bool bT);
+            void setRasterEffectsVisible(const bool bT);
+            void setPathEffectsVisible(const bool bT);
 
-    eBoxOrSound* handleDropEvent(QDropEvent * const event,
-                                 const QPointF &relDropPos = QPointF(0, 0),
-                                 const int frame = 0);
-    eBoxOrSound* importFile(const QString &path);
-    eBoxOrSound* importFile(const QString &path,
-                            ContainerBox * const target,
-                            const int insertId = 0,
-                            const QPointF &relDropPos = QPointF(0, 0),
-                            const int frame = 0);
-    eBoxOrSound *linkFile(const QString &path);
-//
-    void setMovePathMode();
-    void setMovePointMode();
-    void setAddPointMode();
-    void setDrawPathMode();
+            eBoxOrSound* handleDropEvent(QDropEvent * const event,
+                                         const QPointF &relDropPos = QPointF(0, 0),
+                                         const int frame = 0);
+            eBoxOrSound* importFile(const QString &path);
+            eBoxOrSound* importFile(const QString &path,
+                                    ContainerBox * const target,
+                                    const int insertId = 0,
+                                    const QPointF &relDropPos = QPointF(0, 0),
+                                    const int frame = 0);
+            eBoxOrSound *linkFile(const QString &path);
 
-    void setPaintMode();
-    void setRectangleMode();
-    void setCircleMode();
-    void setTextMode();
+            void setMovePathMode();
+            void setMovePointMode();
+            void setAddPointMode();
+            void setDrawPathMode();
 
-    void setNullMode();
-    void setPickPaintSettingsMode();
-//
-    bool smoothChange() const { return mSmoothChange; }
-    void startSmoothChange() { mSmoothChange = true; }
-    void finishSmoothChange();
+            void setPaintMode();
+            void setRectangleMode();
+            void setCircleMode();
+            void setTextMode();
 
-    Action* deleteSceneAction;
-    Action* sceneSettingsAction;
+            void setNullMode();
+            void setPickPaintSettingsMode();
 
-    UndoableAction* raiseAction;
-    UndoableAction* lowerAction;
-    UndoableAction* raiseToTopAction;
-    UndoableAction* lowerToBottomAction;
+            bool smoothChange() const;
+            void startSmoothChange();
+            void finishSmoothChange();
 
-    UndoableAction* objectsToPathAction;
-    UndoableAction* strokeToPathAction;
+            Action* deleteSceneAction;
+            Action* sceneSettingsAction;
 
-    UndoableAction* groupAction;
-    UndoableAction* ungroupAction;
+            UndoableAction* raiseAction;
+            UndoableAction* lowerAction;
+            UndoableAction* raiseToTopAction;
+            UndoableAction* lowerToBottomAction;
 
-    UndoableAction* pathsUnionAction;
-    UndoableAction* pathsDifferenceAction;
-    UndoableAction* pathsIntersectionAction;
-    UndoableAction* pathsDivisionAction;
-    UndoableAction* pathsExclusionAction;
-    UndoableAction* pathsCombineAction;
-    UndoableAction* pathsBreakApartAction;
+            UndoableAction* objectsToPathAction;
+            UndoableAction* strokeToPathAction;
 
-    UndoableAction* deleteAction;
-    UndoableAction* copyAction;
-    UndoableAction* pasteAction;
-    UndoableAction* cutAction;
-    UndoableAction* duplicateAction;
+            UndoableAction* groupAction;
+            UndoableAction* ungroupAction;
 
-    UndoableAction* rotate90CWAction;
-    UndoableAction* rotate90CCWAction;
-    UndoableAction* flipHorizontalAction;
-    UndoableAction* flipVerticalAction;
+            UndoableAction* pathsUnionAction;
+            UndoableAction* pathsDifferenceAction;
+            UndoableAction* pathsIntersectionAction;
+            UndoableAction* pathsDivisionAction;
+            UndoableAction* pathsExclusionAction;
+            UndoableAction* pathsCombineAction;
+            UndoableAction* pathsBreakApartAction;
 
-    Action* undoAction;
-    Action* redoAction;
-private:
-    void connectToActiveScene(Canvas* const scene);
-    void afterAction() const;
+            UndoableAction* deleteAction;
+            UndoableAction* copyAction;
+            UndoableAction* pasteAction;
+            UndoableAction* cutAction;
+            UndoableAction* duplicateAction;
 
-    bool mSmoothChange = false;
-    Document& mDocument;
-    ConnContextPtr<Canvas> mActiveScene;
-};
+            UndoableAction* rotate90CWAction;
+            UndoableAction* rotate90CCWAction;
+            UndoableAction* flipHorizontalAction;
+            UndoableAction* flipVerticalAction;
 
-#endif // ACTIONS_H
+            Action* undoAction;
+            Action* redoAction;
+
+        private:
+            void connectToActiveScene(Canvas* const scene);
+            void afterAction() const;
+
+            bool mSmoothChange = false;
+            Document& mDocument;
+            ConnContextPtr<Canvas> mActiveScene;
+        };
+    }
+}
+
+#endif // FRICTION_ACTIONS_H

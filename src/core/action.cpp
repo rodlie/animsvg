@@ -25,23 +25,34 @@
 
 #include "action.h"
 
+using namespace Friction::Core;
+
 Action::Action(const std::function<bool()>& canExecuteFunc,
                const std::function<void()>& executeFunc,
                const std::function<QString()>& textFunc,
-               QObject *parent) :
-    QObject(parent),
-    canExecute(canExecuteFunc),
-    execute(executeFunc),
-    text(textFunc) {}
+               QObject *parent)
+    : QObject(parent)
+    , canExecute(canExecuteFunc)
+    , execute(executeFunc)
+    , text(textFunc)
+{
+
+}
 
 Action::Action(const std::function<bool()>& canExecuteFunc,
                const std::function<void()>& executeFunc,
                const QString &textVal,
-               QObject *parent) :
-    Action(canExecuteFunc, executeFunc,
-           [textVal]() { return textVal; }, parent) {}
+               QObject *parent)
+    : Action(canExecuteFunc,
+             executeFunc,
+             [textVal]() { return textVal; },
+             parent)
+{
 
-void Action::connect(QAction * const action) {
+}
+
+void Action::connect(QAction * const action)
+{
     QObject::connect(action, &QAction::triggered, this, execute);
     QObject::connect(this, &Action::canExecuteChanged,
                      action, &QAction::setEnabled);
@@ -51,22 +62,46 @@ void Action::connect(QAction * const action) {
     action->setEnabled(canExecute());
 }
 
+void Action::operator()() const
+{
+    if (canExecute()) { execute(); }
+}
+
+void Action::raiseCanExecuteChanged()
+{
+    emit canExecuteChanged(canExecute());
+}
+
+void Action::raiseTextChanged()
+{
+    emit textChanged(text());
+}
+
 UndoableAction::UndoableAction(const std::function<bool()>& canExecuteFunc,
                                const std::function<void()>& executeFunc,
                                const std::function<QString()>& textFunc,
                                const std::function<void(const QString&)>& pushNameFunc,
-                               QObject *parent) :
-    Action(canExecuteFunc,
-           [this, executeFunc, pushNameFunc]() {
+                               QObject *parent)
+    : Action(canExecuteFunc,
+             [this, executeFunc, pushNameFunc]() {
                 pushNameFunc(text());
                 executeFunc();
-           },
-           textFunc, parent) {}
+             },
+             textFunc,
+             parent)
+{
+
+}
 
 UndoableAction::UndoableAction(const std::function<bool()>& canExecuteFunc,
                                const std::function<void()>& executeFunc,
                                const QString &textVal,
                                const std::function<void(const QString&)>& pushNameFunc,
-                               QObject *parent) :
-    UndoableAction(canExecuteFunc, executeFunc,
-                   [textVal]() { return textVal; }, pushNameFunc, parent) {}
+                               QObject *parent)
+    : UndoableAction(canExecuteFunc, executeFunc,
+                     [textVal]() { return textVal; },
+                     pushNameFunc,
+                     parent)
+{
+
+}

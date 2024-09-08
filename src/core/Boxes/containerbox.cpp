@@ -44,6 +44,8 @@
 #include "ReadWrite/evformat.h"
 #include "internallinkbox.h"
 
+using namespace Friction::Core;
+
 class FlipBookProperty : public BoolPropertyContainer {
     e_OBJECT
 

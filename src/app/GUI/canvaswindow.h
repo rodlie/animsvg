@@ -32,6 +32,7 @@
 #include "misc/keyfocustarget.h"
 #include "smartPointers/ememory.h"
 #include "canvas.h"
+#include "actions.h"
 
 class Brush;
 class WindowSingleWidgetTarget;
@@ -50,7 +51,6 @@ class Canvas;
 class PaintSettingsAnimator;
 class OutlineSettingsAnimator;
 class SimpleBrushWrapper;
-class Actions;
 
 class CanvasWindow : public GLWindow, public KeyFocusTarget
 {
@@ -126,7 +126,7 @@ private:
     void updatePaintModeCursor();
 
     Document& mDocument;
-    Actions& mActions;
+    Friction::Core::Actions& mActions;
 
     QSize mOldSize{-1, -1};
     QMatrix mViewTransform;

@@ -30,6 +30,8 @@
 #include <QPainter>
 #include "Private/document.h"
 
+using namespace Friction::Core;
+
 ColorValueRect::ColorValueRect(const ColorProgram& program,
                                QWidget * const parent) :
     ColorWidget(parent), mGLProgram(program) {}
