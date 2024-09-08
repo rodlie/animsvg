@@ -43,6 +43,8 @@
 #include "Boxes/smartvectorpath.h"
 #include "themesupport.h"
 
+using namespace Friction::Core;
+
 PathBox::PathBox(const QString &name, const eBoxType type) :
     BoxWithPathEffects(name, type) {
     connect(this, &eBoxOrSound::parentChanged, this, [this]() {

@@ -25,14 +25,18 @@
 
 #include "etask.h"
 
-bool eTask::queTask() {
+using namespace Friction::Core;
+
+bool eTask::queTask()
+{
     mState = eTaskState::qued;
     afterQued();
     queTaskNow();
     return true;
 }
 
-void eTask::aboutToProcess(const Hardware hw) {
+void eTask::aboutToProcess(const Hardware hw)
+{
     mState = eTaskState::processing;
     beforeProcessing(hw);
 }

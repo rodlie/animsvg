@@ -189,7 +189,7 @@ protected:
     VideoEncoder();
 public:
     void process();
-    void beforeProcessing(const Hardware);
+    void beforeProcessing(const Friction::Core::Hardware);
     void afterProcessing();
 
     bool startNewEncoding(RenderInstanceSettings * const settings) {

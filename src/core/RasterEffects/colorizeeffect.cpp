@@ -34,6 +34,8 @@
 
 #include "appsupport.h"
 
+using namespace Friction::Core;
+
 ColorizeEffect::ColorizeEffect() :
     RasterEffect("colorize",
                  AppSupport::getRasterEffectHardwareSupport("Colorize",

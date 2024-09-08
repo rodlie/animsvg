@@ -25,6 +25,7 @@
 
 #include "rastereffectcaller.h"
 
+using namespace Friction::Core;
 
 RasterEffectCaller::RasterEffectCaller(const HardwareSupport hwSupport,
                                        const bool forceMargin,

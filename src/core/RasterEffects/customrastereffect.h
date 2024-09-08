@@ -31,7 +31,7 @@
 class CORE_EXPORT CustomRasterEffect : public RasterEffect {
 protected:
     CustomRasterEffect(const QString& name,
-                       const HardwareSupport hwSupport,
+                       const Friction::Core::HardwareSupport hwSupport,
                        const bool hwInterchangeable);
 public:
     virtual CustomIdentifier getIdentifier() const = 0;

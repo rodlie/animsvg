@@ -97,10 +97,10 @@ public:
                                               float fps);
     static int getFrameFromTimeCode(const QString &timecode,
                                     float fps);
-    static HardwareSupport getRasterEffectHardwareSupport(const QString &effect,
-                                                          HardwareSupport fallback);
+    static Friction::Core::HardwareSupport getRasterEffectHardwareSupport(const QString &effect,
+                                                                          Friction::Core::HardwareSupport fallback);
     static const QString getRasterEffectHardwareSupportString(const QString &effect,
-                                                              HardwareSupport fallback);
+                                                              Friction::Core::HardwareSupport fallback);
     static const QByteArray filterShader(QByteArray data);
     static const QStringList getFpsPresets();
     static void saveFpsPresets(const QStringList &presets);

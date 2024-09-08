@@ -36,7 +36,7 @@ public:
 
     virtual void read(eReadStream& src) = 0;
     void process();
-    void beforeProcessing(const Hardware);
+    void beforeProcessing(const Friction::Core::Hardware);
 private:
     qsptr<QTemporaryFile> mTmpFile;
     const stdptr<HddCachableCont> mTarget;

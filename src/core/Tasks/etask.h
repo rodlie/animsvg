@@ -42,9 +42,9 @@ protected:
 
     virtual void queTaskNow() = 0;
     virtual void afterQued() {}
-    virtual void beforeProcessing(const Hardware) {}
+    virtual void beforeProcessing(const Friction::Core::Hardware) {}
 public:
-    virtual HardwareSupport hardwareSupport() const = 0;
+    virtual Friction::Core::HardwareSupport hardwareSupport() const = 0;
     virtual void processGpu(QGL33 * const gl,
                             SwitchableContext &context) = 0;
     virtual void process() = 0;
@@ -53,7 +53,7 @@ public:
 
     bool queTask();
 
-    void aboutToProcess(const Hardware hw);
+    void aboutToProcess(const Friction::Core::Hardware hw);
 };
 
 Q_DECLARE_METATYPE(stdsptr<eTask>);

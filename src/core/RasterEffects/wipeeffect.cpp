@@ -31,6 +31,8 @@
 
 #include "appsupport.h"
 
+using namespace Friction::Core;
+
 WipeEffect::WipeEffect() :
     RasterEffect("wipe",
                  AppSupport::getRasterEffectHardwareSupport("Wipe",

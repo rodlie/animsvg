@@ -94,6 +94,8 @@ bool BoxSingleWidget::sStaticPixmapsLoaded = false;
 #include <QMenu>
 #include <QInputDialog>
 
+using namespace Friction::Core;
+
 eComboBox* createCombo(QWidget* const parent)
 {
     const auto result = new eComboBox(parent);

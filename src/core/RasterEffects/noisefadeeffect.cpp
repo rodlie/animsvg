@@ -31,6 +31,8 @@
 
 #include "appsupport.h"
 
+using namespace Friction::Core;
+
 NoiseFadeEffect::NoiseFadeEffect() :
     RasterEffect("noise fade",
                  AppSupport::getRasterEffectHardwareSupport("NoiseFade",

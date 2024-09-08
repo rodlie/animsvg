@@ -27,10 +27,103 @@
 #include "Private/Tasks/taskscheduler.h"
 #include "Private/Tasks/taskexecutor.h"
 
-void eCpuTask::queTaskNow() {
+using namespace Friction::Core;
+
+HardwareSupport eCpuTask::hardwareSupport() const
+{
+    return HardwareSupport::cpuOnly;
+}
+
+void eCpuTask::processGpu(QGL33 * const gl,
+                          SwitchableContext &context)
+{
+    Q_UNUSED(gl)
+    Q_UNUSED(context)
+}
+
+void eCpuTask::queTaskNow()
+{
     TaskScheduler::instance()->queCpuTask(ref<eTask>());
 }
 
-void eHddTask::queTaskNow() {
+HardwareSupport eHddTask::hardwareSupport() const
+{
+    return HardwareSupport::cpuOnly;
+}
+
+void eHddTask::processGpu(QGL33 * const gl,
+                          SwitchableContext &context)
+{
+    Q_UNUSED(gl)
+    Q_UNUSED(context)
+}
+
+void eHddTask::queTaskNow()
+{
     TaskScheduler::instance()->queHddTask(ref<eTask>());
+}
+
+eCustomCpuTask::eCustomCpuTask(const Func &before,
+                               const Func &run,
+                               const Func &after,
+                               const Func &canceled)
+    : mBefore(before)
+    , mRun(run)
+    , mAfter(after)
+    , mCanceled(canceled)
+{
+
+}
+
+void eCustomCpuTask::beforeProcessing(const Hardware)
+{
+    if (mBefore) { mBefore(); }
+}
+
+void eCustomCpuTask::afterProcessing()
+{
+    if (mAfter) { mAfter(); }
+}
+
+void eCustomCpuTask::afterCanceled()
+{
+    if (mCanceled) { mCanceled(); }
+}
+
+void eCustomCpuTask::process()
+{
+    if (mRun) { mRun(); }
+}
+
+template<typename T>
+SPtrDisposer<T>::SPtrDisposer(const T &ptr)
+    : mPtr(ptr)
+{
+
+}
+
+template<typename T>
+void SPtrDisposer<T>::beforeProcessing(const Hardware)
+{
+
+}
+
+template<typename T>
+void SPtrDisposer<T>::process()
+{
+    mPtr.reset();
+}
+
+template<typename T>
+eTask *SPtrDisposer<T>::sDispose(const T &ptr)
+{
+    const auto disposer = enve::make_shared<SPtrDisposer<T>>(ptr);
+    if (disposer->scheduleTask()) { return disposer.get(); }
+    return nullptr;
+}
+
+template<typename T>
+void SPtrDisposer<T>::afterProcessing()
+{
+
 }

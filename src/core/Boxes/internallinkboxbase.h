@@ -63,7 +63,7 @@ public:
     bool isFrameInDurationRect(const int relFrame) const override;
     bool isFrameFInDurationRect(const qreal relFrame) const override;
 
-    HardwareSupport hardwareSupport() const override;
+    Friction::Core::HardwareSupport hardwareSupport() const override;
 
     void blendSetup(ChildRenderData& data,
                     const int index, const qreal relFrame,
@@ -126,9 +126,10 @@ SkBlendMode ILBB::getBlendMode() const {
 }
 
 template <typename BoxT>
-HardwareSupport ILBB::hardwareSupport() const {
+Friction::Core::HardwareSupport ILBB::hardwareSupport() const
+{
     const auto linkTarget = getLinkTarget();
-    if(!linkTarget) return BoxT::hardwareSupport();
+    if (!linkTarget) { return BoxT::hardwareSupport(); }
     return linkTarget->hardwareSupport();
 }
 

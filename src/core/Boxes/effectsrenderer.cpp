@@ -28,6 +28,8 @@
 #include "RasterEffects/rastereffectcaller.h"
 #include "gpurendertools.h"
 
+using namespace Friction::Core;
+
 void EffectsRenderer::processGpu(QGL33 * const gl,
                                  SwitchableContext &context,
                                  BoxRenderData * const boxData) {

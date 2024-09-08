@@ -26,6 +26,8 @@
 #include "RasterEffects/customrastereffect.h"
 #include "ReadWrite/basicreadwrite.h"
 
+using namespace Friction::Core;
+
 CustomRasterEffect::CustomRasterEffect(const QString &name,
                                        const HardwareSupport hwSupport,
                                        const bool hwInterchangeable) :

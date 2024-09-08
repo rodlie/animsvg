@@ -48,7 +48,7 @@ public:
     void setBaseGlobalRect(SkIRect& currRect,
                            const SkIRect& skMaxBounds) const;
 
-    HardwareSupport nextHardwareSupport() const;
+    Friction::Core::HardwareSupport nextHardwareSupport() const;
 private:
     int mCurrentId = 0;
     QList<stdsptr<RasterEffectCaller>> mEffects;

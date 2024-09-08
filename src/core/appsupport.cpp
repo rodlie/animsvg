@@ -42,6 +42,8 @@
 #include <QRegularExpression>
 #include <QMessageBox>
 
+using namespace Friction::Core;
+
 AppSupport::AppSupport(QObject *parent)
     : QObject{parent}
 {

@@ -26,6 +26,8 @@
 #include "shadereffectcaller.h"
 #include "shadereffectprogram.h"
 
+using namespace Friction::Core;
+
 ShaderEffectCaller::ShaderEffectCaller(std::unique_ptr<ShaderEffectJS>&& engine,
                                        const ShaderEffectProgram &program,
                                        const ShaderEffect *parentEffect,

@@ -26,6 +26,8 @@
 #include "taskque.h"
 #include "Private/esettings.h"
 
+using namespace Friction::Core;
+
 TaskQue::TaskQue() {}
 
 TaskQue::~TaskQue() {

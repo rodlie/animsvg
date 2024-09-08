@@ -32,6 +32,8 @@
 
 #include "appsupport.h"
 
+using namespace Friction::Core;
+
 BrightnessContrastEffect::BrightnessContrastEffect() :
     RasterEffect("brightness-contrast",
                  AppSupport::getRasterEffectHardwareSupport("BrightnessContrast",

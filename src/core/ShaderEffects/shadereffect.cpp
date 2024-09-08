@@ -27,6 +27,8 @@
 #include "RasterEffects/rastereffectcollection.h"
 #include "shadereffectcaller.h"
 
+using namespace Friction::Core;
+
 ShaderEffect::ShaderEffect(const QString& name,
                            const ShaderEffectCreator * const creator,
                            const ShaderEffectProgram * const program,

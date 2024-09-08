@@ -48,7 +48,7 @@ class CORE_EXPORT RasterEffect : public eEffect {
     Q_OBJECT
 protected:
     RasterEffect(const QString &name,
-                 const HardwareSupport hwSupport,
+                 const Friction::Core::HardwareSupport hwSupport,
                  const bool hwInterchangeable,
                  const RasterEffectType type);
 public:
@@ -68,7 +68,8 @@ public:
     void writeIdentifier(eWriteStream& dst) const;
     void writeIdentifierXEV(QDomElement& ele) const;
 
-    HardwareSupport instanceHwSupport() const {
+    Friction::Core::HardwareSupport instanceHwSupport() const
+    {
         return mInstHwSupport;
     }
 
@@ -78,9 +79,9 @@ signals:
     void forcedMarginChanged();
 private:
     const RasterEffectType mType;
-    const HardwareSupport mTypeHwSupport;
+    const Friction::Core::HardwareSupport mTypeHwSupport;
     const bool mHwInterchangeable;
-    HardwareSupport mInstHwSupport;
+    Friction::Core::HardwareSupport mInstHwSupport;
 };
 
 #endif // RASTEREFFECT_H
