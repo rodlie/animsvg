@@ -29,6 +29,8 @@
 
 #include <QMenu>
 
+using namespace Friction::Core;
+
 AnimationDockWidget::AnimationDockWidget(QWidget *parent,
                                          KeysView *keysView)
     : QToolBar(parent)

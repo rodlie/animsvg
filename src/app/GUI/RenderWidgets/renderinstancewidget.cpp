@@ -38,6 +38,8 @@
 
 #include <QDesktopServices>
 
+using namespace Friction::Core;
+
 RenderInstanceWidget::RenderInstanceWidget(
         Canvas *canvas, QWidget *parent) :
     ClosableContainer(parent), mSettings(canvas) {

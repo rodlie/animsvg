@@ -24,6 +24,8 @@
 
 #include "appsupport.h"
 
+using namespace Friction::Core;
+
 SvgExporter::SvgExporter(const QString& path,
                          Canvas* const scene,
                          const FrameRange& frameRange,

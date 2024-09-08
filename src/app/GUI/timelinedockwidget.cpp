@@ -46,6 +46,8 @@
 #include "memoryhandler.h"
 #include "appsupport.h"
 
+using namespace Friction::Core;
+
 TimelineDockWidget::TimelineDockWidget(Document& document,
                                        LayoutHandler * const layoutH,
                                        MainWindow * const parent)

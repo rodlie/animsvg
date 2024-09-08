@@ -26,6 +26,8 @@
 #include "appsupport.h"
 #include "widgets/vlabel.h"
 
+using namespace Friction::Core;
+
 void MainWindow::setupToolBox()
 {
     mToolBoxStack = new QStackedWidget(this);

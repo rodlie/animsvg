@@ -30,6 +30,8 @@
 
 #include "GUI/global.h"
 
+using namespace Friction::Core;
+
 SceneSettingsDialog::SceneSettingsDialog(Canvas * const canvas,
                                          QWidget * const parent)
     : SceneSettingsDialog(canvas->prp_getName(),

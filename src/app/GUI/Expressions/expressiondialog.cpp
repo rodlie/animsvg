@@ -45,6 +45,8 @@
 
 #define DEFAULT_FONT "monospace", 10
 
+using namespace Friction::Core;
+
 class JSLexer : public QsciLexerJavaScript {
 public:
     using QsciLexerJavaScript::QsciLexerJavaScript;

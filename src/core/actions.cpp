@@ -35,6 +35,8 @@
 #include <QMessageBox>
 #include <QStandardItemModel>
 
+using namespace Friction::Core;
+
 Actions* Actions::sInstance = nullptr;
 
 Actions::Actions(Document &document) : mDocument(document) {

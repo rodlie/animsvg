@@ -23,6 +23,8 @@
 
 #include "mainwindow.h"
 
+using namespace Friction::Core;
+
 void MainWindow::setupMenuExtras()
 {
     const auto menu = new QMenu(this);

@@ -40,6 +40,8 @@ GLuint GL_PLAIN_SQUARE_VBO;
 QString GL_TEXTURED_VERT = ":/shaders/textured.vert";
 GLuint GL_TEXTURED_SQUARE_VBO;
 
+using namespace Friction::Core;
+
 void iniTexturedVShaderVBO(QGL33 * const gl) {
     float vertices[] = {
     //  positions  | texture coords

@@ -24,6 +24,8 @@
 #include "framespinbox.h"
 #include "appsupport.h"
 
+using namespace Friction::Core;
+
 void FrameSpinBox::setDisplayTimeCode(const bool &enabled)
 {
     setSingleStep(enabled && mFps > 0. ? mFps : 1);
