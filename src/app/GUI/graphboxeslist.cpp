@@ -37,6 +37,8 @@
 #include "GUI/BoxesList/boxscrollwidget.h"
 #include "themesupport.h"
 
+using namespace Friction::Core;
+
 QColor KeysView::sGetAnimatorColor(const int i) {
     return ANIMATOR_COLORS.at(i % ANIMATOR_COLORS.length());
 }

@@ -29,6 +29,8 @@
 #include <QDebug>
 #include <QDesktopWidget>
 
+using namespace Friction::Core;
+
 const QColor ThemeSupport::getQColor(int r,
                                      int g,
                                      int b,
@@ -167,6 +169,28 @@ const QColor ThemeSupport::getThemeColorTextDisabled(int alpha)
     return getQColor(112, 112, 113, alpha);
 }
 
+const QPalette ThemeSupport::getDefaultPalette(const QColor &highlight)
+{
+    QPalette palette;
+    palette.setColor(QPalette::Window, getThemeAlternateColor());
+    palette.setColor(QPalette::WindowText, Qt::white);
+    palette.setColor(QPalette::Base, getThemeBaseColor());
+    palette.setColor(QPalette::AlternateBase, getThemeAlternateColor());
+    palette.setColor(QPalette::Link, Qt::white);
+    palette.setColor(QPalette::LinkVisited, Qt::white);
+    palette.setColor(QPalette::ToolTipText, Qt::white);
+    palette.setColor(QPalette::ToolTipBase, Qt::black);
+    palette.setColor(QPalette::Text, Qt::white);
+    palette.setColor(QPalette::Button, getThemeBaseColor());
+    palette.setColor(QPalette::ButtonText, Qt::white);
+    palette.setColor(QPalette::BrightText, Qt::white);
+    palette.setColor(QPalette::Highlight, highlight.isValid() ? highlight : getThemeHighlightColor());
+    palette.setColor(QPalette::HighlightedText, Qt::white);
+    palette.setColor(QPalette::Disabled, QPalette::Text, Qt::darkGray);
+    palette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
+    return palette;
+}
+
 const QPalette ThemeSupport::getDarkPalette(int alpha)
 {
     QPalette pal = QPalette();
@@ -223,25 +247,7 @@ void ThemeSupport::setupTheme(const int iconSize)
     QIcon::setThemeSearchPaths(QStringList() << QString::fromUtf8(":/icons"));
     QIcon::setThemeName(QString::fromUtf8("hicolor"));
     qApp->setStyle(QString::fromUtf8("fusion"));
-
-    QPalette palette;
-    palette.setColor(QPalette::Window, getThemeAlternateColor());
-    palette.setColor(QPalette::WindowText, Qt::white);
-    palette.setColor(QPalette::Base, getThemeBaseColor());
-    palette.setColor(QPalette::AlternateBase, getThemeAlternateColor());
-    palette.setColor(QPalette::Link, Qt::white);
-    palette.setColor(QPalette::LinkVisited, Qt::white);
-    palette.setColor(QPalette::ToolTipText, Qt::white);
-    palette.setColor(QPalette::ToolTipBase, Qt::black);
-    palette.setColor(QPalette::Text, Qt::white);
-    palette.setColor(QPalette::Button, getThemeBaseColor());
-    palette.setColor(QPalette::ButtonText, Qt::white);
-    palette.setColor(QPalette::BrightText, Qt::white);
-    palette.setColor(QPalette::Highlight, getThemeHighlightColor());
-    palette.setColor(QPalette::HighlightedText, Qt::white);
-    palette.setColor(QPalette::Disabled, QPalette::Text, Qt::darkGray);
-    palette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
-    qApp->setPalette(palette);
+    qApp->setPalette(getDefaultPalette());
     qApp->setStyleSheet(getThemeStyle(iconSize));
 }
 

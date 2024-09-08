@@ -32,7 +32,7 @@
 #include <QMimeData>
 #include "Boxes/boundingbox.h"
 #include "Boxes/containerbox.h"
-#include "GUI/mainwindow.h"
+#include "Private/document.h"
 #include "GUI/global.h"
 #include "swt_abstraction.h"
 #include "GUI/keysview.h"

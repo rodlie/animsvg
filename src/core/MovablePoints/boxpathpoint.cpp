@@ -28,6 +28,8 @@
 #include "Animators/transformanimator.h"
 #include "themesupport.h"
 
+using namespace Friction::Core;
+
 BoxPathPoint::BoxPathPoint(QPointFAnimator * const associatedAnimator,
                            BoxTransformAnimator * const boxTrans) :
     AnimatedPoint(associatedAnimator, TYPE_PIVOT_POINT) {

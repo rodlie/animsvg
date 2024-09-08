@@ -51,7 +51,7 @@ protected:
         mSecondId(secondId), mSampleRange(sampleRange),
         mSettings(eSoundSettings::sData()) {}
 
-    void beforeProcessing(const Hardware);
+    void beforeProcessing(const Friction::Core::Hardware);
     void afterProcessing();
     void afterCanceled();
 public:

@@ -27,6 +27,8 @@
 #include "Animators/dynamiccomplexanimator.h"
 #include "typemenu.h"
 
+using namespace Friction::Core;
+
 RasterEffect::RasterEffect(const QString &name,
                            const HardwareSupport hwSupport,
                            const bool hwInterchangeable,

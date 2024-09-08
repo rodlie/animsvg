@@ -29,6 +29,8 @@
 #include "Animators/transformanimator.h"
 #include "themesupport.h"
 
+using namespace Friction::Core;
+
 PathPivot::PathPivot(const Canvas * const parent) :
     NonAnimatedMovablePoint(parent->getTransformAnimator(),
                             TYPE_PIVOT_POINT),

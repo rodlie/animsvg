@@ -82,7 +82,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 public:
     MainWindow(Document &document,
-               Actions &actions,
+               Friction::Core::Actions &actions,
                AudioHandler &audioHandler,
                RenderHandler &renderHandler,
                const QString &openProject = QString(),
@@ -363,7 +363,7 @@ private:
 
     FilesHandler mFilesHandler;
     Document& mDocument;
-    Actions& mActions;
+    Friction::Core::Actions& mActions;
     AudioHandler& mAudioHandler;
     RenderHandler& mRenderHandler;
 

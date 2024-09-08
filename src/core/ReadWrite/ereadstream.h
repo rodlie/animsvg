@@ -4,6 +4,8 @@
 #include "../core_global.h"
 #include "efuturepos.h"
 #include "../XML/runtimewriteid.h"
+#include "formatoptions.h"
+
 #include <functional>
 
 #include <QIODevice>
@@ -76,6 +78,7 @@ public:
     eReadStream& operator>>(QString &val);
     eReadStream& operator>>(QByteArray &val);
     eReadStream& operator>>(SimpleBrushWrapper*& brush);
+    eReadStream& operator>>(Friction::Core::FormatOptions &val);
 
     QString readFilePath();
 

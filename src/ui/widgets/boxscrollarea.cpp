@@ -21,33 +21,11 @@
 #
 */
 
-#include "framespinbox.h"
-#include "appsupport.h"
+// Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-using namespace Friction::Core;
+#include "boxscrollarea.h"
 
-void FrameSpinBox::setDisplayTimeCode(const bool &enabled)
-{
-    setSingleStep(enabled && mFps > 0. ? mFps : 1);
-    mDisplayTimecode = enabled;
-    setSpecialValueText(enabled ? "00:00:00:00" : "");
-    updateGeometry();
-}
-
-void FrameSpinBox::updateFps(const qreal &fps)
-{
-    mFps = fps;
-}
-
-QString FrameSpinBox::textFromValue(int value) const
-{
-    return mDisplayTimecode ? AppSupport::getTimeCodeFromFrame(value, mFps) : QSpinBox::textFromValue(value);
-}
-
-void FrameSpinBox::fixup(QString &str) const
-{
-    if (mDisplayTimecode) {
-        str = QString::number(AppSupport::getFrameFromTimeCode(str, mFps));
-    }
-    QSpinBox::fixup(str);
+BoxScrollArea::BoxScrollArea(QWidget *parent) :
+    ScrollArea(parent) {
+    setFocusPolicy(Qt::ClickFocus);
 }

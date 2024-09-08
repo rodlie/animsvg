@@ -30,6 +30,8 @@
 #include "Private/Tasks/taskscheduler.h"
 #include "Private/Tasks/gputaskexecutor.h"
 
+using namespace Friction::Core;
+
 BoxRenderData::BoxRenderData(BoundingBox * const parent) :
     fFilterQuality(eFilterSettings::sRender()) {
     fParentBox = parent;

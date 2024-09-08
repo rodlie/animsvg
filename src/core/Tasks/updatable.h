@@ -23,8 +23,9 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef UPDATABLE_H
-#define UPDATABLE_H
+#ifndef FRICTION_UPDATABLE_H
+#define FRICTION_UPDATABLE_H
+
 #include <QList>
 #include <QEventLoop>
 
@@ -32,62 +33,47 @@
 
 class ExecController;
 
-class CORE_EXPORT eCpuTask : public eTask {
+class CORE_EXPORT eCpuTask : public eTask
+{
     e_OBJECT
 public:
-    HardwareSupport hardwareSupport() const final {
-        return HardwareSupport::cpuOnly;
-    }
+    Friction::Core::HardwareSupport hardwareSupport() const final;
 
     void processGpu(QGL33 * const gl,
-                    SwitchableContext &context) final {
-        Q_UNUSED(gl)
-        Q_UNUSED(context)
-    }
+                    SwitchableContext &context) final;
+
 protected:
     void queTaskNow() final;
 };
 
-class CORE_EXPORT eHddTask : public eTask {
+class CORE_EXPORT eHddTask : public eTask
+{
     e_OBJECT
 public:
-    HardwareSupport hardwareSupport() const {
-        return HardwareSupport::cpuOnly;
-    }
+    Friction::Core::HardwareSupport hardwareSupport() const;
 
     void processGpu(QGL33 * const gl,
-                    SwitchableContext &context) {
-        Q_UNUSED(gl)
-        Q_UNUSED(context)
-    }
+                    SwitchableContext &context);
+
 protected:
     void queTaskNow();
 };
 
-class CORE_EXPORT eCustomCpuTask : public eCpuTask {
+class CORE_EXPORT eCustomCpuTask : public eCpuTask
+{
     e_OBJECT
 protected:
     using Func = std::function<void()>;
     eCustomCpuTask(const Func& before,
                    const Func& run,
                    const Func& after,
-                   const Func& canceled) :
-        mBefore(before), mRun(run),
-        mAfter(after), mCanceled(canceled) {}
+                   const Func& canceled);
 
-    void beforeProcessing(const Hardware) final {
-        if(mBefore) mBefore();
-    }
+    void beforeProcessing(const Friction::Core::Hardware) final;
+    void afterProcessing() final;
+    void afterCanceled() final;
+    void process() final;
 
-    void afterProcessing() final {
-        if(mAfter) mAfter();
-    }
-
-    void afterCanceled() final {
-        if(mCanceled) mCanceled();
-    }
-
-    void process() final { if(mRun) mRun(); }
 private:
     const Func mBefore;
     const Func mRun;
@@ -96,22 +82,22 @@ private:
 };
 
 template <typename T>
-class CORE_EXPORT SPtrDisposer : public eCpuTask {
+class CORE_EXPORT SPtrDisposer : public eCpuTask
+{
     e_OBJECT
 protected:
-    SPtrDisposer(const T& ptr) : mPtr(ptr) {}
+    SPtrDisposer(const T& ptr);
+
 public:
-    void beforeProcessing(const Hardware) final {}
-    void process() final { mPtr.reset(); }
-    static eTask* sDispose(const T& ptr) {
-        const auto disposer = enve::make_shared<SPtrDisposer<T>>(ptr);
-        if(disposer->scheduleTask()) return disposer.get();
-        return nullptr;
-    }
+    void beforeProcessing(const Friction::Core::Hardware) final;
+    void process() final;
+    static eTask* sDispose(const T& ptr);
+
 protected:
-    void afterProcessing() final {}
+    void afterProcessing() final;
+
 private:
     T mPtr;
 };
 
-#endif // UPDATABLE_H
+#endif // FRICTION_UPDATABLE_H

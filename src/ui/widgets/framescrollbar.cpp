@@ -30,6 +30,8 @@
 #include "colorhelpers.h"
 #include "appsupport.h"
 
+using namespace Friction::Core;
+
 FrameScrollBar::FrameScrollBar(const int minSpan,
                                const int maxSpan,
                                const bool range,

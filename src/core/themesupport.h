@@ -21,8 +21,8 @@
 #
 */
 
-#ifndef THEMESUPPORT_H
-#define THEMESUPPORT_H
+#ifndef FRICTION_THEME_SUPPORT_H
+#define FRICTION_THEME_SUPPORT_H
 
 #include "core_global.h"
 
@@ -32,46 +32,52 @@
 
 #include "include/core/SkColor.h"
 
-class CORE_EXPORT ThemeSupport
+namespace Friction
 {
+    namespace Core
+    {
+        class CORE_EXPORT ThemeSupport
+        {
+        public:
+            static const QColor getQColor(int r, int g, int b, int a = 255);
+            static const QColor getThemeBaseColor(int alpha = 255);
+            static SkColor getThemeBaseSkColor(int alpha = 255);
+            static const QColor getThemeBaseDarkColor(int alpha = 255);
+            static const QColor getThemeBaseDarkerColor(int alpha = 255);
+            static const QColor getThemeAlternateColor(int alpha = 255);
+            static const QColor getThemeHighlightColor(int alpha = 255);
+            static const QColor getThemeHighlightDarkerColor(int alpha = 255);
+            static const QColor getThemeHighlightAlternativeColor(int alpha = 255);
+            static const QColor getThemeHighlightSelectedColor(int alpha = 255);
+            static SkColor getThemeHighlightSkColor(int alpha = 255);
+            static const QColor getThemeButtonBaseColor(int alpha = 255);
+            static const QColor getThemeButtonBorderColor(int alpha = 255);
+            static const QColor getThemeComboBaseColor(int alpha = 255);
+            static const QColor getThemeTimelineColor(int alpha = 255);
+            static const QColor getThemeRangeColor(int alpha = 255);
+            static const QColor getThemeRangeSelectedColor(int alpha = 255);
+            static const QColor getThemeFrameMarkerColor(int alpha = 255);
+            static const QColor getThemeObjectColor(int alpha = 255);
+            static const QColor getThemeColorRed(int alpha = 255);
+            static const QColor getThemeColorBlue(int alpha = 255);
+            static const QColor getThemeColorYellow(int alpha = 255);
+            static const QColor getThemeColorPink(int alpha = 255);
+            static const QColor getThemeColorGreen(int alpha = 255);
+            static const QColor getThemeColorGreenDark(int alpha = 255);
+            static const QColor getThemeColorOrange(int alpha = 255);
+            static const QColor getThemeColorTextDisabled(int alpha = 255);
+            static const QPalette getDefaultPalette(const QColor &highlight = QColor());
+            static const QPalette getDarkPalette(int alpha = 255);
+            static const QPalette getDarkerPalette(int alpha = 255);
+            static const QPalette getNotSoDarkPalette(int alpha = 255);
+            static const QString getThemeStyle(int iconSize = 20);
+            static void setupTheme(const int iconSize = 20);
+            static const QList<QSize> getAvailableIconSizes();
+            static const QSize getIconSize(const int size);
+            static bool hasIconSize(const int size);
+            static const QSize findClosestIconSize(int iconSize);
+        };
+    }
+}
 
-public:
-    static const QColor getQColor(int r, int g, int b, int a = 255);
-    static const QColor getThemeBaseColor(int alpha = 255);
-    static SkColor getThemeBaseSkColor(int alpha = 255);
-    static const QColor getThemeBaseDarkColor(int alpha = 255);
-    static const QColor getThemeBaseDarkerColor(int alpha = 255);
-    static const QColor getThemeAlternateColor(int alpha = 255);
-    static const QColor getThemeHighlightColor(int alpha = 255);
-    static const QColor getThemeHighlightDarkerColor(int alpha = 255);
-    static const QColor getThemeHighlightAlternativeColor(int alpha = 255);
-    static const QColor getThemeHighlightSelectedColor(int alpha = 255);
-    static SkColor getThemeHighlightSkColor(int alpha = 255);
-    static const QColor getThemeButtonBaseColor(int alpha = 255);
-    static const QColor getThemeButtonBorderColor(int alpha = 255);
-    static const QColor getThemeComboBaseColor(int alpha = 255);
-    static const QColor getThemeTimelineColor(int alpha = 255);
-    static const QColor getThemeRangeColor(int alpha = 255);
-    static const QColor getThemeRangeSelectedColor(int alpha = 255);
-    static const QColor getThemeFrameMarkerColor(int alpha = 255);
-    static const QColor getThemeObjectColor(int alpha = 255);
-    static const QColor getThemeColorRed(int alpha = 255);
-    static const QColor getThemeColorBlue(int alpha = 255);
-    static const QColor getThemeColorYellow(int alpha = 255);
-    static const QColor getThemeColorPink(int alpha = 255);
-    static const QColor getThemeColorGreen(int alpha = 255);
-    static const QColor getThemeColorGreenDark(int alpha = 255);
-    static const QColor getThemeColorOrange(int alpha = 255);
-    static const QColor getThemeColorTextDisabled(int alpha = 255);
-    static const QPalette getDarkPalette(int alpha = 255);
-    static const QPalette getDarkerPalette(int alpha = 255);
-    static const QPalette getNotSoDarkPalette(int alpha = 255);
-    static const QString getThemeStyle(int iconSize = 20);
-    static void setupTheme(const int iconSize = 20);
-    static const QList<QSize> getAvailableIconSizes();
-    static const QSize getIconSize(const int size);
-    static bool hasIconSize(const int size);
-    static const QSize findClosestIconSize(int iconSize);
-};
-
-#endif // THEMESUPPORT_H
+#endif // FRICTION_THEME_SUPPORT_H

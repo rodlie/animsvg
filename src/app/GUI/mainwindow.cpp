@@ -74,6 +74,8 @@
 #include "dialogs/adjustscenedialog.h"
 #include "dialogs/commandpalette.h"
 
+using namespace Friction::Core;
+
 MainWindow *MainWindow::sInstance = nullptr;
 
 void MainWindow::keyPressEvent(QKeyEvent *event)

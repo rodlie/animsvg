@@ -40,6 +40,8 @@
 #define UI_CONF_KEY_TOP "uiTop"
 #define UI_CONF_KEY_BOTTOM "uiBottom"
 
+using namespace Friction::Core;
+
 UIDock::UIDock(QWidget *parent,
                QWidget *widget,
                const QString &label,

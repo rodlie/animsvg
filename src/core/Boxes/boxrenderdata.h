@@ -51,10 +51,10 @@ protected:
     virtual void copyFrom(BoxRenderData *src);
     virtual void updateGlobalRect();
 
-    HardwareSupport hardwareSupport() const;
+    Friction::Core::HardwareSupport hardwareSupport() const;
 
     void afterCanceled() {}
-    void beforeProcessing(const Hardware hw) final;
+    void beforeProcessing(const Friction::Core::Hardware hw) final;
     void afterProcessing();
     void afterQued();
     void queTaskNow() final;

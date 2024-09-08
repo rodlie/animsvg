@@ -39,6 +39,8 @@
 
 #define RASTER_HW_SUPPORT_ID Qt::UserRole + 1
 
+using namespace Friction::Core;
+
 PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
     : SettingsWidget(parent)
     , mAudioDevicesCombo(nullptr)

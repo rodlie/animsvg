@@ -45,8 +45,9 @@ public:
     bool isGroup() const final { return !mIsLayer; }
     bool isLayer() const final { return mIsLayer; }
 
-    HardwareSupport hardwareSupport() const {
-        if(isLayer()) return HardwareSupport::gpuPreffered;
+    Friction::Core::HardwareSupport hardwareSupport() const
+    {
+        if (isLayer()) { return Friction::Core::HardwareSupport::gpuPreffered; }
         return BoundingBox::hardwareSupport();
     }
 

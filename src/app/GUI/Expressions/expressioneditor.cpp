@@ -30,6 +30,8 @@
 #include "expressionhighlighter.h"
 #include "themesupport.h"
 
+using namespace Friction::Core;
+
 ExpressionEditor::ExpressionEditor(QrealAnimator * const target,
                                    QWidget * const parent) :
     ExpressionEditor(target, target->getExpressionBindingsString(), parent) {}

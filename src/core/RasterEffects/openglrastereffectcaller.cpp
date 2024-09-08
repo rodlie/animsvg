@@ -25,6 +25,8 @@
 
 #include "openglrastereffectcaller.h"
 
+using namespace Friction::Core;
+
 OpenGLRasterEffectCaller::OpenGLRasterEffectCaller(
         bool& initialized,
         GLuint& programId,

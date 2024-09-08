@@ -34,6 +34,8 @@
 
 #include "../mainwindow.h"
 
+using namespace Friction::Core;
+
 GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     : SettingsWidget(parent)
     , mAutoBackup(nullptr)

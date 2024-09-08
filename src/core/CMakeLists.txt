@@ -690,6 +690,7 @@ set(
     rendersettings.h
     renderinstancesettings.h
     videoencoder.h
+    formatoptions.h
 )
 
 if(NOT WIN32)

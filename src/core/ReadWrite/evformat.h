@@ -42,6 +42,7 @@ namespace EvFormat {
         effectCustomName = 27,
         markers = 28,
         svgBeginEnd = 29,
+        formatOptions = 30,
 
         nextVersion
     };

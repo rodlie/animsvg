@@ -35,7 +35,7 @@
 #include "swt_abstraction.h"
 #include "GUI/BoxesList/boxscrollwidget.h"
 #include "keysview.h"
-#include "GUI/BoxesList/boxscrollarea.h"
+#include "widgets/boxscrollarea.h"
 #include "GUI/BoxesList/boxscroller.h"
 #include "canvaswindow.h"
 #include "animationdockwidget.h"
@@ -45,6 +45,8 @@
 #include "widgets/changewidthwidget.h"
 #include "timelinehighlightwidget.h"
 #include "themesupport.h"
+
+using namespace Friction::Core;
 
 TimelineWidget::TimelineWidget(Document &document,
                                QWidget * const menu,

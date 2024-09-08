@@ -6,6 +6,8 @@
 #include "svgexporter.h"
 #include "appsupport.h"
 
+using namespace Friction::Core;
+
 class BlurEffectCaller : public RasterEffectCaller {
 public:
     BlurEffectCaller(const HardwareSupport hwSupport,

@@ -23,10 +23,32 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#include "boxscrollarea.h"
-#include "GUI/mainwindow.h"
-#include "GUI/canvaswindow.h"
-BoxScrollArea::BoxScrollArea(QWidget *parent) :
-    ScrollArea(parent) {
-    setFocusPolicy(Qt::ClickFocus);
-}
+#ifndef BOOLPROPERTYWIDGET_H
+#define BOOLPROPERTYWIDGET_H
+
+#include "ui_global.h"
+
+#include <QWidget>
+
+#include "Properties/boolproperty.h"
+#include "Properties/boolpropertycontainer.h"
+
+class UI_EXPORT BoolPropertyWidget : public QWidget {
+    Q_OBJECT
+public:
+    BoolPropertyWidget(QWidget *parent = nullptr);
+
+    void setTarget(BoolProperty *property);
+    void setTarget(BoolPropertyContainer *property);
+protected:
+    void mousePressEvent(QMouseEvent *);
+    void paintEvent(QPaintEvent *);
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
+private:
+    bool mHovered = false;
+    qptr<BoolProperty> mTarget;
+    qptr<BoolPropertyContainer> mTargetContainer;
+};
+
+#endif // BOOLPROPERTYWIDGET_H

@@ -214,8 +214,8 @@ public:
     virtual FrameRange getMotionBlurIdenticalRange(
             const qreal relFrame, const bool inheritedTransform);
 
-    virtual HardwareSupport hardwareSupport() const {
-        return HardwareSupport::cpuPreffered;
+    virtual Friction::Core::HardwareSupport hardwareSupport() const {
+        return Friction::Core::HardwareSupport::cpuPreffered;
     }
 
     virtual bool shouldScheduleUpdate() { return true; }

@@ -34,6 +34,8 @@
 #include "themesupport.h"
 #include "Private/esettings.h"
 
+using namespace Friction::Core;
+
 WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
                              const std::function<void()> &newFunc,
                              const std::function<void()> &openFunc,

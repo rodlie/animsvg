@@ -38,6 +38,8 @@
 
 #include <QShortcut>
 
+using namespace Friction::Core;
+
 void ColorSettingsWidget::updateWidgetTargets()
 {
     mUpdateConnections.clear();

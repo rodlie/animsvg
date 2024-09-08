@@ -33,6 +33,8 @@
 
 #include "GUI/global.h"
 
+using namespace Friction::Core;
+
 PresetSettingsWidget::PresetSettingsWidget(QWidget *parent)
     : SettingsWidget(parent)
     , mTreeResolutions(nullptr)

@@ -182,14 +182,12 @@ set(
     renderhandler.cpp
     GUI/BoxesList/boxsinglewidget.cpp
     GUI/BoxesList/boxscrollwidget.cpp
-    GUI/BoxesList/boolpropertywidget.cpp
     memorychecker.cpp
     memoryhandler.cpp
     GUI/RenderWidgets/renderwidget.cpp
     GUI/RenderWidgets/renderinstancewidget.cpp
     GUI/RenderWidgets/closablecontainer.cpp
     GUI/BoxesList/boxtargetwidget.cpp
-    GUI/BoxesList/boxscrollarea.cpp
     GUI/RenderWidgets/outputsettingsprofilesdialog.cpp
     GUI/RenderWidgets/outputsettingsdisplaywidget.cpp
     GUI/animationdockwidget.cpp
@@ -237,14 +235,12 @@ set(
     renderhandler.h
     GUI/BoxesList/boxsinglewidget.h
     GUI/BoxesList/boxscrollwidget.h
-    GUI/BoxesList/boolpropertywidget.h
     memorychecker.h
     memoryhandler.h
     GUI/RenderWidgets/renderwidget.h
     GUI/RenderWidgets/renderinstancewidget.h
     GUI/RenderWidgets/closablecontainer.h
     GUI/BoxesList/boxtargetwidget.h
-    GUI/BoxesList/boxscrollarea.h
     GUI/RenderWidgets/outputsettingsprofilesdialog.h
     GUI/RenderWidgets/outputsettingsdisplaywidget.h
     GUI/animationdockwidget.h

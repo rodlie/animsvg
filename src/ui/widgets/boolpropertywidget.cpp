@@ -24,9 +24,11 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "boolpropertywidget.h"
-#include "GUI/mainwindow.h"
 #include "GUI/global.h"
+#include "Private/document.h"
 #include "themesupport.h"
+
+using namespace Friction::Core;
 
 BoolPropertyWidget::BoolPropertyWidget(QWidget *parent) :
     QWidget(parent) {

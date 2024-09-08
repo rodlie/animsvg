@@ -33,6 +33,8 @@
 #include <QSortFilterProxyModel>
 #include "appsupport.h"
 
+using namespace Friction::Core;
+
 class evIconProvider : public QFileIconProvider {
 public:
     evIconProvider() {

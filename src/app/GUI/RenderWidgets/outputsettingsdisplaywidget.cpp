@@ -27,6 +27,8 @@
 #include "GUI/global.h"
 #include "appsupport.h"
 
+using namespace Friction::Core;
+
 OutputSettingsDisplayWidget::OutputSettingsDisplayWidget(QWidget *parent)
     : QWidget(parent)
 {

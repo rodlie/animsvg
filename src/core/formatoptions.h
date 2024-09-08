@@ -21,15 +21,44 @@
 #
 */
 
-// Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
+#ifndef FRICTION_FORMAT_OPTIONS_H
+#define FRICTION_FORMAT_OPTIONS_H
 
-#ifndef BOXSCROLLAREA_H
-#define BOXSCROLLAREA_H
-#include "optimalscrollarena/scrollarea.h"
+#include "core_global.h"
 
-class BoxScrollArea : public ScrollArea {
-public:
-    BoxScrollArea(QWidget *parent = nullptr);
-};
+#include <QList>
+#include <QStringList>
 
-#endif // BOXSCROLLAREA_H
+namespace Friction
+{
+    namespace Core
+    {
+        enum CORE_EXPORT FormatType
+        {
+            fTypeMeta,
+            fTypeFormat,
+            fTypeCodec
+        };
+
+        struct CORE_EXPORT FormatOption
+        {
+            QString fKey;
+            QString fValue;
+            int fType;
+        };
+
+        struct CORE_EXPORT FormatOptions
+        {
+            QList<FormatOption> fValues;
+        };
+
+        struct CORE_EXPORT FormatOptionsList
+        {
+            QStringList fTypes;
+            QStringList fKeys;
+            QStringList fValues;
+        };
+    }
+}
+
+#endif // FRICTION_FORMAT_OPTIONS_H

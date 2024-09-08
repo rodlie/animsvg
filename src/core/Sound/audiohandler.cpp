@@ -29,6 +29,8 @@
 
 #include <iostream>
 
+using namespace Friction::Core;
+
 AudioHandler* AudioHandler::sInstance = nullptr;
 
 AudioHandler::AudioHandler()

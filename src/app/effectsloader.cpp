@@ -40,6 +40,8 @@
 #include "Boxes/customboxcreator.h"
 #include "appsupport.h"
 
+using namespace Friction::Core;
+
 EffectsLoader* EffectsLoader::sInstance = nullptr;
 
 EffectsLoader::EffectsLoader()

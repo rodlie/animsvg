@@ -17,6 +17,8 @@
 #include <QPushButton>
 #include <QStatusBar>
 
+using namespace Friction::Core;
+
 SettingsDialog::SettingsDialog(QWidget * const parent)
     : QDialog(parent)
 {

@@ -31,12 +31,12 @@
 #include "../cpurendertools.h"
 #include "../hardwareenums.h"
 
-enum class HardwareSupport : short;
+//enum class HardwareSupport : short;
 
 class CORE_EXPORT RasterEffectCaller : public StdSelfRef {
     e_OBJECT
 public:
-    RasterEffectCaller(const HardwareSupport hwSupport,
+    RasterEffectCaller(const Friction::Core::HardwareSupport hwSupport,
                        const bool forceMargin = false,
                        const QMargins& margin = QMargins());
 
@@ -56,13 +56,13 @@ public:
 
     virtual bool srcDstSeparation() const { return true; }
 
-    HardwareSupport hardwareSupport() const {
+    Friction::Core::HardwareSupport hardwareSupport() const {
         return fHwSupport;
     }
 
     bool interchangeable() const {
-        return fHwSupport != HardwareSupport::cpuOnly &&
-               fHwSupport != HardwareSupport::gpuOnly;
+        return fHwSupport != Friction::Core::HardwareSupport::cpuOnly &&
+               fHwSupport != Friction::Core::HardwareSupport::gpuOnly;
     }
 
     void setSrcRect(const SkIRect& srcRect, const SkIRect& clampRect);
@@ -75,7 +75,7 @@ protected:
     }
 
     const bool fForceMargin;
-    const HardwareSupport fHwSupport;
+    const Friction::Core::HardwareSupport fHwSupport;
     const QMargins fMargin;
     SkIRect fSrcRect;
     SkIRect fDstRect;

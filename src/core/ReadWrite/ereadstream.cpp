@@ -6,6 +6,8 @@
 #include "evformat.h"
 #include "Boxes/boundingbox.h"
 
+using namespace Friction::Core;
+
 eReadFutureTable::eReadFutureTable(QIODevice * const main) : mMain(main) {}
 
 void eReadFutureTable::read() {
@@ -157,6 +159,11 @@ eReadStream &eReadStream::operator>>(SimpleBrushWrapper *&brush) {
     QString brushCollection; *this >> brushCollection;
     QString brushName; *this >> brushName;
     brush = BrushCollectionData::sGetBrush(brushCollection, brushName);
+    return *this;
+}
+
+eReadStream &eReadStream::operator>>(FormatOptions &val) {
+    read(&val, sizeof(FormatOptions));
     return *this;
 }
 

@@ -31,13 +31,25 @@
 #include "Sound/eindependentsound.h"
 #include "Boxes/externallinkboxt.h"
 #include "GUI/dialogsinterface.h"
+#include "filesourcescache.h"
+#include "Boxes/videobox.h"
+#include "Boxes/imagebox.h"
+#include "importhandler.h"
+#include "Boxes/imagesequencebox.h"
+#include "Boxes/videobox.h"
+#include "Boxes/internallinkbox.h"
+#include "Boxes/svglinkbox.h"
 
 #include <QMessageBox>
 #include <QStandardItemModel>
 
+using namespace Friction::Core;
+
 Actions* Actions::sInstance = nullptr;
 
-Actions::Actions(Document &document) : mDocument(document) {
+Actions::Actions(Document &document)
+    : mDocument(document)
+{
     Q_ASSERT(!sInstance);
     sInstance = this;
 
@@ -45,7 +57,7 @@ Actions::Actions(Document &document) : mDocument(document) {
             this, &Actions::connectToActiveScene);
 
     const auto pushName = [this](const QString& name) {
-        if(!mActiveScene) return;
+        if (!mActiveScene) { return; }
         mActiveScene->pushUndoRedoName(name);
     };
 
@@ -54,18 +66,18 @@ Actions::Actions(Document &document) : mDocument(document) {
             return static_cast<bool>(mActiveScene);
         };
         const auto deleteSceneActionExec = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             const auto sceneName = mActiveScene->prp_getName();
             const int buttonId = QMessageBox::question(
                         nullptr, "Delete " + sceneName,
                         QString("Are you sure you want to delete "
                         "%1? This action cannot be undone.").arg(sceneName),
                         "Cancel", "Delete");
-            if(buttonId == 0) return false;
+            if (buttonId == 0) { return false; }
             return mDocument.removeScene(mActiveScene->ref<Canvas>());
         };
         const auto deleteSceneActionText = [this]() {
-            if(!mActiveScene) return QStringLiteral("Delete Scene");
+            if (!mActiveScene) { return QStringLiteral("Delete Scene"); }
             return "Delete " + mActiveScene->prp_getName();
         };
         deleteSceneAction = new Action(deleteSceneActionCan,
@@ -79,7 +91,7 @@ Actions::Actions(Document &document) : mDocument(document) {
             return static_cast<bool>(mActiveScene);
         };
         const auto sceneSettingsActionExec = [this]() {
-            if(!mActiveScene) return;
+            if (!mActiveScene) { return; }
             const auto& intr = DialogsInterface::instance();
             intr.showSceneSettingsDialog(mActiveScene);
         };
@@ -92,7 +104,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // undoAction
         const auto undoActionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return mActiveScene->undoRedoStack()->canUndo();
         };
         const auto undoActionExec = [this]() {
@@ -100,7 +112,7 @@ Actions::Actions(Document &document) : mDocument(document) {
             afterAction();
         };
         const auto undoActionText = [this]() {
-            if(!mActiveScene) return QStringLiteral("Undo");
+            if (!mActiveScene) { return QStringLiteral("Undo"); }
             return mActiveScene->undoRedoStack()->undoText();
         };
         undoAction = new Action(undoActionCan, undoActionExec,
@@ -109,7 +121,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // redoAction
         const auto redoActionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return mActiveScene->undoRedoStack()->canRedo();
         };
         const auto redoActionExec = [this]() {
@@ -117,7 +129,7 @@ Actions::Actions(Document &document) : mDocument(document) {
             afterAction();
         };
         const auto redoActionText = [this]() {
-            if(!mActiveScene) return QStringLiteral("Redo");
+            if (!mActiveScene) { return QStringLiteral("Redo"); }
             return mActiveScene->undoRedoStack()->redoText();
         };
         redoAction = new Action(redoActionCan, redoActionExec,
@@ -126,7 +138,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // raiseAction
         const auto raiseActionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto raiseActionExec = [this]() {
@@ -139,7 +151,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // lowerAction
         const auto lowerActionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto lowerActionExec = [this]() {
@@ -152,7 +164,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // raiseToTopAction
         const auto raiseToTopActionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto raiseToTopActionExec = [this]() {
@@ -168,7 +180,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // lowerToBottomAction
         const auto lowerToBottomActionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto lowerToBottomActionExec = [this]() {
@@ -183,7 +195,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // objectsToPathAction
         const auto objectsToPathActionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto objectsToPathActionExec = [this]() {
@@ -198,7 +210,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // strokeToPathAction
         const auto strokeToPathActionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto strokeToPathActionExec = [this]() {
@@ -213,7 +225,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // groupAction
         const auto groupActionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto groupActionExec = [this]() {
@@ -228,7 +240,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // ungroupAction
         const auto ungroupActionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto ungroupActionExec = [this]() {
@@ -243,7 +255,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // pathsUnionAction
         const auto actionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto actionExec = [this]() {
@@ -256,7 +268,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // pathsDifferenceAction
         const auto actionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto actionExec = [this]() {
@@ -269,7 +281,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // pathsIntersectionAction
         const auto actionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto actionExec = [this]() {
@@ -282,7 +294,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // pathsDivisionAction
         const auto actionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto actionExec = [this]() {
@@ -295,7 +307,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // pathsExclusionAction
         const auto actionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto actionExec = [this]() {
@@ -308,7 +320,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // pathsCombineAction
         const auto actionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto actionExec = [this]() {
@@ -321,7 +333,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // pathsBreakApartAction
         const auto actionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto actionExec = [this]() {
@@ -334,7 +346,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // deleteAction
         const auto actionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty() ||
                    !mActiveScene->isPointSelectionEmpty();
         };
@@ -348,7 +360,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // copyAction
         const auto actionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto actionExec = [this]() {
@@ -373,7 +385,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // cutAction
         const auto actionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto actionExec = [this]() {
@@ -386,7 +398,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // duplicateAction
         const auto actionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto actionExec = [this]() {
@@ -399,7 +411,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // rotate90CWAction
         const auto actionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto actionExec = [this]() {
@@ -412,7 +424,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // rotate90CCWAction
         const auto actionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto actionExec = [this]() {
@@ -425,7 +437,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // flipHorizontalAction
         const auto actionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto actionExec = [this]() {
@@ -438,7 +450,7 @@ Actions::Actions(Document &document) : mDocument(document) {
 
     { // flipVerticalAction
         const auto actionCan = [this]() {
-            if(!mActiveScene) return false;
+            if (!mActiveScene) { return false; }
             return !mActiveScene->isBoxSelectionEmpty();
         };
         const auto actionExec = [this]() {
@@ -450,31 +462,35 @@ Actions::Actions(Document &document) : mDocument(document) {
     }
 }
 
-void Actions::setTextAlignment(const Qt::Alignment alignment) const {
-    if(!mActiveScene) return;
+void Actions::setTextAlignment(const Qt::Alignment alignment) const
+{
+    if (!mActiveScene) { return; }
     mDocument.fTextAlignment = alignment;
     mActiveScene->setSelectedTextAlignment(alignment);
     afterAction();
 }
 
-void Actions::setTextVAlignment(const Qt::Alignment alignment) const {
-    if(!mActiveScene) return;
+void Actions::setTextVAlignment(const Qt::Alignment alignment) const
+{
+    if (!mActiveScene) { return; }
     mDocument.fTextVAlignment = alignment;
     mActiveScene->setSelectedTextVAlignment(alignment);
     afterAction();
 }
 
 void Actions::setFontFamilyAndStyle(const QString& family,
-                                    const SkFontStyle& style) const {
-    if(!mActiveScene) return;
+                                    const SkFontStyle& style) const
+{
+    if (!mActiveScene) { return; }
     mDocument.fFontFamily = family;
     mDocument.fFontStyle = style;
     mActiveScene->setSelectedFontFamilyAndStyle(family, style);
     afterAction();
 }
 
-void Actions::setFontSize(const qreal size) const {
-    if(!mActiveScene) return;
+void Actions::setFontSize(const qreal size) const
+{
+    if (!mActiveScene) { return; }
     mDocument.fFontSize = size;
     mActiveScene->setSelectedFontSize(size);
     afterAction();
@@ -567,92 +583,98 @@ void Actions::newEmptyPaintFrame() const
     afterAction();
 }
 
-void Actions::selectAllAction() const {
-    if(!mActiveScene) return;
+void Actions::selectAllAction() const
+{
+    if (!mActiveScene) { return; }
     mActiveScene->selectAllAction();
 }
 
-void Actions::invertSelectionAction() const {
-    if(!mActiveScene) return;
+void Actions::invertSelectionAction() const
+{
+    if (!mActiveScene) { return; }
     mActiveScene->invertSelectionAction();
 }
 
-void Actions::clearSelectionAction() const {
-    if(!mActiveScene) return;
+void Actions::clearSelectionAction() const
+{
+    if (!mActiveScene) { return; }
     mActiveScene->clearSelectionAction();
 }
 
-void Actions::startSelectedStrokeColorTransform() const {
-    if(!mActiveScene) return;
+void Actions::startSelectedStrokeColorTransform() const
+{
+    if (!mActiveScene) { return; }
     mActiveScene->startSelectedStrokeColorTransform();
     afterAction();
 }
 
-void Actions::startSelectedFillColorTransform() const {
-    if(!mActiveScene) return;
+void Actions::startSelectedFillColorTransform() const
+{
+    if (!mActiveScene) { return; }
     mActiveScene->startSelectedFillColorTransform();
     afterAction();
 }
 
-void Actions::strokeCapStyleChanged(const SkPaint::Cap capStyle) const {
-    if(!mActiveScene) return;
+void Actions::strokeCapStyleChanged(const SkPaint::Cap capStyle) const
+{
+    if (!mActiveScene) { return; }
     mActiveScene->setSelectedCapStyle(capStyle);
     afterAction();
 }
 
-void Actions::strokeJoinStyleChanged(const SkPaint::Join joinStyle) const {
-    if(!mActiveScene) return;
+void Actions::strokeJoinStyleChanged(const SkPaint::Join joinStyle) const
+{
+    if (!mActiveScene) { return; }
     mActiveScene->setSelectedJoinStyle(joinStyle);
     afterAction();
 }
 
-void Actions::strokeWidthAction(const QrealAction &action) const {
-    if(!mActiveScene) return;
+void Actions::strokeWidthAction(const QrealAction &action) const
+{
+    if (!mActiveScene) { return; }
     mActiveScene->strokeWidthAction(action);
     afterAction();
 }
 
-void Actions::applyPaintSettingToSelected(
-        const PaintSettingsApplier &setting) const {
-    if(!mActiveScene) return;
+void Actions::applyPaintSettingToSelected(const PaintSettingsApplier &setting) const
+{
+    if (!mActiveScene) { return; }
     mActiveScene->applyPaintSettingToSelected(setting);
     afterAction();
 }
 
-void Actions::updateAfterFrameChanged(const int currentFrame) const {
-    if(!mActiveScene) return;
+void Actions::updateAfterFrameChanged(const int currentFrame) const
+{
+    if (!mActiveScene) { return; }
     mActiveScene->anim_setAbsFrame(currentFrame);
     afterAction();
 }
 
-void Actions::setClipToCanvas(const bool clip) {
-    if(!mActiveScene) return;
-    if(mActiveScene->clipToCanvas() == clip) return;
+void Actions::setClipToCanvas(const bool clip)
+{
+    if (!mActiveScene) { return; }
+    if (mActiveScene->clipToCanvas() == clip) { return; }
     mActiveScene->setClipToCanvas(clip);
     mActiveScene->updateAllBoxes(UpdateReason::userChange);
     mActiveScene->sceneFramesUpToDate();
     afterAction();
 }
 
-void Actions::setRasterEffectsVisible(const bool bT) {
-    if(!mActiveScene) return;
+void Actions::setRasterEffectsVisible(const bool bT)
+{
+    if (!mActiveScene) { return; }
     mActiveScene->setRasterEffectsVisible(bT);
     mActiveScene->updateAllBoxes(UpdateReason::userChange);
     afterAction();
 }
 
-void Actions::setPathEffectsVisible(const bool bT) {
-    if(!mActiveScene) return;
+void Actions::setPathEffectsVisible(const bool bT)
+{
+    if (!mActiveScene) { return; }
     mActiveScene->setPathEffectsVisible(bT);
     mActiveScene->updateAllBoxes(UpdateReason::userChange);
     afterAction();
 }
-
-#include "filesourcescache.h"
-//#include "svgimporter.h"
-#include "Boxes/videobox.h"
-#include "Boxes/imagebox.h"
-#include "importhandler.h"
 
 eBoxOrSound* Actions::handleDropEvent(QDropEvent * const event,
                                       const QPointF& relDropPos,
@@ -684,7 +706,7 @@ eBoxOrSound* Actions::handleDropEvent(QDropEvent * const event,
                 return importFile(urlList.at(i).toLocalFile(),
                                   mActiveScene->getCurrentGroup(),
                                   0, relDropPos, frame);
-            } catch(const std::exception& e) {
+            } catch (const std::exception& e) {
                 gPrintExceptionCritical(e);
             }
         }
@@ -693,33 +715,36 @@ eBoxOrSound* Actions::handleDropEvent(QDropEvent * const event,
 }
 
 
-qsptr<ImageBox> createImageBox(const QString &path) {
+qsptr<ImageBox> createImageBox(const QString &path)
+{
     const auto img = enve::make_shared<ImageBox>(path);
     return img;
 }
 
-#include "Boxes/imagesequencebox.h"
-qsptr<ImageSequenceBox> createImageSequenceBox(const QString &folderPath) {
+qsptr<ImageSequenceBox> createImageSequenceBox(const QString &folderPath)
+{
     const auto aniBox = enve::make_shared<ImageSequenceBox>();
     aniBox->setFolderPath(folderPath);
     return aniBox;
 }
 
-#include "Boxes/videobox.h"
-qsptr<VideoBox> createVideoForPath(const QString &path) {
+qsptr<VideoBox> createVideoForPath(const QString &path)
+{
     const auto vidBox = enve::make_shared<VideoBox>();
     vidBox->setFilePath(path);
     return vidBox;
 }
 
-qsptr<eIndependentSound> createSoundForPath(const QString &path) {
+qsptr<eIndependentSound> createSoundForPath(const QString &path)
+{
     const auto result = enve::make_shared<eIndependentSound>();
     result->setFilePath(path);
     return result;
 }
 
-eBoxOrSound *Actions::importFile(const QString &path) {
-    if(!mActiveScene) return nullptr;
+eBoxOrSound *Actions::importFile(const QString &path)
+{
+    if (!mActiveScene) { return nullptr; }
     return importFile(path, mActiveScene->getCurrentGroup());
 }
 
@@ -727,14 +752,16 @@ eBoxOrSound *Actions::importFile(const QString &path,
                                  ContainerBox* const target,
                                  const int insertId,
                                  const QPointF &relDropPos,
-                                 const int frame) {
+                                 const int frame)
+{
     const auto scene = target->getParentScene();
     auto block = scene ? scene->blockUndoRedo() :
                          UndoRedoStack::StackBlock();
     qsptr<eBoxOrSound> result;
     const QFile file(path);
-    if(!file.exists())
+    if (!file.exists()) {
         RuntimeThrow("File " + path + " does not exit.");
+    }
 
     QFileInfo fInfo(path);
 
@@ -744,34 +771,34 @@ eBoxOrSound *Actions::importFile(const QString &path,
                                 fInfo.dir().absolutePath());
     }
 
-    if(fInfo.isDir()) {
+    if (fInfo.isDir()) {
         result = createImageSequenceBox(path);
         target->insertContained(insertId, result);
     } else { // is file
         const QString extension = fInfo.suffix();
-        if(isSoundExt(extension)) {
+        if (isSoundExt(extension)) {
             result = createSoundForPath(path);
             target->insertContained(insertId, result);
         } else {
             try {
-                if(isImageExt(extension)) {
+                if (isImageExt(extension)) {
                     result = createImageBox(path);
-                } else if(isVideoExt(extension)) {
+                } else if (isVideoExt(extension)) {
                     result = createVideoForPath(path);
                 } else {
                     result = ImportHandler::sInstance->import(path, scene);
                 }
-            } catch(const std::exception& e) {
+            } catch (const std::exception& e) {
                 gPrintExceptionCritical(e);
             }
         }
     }
-    if(result) {
-        if(frame) result->shiftAll(frame);
+    if (result) {
+        if (frame) { result->shiftAll(frame); }
         block.reset();
         target->prp_pushUndoRedoName("Import File");
         target->insertContained(insertId, result);
-        if(const auto importedBox = enve_cast<BoundingBox*>(result)) {
+        if (const auto importedBox = enve_cast<BoundingBox*>(result)) {
             importedBox->planCenterPivotPosition();
             importedBox->startPosTransform();
             importedBox->moveByAbs(relDropPos);
@@ -784,9 +811,6 @@ eBoxOrSound *Actions::importFile(const QString &path,
     afterAction();
     return result.get();
 }
-
-#include "Boxes/internallinkbox.h"
-#include "Boxes/svglinkbox.h"
 
 eBoxOrSound* Actions::linkFile(const QString &path)
 {
@@ -807,57 +831,79 @@ eBoxOrSound* Actions::linkFile(const QString &path)
     return result.get();
 }
 
-void Actions::setMovePathMode() {
+void Actions::setMovePathMode()
+{
     mDocument.setCanvasMode(CanvasMode::boxTransform);
 }
 
-void Actions::setMovePointMode() {
+void Actions::setMovePointMode()
+{
     mDocument.setCanvasMode(CanvasMode::pointTransform);
 }
 
-void Actions::setAddPointMode() {
+void Actions::setAddPointMode()
+{
     mDocument.setCanvasMode(CanvasMode::pathCreate);
 }
 
-void Actions::setDrawPathMode() {
+void Actions::setDrawPathMode()
+{
     mDocument.setCanvasMode(CanvasMode::drawPath);
 }
 
-void Actions::setRectangleMode() {
+void Actions::setRectangleMode()
+{
     mDocument.setCanvasMode(CanvasMode::rectCreate);
 }
 
-void Actions::setPickPaintSettingsMode() {
+void Actions::setPickPaintSettingsMode()
+{
     mDocument.setCanvasMode(CanvasMode::pickFillStroke);
 }
 
-void Actions::setCircleMode() {
+bool Actions::smoothChange() const
+{
+    return mSmoothChange;
+}
+
+void Actions::startSmoothChange()
+{
+    mSmoothChange = true;
+}
+
+void Actions::setCircleMode()
+{
     mDocument.setCanvasMode(CanvasMode::circleCreate);
 }
 
-void Actions::setTextMode() {
+void Actions::setTextMode()
+{
     mDocument.setCanvasMode(CanvasMode::textCreate);
 }
 
-void Actions::setPaintMode() {
+void Actions::setPaintMode()
+{
     mDocument.setCanvasMode(CanvasMode::paint);
 }
 
-void Actions::setNullMode() {
+void Actions::setNullMode()
+{
     mDocument.setCanvasMode(CanvasMode::nullCreate);
 }
 
-void Actions::finishSmoothChange() {
+void Actions::finishSmoothChange()
+{
     mSmoothChange = false;
     //    mDocument.actionFinished();
 }
 
-void Actions::connectToActiveScene(Canvas* const scene) {
+void Actions::connectToActiveScene(Canvas* const scene)
+{
     auto& conn = mActiveScene.assign(scene);
 
     deleteSceneAction->raiseCanExecuteChanged();
     deleteSceneAction->raiseTextChanged();
-    if(mActiveScene) {
+    if (mActiveScene) {
         conn << connect(mActiveScene, &Canvas::prp_nameChanged,
                         deleteSceneAction, &Action::raiseTextChanged);
     }
@@ -867,7 +913,7 @@ void Actions::connectToActiveScene(Canvas* const scene) {
     undoAction->raiseTextChanged();
     redoAction->raiseCanExecuteChanged();
     redoAction->raiseTextChanged();
-    if(mActiveScene) {
+    if (mActiveScene) {
         const auto urStack = mActiveScene->undoRedoStack();
         conn << connect(urStack, &UndoRedoStack::canUndoChanged,
                         undoAction, &Action::raiseCanExecuteChanged);
@@ -884,7 +930,7 @@ void Actions::connectToActiveScene(Canvas* const scene) {
     lowerAction->raiseCanExecuteChanged();
     raiseToTopAction->raiseCanExecuteChanged();
     lowerToBottomAction->raiseCanExecuteChanged();
-    if(mActiveScene) {
+    if (mActiveScene) {
         conn << connect(mActiveScene, &Canvas::objectSelectionChanged,
                         raiseAction, &Action::raiseCanExecuteChanged);
         conn << connect(mActiveScene, &Canvas::objectSelectionChanged,
@@ -897,7 +943,7 @@ void Actions::connectToActiveScene(Canvas* const scene) {
 
     objectsToPathAction->raiseCanExecuteChanged();
     strokeToPathAction->raiseCanExecuteChanged();
-    if(mActiveScene) {
+    if (mActiveScene) {
         conn << connect(mActiveScene, &Canvas::objectSelectionChanged,
                         objectsToPathAction, &Action::raiseCanExecuteChanged);
         conn << connect(mActiveScene, &Canvas::objectSelectionChanged,
@@ -906,7 +952,7 @@ void Actions::connectToActiveScene(Canvas* const scene) {
 
     groupAction->raiseCanExecuteChanged();
     ungroupAction->raiseCanExecuteChanged();
-    if(mActiveScene) {
+    if (mActiveScene) {
         conn << connect(mActiveScene, &Canvas::objectSelectionChanged,
                         groupAction, &Action::raiseCanExecuteChanged);
         conn << connect(mActiveScene, &Canvas::objectSelectionChanged,
@@ -921,7 +967,7 @@ void Actions::connectToActiveScene(Canvas* const scene) {
     pathsExclusionAction->raiseCanExecuteChanged();
     pathsCombineAction->raiseCanExecuteChanged();
     pathsBreakApartAction->raiseCanExecuteChanged();
-    if(mActiveScene) {
+    if (mActiveScene) {
         conn << connect(mActiveScene, &Canvas::objectSelectionChanged,
                         pathsUnionAction, &Action::raiseCanExecuteChanged);
         conn << connect(mActiveScene, &Canvas::objectSelectionChanged,
@@ -943,7 +989,7 @@ void Actions::connectToActiveScene(Canvas* const scene) {
     pasteAction->raiseCanExecuteChanged();
     cutAction->raiseCanExecuteChanged();
     duplicateAction->raiseCanExecuteChanged();
-    if(mActiveScene) {
+    if (mActiveScene) {
         conn << connect(mActiveScene, &Canvas::objectSelectionChanged,
                         deleteAction, &Action::raiseCanExecuteChanged);
         conn << connect(mActiveScene, &Canvas::pointSelectionChanged,
@@ -962,7 +1008,7 @@ void Actions::connectToActiveScene(Canvas* const scene) {
     rotate90CCWAction->raiseCanExecuteChanged();
     flipHorizontalAction->raiseCanExecuteChanged();
     flipVerticalAction->raiseCanExecuteChanged();
-    if(mActiveScene) {
+    if (mActiveScene) {
         conn << connect(mActiveScene, &Canvas::objectSelectionChanged,
                         rotate90CWAction, &Action::raiseCanExecuteChanged);
         conn << connect(mActiveScene, &Canvas::objectSelectionChanged,
@@ -974,6 +1020,7 @@ void Actions::connectToActiveScene(Canvas* const scene) {
     }
 }
 
-void Actions::afterAction() const {
+void Actions::afterAction() const
+{
     Document::sInstance->actionFinished();
 }

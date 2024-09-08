@@ -37,6 +37,8 @@
 #include "GUI/global.h"
 #include "Private/esettings.h"
 
+using namespace Friction::Core;
+
 PluginsSettingsWidget::PluginsSettingsWidget(QWidget *parent)
     : SettingsWidget(parent)
     , mShaderPath(nullptr)

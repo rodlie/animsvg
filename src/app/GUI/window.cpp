@@ -29,6 +29,8 @@
 
 #include "mainwindow.h"
 
+using namespace Friction::Core;
+
 Window::Window(QWidget *parent,
                QWidget *child,
                const QString title,

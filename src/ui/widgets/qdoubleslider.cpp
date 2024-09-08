@@ -34,6 +34,8 @@
 #include "GUI/global.h"
 #include "themesupport.h"
 
+using namespace Friction::Core;
+
 SliderEdit::SliderEdit(QWidget* const parent) :
     QLineEdit(parent) {
     setAttribute(Qt::WA_TranslucentBackground);

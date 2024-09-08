@@ -39,6 +39,8 @@
 
 #include "GUI/global.h"
 
+using namespace Friction::Core;
+
 AssetsTreeWidget::AssetsTreeWidget(QWidget *parent)
     : QTreeWidget(parent)
 {

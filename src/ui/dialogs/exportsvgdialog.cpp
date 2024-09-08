@@ -41,6 +41,8 @@
 #include <QMessageBox>
 #include <QGroupBox>
 
+using namespace Friction::Core;
+
 ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
                                  const QString &warnings)
     : QDialog(parent)

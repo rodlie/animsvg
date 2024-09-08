@@ -5,6 +5,8 @@
 #include "svgexporthelpers.h"
 #include "appsupport.h"
 
+using namespace Friction::Core;
+
 class ShadowEffectCaller : public RasterEffectCaller {
 public:
     ShadowEffectCaller(const HardwareSupport hwSupport,

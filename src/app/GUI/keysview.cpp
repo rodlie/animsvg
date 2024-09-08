@@ -43,6 +43,8 @@
 #include "GUI/dialogsinterface.h"
 #include "themesupport.h"
 
+using namespace Friction::Core;
+
 KeysView::KeysView(BoxScrollWidget *boxesListVisible,
                    QWidget *parent) :
     QWidget(parent), mBoxesListWidget(boxesListVisible) {

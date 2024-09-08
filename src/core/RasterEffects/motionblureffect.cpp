@@ -30,6 +30,8 @@
 #include "Boxes/boundingbox.h"
 #include "appsupport.h"
 
+using namespace Friction::Core;
+
 class MotionBlurCaller : public RasterEffectCaller {
     e_OBJECT
     friend class StdSelfRef;

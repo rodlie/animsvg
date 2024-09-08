@@ -25,6 +25,8 @@
 
 #include "tmploader.h"
 
+using namespace Friction::Core;
+
 TmpLoader::TmpLoader(const qsptr<QTemporaryFile> &file,
                      HddCachableCont * const target) :
     mTmpFile(file), mTarget(target) {}

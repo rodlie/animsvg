@@ -23,19 +23,29 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef HARDWAREENUMS_H
-#define HARDWAREENUMS_H
+#ifndef FRICTION_HARDWAREENUMS_H
+#define FRICTION_HARDWAREENUMS_H
 
-enum class HardwareSupport : short {
-    cpuOnly,
-    cpuPreffered,
-    gpuPreffered,
-    gpuOnly,
-    hardwareDefault
-};
+#include "core_global.h"
 
-enum class Hardware : short {
-    cpu, gpu, hdd
-};
+namespace Friction
+{
+    namespace Core
+    {
+        enum class CORE_EXPORT HardwareSupport : short
+        {
+            cpuOnly,
+            cpuPreffered,
+            gpuPreffered,
+            gpuOnly,
+            hardwareDefault
+        };
 
-#endif // HARDWAREENUMS_H
+        enum class CORE_EXPORT Hardware : short
+        {
+            cpu, gpu, hdd
+        };
+    }
+}
+
+#endif // FRICTION_HARDWAREENUMS_H

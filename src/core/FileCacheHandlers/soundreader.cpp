@@ -29,6 +29,8 @@
 #include "CacheHandlers/soundcachecontainer.h"
 #include "Sound/soundcomposition.h"
 
+using namespace Friction::Core;
+
 void SoundReader::beforeProcessing(const Hardware) {
     mOpenedAudio->lock();
 }

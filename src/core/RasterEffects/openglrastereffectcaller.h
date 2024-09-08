@@ -33,7 +33,7 @@ protected:
     OpenGLRasterEffectCaller(bool& initialized,
                              GLuint& programId,
                              const QString& shaderPath,
-                             const HardwareSupport hwSupport,
+                             const Friction::Core::HardwareSupport hwSupport,
                              const bool forceMargin = false,
                              const QMargins& margin = QMargins());
 

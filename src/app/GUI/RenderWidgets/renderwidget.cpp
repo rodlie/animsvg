@@ -35,6 +35,8 @@
 #include "../mainwindow.h"
 #include "../timelinedockwidget.h"
 
+using namespace Friction::Core;
+
 RenderWidget::RenderWidget(QWidget *parent)
     : QWidget(parent)
     , mMainLayout(nullptr)

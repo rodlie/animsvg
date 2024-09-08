@@ -33,6 +33,8 @@
 #include "Private/document.h"
 #include "Boxes/boxrenderdata.h"
 
+using namespace Friction::Core;
+
 TaskScheduler *TaskScheduler::sInstance = nullptr;
 
 TaskScheduler::TaskScheduler() {

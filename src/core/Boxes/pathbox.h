@@ -51,7 +51,7 @@ public:
             const int frame1, const int frame2) const = 0;
     virtual SkPath getRelativePath(const qreal relFrame) const = 0;
 
-    HardwareSupport hardwareSupport() const;
+    Friction::Core::HardwareSupport hardwareSupport() const;
 
     OutlineSettingsAnimator *getStrokeSettings() const;
     FillSettingsAnimator *getFillSettings() const;

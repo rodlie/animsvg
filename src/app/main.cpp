@@ -35,6 +35,7 @@
 #include "videoencoder.h"
 #include "appsupport.h"
 #include "themesupport.h"
+#include "actions.h"
 
 #ifdef Q_OS_WIN
 #include "windowsincludes.h"
@@ -44,6 +45,8 @@
 #include <QJSEngine>
 
 #define GPU_NOT_COMPATIBLE gPrintException("Your GPU drivers do not seem to be compatible.")
+
+using namespace Friction::Core;
 
 void setDefaultFormat()
 {

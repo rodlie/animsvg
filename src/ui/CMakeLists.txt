@@ -67,8 +67,10 @@ set(
     widgets/alignwidget.cpp
     widgets/framescrollbar.cpp
     widgets/assetswidget.cpp
+    widgets/boolpropertywidget.cpp
     widgets/bookmarkedcolors.cpp
     widgets/bookmarkedwidget.cpp
+    widgets/boxscrollarea.cpp
     widgets/buttonbase.cpp
     widgets/buttonslist.cpp
     widgets/canvassettingswidget.cpp
@@ -128,8 +130,10 @@ set(
     widgets/alignwidget.h
     widgets/framescrollbar.h
     widgets/assetswidget.h
+    widgets/boolpropertywidget.h
     widgets/bookmarkedcolors.h
     widgets/bookmarkedwidget.h
+    widgets/boxscrollarea.h
     widgets/buttonbase.h
     widgets/buttonslist.h
     widgets/canvassettingswidget.h
