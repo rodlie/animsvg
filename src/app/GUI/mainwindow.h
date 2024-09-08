@@ -383,6 +383,7 @@ private:
     void setupMenuBar();
     void setupMenuEffects();
     void setupMenuExtras();
+    void setupPropertiesActions();
 
     BoundingBox* getCurrentBox();
 

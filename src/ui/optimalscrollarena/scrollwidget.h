@@ -80,6 +80,9 @@ public:
     void updateVisible();
     const QList<QWidget*> &visibleWidgets();
 
+signals:
+    void boxRuleChanged(const SWT_BoxRule rule);
+
 protected:
     ScrollWidgetVisiblePart* visiblePartWidget() const
     { return mVisiblePartWidget; }

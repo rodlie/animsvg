@@ -228,13 +228,17 @@ MainWindow::MainWindow(Document& document,
         mDocument.actionFinished();
     });
 
+    // properties widget
     mObjectSettingsScrollArea = new ScrollArea(this);
     mObjectSettingsScrollArea->setSizePolicy(QSizePolicy::Expanding,
                                              QSizePolicy::Expanding);
     mObjectSettingsWidget = new BoxScrollWidget(mDocument,
                                                 mObjectSettingsScrollArea);
     mObjectSettingsScrollArea->setWidget(mObjectSettingsWidget);
-    mObjectSettingsWidget->setCurrentRule(SWT_BoxRule::selected);
+    const int defaultRule = AppSupport::getSettings("ui",
+                                                    "propertiesFilter",
+                                                    (int)SWT_BoxRule::selected).toInt();
+    mObjectSettingsWidget->setCurrentRule(static_cast<SWT_BoxRule>(defaultRule));
     mObjectSettingsWidget->setCurrentTarget(nullptr, SWT_Target::group);
 
     connect(mObjectSettingsScrollArea->verticalScrollBar(),
@@ -250,6 +254,7 @@ MainWindow::MainWindow(Document& document,
     setupToolBox();
     setupToolBar();
     setupMenuBar();
+    setupPropertiesActions();
 
     readRecentFiles();
     updateRecentMenu();

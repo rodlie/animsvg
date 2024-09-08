@@ -61,6 +61,7 @@ void ScrollWidget::setMainTarget(SingleWidgetTarget *target) {
 
 void ScrollWidget::setCurrentRule(const SWT_BoxRule rule) {
     mVisiblePartWidget->setCurrentRule(rule);
+    emit boxRuleChanged(rule);
 }
 
 void ScrollWidget::setCurrentTarget(SingleWidgetTarget *targetP,

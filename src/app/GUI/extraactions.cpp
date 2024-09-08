@@ -23,6 +23,8 @@
 
 #include "mainwindow.h"
 
+#include "GUI/BoxesList/boxscrollwidget.h"
+
 void MainWindow::setupMenuExtras()
 {
     const auto menu = new QMenu(this);
@@ -521,4 +523,38 @@ void MainWindow::setupMenuExtras()
             });
         }
     }
+}
+
+void MainWindow::setupPropertiesActions()
+{
+    const auto menu = mViewMenu->addMenu(QIcon::fromTheme("filter"),
+                                         tr("Properties Filter"));
+    const int defaultRule = AppSupport::getSettings("ui",
+                                                    "propertiesFilter",
+                                                    (int)SWT_BoxRule::selected).toInt();
+    const auto ruleActionAdder = [this, menu, defaultRule](const SWT_BoxRule rule,
+                                                           const QString& text) {
+        const auto slot = [this, rule]() {
+            mObjectSettingsWidget->setCurrentRule(rule);
+            AppSupport::setSettings("ui", "propertiesFilter", (int)rule);
+        };
+        const auto action = menu->addAction(text, this, slot);
+        action->setCheckable(true);
+        action->setChecked((int)rule == defaultRule);
+        connect(mObjectSettingsWidget, &BoxScrollWidget::boxRuleChanged,
+                action, [action, rule](const SWT_BoxRule setRule) {
+                    action->setChecked(rule == setRule);
+                });
+        return action;
+    };
+
+    const auto group = new QActionGroup(this);
+    group->addAction(ruleActionAdder(SWT_BoxRule::all, tr("All")));
+    group->addAction(ruleActionAdder(SWT_BoxRule::selected, tr("Selected")));
+    group->addAction(ruleActionAdder(SWT_BoxRule::animated, tr("Animated")));
+    group->addAction(ruleActionAdder(SWT_BoxRule::notAnimated, tr("Not Animated")));
+    group->addAction(ruleActionAdder(SWT_BoxRule::visible, tr("Visible")));
+    group->addAction(ruleActionAdder(SWT_BoxRule::hidden, tr("Hidden")));
+    group->addAction(ruleActionAdder(SWT_BoxRule::unlocked, tr("Unlocked")));
+    group->addAction(ruleActionAdder(SWT_BoxRule::locked, tr("Locked")));
 }
