@@ -24,12 +24,14 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "fontswidget.h"
-#include "mainwindow.h"
 
 #include <QLineEdit>
 #include <QIntValidator>
 #include <QLabel>
 
+#include "mainwindow.h"
+#include "Private/document.h"
+#include "themesupport.h"
 #include "widgets/editablecombobox.h"
 
 using namespace Friction::Core;
