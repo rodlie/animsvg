@@ -1374,7 +1374,7 @@ void MainWindow::setResolutionText(QString text)
 
 void MainWindow::checkAutoSaveTimer()
 {
-    if (mShutdown | mIsRenderer) { return; }
+    if (mShutdown || mIsRenderer) { return; }
 
     if (mAutoSave &&
         mChangedSinceSaving &&
@@ -1440,7 +1440,7 @@ void MainWindow::openTimelineWindow()
 
 void MainWindow::closedTimelineWindow()
 {
-    if (mShutdown | mIsRenderer) { return; }
+    if (mShutdown || mIsRenderer) { return; }
     AppSupport::setSettings("ui",
                             "TimelineWindow",
                             false);
