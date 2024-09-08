@@ -126,6 +126,17 @@ namespace Friction
             static bool hasXDGDesktopIntegration();
             static bool setupXDGDesktopIntegration();
             static bool removeXDGDesktopIntegration();
+            static void initXDGDesktop(const bool &isRenderer);
+            static bool hasArg(int argc,
+                               char *argv[],
+                               const QString &find);
+            static void checkPerms(const bool &isRenderer);
+            static void checkFFmpeg(const bool &isRenderer);
+            static void initEnv(const bool &isRenderer);
+            static QPair<bool,int> handleXDGArgs(const bool &isRenderer,
+                                                  const QStringList &args);
+            static void printVersion();
+            static void printHelp(const bool &isRenderer);
             static const ExpressionPreset readEasingPreset(const QString &filename);
             static const QList<QPair<QString,QString>> getEasingPresets();
             static void handlePortableFirstRun();

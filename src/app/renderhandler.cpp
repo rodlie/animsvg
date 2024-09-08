@@ -418,7 +418,7 @@ void RenderHandler::stopAudio() {
 }
 
 void RenderHandler::audioPushTimerExpired() {
-    if(!mCurrentSoundComposition | mNoAudio) return;
+    if(!mCurrentSoundComposition || mNoAudio) return;
     while(auto request = mAudioHandler.dataRequest()) {
         const qint64 len = mCurrentSoundComposition->read(
                     request.fData, request.fSize);
