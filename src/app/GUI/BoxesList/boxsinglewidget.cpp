@@ -34,7 +34,7 @@
 #include "boxscroller.h"
 #include "GUI/keysview.h"
 #include "pointhelpers.h"
-#include "GUI/BoxesList/boolpropertywidget.h"
+#include "widgets/boolpropertywidget.h"
 #include "boxtargetwidget.h"
 #include "Properties/boxtargetproperty.h"
 #include "Properties/comboboxproperty.h"

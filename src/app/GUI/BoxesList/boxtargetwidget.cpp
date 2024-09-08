@@ -24,13 +24,14 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "boxtargetwidget.h"
+
 #include <QMimeData>
 #include <QPainter>
 #include <QMenu>
+
 #include "Boxes/containerbox.h"
 #include "Properties/boxtargetproperty.h"
-#include "GUI/mainwindow.h"
-#include "Properties/emimedata.h"
+#include "Private/document.h"
 #include "themesupport.h"
 
 using namespace Friction::Core;

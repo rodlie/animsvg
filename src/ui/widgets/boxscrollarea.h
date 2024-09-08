@@ -23,29 +23,16 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef BOOLPROPERTYWIDGET_H
-#define BOOLPROPERTYWIDGET_H
+#ifndef BOXSCROLLAREA_H
+#define BOXSCROLLAREA_H
 
-#include <QWidget>
-#include "Properties/boolproperty.h"
-#include "Properties/boolpropertycontainer.h"
+#include "ui_global.h"
 
-class BoolPropertyWidget : public QWidget {
-    Q_OBJECT
+#include "optimalscrollarena/scrollarea.h"
+
+class UI_EXPORT BoxScrollArea : public ScrollArea {
 public:
-    BoolPropertyWidget(QWidget *parent = nullptr);
-
-    void setTarget(BoolProperty *property);
-    void setTarget(BoolPropertyContainer *property);
-protected:
-    void mousePressEvent(QMouseEvent *);
-    void paintEvent(QPaintEvent *);
-    void enterEvent(QEvent *);
-    void leaveEvent(QEvent *);
-private:
-    bool mHovered = false;
-    qptr<BoolProperty> mTarget;
-    qptr<BoolPropertyContainer> mTargetContainer;
+    BoxScrollArea(QWidget *parent = nullptr);
 };
 
-#endif // BOOLPROPERTYWIDGET_H
+#endif // BOXSCROLLAREA_H

@@ -23,13 +23,9 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef BOXSCROLLAREA_H
-#define BOXSCROLLAREA_H
-#include "optimalscrollarena/scrollarea.h"
+#include "boxscrollarea.h"
 
-class BoxScrollArea : public ScrollArea {
-public:
-    BoxScrollArea(QWidget *parent = nullptr);
-};
-
-#endif // BOXSCROLLAREA_H
+BoxScrollArea::BoxScrollArea(QWidget *parent) :
+    ScrollArea(parent) {
+    setFocusPolicy(Qt::ClickFocus);
+}

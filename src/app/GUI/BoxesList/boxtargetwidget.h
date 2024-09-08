@@ -27,8 +27,14 @@
 #define BOXTARGETWIDGET_H
 
 #include <QWidget>
-class BoundingBox;
-class BoxTargetProperty;
+#include <QPaintEvent>
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <QDragLeaveEvent>
+#include <QMouseEvent>
+#include <QDragMoveEvent>
+
+#include "Properties/boxtargetproperty.h"
 #include "smartPointers/ememory.h"
 #include "conncontextptr.h"
 
