@@ -28,6 +28,8 @@
 #include "GUI/global.h"
 #include "themesupport.h"
 
+using namespace Friction::Core;
+
 BoolPropertyWidget::BoolPropertyWidget(QWidget *parent) :
     QWidget(parent) {
     eSizesUI::widget.add(this, [this](const int size) {

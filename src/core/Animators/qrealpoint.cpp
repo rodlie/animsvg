@@ -27,6 +27,8 @@
 #include "graphkey.h"
 #include "themesupport.h"
 
+using namespace Friction::Core;
+
 QrealPoint::QrealPoint(QrealPointType type,
                        GraphKey * const parentKey,
                        const qreal radius) {

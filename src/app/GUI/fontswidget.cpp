@@ -32,6 +32,8 @@
 
 #include "widgets/editablecombobox.h"
 
+using namespace Friction::Core;
+
 FontsWidget::FontsWidget(QWidget *parent)
     : QWidget(parent)
     , mBlockEmit(0)

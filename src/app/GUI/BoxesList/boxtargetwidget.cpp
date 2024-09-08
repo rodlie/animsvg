@@ -33,6 +33,8 @@
 #include "Properties/emimedata.h"
 #include "themesupport.h"
 
+using namespace Friction::Core;
+
 BoxTargetWidget::BoxTargetWidget(QWidget *parent) : QWidget(parent) {
     setAcceptDrops(true);
     setMaximumWidth(150);

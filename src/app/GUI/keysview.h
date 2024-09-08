@@ -35,11 +35,11 @@
 #include "conncontextobjlist.h"
 #include "themesupport.h"
 
-const QList<QColor> ANIMATOR_COLORS = {ThemeSupport::getThemeColorRed(),
-                                       ThemeSupport::getThemeColorBlue(),
-                                       ThemeSupport::getThemeColorYellow(),
-                                       ThemeSupport::getThemeColorPink(),
-                                       ThemeSupport::getThemeColorGreen()};
+const QList<QColor> ANIMATOR_COLORS = {Friction::Core::ThemeSupport::getThemeColorRed(),
+                                       Friction::Core::ThemeSupport::getThemeColorBlue(),
+                                       Friction::Core::ThemeSupport::getThemeColorYellow(),
+                                       Friction::Core::ThemeSupport::getThemeColorPink(),
+                                       Friction::Core::ThemeSupport::getThemeColorGreen()};
 
 class Key;
 class QrealKey;

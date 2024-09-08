@@ -29,6 +29,8 @@
 #include "Animators/transformanimator.h"
 #include "themesupport.h"
 
+using namespace Friction::Core;
+
 MovablePoint::MovablePoint(const MovablePointType type) : mType(type) {}
 
 MovablePoint::MovablePoint(BasicTransformAnimator * const trans,

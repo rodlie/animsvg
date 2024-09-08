@@ -30,6 +30,8 @@
 
 #include "smartPointers/stdselfref.h"
 
+using namespace Friction::Core;
+
 struct eSetting
 {
     eSetting(const QString& name) : fName(name) {}

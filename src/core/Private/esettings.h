@@ -147,15 +147,15 @@ public:
     bool fTimelineAlternateRow = true;
     QColor fTimelineAlternateRowColor = QColor(0, 0, 0, 25);
     bool fTimelineHighlightRow = true;
-    QColor fTimelineHighlightRowColor = ThemeSupport::getThemeHighlightColor(15);
+    QColor fTimelineHighlightRowColor = Friction::Core::ThemeSupport::getThemeHighlightColor(15);
 
     QColor fObjectKeyframeColor;
     QColor fPropertyGroupKeyframeColor;
     QColor fPropertyKeyframeColor;
     QColor fSelectedKeyframeColor;
 
-    QColor fVisibilityRangeColor = ThemeSupport::getThemeRangeColor();
-    QColor fSelectedVisibilityRangeColor = ThemeSupport::getThemeRangeSelectedColor();
+    QColor fVisibilityRangeColor = Friction::Core::ThemeSupport::getThemeRangeColor();
+    QColor fSelectedVisibilityRangeColor = Friction::Core::ThemeSupport::getThemeRangeSelectedColor();
     QColor fAnimationRangeColor = QColor(0, 0, 0, 55);
 
     // command palette

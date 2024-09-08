@@ -27,6 +27,8 @@
 #include "pointhelpers.h"
 #include "themesupport.h"
 
+using namespace Friction::Core;
+
 void HddCachableCacheHandler::drawCacheOnTimeline(QPainter * const p,
                                                   const QRectF& drawRect,
                                                   const int startFrame,

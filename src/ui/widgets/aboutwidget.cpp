@@ -32,6 +32,8 @@
 #include <QTextBrowser>
 #include <QFile>
 
+using namespace Friction::Core;
+
 AboutWidget::AboutWidget(QWidget *parent)
     : QWidget{parent}
 {

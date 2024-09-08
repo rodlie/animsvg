@@ -46,6 +46,8 @@
 #include "timelinehighlightwidget.h"
 #include "themesupport.h"
 
+using namespace Friction::Core;
+
 TimelineWidget::TimelineWidget(Document &document,
                                QWidget * const menu,
                                QWidget *parent)

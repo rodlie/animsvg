@@ -29,6 +29,8 @@
 #include <QDebug>
 #include <QDesktopWidget>
 
+using namespace Friction::Core;
+
 const QColor ThemeSupport::getQColor(int r,
                                      int g,
                                      int b,

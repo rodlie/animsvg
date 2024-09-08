@@ -31,6 +31,8 @@
 #include "GUI/dialogsinterface.h"
 #include "themesupport.h"
 
+using namespace Friction::Core;
+
 QrealAnimatorValueSlider::QrealAnimatorValueSlider(qreal minVal, qreal maxVal,
                                                    qreal prefferedStep,
                                                    QWidget *parent) :

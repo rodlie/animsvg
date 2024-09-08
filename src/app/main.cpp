@@ -60,6 +60,8 @@ extern "C" {
 
 #define GPU_NOT_COMPATIBLE gPrintException("Your GPU drivers do not seem to be compatible.")
 
+using namespace Friction::Core;
+
 void setDefaultFormat()
 {
     QSurfaceFormat format;

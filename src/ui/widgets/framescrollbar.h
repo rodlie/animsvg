@@ -115,7 +115,7 @@ private:
 
     QFontMetrics mFm;
 
-    QColor mHandleColor = ThemeSupport::getThemeButtonBaseColor();
+    QColor mHandleColor = Friction::Core::ThemeSupport::getThemeButtonBaseColor();
     qptr<Canvas> mCurrentCanvas;
 };
 

@@ -29,6 +29,8 @@
 
 #include "themesupport.h"
 
+using namespace Friction::Core;
+
 BoxesListActionButton::BoxesListActionButton(QWidget * const parent)
     : QWidget(parent)
 {

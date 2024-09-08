@@ -46,6 +46,8 @@
 #include "glhelpers.h"
 #include "themesupport.h"
 
+using namespace Friction::Core;
+
 CanvasWindow::CanvasWindow(Document &document,
                            QWidget * const parent)
     : GLWindow(parent)
