@@ -159,6 +159,8 @@ void Document::setActiveScene(Canvas * const scene) {
                         this, &Document::clearActiveScene);
         conn << connect(fActiveScene, &Canvas::openTextEditor,
                         this, [this] () { emit openTextEditor(); });
+        conn << connect(fActiveScene, &Canvas::openMarkerEditor,
+                        this, [this] () { emit openMarkerEditor(); });
         emit currentBoxChanged(fActiveScene->getCurrentBox());
         emit selectedPaintSettingsChanged();
     }

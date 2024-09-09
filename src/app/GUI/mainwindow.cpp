@@ -40,6 +40,7 @@
 #include <iostream>
 
 #include "GUI/edialogs.h"
+#include "dialogs/markereditordialog.h"
 #include "timelinedockwidget.h"
 #include "canvaswindow.h"
 #include "GUI/BoxesList/boxscrollwidget.h"
@@ -73,6 +74,8 @@
 #include "widgets/assetswidget.h"
 #include "dialogs/adjustscenedialog.h"
 #include "dialogs/commandpalette.h"
+
+using namespace Friction;
 
 MainWindow *MainWindow::sInstance = nullptr;
 
@@ -186,6 +189,8 @@ MainWindow::MainWindow(Document& document,
             this, &MainWindow::closeWelcomeDialog);
     connect(&mDocument, &Document::openTextEditor,
             this, [this] () { focusFontWidget(true); });
+    connect(&mDocument, &Document::openMarkerEditor,
+            this, &MainWindow::openMarkerEditor);
     connect(&mDocument, &Document::newVideo,
             this, &MainWindow::handleNewVideoClip);
 
@@ -2286,6 +2291,15 @@ void MainWindow::focusFontWidget(const bool focus)
 void MainWindow::focusColorWidget()
 {
     mTabColorText->setCurrentIndex(mTabColorIndex);
+}
+
+void MainWindow::openMarkerEditor()
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return; }
+    const auto dialog = new Ui::MarkerEditorDialog(scene, this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->show();
 }
 
 stdsptr<void> MainWindow::lock()

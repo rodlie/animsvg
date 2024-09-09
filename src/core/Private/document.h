@@ -210,6 +210,7 @@ signals:
     void evFilePathChanged(QString);
     void documentChanged();
     void openTextEditor();
+    void openMarkerEditor();
     void newVideo(const VideoBox::VideoSpecs specs);
 };
 

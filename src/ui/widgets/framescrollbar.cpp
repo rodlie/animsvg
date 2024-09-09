@@ -242,7 +242,7 @@ bool FrameScrollBar::hasFrameOut(const int frame)
 bool FrameScrollBar::hasFrameMarker(const int frame)
 {
     if (!mCurrentCanvas) { return false; }
-    return mCurrentCanvas->hasMarker(frame + 1);
+    return mCurrentCanvas->hasMarkerEnabled(frame + 1);
 }
 
 const QString FrameScrollBar::getFrameMarkerText(const int frame)
@@ -342,6 +342,8 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
                                               tr(hasMarker ? "Remove Marker" : "Add Marker"), this);
         const auto clearMarkersAct = new QAction(QIcon::fromTheme("trash"),
                                                  tr("Clear Markers"), this);
+        const auto openMarkerEditorAct = new QAction(QIcon::fromTheme("dialog-information"),
+                                                     tr("Marker Editor"), this);
         const auto splitDurationAct = new QAction(QIcon::fromTheme("image-missing"),
                                                   tr("Split Clip"), this);
 
@@ -351,6 +353,7 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
         menu.addAction(clearFrameOutAct);
         menu.addSeparator();
         menu.addAction(setMarkerAct);
+        menu.addAction(openMarkerEditorAct);
         menu.addAction(clearMarkersAct);
         menu.addSeparator();
         menu.addAction(splitDurationAct);
@@ -407,6 +410,10 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
             } else if (selectedAction == splitDurationAct) {
                 if (mCurrentCanvas) {
                     mCurrentCanvas->splitAction();
+                }
+            } else if (selectedAction == openMarkerEditorAct) {
+                if (mCurrentCanvas) {
+                    mCurrentCanvas->openMarkerEditor();
                 }
             }
         }

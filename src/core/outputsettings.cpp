@@ -120,7 +120,7 @@ void OutputSettings::write(eWriteStream &dst) const
     dst.write(&fVideoPixelFormat, sizeof(AVPixelFormat));
     dst << fVideoBitrate;
     dst << fVideoProfile;
-    dst << fVideoOptions;
+    dst << FormatOptions{}; //fVideoOptions; // tmp fix
 
     dst << fAudioEnabled;
     dst << (fAudioCodec ? fAudioCodec->id : -1);
@@ -146,7 +146,7 @@ void OutputSettings::read(eReadStream &src)
         src >> fVideoProfile;
     }
     if (src.evFileVersion() >= EvFormat::formatOptions) {
-        src >> fVideoOptions;
+        src.read(nullptr, sizeof(FormatOptions)); // tmp fix
     }
 
     src >> fAudioEnabled;
