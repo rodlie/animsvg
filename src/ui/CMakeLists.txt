@@ -47,6 +47,7 @@ set(
     dialogs/commandpalette.cpp
     dialogs/durationrectsettingsdialog.cpp
     dialogs/exportsvgdialog.cpp
+    dialogs/markereditordialog.cpp
     dialogs/qrealpointvaluedialog.cpp
     dialogs/renderoutputwidget.cpp
     dialogs/scenesettingsdialog.cpp
@@ -85,6 +86,7 @@ set(
     widgets/glwidget.cpp
     widgets/glwindow.cpp
     widgets/labeledslider.cpp
+    widgets/markereditor.cpp
     widgets/performancesettingswidget.cpp
     widgets/presetsettingswidget.cpp
     widgets/qdoubleslider.cpp
@@ -108,6 +110,7 @@ set(
     dialogs/commandpalette.h
     dialogs/durationrectsettingsdialog.h
     dialogs/exportsvgdialog.h
+    dialogs/markereditordialog.h
     dialogs/qrealpointvaluedialog.h
     dialogs/renderoutputwidget.h
     dialogs/scenesettingsdialog.h
@@ -146,6 +149,7 @@ set(
     widgets/glwidget.h
     widgets/glwindow.h
     widgets/labeledslider.h
+    widgets/markereditor.h
     widgets/performancesettingswidget.h
     widgets/presetsettingswidget.h
     widgets/qdoubleslider.h

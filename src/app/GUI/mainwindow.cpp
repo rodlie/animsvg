@@ -40,6 +40,7 @@
 #include <iostream>
 
 #include "GUI/edialogs.h"
+#include "dialogs/markereditordialog.h"
 #include "timelinedockwidget.h"
 #include "canvaswindow.h"
 #include "GUI/BoxesList/boxscrollwidget.h"
@@ -73,6 +74,8 @@
 #include "widgets/assetswidget.h"
 #include "dialogs/adjustscenedialog.h"
 #include "dialogs/commandpalette.h"
+
+using namespace Friction;
 
 MainWindow *MainWindow::sInstance = nullptr;
 
@@ -2294,7 +2297,9 @@ void MainWindow::openMarkerEditor()
 {
     const auto scene = *mDocument.fActiveScene;
     if (!scene) { return; }
-    qDebug() << "Open Marker Editor";
+    const auto dialog = new Ui::MarkerEditorDialog(scene, this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->exec();
 }
 
 stdsptr<void> MainWindow::lock()
