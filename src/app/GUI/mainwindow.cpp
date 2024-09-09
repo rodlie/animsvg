@@ -2299,7 +2299,7 @@ void MainWindow::openMarkerEditor()
     if (!scene) { return; }
     const auto dialog = new Ui::MarkerEditorDialog(scene, this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
-    dialog->exec();
+    dialog->show();
 }
 
 stdsptr<void> MainWindow::lock()

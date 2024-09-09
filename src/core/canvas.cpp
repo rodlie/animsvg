@@ -458,14 +458,31 @@ const FrameMarker Canvas::getFrameOut()
 void Canvas::setMarker(const QString &title,
                        const int frame)
 {
-    if (hasMarker(frame, true)) { return; }
-    mMarkers.push_back({title.isEmpty() ? QString::number(mMarkers.size()) : title, true, frame});
+    if (hasMarker(frame)) {
+        if (!hasMarkerEnabled(frame)) {
+            setMarkerEnabled(frame, true);
+        } else { removeMarker(frame); }
+        return;
+    }
+    mMarkers.push_back({title.isEmpty() ?
+                            QString::number(mMarkers.size()) :
+                            title,
+                        true, frame});
     emit requestUpdate();
 }
 
 void Canvas::setMarker(const int frame)
 {
     setMarker(QString::number(mMarkers.size()), frame);
+}
+
+void Canvas::setMarkerEnabled(const int frame,
+                              const bool &enabled)
+{
+    const int index = getMarkerIndex(frame);
+    if (index < 0) { return; }
+    mMarkers.at(index).enabled = enabled;
+    updateMarkers();
 }
 
 bool Canvas::hasMarker(const int frame,
@@ -485,12 +502,47 @@ bool Canvas::hasMarker(const int frame,
     return false;
 }
 
+bool Canvas::hasMarkerEnabled(const int frame)
+{
+    for (const auto &mark : mMarkers) {
+        if (mark.frame == frame) { return mark.enabled; }
+    }
+    return false;
+}
+
+bool Canvas::removeMarker(const int frame)
+{
+    return hasMarker(frame, true);
+}
+
+bool Canvas::editMarker(const int frame,
+                        const QString &title,
+                        const bool enabled)
+{
+    int index = getMarkerIndex(frame);
+    if (index >= 0) {
+        mMarkers.at(index).title = title;
+        mMarkers.at(index).enabled = enabled;
+        emit newFrameRange(mRange);
+        return true;
+    }
+    return false;
+}
+
 const QString Canvas::getMarkerText(int frame)
 {
     for (const auto &mark: mMarkers) {
         if (mark.frame == frame) { return mark.title; }
     }
     return QString();
+}
+
+int Canvas::getMarkerIndex(const int frame)
+{
+    for (size_t i = 0; i < mMarkers.size(); i++) {
+        if (mMarkers.at(i).frame == frame) { return i; }
+    }
+    return -1;
 }
 
 const std::vector<FrameMarker> Canvas::getMarkers()
@@ -501,6 +553,12 @@ const std::vector<FrameMarker> Canvas::getMarkers()
 void Canvas::clearMarkers()
 {
     mMarkers.clear();
+    emit requestUpdate();
+}
+
+void Canvas::updateMarkers()
+{
+    emit newFrameRange(mRange);
     emit requestUpdate();
 }
 
@@ -1248,7 +1306,9 @@ void Canvas::writeMarkers(eWriteStream &dst) const
     QStringList markers;
     for (auto &marker: mMarkers) {
         QString title = marker.title.isEmpty() ? tr("Marker") : marker.title;
-        markers << QString("%1:%2").arg(title, QString::number(marker.frame));
+        markers << QString("%1:%2:%3").arg(title,
+                                           QString::number(marker.frame),
+                                           QString::number(marker.enabled ? 1 : 0));
     }
     dst << markers.join(",").toUtf8();
 }
@@ -1265,11 +1325,13 @@ void Canvas::readMarkers(eReadStream &src)
     const auto markers = QString::fromUtf8(markerData).split(",");
     for (auto &marker: markers) {
         const auto content = marker.split(":");
-        if (content.size() != 2) { continue; }
-        QString title = content.at(0).isEmpty() ? tr("Marker") : content.at(0);
-        int frame = content.at(1).toInt();
-        if (hasMarker(frame)) { continue; }
-        mMarkers.push_back({title, true, frame});
+        if (content.size() >= 2) {
+            const QString title = content.at(0).isEmpty() ? tr("Marker") : content.at(0);
+            const bool enabled = content.size() > 2 ? content.at(2).toInt() : true;
+            const int frame = content.at(1).toInt();
+            if (hasMarker(frame)) { continue; }
+            mMarkers.push_back({title.simplified(), enabled, frame});
+        }
     }
 }
 

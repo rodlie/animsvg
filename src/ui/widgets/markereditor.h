@@ -28,6 +28,7 @@
 #include "ui_global.h"
 
 #include <QWidget>
+#include <QTreeWidget>
 
 #include "canvas.h"
 
@@ -44,6 +45,12 @@ namespace Friction
 
         private:
             Canvas *mScene;
+            QTreeWidget *mTree;
+
+            void setup();
+            void populate();
+            bool duplicate(QTreeWidgetItem *item,
+                           const int &frame);
         };
     }
 }

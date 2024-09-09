@@ -363,11 +363,19 @@ public:
     void setMarker(const QString &title,
                    const int frame);
     void setMarker(const int frame);
+    void setMarkerEnabled(const int frame, const bool &enabled);
     bool hasMarker(const int frame,
                    const bool removeExists = false);
+    bool hasMarkerEnabled(const int frame);
+    bool removeMarker(const int frame);
+    bool editMarker(const int frame,
+                    const QString &title,
+                    const bool enabled);
     const QString getMarkerText(int frame);
+    int getMarkerIndex(const int frame);
     const std::vector<FrameMarker> getMarkers();
     void clearMarkers();
+    void updateMarkers();
 
     void addKeySelectedProperties();
 

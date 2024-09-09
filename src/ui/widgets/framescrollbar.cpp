@@ -242,7 +242,7 @@ bool FrameScrollBar::hasFrameOut(const int frame)
 bool FrameScrollBar::hasFrameMarker(const int frame)
 {
     if (!mCurrentCanvas) { return false; }
-    return mCurrentCanvas->hasMarker(frame + 1);
+    return mCurrentCanvas->hasMarkerEnabled(frame + 1);
 }
 
 const QString FrameScrollBar::getFrameMarkerText(const int frame)

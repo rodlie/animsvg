@@ -39,7 +39,7 @@ MarkerEditorDialog::MarkerEditorDialog(Canvas *scene,
     setWindowTitle(tr("Marker Editor"));
     const auto lay = new QVBoxLayout(this);
     const auto editor = new MarkerEditor(scene, this);
-    const auto footer = new QHBoxLayout(this);
+    const auto footer = new QHBoxLayout();
     const auto button = new QPushButton(QIcon::fromTheme("close"),
                                         tr("Close"));
 

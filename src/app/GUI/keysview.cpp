@@ -214,7 +214,7 @@ bool KeysView::hasFrameOut(const int frame)
 bool KeysView::hasFrameMarker(const int frame)
 {
     if (!mCurrentScene) { return false; }
-    return mCurrentScene->hasMarker(frame);
+    return mCurrentScene->hasMarkerEnabled(frame);
 }
 
 void KeysView::resizeEvent(QResizeEvent *e) {
