@@ -6,8 +6,6 @@
 #include "filefooter.h"
 #include "framerange.h"
 
-using namespace Friction::Core;
-
 void eWriteFutureTable::write(eWriteStream &dst) {
     for(const auto& future : mFutures) {
         dst.write(&future, sizeof(eFuturePos));
@@ -140,10 +138,5 @@ eWriteStream &eWriteStream::operator<<(const QString &val) {
 eWriteStream &eWriteStream::operator<<(SimpleBrushWrapper * const brush) {
     *this << (brush ? brush->getCollectionName() : "");
     *this << (brush ? brush->getBrushName() : "");
-    return *this;
-}
-
-eWriteStream &eWriteStream::operator<<(const FormatOptions &val) {
-    write(&val, sizeof(FormatOptions));
     return *this;
 }

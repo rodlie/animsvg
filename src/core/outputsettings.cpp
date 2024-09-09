@@ -120,7 +120,8 @@ void OutputSettings::write(eWriteStream &dst) const
     dst.write(&fVideoPixelFormat, sizeof(AVPixelFormat));
     dst << fVideoBitrate;
     dst << fVideoProfile;
-    dst << FormatOptions{}; //fVideoOptions; // tmp fix
+
+    writeFormatOptions(dst);
 
     dst << fAudioEnabled;
     dst << (fAudioCodec ? fAudioCodec->id : -1);
@@ -145,9 +146,8 @@ void OutputSettings::read(eReadStream &src)
     if (src.evFileVersion() >= EvFormat::codecProfile) {
         src >> fVideoProfile;
     }
-    if (src.evFileVersion() >= EvFormat::formatOptions) {
-        src.read(nullptr, sizeof(FormatOptions)); // tmp fix
-    }
+
+    readFormatOptions(src);
 
     src >> fAudioEnabled;
     int audioCodecId; src >> audioCodecId;
@@ -157,6 +157,36 @@ void OutputSettings::read(eReadStream &src)
     src >> fAudioChannelsLayout;
     src >> fAudioSampleRate;
     src >> fAudioBitrate;
+}
+
+void OutputSettings::writeFormatOptions(eWriteStream &dst) const
+{
+    const auto list = OutputSettingsProfile::toFormatOptionsList(fVideoOptions);
+    dst << list.fTypes.join("|").toUtf8();
+    dst << list.fKeys.join("|").toUtf8();
+    dst << list.fValues.join("|").toUtf8();
+}
+
+void OutputSettings::readFormatOptions(eReadStream &src)
+{
+    if (src.evFileVersion() < EvFormat::formatOptions) { return; }
+    if (src.evFileVersion() == EvFormat::formatOptions) {
+        src.read(nullptr, sizeof(FormatOptions));
+        return;
+    }
+
+    QByteArray dTypes, dKeys, dValues;
+    src >> dTypes;
+    src >> dKeys;
+    src >> dValues;
+
+    FormatOptionsList list;
+    list.fTypes = QString::fromUtf8(dTypes).split("|");
+    list.fKeys = QString::fromUtf8(dKeys).split("|");
+    list.fValues = QString::fromUtf8(dValues).split("|");
+    if (OutputSettingsProfile::isValidFormatOptionsList(list)) {
+        fVideoOptions = OutputSettingsProfile::toFormatOptions(list);
+    }
 }
 
 OutputSettingsProfile::OutputSettingsProfile() {}

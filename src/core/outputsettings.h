@@ -50,6 +50,9 @@ struct CORE_EXPORT OutputSettings
     void write(eWriteStream& dst) const;
     void read(eReadStream& src);
 
+    void writeFormatOptions(eWriteStream &dst) const;
+    void readFormatOptions(eReadStream &src);
+
     const AVOutputFormat *fOutputFormat = nullptr;
 
     bool fVideoEnabled = false;

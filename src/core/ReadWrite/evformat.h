@@ -43,6 +43,7 @@ namespace EvFormat {
         markers = 28,
         svgBeginEnd = 29,
         formatOptions = 30,
+        formatOptions2 = 31,
 
         nextVersion
     };
