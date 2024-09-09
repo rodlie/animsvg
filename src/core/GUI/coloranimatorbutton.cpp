@@ -61,6 +61,7 @@ void ColorAnimatorButton::setColorTarget(ColorAnimator * const target) {
                                 &QrealAnimator::effectiveValueChanged,
                                 this, qOverload<>(&ColorAnimatorButton::update));
     }
+    update();
 }
 
 void ColorAnimatorButton::paintEvent(QPaintEvent *) {
