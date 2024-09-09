@@ -186,6 +186,8 @@ MainWindow::MainWindow(Document& document,
             this, &MainWindow::closeWelcomeDialog);
     connect(&mDocument, &Document::openTextEditor,
             this, [this] () { focusFontWidget(true); });
+    connect(&mDocument, &Document::openMarkerEditor,
+            this, &MainWindow::openMarkerEditor);
     connect(&mDocument, &Document::newVideo,
             this, &MainWindow::handleNewVideoClip);
 
@@ -2286,6 +2288,13 @@ void MainWindow::focusFontWidget(const bool focus)
 void MainWindow::focusColorWidget()
 {
     mTabColorText->setCurrentIndex(mTabColorIndex);
+}
+
+void MainWindow::openMarkerEditor()
+{
+    const auto scene = *mDocument.fActiveScene;
+    if (!scene) { return; }
+    qDebug() << "Open Marker Editor";
 }
 
 stdsptr<void> MainWindow::lock()

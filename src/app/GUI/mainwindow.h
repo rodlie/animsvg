@@ -198,6 +198,7 @@ public:
     TimelineDockWidget* getTimeLineWidget();
     void focusFontWidget(const bool focus = true);
     void focusColorWidget();
+    void openMarkerEditor();
 
 protected:
     void lockFinished();

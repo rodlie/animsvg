@@ -439,6 +439,7 @@ signals:
     void gradientRemoved(SceneBoundGradient*);
     void openTextEditor();
     void requestEasingAction(const QString &easing);
+    void openMarkerEditor();
 
 public:
     void makePointCtrlsSymmetric();
