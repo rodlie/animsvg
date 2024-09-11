@@ -172,6 +172,7 @@ QToolBar
     border: 0;
 }
 
+QSpinBox#ComboSpinBox,
 QComboBox,
 QPushButton,
 QToolButton,
@@ -197,6 +198,7 @@ QAction:unchecked {
     border-color: rgba(0, 0, 0, 0);
 }
 
+QSpinBox#ComboSpinBox:hover,
 QComboBox:hover,
 QPushButton:hover,
 QToolButton:hover,
@@ -207,7 +209,6 @@ QCheckBox::indicator:unchecked:hover
 {
     background-color: %3;
     border-color: %4;
-    
 }
 
 QDoubleSpinBox,
@@ -496,16 +497,48 @@ QCheckBox::indicator:hover:unchecked {
     background-color: %4;
 }
 
+QTreeView::indicator:checked,
 QCheckBox::indicator:checked {
     image: url(:/icons/hicolor/%11x%11/actions/dialog-ok.png);
     width: %7px;
     height: %7px;
 }
 
+QTreeView::indicator:unchecked,
 QCheckBox::indicator:unchecked {
     image: url(:/icons/hicolor/%11x%11/actions/dialog-cancel.png);
     width: %7px;
     height: %7px;
+}
+
+QMenu::icon {
+    padding-left: 6px;
+}
+
+QMenu::indicator {
+    width: %7px;
+    height: %7px;
+}
+
+QMenu::item {
+    background-color: transparent;
+    padding: 4px 16px 4px 4px;
+}
+
+QMenu::indicator:non-exclusive:unchecked {
+    image: url(:/icons/hicolor/%11x%11/actions/dialog-cancel.png);
+}
+
+QMenu::indicator:non-exclusive:unchecked:selected {
+    image: url(:/icons/hicolor/%11x%11/actions/dialog-cancel.png);
+}
+
+QMenu::indicator:non-exclusive:checked {
+    image: url(:/icons/hicolor/%11x%11/actions/dialog-ok.png);
+}
+
+QMenu::indicator:non-exclusive:checked:selected {
+    image: url(:/icons/hicolor/%11x%11/actions/dialog-ok.png);
 }
 
 QProgressBar {
@@ -521,4 +554,8 @@ QProgressBar::chunk {
 
 QCheckBox::disabled {
     color: %13;
+}
+
+QToolBar#DarkToolBar {
+    background-color: %5;
 }
