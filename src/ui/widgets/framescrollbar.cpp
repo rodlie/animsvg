@@ -343,7 +343,7 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
         const auto clearMarkersAct = new QAction(QIcon::fromTheme("trash"),
                                                  tr("Clear Markers"), this);
         const auto openMarkerEditorAct = new QAction(QIcon::fromTheme("dialog-information"),
-                                                     tr("Marker Editor"), this);
+                                                     tr("Edit Markers"), this);
         const auto splitDurationAct = new QAction(QIcon::fromTheme("image-missing"),
                                                   tr("Split Clip"), this);
 
