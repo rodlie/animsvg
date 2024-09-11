@@ -115,7 +115,7 @@ private:
 
     QFontMetrics mFm;
 
-    QColor mHandleColor = ThemeSupport::getThemeButtonBaseColor();
+    QColor mHandleColor = ThemeSupport::getThemeButtonBorderColor();
     qptr<Canvas> mCurrentCanvas;
 };
 
