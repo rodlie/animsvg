@@ -23,6 +23,7 @@
 
 #include "markereditor.h"
 #include "GUI/global.h"
+#include "themesupport.h"
 
 #include <QHBoxLayout>
 #include <QPushButton>
@@ -44,6 +45,10 @@ MarkerEditor::MarkerEditor(Canvas *scene,
 
 void MarkerEditor::setup()
 {
+    mTree->setPalette(
+        ThemeSupport::getDefaultPalette(
+            ThemeSupport::getThemeButtonBorderColor()));
+
     mTree->setHeaderLabels(QStringList() << tr("Frame") << tr("Comment"));
     mTree->setTabKeyNavigation(true);
     mTree->setAlternatingRowColors(true);
@@ -58,10 +63,19 @@ void MarkerEditor::setup()
     addButton->setObjectName("FlatButton");
     addButton->setFocusPolicy(Qt::NoFocus);
 
+    const auto remButton = new QPushButton(QIcon::fromTheme("minus"),
+                                           QString(),
+                                           this);
+    remButton->setObjectName("FlatButton");
+    remButton->setFocusPolicy(Qt::NoFocus);
+
+    mTree->addScrollBarWidget(remButton, Qt::AlignBottom);
     mTree->addScrollBarWidget(addButton, Qt::AlignBottom);
 
-    eSizesUI::widget.add(addButton, [addButton](const int size) {
+    eSizesUI::widget.add(addButton, [addButton,
+                                     remButton](const int size) {
         addButton->setFixedHeight(size);
+        remButton->setFixedHeight(size);
     });
 
     connect(addButton, &QPushButton::clicked,
@@ -73,6 +87,16 @@ void MarkerEditor::setup()
         item->setCheckState(0, Qt::Checked);
         item->setFlags(item->flags() | Qt::ItemIsEditable);
         mTree->addTopLevelItem(item);
+    });
+
+    connect(remButton, &QPushButton::pressed, this, [this]() {
+        auto item = mTree->selectedItems().count() > 0 ?
+                        mTree->selectedItems().at(0) : nullptr;
+        if (!item) { return; }
+        const int frame = item->text(0).toInt();
+        if (mScene) { mScene->removeMarker(frame); }
+        delete mTree->takeTopLevelItem(
+            mTree->indexOfTopLevelItem(item));
     });
 
     connect(mTree, &QTreeWidget::itemChanged,
