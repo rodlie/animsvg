@@ -321,7 +321,7 @@ void OutputSettingsDialog::setupFormatOptionsTree()
 {
     mFormatOptionsTree->setPalette(
         ThemeSupport::getDefaultPalette(
-            ThemeSupport::getThemeComboBaseColor()));
+            ThemeSupport::getThemeButtonBorderColor()));
 
     const auto area = new QScrollArea(this);
     const auto container = new QWidget(this);
