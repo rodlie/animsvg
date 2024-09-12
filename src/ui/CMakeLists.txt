@@ -74,6 +74,7 @@ set(
     widgets/buttonslist.cpp
     widgets/canvassettingswidget.cpp
     widgets/changewidthwidget.cpp
+    widgets/colortoolbutton.cpp
     widgets/colorlabel.cpp
     widgets/colorvaluerect.cpp
     widgets/colorwidget.cpp
@@ -95,6 +96,7 @@ set(
     widgets/scenechooser.cpp
     widgets/settingswidget.cpp
     widgets/twocolumnlayout.cpp
+    widgets/viewertoolboxcanvas.cpp
     widgets/uilayout.cpp
     widgets/welcomedialog.cpp
     widgets/widgetstack.cpp
@@ -137,6 +139,7 @@ set(
     widgets/buttonslist.h
     widgets/canvassettingswidget.h
     widgets/changewidthwidget.h
+    widgets/colortoolbutton.h
     widgets/colorlabel.h
     widgets/colorvaluerect.h
     widgets/colorwidget.h
@@ -159,6 +162,7 @@ set(
     widgets/settingswidget.h
     widgets/toolbutton.h
     widgets/twocolumnlayout.h
+    widgets/viewertoolboxcanvas.h
     widgets/uilayout.h
     widgets/vlabel.h
     widgets/welcomedialog.h
