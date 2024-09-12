@@ -74,6 +74,7 @@ set(
     widgets/buttonslist.cpp
     widgets/canvassettingswidget.cpp
     widgets/changewidthwidget.cpp
+    widgets/colortoolbar.cpp
     widgets/colortoolbutton.cpp
     widgets/colorlabel.cpp
     widgets/colorvaluerect.cpp
@@ -139,6 +140,7 @@ set(
     widgets/buttonslist.h
     widgets/canvassettingswidget.h
     widgets/changewidthwidget.h
+    widgets/colortoolbar.h
     widgets/colortoolbutton.h
     widgets/colorlabel.h
     widgets/colorvaluerect.h
@@ -160,6 +162,7 @@ set(
     widgets/savedcolorswidget.h
     widgets/scenechooser.h
     widgets/settingswidget.h
+    widgets/toolbar.h
     widgets/toolbutton.h
     widgets/twocolumnlayout.h
     widgets/viewertoolboxcanvas.h
