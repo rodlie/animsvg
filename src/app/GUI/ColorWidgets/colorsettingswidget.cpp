@@ -102,6 +102,10 @@ void ColorSettingsWidget::setTarget(ColorAnimator * const target) {
                         this, &ColorSettingsWidget::updateWidgetTargets);
         conn << connect(target, &ColorAnimator::colorChanged,
                         mBookmarkedColors, &SavedColorsWidget::setColor);
+        conn << connect(target, &ColorAnimator::colorChanged,
+                        this, [this]() {
+            if (isHidden()) { updateWidgetTargets(); }
+        });
         mBookmarkedColors->setColor(getCurrentQColor());
 
     }
