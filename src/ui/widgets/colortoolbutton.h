@@ -43,6 +43,8 @@ namespace Friction
             ColorToolButton(QWidget * const parent = nullptr);
             ColorToolButton(ColorAnimator * const colorTarget,
                             QWidget * const parent = nullptr);
+            void setColorFillTarget(FillSettingsAnimator * const target);
+            void setColorStrokeTarget(OutlineSettingsAnimator * const target);
             void setColorTarget(ColorAnimator * const target);
             void updateColor();
             QColor color() const;
@@ -53,6 +55,8 @@ namespace Friction
             QWidget *mColorWidget;
             QWidgetAction *mColorAct;
             ConnContextQPtr<ColorAnimator> mColorTarget;
+            ConnContextQPtr<FillSettingsAnimator> mColorFillTarget;
+            ConnContextQPtr<OutlineSettingsAnimator> mColorStrokeTarget;
         };
     }
 }

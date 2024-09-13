@@ -23,6 +23,8 @@
 
 #include "widgets/colortoolbutton.h"
 #include "Animators/coloranimator.h"
+#include "Animators/outlinesettingsanimator.h"
+#include "Animators/paintsettingsanimator.h"
 #include "colorsetting.h"
 #include "GUI/ewidgets.h"
 
@@ -32,6 +34,7 @@ using namespace Friction::Ui;
 
 ColorToolButton::ColorToolButton(QWidget * const parent)
     : ToolButton(parent)
+    , mColor(Qt::black)
     , mColorLabel(nullptr)
     , mColorWidget(nullptr)
     , mColorAct(nullptr)
@@ -56,6 +59,18 @@ ColorToolButton::ColorToolButton(ColorAnimator * const colorTarget,
     : ColorToolButton(parent)
 {
     setColorTarget(colorTarget);
+}
+
+void ColorToolButton::setColorFillTarget(FillSettingsAnimator * const target)
+{
+    mColorFillTarget.assign(target);
+    setColorTarget(target ? target->getColorAnimator() : nullptr);
+}
+
+void ColorToolButton::setColorStrokeTarget(OutlineSettingsAnimator * const target)
+{
+    mColorStrokeTarget.assign(target);
+    setColorTarget(target ? target->getColorAnimator() : nullptr);
 }
 
 void ColorToolButton::setColorTarget(ColorAnimator * const target)
@@ -90,13 +105,25 @@ void ColorToolButton::setColorTarget(ColorAnimator * const target)
 
 void ColorToolButton::updateColor()
 {
-    const QColor color = mColorTarget ? mColorTarget->getColor() : Qt::black;
-    mColorLabel->setColor(color);
-    mColorLabel->setAlpha(color.alphaF());
+
+    if (mColorFillTarget || mColorStrokeTarget) {
+        if (mColorFillTarget) {
+            mColorLabel->setGradient(mColorFillTarget->getPaintType() == PaintType::GRADIENTPAINT ?
+                                         mColorFillTarget->getGradient() : nullptr);
+        } else if (mColorStrokeTarget) {
+            mColorLabel->setGradient(mColorStrokeTarget->getPaintType() == PaintType::GRADIENTPAINT ?
+                                         mColorStrokeTarget->getGradient() : nullptr);
+        }
+    } else { mColorLabel->setGradient(nullptr); }
+
+    const QColor color = mColorTarget ? mColorTarget->getColor() : mColor;
+    mColor = color;
+    mColorLabel->setColor(mColor);
+    mColorLabel->setAlpha(mColor.alphaF());
 }
 
 QColor ColorToolButton::color() const
 {
     if (mColorTarget) { return mColorTarget->getColor(); }
-    return Qt::black;
+    return mColor;
 }
