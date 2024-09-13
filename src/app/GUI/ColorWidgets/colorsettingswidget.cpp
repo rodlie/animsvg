@@ -144,6 +144,26 @@ ColorSetting ColorSettingsWidget::getColorSetting(
     }
 }
 
+void ColorSettingsWidget::setColorModeVisible(const bool &visible)
+{
+    mColorModeLabel->setVisible(visible);
+    mColorModeCombo->setVisible(visible);
+}
+
+void ColorSettingsWidget::setColorHexVisible(const bool &visible)
+{
+    Q_UNUSED(visible)
+    //mHexLabel->setVisible(visible);
+    //mHexEdit->setVisible(visible);
+}
+
+void ColorSettingsWidget::setCurrentTab(const int &index)
+{
+    if (index >= 0 && index < mTabWidget->count()) {
+        mTabWidget->setCurrentIndex(index);
+    }
+}
+
 void ColorSettingsWidget::emitColorChangedSignal() {
     const auto colorSetting = getColorSetting(ColorSettingType::change,
                                               mLastTriggered);
@@ -402,8 +422,10 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     mWidgetsLayout->addWidget(mTabWidget);
     mRGBLayout->addLayout(aLayout);
 
+    mHexLabel = new QLabel("Hex", this);
+
     hexLayout = new QHBoxLayout;
-    hexLayout->addWidget(new QLabel("Hex", this));
+    hexLayout->addWidget(mHexLabel);
     mHexEdit = new QLineEdit("#FF000000", this);
     mHexEdit->setFocusPolicy(Qt::ClickFocus);
     hexLayout->addWidget(mHexEdit);

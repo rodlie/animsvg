@@ -56,6 +56,10 @@ public:
 
     ColorSetting getColorSetting(const ColorSettingType type,
                                  const ColorParameter parameter) const;
+    void setColorModeVisible(const bool &visible);
+    void setColorHexVisible(const bool &visible);
+    void setCurrentTab(const int &index);
+
 signals:
     void colorSettingSignal(const ColorSetting&);
 private:
@@ -206,6 +210,7 @@ private:
 
     QHBoxLayout *hexLayout;
     QLineEdit *mHexEdit;
+    QLabel *mHexLabel;
 
     QHBoxLayout *mColorLabelLayout = new QHBoxLayout();
     QPushButton *mPickingButton;
