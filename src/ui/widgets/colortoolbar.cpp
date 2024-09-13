@@ -116,6 +116,7 @@ void ColorToolBar::setupWidgets()
         mColorBackground->setFixedHeight(wid);
     });
 
+    addSpacer();
     addAction(mColorFillAct);
     addWidget(mColorFill);
     addSeparator();
@@ -124,6 +125,7 @@ void ColorToolBar::setupWidgets()
     addSeparator();
     addAction(mColorBackgroundAct);
     addWidget(mColorBackground);
+    addSeparator();
 
     adjustWidgets();
 }
@@ -149,4 +151,12 @@ void ColorToolBar::adjustWidgets()
     mColorFillAct->setText(horiz ? tr("Fill") : tr("F"));
     mColorStrokeAct->setText(horiz ? tr("Stroke") : tr("S"));
     mColorBackgroundAct->setText(horiz ? tr("Background") : tr("B"));
+}
+
+void ColorToolBar::addSpacer()
+{
+    const auto space = new QWidget(this);
+    space->setSizePolicy(QSizePolicy::Expanding,
+                         QSizePolicy::Minimum);
+    addWidget(space);
 }

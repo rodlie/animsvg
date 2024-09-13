@@ -47,6 +47,7 @@ namespace Friction
         private:
             void setupWidgets();
             void adjustWidgets();
+            void addSpacer();
             ColorToolButton *mColorFill;
             ColorToolButton *mColorStroke;
             ColorToolButton *mColorBackground;
