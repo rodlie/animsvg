@@ -38,6 +38,11 @@ protected:
                          const Func<void(const ColorSetting&)>& slot);
     QWidget* colorWidget(QWidget* const parent,
                          ColorAnimator* const target);
+    QWidget* colorWidget(QWidget* const parent,
+                         ColorAnimator* const target,
+                         const bool showColorMode,
+                         const bool showHex,
+                         const int index);
 };
 
 #endif // EWIDGETSIMPL_H

@@ -48,3 +48,17 @@ QWidget *eWidgetsImpl::colorWidget(QWidget * const parent,
     wid->setTarget(target);
     return wid;
 }
+
+QWidget *eWidgetsImpl::colorWidget(QWidget * const parent,
+                                   ColorAnimator * const target,
+                                   const bool showColorMode,
+                                   const bool showHex,
+                                   const int index)
+{
+    const auto wid = new ColorSettingsWidget(parent);
+    wid->setTarget(target);
+    wid->setColorModeVisible(showColorMode);
+    wid->setCurrentTab(index);
+    wid->setColorHexVisible(showHex);
+    return wid;
+}

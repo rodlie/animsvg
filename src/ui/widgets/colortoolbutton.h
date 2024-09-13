@@ -39,15 +39,11 @@ namespace Friction
     {
         class UI_EXPORT ColorToolButton : public ToolButton
         {
-            ColorToolButton(QWidget * const parent = nullptr);
-
         public:
+            ColorToolButton(QWidget * const parent = nullptr);
             ColorToolButton(ColorAnimator * const colorTarget,
                             QWidget * const parent = nullptr);
-            ColorToolButton(const QColor& color,
-                            QWidget * const parent = nullptr);
             void setColorTarget(ColorAnimator * const target);
-            void setColor(const QColor& color);
             void updateColor();
             QColor color() const;
 
