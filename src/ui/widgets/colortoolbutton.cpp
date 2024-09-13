@@ -36,8 +36,11 @@ ColorToolButton::ColorToolButton(QWidget * const parent)
     , mColorWidget(nullptr)
     , mColorAct(nullptr)
 {
+    setAutoPopup(false); // TODO: add to settings (auto/click popup)
+    setPopupMode(ToolButtonPopupMode::InstantPopup);
+
     mColorAct = new QWidgetAction(this);
-    mColorLabel = new ColorLabel(this);
+    mColorLabel = new ColorLabel(this, false);
 
     const auto lay = new QVBoxLayout(this);
     lay->setContentsMargins(0, 0, 0, 0);
@@ -45,6 +48,7 @@ ColorToolButton::ColorToolButton(QWidget * const parent)
     lay->addWidget(mColorLabel);
 
     addAction(mColorAct);
+    updateColor();
 }
 
 ColorToolButton::ColorToolButton(ColorAnimator * const colorTarget,
@@ -54,17 +58,8 @@ ColorToolButton::ColorToolButton(ColorAnimator * const colorTarget,
     setColorTarget(colorTarget);
 }
 
-ColorToolButton::ColorToolButton(const QColor &color,
-                                 QWidget * const parent)
-    : ColorToolButton(parent)
-{
-    mColor = color;
-}
-
 void ColorToolButton::setColorTarget(ColorAnimator * const target)
 {
-    setAutoPopup(target ? true : false);
-
     if (mColorWidget) {
         mColorAct->releaseWidget(mColorWidget);
         delete mColorWidget;
@@ -72,8 +67,9 @@ void ColorToolButton::setColorTarget(ColorAnimator * const target)
     }
 
     if (target) {
-        mColorWidget = eWidgets::sColorWidget(this, target);
+        mColorWidget = eWidgets::sColorWidget(this, target, false, false, 1);
         mColorWidget->setContentsMargins(10, 10, 10, 10);
+        mColorWidget->setMinimumWidth(250);
         mColorAct->setDefaultWidget(mColorWidget);
     }
 
@@ -92,22 +88,15 @@ void ColorToolButton::setColorTarget(ColorAnimator * const target)
     updateColor();
 }
 
-void ColorToolButton::setColor(const QColor &color)
-{
-    mColor = color;
-    updateColor();
-}
-
 void ColorToolButton::updateColor()
 {
-    const QColor color = mColorTarget ? mColorTarget->getColor() : mColor;
-    mColor = color;
-    mColorLabel->setColor(mColor);
-    mColorLabel->setAlpha(mColor.alphaF());
+    const QColor color = mColorTarget ? mColorTarget->getColor() : Qt::black;
+    mColorLabel->setColor(color);
+    mColorLabel->setAlpha(color.alphaF());
 }
 
 QColor ColorToolButton::color() const
 {
     if (mColorTarget) { return mColorTarget->getColor(); }
-    return mColor;
+    return Qt::black;
 }

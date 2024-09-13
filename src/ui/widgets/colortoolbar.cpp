@@ -94,9 +94,9 @@ void ColorToolBar::setCurrentBox(BoundingBox *target)
 
 void ColorToolBar::setupWidgets()
 {
-    mColorFill = new ColorToolButton(Qt::black, this);
-    mColorStroke = new ColorToolButton(Qt::black, this);
-    mColorBackground = new ColorToolButton(Qt::black, this);
+    mColorFill = new ColorToolButton(this);
+    mColorStroke = new ColorToolButton(this);
+    mColorBackground = new ColorToolButton(this);
 
     mColorFillAct = new QAction(QIcon::fromTheme("color"),
                                 tr("Fill"), this);
