@@ -32,17 +32,25 @@
 #include "Private/document.h"
 #include "widgets/colorwidgetshaders.h"
 
-ColorLabel::ColorLabel(QWidget *parent) : ColorWidget(parent) {
-    //setMinimumSize(80, 20);
-    //setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+ColorLabel::ColorLabel(QWidget *parent,
+                       const bool &bookmark)
+    : ColorWidget(parent)
+    , mBookmark(bookmark)
+{
+
 }
 
-void ColorLabel::mousePressEvent(QMouseEvent *e) {
+void ColorLabel::mousePressEvent(QMouseEvent *e)
+{
+    if (!mBookmark) {
+        ColorWidget::mousePressEvent(e);
+        return;
+    }
     QMenu menu(this);
-    menu.addAction("Bookmark");
+    menu.addAction(QIcon::fromTheme("color"), tr("Bookmark"));
     const auto act = menu.exec(e->globalPos());
-    if(act) {
-        if(act->text() == "Bookmark") {
+    if (act) {
+        if (act->text() == tr("Bookmark")) {
             const QColor col = QColor::fromHsvF(qreal(mHue),
                                                 qreal(mSaturation),
                                                 qreal(mValue),
@@ -52,13 +60,15 @@ void ColorLabel::mousePressEvent(QMouseEvent *e) {
     }
 }
 
-void ColorLabel::setAlpha(const qreal alpha_t) {
+void ColorLabel::setAlpha(const qreal alpha_t)
+{
     mAlpha = alpha_t;
     update();
 }
 
 void ColorLabel::addBookmark()
 {
+    if (!mBookmark) { return; }
     const QColor col = QColor::fromHsvF(qreal(mHue),
                                         qreal(mSaturation),
                                         qreal(mValue),
@@ -66,7 +76,8 @@ void ColorLabel::addBookmark()
     Document::sInstance->addBookmarkColor(col);
 }
 
-void ColorLabel::paintGL() {
+void ColorLabel::paintGL()
+{
     qreal pixelRatio = devicePixelRatioF();
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(PLAIN_PROGRAM.fID);

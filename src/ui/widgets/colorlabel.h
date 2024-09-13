@@ -35,7 +35,8 @@ class UI_EXPORT ColorLabel : public ColorWidget
     Q_OBJECT
 
 public:
-    explicit ColorLabel(QWidget *parent = nullptr);
+    explicit ColorLabel(QWidget *parent = nullptr,
+                        const bool &bookmark = true);
     void saveCurrentColorAsLast();
     void setLastColorHSV(GLfloat h, GLfloat s, GLfloat v);
     void mousePressEvent(QMouseEvent *e);
@@ -45,6 +46,7 @@ public:
 private:
     void paintGL();
     qreal mAlpha = 1;
+    bool mBookmark;
 };
 
 #endif // COLORLABEL_H
