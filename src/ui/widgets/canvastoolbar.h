@@ -21,8 +21,8 @@
 #
 */
 
-#ifndef FRICTION_VIEWER_TOOLBOX_CANVAS_H
-#define FRICTION_VIEWER_TOOLBOX_CANVAS_H
+#ifndef FRICTION_CANVAS_TOOLBAR_H
+#define FRICTION_CANVAS_TOOLBAR_H
 
 #include "ui_global.h"
 
@@ -38,19 +38,16 @@ namespace Friction
 {
     namespace Ui
     {
-        class UI_EXPORT ViewerToolBoxCanvas : public QToolBar
+        class UI_EXPORT CanvasToolBar : public QToolBar
         {
         public:
-            explicit ViewerToolBoxCanvas(QWidget *parent = nullptr);
+            explicit CanvasToolBar(QWidget *parent = nullptr);
 
             void setCurrentCanvas(Canvas * const target);
-            void setCurrentBox(BoundingBox *target);
 
             QComboBox* getResolutionComboBox();
 
         private:
-            void setup();
-            void setupColors();
             void setupDimensions();
             void setupResolution();
             void addSpacer();
@@ -65,20 +62,9 @@ namespace Friction
             QSpinBox *mSpinHeight;
             QComboBox *mComboResolution;
 
-            ColorToolButton *mColorFill;
-            ColorToolButton *mColorStroke;
-            ColorToolButton *mColorBackground;
-
-            QAction *mSpinWidthAct;
-            QAction *mSpinHeightAct;
-            QAction *mComboResolutionAct;
-            QAction *mColorFillAct;
-            QAction *mColorStrokeAct;
-            QAction *mColorBackgroundAct;
-
-            ConnContextQPtr<Canvas> mConCanvas;
+            ConnContextQPtr<Canvas> mCanvas;
         };
     }
 }
 
-#endif // FRICTION_VIEWER_TOOLBOX_CANVAS_H
+#endif // FRICTION_CANVAS_TOOLBAR_H
