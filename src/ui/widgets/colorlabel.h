@@ -29,6 +29,7 @@
 #include "ui_global.h"
 
 #include "widgets/colorwidget.h"
+#include "Animators/gradient.h"
 
 class UI_EXPORT ColorLabel : public ColorWidget
 {
@@ -42,11 +43,13 @@ public:
     void mousePressEvent(QMouseEvent *e);
     void setAlpha(const qreal alpha_t);
     void addBookmark();
+    void setGradient(Gradient *gradient);
 
 private:
     void paintGL();
     qreal mAlpha = 1;
     bool mBookmark;
+    QPointer<Gradient> mGradient;
 };
 
 #endif // COLORLABEL_H
