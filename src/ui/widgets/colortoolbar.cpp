@@ -78,17 +78,11 @@ void ColorToolBar::setCurrentBox(BoundingBox *target)
     mColorStroke->setEnabled(enabled);
 
     if (!target) {
-        mColorFill->setColorTarget(nullptr);
-        mColorStroke->setColorTarget(nullptr);
+        mColorFill->setColorFillTarget(nullptr);
+        mColorStroke->setColorStrokeTarget(nullptr);
     } else {
-        const auto fillSettings = target->getFillSettings();
-        mColorFill->setColorTarget(fillSettings ?
-                                       fillSettings->getColorAnimator() :
-                                       nullptr);
-        const auto strokeSettings = target->getStrokeSettings();
-        mColorStroke->setColorTarget(strokeSettings ?
-                                         strokeSettings->getColorAnimator() :
-                                         nullptr);
+        mColorFill->setColorFillTarget(target->getFillSettings());
+        mColorStroke->setColorStrokeTarget(target->getStrokeSettings());
     }
 }
 
