@@ -39,6 +39,7 @@ AlignWidget::AlignWidget(QWidget* const parent)
     , mRelativeTo(nullptr)
 {
     const auto mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(5, 5, 5, 5);
     setLayout(mainLayout);
 
     const auto combosLay = new QHBoxLayout;
