@@ -24,10 +24,13 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "fontswidget.h"
+#include "GUI/global.h"
 #include "themesupport.h"
 #include "Private/document.h"
 
 #include <QLineEdit>
+
+using namespace Friction::Ui;
 
 FontsWidget::FontsWidget(QWidget *parent)
     : QWidget(parent)
@@ -171,6 +174,9 @@ FontsWidget::FontsWidget(QWidget *parent)
 
     mMainLayout->addLayout(buttonsLayout);
     mMainLayout->addWidget(mTextInput);
+
+    setDisabled(true);
+    setVisible(false);
 
     afterFamilyChange();
 }

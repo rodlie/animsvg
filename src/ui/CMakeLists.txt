@@ -85,6 +85,7 @@ set(
     widgets/editablecombobox.cpp
     widgets/fakemenubar.cpp
     widgets/flowlayout.cpp
+    widgets/fontswidget.cpp
     widgets/framespinbox.cpp
     widgets/glwidget.cpp
     widgets/glwindow.cpp
@@ -151,6 +152,7 @@ set(
     widgets/editablecombobox.h
     widgets/fakemenubar.h
     widgets/flowlayout.h
+    widgets/fontswidget.h
     widgets/framespinbox.h
     widgets/glwidget.h
     widgets/glwindow.h

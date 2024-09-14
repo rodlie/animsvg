@@ -198,7 +198,6 @@ set(
     GUI/keysview.cpp
     GUI/mainwindow.cpp
     GUI/qrealanimatorvalueslider.cpp
-    GUI/fontswidget.cpp
     GUI/fillstrokesettings.cpp
     GUI/toolbox.cpp
     GUI/extraactions.cpp
@@ -249,7 +248,6 @@ set(
     GUI/animationdockwidget.h
     GUI/canvaswindow.h
     GUI/fillstrokesettings.h
-    GUI/fontswidget.h
     GUI/keysview.h
     GUI/mainwindow.h
     GUI/window.h
