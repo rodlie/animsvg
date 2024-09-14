@@ -56,12 +56,9 @@ public:
     }
     static QWidget* sColorWidget(QWidget* const parent,
                                  ColorAnimator* const target,
-                                 const bool showColorMode,
-                                 const bool showHex,
-                                 const int index)
+                                 const bool showColorMode)
     {
-        return sInstance->colorWidget(parent, target,
-                                      showColorMode, showHex, index);
+        return sInstance->colorWidget(parent, target, showColorMode);
     }
 protected:
     virtual QWidget* colorWidget(QWidget* const parent,
@@ -72,9 +69,7 @@ protected:
                                  ColorAnimator* const target) = 0;
     virtual QWidget* colorWidget(QWidget* const parent,
                                  ColorAnimator* const target,
-                                 const bool showColorMode,
-                                 const bool showHex,
-                                 const int index) = 0;
+                                 const bool showColorMode) = 0;
 };
 
 #endif // EWIDGETS_H

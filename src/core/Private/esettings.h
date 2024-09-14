@@ -143,6 +143,8 @@ public:
 
     int fAdjustSceneFromFirstClip = AdjustSceneAsk;
 
+    int fDefaultFillStrokeIndex = 0;
+
     // timeline settings
     bool fTimelineAlternateRow = true;
     QColor fTimelineAlternateRowColor = QColor(0, 0, 0, 25);

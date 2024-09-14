@@ -82,7 +82,7 @@ void ColorToolButton::setColorTarget(ColorAnimator * const target)
     }
 
     if (target) {
-        mColorWidget = eWidgets::sColorWidget(this, target, false, false, 1);
+        mColorWidget = eWidgets::sColorWidget(this, target, false);
         mColorWidget->setContentsMargins(10, 10, 10, 10);
         mColorWidget->setMinimumWidth(250);
         mColorAct->setDefaultWidget(mColorWidget);

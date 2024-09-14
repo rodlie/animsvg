@@ -40,9 +40,7 @@ protected:
                          ColorAnimator* const target);
     QWidget* colorWidget(QWidget* const parent,
                          ColorAnimator* const target,
-                         const bool showColorMode,
-                         const bool showHex,
-                         const int index);
+                         const bool showColorMode);
 };
 
 #endif // EWIDGETSIMPL_H

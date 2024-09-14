@@ -249,6 +249,10 @@ eSettings::eSettings(const int cpuThreads,
                                                "AdjustSceneFromFirstClip",
                                                AdjustSceneAsk);
 
+    gSettings << std::make_shared<eIntSetting>(fDefaultFillStrokeIndex,
+                                              "DefaultFillStrokeIndex",
+                                               0);
+
     /*gSettings << std::make_shared<eBoolSetting>(
                      fTimelineAlternateRow,
                      "timelineAlternateRow", true);

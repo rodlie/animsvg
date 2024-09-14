@@ -150,13 +150,6 @@ void ColorSettingsWidget::setColorModeVisible(const bool &visible)
     mColorModeCombo->setVisible(visible);
 }
 
-void ColorSettingsWidget::setColorHexVisible(const bool &visible)
-{
-    Q_UNUSED(visible)
-    //mHexLabel->setVisible(visible);
-    //mHexEdit->setVisible(visible);
-}
-
 void ColorSettingsWidget::setCurrentTab(const int &index)
 {
     if (index >= 0 && index < mTabWidget->count()) {
@@ -483,6 +476,15 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     connect(mTabWidget, &QTabWidget::currentChanged,
             this, &ColorSettingsWidget::moveAlphaWidgetToTab);
 
+    connect(mTabWidget, &QTabWidget::currentChanged,
+            this, [](int index){
+        const auto settings = eSettings::sInstance;
+        if (settings->fDefaultFillStrokeIndex != index) {
+            settings->fDefaultFillStrokeIndex = index;
+            settings->saveKeyToFile("DefaultFillStrokeIndex");
+        }
+    });
+
     connect(rSpin, &QrealAnimatorValueSlider::valueEdited,
             this, &ColorSettingsWidget::setRed);
     connect(gSpin, &QrealAnimatorValueSlider::valueEdited,
@@ -638,8 +640,9 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     mTabWidget->setSizePolicy(QSizePolicy::MinimumExpanding,
                               QSizePolicy::Maximum);
     setDisplayedColor(Qt::black);
+    setCurrentTab(eSettings::instance().fDefaultFillStrokeIndex);
 
-    moveAlphaWidgetToTab(0);
+    moveAlphaWidgetToTab(eSettings::instance().fDefaultFillStrokeIndex);
 }
 
 QColor ColorSettingsWidget::getCurrentQColor() {
