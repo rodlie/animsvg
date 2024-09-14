@@ -36,6 +36,7 @@
 #include "Boxes/boundingbox.h"
 #include "Boxes/textbox.h"
 #include "GUI/coloranimatorbutton.h"
+#include "widgets/qdoubleslider.h"
 
 class SkFontStyle;
 class ColorAnimator;
@@ -61,7 +62,6 @@ public:
     const QString getText();
     void setTextFocus();
     void clearText();
-    void setColorTarget(ColorAnimator * const target);
     void setBoxTarget(TextBox * const target);
 
 signals:
@@ -74,7 +74,6 @@ signals:
 
 private:
     void updateStyles();
-    void updateSizes();
 
     void emitFamilyAndStyleChanged();
     void emitSizeChanged();
@@ -91,7 +90,7 @@ private:
 
     QComboBox *mFontFamilyCombo;
     QComboBox *mFontStyleCombo;
-    QComboBox *mFontSizeCombo;
+    QDoubleSlider *mFontSizeSlider;
 
     QPushButton *mAlignLeft;
     QPushButton *mAlignCenter;
@@ -104,8 +103,6 @@ private:
     QFontDatabase mFontDatabase;
 
     QPlainTextEdit *mTextInput;
-
-    ColorAnimatorButton *mColorButton;
 
     ConnContextQPtr<TextBox> mBoxTarget;
 };

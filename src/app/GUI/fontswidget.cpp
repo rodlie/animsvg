@@ -24,13 +24,10 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "fontswidget.h"
-#include "mainwindow.h"
+#include "themesupport.h"
+#include "Private/document.h"
 
 #include <QLineEdit>
-#include <QIntValidator>
-#include <QLabel>
-
-#include "widgets/editablecombobox.h"
 
 FontsWidget::FontsWidget(QWidget *parent)
     : QWidget(parent)
@@ -39,7 +36,7 @@ FontsWidget::FontsWidget(QWidget *parent)
     , mMainLayout(nullptr)
     , mFontFamilyCombo(nullptr)
     , mFontStyleCombo(nullptr)
-    , mFontSizeCombo(nullptr)
+    , mFontSizeSlider(nullptr)
     , mAlignLeft(nullptr)
     , mAlignCenter(nullptr)
     , mAlignRight(nullptr)
@@ -47,7 +44,6 @@ FontsWidget::FontsWidget(QWidget *parent)
     , mAlignVCenter(nullptr)
     , mAlignBottom(nullptr)
     , mTextInput(nullptr)
-    , mColorButton(nullptr)
 {
     mFontStyleCombo = new QComboBox(this);
     mFontStyleCombo->setMinimumWidth(20);
@@ -59,17 +55,10 @@ FontsWidget::FontsWidget(QWidget *parent)
     mFontFamilyCombo->setFocusPolicy(Qt::NoFocus);
     mFontFamilyCombo->setToolTip(tr("Font family"));
 
-    mFontSizeCombo = new EditableComboBox(this, true);
-    mFontSizeCombo->setMinimumWidth(20);
-    mFontSizeCombo->setCompleter(nullptr);
-    mFontSizeCombo->setMinimumContentsLength(3);
-    mFontSizeCombo->setToolTip(tr("Font size"));
-
-    mColorButton = new ColorAnimatorButton(QColor(Qt::white), this);
-    mColorButton->setFocusPolicy(Qt::NoFocus);
-
-    MainWindow::sGetInstance()->installNumericFilter(mFontSizeCombo);
-    mFontSizeCombo->setValidator(new QDoubleValidator(1, 999, 2, mFontSizeCombo));
+    mFontSizeSlider = new QDoubleSlider(1, 999, 1, this, false);
+    mFontSizeSlider->setMinimumWidth(20);
+    mFontSizeSlider->setDisplayedValue(72);
+    mFontSizeSlider->setToolTip(tr("Font size"));
 
     mFontFamilyCombo->addItems(filterFonts());
 
@@ -79,43 +68,34 @@ FontsWidget::FontsWidget(QWidget *parent)
     connect(mFontStyleCombo, &QComboBox::currentTextChanged,
             this, &FontsWidget::afterStyleChange);
 
-    connect(mFontSizeCombo, &QComboBox::currentTextChanged,
+    connect(mFontSizeSlider, &QDoubleSlider::valueEdited,
             this, &FontsWidget::emitSizeChanged);
 
     mMainLayout = new QVBoxLayout(this);
-    //mMainLayout->setSpacing(eSizesUI::widget);
-    mMainLayout->setContentsMargins(0, 0, 0, 0);
-    setContentsMargins(0, 0, 0, 0);
+    mMainLayout->setContentsMargins(5, 5, 5, 0);
+    //setContentsMargins(0, 0, 0, 0);
     setLayout(mMainLayout);
 
-    mFontFamilyCombo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    mFontStyleCombo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    mFontSizeCombo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    mFontFamilyCombo->setSizePolicy(QSizePolicy::Expanding,
+                                    QSizePolicy::Preferred);
+    mFontStyleCombo->setSizePolicy(QSizePolicy::Expanding,
+                                   QSizePolicy::Preferred);
+    mFontSizeSlider->setSizePolicy(QSizePolicy::Expanding,
+                                   QSizePolicy::Preferred);
 
-   // QLabel *fontFamilyLabel = new QLabel(tr("Family"), this);
-   // QLabel *fontStyleLabel = new QLabel(tr("Style"), this);
-  //  QLabel *fontSizeLabel = new QLabel(tr("Size"), this);
+    mFontFamilyCombo->setMinimumWidth(120);
+    mFontStyleCombo->setMinimumWidth(80);
+    mFontSizeSlider->setMinimumWidth(60);
 
     QWidget *fontFamilyWidget = new QWidget(this);
     fontFamilyWidget->setContentsMargins(0, 0, 0, 0);
     QHBoxLayout *fontFamilyLayout = new QHBoxLayout(fontFamilyWidget);
     fontFamilyLayout->setMargin(0);
-   // fontFamilyLayout->addWidget(fontFamilyLabel);
     fontFamilyLayout->addWidget(mFontFamilyCombo);
-
-    QWidget *fontStyleWidget = new QWidget(this);
-    fontStyleWidget->setContentsMargins(0, 0, 0 ,0);
-    QHBoxLayout *fontStyleLayout = new QHBoxLayout(fontStyleWidget);
-    fontStyleLayout->setMargin(0);
-
-  //  fontStyleLayout->addWidget(fontStyleLabel);
-    fontStyleLayout->addWidget(mFontStyleCombo);
-  //  fontStyleLayout->addWidget(fontSizeLabel);
-    fontStyleLayout->addWidget(mFontSizeCombo);
-    fontStyleLayout->addWidget(mColorButton);
+    fontFamilyLayout->addWidget(mFontStyleCombo);
+    fontFamilyLayout->addWidget(mFontSizeSlider);
 
     mMainLayout->addWidget(fontFamilyWidget);
-    mMainLayout->addWidget(fontStyleWidget);
 
     mAlignLeft = new QPushButton(QIcon::fromTheme("alignLeft"),
                                  QString(), this);
@@ -180,19 +160,17 @@ FontsWidget::FontsWidget(QWidget *parent)
     });
 
     const auto buttonsLayout = new QHBoxLayout;
-    //buttonsLayout->setSpacing(eSizesUI::widget/5);
     buttonsLayout->setContentsMargins(0, 0, 0, 0);
 
     buttonsLayout->addWidget(mAlignLeft);
     buttonsLayout->addWidget(mAlignCenter);
     buttonsLayout->addWidget(mAlignRight);
-    //eSizesUI::widget.addSpacing(buttonsLayout);
     buttonsLayout->addWidget(mAlignTop);
     buttonsLayout->addWidget(mAlignVCenter);
     buttonsLayout->addWidget(mAlignBottom);
 
-    mMainLayout->addWidget(mTextInput);
     mMainLayout->addLayout(buttonsLayout);
+    mMainLayout->addWidget(mTextInput);
 
     afterFamilyChange();
 }
@@ -220,7 +198,6 @@ void FontsWidget::afterFamilyChange()
 
 void FontsWidget::afterStyleChange()
 {
-    updateSizes();
     emitFamilyAndStyleChanged();
 }
 
@@ -245,31 +222,9 @@ const QStringList FontsWidget::filterFonts()
     return fonts;
 }
 
-void FontsWidget::updateSizes()
-{
-    mBlockEmit++;
-    const QString currentSize = mFontSizeCombo->currentText();
-
-    mFontSizeCombo->clear();
-    QList<int> sizes = mFontDatabase.smoothSizes(fontFamily(), fontStyle());
-    if (sizes.isEmpty()) { sizes = mFontDatabase.standardSizes(); }
-    for (const int size : sizes) {
-        mFontSizeCombo->addItem(QString::number(size));
-    }
-
-    if (currentSize.isEmpty()) {
-        mFontSizeCombo->setCurrentIndex(0);
-    } else {
-        const int id = mFontSizeCombo->findText(currentSize);
-        if (id != -1) { mFontSizeCombo->setCurrentIndex(id); }
-        else { mFontSizeCombo->setCurrentText(currentSize); }
-    }
-    mBlockEmit--;
-}
-
 float FontsWidget::fontSize() const
 {
-    return mFontSizeCombo->currentText().toFloat();
+    return mFontSizeSlider->value();
 }
 
 QString FontsWidget::fontStyle() const
@@ -294,13 +249,13 @@ void FontsWidget::setCurrentBox(BoundingBox * const box)
         fontStyle = tBox->getFontStyle();
         fontText = tBox->getCurrentValue();
         setEnabled(true);
-        setColorTarget(tBox->getFillSettings()->getColorAnimator());
         setBoxTarget(tBox);
+        setVisible(true);
     } else {
         clearText();
         setDisabled(true);
-        setColorTarget(nullptr);
         setBoxTarget(nullptr);
+        setVisible(false);
     }
     setDisplayedSettings(fontSize,
                          fontFamily,
@@ -349,7 +304,6 @@ void FontsWidget::setDisplayedSettings(const float size,
                                        const SkFontStyle &style,
                                        const QString &text)
 {
-    qDebug() << "setDisplayedSettings" << size << family << text;
     mTextInput->blockSignals(true);
     mTextInput->setPlainText(text);
     mTextInput->blockSignals(false);
@@ -363,10 +317,7 @@ void FontsWidget::setDisplayedSettings(const float size,
         mFontStyleCombo->setCurrentText(styleStr);
     }
 
-    const auto sizeStr = QString::number(size);
-    const int id = mFontSizeCombo->findText(sizeStr);
-    if (id != -1) { mFontSizeCombo->setCurrentIndex(id); }
-    else { mFontSizeCombo->setCurrentText(sizeStr); }
+    mFontSizeSlider->setDisplayedValue(size);
     mBlockEmit--;
 }
 
@@ -392,11 +343,6 @@ void FontsWidget::clearText()
     mTextInput->blockSignals(true);
     mTextInput->clear();
     mTextInput->blockSignals(false);
-}
-
-void FontsWidget::setColorTarget(ColorAnimator * const target)
-{
-    mColorButton->setColorTarget(target);
 }
 
 void FontsWidget::setBoxTarget(TextBox * const target)
