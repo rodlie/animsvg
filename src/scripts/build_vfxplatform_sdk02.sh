@@ -29,7 +29,7 @@ DIST=${DIST:-"/mnt"}
 MKJOBS=${MKJOBS:-32}
 SRC_SUFFIX=tar.xz
 
-QT_V=5.15.14
+QT_V=5.15.15
 QSCINTILLA_V=2.14.1
 PELF_V=0.17.0
 CMAKE_V=3.26.3
@@ -260,6 +260,28 @@ if [ ! -f "${QMAKE_BIN}" ]; then
     -no-linuxfb \
     -nomake examples \
     -nomake tests \
+    -no-feature-bearermanagement \
+    -no-feature-dnslookup \
+    -no-feature-dtls \
+    -no-feature-ftp \
+    -no-feature-gssapi \
+    -no-feature-http \
+    -no-feature-localserver \
+    -no-feature-netlistmgr \
+    -no-feature-networkdiskcache \
+    -no-feature-networkinterface \
+    -no-feature-networkproxy \
+    -no-feature-qml-network \
+    -no-feature-qml-xml-http-request \
+    -no-feature-qml-animation \
+    -no-feature-socks5 \
+    -no-feature-sspi \
+    -no-feature-udpsocket \
+    -no-feature-printdialog \
+    -no-feature-printer \
+    -no-feature-printpreviewdialog \
+    -no-feature-printpreviewwidget \
+    -no-feature-pdf \
     -skip qt3d \
     -skip qtactiveqt \
     -skip qtcanvas3d \
