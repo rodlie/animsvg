@@ -154,6 +154,7 @@ void ColorSettingsWidget::setCurrentTab(const int &index)
 {
     if (index >= 0 && index < mTabWidget->count()) {
         mTabWidget->setCurrentIndex(index);
+        moveAlphaWidgetToTab(index);
     }
 }
 
@@ -641,8 +642,6 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
                               QSizePolicy::Maximum);
     setDisplayedColor(Qt::black);
     setCurrentTab(eSettings::instance().fDefaultFillStrokeIndex);
-
-    moveAlphaWidgetToTab(eSettings::instance().fDefaultFillStrokeIndex);
 }
 
 QColor ColorSettingsWidget::getCurrentQColor() {
