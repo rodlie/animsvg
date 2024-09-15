@@ -111,7 +111,7 @@ void CanvasToolBar::setupDimensions()
                           tr("Width"), this));
     addWidget(mSpinWidth);
 
-    addSeparator();
+    //addSeparator();
     addAction(new QAction(QIcon::fromTheme("height"),
                           tr("Height"), this));
     addWidget(mSpinHeight);
