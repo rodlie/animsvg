@@ -278,8 +278,6 @@ MainWindow::MainWindow(Document& document,
 
     const auto layoutComboLabel = new QLabel(tr("Layout"), this);
     layoutComboLabel->setContentsMargins(5, 0, 5, 0);
-    statusBar()->addPermanentWidget(layoutComboLabel);
-    statusBar()->addPermanentWidget(mLayoutHandler->comboWidget());
 
     QMargins frictionMargins(0, 0, 0, 0);
     int frictionSpacing = 0;
@@ -346,6 +344,11 @@ MainWindow::MainWindow(Document& document,
     toolBoxExtraLayout->addWidget(mToolBoxExtraStack);
 
     addToolBar(mColorToolBar);
+
+    mCanvasToolBar->addSeparator();
+    mCanvasToolBar->addWidget(layoutComboLabel);
+    mCanvasToolBar->addWidget(mLayoutHandler->comboWidget());
+
     statusBar()->addPermanentWidget(mCanvasToolBar);
 
     viewerLayout->addWidget(toolBoxWidget);
