@@ -33,15 +33,7 @@ MKJOBS=${MKJOBS:-32}
 SDK_VERSION=${SDK_VERSION:-""}
 ONLY_SDK=${ONLY_SDK:-0}
 SDK_TAR="${DISTFILES}/sdk/friction-vfxplatform-CY2021-sdk-${SDK_VERSION}.tar"
-DOWNLOAD_SDK=${DOWNLOAD_SDK:-0}
 TAR_VERSION=${TAR_VERSION:-""}
-
-# Download SDK
-#if [ "${DOWNLOAD_SDK}" = 1 ] && [ ! -f "${SDK_TAR}.bz2" ]; then
-#    (cd ${DISTFILES}/sdk ;
-#        wget https://download.friction.graphics/distfiles/vfxplatform/friction-vfxplatform-CY2021-sdk-${SDK_VERSION}.tar.bz2
-#    )
-#fi
 
 # Build SDK
 if [ ! -d "${SDK}" ]; then
@@ -49,8 +41,8 @@ if [ ! -d "${SDK}" ]; then
     mkdir -p "${SDK}/bin"
     (cd "${SDK}"; ln -sf lib lib64)
 fi
-if [ -f "${SDK_TAR}.bz2" ]; then
-(cd ${SDK}/.. ; tar xf ${SDK_TAR}.bz2 )
+if [ -f "${SDK_TAR}.xz" ]; then
+(cd ${SDK}/.. ; tar xf ${SDK_TAR}.xz )
 else
 SDK=${SDK} DISTFILES=${DISTFILES} MKJOBS=${MKJOBS} ${BUILD}/build_vfxplatform_sdk01.sh
 SDK=${SDK} DISTFILES=${DISTFILES} MKJOBS=${MKJOBS} ${BUILD}/build_vfxplatform_sdk02.sh
@@ -58,7 +50,7 @@ SDK=${SDK} DISTFILES=${DISTFILES} MKJOBS=${MKJOBS} ${BUILD}/build_vfxplatform_sd
 (cd ${SDK}/.. ;
     rm -rf friction/src
     tar cvvf ${SDK_TAR} friction
-    bzip2 -9 ${SDK_TAR}
+    xz -9 ${SDK_TAR}
 )
 fi
 

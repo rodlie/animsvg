@@ -29,10 +29,10 @@ BUILD_ENGINE=${BUILD_ENGINE:-"OFF"}
 REL=${REL:-0}
 APPIMG=20240401
 SDK=20240915
-SKIA=7e480cd3
+SKIA=d03a4291
 URL=https://github.com/friction2d/friction-sdk/releases/download/${SDK}
 APPIMAGE_TAR=friction-appimage-tools-${APPIMG}.tar.xz
-SDK_TAR=friction-vfxplatform-CY2021-sdk-${SDK}.tar.bz2
+SDK_TAR=friction-vfxplatform-CY2021-sdk-${SDK}.tar.xz
 SKIA_TAR=skia-build-${SKIA}.tar.xz
 
 mkdir -p distfiles/sdk || true

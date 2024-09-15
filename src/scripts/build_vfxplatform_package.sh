@@ -69,12 +69,8 @@ for so in ${LIB_DIR}/*.so*; do
 done
 
 cp ${SDK}/plugins/audio/libqtmedia_pulse.so ${PLUG_DIR}/audio/
-cp ${SDK}/plugins/generic/libqevdevkeyboardplugin.so ${PLUG_DIR}/generic/
-cp ${SDK}/plugins/generic/libqevdevmouseplugin.so ${PLUG_DIR}/generic/
-cp ${SDK}/plugins/generic/libqevdevtabletplugin.so ${PLUG_DIR}/generic/
-cp ${SDK}/plugins/generic/libqevdevtouchplugin.so ${PLUG_DIR}/generic/
-cp ${SDK}/plugins/generic/libqtuiotouchplugin.so ${PLUG_DIR}/generic/
 cp ${SDK}/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so ${PLUG_DIR}/platforminputcontexts/
+cp ${SDK}/plugins/platforms/libqminimal.so ${PLUG_DIR}/platforms/
 cp ${SDK}/plugins/platforms/libqoffscreen.so ${PLUG_DIR}/platforms/
 cp ${SDK}/plugins/platforms/libqxcb.so ${PLUG_DIR}/platforms/
 cp ${SDK}/plugins/xcbglintegrations/libqxcb-glx-integration.so ${PLUG_DIR}/xcbglintegrations/
@@ -148,7 +144,6 @@ done
 
 PLUGS="
 audio
-generic
 platforminputcontexts
 platforms
 xcbglintegrations

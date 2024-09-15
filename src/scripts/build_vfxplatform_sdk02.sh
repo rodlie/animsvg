@@ -327,6 +327,9 @@ if [ ! -f "${SDK}/lib/libqscintilla2_friction_qt5.so" ]; then
     tar xf ${DIST}/qt/${QSC_SRC}.tar.gz
     cd ${QSC_SRC}/src
     sed -i 's/qscintilla2_qt/qscintilla2_friction_qt/g' qscintilla.pro
+    sed -i 's#!ios:QT += printsupport##' qscintilla.pro
+    sed -i 's#!ios:HEADERS += ./Qsci/qsciprinter.h##' qscintilla.pro
+    sed -i 's#!ios:SOURCES += qsciprinter.cpp##' qscintilla.pro
     ${SDK}/bin/qmake CONFIG+=release
     make -j${MKJOBS}
     cp -a libqscintilla2_friction_qt5* ${SDK}/lib/

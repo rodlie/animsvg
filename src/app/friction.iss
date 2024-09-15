@@ -55,9 +55,7 @@ Source: "qscintilla2_qt5.dll"; DestDir: "{app}"; Components: qt ; Flags: ignorev
 Source: "Qt5Core.dll"; DestDir: "{app}"; Components: qt ; Flags: ignoreversion
 Source: "Qt5Gui.dll"; DestDir: "{app}"; Components: qt ; Flags: ignoreversion
 Source: "Qt5Multimedia.dll"; DestDir: "{app}"; Components: qt ; Flags: ignoreversion
-Source: "Qt5Network.dll"; DestDir: "{app}"; Components: qt ; Flags: ignoreversion
 Source: "Qt5OpenGL.dll"; DestDir: "{app}"; Components: qt ; Flags: ignoreversion
-Source: "Qt5PrintSupport.dll"; DestDir: "{app}"; Components: qt ; Flags: ignoreversion
 Source: "Qt5Qml.dll"; DestDir: "{app}"; Components: qt ; Flags: ignoreversion
 Source: "Qt5Widgets.dll"; DestDir: "{app}"; Components: qt ; Flags: ignoreversion
 Source: "Qt5Xml.dll"; DestDir: "{app}"; Components: qt ; Flags: ignoreversion

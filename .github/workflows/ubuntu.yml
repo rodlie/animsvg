@@ -1,12 +1,16 @@
-name: CI
+name: Ubuntu
 
 on: workflow_dispatch
 
 jobs:
-  build:
-
+  jammy:
     runs-on: ubuntu-22.04
-
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build
+      run: APT=1 CI=1 MKJOBS=2 ./src/scripts/ci.sh
+  noble:
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v3
     - name: Build
