@@ -198,6 +198,28 @@ if [ ! -f "${CMAKE_BIN}" ]; then
 fi # cmake
 
 # qt
+#    -no-feature-bearermanagement \
+#    -no-feature-dnslookup \
+#    -no-feature-dtls \
+#    -no-feature-ftp \
+#    -no-feature-gssapi \
+#    -no-feature-http \
+#    -no-feature-localserver \
+#    -no-feature-netlistmgr \
+#    -no-feature-networkdiskcache \
+#    -no-feature-networkinterface \
+#    -no-feature-networkproxy \
+#    -no-feature-qml-network \
+#    -no-feature-qml-xml-http-request \
+#    -no-feature-qml-animation \
+#    -no-feature-socks5 \
+#    -no-feature-sspi \
+#    -no-feature-udpsocket \
+#    -no-feature-printdialog \
+#    -no-feature-printer \
+#    -no-feature-printpreviewdialog \
+#    -no-feature-printpreviewwidget \
+#    -no-feature-pdf \
 if [ ! -f "${QMAKE_BIN}" ]; then
     cd ${SRC}
     QT_SRC="qt-everywhere-src-${QT_V}"
@@ -260,28 +282,6 @@ if [ ! -f "${QMAKE_BIN}" ]; then
     -no-linuxfb \
     -nomake examples \
     -nomake tests \
-    -no-feature-bearermanagement \
-    -no-feature-dnslookup \
-    -no-feature-dtls \
-    -no-feature-ftp \
-    -no-feature-gssapi \
-    -no-feature-http \
-    -no-feature-localserver \
-    -no-feature-netlistmgr \
-    -no-feature-networkdiskcache \
-    -no-feature-networkinterface \
-    -no-feature-networkproxy \
-    -no-feature-qml-network \
-    -no-feature-qml-xml-http-request \
-    -no-feature-qml-animation \
-    -no-feature-socks5 \
-    -no-feature-sspi \
-    -no-feature-udpsocket \
-    -no-feature-printdialog \
-    -no-feature-printer \
-    -no-feature-printpreviewdialog \
-    -no-feature-printpreviewwidget \
-    -no-feature-pdf \
     -skip qt3d \
     -skip qtactiveqt \
     -skip qtcanvas3d \
