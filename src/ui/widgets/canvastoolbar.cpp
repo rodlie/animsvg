@@ -45,6 +45,7 @@ CanvasToolBar::CanvasToolBar(QWidget *parent)
     setEnabled(false);
     setWindowTitle(tr("Canvas Toolbar"));
     setObjectName("CanvasToolBar");
+    setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
     {
         const auto space = new QWidget(this);
@@ -106,15 +107,13 @@ void CanvasToolBar::setupDimensions()
     mSpinHeight->setMaximum(99999);
     mSpinHeight->setKeyboardTracking(false);
 
-    addWidget(new QLabel(tr("Width"), this));
-    addSeparator();
-
+    addAction(new QAction(QIcon::fromTheme("width"),
+                          tr("Width"), this));
     addWidget(mSpinWidth);
 
     addSeparator();
-    addWidget(new QLabel(tr("Height"), this));
-    addSeparator();
-
+    addAction(new QAction(QIcon::fromTheme("height"),
+                          tr("Height"), this));
     addWidget(mSpinHeight);
 }
 
@@ -134,8 +133,8 @@ void CanvasToolBar::setupResolution()
     //                                QSizePolicy::Preferred);
 
     addSeparator();
-    addWidget(new QLabel(tr("Resolution"), this));
-    addSeparator();
+    addAction(new QAction(QIcon::fromTheme("resolution"),
+                          tr("Resolution"), this));
 
     addWidget(mComboResolution);
 }

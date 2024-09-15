@@ -276,9 +276,6 @@ MainWindow::MainWindow(Document& document,
     mColorToolBar->setMovable(false);
     installNumericFilter(mCanvasToolBar->getResolutionComboBox());
 
-    const auto layoutComboLabel = new QLabel(tr("Layout"), this);
-    layoutComboLabel->setContentsMargins(5, 0, 5, 0);
-
     QMargins frictionMargins(0, 0, 0, 0);
     int frictionSpacing = 0;
 
@@ -346,7 +343,8 @@ MainWindow::MainWindow(Document& document,
     addToolBar(mColorToolBar);
 
     mCanvasToolBar->addSeparator();
-    mCanvasToolBar->addWidget(layoutComboLabel);
+    mCanvasToolBar->addAction(new QAction(QIcon::fromTheme("workspace"),
+                                          tr("Layout"), this));
     mCanvasToolBar->addWidget(mLayoutHandler->comboWidget());
 
     statusBar()->addPermanentWidget(mCanvasToolBar);

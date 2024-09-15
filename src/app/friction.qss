@@ -560,7 +560,8 @@ QToolBar#DarkToolBar {
     background-color: %5;
 }
 
-QToolBar#ColorToolBar QToolButton:hover
+QToolBar#ColorToolBar QToolButton:hover,
+QToolBar#CanvasToolBar QToolButton:hover
 {
     background-color: transparent;
     border-color: transparent;
