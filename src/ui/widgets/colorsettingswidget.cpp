@@ -158,6 +158,12 @@ void ColorSettingsWidget::setCurrentTab(const int &index)
     }
 }
 
+void ColorSettingsWidget::showEvent(QShowEvent *e)
+{
+    updateWidgetTargets();
+    QWidget::showEvent(e);
+}
+
 void ColorSettingsWidget::emitColorChangedSignal() {
     const auto colorSetting = getColorSetting(ColorSettingType::change,
                                               mLastTriggered);

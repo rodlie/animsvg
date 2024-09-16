@@ -64,6 +64,9 @@ public:
 signals:
     void colorSettingSignal(const ColorSetting&);
 
+protected:
+    void showEvent(QShowEvent *e) override;
+
 private:
     void emitColorChangedSignal();
     void emitEditingFinishedSignal();
