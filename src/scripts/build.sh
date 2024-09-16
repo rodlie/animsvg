@@ -24,6 +24,7 @@ CWD=`pwd`
 MKJOBS=${MKJOBS:-2}
 COMMIT=`git rev-parse --short=8 HEAD`
 BRANCH=`git rev-parse --abbrev-ref HEAD`
+CUSTOM=${CUSTOM:-"CI"}
 
 BUILD_ENGINE=${BUILD_ENGINE:-"OFF"}
 REL=${REL:-0}
@@ -59,4 +60,4 @@ fi
 
 cd ${CWD}
 
-BUILD_ENGINE=${BUILD_ENGINE} LOCAL_BUILD=0 MKJOBS=${MKJOBS} REL=${REL} BRANCH=${BRANCH} COMMIT=${COMMIT} ./src/scripts/run_docker.sh
+BUILD_ENGINE=${BUILD_ENGINE} LOCAL_BUILD=0 MKJOBS=${MKJOBS} REL=${REL} BRANCH=${BRANCH} COMMIT=${COMMIT} CUSTOM=${CUSTOM} ./src/scripts/run_docker.sh
