@@ -173,7 +173,6 @@ set(
     GUI/timelinehighlightwidget.cpp
     GUI/timelinewidget.cpp
     GUI/timelinewrappernode.cpp
-    GUI/ColorWidgets/colorsettingswidget.cpp
     GUI/window.cpp
     effectsloader.cpp
     eimporters.cpp
@@ -226,7 +225,6 @@ set(
     GUI/timelinehighlightwidget.h
     GUI/timelinewidget.h
     GUI/timelinewrappernode.h
-    GUI/ColorWidgets/colorsettingswidget.h
     effectsloader.h
     eimporters.h
     renderhandler.h

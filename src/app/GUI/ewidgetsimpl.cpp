@@ -25,7 +25,7 @@
 
 #include "ewidgetsimpl.h"
 
-#include "ColorWidgets/colorsettingswidget.h"
+#include "widgets/colorsettingswidget.h"
 
 eWidgetsImpl::eWidgetsImpl() {}
 

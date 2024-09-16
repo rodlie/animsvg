@@ -26,25 +26,27 @@
 #ifndef COLORSETTINGSWIDGET_H
 #define COLORSETTINGSWIDGET_H
 
+#include "ui_global.h"
+
 #include <QWidget>
 #include <QHBoxLayout>
-//#include "h_wheel_sv_triangle.h"
-#include "widgets/colorvaluerect.h"
 #include <QTabWidget>
 #include <QLabel>
 #include <QPushButton>
 #include <QComboBox>
+
+#include "widgets/colorvaluerect.h"
 #include "widgets/qrealanimatorvalueslider.h"
 #include "Animators/coloranimator.h"
 #include "Animators/paintsettingsanimator.h"
 #include "paintsettingsapplier.h"
 #include "conncontextptr.h"
+#include "widgets/actionbutton.h"
+#include "widgets/colorlabel.h"
+#include "widgets/savedcolorswidget.h"
 
-class ColorLabel;
-class ActionButton;
-class SavedColorsWidget;
-
-class ColorSettingsWidget : public QWidget {
+class UI_EXPORT ColorSettingsWidget : public QWidget
+{
     Q_OBJECT
 public:
     explicit ColorSettingsWidget(QWidget *parent = nullptr);
@@ -61,6 +63,7 @@ public:
 
 signals:
     void colorSettingSignal(const ColorSetting&);
+
 private:
     void emitColorChangedSignal();
     void emitEditingFinishedSignal();
@@ -145,10 +148,6 @@ private:
 
     QTabWidget *mTabWidget = new QTabWidget();
     QVBoxLayout *mWidgetsLayout = new QVBoxLayout();
-
-//    QWidget *mWheelWidget = new QWidget();
-//    QVBoxLayout *mWheelLayout = new QVBoxLayout();
-//    H_Wheel_SV_Triangle *wheel_triangle_widget = nullptr;
 
     QWidget *mRGBWidget = new QWidget();
     QVBoxLayout *mRGBLayout = new QVBoxLayout();

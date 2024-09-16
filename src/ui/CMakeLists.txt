@@ -79,6 +79,7 @@ set(
     widgets/colortoolbar.cpp
     widgets/colortoolbutton.cpp
     widgets/colorlabel.cpp
+    widgets/colorsettingswidget.cpp
     widgets/colorvaluerect.cpp
     widgets/colorwidget.cpp
     widgets/colorwidgetshaders.cpp
@@ -148,6 +149,7 @@ set(
     widgets/colortoolbar.h
     widgets/colortoolbutton.h
     widgets/colorlabel.h
+    widgets/colorsettingswidget.h
     widgets/colorvaluerect.h
     widgets/colorwidget.h
     widgets/colorwidgetshaders.h

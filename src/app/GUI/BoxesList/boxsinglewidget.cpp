@@ -27,7 +27,7 @@
 #include "swt_abstraction.h"
 #include "singlewidgettarget.h"
 #include "optimalscrollarena/scrollwidgetvisiblepart.h"
-#include "GUI/ColorWidgets/colorsettingswidget.h"
+#include "widgets/colorsettingswidget.h"
 
 #include "Boxes/containerbox.h"
 #include "widgets/qrealanimatorvalueslider.h"
