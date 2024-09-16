@@ -26,10 +26,12 @@
 #include "qrealanimatorvalueslider.h"
 #include <QMenu>
 #include "Animators/qrealanimator.h"
-#include "mainwindow.h"
 #include "Expressions/expressiondialog.h"
 #include "GUI/dialogsinterface.h"
 #include "themesupport.h"
+#include "Private/document.h"
+
+#include <QMouseEvent>
 
 QrealAnimatorValueSlider::QrealAnimatorValueSlider(qreal minVal, qreal maxVal,
                                                    qreal prefferedStep,
