@@ -105,19 +105,22 @@ void ColorToolButton::setColorTarget(ColorAnimator * const target)
 
 void ColorToolButton::updateColor()
 {
-
+    PaintType type = FLATPAINT;
     if (mColorFillTarget || mColorStrokeTarget) {
         if (mColorFillTarget) {
-            mColorLabel->setGradient(mColorFillTarget->getPaintType() == PaintType::GRADIENTPAINT ?
+            type = mColorFillTarget->getPaintType();
+            mColorLabel->setGradient(type == PaintType::GRADIENTPAINT ?
                                          mColorFillTarget->getGradient() : nullptr);
         } else if (mColorStrokeTarget) {
-            mColorLabel->setGradient(mColorStrokeTarget->getPaintType() == PaintType::GRADIENTPAINT ?
+            type = mColorStrokeTarget->getPaintType();
+            mColorLabel->setGradient(type == PaintType::GRADIENTPAINT ?
                                          mColorStrokeTarget->getGradient() : nullptr);
         }
     } else { mColorLabel->setGradient(nullptr); }
 
     const QColor color = mColorTarget ? mColorTarget->getColor() : mColor;
-    mColor = color;
+
+    mColor = type == PaintType::NOPAINT ? Qt::black : color;
     mColorLabel->setColor(mColor);
     mColorLabel->setAlpha(mColor.alphaF());
 }
