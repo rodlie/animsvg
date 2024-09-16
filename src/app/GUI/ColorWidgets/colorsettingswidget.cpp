@@ -24,18 +24,18 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "colorsettingswidget.h"
-#include "GUI/mainwindow.h"
-#include <QResizeEvent>
-#include <QWindow>
-#include <QMenu>
-#include "GUI/ColorWidgets/colorpickingwidget.h"
+#include "widgets/colorpickingwidget.h"
 #include "colorhelpers.h"
 #include "widgets/colorlabel.h"
 #include "GUI/global.h"
-#include "widgets/actionbutton.h"
 #include "widgets/savedcolorswidget.h"
 #include "appsupport.h"
+#include "Private/esettings.h"
+#include "Private/document.h"
 
+#include <QResizeEvent>
+#include <QWindow>
+#include <QMenu>
 #include <QShortcut>
 
 void ColorSettingsWidget::updateWidgetTargets()
@@ -275,10 +275,9 @@ void ColorSettingsWidget::moveAlphaWidgetToTab(const int tabId) {
                 mTabWidget->widget(tabId)->minimumSizeHint());*/
 }
 
-void ColorSettingsWidget::startColorPicking() {
-    const auto parent = MainWindow::sGetInstance();
-    const auto screen = parent->windowHandle()->screen();
-    const auto wid = new ColorPickingWidget(screen, parent);
+void ColorSettingsWidget::startColorPicking()
+{
+    const auto wid = new ColorPickingWidget(this->screen(), this);
     connect(wid, &ColorPickingWidget::colorSelected,
             [this](const QColor & color) {
         emitStartFullColorChangedSignal();

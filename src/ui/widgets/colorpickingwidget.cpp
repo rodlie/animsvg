@@ -24,15 +24,12 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "colorpickingwidget.h"
-#include <QMouseEvent>
-#include <QPainter>
-#include "GUI/mainwindow.h"
-#include <QApplication>
-#include <QScreen>
-#include <QDesktopWidget>
-#include "colorsettingswidget.h"
-#include <QDebug>
+#include "Private/document.h"
 #include "GUI/global.h"
+
+#include <QPainter>
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QWindow>
 
 ColorPickingWidget::ColorPickingWidget(QScreen* const screen,

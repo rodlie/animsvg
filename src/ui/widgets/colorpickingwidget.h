@@ -26,11 +26,19 @@
 #ifndef COLORPICKINGWIDGET_H
 #define COLORPICKINGWIDGET_H
 
+#include "ui_global.h"
+
 #include <QWidget>
+#include <QScreen>
+#include <QMouseEvent>
+#include <QPaintEvent>
+#include <QKeyEvent>
+#include <QFocusEvent>
+#include <QColor>
+#include <QImage>
 
-class ColorSettingsWidget;
-
-class ColorPickingWidget : public QWidget {
+class UI_EXPORT ColorPickingWidget : public QWidget
+{
     Q_OBJECT
 public:
     explicit ColorPickingWidget(QScreen* const screen,
@@ -42,8 +50,10 @@ protected:
     void keyPressEvent(QKeyEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
     void focusOutEvent(QFocusEvent*);
+
 signals:
     void colorSelected(QColor);
+
 private:
     QColor colorFromPoint(const int x, const int y);
     void updateBox(const QPoint &pos);
