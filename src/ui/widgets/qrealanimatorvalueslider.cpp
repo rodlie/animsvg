@@ -24,13 +24,12 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "qrealanimatorvalueslider.h"
-#include <QMenu>
-#include "Animators/qrealanimator.h"
-#include "Expressions/expressiondialog.h"
-#include "GUI/dialogsinterface.h"
+#include "Animators/qpointfanimator.h"
 #include "themesupport.h"
+#include "canvas.h"
 #include "Private/document.h"
 
+#include <QMenu>
 #include <QMouseEvent>
 
 QrealAnimatorValueSlider::QrealAnimatorValueSlider(qreal minVal, qreal maxVal,
@@ -77,7 +76,6 @@ QrealAnimatorValueSlider::QrealAnimatorValueSlider(QString name,
 
 }
 
-#include "Animators/qpointfanimator.h"
 QrealAnimator* QrealAnimatorValueSlider::getTransformTargetSibling() {
     if(mTransformTarget) {
         const auto parent = mTransformTarget->getParent();
@@ -268,16 +266,16 @@ void QrealAnimatorValueSlider::openContextMenu(
 
     menu.addSeparator();
 
-    const auto setExpression = menu.addAction("Set Expression");
-
+    const auto setExpression = menu.addAction(tr("Set Expression"));
     connect(setExpression, &QAction::triggered, this, [aTarget]() {
-        DialogsInterface::instance().showExpressionDialog(aTarget);
+        const auto scene = aTarget->getParentScene();
+        if (scene) { scene->openExpressionDialog(aTarget); }
     });
 
-    const auto applyExpression = menu.addAction("Apply Expression...");
+    const auto applyExpression = menu.addAction(tr("Apply Expression"));
     connect(applyExpression, &QAction::triggered, this, [aTarget]() {
-        const auto& intrface = DialogsInterface::instance();
-        intrface.showApplyExpressionDialog(aTarget);
+        const auto scene = aTarget->getParentScene();
+        if (scene) { scene->openApplyExpressionDialog(aTarget); }
     });
     applyExpression->setEnabled(aTarget->hasExpression());
 

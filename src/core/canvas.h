@@ -448,6 +448,8 @@ signals:
     void openTextEditor();
     void requestEasingAction(const QString &easing);
     void openMarkerEditor();
+    void openExpressionDialog(QrealAnimator* const target);
+    void openApplyExpressionDialog(QrealAnimator* const target);
 
 public:
     void makePointCtrlsSymmetric();

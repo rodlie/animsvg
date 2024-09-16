@@ -26,13 +26,15 @@
 #ifndef QREALANIMATORVALUESLIDER_H
 #define QREALANIMATORVALUESLIDER_H
 
+#include "ui_global.h"
+
 #include "widgets/qdoubleslider.h"
-#include "smartPointers/ememory.h"
+#include "Animators/qrealanimator.h"
+#include "smartPointers/selfref.h"
 #include "conncontextptr.h"
 
-class QrealAnimator;
-
-class QrealAnimatorValueSlider : public QDoubleSlider {
+class UI_EXPORT QrealAnimatorValueSlider : public QDoubleSlider
+{
     Q_OBJECT
 public:
     QrealAnimatorValueSlider(QString name, qreal minVal,
@@ -50,6 +52,7 @@ public:
     void setTarget(QrealAnimator * const animator);
     bool hasTarget();
     bool isTargetDisabled();
+
 protected:
     void paint(QPainter *p);
     void openContextMenu(const QPoint &globalPos);
@@ -63,6 +66,7 @@ protected:
 
     void mouseMoveEvent(QMouseEvent *event);
     bool eventFilter(QObject *obj, QEvent *event);
+
 private:
     QrealAnimator *getTransformTargetSibling();
     void targetHasExpressionChanged();

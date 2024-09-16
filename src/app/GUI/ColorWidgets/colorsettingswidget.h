@@ -34,7 +34,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QComboBox>
-#include "GUI/qrealanimatorvalueslider.h"
+#include "widgets/qrealanimatorvalueslider.h"
 #include "Animators/coloranimator.h"
 #include "Animators/paintsettingsanimator.h"
 #include "paintsettingsapplier.h"

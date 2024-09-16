@@ -169,6 +169,8 @@ public:
     void focusFontWidget(const bool focus = true);
     void focusColorWidget();
     void openMarkerEditor();
+    void openExpressionDialog(QrealAnimator* const target);
+    void openApplyExpressionDialog(QrealAnimator* const target);
 
 protected:
     void lockFinished();

@@ -161,6 +161,14 @@ void Document::setActiveScene(Canvas * const scene) {
                         this, [this] () { emit openTextEditor(); });
         conn << connect(fActiveScene, &Canvas::openMarkerEditor,
                         this, [this] () { emit openMarkerEditor(); });
+        conn << connect(fActiveScene, &Canvas::openExpressionDialog,
+                        this, [this](QrealAnimator* const target) {
+            emit openExpressionDialog(target);
+        });
+        conn << connect(fActiveScene, &Canvas::openApplyExpressionDialog,
+                        this, [this](QrealAnimator* const target) {
+            emit openApplyExpressionDialog(target);
+        });
         emit currentBoxChanged(fActiveScene->getCurrentBox());
         emit selectedPaintSettingsChanged();
     }

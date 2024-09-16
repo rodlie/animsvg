@@ -24,6 +24,7 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "mainwindow.h"
+#include "GUI/Expressions/expressiondialog.h"
 #include "canvas.h"
 #include <QKeyEvent>
 #include <QApplication>
@@ -40,6 +41,7 @@
 #include <iostream>
 
 #include "GUI/edialogs.h"
+#include "dialogs/applyexpressiondialog.h"
 #include "dialogs/markereditordialog.h"
 #include "timelinedockwidget.h"
 #include "canvaswindow.h"
@@ -184,6 +186,10 @@ MainWindow::MainWindow(Document& document,
             this, [this] () { focusFontWidget(true); });
     connect(&mDocument, &Document::openMarkerEditor,
             this, &MainWindow::openMarkerEditor);
+    connect(&mDocument, &Document::openExpressionDialog,
+            this, &MainWindow::openExpressionDialog);
+    connect(&mDocument, &Document::openApplyExpressionDialog,
+            this, &MainWindow::openApplyExpressionDialog);
     connect(&mDocument, &Document::newVideo,
             this, &MainWindow::handleNewVideoClip);
 
@@ -2045,6 +2051,22 @@ void MainWindow::openMarkerEditor()
     const auto scene = *mDocument.fActiveScene;
     if (!scene) { return; }
     const auto dialog = new Ui::MarkerEditorDialog(scene, this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->show();
+}
+
+void MainWindow::openExpressionDialog(QrealAnimator * const target)
+{
+    if (!target) { return; }
+    const auto dialog = new ExpressionDialog(target, this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->show();
+}
+
+void MainWindow::openApplyExpressionDialog(QrealAnimator * const target)
+{
+    if (!target) { return; }
+    const auto dialog = new ApplyExpressionDialog(target, this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }

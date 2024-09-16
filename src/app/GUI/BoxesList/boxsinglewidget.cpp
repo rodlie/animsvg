@@ -30,7 +30,7 @@
 #include "GUI/ColorWidgets/colorsettingswidget.h"
 
 #include "Boxes/containerbox.h"
-#include "GUI/qrealanimatorvalueslider.h"
+#include "widgets/qrealanimatorvalueslider.h"
 #include "boxscroller.h"
 #include "GUI/keysview.h"
 #include "pointhelpers.h"

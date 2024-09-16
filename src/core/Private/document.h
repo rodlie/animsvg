@@ -211,6 +211,8 @@ signals:
     void documentChanged();
     void openTextEditor();
     void openMarkerEditor();
+    void openExpressionDialog(QrealAnimator* const target);
+    void openApplyExpressionDialog(QrealAnimator* const target);
     void newVideo(const VideoBox::VideoSpecs specs);
 };
 

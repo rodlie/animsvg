@@ -94,6 +94,7 @@ set(
     widgets/performancesettingswidget.cpp
     widgets/presetsettingswidget.cpp
     widgets/qdoubleslider.cpp
+    widgets/qrealanimatorvalueslider.cpp
     widgets/savedcolorbutton.cpp
     widgets/savedcolorswidget.cpp
     widgets/scenechooser.cpp
@@ -161,6 +162,7 @@ set(
     widgets/performancesettingswidget.h
     widgets/presetsettingswidget.h
     widgets/qdoubleslider.h
+    widgets/qrealanimatorvalueslider.h
     widgets/savedcolorbutton.h
     widgets/savedcolorswidget.h
     widgets/scenechooser.h

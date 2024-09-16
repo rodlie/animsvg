@@ -197,7 +197,6 @@ set(
     GUI/graphboxeslist.cpp
     GUI/keysview.cpp
     GUI/mainwindow.cpp
-    GUI/qrealanimatorvalueslider.cpp
     GUI/fillstrokesettings.cpp
     GUI/toolbox.cpp
     GUI/extraactions.cpp
@@ -251,7 +250,6 @@ set(
     GUI/keysview.h
     GUI/mainwindow.h
     GUI/window.h
-    GUI/qrealanimatorvalueslider.h
 )
 
 set(
