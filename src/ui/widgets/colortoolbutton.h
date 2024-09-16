@@ -30,6 +30,7 @@
 #include "widgets/colorlabel.h"
 #include "widgets/toolbutton.h"
 #include "conncontextptr.h"
+#include "widgets/colorsettingswidget.h"
 
 #include <QWidgetAction>
 
@@ -52,7 +53,7 @@ namespace Friction
         private:
             QColor mColor;
             ColorLabel *mColorLabel;
-            QWidget *mColorWidget;
+            ColorSettingsWidget *mColorWidget;
             QWidgetAction *mColorAct;
             ConnContextQPtr<ColorAnimator> mColorTarget;
             ConnContextQPtr<FillSettingsAnimator> mColorFillTarget;

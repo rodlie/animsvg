@@ -42,7 +42,14 @@ ColorToolButton::ColorToolButton(QWidget * const parent)
     setAutoPopup(false); // TODO: add to settings (auto/click popup)
     setPopupMode(ToolButtonPopupMode::InstantPopup);
 
+    mColorWidget = new ColorSettingsWidget(this);
+    mColorWidget->setColorModeVisible(false);
+    mColorWidget->setContentsMargins(10, 10, 10, 10);
+    mColorWidget->setMinimumWidth(250);
+
     mColorAct = new QWidgetAction(this);
+    mColorAct->setDefaultWidget(mColorWidget);
+
     mColorLabel = new ColorLabel(this, false);
 
     const auto lay = new QVBoxLayout(this);
@@ -75,19 +82,7 @@ void ColorToolButton::setColorStrokeTarget(OutlineSettingsAnimator * const targe
 
 void ColorToolButton::setColorTarget(ColorAnimator * const target)
 {
-    if (mColorWidget) {
-        mColorAct->releaseWidget(mColorWidget);
-        delete mColorWidget;
-        mColorWidget = nullptr;
-    }
-
-    if (target) {
-        mColorWidget = eWidgets::sColorWidget(this, target, false);
-        mColorWidget->setContentsMargins(10, 10, 10, 10);
-        mColorWidget->setMinimumWidth(250);
-        mColorAct->setDefaultWidget(mColorWidget);
-    }
-
+    mColorWidget->setTarget(target);
     mColorTarget.assign(target);
     if (target) {
         mColorTarget << connect(target->getVal1Animator(),
