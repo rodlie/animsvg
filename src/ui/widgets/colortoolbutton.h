@@ -33,6 +33,7 @@
 #include "widgets/colorsettingswidget.h"
 
 #include <QWidgetAction>
+#include <QPushButton>
 
 namespace Friction
 {
@@ -41,18 +42,25 @@ namespace Friction
         class UI_EXPORT ColorToolButton : public ToolButton
         {
         public:
-            ColorToolButton(QWidget * const parent = nullptr);
+            ColorToolButton(QWidget * const parent = nullptr,
+                            const bool flatOnly = false);
             ColorToolButton(ColorAnimator * const colorTarget,
                             QWidget * const parent = nullptr);
             void setColorFillTarget(FillSettingsAnimator * const target);
             void setColorStrokeTarget(OutlineSettingsAnimator * const target);
             void setColorTarget(ColorAnimator * const target);
+            void setColorType(const PaintType &type);
+            void updateColorTypeWidgets(const PaintType &type);
             void updateColor();
             QColor color() const;
 
         private:
+            bool mIsFlatOnly;
             QColor mColor;
             ColorLabel *mColorLabel;
+            QPushButton *mColorNoneButton;
+            QPushButton *mColorFlatButton;
+            QPushButton *mColorGradientButton;
             ColorSettingsWidget *mColorWidget;
             QWidgetAction *mColorAct;
             ConnContextQPtr<ColorAnimator> mColorTarget;

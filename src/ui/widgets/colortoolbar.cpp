@@ -90,7 +90,7 @@ void ColorToolBar::setupWidgets()
 {
     mColorFill = new ColorToolButton(this);
     mColorStroke = new ColorToolButton(this);
-    mColorBackground = new ColorToolButton(this);
+    mColorBackground = new ColorToolButton(this, true);
 
     mColorFillAct = new QAction(QIcon::fromTheme("color"),
                                 tr("Fill"), this);

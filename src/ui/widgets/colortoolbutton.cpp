@@ -25,37 +25,75 @@
 #include "Animators/coloranimator.h"
 #include "Animators/outlinesettingsanimator.h"
 #include "Animators/paintsettingsanimator.h"
+#include "Private/document.h"
 #include "colorsetting.h"
-#include "GUI/ewidgets.h"
 
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 
 using namespace Friction::Ui;
 
-ColorToolButton::ColorToolButton(QWidget * const parent)
+ColorToolButton::ColorToolButton(QWidget * const parent,
+                                 const bool flatOnly)
     : ToolButton(parent)
-    , mColor(Qt::black)
+    , mIsFlatOnly(flatOnly)
+    , mColor(Qt::transparent)
     , mColorLabel(nullptr)
+    , mColorNoneButton(nullptr)
+    , mColorFlatButton(nullptr)
+    , mColorGradientButton(nullptr)
     , mColorWidget(nullptr)
     , mColorAct(nullptr)
 {
     setAutoPopup(false); // TODO: add to settings (auto/click popup)
     setPopupMode(ToolButtonPopupMode::InstantPopup);
 
+    const auto pop = new QWidget(this);
+    const auto popLay = new QVBoxLayout(pop);
+
+    pop->setMinimumWidth(250);
+
     mColorWidget = new ColorSettingsWidget(this);
     mColorWidget->setColorModeVisible(false);
-    mColorWidget->setContentsMargins(10, 10, 10, 10);
-    mColorWidget->setMinimumWidth(250);
+
+    if (!mIsFlatOnly) {
+        mColorNoneButton = new QPushButton(QIcon::fromTheme("fill_none_2"),
+                                           tr("None"), this);
+        mColorFlatButton = new QPushButton(QIcon::fromTheme("fill_flat_2"),
+                                           tr("Flat"), this);
+        mColorGradientButton = new QPushButton(QIcon::fromTheme("fill_gradient_2"),
+                                               tr("Gradient"), this);
+
+        connect(mColorNoneButton, &QPushButton::released,
+                this, [this]() { setColorType(PaintType::NOPAINT); });
+        connect(mColorFlatButton, &QPushButton::released,
+                this, [this]() { setColorType(PaintType::FLATPAINT); });
+        connect(mColorGradientButton, &QPushButton::released,
+                this, [this]() { setColorType(PaintType::GRADIENTPAINT); });
+
+        mColorNoneButton->setCheckable(true);
+        mColorFlatButton->setCheckable(true);
+        mColorGradientButton->setCheckable(true);
+
+        const auto buttLay = new QHBoxLayout();
+        buttLay->addWidget(mColorNoneButton);
+        buttLay->addWidget(mColorFlatButton);
+        buttLay->addWidget(mColorGradientButton);
+        popLay->addLayout(buttLay);
+    }
+    popLay->addWidget(mColorWidget);
+
+    updateColorTypeWidgets(mIsFlatOnly ? PaintType::FLATPAINT : PaintType::NOPAINT);
 
     mColorAct = new QWidgetAction(this);
-    mColorAct->setDefaultWidget(mColorWidget);
+    mColorAct->setDefaultWidget(pop);
 
     mColorLabel = new ColorLabel(this, false);
 
-    const auto lay = new QVBoxLayout(this);
-    lay->setContentsMargins(0, 0, 0, 0);
-    lay->setMargin(0);
-    lay->addWidget(mColorLabel);
+    const auto mainLay = new QVBoxLayout(this);
+    mainLay->setContentsMargins(0, 0, 0, 0);
+    mainLay->setMargin(0);
+    mainLay->addWidget(mColorLabel);
 
     addAction(mColorAct);
     updateColor();
@@ -70,12 +108,14 @@ ColorToolButton::ColorToolButton(ColorAnimator * const colorTarget,
 
 void ColorToolButton::setColorFillTarget(FillSettingsAnimator * const target)
 {
+    if (mIsFlatOnly) { return; }
     mColorFillTarget.assign(target);
     setColorTarget(target ? target->getColorAnimator() : nullptr);
 }
 
 void ColorToolButton::setColorStrokeTarget(OutlineSettingsAnimator * const target)
 {
+    if (mIsFlatOnly) { return; }
     mColorStrokeTarget.assign(target);
     setColorTarget(target ? target->getColorAnimator() : nullptr);
 }
@@ -98,9 +138,32 @@ void ColorToolButton::setColorTarget(ColorAnimator * const target)
     updateColor();
 }
 
+void ColorToolButton::setColorType(const PaintType &type)
+{
+    if (mIsFlatOnly) { return; }
+    if (mColorFillTarget) {
+        mColorFillTarget->setPaintType(type);
+        Document::sInstance->actionFinished();
+    } else if (mColorStrokeTarget) {
+        mColorStrokeTarget->setPaintType(type);
+        Document::sInstance->actionFinished();
+    }
+    updateColorTypeWidgets(type);
+}
+
+void ColorToolButton::updateColorTypeWidgets(const PaintType &type)
+{
+    if (mIsFlatOnly) { return; }
+    mColorNoneButton->setChecked(type == PaintType::NOPAINT);
+    mColorFlatButton->setChecked(type == PaintType::FLATPAINT);
+    mColorGradientButton->setChecked(type == PaintType::GRADIENTPAINT);
+    mColorWidget->setEnabled(type == PaintType::FLATPAINT ||
+                             type == PaintType::GRADIENTPAINT);
+}
+
 void ColorToolButton::updateColor()
 {
-    PaintType type = FLATPAINT;
+    PaintType type = mIsFlatOnly ? PaintType::FLATPAINT : PaintType::NOPAINT;
     if (mColorFillTarget || mColorStrokeTarget) {
         if (mColorFillTarget) {
             type = mColorFillTarget->getPaintType();
@@ -111,13 +174,16 @@ void ColorToolButton::updateColor()
             mColorLabel->setGradient(type == PaintType::GRADIENTPAINT ?
                                          mColorStrokeTarget->getGradient() : nullptr);
         }
-    } else { mColorLabel->setGradient(nullptr); }
+    } else {
+        if (!mIsFlatOnly) { mColorLabel->setGradient(nullptr); }
+    }
 
     const QColor color = mColorTarget ? mColorTarget->getColor() : mColor;
 
-    mColor = type == PaintType::NOPAINT ? Qt::black : color;
+    mColor = type == PaintType::NOPAINT ? Qt::transparent : color;
     mColorLabel->setColor(mColor);
     mColorLabel->setAlpha(mColor.alphaF());
+    updateColorTypeWidgets(type);
 }
 
 QColor ColorToolButton::color() const
