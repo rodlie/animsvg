@@ -36,7 +36,7 @@ GradientsListWidget::GradientsListWidget(QWidget *parent)
     setObjectName("NoMarginVerticalScrollBar");
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     eSizesUI::widget.add(this, [this](const int size) {
-        setFixedHeight(6 * size);
+        setFixedHeight(4 * size);
         verticalScrollBar()->setSingleStep(size);
     });
     mDisplayedGradients = new DisplayedGradientsWidget(this);
