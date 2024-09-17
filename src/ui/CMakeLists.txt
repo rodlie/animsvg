@@ -86,6 +86,7 @@ set(
     widgets/ecombobox.cpp
     widgets/editablecombobox.cpp
     widgets/fakemenubar.cpp
+    widgets/fillstrokesettings.cpp
     widgets/flowlayout.cpp
     widgets/fontswidget.cpp
     widgets/framespinbox.cpp
@@ -136,6 +137,7 @@ set(
     widgets/aboutwidget.h
     widgets/actionbutton.h
     widgets/alignwidget.h
+    widgets/fillstrokesettings.h
     widgets/framescrollbar.h
     widgets/assetswidget.h
     widgets/bookmarkedcolors.h

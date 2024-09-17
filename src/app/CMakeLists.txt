@@ -195,7 +195,6 @@ set(
     GUI/graphboxeslist.cpp
     GUI/keysview.cpp
     GUI/mainwindow.cpp
-    GUI/fillstrokesettings.cpp
     GUI/toolbox.cpp
     GUI/extraactions.cpp
     GUI/effectactions.cpp
@@ -242,7 +241,6 @@ set(
     GUI/RenderWidgets/outputsettingsdisplaywidget.h
     GUI/animationdockwidget.h
     GUI/canvaswindow.h
-    GUI/fillstrokesettings.h
     GUI/keysview.h
     GUI/mainwindow.h
     GUI/window.h

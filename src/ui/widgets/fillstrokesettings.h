@@ -26,6 +26,8 @@
 #ifndef FILLSTROKESETTINGS_H
 #define FILLSTROKESETTINGS_H
 
+#include "ui_global.h"
+
 #include <QWidget>
 #include <QTabWidget>
 #include <QPushButton>
@@ -39,19 +41,15 @@
 
 #include "Animators/coloranimator.h"
 #include "Animators/paintsettingsanimator.h"
+#include "Private/document.h"
+#include "gradientwidgets/gradientwidget.h"
 #include "paintsettingsapplier.h"
 #include "Animators/brushsettingsanimator.h"
 #include "Paint/brushcontexedwrapper.h"
+#include "widgets/colorsettingswidget.h"
+#include "widgets/qrealanimatorvalueslider.h"
 
-class GradientWidget;
-class ColorSettingsWidget;
-class QrealAnimatorValueSlider;
-class ActionButton;
-class Segment1DEditor;
-class ColorSetting;
-class Document;
-
-class FillStrokeSettingsWidget : public QWidget
+class UI_EXPORT FillStrokeSettingsWidget : public QWidget
 {
     Q_OBJECT
     typedef qCubicSegment1DAnimator::Action SegAction;

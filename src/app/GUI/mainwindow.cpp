@@ -52,7 +52,7 @@
 #include "GUI/RenderWidgets/renderwidget.h"
 #include "GUI/global.h"
 #include "filesourcescache.h"
-#include "fillstrokesettings.h"
+#include "widgets/fillstrokesettings.h"
 #include "widgets/editablecombobox.h"
 
 #include "Sound/soundcomposition.h"
