@@ -26,7 +26,8 @@
 
 using namespace Friction::Ui;
 
-ColorToolBar::ColorToolBar(QWidget *parent)
+ColorToolBar::ColorToolBar(Document &document,
+                           QWidget *parent)
     : QToolBar(parent)
     , mColorFill(nullptr)
     , mColorStroke(nullptr)
@@ -39,7 +40,7 @@ ColorToolBar::ColorToolBar(QWidget *parent)
     setObjectName("ColorToolBar");
     setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     setEnabled(false);
-    setupWidgets();
+    setupWidgets(document);
 
     eSizesUI::widget.add(this, [this](const int size) {
         this->setIconSize({size, size});
@@ -77,20 +78,20 @@ void ColorToolBar::setCurrentBox(BoundingBox *target)
     mColorFill->setEnabled(enabled);
     mColorStroke->setEnabled(enabled);
 
-    if (!target) {
-        mColorFill->setColorFillTarget(nullptr);
-        mColorStroke->setColorStrokeTarget(nullptr);
-    } else {
-        mColorFill->setColorFillTarget(target->getFillSettings());
-        mColorStroke->setColorStrokeTarget(target->getStrokeSettings());
-    }
+    mColorFill->setCurrentBox(target);
+    mColorStroke->setCurrentBox(target);
+    mColorFill->setColorFillTarget(target ? target->getFillSettings() : nullptr);
+    mColorStroke->setColorStrokeTarget(target ? target->getStrokeSettings() : nullptr);
 }
 
-void ColorToolBar::setupWidgets()
+void ColorToolBar::setupWidgets(Document &document)
 {
-    mColorFill = new ColorToolButton(this);
-    mColorStroke = new ColorToolButton(this);
-    mColorBackground = new ColorToolButton(this, true);
+    mColorFill = new ColorToolButton(document, this,
+                                     true, false, false);
+    mColorStroke = new ColorToolButton(document, this,
+                                       false, true, false);
+    mColorBackground = new ColorToolButton(document, this,
+                                           false, false, true);
 
     mColorFillAct = new QAction(QIcon::fromTheme("color"),
                                 tr("Fill"), this);

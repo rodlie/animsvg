@@ -277,7 +277,7 @@ MainWindow::MainWindow(Document& document,
     mStackIndexScene = mStackWidget->addWidget(mLayoutHandler->sceneLayout());
     mStackIndexWelcome = mStackWidget->addWidget(mWelcomeDialog);
 
-    mColorToolBar = new Ui::ColorToolBar(this);
+    mColorToolBar = new Ui::ColorToolBar(mDocument, this);
     mCanvasToolBar = new Ui::CanvasToolBar(this);
     mColorToolBar->setMovable(false);
     installNumericFilter(mCanvasToolBar->getResolutionComboBox());

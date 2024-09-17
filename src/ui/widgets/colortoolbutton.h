@@ -24,14 +24,16 @@
 #ifndef FRICTION_COLOR_TOOLBUTTON_H
 #define FRICTION_COLOR_TOOLBUTTON_H
 
-#include "gradientwidgets/gradientwidget.h"
 #include "ui_global.h"
 
+#include "Private/document.h"
+#include "gradientwidgets/gradientwidget.h"
 #include "Animators/coloranimator.h"
 #include "widgets/colorlabel.h"
 #include "widgets/toolbutton.h"
 #include "conncontextptr.h"
 #include "widgets/colorsettingswidget.h"
+#include "widgets/fillstrokesettings.h"
 
 #include <QWidgetAction>
 #include <QPushButton>
@@ -43,28 +45,28 @@ namespace Friction
         class UI_EXPORT ColorToolButton : public ToolButton
         {
         public:
-            ColorToolButton(QWidget * const parent = nullptr,
+            ColorToolButton(Document& document,
+                            QWidget *parent = nullptr,
+                            const bool fillOnly = false,
+                            const bool strokeOnly = false,
                             const bool flatOnly = false);
-            ColorToolButton(ColorAnimator * const colorTarget,
-                            QWidget * const parent = nullptr);
+            void setCurrentBox(BoundingBox *target);
             void setColorFillTarget(FillSettingsAnimator * const target);
             void setColorStrokeTarget(OutlineSettingsAnimator * const target);
             void setColorTarget(ColorAnimator * const target);
-            void setColorType(const PaintType &type);
-            void updateColorTypeWidgets(const PaintType &type);
             void updateColor();
             QColor color() const;
 
         private:
+            bool mIsFillOnly;
+            bool mIsStrokeOnly;
             bool mIsFlatOnly;
             QColor mColor;
             ColorLabel *mColorLabel;
-            QPushButton *mColorNoneButton;
-            QPushButton *mColorFlatButton;
-            QPushButton *mColorGradientButton;
-            ColorSettingsWidget *mColorWidget;
-            GradientWidget *mGradientWidget;
+            ColorSettingsWidget *mBackgroundWidget;
+            FillStrokeSettingsWidget *mFillStrokeWidget;
             QWidgetAction *mColorAct;
+            Document& mDocument;
             ConnContextQPtr<ColorAnimator> mColorTarget;
             ConnContextQPtr<FillSettingsAnimator> mColorFillTarget;
             ConnContextQPtr<OutlineSettingsAnimator> mColorStrokeTarget;

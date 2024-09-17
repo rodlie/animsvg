@@ -36,7 +36,10 @@
 #include "GUI/global.h"
 
 FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
-                                                   QWidget * const parent)
+                                                   QWidget * const parent,
+                                                   const bool noScroll,
+                                                   const bool fillOnly,
+                                                   const bool strokeOnly)
     : QWidget(parent)
     , mDocument(document)
     , mTarget(PaintSetting::FILL)
@@ -315,14 +318,18 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     mMainLayout->addWidget(mColorsSettingsWidget);
     mMainLayout->addStretch();
 
-    const auto mFillStrokeArea = new ScrollArea(this);
-    mFillAndStrokeWidget->setObjectName("DarkWidget");
-    mFillStrokeArea->setWidget(mFillAndStrokeWidget);
-
     const auto mLayout = new QVBoxLayout(this);
-    mLayout->setContentsMargins(0,0,0,0);
+    mLayout->setContentsMargins(0, 0, 0, 0);
     mLayout->setMargin(0);
-    mLayout->addWidget(mFillStrokeArea);
+
+    if (noScroll) {
+        mLayout->addWidget(mFillAndStrokeWidget);
+    } else {
+        const auto mFillStrokeArea = new ScrollArea(this);
+        mFillAndStrokeWidget->setObjectName("DarkWidget");
+        mFillStrokeArea->setWidget(mFillAndStrokeWidget);
+        mLayout->addWidget(mFillStrokeArea);
+    }
 
     // defaults
     mLinearGradientButton->setChecked(true);
@@ -330,6 +337,12 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     setFillTarget();
     setCapStyle(SkPaint::kRound_Cap);
     setJoinStyle(SkPaint::kRound_Join);
+
+    if (fillOnly || strokeOnly) {
+        mTargetWidget->setVisible(false);
+        if (fillOnly) { setFillTarget(); }
+        else { setStrokeTarget(); }
+    }
 }
 
 void FillStrokeSettingsWidget::setLinearGradientAction()

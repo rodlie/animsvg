@@ -27,6 +27,7 @@
 #include "ui_global.h"
 
 #include "canvas.h"
+#include "Private/document.h"
 #include "widgets/toolbar.h"
 #include "widgets/colortoolbutton.h"
 
@@ -40,12 +41,13 @@ namespace Friction
         class UI_EXPORT ColorToolBar : public QToolBar
         {
         public:
-            explicit ColorToolBar(QWidget *parent = nullptr);
+            explicit ColorToolBar(Document& document,
+                                  QWidget *parent = nullptr);
             void setCurrentCanvas(Canvas * const target);
             void setCurrentBox(BoundingBox *target);
 
         private:
-            void setupWidgets();
+            void setupWidgets(Document& document);
             void adjustWidgets();
             void addSpacer();
             ColorToolButton *mColorFill;

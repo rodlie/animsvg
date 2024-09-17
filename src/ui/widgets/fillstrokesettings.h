@@ -56,7 +56,10 @@ class UI_EXPORT FillStrokeSettingsWidget : public QWidget
 
 public:
     explicit FillStrokeSettingsWidget(Document& document,
-                                      QWidget * const parent = nullptr);
+                                      QWidget * const parent = nullptr,
+                                      const bool noScroll = false,
+                                      const bool fillOnly = false,
+                                      const bool strokeOnly = false);
 
     void setCurrentBox(BoundingBox * const box);
     void clearAll();
