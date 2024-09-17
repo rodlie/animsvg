@@ -30,8 +30,35 @@
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QScrollArea>
 
 using namespace Friction::Ui;
+
+class AWidget : public QWidget
+{
+public:
+    AWidget(QWidget *parent = nullptr) : QWidget(parent) {}
+
+protected:
+    void showEvent(QShowEvent *e) override
+    {
+        adjustSize(); // force resize since we live in a popup
+        QWidget::showEvent(e);
+    }
+};
+
+class AScrollArea : public QScrollArea
+{
+public:
+    AScrollArea(QWidget *parent = nullptr) : QScrollArea(parent) {}
+
+protected:
+    void showEvent(QShowEvent *e) override
+    {
+        setWidget(takeWidget()); // yeah, I know ... only way to force adjustSize(?)
+        QWidget::showEvent(e);
+    }
+};
 
 ColorToolButton::ColorToolButton(QWidget * const parent,
                                  const bool flatOnly)
@@ -43,15 +70,30 @@ ColorToolButton::ColorToolButton(QWidget * const parent,
     , mColorFlatButton(nullptr)
     , mColorGradientButton(nullptr)
     , mColorWidget(nullptr)
+    , mGradientWidget(nullptr)
     , mColorAct(nullptr)
 {
     setAutoPopup(false); // TODO: add to settings (auto/click popup)
     setPopupMode(ToolButtonPopupMode::InstantPopup);
 
-    const auto pop = new QWidget(this);
+    const auto pop = new AWidget(this);
     const auto popLay = new QVBoxLayout(pop);
 
+    pop->setContentsMargins(10, 10, 10, 10);
     pop->setMinimumWidth(250);
+    popLay->setMargin(0);
+
+    const auto popInner = new QWidget(this);
+    const auto popInnerLay = new QVBoxLayout(popInner);
+
+    popInner->setContentsMargins(0, 0, 0, 0);
+    popInnerLay->setMargin(0);
+
+    const auto area = new AScrollArea(this);
+    area->setWidgetResizable(true);
+    area->setContentsMargins(0, 0, 0, 0);
+    area->setFrameShape(QFrame::NoFrame);
+    area->setWidget(popInner);
 
     mColorWidget = new ColorSettingsWidget(this);
     mColorWidget->setColorModeVisible(false);
@@ -75,13 +117,23 @@ ColorToolButton::ColorToolButton(QWidget * const parent,
         mColorFlatButton->setCheckable(true);
         mColorGradientButton->setCheckable(true);
 
-        const auto buttLay = new QHBoxLayout();
+        mGradientWidget = new GradientWidget(this);
+
+        const auto buttWid = new QWidget(this);
+        const auto buttLay = new QHBoxLayout(buttWid);
+
+        buttWid->setContentsMargins(0, 0, 0, 0);
+        buttLay->setMargin(0);
+
         buttLay->addWidget(mColorNoneButton);
         buttLay->addWidget(mColorFlatButton);
         buttLay->addWidget(mColorGradientButton);
-        popLay->addLayout(buttLay);
+
+        popLay->addWidget(buttWid);
+        popInnerLay->addWidget(mGradientWidget);
     }
-    popLay->addWidget(mColorWidget);
+    popInnerLay->addWidget(mColorWidget);
+    popLay->addWidget(area);
 
     updateColorTypeWidgets(mIsFlatOnly ? PaintType::FLATPAINT : PaintType::NOPAINT);
 
@@ -110,14 +162,22 @@ void ColorToolButton::setColorFillTarget(FillSettingsAnimator * const target)
 {
     if (mIsFlatOnly) { return; }
     mColorFillTarget.assign(target);
-    setColorTarget(target ? target->getColorAnimator() : nullptr);
+    mGradientWidget->setCurrentGradient(target ? target->getGradient() : nullptr);
+    setColorTarget(target ?
+                       (target->getPaintType() == PaintType::GRADIENTPAINT ?
+                            mGradientWidget->getColorAnimator() : target->getColorAnimator())
+                          : nullptr);
 }
 
 void ColorToolButton::setColorStrokeTarget(OutlineSettingsAnimator * const target)
 {
     if (mIsFlatOnly) { return; }
     mColorStrokeTarget.assign(target);
-    setColorTarget(target ? target->getColorAnimator() : nullptr);
+    mGradientWidget->setCurrentGradient(target ? target->getGradient() : nullptr);
+    setColorTarget(target ?
+                       (target->getPaintType() == PaintType::GRADIENTPAINT ?
+                                 mGradientWidget->getColorAnimator() : target->getColorAnimator())
+                          : nullptr);
 }
 
 void ColorToolButton::setColorTarget(ColorAnimator * const target)
@@ -144,9 +204,17 @@ void ColorToolButton::setColorType(const PaintType &type)
     if (mColorFillTarget) {
         mColorFillTarget->setPaintType(type);
         Document::sInstance->actionFinished();
+        setColorTarget(type == PaintType::FLATPAINT ?
+                           mColorFillTarget->getColorAnimator() :
+                           type == PaintType::GRADIENTPAINT ?
+                               mGradientWidget->getColorAnimator() : nullptr);
     } else if (mColorStrokeTarget) {
         mColorStrokeTarget->setPaintType(type);
         Document::sInstance->actionFinished();
+        setColorTarget(type == PaintType::FLATPAINT ?
+                           mColorStrokeTarget->getColorAnimator() :
+                           type == PaintType::GRADIENTPAINT ?
+                               mGradientWidget->getColorAnimator() : nullptr);
     }
     updateColorTypeWidgets(type);
 }
@@ -157,8 +225,17 @@ void ColorToolButton::updateColorTypeWidgets(const PaintType &type)
     mColorNoneButton->setChecked(type == PaintType::NOPAINT);
     mColorFlatButton->setChecked(type == PaintType::FLATPAINT);
     mColorGradientButton->setChecked(type == PaintType::GRADIENTPAINT);
+    mGradientWidget->setEnabled(type == PaintType::GRADIENTPAINT);
+    mGradientWidget->setVisible(type == PaintType::GRADIENTPAINT);
     mColorWidget->setEnabled(type == PaintType::FLATPAINT ||
                              type == PaintType::GRADIENTPAINT);
+
+    if (type != PaintType::GRADIENTPAINT) { return ;}
+    if (mColorFillTarget) {
+        mGradientWidget->setCurrentGradient(mColorFillTarget->getGradient());
+    } else if (mColorStrokeTarget) {
+        mGradientWidget->setCurrentGradient(mColorStrokeTarget->getGradient());
+    }
 }
 
 void ColorToolButton::updateColor()

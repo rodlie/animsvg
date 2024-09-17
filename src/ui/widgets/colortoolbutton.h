@@ -24,6 +24,7 @@
 #ifndef FRICTION_COLOR_TOOLBUTTON_H
 #define FRICTION_COLOR_TOOLBUTTON_H
 
+#include "gradientwidgets/gradientwidget.h"
 #include "ui_global.h"
 
 #include "Animators/coloranimator.h"
@@ -62,6 +63,7 @@ namespace Friction
             QPushButton *mColorFlatButton;
             QPushButton *mColorGradientButton;
             ColorSettingsWidget *mColorWidget;
+            GradientWidget *mGradientWidget;
             QWidgetAction *mColorAct;
             ConnContextQPtr<ColorAnimator> mColorTarget;
             ConnContextQPtr<FillSettingsAnimator> mColorFillTarget;
