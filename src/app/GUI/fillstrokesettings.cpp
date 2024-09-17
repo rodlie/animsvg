@@ -109,12 +109,12 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     const auto lineLabel = new QLabel(tr("Width"), this);
 
     mLineWidthSpin = new QrealAnimatorValueSlider(0, 1000, 0.5, this);
-    mLineWidthSpin->setMinimumHeight(25);
     mLineWidthSpin->setMinimumWidth(100);
 
     lineLayout->addWidget(lineLabel);
     lineLayout->addStretch();
     lineLayout->addWidget(mLineWidthSpin);
+    lineLayout->addStretch();
 
     const auto actions = Actions::sInstance;
     connect(mLineWidthSpin, &QrealAnimatorValueSlider::editingStarted,
@@ -270,11 +270,12 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
         mFillGradientButton->setFixedHeight(eSizesUI::button);
         mLinearGradientButton->setFixedHeight(eSizesUI::button);
         mRadialGradientButton->setFixedHeight(eSizesUI::button);
+        mLineWidthSpin->setFixedHeight(eSizesUI::button);
     });
 
     // layout
     mStrokeSettingsWidget = new QWidget(this);
-    const auto mStrokeSettingsLayout = new QVBoxLayout(mStrokeSettingsWidget);
+    const auto mStrokeSettingsLayout = new QHBoxLayout(mStrokeSettingsWidget);
 
     mStrokeSettingsWidget->setContentsMargins(0, 0, 0, 0);
     mStrokeSettingsLayout->setMargin(0);
