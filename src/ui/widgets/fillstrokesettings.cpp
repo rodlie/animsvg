@@ -322,11 +322,11 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     mLayout->setContentsMargins(0, 0, 0, 0);
     mLayout->setMargin(0);
 
+    mFillAndStrokeWidget->setObjectName("DarkWidget");
     if (noScroll) {
         mLayout->addWidget(mFillAndStrokeWidget);
     } else {
         const auto mFillStrokeArea = new ScrollArea(this);
-        mFillAndStrokeWidget->setObjectName("DarkWidget");
         mFillStrokeArea->setWidget(mFillAndStrokeWidget);
         mLayout->addWidget(mFillStrokeArea);
     }

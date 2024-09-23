@@ -27,22 +27,22 @@
 #include "ui_global.h"
 
 #include "Private/document.h"
-#include "gradientwidgets/gradientwidget.h"
 #include "Animators/coloranimator.h"
 #include "widgets/colorlabel.h"
-#include "widgets/toolbutton.h"
 #include "conncontextptr.h"
 #include "widgets/colorsettingswidget.h"
 #include "widgets/fillstrokesettings.h"
 
+#include <QToolButton>
 #include <QWidgetAction>
 #include <QPushButton>
+#include <QScrollArea>
 
 namespace Friction
 {
     namespace Ui
     {
-        class UI_EXPORT ColorToolButton : public ToolButton
+        class UI_EXPORT ColorToolButton : public QToolButton
         {
         public:
             ColorToolButton(Document& document,
@@ -57,10 +57,15 @@ namespace Friction
             void updateColor();
             QColor color() const;
 
+        protected:
+            void mousePressEvent(QMouseEvent *e) override;
+
         private:
             bool mIsFillOnly;
             bool mIsStrokeOnly;
             bool mIsFlatOnly;
+            QWidget *mPop;
+            QScrollArea *mScroll;
             QColor mColor;
             ColorLabel *mColorLabel;
             ColorSettingsWidget *mBackgroundWidget;

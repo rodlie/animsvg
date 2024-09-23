@@ -25,6 +25,7 @@
 #include "Animators/coloranimator.h"
 #include "Animators/outlinesettingsanimator.h"
 #include "Animators/paintsettingsanimator.h"
+#include "GUI/global.h"
 #include "Private/document.h"
 #include "colorsetting.h"
 #include "themesupport.h"
@@ -35,53 +36,17 @@
 
 using namespace Friction::Ui;
 
-class AWidget : public QWidget
-{
-public:
-    AWidget(QWidget *parent = nullptr) : QWidget(parent) {}
-
-protected:
-    void showEvent(QShowEvent *e) override
-    {
-        adjustSize(); // force resize since it's a popup
-        QWidget::showEvent(e);
-    }
-};
-
-class AScrollArea : public QScrollArea
-{
-public:
-    AScrollArea(QWidget *parent = nullptr) : QScrollArea(parent)
-    {
-        setObjectName("NoMarginVerticalScrollBar");
-        setPalette(ThemeSupport::getDarkerPalette());
-        setAutoFillBackground(true);
-        setWidgetResizable(true);
-        setContentsMargins(0, 0, 0, 0);
-        setBackgroundRole(QPalette::Window);
-        setFrameShadow(QFrame::Plain);
-        setFrameShape(QFrame::NoFrame);
-    }
-
-protected:
-    void showEvent(QShowEvent *e) override
-    {
-        widget()->update();
-        widget()->adjustSize();
-        setWidget(takeWidget());
-        QWidget::showEvent(e);
-    }
-};
-
 ColorToolButton::ColorToolButton(Document& document,
                                  QWidget *parent,
                                  const bool fillOnly,
                                  const bool strokeOnly,
                                  const bool flatOnly)
-    : ToolButton(parent)
+    : QToolButton(parent)
     , mIsFillOnly(fillOnly)
     , mIsStrokeOnly(strokeOnly)
     , mIsFlatOnly(flatOnly)
+    , mPop(nullptr)
+    , mScroll(nullptr)
     , mColor(Qt::transparent)
     , mColorLabel(nullptr)
     , mBackgroundWidget(nullptr)
@@ -89,18 +54,25 @@ ColorToolButton::ColorToolButton(Document& document,
     , mColorAct(nullptr)
     , mDocument(document)
 {
-    setAutoPopup(false); // TODO: add to settings (auto/click popup)
+    setFocusPolicy(Qt::NoFocus);
     setPopupMode(ToolButtonPopupMode::InstantPopup);
 
-    const auto pop = new AWidget(this);
-    const auto popLay = new QVBoxLayout(pop);
+    mPop = new QWidget(this);
+    mPop->setObjectName("DarkWidget");
+    const auto popLay = new QVBoxLayout(mPop);
 
-    pop->setContentsMargins(10, 10, 10, 10);
-    pop->setMinimumSize({300, mIsFlatOnly ? 200 : 260});
-    popLay->setMargin(0);
+    mPop->setMinimumSize({300, 235});
 
-    const auto area = new AScrollArea(this);
-    popLay->addWidget(area);
+    mScroll = new QScrollArea(this);
+    mScroll->setObjectName("DarkWidget");
+    mScroll->setFocusPolicy(Qt::NoFocus);
+
+    mScroll->setBackgroundRole(QPalette::Window);
+    mScroll->setFrameShadow(QFrame::Plain);
+    mScroll->setFrameShape(QFrame::NoFrame);
+    mScroll->setWidgetResizable(true);
+
+    popLay->addWidget(mScroll);
 
     if (!mIsFlatOnly) {
         mFillStrokeWidget = new FillStrokeSettingsWidget(mDocument,
@@ -109,15 +81,16 @@ ColorToolButton::ColorToolButton(Document& document,
                                                          mIsFillOnly,
                                                          mIsStrokeOnly);
         mFillStrokeWidget->setContentsMargins(0, 0, 0, 0);
-        area->setWidget(mFillStrokeWidget);
+        mScroll->setWidget(mFillStrokeWidget);
     } else {
         mBackgroundWidget = new ColorSettingsWidget(this);
+        mBackgroundWidget->setObjectName("DarkWidget");
         mBackgroundWidget->setColorModeVisible(false);
-        area->setWidget(mBackgroundWidget);
+        mScroll->setWidget(mBackgroundWidget);
     }
 
     mColorAct = new QWidgetAction(this);
-    mColorAct->setDefaultWidget(pop);
+    mColorAct->setDefaultWidget(mPop);
 
     mColorLabel = new ColorLabel(this, false);
 
@@ -195,4 +168,20 @@ QColor ColorToolButton::color() const
 {
     if (mColorTarget) { return mColorTarget->getColor(); }
     return mColor;
+}
+
+void ColorToolButton::mousePressEvent(QMouseEvent *e)
+{
+    if (mFillStrokeWidget) { mFillStrokeWidget->adjustSize(); }
+    else if (mBackgroundWidget) { mBackgroundWidget->adjustSize(); }
+
+    mScroll->setWidget(mScroll->takeWidget());
+    mScroll->adjustSize();
+    mScroll->setMinimumHeight(mScroll->widget()->sizeHint().height() + 10);
+
+    mPop->adjustSize();
+
+    qDebug() << "pop" << mPop->sizeHint() << "scroll" << mScroll->sizeHint();
+
+    QToolButton::mousePressEvent(e);
 }
