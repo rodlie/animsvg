@@ -26,7 +26,7 @@ public:
         menu->addedActionsForType<NamedProperty<T>>();
         {
             const auto parentWidget = menu->getParentWidget();
-            menu->addPlainAction("Rename", [this, parentWidget]() {
+            menu->addPlainAction(QIcon::fromTheme("dialog-informaton"), QObject::tr("Rename"), [this, parentWidget]() {
                 PropertyNameDialog::sRenameProperty(this, parentWidget);
             });
             menu->addSeparator();
@@ -36,7 +36,7 @@ public:
                         DynamicComplexAnimatorBase<Animator>>();
                 parent->removeChild(prop->template ref<NamedProperty<T>>());
             };
-            menu->addPlainAction("Delete Property", dOp);
+            menu->addPlainAction(QIcon::fromTheme("trash"), QObject::tr("Delete Property"), dOp);
         }
 
         menu->addSeparator();

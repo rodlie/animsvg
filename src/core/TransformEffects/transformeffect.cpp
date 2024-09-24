@@ -51,7 +51,7 @@ void TransformEffect::prp_setupTreeViewMenu(PropertyMenu * const menu) {
                     DynamicComplexAnimatorBase<TransformEffect>>();
             parent->removeChild(prop->template ref<TransformEffect>());
         };
-        menu->addPlainAction("Delete", dOp);
+        menu->addPlainAction(QIcon::fromTheme("trash"), tr("Delete"), dOp);
     }
 
     menu->addSeparator();

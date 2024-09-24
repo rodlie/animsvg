@@ -283,7 +283,7 @@ void ColorAnimator::saveColorSVG(SvgExporter &exp,
 }
 
 void ColorAnimator::prp_setupTreeViewMenu(PropertyMenu * const menu) {
-    const auto colorModeMenu = menu->addMenu("Color Mode");
+    const auto colorModeMenu = menu->addMenu(QIcon::fromTheme("color"), tr("Color Mode"));
 
     const PropertyMenu::CheckSelectedOp<ColorAnimator> rgbOp =
     [](ColorAnimator * anim, bool checked) {

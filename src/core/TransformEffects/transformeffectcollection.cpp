@@ -43,35 +43,35 @@ void TransformEffectCollection::prp_setupTreeViewMenu(PropertyMenu * const menu)
         [](TransformEffectCollection * coll) {
             coll->addChild(enve::make_shared<TrackEffect>());
         };
-        menu->addPlainAction("Add Track Effect", aOp);
+        menu->addPlainAction(QIcon::fromTheme("effect"), tr("Add Track Effect"), aOp);
     }
     {
         const PropertyMenu::PlainSelectedOp<TransformEffectCollection> aOp =
         [](TransformEffectCollection * coll) {
             coll->addChild(enve::make_shared<FollowPathEffect>());
         };
-        menu->addPlainAction("Add Follow Path Effect", aOp);
+        menu->addPlainAction(QIcon::fromTheme("effect"), tr("Add Follow Path Effect"), aOp);
     }
     {
         const PropertyMenu::PlainSelectedOp<TransformEffectCollection> aOp =
         [](TransformEffectCollection * coll) {
             coll->addChild(enve::make_shared<FollowObjectEffect>());
         };
-        menu->addPlainAction("Add Follow Object Effect", aOp);
+        menu->addPlainAction(QIcon::fromTheme("effect"), tr("Add Follow Object Effect"), aOp);
     }
     {
         const PropertyMenu::PlainSelectedOp<TransformEffectCollection> aOp =
         [](TransformEffectCollection * coll) {
             coll->addChild(enve::make_shared<FollowObjectRelativeEffect>());
         };
-        menu->addPlainAction("Add Follow Object Relative Effect", aOp);
+        menu->addPlainAction(QIcon::fromTheme("effect"), tr("Add Follow Object Relative Effect"), aOp);
     }
     {
         const PropertyMenu::PlainSelectedOp<TransformEffectCollection> aOp =
         [](TransformEffectCollection * coll) {
             coll->addChild(enve::make_shared<ParentEffect>());
         };
-        menu->addPlainAction("Add Parent Effect", aOp);
+        menu->addPlainAction(QIcon::fromTheme("effect"), tr("Add Parent Effect"), aOp);
     }
     menu->addSeparator();
     TransformEffectCollection::prp_setupTreeViewMenu(menu);

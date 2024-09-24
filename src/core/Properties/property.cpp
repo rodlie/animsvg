@@ -64,10 +64,10 @@ void Property::prp_drawCanvasControls(
 void Property::prp_setupTreeViewMenu(PropertyMenu * const menu) {
     const auto clipboard = Document::sInstance->getPropertyClipboard();
     const bool compat = clipboard && clipboard->compatibleTarget(this);
-    menu->addPlainAction("Paste", [this, clipboard]() {
+    menu->addPlainAction(QIcon::fromTheme("paste"), tr("Paste"), [this, clipboard]() {
         clipboard->paste(this);
     })->setEnabled(compat);
-    menu->addPlainAction("Copy", [this]() {
+    menu->addPlainAction(QIcon::fromTheme("copy"), tr("Copy"), [this]() {
         const auto clipboard = enve::make_shared<PropertyClipboard>(this);
         Document::sInstance->replaceClipboard(clipboard);
     });

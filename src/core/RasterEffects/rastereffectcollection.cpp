@@ -44,7 +44,7 @@ RasterEffectCollection::RasterEffectCollection() :
 void RasterEffectCollection::prp_setupTreeViewMenu(PropertyMenu * const menu) {
     if(menu->hasActionsForType<RasterEffectCollection>()) return;
     menu->addedActionsForType<RasterEffectCollection>();
-    const auto rasterEffectsMenu = menu->addMenu("Add Effect");
+    const auto rasterEffectsMenu = menu->addMenu(QIcon::fromTheme("effect"), "Add Effect");
     RasterEffectMenuCreator::addEffects(
                 rasterEffectsMenu, &RasterEffectCollection::addChild);
     menu->addSeparator();

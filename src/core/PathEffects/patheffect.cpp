@@ -51,7 +51,7 @@ void PathEffect::prp_setupTreeViewMenu(PropertyMenu * const menu) {
         const auto parent = eff->getParent<DynamicComplexAnimatorBase<PathEffect>>();
         parent->removeChild(eff->ref<PathEffect>());
     };
-    menu->addPlainAction("Delete Effect(s)", dOp);
+    menu->addPlainAction(QIcon::fromTheme("trash"), tr("Delete Effect(s)"), dOp);
 }
 
 void PathEffect::apply(const qreal relFrame,

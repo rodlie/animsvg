@@ -151,7 +151,7 @@ void SmartVectorPath::setupCanvasMenu(PropertyMenu * const menu)
         box->applyCurrentTransform();
     };
     menu->addSeparator();
-    menu->addPlainAction(tr("Apply Transformation"), op);
+    menu->addPlainAction(QIcon::fromTheme("loop2"), tr("Apply Transformation"), op);
 }
 
 void SmartVectorPath::applyCurrentTransform() {

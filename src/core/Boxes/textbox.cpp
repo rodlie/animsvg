@@ -272,7 +272,7 @@ void TextBox::setupCanvasMenu(PropertyMenu * const menu)
     PropertyMenu::PlainSelectedOp<TextBox> txtEff = [](TextBox * box) {
         box->mTextEffects->addChild(enve::make_shared<TextEffect>());
     };
-    menu->addPlainAction(tr("Add Text Effect"), txtEff);
+    menu->addPlainAction(QIcon::fromTheme("effect"), tr("Add Text Effect"), txtEff);
 }
 
 void TextBox::textToPath(const qreal x, const qreal y,

@@ -60,7 +60,7 @@ void RasterEffect::prp_setupTreeViewMenu(PropertyMenu * const menu) {
         const auto parent = eff->getParent<DynamicComplexAnimatorBase<RasterEffect>>();
         parent->removeChild(eff->ref<RasterEffect>());
     };
-    menu->addPlainAction("Delete Effect(s)", dOp);
+    menu->addPlainAction(QIcon::fromTheme("trash"), tr("Delete Effect(s)"), dOp);
 }
 
 QMimeData *RasterEffect::SWT_createMimeData() {

@@ -776,40 +776,40 @@ void BoundingBox::setupCanvasMenu(PropertyMenu * const menu)
     const auto pScene = getParentScene();
     Q_ASSERT(pScene);
 
-    menu->addPlainAction(tr("Create Link"), [pScene]() {
+    menu->addPlainAction(QIcon::fromTheme("linked"), tr("Create Link"), [pScene]() {
         pScene->createLinkBoxForSelected();
     });
-    menu->addPlainAction(tr("Center Pivot"), [pScene]() {
+    menu->addPlainAction(QIcon::fromTheme("pivot-align-center"), tr("Center Pivot"), [pScene]() {
         pScene->centerPivotForSelected();
     });
 
     menu->addSeparator();
 
-    menu->addPlainAction(tr("Copy"), [pScene]() {
+    menu->addPlainAction(QIcon::fromTheme("copy"), tr("Copy"), [pScene]() {
         pScene->copyAction();
     })->setShortcut(Qt::CTRL + Qt::Key_C);
 
-    menu->addPlainAction(tr("Cut"), [pScene]() {
+    menu->addPlainAction(QIcon::fromTheme("x"), tr("Cut"), [pScene]() {
         pScene->cutAction();
     })->setShortcut(Qt::CTRL + Qt::Key_X);
 
-    menu->addPlainAction(tr("Duplicate"), [pScene]() {
+    menu->addPlainAction(QIcon::fromTheme("duplicate"), tr("Duplicate"), [pScene]() {
         pScene->duplicateAction();
     })->setShortcut(Qt::CTRL + Qt::Key_D);
 
-    menu->addPlainAction(tr("Delete"), [pScene]() {
+    menu->addPlainAction(QIcon::fromTheme("trash"), tr("Delete"), [pScene]() {
         pScene->removeSelectedBoxesAndClearList();
     })->setShortcut(Qt::Key_Delete);
 
     menu->addSeparator();
 
-    menu->addPlainAction(tr("Group"), [pScene]() {
+    menu->addPlainAction(QIcon::fromTheme("group"), tr("Group"), [pScene]() {
         pScene->groupSelectedBoxes();
     })->setShortcut(Qt::CTRL + Qt::Key_G);
 
     menu->addSeparator();
 
-    const auto rasterEffectsMenu = menu->addMenu(tr("Raster Effects"));
+    const auto rasterEffectsMenu = menu->addMenu(QIcon::fromTheme("effect"), tr("Raster Effects"));
     RasterEffectMenuCreator::addEffects(
                 rasterEffectsMenu, &BoundingBox::addRasterEffect);
 }
@@ -1140,13 +1140,13 @@ void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu)
     menu->addedActionsForType<BoundingBox>();
 
     const auto parentWidget = menu->getParentWidget();
-    menu->addPlainAction(tr("Rename"), [this, parentWidget]() {
+    menu->addPlainAction(QIcon::fromTheme("dialog-information"), tr("Rename"), [this, parentWidget]() {
         PropertyNameDialog::sRenameBox(this, parentWidget);
     });
 
     const auto pScene = getParentScene();
     if (pScene) {
-        menu->addPlainAction(tr("Delete"), [pScene]() {
+        menu->addPlainAction(QIcon::fromTheme("trash"), tr("Delete"), [pScene]() {
             /*const int ask = QMessageBox::question(nullptr,
                                                   tr("Delete?"),
                                                   tr("Are you sure you want to delete selected item(s)?"));
@@ -1197,7 +1197,7 @@ void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu)
                              hasDurationRectangle(),
                              visRangeOp)->setEnabled(!durationRectangleLocked());
 
-    menu->addPlainAction(tr("Visibility Range Settings"),
+    menu->addPlainAction(QIcon::fromTheme("visible"), tr("Visibility Range Settings"),
                          [this]() {
         const auto durRect = getDurationRectangle();
         if (!durRect) { return; }
@@ -1206,7 +1206,7 @@ void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu)
     })->setEnabled(hasDurationRectangle());
 
     menu->addSeparator();
-    setupCanvasMenu(menu->addMenu(tr("Actions")));
+    setupCanvasMenu(menu->addMenu(QIcon::fromTheme("preferences"), tr("Actions")));
 }
 
 void BoundingBox::getMotionBlurProperties(QList<Property*> &list) const {

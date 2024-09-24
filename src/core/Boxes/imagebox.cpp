@@ -114,11 +114,11 @@ void ImageBox::setupCanvasMenu(PropertyMenu * const menu)
 
     const PropertyMenu::PlainSelectedOp<ImageBox> reloadOp =
     [](ImageBox * box) { box->reload(); };
-    menu->addPlainAction(tr("Reload"), reloadOp);
+    menu->addPlainAction(QIcon::fromTheme("loop"), tr("Reload"), reloadOp);
 
     const PropertyMenu::PlainSelectedOp<ImageBox> setSrcOp =
     [](ImageBox * box) { box->changeSourceFile(); };
-    menu->addPlainAction(tr("Set Source File"), setSrcOp);
+    menu->addPlainAction(QIcon::fromTheme("document-new"), tr("Set Source File"), setSrcOp);
 
     menu->addSeparator();
 

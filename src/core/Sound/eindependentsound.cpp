@@ -87,12 +87,12 @@ void eIndependentSound::prp_setupTreeViewMenu(PropertyMenu * const menu) {
         if(!ok) return;
         sound->setStretch(stretch*0.01);
     };
-    menu->addPlainAction("Stretch...", stretchOp);
+    menu->addPlainAction(QIcon::fromTheme("width"), tr("Stretch"), stretchOp);
 
     const PropertyMenu::PlainTriggeredOp deleteOp = [this]() {
         removeFromParent_k();
     };
-    menu->addPlainAction("Delete", deleteOp);
+    menu->addPlainAction(QIcon::fromTheme("trash"), tr("Delete"), deleteOp);
 }
 
 bool eIndependentSound::SWT_shouldBeVisible(const SWT_RulesCollection &rules,

@@ -69,14 +69,14 @@ QMimeData *SmartPathAnimator::SWT_createMimeData() {
 
 void SmartPathAnimator::prp_setupTreeViewMenu(PropertyMenu * const menu) {
     const auto parentWidget = menu->getParentWidget();
-    menu->addPlainAction("Rename", [this, parentWidget]() {
+    menu->addPlainAction(QIcon::fromTheme("dialog-information"), tr("Rename"), [this, parentWidget]() {
         PropertyNameDialog::sRenameProperty(this, parentWidget);
     });
     const auto spClipboard = Document::sInstance->getSmartPathClipboard();
-    menu->addPlainAction("Paste Path", [this, spClipboard]() {
+    menu->addPlainAction(QIcon::fromTheme("paste"), tr("Paste Path"), [this, spClipboard]() {
         pastePath(spClipboard->path());
     })->setEnabled(spClipboard);
-    menu->addPlainAction("Copy Path", [this] {
+    menu->addPlainAction(QIcon::fromTheme("copy"), tr("Copy Path"), [this] {
         const auto spClipboard = enve::make_shared<SmartPathClipboard>(baseValue());
         Document::sInstance->replaceClipboard(spClipboard);
     });
@@ -86,7 +86,7 @@ void SmartPathAnimator::prp_setupTreeViewMenu(PropertyMenu * const menu) {
         const auto parent = eff->getParent<DynamicComplexAnimatorBase<SmartPathAnimator>>();
         parent->removeChild(eff->ref<SmartPathAnimator>());
     };
-    menu->addPlainAction("Delete Path(s)", dOp);
+    menu->addPlainAction(QIcon::fromTheme("trash"), tr("Delete Path(s)"), dOp);
     menu->addSeparator();
     Animator::prp_setupTreeViewMenu(menu);
 }

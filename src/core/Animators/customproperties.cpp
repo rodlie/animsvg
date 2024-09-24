@@ -54,14 +54,14 @@ void CustomProperties::prp_setupTreeViewMenu(PropertyMenu * const menu) {
         [parent](CustomProperties* target) {
             execPropertyDialog<QrealAnimator>(target, parent);
         };
-        menu->addPlainAction("Add Single Value Property...", aOp);
+        menu->addPlainAction(QIcon::fromTheme("preferences"), tr("Add Single Value Property"), aOp);
     }
     {
         const PropertyMenu::PlainSelectedOp<CustomProperties> aOp =
         [parent](CustomProperties* target) {
             execPropertyDialog<QPointFAnimator>(target, parent);
         };
-        menu->addPlainAction("Add Two Value Property...", aOp);
+        menu->addPlainAction(QIcon::fromTheme("preferences"), tr("Add Two Value Property"), aOp);
     }
     menu->addSeparator();
     CustomPropertiesBase::prp_setupTreeViewMenu(menu);

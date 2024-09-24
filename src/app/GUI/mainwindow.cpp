@@ -583,6 +583,7 @@ void MainWindow::setupMenuBar()
 
     {
         const auto qAct = new NoShortcutAction(tr("Copy", "MenuBar_Edit"));
+        qAct->setIcon(QIcon::fromTheme("copy"));
         mEditMenu->addAction(qAct);
         qAct->setShortcut(Qt::CTRL + Qt::Key_C);
         mActions.copyAction->connect(qAct);
@@ -591,6 +592,7 @@ void MainWindow::setupMenuBar()
 
     {
         const auto qAct = new NoShortcutAction(tr("Cut", "MenuBar_Edit"));
+        qAct->setIcon(QIcon::fromTheme("x"));
         mEditMenu->addAction(qAct);
         qAct->setShortcut(Qt::CTRL + Qt::Key_X);
         mActions.cutAction->connect(qAct);
@@ -599,6 +601,7 @@ void MainWindow::setupMenuBar()
 
     {
         const auto qAct = new NoShortcutAction(tr("Paste", "MenuBar_Edit"));
+        qAct->setIcon(QIcon::fromTheme("paste"));
         mEditMenu->addAction(qAct);
         qAct->setShortcut(Qt::CTRL + Qt::Key_V);
         mActions.pasteAction->connect(qAct);
@@ -616,6 +619,7 @@ void MainWindow::setupMenuBar()
 
     {
         const auto qAct = new NoShortcutAction(tr("Delete", "MenuBar_Edit"));
+        qAct->setIcon(QIcon::fromTheme("trash"));
         mEditMenu->addAction(qAct);
         qAct->setShortcut(Qt::Key_Delete);
         mActions.deleteAction->connect(qAct);
@@ -631,6 +635,7 @@ void MainWindow::setupMenuBar()
                                              &Actions::selectAllAction,
                                              Qt::Key_A,
                                              mEditMenu);
+        mSelectAllAct->setIcon(QIcon::fromTheme("select"));
         mSelectAllAct->setEnabled(false);
         mEditMenu->addAction(mSelectAllAct);
         cmdAddAction(mSelectAllAct);
@@ -643,6 +648,7 @@ void MainWindow::setupMenuBar()
                                              &Actions::invertSelectionAction,
                                              Qt::SHIFT + Qt::Key_A,
                                              mEditMenu);
+        mInvertSelAct->setIcon(QIcon::fromTheme("select"));
         mInvertSelAct->setEnabled(false);
         mEditMenu->addAction(mInvertSelAct);
         cmdAddAction(mInvertSelAct);
@@ -655,6 +661,7 @@ void MainWindow::setupMenuBar()
                                             &Actions::clearSelectionAction,
                                             Qt::ALT + Qt::Key_A,
                                             mEditMenu);
+        mClearSelAct->setIcon(QIcon::fromTheme("select"));
         mClearSelAct->setEnabled(false);
         mEditMenu->addAction(mClearSelAct);
         cmdAddAction(mClearSelAct);
@@ -697,6 +704,7 @@ void MainWindow::setupMenuBar()
 
     const auto raiseQAct = mObjectMenu->addAction(
                 tr("Raise", "MenuBar_Object"));
+    raiseQAct->setIcon(QIcon::fromTheme("go-up"));
     raiseQAct->setShortcut(Qt::Key_PageUp);
     mActions.raiseAction->connect(raiseQAct);
     raiseQAct->setData(tr("Raise Object"));
@@ -704,6 +712,7 @@ void MainWindow::setupMenuBar()
 
     const auto lowerQAct = mObjectMenu->addAction(
                 tr("Lower", "MenuBar_Object"));
+    lowerQAct->setIcon(QIcon::fromTheme("go-down"));
     lowerQAct->setShortcut(Qt::Key_PageDown);
     mActions.lowerAction->connect(lowerQAct);
     lowerQAct->setData(tr("Lower Object"));
@@ -728,6 +737,7 @@ void MainWindow::setupMenuBar()
     {
         const auto qAct = mObjectMenu->addAction(
                     tr("Rotate 90° CW", "MenuBar_Object"));
+        qAct->setIcon(QIcon::fromTheme("loop_forwards"));
         mActions.rotate90CWAction->connect(qAct);
         //cmdAddAction(qAct);
     }
@@ -735,6 +745,7 @@ void MainWindow::setupMenuBar()
     {
         const auto qAct = mObjectMenu->addAction(
                     tr("Rotate 90° CCW", "MenuBar_Object"));
+        qAct->setIcon(QIcon::fromTheme("loop_back"));
         mActions.rotate90CCWAction->connect(qAct);
         //cmdAddAction(qAct);
     }
@@ -759,6 +770,7 @@ void MainWindow::setupMenuBar()
 
     const auto groupQAct = mObjectMenu->addAction(
                 tr("Group", "MenuBar_Object"));
+    groupQAct->setIcon(QIcon::fromTheme("group"));
     groupQAct->setShortcut(Qt::CTRL + Qt::Key_G);
     mActions.groupAction->connect(groupQAct);
     groupQAct->setData(tr("Group Selected"));
@@ -766,11 +778,12 @@ void MainWindow::setupMenuBar()
 
     const auto ungroupQAct = mObjectMenu->addAction(
                 tr("Ungroup", "MenuBar_Object"));
+    ungroupQAct->setIcon(QIcon::fromTheme("group"));
     ungroupQAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_G);
     mActions.ungroupAction->connect(ungroupQAct);
     cmdAddAction(ungroupQAct);
 
-    mObjectMenu->addSeparator();
+    /*mObjectMenu->addSeparator();
 
     const auto transformMenu = mObjectMenu->addMenu(
                 tr("Transform", "MenuBar_Object"));
@@ -804,7 +817,7 @@ void MainWindow::setupMenuBar()
                 tr("Y-Axis Only", "MenuBar_Object_Transform"));
     yAct->setShortcut(Qt::Key_Y);
     yAct->setDisabled(true);
-    //cmdAddAction(yAct);
+    //cmdAddAction(yAct);*/
 
 
     mPathMenu = mMenuBar->addMenu(tr("Path", "MenuBar"));
@@ -874,6 +887,7 @@ void MainWindow::setupMenuBar()
     {
         const auto qAct = mPathMenu->addAction(
                     tr("Break Apart", "MenuBar_Path"));
+        qAct->setIcon(QIcon::fromTheme("image-missing"));
         qAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_K);
         mActions.pathsBreakApartAction->connect(qAct);
         cmdAddAction(qAct);
@@ -939,6 +953,7 @@ void MainWindow::setupMenuBar()
     const auto zoomMenu = mViewMenu->addMenu(QIcon::fromTheme("zoom"), tr("Zoom","MenuBar_View"));
 
     mZoomInAction = zoomMenu->addAction(tr("Zoom In", "MenuBar_View_Zoom"));
+    mZoomInAction->setIcon(QIcon::fromTheme("zoom_in"));
     mZoomInAction->setShortcut(QKeySequence("Ctrl+Shift++"));
     cmdAddAction(mZoomInAction);
     connect(mZoomInAction, &QAction::triggered,
@@ -950,6 +965,7 @@ void MainWindow::setupMenuBar()
     });
 
     mZoomOutAction = zoomMenu->addAction(tr("Zoom Out", "MenuBar_View_Zoom"));
+    mZoomOutAction->setIcon(QIcon::fromTheme("zoom_out"));
     mZoomOutAction->setShortcut(QKeySequence("Ctrl+Shift+-"));
     cmdAddAction(mZoomOutAction);
     connect(mZoomOutAction, &QAction::triggered,
@@ -961,6 +977,7 @@ void MainWindow::setupMenuBar()
     });
 
     mFitViewAction = zoomMenu->addAction(tr("Fit to Canvas", "MenuBar_View_Zoom"));
+    mFitViewAction->setIcon(QIcon::fromTheme("zoom_all"));
     mFitViewAction->setShortcut(QKeySequence("Ctrl+0"));
     connect(mFitViewAction, &QAction::triggered,
             this, [](){

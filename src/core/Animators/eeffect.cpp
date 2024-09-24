@@ -37,7 +37,7 @@ void eEffect::prp_setupTreeViewMenu(PropertyMenu * const menu)
 {
     StaticComplexAnimator::prp_setupTreeViewMenu(menu);
     const auto parentWidget = menu->getParentWidget();
-    menu->addPlainAction(tr("Rename"), [this, parentWidget]() {
+    menu->addPlainAction(QIcon::fromTheme("dialog-information"), tr("Rename"), [this, parentWidget]() {
         PropertyNameDialog::sRenameProperty(this, parentWidget);
     });
 }

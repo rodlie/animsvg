@@ -49,12 +49,12 @@ struct CORE_EXPORT RasterEffectMenuCreator {
                 (target->*addToTarget)(creator());
             };
             if(path.isEmpty()) {
-                menu->addPlainAction<Target>(name, adder);
+                menu->addPlainAction<Target>(QIcon::fromTheme("effect"), name, adder);
             } else {
                 const auto pathList = path.split('/');
                 auto childMenu = menu->childMenu(pathList);
                 if(!childMenu) childMenu = menu->addMenu(pathList);
-                childMenu->addPlainAction<Target>(name, adder);
+                childMenu->addPlainAction<Target>(QIcon::fromTheme("effect"), name, adder);
             }
         };
         forEveryEffect(adder);

@@ -78,28 +78,33 @@ public:
         return qAction;
     }
 
-    QAction* addPlainAction(const QString& text, const PlainTriggeredOp& op) {
-        QAction * const qAction = mQMenu->addAction(text);
+    QAction* addPlainAction(const QIcon &icon,
+                            const QString& text,
+                            const PlainTriggeredOp& op)
+    {
+        QAction * const qAction = mQMenu->addAction(icon, text);
         QObject::connect(qAction, &QAction::triggered, op);
         return qAction;
     }
 
     template <class T>
-    QAction* addPlainAction(const QString& text, const PlainSelectedOp<T>& op) {
-        QAction * const qAction = mQMenu->addAction(text);
+    QAction* addPlainAction(const QIcon &icon,
+                            const QString& text,
+                            const PlainSelectedOp<T>& op) {
+        QAction * const qAction = mQMenu->addAction(icon, text);
         connectAction(qAction, op);
         return qAction;
     }
 
     template <class T>
-    QAction* addPlainAction(const QString& text, const AllOp<T>& op) {
-        QAction * const qAction = mQMenu->addAction(text);
+    QAction* addPlainAction(const QIcon &icon, const QString& text, const AllOp<T>& op) {
+        QAction * const qAction = mQMenu->addAction(icon, text);
         connectAction(qAction, op);
         return qAction;
     }
 
-    TTypeMenu * addMenu(const QString& title) {
-        QMenu * const qMenu = mQMenu->addMenu(title);
+    TTypeMenu * addMenu(const QIcon &icon, const QString& title) {
+        QMenu * const qMenu = mQMenu->addMenu(icon, title);
         const auto child = std::make_shared<TTypeMenu>(qMenu, mTargetCanvas,
                                                        mParentWidget);
         mChildMenus.append(child);
@@ -111,7 +116,7 @@ public:
         for(const auto& title : titles) {
             const auto menuT = menu->childMenu(title);
             if(menuT) menu = menuT;
-            else menu = menu->addMenu(title);
+            else menu = menu->addMenu(QIcon::fromTheme("preferences"), title);
         }
         return menu;
     }

@@ -769,12 +769,12 @@ void ContainerBox::setupCanvasMenu(PropertyMenu * const menu)
     if (menu->hasActionsForType<ContainerBox>()) { return; }
     menu->addedActionsForType<ContainerBox>();
 
-    menu->addPlainAction<ContainerBox>(tr("Promote to Layer"),
+    menu->addPlainAction<ContainerBox>(QIcon::fromTheme("layer"), tr("Promote to Layer"),
                                        [](ContainerBox * box) {
         box->promoteToLayer();
     })->setEnabled(isGroup());
 
-    menu->addPlainAction<ContainerBox>(tr("Demote to Group"),
+    menu->addPlainAction<ContainerBox>(QIcon::fromTheme("group"), tr("Demote to Group"),
                                        [](ContainerBox * box) {
         box->demoteToGroup();
     })->setDisabled(isGroup());
@@ -783,13 +783,13 @@ void ContainerBox::setupCanvasMenu(PropertyMenu * const menu)
     if (!isLink()) {
         menu->addSeparator();
 
-        const auto ungroupAbandonAction = menu->addPlainAction<ContainerBox>(tr("Ungroup"),
+        const auto ungroupAbandonAction = menu->addPlainAction<ContainerBox>(QIcon::fromTheme("group"), tr("Ungroup"),
                                                                              [](ContainerBox * box) {
             if (box->isLink()) { return; }
             box->ungroupAbandomTransform_k();
         });
 
-        const auto ungroupKeepAction = menu->addPlainAction<ContainerBox>(tr("Ungroup (Keep Transform)"),
+        const auto ungroupKeepAction = menu->addPlainAction<ContainerBox>(QIcon::fromTheme("group"), tr("Ungroup (Keep Transform)"),
                                                                           [](ContainerBox * box) {
             if (box->isLink()) { return; }
             box->ungroupKeepTransform_k();

@@ -218,11 +218,11 @@ void AnimationBox::setupCanvasMenu(PropertyMenu * const menu)
 
     const PropertyMenu::PlainSelectedOp<AnimationBox> reloadOp =
     [](AnimationBox * box) { box->reload(); };
-    menu->addPlainAction(tr("Reload"), reloadOp);
+    menu->addPlainAction(QIcon::fromTheme("loop"), tr("Reload"), reloadOp);
 
     const PropertyMenu::PlainSelectedOp<AnimationBox> setSrcOp =
     [](AnimationBox * box) { box->changeSourceFile(); };
-    menu->addPlainAction(tr("Set Source File"), setSrcOp);
+    menu->addPlainAction(QIcon::fromTheme("document-new"), tr("Set Source File"), setSrcOp);
 
     const PropertyMenu::CheckSelectedOp<AnimationBox> remapOp =
     [](AnimationBox * box, bool checked) {
@@ -243,7 +243,7 @@ void AnimationBox::setupCanvasMenu(PropertyMenu * const menu)
         if (!ok) { return; }
         box->setStretch(stretch*0.01);
     };
-    menu->addPlainAction(tr("Stretch"), stretchOp);
+    menu->addPlainAction(QIcon::fromTheme("width"), tr("Stretch"), stretchOp);
 
     menu->addSeparator();
     BoundingBox::setupCanvasMenu(menu);
