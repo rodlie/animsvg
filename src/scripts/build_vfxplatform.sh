@@ -72,7 +72,7 @@ ${BUILD}/build_vfxplatform_friction.sh
 
 # Get Friction version
 VERSION=`cat ${BUILD}/friction/build-vfxplatform/version.txt`
-if [ "${REL}" != 1 ] && [ "${CUSTOM}" = "" ]; then
+if [ "${REL}" != 1 ]; then
     GIT_COMMIT=`(cd ${BUILD}/friction ; git rev-parse --short=8 HEAD)`
     VERSION="${VERSION}-${GIT_COMMIT}"
 fi

@@ -103,7 +103,7 @@ cmake -GNinja \
 ..
 
 VERSION=`cat version.txt`
-if [ "${REL}" != 1 ] && [ "${CUSTOM}" = "" ]; then
+if [ "${REL}" != 1 ]; then
     VERSION="${VERSION}-${GIT_COMMIT}"
 fi
 
