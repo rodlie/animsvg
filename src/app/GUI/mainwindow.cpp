@@ -592,7 +592,7 @@ void MainWindow::setupMenuBar()
 
     {
         const auto qAct = new NoShortcutAction(tr("Cut", "MenuBar_Edit"));
-        qAct->setIcon(QIcon::fromTheme("x"));
+        qAct->setIcon(QIcon::fromTheme("cut"));
         mEditMenu->addAction(qAct);
         qAct->setShortcut(Qt::CTRL + Qt::Key_X);
         mActions.cutAction->connect(qAct);
@@ -720,6 +720,7 @@ void MainWindow::setupMenuBar()
 
     const auto rttQAct = mObjectMenu->addAction(
                 tr("Raise to Top", "MenuBar_Object"));
+    rttQAct->setIcon(QIcon::fromTheme("raise-top"));
     rttQAct->setShortcut(Qt::Key_Home);
     mActions.raiseToTopAction->connect(rttQAct);
     rttQAct->setData(tr("Raise Object to Top"));
@@ -727,6 +728,7 @@ void MainWindow::setupMenuBar()
 
     const auto ltbQAct = mObjectMenu->addAction(
                 tr("Lower to Bottom", "MenuBar_Object"));
+    ltbQAct->setIcon(QIcon::fromTheme("raise-bottom"));
     ltbQAct->setShortcut(Qt::Key_End);
     mActions.lowerToBottomAction->connect(ltbQAct);
     ltbQAct->setData(tr("Lower Object to Bottom"));
@@ -999,8 +1001,8 @@ void MainWindow::setupMenuBar()
     });
     cmdAddAction(mResetZoomAction);
 
-    const auto filteringMenu = mViewMenu->addMenu(
-                tr("Filtering", "MenuBar_View"));
+    const auto filteringMenu = mViewMenu->addMenu(QIcon::fromTheme("user-desktop"),
+                                                  tr("Filtering", "MenuBar_View"));
 
     mNoneQuality = filteringMenu->addAction(
                 tr("None", "MenuBar_View_Filtering"), [this]() {

@@ -789,7 +789,7 @@ void BoundingBox::setupCanvasMenu(PropertyMenu * const menu)
         pScene->copyAction();
     })->setShortcut(Qt::CTRL + Qt::Key_C);
 
-    menu->addPlainAction(QIcon::fromTheme("x"), tr("Cut"), [pScene]() {
+    menu->addPlainAction(QIcon::fromTheme("cut"), tr("Cut"), [pScene]() {
         pScene->cutAction();
     })->setShortcut(Qt::CTRL + Qt::Key_X);
 
