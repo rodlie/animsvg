@@ -33,6 +33,7 @@
 #include "widgets/colorsettingswidget.h"
 #include "widgets/fillstrokesettings.h"
 
+#include <QFrame>
 #include <QToolButton>
 #include <QWidgetAction>
 #include <QPushButton>
@@ -64,7 +65,7 @@ namespace Friction
             bool mIsFillOnly;
             bool mIsStrokeOnly;
             bool mIsFlatOnly;
-            QWidget *mPop;
+            QFrame *mPop;
             QScrollArea *mScroll;
             QColor mColor;
             ColorLabel *mColorLabel;

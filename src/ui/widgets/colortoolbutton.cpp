@@ -57,8 +57,8 @@ ColorToolButton::ColorToolButton(Document& document,
     setFocusPolicy(Qt::NoFocus);
     setPopupMode(ToolButtonPopupMode::InstantPopup);
 
-    mPop = new QWidget(this);
-    mPop->setObjectName("DarkWidget");
+    mPop = new QFrame(this);
+    mPop->setObjectName("PopWidget");
     const auto popLay = new QVBoxLayout(mPop);
 
     mPop->setMinimumSize({300, 235});
