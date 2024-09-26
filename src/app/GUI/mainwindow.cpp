@@ -751,16 +751,16 @@ void MainWindow::setupMenuBar()
     }
 
     {
-        const auto qAct = mObjectMenu->addAction(
-                    tr("Flip Horizontal", "MenuBar_Object"));
+        const auto qAct = mObjectMenu->addAction(tr("Flip Horizontal", "MenuBar_Object"));
+        qAct->setIcon(QIcon::fromTheme("width"));
         qAct->setShortcut(Qt::Key_H);
         mActions.flipHorizontalAction->connect(qAct);
         cmdAddAction(qAct);
     }
 
     {
-        const auto qAct = mObjectMenu->addAction(
-                    tr("Flip Vertical", "MenuBar_Object"));
+        const auto qAct = mObjectMenu->addAction(tr("Flip Vertical", "MenuBar_Object"));
+        qAct->setIcon(QIcon::fromTheme("height"));
         qAct->setShortcut(Qt::Key_V);
         mActions.flipVerticalAction->connect(qAct);
         cmdAddAction(qAct);
