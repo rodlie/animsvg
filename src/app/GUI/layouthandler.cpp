@@ -41,13 +41,9 @@ LayoutHandler::LayoutHandler(Document& document,
     mComboWidget->setContentsMargins(0, 0, 0, 0);
     mComboWidget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
     mComboWidget->setLayout(canvasComboLayout);
-    //mComboWidget->setObjectName("transparentWidget");
 
     mComboBox = new EditableComboBox(mComboWidget, true);
     mComboBox->setMinimumContentsLength(20);
-    //mComboBox->setObjectName("currentLayoutComboBox");
-    mComboBox->setLayoutDirection(Qt::RightToLeft);
-    //mComboBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     const auto newLayPush = new QPushButton(QIcon::fromTheme("plus"), QString(), mComboWidget);
     newLayPush->setFocusPolicy(Qt::NoFocus);
@@ -56,7 +52,6 @@ LayoutHandler::LayoutHandler(Document& document,
     eSizesUI::widget.add(newLayPush, [newLayPush](const int size) {
         newLayPush->setFixedSize(QSize(size, size));
     });
-    //newLayPush->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
 
     const auto removeLayPush = new QPushButton(QIcon::fromTheme("minus"), QString(), mComboWidget);
     removeLayPush->setFocusPolicy(Qt::NoFocus);
@@ -65,7 +60,6 @@ LayoutHandler::LayoutHandler(Document& document,
     eSizesUI::widget.add(removeLayPush, [removeLayPush](const int size) {
         removeLayPush->setFixedSize(QSize(size, size));
     });
-    //removeLayPush->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
 
     canvasComboLayout->addWidget(mComboBox);
     canvasComboLayout->addWidget(newLayPush);

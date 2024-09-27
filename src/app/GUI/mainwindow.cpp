@@ -353,7 +353,9 @@ MainWindow::MainWindow(Document& document,
     mCanvasToolBar->addSeparator();
     mCanvasToolBar->addAction(new QAction(QIcon::fromTheme("workspace"),
                                           tr("Layout"), this));
-    mCanvasToolBar->addWidget(mLayoutHandler->comboWidget());
+    const auto workspaceLayoutCombo = mLayoutHandler->comboWidget();
+    workspaceLayoutCombo->setMaximumWidth(150);
+    mCanvasToolBar->addWidget(workspaceLayoutCombo);
 
     statusBar()->addPermanentWidget(mCanvasToolBar);
 
