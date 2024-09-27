@@ -278,8 +278,11 @@ MainWindow::MainWindow(Document& document,
     mStackIndexWelcome = mStackWidget->addWidget(mWelcomeDialog);
 
     mColorToolBar = new Ui::ColorToolBar(mDocument, this);
+    mColorToolBar->setMovable(true);
+    connect(mColorToolBar, &Ui::ColorToolBar::message,
+            this, [this](const QString &msg){ statusBar()->showMessage(msg, 500); });
+
     mCanvasToolBar = new Ui::CanvasToolBar(this);
-    mColorToolBar->setMovable(false);
     installNumericFilter(mCanvasToolBar->getResolutionComboBox());
 
     QMargins frictionMargins(0, 0, 0, 0);

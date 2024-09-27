@@ -35,12 +35,20 @@ ColorToolBar::ColorToolBar(Document &document,
     , mColorFillAct(nullptr)
     , mColorStrokeAct(nullptr)
     , mColorBackgroundAct(nullptr)
+    , mLeftSpacer(nullptr)
+    , mRightSpacer(nullptr)
+    , mLeftSpacerAct(nullptr)
+    , mRightSpacerAct(nullptr)
 {
     setWindowTitle(tr("Color Toolbar"));
     setObjectName("ColorToolBar");
     setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     setEnabled(false);
     setupWidgets(document);
+
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, &QWidget::customContextMenuRequested,
+            this, &ColorToolBar::showContextMenu);
 
     eSizesUI::widget.add(this, [this](const int size) {
         this->setIconSize({size, size});
@@ -104,6 +112,13 @@ void ColorToolBar::setupWidgets(Document &document)
     mColorStrokeAct->setToolTip(tr("Stroke Color"));
     mColorBackgroundAct->setToolTip(tr("Background Color"));
 
+    connect(mColorFill, &ColorToolButton::message,
+            this, [this](const QString &msg){ emit message(msg); });
+    connect(mColorStroke, &ColorToolButton::message,
+            this, [this](const QString &msg){ emit message(msg); });
+    connect(mColorBackground, &ColorToolButton::message,
+            this, [this](const QString &msg){ emit message(msg); });
+
     eSizesUI::widget.add(mColorFill, [this](const int size) {
         const int wid = orientation() == Qt::Horizontal ? size / 2 : size * 3;
         mColorFill->setFixedHeight(wid);
@@ -111,7 +126,12 @@ void ColorToolBar::setupWidgets(Document &document)
         mColorBackground->setFixedHeight(wid);
     });
 
-    addSpacer();
+    mLeftSpacer = new QWidget(this);
+    mLeftSpacerAct = addSpacer(mLeftSpacer);
+    mLeftSpacerAct->setVisible(AppSupport::getSettings("ui",
+                                                       "ColorToolBarLeftSpacer",
+                                                       true).toBool());
+
     addAction(mColorFillAct);
     addWidget(mColorFill);
     addSeparator();
@@ -121,6 +141,12 @@ void ColorToolBar::setupWidgets(Document &document)
     addAction(mColorBackgroundAct);
     addWidget(mColorBackground);
     addSeparator();
+
+    mRightSpacer = new QWidget(this);
+    mRightSpacerAct = addSpacer(mRightSpacer);
+    mRightSpacerAct->setVisible(AppSupport::getSettings("ui",
+                                                        "ColorToolBarRightSpacer",
+                                                        false).toBool());
 
     adjustWidgets();
 }
@@ -146,12 +172,60 @@ void ColorToolBar::adjustWidgets()
     mColorFillAct->setText(horiz ? tr("Fill") : tr("F"));
     mColorStrokeAct->setText(horiz ? tr("Stroke") : tr("S"));
     mColorBackgroundAct->setText(horiz ? tr("Background") : tr("B"));
+
+    mLeftSpacer->setSizePolicy(horiz ? QSizePolicy::Expanding : QSizePolicy::Minimum,
+                               horiz ? QSizePolicy::Minimum : QSizePolicy::Expanding);
+    mRightSpacer->setSizePolicy(horiz ? QSizePolicy::Expanding : QSizePolicy::Minimum,
+                                horiz ? QSizePolicy::Minimum : QSizePolicy::Expanding);
 }
 
-void ColorToolBar::addSpacer()
+QAction *ColorToolBar::addSpacer(QWidget *widget)
 {
-    const auto space = new QWidget(this);
-    space->setSizePolicy(QSizePolicy::Expanding,
-                         QSizePolicy::Minimum);
-    addWidget(space);
+    if (!widget) { return nullptr; }
+    widget->setSizePolicy(QSizePolicy::Expanding,
+                          QSizePolicy::Minimum);
+    return addWidget(widget);
+}
+
+void ColorToolBar::showContextMenu(const QPoint &pos)
+{
+    QMenu menu(this);
+
+    const bool horiz = orientation() == Qt::Horizontal;
+
+    menu.addAction(QIcon::fromTheme(horiz ? "pivot-align-left" : "pivot-align-top"),
+                   tr(horiz ? "Align Left" : "Align Top"), this, [this](){
+        mLeftSpacerAct->setVisible(false);
+        mRightSpacerAct->setVisible(true);
+        AppSupport::setSettings("ui",
+                                "ColorToolBarLeftSpacer",
+                                false);
+        AppSupport::setSettings("ui",
+                                "ColorToolBarRightSpacer",
+                                true);
+    });
+    menu.addAction(QIcon::fromTheme(horiz ? "pivot-align-hcenter" : "pivot-align-vcenter"),
+                   tr("Align Center"), this, [this](){
+        mLeftSpacerAct->setVisible(true);
+        mRightSpacerAct->setVisible(true);
+        AppSupport::setSettings("ui",
+                                "ColorToolBarLeftSpacer",
+                                true);
+        AppSupport::setSettings("ui",
+                                "ColorToolBarRightSpacer",
+                                true);
+    });
+    menu.addAction(QIcon::fromTheme(horiz ? "pivot-align-right" : "pivot-align-bottom"),
+                   tr(horiz ? "Align Right" : "Align Bottom"), this, [this](){
+       mLeftSpacerAct->setVisible(true);
+       mRightSpacerAct->setVisible(false);
+       AppSupport::setSettings("ui",
+                               "ColorToolBarLeftSpacer",
+                               true);
+       AppSupport::setSettings("ui",
+                               "ColorToolBarRightSpacer",
+                               false);
+    });
+
+    menu.exec(mapToGlobal(pos));
 }

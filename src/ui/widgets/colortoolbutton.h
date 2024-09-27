@@ -38,6 +38,8 @@
 #include <QWidgetAction>
 #include <QPushButton>
 #include <QScrollArea>
+#include <QMouseEvent>
+#include <QWheelEvent>
 
 namespace Friction
 {
@@ -45,6 +47,7 @@ namespace Friction
     {
         class UI_EXPORT ColorToolButton : public QToolButton
         {
+            Q_OBJECT
         public:
             ColorToolButton(Document& document,
                             QWidget *parent = nullptr,
@@ -58,8 +61,12 @@ namespace Friction
             void updateColor();
             QColor color() const;
 
+        signals:
+            void message(const QString &msg);
+
         protected:
             void mousePressEvent(QMouseEvent *e) override;
+            void wheelEvent(QWheelEvent *e) override;
 
         private:
             bool mIsFillOnly;

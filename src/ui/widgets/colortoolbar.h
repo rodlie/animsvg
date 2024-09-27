@@ -40,23 +40,33 @@ namespace Friction
     {
         class UI_EXPORT ColorToolBar : public QToolBar
         {
+            Q_OBJECT
         public:
             explicit ColorToolBar(Document& document,
                                   QWidget *parent = nullptr);
             void setCurrentCanvas(Canvas * const target);
             void setCurrentBox(BoundingBox *target);
 
+        signals:
+            void message(const QString &msg);
+
         private:
             void setupWidgets(Document& document);
             void adjustWidgets();
-            void addSpacer();
+            QAction* addSpacer(QWidget *widget);
             ColorToolButton *mColorFill;
             ColorToolButton *mColorStroke;
             ColorToolButton *mColorBackground;
             QAction *mColorFillAct;
             QAction *mColorStrokeAct;
             QAction *mColorBackgroundAct;
+            QWidget *mLeftSpacer;
+            QWidget *mRightSpacer;
+            QAction *mLeftSpacerAct;
+            QAction *mRightSpacerAct;
             ConnContextQPtr<Canvas> mCanvas;
+
+            void showContextMenu(const QPoint &pos);
         };
     }
 }

@@ -172,16 +172,53 @@ QColor ColorToolButton::color() const
 
 void ColorToolButton::mousePressEvent(QMouseEvent *e)
 {
-    if (mFillStrokeWidget) { mFillStrokeWidget->adjustSize(); }
-    else if (mBackgroundWidget) { mBackgroundWidget->adjustSize(); }
+    const auto button = e->button();
+    if (button == Qt::LeftButton) {
+        if (mFillStrokeWidget) { mFillStrokeWidget->adjustSize(); }
+        else if (mBackgroundWidget) { mBackgroundWidget->adjustSize(); }
 
-    mScroll->setWidget(mScroll->takeWidget());
-    mScroll->adjustSize();
-    mScroll->setMinimumHeight(mScroll->widget()->sizeHint().height() + 10);
+        mScroll->setWidget(mScroll->takeWidget());
+        mScroll->adjustSize();
+        mScroll->setMinimumHeight(mScroll->widget()->sizeHint().height() + 10);
 
-    mPop->adjustSize();
-
-    qDebug() << "pop" << mPop->sizeHint() << "scroll" << mScroll->sizeHint();
+        mPop->adjustSize();
+    }
 
     QToolButton::mousePressEvent(e);
+}
+
+void ColorToolButton::wheelEvent(QWheelEvent *e)
+{
+    if (mColorTarget) {
+        const bool ctrl = QGuiApplication::keyboardModifiers().testFlag(Qt::ControlModifier);
+        const bool shift = QGuiApplication::keyboardModifiers().testFlag(Qt::ShiftModifier);
+        QColor color = mColorTarget->getColor().toHsv();
+
+        qreal h = clamp(color.hueF(), 0., 1.);
+        qreal s = clamp(color.saturationF(), 0., 1.);
+        qreal v = clamp(color.valueF(), 0., 1.);
+        qreal a = clamp(color.alphaF(), 0., 1.);
+
+        qreal step = 0.01;
+        const int y = e->angleDelta().y();
+
+        if (ctrl && shift) {
+            a = clamp(y > 0 ? a + step : a - step, 0., 1.);
+            emit message(tr("Alpha: %1").arg(QString::number(a)));
+        } else if (ctrl) {
+            s = clamp(y > 0 ? s + step : s - step, 0., 1.);
+            emit message(tr("Saturation: %1").arg(QString::number(s)));
+        } else if (shift) {
+            v = clamp(y > 0 ? v + step : v - step, 0., 1.);
+            emit message(tr("Value: %1").arg(QString::number(v)));
+        } else {
+            h = clamp(y > 0 ? h + step : h - step, 0., 1.);
+            emit message(tr("Hue: %1").arg(QString::number(h)));
+        }
+
+        mColorTarget->setColor(QColor::fromHsvF(h, s, v, a));
+        mDocument.actionFinished();
+    } else {
+        QToolButton::wheelEvent(e);
+    }
 }
