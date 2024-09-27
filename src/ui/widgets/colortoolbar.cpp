@@ -44,6 +44,9 @@ ColorToolBar::ColorToolBar(Document &document,
     setObjectName("ColorToolBar");
     setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     setEnabled(false);
+    setMovable(AppSupport::getSettings("ui",
+                                       "ColorToolBarMovable",
+                                       false).toBool());
     setupWidgets(document);
 
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -225,6 +228,14 @@ void ColorToolBar::showContextMenu(const QPoint &pos)
        AppSupport::setSettings("ui",
                                "ColorToolBarRightSpacer",
                                false);
+    });
+    menu.addAction(QIcon::fromTheme(isMovable() ? "locked" : "unlocked"),
+                   tr(isMovable() ? "Lock" : "Unlock"),
+                   this, [this](){
+        setMovable(!isMovable());
+        AppSupport::setSettings("ui",
+                                "ColorToolBarMovable",
+                                isMovable());
     });
 
     menu.exec(mapToGlobal(pos));

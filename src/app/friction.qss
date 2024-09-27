@@ -567,10 +567,6 @@ QToolBar#CanvasToolBar QToolButton:hover
     border-color: transparent;
 }
 
-QToolBar::handle {
-    background-color: transparent;
-}
-
 QFrame#PopWidget {
     border: 2px solid %4;
     border-radius: 2%;
