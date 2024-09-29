@@ -2,13 +2,15 @@
 
 [![Windows](https://github.com/friction2d/friction/actions/workflows/windows.yml/badge.svg)](https://github.com/friction2d/friction/actions/workflows/windows.yml?query=branch%3Amain) [![Linux](https://github.com/friction2d/friction/actions/workflows/linux.yml/badge.svg)](https://github.com/friction2d/friction/actions/workflows/linux.yml?query=branch%3Amain) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/friction2d/friction/latest)
 
+[![GitHub](https://img.shields.io/badge/Source-GitHub-blue)](https://github.com/friction2d/friction) [![Codeberg](https://img.shields.io/badge/Source-Codeberg-blue)](https://codeberg.org/friction/friction)
+
 [Friction](https://friction.graphics) is a powerful and versatile motion graphics application that allows you to create vector and raster animations for web and video with ease.
 
-![Screenshot of Friction 1.0.0 Beta 1](https://friction.graphics/assets/screenshots/100/friction-100b1-screenshot.png?v=1)
+![Screenshot of Friction 1.0.0](https://friction.graphics/assets/screenshots/100/friction-100b1-screenshot.png?v=2)
 
 ## Contribute
 
-We accept any contributions, big or small. Before submitting a PR it's recommended that you communicate with the developers first (in [issues](https://github.com/friction2d/friction/issues) or [discussions](https://github.com/friction2d/friction/discussions)).
+We accept any contributions, big or small. Before submitting a PR/MR it's recommended that you communicate with the developers first (on [GitHub](https://github.com/friction2d/friction/issues) or [Codeberg](https://codeberg.org/friction/friction/issues)).
 
 It's always preferred to submit PR's against the `main` branch.
 
@@ -78,13 +80,17 @@ Generic build instructions.
 
 Binary SDK available [here](https://github.com/friction2d/friction-sdk/releases).
 
-### Get
+### Get Source
 
 ```
 git clone --recurse-submodules https://github.com/friction2d/friction
 ```
 
-Or download a release tarball *(friction-VERSION.tar.bz2)*.
+or
+
+```
+git clone --recurse-submodules https://codeberg.org/friction/friction
+```
 
 ### Build on Linux
 
