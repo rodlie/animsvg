@@ -28,6 +28,7 @@
 #include <QDesktopWidget>
 //#include <QScreen>
 #include <QMessageBox>
+#include <QSplashScreen>
 
 #include <libavutil/ffversion.h>
 
@@ -143,6 +144,12 @@ int main(int argc, char *argv[])
     }
 #endif
 
+    QSplashScreen splash(QPixmap(":/pixmaps/splash.png"));
+    splash.show();
+    splash.raise();
+    splash.showMessage(QObject::tr("Loading ..."),
+                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+
 #ifdef Q_OS_WIN
     QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
 #endif
@@ -161,6 +168,10 @@ int main(int argc, char *argv[])
         GPU_NOT_COMPATIBLE;
         gPrintExceptionCritical(e);
     }
+
+    splash.raise();
+    splash.showMessage(QObject::tr("Using OpenGL Renderer: %1").arg(HardwareInfo::sGpuRendererString()),
+                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
 
     std::cout << "OpenGL Vendor: " << HardwareInfo::sGpuVendorString().toStdString() << std::endl
               << "OpenGL Renderer: " << HardwareInfo::sGpuRendererString().toStdString() << std::endl
@@ -205,7 +216,10 @@ int main(int argc, char *argv[])
         generateAlphaMesh(alphaMesh, size/2);
     });
     ALPHA_MESH_PIX = &alphaMesh;
-    std::cout << "Generated Alpha Mesh" << std::endl;
+
+    splash.raise();
+    splash.showMessage(QObject::tr("Generated Alpha Mesh"),
+                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
 
     ThemeSupport::setupTheme(eSizesUI::widget);
 
@@ -244,6 +258,10 @@ int main(int argc, char *argv[])
     //    process->start("prlimit --data=3000000000 --pid " + QString::number(pId));
     //#endif
 
+    splash.raise();
+    splash.showMessage(QObject::tr("Loading Settings ..."),
+                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+
     try {
         settings.loadFromFile();
         std::cout << "Loaded settings" << std::endl;
@@ -274,6 +292,10 @@ int main(int argc, char *argv[])
     Document document(taskScheduler);
     Actions actions(document);
 
+    splash.raise();
+    splash.showMessage(QObject::tr("Initializing GPU ..."),
+                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+
     EffectsLoader effectsLoader;
     try {
         effectsLoader.initializeGpu();
@@ -303,7 +325,10 @@ int main(int argc, char *argv[])
             scene->updateIfUsesProgram(program);
         document.actionFinished();
     });
-    std::cout << "Shader effects initialized" << std::endl;
+
+    splash.raise();
+    splash.showMessage(QObject::tr("Shader effects initialized"),
+                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
 
     // disabled for now
     //effectsLoader.iniCustomBoxes();
@@ -319,12 +344,17 @@ int main(int argc, char *argv[])
     } catch(const std::exception& e) {
         gPrintExceptionCritical(e);
     }
-    std::cout << "Audio initialized" << std::endl;
+    splash.raise();
+    splash.showMessage(QObject::tr("Audio initialized"),
+                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
 
     const auto videoEncoder = enve::make_shared<VideoEncoder>();
     RenderHandler renderHandler(document, audioHandler,
                                 *videoEncoder, memoryHandler);
-    std::cout << "Render handler initialized" << std::endl;
+
+    splash.raise();
+    splash.showMessage(QObject::tr("Render handler initialized"),
+                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
 
     av_log_set_level(AV_LOG_ERROR);
 #ifndef QT_DEBUG
@@ -342,6 +372,7 @@ int main(int argc, char *argv[])
                  renderHandler,
                  openProject);
     w.show();
+    splash.finish(&w);
 
     try {
         return app.exec();

@@ -273,9 +273,9 @@ if(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE TRUE)
 endif()
 
-#if(WIN32)
-#    set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
-#endif()
+if(WIN32)
+    set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
+endif()
 
 target_link_directories(
     ${PROJECT_NAME}
