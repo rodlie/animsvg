@@ -35,13 +35,6 @@ SDK_TAR="${DISTFILES}/friction-vfxplatform-CY2021-sdk-${SDK_VERSION}.tar"
 DOWNLOAD_SDK=${DOWNLOAD_SDK:-0}
 TAR_VERSION=${TAR_VERSION:-""}
 
-# Download SDK
-if [ "${DOWNLOAD_SDK}" = 1 ] && [ ! -f "${SDK_TAR}.bz2" ]; then
-    (cd ${DISTFILES} ;
-        wget https://download.friction.graphics/distfiles/vfxplatform/friction-vfxplatform-CY2021-sdk-${SDK_VERSION}.tar.bz2
-    )
-fi
-
 # Build SDK
 if [ ! -d "${SDK}" ]; then
     mkdir -p "${SDK}/lib"

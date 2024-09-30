@@ -180,7 +180,13 @@ if [ ! -f "${SDK}/lib/pkgconfig/xkbcommon.pc" ]; then
     rm -rf ${XKB_SRC} || true
     tar xf ${DIST}/x11/${XKB_SRC}.${SRC_SUFFIX}
     cd ${XKB_SRC}
-    ./configure ${DEFAULT_CONFIGURE} --disable-docs
+    ./configure ${DEFAULT_CONFIGURE} \
+    --disable-docs \
+    --with-xkb-config-root=/usr/share/X11/xkb \
+    --with-x-locale-root=/usr/share/X11/locale \
+    --with-default-rules=evdev \
+    --with-default-model=pc105 \
+    --with-default-layout=us
     make -j${MKJOBS}
     make install
 fi # libxkbcommon
@@ -190,7 +196,7 @@ if [ ! -f "${CMAKE_BIN}" ]; then
     cd ${SRC}
     CMAKE_SRC=cmake-${CMAKE_V}
     rm -rf ${CMAKE_SRC} || true
-    tar xf ${DIST}/mxe/pkg/${CMAKE_SRC}.tar.gz
+    tar xf ${DIST}/ffmpeg/${CMAKE_SRC}.tar.gz
     cd ${CMAKE_SRC}
     ./configure ${COMMON_CONFIGURE} --parallel=${MKJOBS} -- -DCMAKE_USE_OPENSSL=OFF
     make -j${MKJOBS}
@@ -203,7 +209,7 @@ if [ ! -f "${QMAKE_BIN}" ]; then
     QT_SRC="qt-everywhere-src-${QT_V}"
     QT_TAR_SRC="qt-everywhere-opensource-src-${QT_V}"
     rm -rf ${QT_SRC} || true
-    tar xf ${DIST}/${QT_TAR_SRC}.${SRC_SUFFIX}
+    tar xf ${DIST}/qt/${QT_TAR_SRC}.${SRC_SUFFIX}
     cd ${QT_SRC}
     ./configure \
     -prefix ${SDK} \
@@ -302,7 +308,7 @@ if [ ! -f "${SDK}/lib/libqscintilla2_friction_qt5.so" ]; then
     cd ${SRC}
     QSC_SRC="QScintilla_src-${QSCINTILLA_V}"
     rm -rf ${QSC_SRC}
-    tar xf ${DIST}/${QSC_SRC}.tar.gz
+    tar xf ${DIST}/qt/${QSC_SRC}.tar.gz
     cd ${QSC_SRC}/src
     sed -i 's/qscintilla2_qt/qscintilla2_friction_qt/g' qscintilla.pro
     ${SDK}/bin/qmake CONFIG+=release

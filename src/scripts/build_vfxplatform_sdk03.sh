@@ -25,7 +25,7 @@ gcc -v
 
 SDK=${SDK:-"/opt/friction"}
 SRC=${SDK}/src
-DIST=${DIST:-"/mnt/mxe/pkg"}
+DIST=${DIST:-"/mnt/ffmpeg"}
 MKJOBS=${MKJOBS:-32}
 
 # Keep in sync with https://github.com/friction2d/mxe
