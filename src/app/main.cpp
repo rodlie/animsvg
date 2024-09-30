@@ -182,8 +182,12 @@ int main(int argc, char *argv[])
                        HardwareInfo::sRamKB());
 
     OS_FONT = QApplication::font();
-    eSizesUI::font.setEvaluator([]() {
+    eSizesUI::font.setEvaluator([&settings]() {
         const auto fm = QFontMetrics(OS_FONT);
+        if (!settings.fDefaultInterfaceScaling) {
+            const qreal scaling = qBound(0.5, settings.fInterfaceScaling, 1.5);
+            return qRound(fm.height() * scaling);
+        }
         return fm.height();
     });
     eSizesUI::widget.setEvaluator([]() {
