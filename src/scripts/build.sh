@@ -33,7 +33,7 @@ SDK=20240915
 SKIA=d03a4291
 URL=https://github.com/friction2d/friction-sdk/releases/download/${SDK}
 APPIMAGE_TAR=friction-appimage-tools-${APPIMG}.tar.xz
-SDK_TAR=friction-vfxplatform-CY2021-sdk-${SDK}.tar.xz
+SDK_TAR=friction-vfxplatform-CY2021-sdk-${SDK}v2.tar.xz
 SKIA_TAR=skia-build-${SKIA}.tar.xz
 
 mkdir -p distfiles/sdk || true
