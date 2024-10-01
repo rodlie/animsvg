@@ -180,7 +180,13 @@ if [ ! -f "${SDK}/lib/pkgconfig/xkbcommon.pc" ]; then
     rm -rf ${XKB_SRC} || true
     tar xf ${DIST}/x11/${XKB_SRC}.${SRC_SUFFIX}
     cd ${XKB_SRC}
-    ./configure ${DEFAULT_CONFIGURE} --disable-docs
+    ./configure ${DEFAULT_CONFIGURE} \
+    --disable-docs \
+    --with-xkb-config-root=/usr/share/X11/xkb \
+    --with-x-locale-root=/usr/share/X11/locale \
+    --with-default-rules=evdev \
+    --with-default-model=pc105 \
+    --with-default-layout=us
     make -j${MKJOBS}
     make install
 fi # libxkbcommon
