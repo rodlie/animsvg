@@ -1156,6 +1156,18 @@ void BoxSvgAttributes::loadBoundingBoxAttributes(const QDomElement &element) {
     const QString strokeOp = element.attribute("stroke-opacity");
     if(!strokeOp.isEmpty()) mFillAttributes.setColorOpacity(toDouble(strokeOp));
 
+    const QString strokeWidth = element.attribute("stroke-width").simplified();
+    if (mStrokeAttributes.getPaintType() != NOPAINT) {
+        if (strokeWidth.isEmpty() || strokeWidth.contains("%")) {
+            if (mStrokeAttributes.getLineWidth() < 1.0) {
+                mStrokeAttributes.setLineWidth(1.0); // spec says 1 as default
+            }
+            // TODO: A percentage value is always computed as a percentage of the normalized viewBox diagonal length.
+        } else {
+            mStrokeAttributes.setLineWidth(stripPx(strokeWidth).simplified().toDouble());
+        }
+    }
+
     const QString matrixStr = element.attribute("transform");
 //    const QString transCenterX = element.attribute("inkscape:transform-center-x");
 //    const QString transCenterY = element.attribute("inkscape:transform-center-y");
