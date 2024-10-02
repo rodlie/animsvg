@@ -33,6 +33,7 @@
 #include "GUI/global.h"
 
 #include "../mainwindow.h"
+#include "widgets/twocolumnlayout.h"
 
 GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     : SettingsWidget(parent)
@@ -44,6 +45,7 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     , mImportFileDir(nullptr)
     , mToolBarActionNew(nullptr)
     , mToolBarActionOpen(nullptr)
+    , mToolBarActionImport(nullptr)
     , mToolBarActionSave(nullptr)
     , mToolBarActionScene(nullptr)
     , mToolBarActionRender(nullptr)
@@ -173,6 +175,7 @@ void GeneralSettingsWidget::applySettings()
 
     mSett.fToolBarActionNew = mToolBarActionNew->isChecked();
     mSett.fToolBarActionOpen = mToolBarActionOpen->isChecked();
+    mSett.fToolBarActionImport = mToolBarActionImport->isChecked();
     mSett.fToolBarActionSave = mToolBarActionSave->isChecked();
     mSett.fToolBarActionScene = mToolBarActionScene->isChecked();
     mSett.fToolBarActionRender = mToolBarActionRender->isChecked();
@@ -202,6 +205,7 @@ void GeneralSettingsWidget::updateSettings(bool restore)
 
     mToolBarActionNew->setChecked(mSett.fToolBarActionNew);
     mToolBarActionOpen->setChecked(mSett.fToolBarActionOpen);
+    mToolBarActionImport->setChecked(mSett.fToolBarActionImport);
     mToolBarActionSave->setChecked(mSett.fToolBarActionSave);
     mToolBarActionScene->setChecked(mSett.fToolBarActionScene);
     mToolBarActionRender->setChecked(mSett.fToolBarActionRender);
@@ -225,7 +229,8 @@ void GeneralSettingsWidget::setupToolBarWidgets(QVBoxLayout *lay)
     container->setObjectName("BlueBox");
     const auto containerLayout = new QVBoxLayout(container);
     const auto containerInner = new QWidget(this);
-    const auto containerInnerLayout = new QVBoxLayout(containerInner);
+    const auto containerInnerLayout = new TwoColumnLayout();
+    containerInner->setLayout(containerInnerLayout);
 
     area->setWidget(containerInner);
     area->setWidgetResizable(true);
@@ -242,25 +247,18 @@ void GeneralSettingsWidget::setupToolBarWidgets(QVBoxLayout *lay)
     containerLayout->addWidget(area);
 
     mToolBarActionNew = new QCheckBox(tr("New"), this);
-    containerInnerLayout->addWidget(mToolBarActionNew);
-
     mToolBarActionOpen = new QCheckBox(tr("Open"), this);
-    containerInnerLayout->addWidget(mToolBarActionOpen);
-
+    mToolBarActionImport = new QCheckBox(tr("Import"), this);
     mToolBarActionSave = new QCheckBox(tr("Save"), this);
-    containerInnerLayout->addWidget(mToolBarActionSave);
-
     mToolBarActionScene = new QCheckBox(tr("Scene"), this);
-    containerInnerLayout->addWidget(mToolBarActionScene);
-
     mToolBarActionRender = new QCheckBox(tr("Render"), this);
-    containerInnerLayout->addWidget(mToolBarActionRender);
+    mToolBarActionPreview = new QCheckBox(tr("Preview SVG"), this);
+    mToolBarActionExport = new QCheckBox(tr("Export SVG"), this);
 
-    mToolBarActionPreview = new QCheckBox(tr("Preview"), this);
-    containerInnerLayout->addWidget(mToolBarActionPreview);
-
-    mToolBarActionExport = new QCheckBox(tr("Export"), this);
-    containerInnerLayout->addWidget(mToolBarActionExport);
+    containerInnerLayout->addPair(mToolBarActionNew, mToolBarActionOpen);
+    containerInnerLayout->addPair(mToolBarActionImport, mToolBarActionSave);
+    containerInnerLayout->addPair(mToolBarActionScene, mToolBarActionRender);
+    containerInnerLayout->addPair(mToolBarActionPreview, mToolBarActionExport);
 
     lay->addWidget(container);
 }

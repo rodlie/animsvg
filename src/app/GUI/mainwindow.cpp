@@ -443,7 +443,7 @@ void MainWindow::setupMenuBar()
     cmdAddAction(mLinkedAct);
 
     mImportAct = mFileMenu->addAction(QIcon::fromTheme("file_blank"),
-                                      tr("Import File", "MenuBar_File"),
+                                      tr("Import", "MenuBar_File"),
                                       this, qOverload<>(&MainWindow::importFile),
                                       Qt::CTRL + Qt::Key_I);
     mImportAct->setEnabled(false);
@@ -466,11 +466,14 @@ void MainWindow::setupMenuBar()
         loadToolBtn->setDefaultAction(openAct);
 
         loadToolMenu->addAction(mLinkedAct);
-        loadToolMenu->addAction(mImportAct);
         loadToolMenu->addAction(mImportSeqAct);
         loadToolMenu->addMenu(mRecentMenu);
 
         mToolbar->addWidget(loadToolBtn);
+    }
+
+    if (eSettings::instance().fToolBarActionImport) {
+        mToolbar->addAction(mImportAct);
     }
 
     mRevertAct = mFileMenu->addAction(QIcon::fromTheme("loop_back"),
@@ -506,7 +509,7 @@ void MainWindow::setupMenuBar()
     cmdAddAction(mSaveBackAct);
 
     mPreviewSVGAct = mFileMenu->addAction(QIcon::fromTheme("seq_preview"),
-                                          tr("Preview", "MenuBar_File"),
+                                          tr("Preview SVG", "MenuBar_File"),
                                           this,[this]{ exportSVG(true); },
                                           QKeySequence(AppSupport::getSettings("shortcuts",
                                                                                "previewSVG",
@@ -517,7 +520,7 @@ void MainWindow::setupMenuBar()
     cmdAddAction(mPreviewSVGAct);
 
     mExportSVGAct = mFileMenu->addAction(QIcon::fromTheme("seq_preview"),
-                                        tr("Export", "MenuBar_File"),
+                                        tr("Export SVG", "MenuBar_File"),
                                         this, &MainWindow::exportSVG,
                                         QKeySequence(AppSupport::getSettings("shortcuts",
                                                                              "exportSVG",

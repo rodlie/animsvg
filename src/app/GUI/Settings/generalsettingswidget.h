@@ -51,6 +51,7 @@ private:
 
     QCheckBox *mToolBarActionNew;
     QCheckBox *mToolBarActionOpen;
+    QCheckBox *mToolBarActionImport;
     QCheckBox *mToolBarActionSave;
     QCheckBox *mToolBarActionScene;
     QCheckBox *mToolBarActionRender;

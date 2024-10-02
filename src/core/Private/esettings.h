@@ -99,6 +99,7 @@ public:
 
     bool fToolBarActionNew = true;
     bool fToolBarActionOpen = true;
+    bool fToolBarActionImport = true;
     bool fToolBarActionSave = true;
     bool fToolBarActionScene = true;
     bool fToolBarActionRender = true;
