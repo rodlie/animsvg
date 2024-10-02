@@ -1344,6 +1344,7 @@ void MainWindow::askInstallRenderPresets()
 void MainWindow::openWelcomeDialog()
 {
     mStackWidget->setCurrentIndex(mStackIndexWelcome);
+    mActions.setMovePathMode();
 }
 
 void MainWindow::closeWelcomeDialog()
