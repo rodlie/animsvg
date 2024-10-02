@@ -26,6 +26,7 @@
 #include "svgimporter.h"
 
 #include <QtXml/QDomDocument>
+#include <QRegularExpression>
 
 #include "Boxes/containerbox.h"
 #include "colorhelpers.h"
@@ -220,33 +221,42 @@ void extractSvgAttributes(const QString &string,
     }
 }
 
+bool isColorRGB(const QString &colorStr)
+{
+    static QRegularExpression rx(RGXS "rgb\\(.*\\)" RGXS,
+                                 QRegularExpression::CaseInsensitiveOption);
+    return rx.match(colorStr).hasMatch();
+}
 
-bool toColor(const QString &colorStr, QColor &color) {
-    QRegExp rx = QRegExp(RGXS "rgb\\(.*\\)" RGXS, Qt::CaseInsensitive);
-    if(rx.exactMatch(colorStr)) {
-        rx = QRegExp(RGXS "rgb\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\)" RGXS, Qt::CaseInsensitive);
-        if(rx.exactMatch(colorStr)) {
-            rx.indexIn(colorStr);
-            QStringList intRGB = rx.capturedTexts();
-            color.setRgb(intRGB.at(1).toInt(),
-                         intRGB.at(2).toInt(),
-                         intRGB.at(3).toInt());
-        } else {
-            rx = QRegExp(RGXS "rgb\\(\\s*(\\d+)\\s*%\\s*,\\s*(\\d+)\\s*%\\s*,\\s*(\\d+)\\s*%\\s*\\)" RGXS, Qt::CaseInsensitive);
-            rx.indexIn(colorStr);
-            QStringList intRGB = rx.capturedTexts();
-            color.setRgbF(intRGB.at(1).toInt()/100.,
-                          intRGB.at(2).toInt()/100.,
-                          intRGB.at(3).toInt()/100.);
+bool isColorRGBA(const QString &colorStr)
+{
+    static QRegularExpression rx(RGXS "rgba\\(.*\\)" RGXS,
+                                 QRegularExpression::CaseInsensitiveOption);
+    return rx.match(colorStr).hasMatch();
+}
 
-        }
+bool toColor(const QString &colorStr, QColor &color)
+{
+    const bool isRGB = isColorRGB(colorStr);
+    const bool isRGBA = isColorRGBA(colorStr);
+    if (isRGB || isRGBA) {
+        QString str = colorStr.toLower().simplified();
+        str.remove(isRGB ? "rgb" : "rgba").remove(";").remove("(").remove(")");
+        QStringList components = str.split(",", Qt::SkipEmptyParts);
+        if (components.size() >= 3) {
+            qreal r = components[0].contains("%") ? components[0].remove("%").simplified().toFloat() / 100. :
+                                                    components[0].simplified().toFloat();
+            qreal g = components[1].contains("%") ? components[1].remove("%").simplified().toFloat() / 100. :
+                                                    components[1].simplified().toFloat();
+            qreal b = components[2].contains("%") ? components[2].remove("%").simplified().toFloat() / 100. :
+                                                    components[2].simplified().toFloat();
+            qreal a = components.size() == 4 ? components[3].contains("%") ? components[3].remove("%").simplified().toFloat() / 100. :
+                                                                             components[3].simplified().toFloat() : 1.0;
+            color.setRgbF(r, g, b, a);
+        } else { return false; }
     } else {
-        rx = QRegExp(RGXS "#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})" RGXS, Qt::CaseInsensitive);
-        if(rx.exactMatch(colorStr)) {
-            color = QColor(colorStr);
-        } else {
-            return false;
-        }
+        if (QColor::isValidColor(colorStr.simplified())) { color = QColor(colorStr.simplified()); }
+        else { return false; }
     }
     return true;
 }
