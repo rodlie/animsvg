@@ -2029,6 +2029,11 @@ void MainWindow::importImageSequence()
 
 void MainWindow::revert()
 {
+    const int ask = QMessageBox::question(this,
+                                          tr("Confirm revert"),
+                                          tr("Are you sure you want to revert current project?"
+                                             "<p><b>Any changes will be lost.</b></p>"));
+    if (ask == QMessageBox::No) { return; }
     const QString path = mDocument.fEvFile;
     openFile(path);
 }
