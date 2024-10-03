@@ -572,3 +572,7 @@ QFrame#PopWidget {
     border-radius: 2%;
     background-color: %5;
 }
+
+QSlider::handle:horizontal:disabled {
+    background: transparent;
+}

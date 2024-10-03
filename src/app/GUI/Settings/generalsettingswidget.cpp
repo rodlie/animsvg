@@ -118,6 +118,10 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     mDefaultInterfaceScaling = new QCheckBox(this);
     mDefaultInterfaceScaling->setText(tr("Auto"));
     mDefaultInterfaceScaling->setToolTip(tr("Use scaling reported by the system."));
+    connect(mDefaultInterfaceScaling, &QCheckBox::stateChanged,
+            this, [this]() {
+        mInterfaceScaling->setEnabled(!mDefaultInterfaceScaling->isChecked());
+    });
 
     mScaleContainerLayout->addWidget(mDefaultInterfaceScaling);
 
@@ -201,6 +205,7 @@ void GeneralSettingsWidget::updateSettings(bool restore)
     mAutoSaveTimer->setValue((ms / 1000) / 60);
 
     mDefaultInterfaceScaling->setChecked(mSett.fDefaultInterfaceScaling);
+    mInterfaceScaling->setEnabled(!mDefaultInterfaceScaling->isChecked());
     mInterfaceScaling->setValue(mDefaultInterfaceScaling->isChecked() ? 100 : 100 * mSett.fInterfaceScaling);
 
     mToolBarActionNew->setChecked(mSett.fToolBarActionNew);
