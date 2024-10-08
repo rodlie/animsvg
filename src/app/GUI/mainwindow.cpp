@@ -156,6 +156,7 @@ MainWindow::MainWindow(Document& document,
     , mViewTimelineAct(nullptr)
     , mTimelineWindow(nullptr)
     , mTimelineWindowAct(nullptr)
+    , mViewFillStrokeAct(nullptr)
     , mRenderWindow(nullptr)
     , mRenderWindowAct(nullptr)
 {
@@ -1128,6 +1129,16 @@ void MainWindow::setupMenuBar()
         }
     });
     cmdAddAction(mViewTimelineAct);
+
+    mViewFillStrokeAct = mViewMenu->addAction(tr("View Fill and Stroke"));
+    mViewFillStrokeAct->setCheckable(true);
+    mViewFillStrokeAct->setChecked(true);
+    mViewFillStrokeAct->setShortcut(QKeySequence(Qt::Key_F));
+    connect(mViewFillStrokeAct, &QAction::triggered,
+            this, [this](bool triggered) {
+        mUI->setDockVisible("Fill and Stroke", triggered);
+    });
+    cmdAddAction(mViewFillStrokeAct);
 
     mTimelineWindowAct = mViewMenu->addAction(tr("Timeline Window"));
     mTimelineWindowAct->setCheckable(true);

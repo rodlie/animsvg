@@ -376,6 +376,8 @@ private:
     void openTimelineWindow();
     void closedTimelineWindow();
 
+    QAction *mViewFillStrokeAct;
+
     Window *mRenderWindow;
     QAction *mRenderWindowAct;
     void openRenderQueueWindow();
