@@ -1128,7 +1128,7 @@ void MainWindow::setupMenuBar()
             mUI->setDockVisible(tr("Timeline"), triggered);
         }
     });
-    cmdAddAction(mViewTimelineAct);
+    //cmdAddAction(mViewTimelineAct);
 
     mViewFillStrokeAct = mViewMenu->addAction(tr("View Fill and Stroke"));
     mViewFillStrokeAct->setCheckable(true);
@@ -1138,9 +1138,9 @@ void MainWindow::setupMenuBar()
             this, [this](bool triggered) {
         mUI->setDockVisible("Fill and Stroke", triggered);
     });
-    cmdAddAction(mViewFillStrokeAct);
+    //cmdAddAction(mViewFillStrokeAct);
 
-    mTimelineWindowAct = mViewMenu->addAction(tr("Timeline Window"));
+    mTimelineWindowAct = mViewMenu->addAction(tr("Timeline in Window"));
     mTimelineWindowAct->setCheckable(true);
     connect(mTimelineWindowAct, &QAction::triggered,
             this, [this](bool triggered) {
@@ -1149,7 +1149,7 @@ void MainWindow::setupMenuBar()
         else { openTimelineWindow(); }
     });
 
-    mRenderWindowAct = mViewMenu->addAction(tr("Queue Window"));
+    mRenderWindowAct = mViewMenu->addAction(tr("Queue in Window"));
     mRenderWindowAct->setCheckable(true);
     connect(mRenderWindowAct, &QAction::triggered,
             this, [this](bool triggered) {
