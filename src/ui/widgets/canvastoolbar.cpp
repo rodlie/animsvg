@@ -101,7 +101,7 @@ void CanvasToolBar::setupDimensions()
     mSpinWidth->setKeyboardTracking(false);
 
     mSpinHeight = new QSpinBox(this);
-    mSpinWidth->setFocusPolicy(Qt::ClickFocus);
+    mSpinHeight->setFocusPolicy(Qt::ClickFocus);
     mSpinHeight->setObjectName("ComboSpinBox");
     mSpinHeight->setMinimum(1);
     mSpinHeight->setMaximum(99999);
