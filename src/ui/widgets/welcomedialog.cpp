@@ -26,7 +26,6 @@
 #include "welcomedialog.h"
 
 #include <QVBoxLayout>
-#include <QPushButton>
 #include <QPainter>
 #include <QLabel>
 
@@ -39,6 +38,7 @@ WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
                              const std::function<void()> &openFunc,
                              QWidget * const parent)
     : QWidget(parent)
+    , mRecentButton(nullptr)
 {
     setObjectName(QString::fromUtf8("welcomeDialog"));
 
@@ -83,17 +83,18 @@ WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
                               QSizePolicy::Expanding);
     connect(openButton, &QPushButton::released, openFunc);
 
-    const auto recentButton = new QPushButton(tr("Open Recent"), this);
-    recentButton->setSizePolicy(QSizePolicy::Preferred,
-                                QSizePolicy::Preferred);
-    recentButton->setContentsMargins(0, 0, 0, 0);
-    recentButton->setObjectName("WelcomeRecentButton");
-    recentButton->setMenu(recentMenu);
+    mRecentButton = new QPushButton(tr("Open Recent"), this);
+    mRecentButton->setSizePolicy(QSizePolicy::Preferred,
+                                 QSizePolicy::Preferred);
+    mRecentButton->setContentsMargins(0, 0, 0, 0);
+    mRecentButton->setObjectName("WelcomeRecentButton");
+    mRecentButton->setMenu(recentMenu);
+    mRecentButton->setVisible(mRecentButton->menu()->children().count() > 1);
 
     thisLay->addWidget(mainWid, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     sceneLay->addWidget(logoLabel);
     sceneLay->addWidget(buttonWid);
-    sceneLay->addWidget(recentButton);
+    sceneLay->addWidget(mRecentButton);
     buttonLay->addWidget(newButton);
     buttonLay->addWidget(openButton);
     mainLay->addWidget(sceneWid);
@@ -104,4 +105,10 @@ void WelcomeDialog::paintEvent(QPaintEvent *)
     QPainter p(this);
     p.fillRect(0, 0, width(), height(), Qt::black);
     p.end();
+}
+
+void WelcomeDialog::showEvent(QShowEvent *e)
+{
+    mRecentButton->setVisible(mRecentButton->menu()->children().count() > 1);
+    QWidget::showEvent(e);
 }
