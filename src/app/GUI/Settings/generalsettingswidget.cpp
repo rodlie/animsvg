@@ -47,7 +47,7 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     , mToolBarActionOpen(nullptr)
     , mToolBarActionImport(nullptr)
     , mToolBarActionSave(nullptr)
-    , mToolBarActionScene(nullptr)
+    //, mToolBarActionScene(nullptr)
     , mToolBarActionRender(nullptr)
     , mToolBarActionPreview(nullptr)
     , mToolBarActionExport(nullptr)
@@ -181,7 +181,7 @@ void GeneralSettingsWidget::applySettings()
     mSett.fToolBarActionOpen = mToolBarActionOpen->isChecked();
     mSett.fToolBarActionImport = mToolBarActionImport->isChecked();
     mSett.fToolBarActionSave = mToolBarActionSave->isChecked();
-    mSett.fToolBarActionScene = mToolBarActionScene->isChecked();
+    //mSett.fToolBarActionScene = mToolBarActionScene->isChecked();
     mSett.fToolBarActionRender = mToolBarActionRender->isChecked();
     mSett.fToolBarActionPreview = mToolBarActionPreview->isChecked();
     mSett.fToolBarActionExport = mToolBarActionExport->isChecked();
@@ -212,7 +212,7 @@ void GeneralSettingsWidget::updateSettings(bool restore)
     mToolBarActionOpen->setChecked(mSett.fToolBarActionOpen);
     mToolBarActionImport->setChecked(mSett.fToolBarActionImport);
     mToolBarActionSave->setChecked(mSett.fToolBarActionSave);
-    mToolBarActionScene->setChecked(mSett.fToolBarActionScene);
+    //mToolBarActionScene->setChecked(mSett.fToolBarActionScene);
     mToolBarActionRender->setChecked(mSett.fToolBarActionRender);
     mToolBarActionPreview->setChecked(mSett.fToolBarActionPreview);
     mToolBarActionExport->setChecked(mSett.fToolBarActionExport);
@@ -255,15 +255,16 @@ void GeneralSettingsWidget::setupToolBarWidgets(QVBoxLayout *lay)
     mToolBarActionOpen = new QCheckBox(tr("Open"), this);
     mToolBarActionImport = new QCheckBox(tr("Import"), this);
     mToolBarActionSave = new QCheckBox(tr("Save"), this);
-    mToolBarActionScene = new QCheckBox(tr("Scene"), this);
+    //mToolBarActionScene = new QCheckBox(tr("Scene"), this);
     mToolBarActionRender = new QCheckBox(tr("Render"), this);
     mToolBarActionPreview = new QCheckBox(tr("Preview SVG"), this);
     mToolBarActionExport = new QCheckBox(tr("Export SVG"), this);
 
     containerInnerLayout->addPair(mToolBarActionNew, mToolBarActionOpen);
     containerInnerLayout->addPair(mToolBarActionImport, mToolBarActionSave);
-    containerInnerLayout->addPair(mToolBarActionScene, mToolBarActionRender);
-    containerInnerLayout->addPair(mToolBarActionPreview, mToolBarActionExport);
+    containerInnerLayout->addPair(mToolBarActionRender, mToolBarActionPreview);
+    containerInnerLayout->addWidgetToFirstColumn(mToolBarActionExport);
+    containerLayout->addStretch();
 
     lay->addWidget(container);
 }
