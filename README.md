@@ -1,8 +1,6 @@
 # Friction
 
-[![Windows](https://github.com/friction2d/friction/actions/workflows/windows.yml/badge.svg)](https://github.com/friction2d/friction/actions/workflows/windows.yml?query=branch%3Amain) [![Linux](https://github.com/friction2d/friction/actions/workflows/linux.yml/badge.svg)](https://github.com/friction2d/friction/actions/workflows/linux.yml?query=branch%3Amain) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/friction2d/friction/latest)
-
-[![GitHub](https://img.shields.io/badge/Source-GitHub-blue)](https://github.com/friction2d/friction) [![Codeberg](https://img.shields.io/badge/Source-Codeberg-blue)](https://codeberg.org/friction/friction)
+[![Windows](https://github.com/friction2d/friction/actions/workflows/windows.yml/badge.svg)](https://github.com/friction2d/friction/actions/workflows/windows.yml?query=branch%3Amain) [![Linux](https://github.com/friction2d/friction/actions/workflows/linux.yml/badge.svg)](https://github.com/friction2d/friction/actions/workflows/linux.yml?query=branch%3Amain) [![GitHub](https://img.shields.io/badge/Source-GitHub-blue)](https://github.com/friction2d/friction) [![Codeberg](https://img.shields.io/badge/Source-Codeberg-blue)](https://codeberg.org/friction/friction)
 
 [Friction](https://friction.graphics) is a powerful and versatile motion graphics application that allows you to create vector and raster animations for web and video with ease.
 
@@ -10,9 +8,9 @@
 
 ## Contribute
 
-We accept any contributions, big or small. Before submitting a PR/MR it's recommended that you communicate with the developers first (on [GitHub](https://github.com/friction2d/friction/issues) or [Codeberg](https://codeberg.org/friction/friction/issues)).
+We accept any contributions, big or small. Before submitting a pull request it's recommended that you communicate with the developers first (on [GitHub](https://github.com/friction2d/friction/issues) or [Codeberg](https://codeberg.org/friction/friction/issues)).
 
-It's always preferred to submit PR's against the `main` branch.
+It's always preferred to submit pull requests against the `main` branch.
 
 ## Branches and versions
 
@@ -37,3 +35,7 @@ This program is free software: you can redistribute it and/or modify it under th
 **This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the [GNU General Public License](LICENSE.md) for more details.**
 
 Friction is based on [enve](https://github.com/MaurycyLiebner/enve) - Copyright &copy; Maurycy Liebner and contributors.
+
+Third-party software may contain other OSS licenses, see 'Help' > 'About' > 'Licenses' in Friction.
+
+Source code for third-party software can be downloaded [here](https://download.friction.graphics/distfiles/).
