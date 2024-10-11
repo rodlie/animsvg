@@ -1,7 +1,7 @@
 @echo off
 
 REM ### BUILD QT 5.15 FOR FRICTION
-REM # Copyright (c) Friction contributors
+REM # Copyright (c) Ole-André Rodlie and contributors
 REM # GPLv3+
 
 set CWD=%cd%
