@@ -70,20 +70,28 @@ WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
     const auto buttonLay = new QHBoxLayout(buttonWid);
     buttonLay->setMargin(0);
 
-    const auto newButton = new QPushButton(tr("New"), this);
+    const auto newButton = new QPushButton(QIcon::fromTheme("file_new"),
+                                           tr("New"),
+                                           this);
+    newButton->setFocusPolicy(Qt::NoFocus);
     newButton->setObjectName("WelcomeButton");
     newButton->setSizePolicy(QSizePolicy::Preferred,
                              QSizePolicy::Expanding);
     connect(newButton, &QPushButton::released, newFunc);
 
-    const auto openButton = new QPushButton(this);
+    const auto openButton = new QPushButton(QIcon::fromTheme("file_folder"),
+                                            tr("Open"),
+                                            this);
+    openButton->setFocusPolicy(Qt::NoFocus);
     openButton->setObjectName("WelcomeButton");
-    openButton->setText(tr("Open"));
     openButton->setSizePolicy(QSizePolicy::Preferred,
                               QSizePolicy::Expanding);
     connect(openButton, &QPushButton::released, openFunc);
 
-    mRecentButton = new QPushButton(tr("Open Recent"), this);
+    mRecentButton = new QPushButton(QIcon::fromTheme("file_folder"),
+                                    tr("Recent"),
+                                    this);
+    mRecentButton->setFocusPolicy(Qt::NoFocus);
     mRecentButton->setSizePolicy(QSizePolicy::Preferred,
                                  QSizePolicy::Preferred);
     mRecentButton->setContentsMargins(0, 0, 0, 0);
