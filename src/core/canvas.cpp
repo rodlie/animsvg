@@ -884,10 +884,10 @@ void Canvas::splitAction()
 {
     if (mSelectedBoxes.isEmpty() || mSelectedBoxes.count() > 1) { return; }
 
-    const auto vidBox = enve_cast<VideoBox*>(mSelectedBoxes.getList().at(0));
-    if (!vidBox) { return; }
+    const auto bBox = enve_cast<BoundingBox*>(mSelectedBoxes.getList().at(0));
+    if (!bBox) { return; }
 
-    const auto dRect = vidBox->getDurationRectangle();
+    const auto dRect = bBox->getDurationRectangle();
     if (!dRect) { return; }
 
     const auto frame = getCurrentFrame();
@@ -912,14 +912,14 @@ void Canvas::splitAction()
     dRect->setValues({values.fShift, offset, values.fMax});
     cRect->setValues({values.fShift, values.fMin, offset});
 
-    for (int i = box->getZIndex(); i < vidBox->getZIndex(); i = box->getZIndex()) {
+    for (int i = box->getZIndex(); i < bBox->getZIndex(); i = box->getZIndex()) {
         box->moveDown();
     }
 
     mSelectedBoxes.removeObj(box);
     box->setSelected(false);
-    mSelectedBoxes.addObj(vidBox);
-    vidBox->setSelected(true);
+    mSelectedBoxes.addObj(bBox);
+    bBox->setSelected(true);
 
     mDocument.actionFinished();
 }
