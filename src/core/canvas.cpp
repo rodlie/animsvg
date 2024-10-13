@@ -841,10 +841,20 @@ bool Canvas::handleTransormationInputKeyEvent(const eKeyEvent &e)
 
 void Canvas::deleteAction()
 {
-    if (mCurrentMode == CanvasMode::pointTransform) {
+    switch(mCurrentMode) {
+    case CanvasMode::pointTransform:
         removeSelectedPointsAndClearList();
-    } else if (mCurrentMode == CanvasMode::boxTransform) {
+        break;
+    case CanvasMode::boxTransform:
+    case CanvasMode::circleCreate:
+    case CanvasMode::rectCreate:
+    case CanvasMode::textCreate:
+    case CanvasMode::nullCreate:
+    case CanvasMode::drawPath:
+    case CanvasMode::pathCreate:
         removeSelectedBoxesAndClearList();
+        break;
+    default:;
     }
 }
 

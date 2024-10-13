@@ -229,8 +229,9 @@ void Canvas::removePointFromSelection(MovablePoint * const point) {
     schedulePivotUpdate();
 }
 
-void Canvas::removeSelectedPointsAndClearList() {
-    if(mPressedPoint && mPressedPoint->isCtrlPoint()) {
+void Canvas::removeSelectedPointsAndClearList()
+{
+    if (mPressedPoint && mPressedPoint->isCtrlPoint()) {
         mPressedPoint->finishTransform();
         removePointFromSelection(mPressedPoint);
         mPressedPoint->remove();
@@ -239,7 +240,12 @@ void Canvas::removeSelectedPointsAndClearList() {
     }
 
     const auto selected = mSelectedPoints_d;
-    for(const auto& point : selected) {
+    if (selected.count() < 1) {
+        removeSelectedBoxesAndClearList();
+        return;
+    }
+
+    for (const auto& point : selected) {
         point->setSelected(false);
         point->remove();
     }
