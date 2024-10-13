@@ -218,12 +218,6 @@ private:
     TimelineDockWidget *mTimeline;
     RenderWidget *mRenderWidget;
 
-    QStackedWidget *mToolBoxStack;
-    QStackedWidget *mToolBoxExtraStack;
-    int mToolBoxMainIndex;
-    int mToolBoxNodesIndex;
-    int mToolBoxDrawIndex;
-
     QToolBar *mToolbar;
 
     QActionGroup *mToolBoxGroupMain;

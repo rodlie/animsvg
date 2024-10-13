@@ -828,7 +828,8 @@ void Actions::setRectangleMode() {
 }
 
 void Actions::setPickPaintSettingsMode() {
-    mDocument.setCanvasMode(CanvasMode::pickFillStroke);
+    // mDocument.setCanvasMode(CanvasMode::pickFillStroke);
+    // Disabled, why would anyone use this?
 }
 
 void Actions::setCircleMode() {

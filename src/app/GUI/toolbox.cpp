@@ -28,12 +28,6 @@
 
 void MainWindow::setupToolBox()
 {
-    mToolBoxStack = new QStackedWidget(this);
-    mToolBoxStack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-
-    mToolBoxExtraStack = new QStackedWidget(this);
-    mToolBoxExtraStack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-
     setupToolBoxMain();
     setupToolBoxNodes();
     setupToolBoxDraw();
@@ -44,13 +38,6 @@ void MainWindow::setupToolBox()
         mToolBoxDraw->setIconSize(QSize(size, size));
     });
 
-    mToolBoxMainIndex = mToolBoxStack->addWidget(mToolBoxMain);
-    mToolBoxNodesIndex = mToolBoxExtraStack->addWidget(mToolBoxNodes);
-    mToolBoxDrawIndex = mToolBoxExtraStack->addWidget(mToolBoxDraw);
-
-    mToolBoxStack->setCurrentIndex(mToolBoxMainIndex);
-    mToolBoxExtraStack->setCurrentIndex(mToolBoxNodesIndex);
-
     // set default
     mDocument.setCanvasMode(CanvasMode::boxTransform);
 }
@@ -58,6 +45,9 @@ void MainWindow::setupToolBox()
 void MainWindow::setupToolBoxMain()
 {
     mToolBoxMain = new QToolBar(this);
+    mToolBoxMain->setObjectName("ToolBoxMain");
+    mToolBoxMain->setWindowTitle(tr("ToolBox Main"));
+    mToolBoxMain->setMovable(false);
     mToolBoxMain->setOrientation(Qt::Vertical);
 
     mToolBoxGroupMain = new QActionGroup(this);
@@ -86,7 +76,6 @@ void MainWindow::setupToolBoxMain()
             });
     boxTransformAct->setChecked(true); // default
     mToolBoxGroupMain->addAction(boxTransformAct);
-    //cmdAddAction(boxTransformAct);
 
     // pointTransform
     QAction *pointTransformAct = new QAction(QIcon::fromTheme("pointTransform"),
@@ -96,8 +85,6 @@ void MainWindow::setupToolBoxMain()
     pointTransformAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                         "pointTransform",
                                                                         "F2").toString()));
-    //cmdAddAction(pointTransformAct);
-
     connect(pointTransformAct,
             &QAction::triggered,
             this,
@@ -122,7 +109,6 @@ void MainWindow::setupToolBoxMain()
     addPointModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                       "pathCreate",
                                                                       "F3").toString()));
-    //cmdAddAction(addPointModeAct);
     connect(addPointModeAct,
             &QAction::triggered,
             this,
@@ -147,7 +133,6 @@ void MainWindow::setupToolBoxMain()
     drawPathModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                       "drawPath",
                                                                       "F4").toString()));
-    //cmdAddAction(drawPathModeAct);
     connect(drawPathModeAct,
             &QAction::triggered,
             this,
@@ -164,30 +149,6 @@ void MainWindow::setupToolBoxMain()
             });
     mToolBoxGroupMain->addAction(drawPathModeAct);
 
-    // paintMode
-    /*QAction *paintModeAct = new QAction(QIcon::fromTheme("paint"),
-                                                         tr("Paint"),
-                                                         this);
-    paintModeAct->setCheckable(true);
-    paintModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                   "paintMode",
-                                                                   "F5").toString()));
-    connect(paintModeAct,
-            &QAction::triggered,
-            this,
-            [paintModeAct, this]() {
-        if (paintModeAct->isChecked()) { mActions.setPaintMode(); }
-    });
-    connect(&mDocument,
-            &Document::canvasModeSet,
-            this,
-            [this, paintModeAct]() {
-        if (mDocument.fCanvasMode == CanvasMode::paint) {
-            paintModeAct->setChecked(true);
-        }
-    });
-    mToolBoxGroupMain->addAction(paintModeAct);*/
-
     // circleMode
     QAction *circleModeAct = new QAction(QIcon::fromTheme("circleCreate"),
                                          tr("Add Circle"),
@@ -196,7 +157,6 @@ void MainWindow::setupToolBoxMain()
     circleModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                     "circleMode",
                                                                     "F5").toString()));
-    //cmdAddAction(circleModeAct);
     connect(circleModeAct,
             &QAction::triggered,
             this,
@@ -221,7 +181,6 @@ void MainWindow::setupToolBoxMain()
     rectModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                   "rectMode",
                                                                   "F6").toString()));
-    //cmdAddAction(rectModeAct);
     connect(rectModeAct,
             &QAction::triggered,
             this,
@@ -272,7 +231,6 @@ void MainWindow::setupToolBoxMain()
     nullModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                   "nullMode",
                                                                   "F8").toString()));
-    //cmdAddAction(nullModeAct);
     connect(nullModeAct,
             &QAction::triggered,
             this,
@@ -290,7 +248,7 @@ void MainWindow::setupToolBoxMain()
     mToolBoxGroupMain->addAction(nullModeAct);
 
     // pickMode
-    QAction *pickModeAct = new QAction(QIcon::fromTheme("pick"),
+    /*QAction *pickModeAct = new QAction(QIcon::fromTheme("pick"),
                                        tr("Pick Mode"),
                                        this);
     pickModeAct->setCheckable(true);
@@ -311,8 +269,7 @@ void MainWindow::setupToolBoxMain()
                     pickModeAct->setChecked(true);
                 }
             });
-    mToolBoxGroupMain->addAction(pickModeAct);
-    //cmdAddAction(pickModeAct);
+    mToolBoxGroupMain->addAction(pickModeAct);*/
 
     mToolBoxMain->addActions(mToolBoxGroupMain->actions());
 
@@ -331,17 +288,17 @@ void MainWindow::setupToolBoxMain()
                 mLocalPivotAct->setIcon(mDocument.fLocalPivot ? QIcon::fromTheme("pivotLocal") : QIcon::fromTheme("pivotGlobal"));
             });
 
-    const auto spacer = new QWidget(this);
-    spacer->setSizePolicy(QSizePolicy::Minimum,
-                          QSizePolicy::Expanding);
-    mToolBoxMain->addWidget(spacer);
     mToolBoxMain->addAction(mLocalPivotAct);
+
+    addToolBar(Qt::LeftToolBarArea, mToolBoxMain);
 }
 
 void MainWindow::setupToolBoxNodes()
 {
     mToolBoxNodes = new QToolBar(this);
-    mToolBoxNodes->setObjectName(QString::fromUtf8("ViewerNodeBar"));
+    mToolBoxNodes->setMovable(false);
+    mToolBoxNodes->setObjectName(QString::fromUtf8("ToolBoxNodes"));
+    mToolBoxNodes->setWindowTitle(tr("ToolBox Nodes"));
     mToolBoxNodes->setOrientation(Qt::Vertical);
 
     mToolBoxGroupNodes = new QActionGroup(this);
@@ -458,11 +415,9 @@ void MainWindow::setupToolBoxNodes()
                 Document::sInstance->actionFinished();
             });
 
-    QWidget *spacer = new QWidget(this);
-    spacer->setSizePolicy(QSizePolicy::Minimum,
-                          QSizePolicy::Expanding);
-    mToolBoxNodes->addWidget(spacer);
     mToolBoxNodes->addWidget(mNodeVisibility);
+
+    addToolBar(Qt::LeftToolBarArea, mToolBoxNodes);
 }
 
 void MainWindow::setupToolBoxDraw()
@@ -502,11 +457,10 @@ void MainWindow::setupToolBoxDraw()
     const auto label1 = new VLabel(QString("%1 :").arg(tr("Max Error")), this);
     const auto label2 = new VLabel(QString("%1 :").arg(tr("Smooth")), this);
 
-    const auto spacer = new QWidget(this);
-    spacer->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
-
     mToolBoxDraw = new QToolBar(this);
-    mToolBoxDraw->setObjectName(QString::fromUtf8("ViewerNodeBar"));
+    mToolBoxDraw->setMovable(false);
+    mToolBoxDraw->setObjectName(QString::fromUtf8("ToolBoxDraw"));
+    mToolBoxDraw->setWindowTitle(tr("ToolBox Draw"));
     mToolBoxDraw->setOrientation(Qt::Vertical);
 
     mToolBoxDraw->addSeparator();
@@ -517,7 +471,9 @@ void MainWindow::setupToolBoxDraw()
     mToolBoxDraw->addWidget(label2);
     mToolBoxDraw->addSeparator();
     mToolBoxDraw->addWidget(mDrawPathSmooth);
-    mToolBoxDraw->addWidget(spacer);
+    mToolBoxDraw->addSeparator();
     mToolBoxDraw->addAction(mDrawPathAuto);
+
+    addToolBar(Qt::LeftToolBarArea, mToolBoxDraw);
 }
 

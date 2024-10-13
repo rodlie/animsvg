@@ -98,11 +98,6 @@ MainWindow::MainWindow(Document& document,
     , mTabProperties(nullptr)
     , mTimeline(nullptr)
     , mRenderWidget(nullptr)
-    , mToolBoxStack(nullptr)
-    , mToolBoxExtraStack(nullptr)
-    , mToolBoxMainIndex(0)
-    , mToolBoxNodesIndex(0)
-    , mToolBoxDrawIndex(0)
     , mToolbar(nullptr)
     , mToolBoxGroupMain(nullptr)
     , mToolBoxGroupNodes(nullptr)
@@ -321,34 +316,6 @@ MainWindow::MainWindow(Document& document,
                                             QIcon::fromTheme("render_animation"),
                                             tr("Queue"));
 
-    // setup toolbox and viewer
-    const auto viewerWidget = new QWidget(this);
-    viewerWidget->setContentsMargins(frictionMargins);
-    viewerWidget->setSizePolicy(QSizePolicy::Expanding,
-                                QSizePolicy::Expanding);
-    const auto viewerLayout = new QHBoxLayout(viewerWidget);
-    viewerLayout->setContentsMargins(frictionMargins);
-    viewerLayout->setSpacing(0);
-
-    const auto toolBoxWidget = new QWidget(this);
-    toolBoxWidget->setSizePolicy(QSizePolicy::Fixed,
-                                 QSizePolicy::Expanding);
-    toolBoxWidget->setContentsMargins(0, 0, 0, 0);
-    const auto toolBoxLayout = new QVBoxLayout(toolBoxWidget);
-    toolBoxLayout->setContentsMargins(0, 0, 0, 0);
-    toolBoxLayout->setSpacing(0);
-
-    const auto toolBoxExtraWidget = new QWidget(this);
-    toolBoxExtraWidget->setSizePolicy(QSizePolicy::Fixed,
-                                      QSizePolicy::Expanding);
-    toolBoxExtraWidget->setContentsMargins(0, 0, 0, 0);
-    const auto toolBoxExtraLayout = new QVBoxLayout(toolBoxExtraWidget);
-    toolBoxExtraLayout->setContentsMargins(0, 0, 0, 0);
-    toolBoxExtraLayout->setSpacing(0);
-
-    toolBoxLayout->addWidget(mToolBoxStack);
-    toolBoxExtraLayout->addWidget(mToolBoxExtraStack);
-
     addToolBar(mColorToolBar);
 
     mCanvasToolBar->addSeparator();
@@ -360,17 +327,13 @@ MainWindow::MainWindow(Document& document,
 
     statusBar()->addPermanentWidget(mCanvasToolBar);
 
-    viewerLayout->addWidget(toolBoxWidget);
-    viewerLayout->addWidget(mStackWidget);
-    viewerLayout->addWidget(toolBoxExtraWidget);
-
     // final layout
     mUI = new UILayout(this);
     std::vector<UILayout::Item> docks;
     docks.push_back({UIDock::Position::Up,
                      -1,
                      tr("Viewer"),
-                     viewerWidget,
+                     mStackWidget,
                      false,
                      false,
                      false});
@@ -457,20 +420,6 @@ void MainWindow::setupMenuBar()
     cmdAddAction(mImportSeqAct);
 
     if (eSettings::instance().fToolBarActionOpen) {
-        /*const auto loadToolBtn = new QToolButton(this);
-        loadToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
-        loadToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-        loadToolBtn->setFocusPolicy(Qt::NoFocus);
-
-        const auto loadToolMenu = new QMenu(this);
-        loadToolBtn->setMenu(loadToolMenu);
-        loadToolBtn->setDefaultAction(openAct);
-
-        loadToolMenu->addAction(mLinkedAct);
-        loadToolMenu->addAction(mImportSeqAct);
-        loadToolMenu->addMenu(mRecentMenu);
-
-        mToolbar->addWidget(loadToolBtn);*/
         mToolbar->addAction(openAct);
     }
 
@@ -529,20 +478,6 @@ void MainWindow::setupMenuBar()
     cmdAddAction(mExportSVGAct);
 
     if (eSettings::instance().fToolBarActionSave) {
-        /*const auto saveToolBtn = new QToolButton(this);
-        saveToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
-        saveToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-        saveToolBtn->setFocusPolicy(Qt::NoFocus);
-
-        const auto saveToolMenu = new QMenu(this);
-        saveToolBtn->setMenu(saveToolMenu);
-        saveToolBtn->setDefaultAction(mSaveAct);
-
-        saveToolMenu->addAction(mSaveAsAct);
-        saveToolMenu->addAction(mSaveBackAct);
-        //saveToolMenu->addAction(exportSvgAct);
-        saveToolMenu->addSeparator();*/
-
         mToolbar->addAction(mSaveAct);
     }
 
@@ -750,7 +685,6 @@ void MainWindow::setupMenuBar()
                     tr("Rotate 90° CW", "MenuBar_Object"));
         qAct->setIcon(QIcon::fromTheme("loop_forwards"));
         mActions.rotate90CWAction->connect(qAct);
-        //cmdAddAction(qAct);
     }
 
     {
@@ -758,7 +692,6 @@ void MainWindow::setupMenuBar()
                     tr("Rotate 90° CCW", "MenuBar_Object"));
         qAct->setIcon(QIcon::fromTheme("loop_back"));
         mActions.rotate90CCWAction->connect(qAct);
-        //cmdAddAction(qAct);
     }
 
     {
@@ -793,43 +726,6 @@ void MainWindow::setupMenuBar()
     ungroupQAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_G);
     mActions.ungroupAction->connect(ungroupQAct);
     cmdAddAction(ungroupQAct);
-
-    /*mObjectMenu->addSeparator();
-
-    const auto transformMenu = mObjectMenu->addMenu(
-                tr("Transform", "MenuBar_Object"));
-    const auto moveAct = transformMenu->addAction(
-                tr("Move", "MenuBar_Object_Transform"));
-    moveAct->setShortcut(Qt::Key_G);
-    moveAct->setDisabled(true);
-    //cmdAddAction(moveAct);
-
-    const auto rotateAct = transformMenu->addAction(
-                tr("Rotate", "MenuBar_Object_Transform"));
-    rotateAct->setShortcut(Qt::Key_R);
-    rotateAct->setDisabled(true);
-    //cmdAddAction(rotateAct);
-
-    const auto scaleAct = transformMenu->addAction(
-                tr("Scale", "MenuBar_Object_Transform"));
-    scaleAct->setShortcut(Qt::Key_S);
-    scaleAct->setDisabled(true);
-    //cmdAddAction(scaleAct);
-
-    transformMenu->addSeparator();
-
-    const auto xAct = transformMenu->addAction(
-                tr("X-Axis Only", "MenuBar_Object_Transform"));
-    xAct->setShortcut(Qt::Key_X);
-    xAct->setDisabled(true);
-    //cmdAddAction(xAct);
-
-    const auto yAct = transformMenu->addAction(
-                tr("Y-Axis Only", "MenuBar_Object_Transform"));
-    yAct->setShortcut(Qt::Key_Y);
-    yAct->setDisabled(true);
-    //cmdAddAction(yAct);*/
-
 
     mPathMenu = mMenuBar->addMenu(tr("Path", "MenuBar"));
 
@@ -937,29 +833,6 @@ void MainWindow::setupMenuBar()
                                                                               "F12").toString()));
     mAddToQueAct->setEnabled(false);
     cmdAddAction(mAddToQueAct);
-
-    /*if (eSettings::instance().fToolBarActionScene) {
-        const auto sceneToolBtn = new QToolButton(this);
-        sceneToolBtn->setText(tr("Scene"));
-        sceneToolBtn->setIcon(QIcon::fromTheme("sequence"));
-        sceneToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
-        sceneToolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-        sceneToolBtn->setFocusPolicy(Qt::NoFocus);
-        const auto sceneToolMenu = new QMenu(this);
-        sceneToolBtn->setMenu(sceneToolMenu);
-
-        sceneToolMenu->addAction(newSceneAct);
-        sceneToolMenu->addAction(mAddToQueAct);
-        sceneToolMenu->addAction(deleteSceneAct);
-
-        sceneToolBtn->setDefaultAction(scenePropAct);
-        sceneToolBtn->setText(tr("Scene"));
-
-        connect(scenePropAct, &QAction::changed,
-                this, [sceneToolBtn]() { sceneToolBtn->setText(tr("Scene")); });
-
-        mToolbar->addWidget(sceneToolBtn);
-    }*/
 
     const auto zoomMenu = mViewMenu->addMenu(QIcon::fromTheme("zoom"), tr("Zoom","MenuBar_View"));
 
@@ -1129,7 +1002,6 @@ void MainWindow::setupMenuBar()
             mUI->setDockVisible(tr("Timeline"), triggered);
         }
     });
-    //cmdAddAction(mViewTimelineAct);
 
     mViewFillStrokeAct = mViewMenu->addAction(tr("View Fill and Stroke"));
     mViewFillStrokeAct->setCheckable(true);
@@ -1139,7 +1011,6 @@ void MainWindow::setupMenuBar()
             this, [this](bool triggered) {
         mUI->setDockVisible("Fill and Stroke", triggered);
     });
-    //cmdAddAction(mViewFillStrokeAct);
 
     mTimelineWindowAct = mViewMenu->addAction(tr("Timeline in Window"));
     mTimelineWindowAct->setCheckable(true);
@@ -1394,6 +1265,7 @@ void MainWindow::openWelcomeDialog()
 void MainWindow::closeWelcomeDialog()
 {
     mStackWidget->setCurrentIndex(mStackIndexScene);
+    mActions.setMovePathMode();
 }
 
 void MainWindow::addCanvasToRenderQue()
@@ -1461,7 +1333,7 @@ void MainWindow::setupToolBar()
     eSizesUI::widget.add(mToolbar, [this](const int size) {
         mToolbar->setIconSize(QSize(size, size));
     });
-    addToolBar(mToolbar);
+    addToolBar(Qt::TopToolBarArea, mToolbar);
 }
 
 MainWindow *MainWindow::sGetInstance()
@@ -1477,10 +1349,10 @@ void MainWindow::updateCanvasModeButtonsChecked()
     const bool pointMode = mode == CanvasMode::pointTransform;
     const bool drawMode = mode == CanvasMode::drawPath;
 
-    //mToolBoxStack->setCurrentIndex(drawMode ? mToolBoxDrawIndex : (pointMode ? mToolBoxNodesIndex : mToolBoxMainIndex));
-    mToolBoxExtraStack->setCurrentIndex(drawMode ? mToolBoxDrawIndex : mToolBoxNodesIndex);
     mToolBoxNodes->setEnabled(pointMode);
+    mToolBoxNodes->setVisible(pointMode);
     mToolBoxDraw->setEnabled(drawMode);
+    mToolBoxDraw->setVisible(drawMode);
     mLocalPivotAct->setEnabled(pointMode || boxMode);
 }
 
