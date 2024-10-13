@@ -305,6 +305,7 @@ QPushButton#WelcomeRecentButton:hover {
 }*/
 
 QPushButton#FlatButton,
+QPushButton#AboutButton,
 QToolButton#FlatButton {
     background-color: none;
     border: 0;
@@ -312,6 +313,7 @@ QToolButton#FlatButton {
 }
 
 QPushButton#FlatButton,
+QPushButton#AboutButton,
 QToolButton#FlatButton {
     border-radius: 2%;
 }
@@ -321,6 +323,10 @@ QPushButton#FlatButton:hover,
 QToolButton#FlatButton:hover {
     background-color: rgb(19, 19, 21);
     border-color: rgb(104, 144, 206);
+}
+
+QPushButton#AboutButton:hover {
+    background-color: none;
 }
 
 QTabWidget#ThirdPartyBrowser { border: 0; }

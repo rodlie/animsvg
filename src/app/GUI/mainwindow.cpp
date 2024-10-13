@@ -1204,15 +1204,18 @@ void MainWindow::setupMenuBar()
 
     setMenuBar(mMenuBar);
 
-    const auto frictionButton = new QToolButton(this);
-    frictionButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    frictionButton->setPopupMode(QToolButton::InstantPopup);
+    const auto frictionButton = new QPushButton(this);
+    frictionButton->setFlat(true);
     frictionButton->setIcon(QIcon::fromTheme(AppSupport::getAppID()));
-    frictionButton->setDefaultAction(aboutAct);
-    frictionButton->setText(QString("%1 %2").arg(AppSupport::getAppDisplayName(),
+    frictionButton->setObjectName("AboutButton");
+    frictionButton->setLayoutDirection(Qt::RightToLeft);
+    frictionButton->setText(QString("%1 %2 ").arg(AppSupport::getAppDisplayName(),
                                                  AppSupport::getAppVersion()));
-    frictionButton->setToolTip(QString());
     frictionButton->setFocusPolicy(Qt::NoFocus);
+
+    connect(frictionButton, &QPushButton::released,
+            this, &MainWindow::openAboutWindow);
+
     mMenuBar->setCornerWidget(frictionButton,
                               Qt::TopRightCorner);
 }
