@@ -1259,13 +1259,11 @@ void MainWindow::askInstallRenderPresets()
 void MainWindow::openWelcomeDialog()
 {
     mStackWidget->setCurrentIndex(mStackIndexWelcome);
-    mActions.setMovePathMode();
 }
 
 void MainWindow::closeWelcomeDialog()
 {
     mStackWidget->setCurrentIndex(mStackIndexScene);
-    mActions.setMovePathMode();
 }
 
 void MainWindow::addCanvasToRenderQue()
@@ -1611,17 +1609,15 @@ void MainWindow::clearAll()
     setFileChangedSinceSaving(false);
     mObjectSettingsWidget->setMainTarget(nullptr);
 
-    //mTimeline->clearAll();
     mRenderWidget->clearRenderQueue();
     mFillStrokeSettings->clearAll();
+    mFontWidget->clearAll();
     mDocument.clear();
     mLayoutHandler->clear();
-//    for(ClipboardContainer *cont : mClipboardContainers) {
-//        delete cont;
-//    }
-//    mClipboardContainers.clear();
     FilesHandler::sInstance->clear();
-    //mBoxListWidget->clearAll();
+
+    mActions.setMovePathMode();
+
     openWelcomeDialog();
 }
 

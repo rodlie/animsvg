@@ -32,6 +32,7 @@
 #include "appsupport.h"
 #include "themesupport.h"
 #include "Private/esettings.h"
+#include "GUI/global.h"
 
 WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
                              const std::function<void()> &newFunc,
@@ -89,7 +90,7 @@ WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
     connect(openButton, &QPushButton::released, openFunc);
 
     mRecentButton = new QPushButton(QIcon::fromTheme("file_folder"),
-                                    tr("Recent"),
+                                    tr("Recent Files"),
                                     this);
     mRecentButton->setFocusPolicy(Qt::NoFocus);
     mRecentButton->setSizePolicy(QSizePolicy::Preferred,
@@ -106,6 +107,14 @@ WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
     buttonLay->addWidget(newButton);
     buttonLay->addWidget(openButton);
     mainLay->addWidget(sceneWid);
+
+    eSizesUI::widget.add(newButton, [this,
+                                     newButton,
+                                     openButton](const int size) {
+        newButton->setIconSize({size, size});
+        openButton->setIconSize({size, size});
+        mRecentButton->setIconSize({size, size});
+    });
 }
 
 void WelcomeDialog::paintEvent(QPaintEvent *)
