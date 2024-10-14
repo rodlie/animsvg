@@ -176,9 +176,10 @@ FontsWidget::FontsWidget(QWidget *parent)
     mMainLayout->addWidget(mTextInput);
 
     setDisabled(true);
-    //setVisible(false);
 
     afterFamilyChange();
+
+    QTimer::singleShot(100, this, [this]{ setVisible(false); });
 }
 
 void FontsWidget::updateStyles()
@@ -394,6 +395,11 @@ void FontsWidget::setBoxTarget(TextBox * const target)
                                  target->getCurrentValue());
         });
     }
+}
+
+void FontsWidget::clearAll()
+{
+    setCurrentBox(nullptr);
 }
 
 void FontsWidget::emitFamilyAndStyleChanged()

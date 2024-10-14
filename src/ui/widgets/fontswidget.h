@@ -65,6 +65,7 @@ namespace Friction
             void setTextFocus();
             void clearText();
             void setBoxTarget(TextBox * const target);
+            void clearAll();
 
         signals:
             void fontFamilyAndStyleChanged(const QString &family,
