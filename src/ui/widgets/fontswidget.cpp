@@ -176,7 +176,7 @@ FontsWidget::FontsWidget(QWidget *parent)
     mMainLayout->addWidget(mTextInput);
 
     setDisabled(true);
-    setVisible(false);
+    //setVisible(false);
 
     afterFamilyChange();
 }
