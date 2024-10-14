@@ -369,6 +369,10 @@ int main(int argc, char *argv[])
     }
 #endif
 
+    splash.raise();
+    splash.showMessage(QObject::tr("Loading User Interface ..."),
+                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+
     const QString openProject = argc > 1 ? argv[1] : QString();
     MainWindow w(document,
                  actions,

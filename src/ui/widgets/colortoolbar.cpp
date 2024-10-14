@@ -196,6 +196,10 @@ void ColorToolBar::showContextMenu(const QPoint &pos)
 
     const bool horiz = orientation() == Qt::Horizontal;
 
+    const auto act = menu.addAction(QIcon::fromTheme("color"), windowTitle());
+    act->setEnabled(false);
+    menu.addSeparator();
+
     menu.addAction(QIcon::fromTheme(horiz ? "pivot-align-left" : "pivot-align-top"),
                    tr(horiz ? "Align Left" : "Align Top"), this, [this](){
         mLeftSpacerAct->setVisible(false);

@@ -1079,9 +1079,6 @@ void MainWindow::setupMenuBar()
     frictionButton->setFlat(true);
     frictionButton->setIcon(QIcon::fromTheme(AppSupport::getAppID()));
     frictionButton->setObjectName("AboutButton");
-    frictionButton->setLayoutDirection(Qt::RightToLeft);
-    frictionButton->setText(QString("%1 %2 ").arg(AppSupport::getAppDisplayName(),
-                                                 AppSupport::getAppVersion()));
     frictionButton->setFocusPolicy(Qt::NoFocus);
 
     connect(frictionButton, &QPushButton::released,
