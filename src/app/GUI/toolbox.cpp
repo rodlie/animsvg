@@ -301,6 +301,8 @@ void MainWindow::setupToolBoxNodes()
     mToolBoxNodes->setWindowTitle(tr("ToolBox Nodes"));
     mToolBoxNodes->setOrientation(Qt::Vertical);
 
+    mToolBoxNodes->addSeparator();
+
     mToolBoxGroupNodes = new QActionGroup(this);
 
     // nodeConnect
@@ -454,8 +456,8 @@ void MainWindow::setupToolBoxDraw()
                 mDocument.fDrawPathSmooth = qFloor(value);
             });
 
-    const auto label1 = new VLabel(QString("%1 :").arg(tr("Max Error")), this);
-    const auto label2 = new VLabel(QString("%1 :").arg(tr("Smooth")), this);
+    const auto label1 = new VLabel(tr("Max Error"), this);
+    const auto label2 = new VLabel(tr("Smooth"), this);
 
     mToolBoxDraw = new QToolBar(this);
     mToolBoxDraw->setMovable(false);
@@ -464,14 +466,18 @@ void MainWindow::setupToolBoxDraw()
     mToolBoxDraw->setOrientation(Qt::Vertical);
 
     mToolBoxDraw->addSeparator();
+    {
+        const auto act = mToolBoxDraw->addAction(QIcon::fromTheme("drawPath"), QString());
+        act->setDisabled(true);
+    }
     mToolBoxDraw->addWidget(label1);
-    mToolBoxDraw->addSeparator();
     mToolBoxDraw->addWidget(mDrawPathMaxError);
-    mToolBoxDraw->addSeparator();
+    {
+        const auto act = mToolBoxDraw->addAction(QIcon::fromTheme("drawPath"), QString());
+        act->setDisabled(true);
+    }
     mToolBoxDraw->addWidget(label2);
-    mToolBoxDraw->addSeparator();
     mToolBoxDraw->addWidget(mDrawPathSmooth);
-    mToolBoxDraw->addSeparator();
     mToolBoxDraw->addAction(mDrawPathAuto);
 
     addToolBar(Qt::LeftToolBarArea, mToolBoxDraw);
