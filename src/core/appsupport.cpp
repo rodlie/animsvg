@@ -42,6 +42,14 @@
 #include <QRegularExpression>
 #include <QMessageBox>
 
+#include <iostream>
+#include <ostream>
+
+extern "C" {
+#include <libavutil/log.h>
+#include <libavformat/avformat.h>
+}
+
 AppSupport::AppSupport(QObject *parent)
     : QObject{parent}
 {
@@ -232,10 +240,10 @@ const QString AppSupport::getAppConfigPath()
     if (isAppPortable()) {
         const QString appPath = getAppPath();
         if (QFileInfo(appPath).isWritable()) { path = QString("%1/config").arg(appPath); }
-#ifdef Q_OS_LINUX
+/*#ifdef Q_OS_LINUX
         const QString appimage = getAppImagePath();
         if (!appimage.isEmpty() && QFileInfo(appimage).isWritable()) { path = QString("%1.config").arg(appimage); }
-#endif
+#endif*/
     }
     QDir dir(path);
     if (!dir.exists()) { dir.mkpath(path); }
@@ -694,13 +702,18 @@ const QPair<QStringList, bool> AppSupport::hasWriteAccess()
 bool AppSupport::isAppPortable()
 {
     const QString path = getAppPath();
-#ifdef Q_OS_LINUX
+/*#ifdef Q_OS_LINUX
     const QString appimage = getAppImagePath();
     if (!appimage.isEmpty()) {
         return QFile::exists(appimage);// && QFileInfo(appimage).isWritable();
     }
-#endif
+#endif*/
     return QFile::exists(QString("%1/portable.txt").arg(path)) && QFileInfo(path).isWritable();
+}
+
+bool AppSupport::isAppImage()
+{
+    return !getAppImagePath().simplified().isEmpty();
 }
 
 const QString AppSupport::getAppImagePath()
@@ -915,6 +928,127 @@ bool AppSupport::removeXDGDesktopIntegration()
         }
     }
     return true;
+}
+
+void AppSupport::initXDGDesktop(const bool &isRenderer)
+{
+    if ((!isAppPortable() && !isAppImage()) || isRenderer) { return; }
+    if (AppSupport::hasXDGDesktopIntegration()) { return; }
+    QString appPath("friction");
+    const QString appimage = AppSupport::getAppImagePath().simplified();
+    if (!appimage.isEmpty()) { appPath = appimage.split("/").takeLast(); }
+    const auto ask = QMessageBox::question(nullptr,
+                                           QObject::tr("Setup Desktop Integration"),
+                                           QObject::tr("Would you like to setup desktop integration?"
+                                                       " This will add Friction to your application launcher"
+                                                       " and add required mime types.<br><br>"
+                                                       "You also can manage the desktop integration with:"
+                                                       "<br><br><code>%1 --xdg-install</code>"
+                                                       "<br><code>%1 --xdg-remove</code>").arg(appPath));
+    if (ask == QMessageBox::Yes) {
+        if (!AppSupport::setupXDGDesktopIntegration()) {
+            QMessageBox::warning(nullptr,
+                                 QObject::tr("Desktop Integration Failed"),
+                                 QObject::tr("Failed to install the required files for desktop integration,"
+                                             " please check your permissions."));
+        }
+    } else {
+        AppSupport::setSettings("portable", "ignoreXDG", true);
+    }
+}
+
+bool AppSupport::hasArg(int argc,
+                        char *argv[],
+                        const QString &find)
+{
+    for (int i = 0; i < argc; i++) {
+        const QString val = argv[i];
+        if (val.contains(find)) { return true; }
+    }
+    return false;
+}
+
+void AppSupport::checkPerms(const bool &isRenderer)
+{
+    const auto perms = hasWriteAccess();
+    if (perms.second) { return; }
+    if (isRenderer) {
+        qWarning() << QObject::tr("Friction needs read/write access to:\n- %1").arg(perms.first.join("\n- "));
+    } else {
+        QMessageBox::warning(nullptr,
+                             QObject::tr("Permission issue"),
+                             QObject::tr("Friction needs read/write access to:<br><br>- %1").arg(perms.first.join("<br>- ")));
+    }
+}
+
+void AppSupport::checkFFmpeg(const bool &isRenderer)
+{
+    av_log_set_level(AV_LOG_ERROR);
+#ifndef QT_DEBUG
+    const QString warning = QObject::tr("Friction is built against an unsupported FFmpeg version. Use at own risk and don't report any issues upstream.");
+    if (avformat_version() >= 3812708) {
+        if (isRenderer) { qWarning() << warning; }
+        else {
+            QMessageBox::critical(nullptr,
+                                  QObject::tr("Unsupported FFmpeg version"),
+                                  warning);
+        }
+    }
+#else
+    Q_UNUSED(isRenderer)
+#endif
+}
+
+void AppSupport::initEnv(const bool &isRenderer)
+{
+    // windows theme integration
+#ifdef Q_OS_WIN
+#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
+    // Set window title bar color based on dark/light theme
+    // https://www.qt.io/blog/dark-mode-on-windows-11-with-qt-6.5
+    // https://learn.microsoft.com/en-us/answers/questions/1161597/how-to-detect-windows-application-dark-mode
+    QSettings registry("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+                       QSettings::NativeFormat);
+    if (registry.value("AppsUseLightTheme", 0).toInt() == 0) { qputenv("QT_QPA_PLATFORM", "windows:darkmode=1"); }
+#endif
+#else
+    if (isRenderer) { // Force Mesa if Renderer
+        qputenv("LIBGL_ALWAYS_SOFTWARE", "1");
+    }
+    // Force XCB on Linux until we support Wayland
+    qputenv("QT_QPA_PLATFORM", isRenderer ? "offscreen" : "xcb");
+#endif
+}
+
+QPair<bool, int> AppSupport::handleXDGArgs(const bool &isRenderer,
+                                           const QStringList &args)
+{
+    QPair<bool,int> status(false, 0);
+    if (!AppSupport::isAppPortable() || isRenderer) { return status; }
+    if (args.contains("--xdg-remove")) {
+        const bool removedXDG = AppSupport::removeXDGDesktopIntegration();
+        qWarning() << "Removed XDG Integration:" << removedXDG;
+        status.first = true;
+        status.second = removedXDG ? 0 : -1;
+    } else if (args.contains("--xdg-install")) {
+        const bool installedXDG = AppSupport::setupXDGDesktopIntegration();
+        qWarning() << "Installed XDG Integration:" << installedXDG;
+        status.first = true;
+        status.second = installedXDG ? 0 : -1;
+    }
+    return status;
+}
+
+void AppSupport::printVersion()
+{
+    std::cout << QString("%1 %2 - %3").arg(getAppDisplayName(),
+                                           getAppVersion(),
+                                           getAppUrl()).toStdString() << std::endl;
+}
+
+void AppSupport::printHelp(const bool &isRenderer)
+{
+    Q_UNUSED(isRenderer)
 }
 
 const AppSupport::ExpressionPreset AppSupport::readEasingPreset(const QString &filename)
