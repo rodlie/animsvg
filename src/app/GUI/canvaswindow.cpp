@@ -122,27 +122,25 @@ void CanvasWindow::updatePaintModeCursor()
 
 void CanvasWindow::setCanvasMode(const CanvasMode mode)
 {
-    if (mode == CanvasMode::boxTransform) {
-        setCursor(QCursor(Qt::ArrowCursor) );
-    } else if (mode == CanvasMode::pointTransform) {
-        setCursor(QCursor(QPixmap(":/cursors/cursor-node.xpm"), 0, 0) );
-    } else if (mode == CanvasMode::pathCreate) {
-        setCursor(QCursor(QPixmap(":/cursors/cursor-pen.xpm"), 4, 4) );
-    } else if (mode == CanvasMode::drawPath) {
-        setCursor(QCursor(QPixmap(":/cursors/cursor-pencil.xpm"), 4, 4) );
-    } else if (mode == CanvasMode::paint) {
-        updatePaintModeCursor();
-    } else if (mode == CanvasMode::circleCreate) {
-        setCursor(QCursor(QPixmap(":/cursors/cursor-ellipse.xpm"), 4, 4) );
-    } else if (mode == CanvasMode::rectCreate) {
-        setCursor(QCursor(QPixmap(":/cursors/cursor-rect.xpm"), 4, 4) );
-    } else if (mode == CanvasMode::textCreate) {
-        setCursor(QCursor(QPixmap(":/cursors/cursor-text.xpm"), 4, 4) );
-    } else if (mode == CanvasMode::pickFillStroke) {
-        setCursor(QCursor(QPixmap(":/cursors/cursor_color_picker.png"), 2, 20) );
-    } else {
-        setCursor(QCursor(QPixmap(":/cursors/cursor-pen.xpm"), 4, 4) );
+    switch(mode) {
+    case CanvasMode::boxTransform:
+        setCursor(Qt::ArrowCursor);
+        break;
+    case CanvasMode::pointTransform:
+    case CanvasMode::pickFillStroke:
+        setCursor(Qt::PointingHandCursor);
+        break;
+    case CanvasMode::circleCreate:
+    case CanvasMode::rectCreate:
+        setCursor(Qt::SizeFDiagCursor);
+        break;
+    case CanvasMode::textCreate:
+        setCursor(Qt::IBeamCursor);
+        break;
+    default:
+        setCursor(Qt::CrossCursor);
     }
+
     if (!mCurrentCanvas) { return; }
     if (mMouseGrabber) {
         mCurrentCanvas->cancelCurrentTransform();

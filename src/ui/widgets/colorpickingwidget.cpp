@@ -37,8 +37,7 @@ ColorPickingWidget::ColorPickingWidget(QScreen* const screen,
     : QWidget(parent) {
     mScreenshot = screen->grabWindow(0).toImage();
 
-    QPixmap picker(":/cursors/cursor_color_picker.png");
-    setCursor(QCursor(picker, 2, 20));
+    setCursor(Qt::PointingHandCursor);
 
     setMouseTracking(true);
 
