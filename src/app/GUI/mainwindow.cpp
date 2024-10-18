@@ -1950,6 +1950,9 @@ TimelineDockWidget *MainWindow::getTimeLineWidget()
 
 void MainWindow::focusFontWidget(const bool focus)
 {
+    if (mTabProperties->currentIndex() != mTabPropertiesIndex) {
+        mTabProperties->setCurrentIndex(mTabPropertiesIndex);
+    }
     if (focus) { mFontWidget->setTextFocus(); }
 }
 
