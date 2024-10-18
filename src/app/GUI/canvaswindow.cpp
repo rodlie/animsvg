@@ -124,9 +124,9 @@ void CanvasWindow::setCanvasMode(const CanvasMode mode)
 {
     switch(mode) {
     case CanvasMode::boxTransform:
+    case CanvasMode::pointTransform:
         setCursor(Qt::ArrowCursor);
         break;
-    case CanvasMode::pointTransform:
     case CanvasMode::pickFillStroke:
         setCursor(Qt::PointingHandCursor);
         break;
