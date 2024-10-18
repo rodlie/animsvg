@@ -158,7 +158,7 @@ void ColorToolBar::adjustWidgets()
 {
     const bool horiz = orientation() == Qt::Horizontal;
     const int min = horiz ? eSizesUI::widget * 3 : eSizesUI::widget / 2;
-    const int wid = horiz ? eSizesUI::widget / 2 : eSizesUI::widget * 3;
+    const int wid = horiz ? eSizesUI::widget / 2 : eSizesUI::widget;
 
     setToolButtonStyle(horiz ?
                            Qt::ToolButtonTextBesideIcon :
