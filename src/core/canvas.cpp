@@ -236,10 +236,11 @@ void Canvas::renderSk(SkCanvas* const canvas,
     mDrawnSinceQue = true;
     SkPaint paint;
     paint.setStyle(SkPaint::kFill_Style);
+    const qreal pixelRatio = qApp->devicePixelRatio();
     const SkRect canvasRect = SkRect::MakeWH(mWidth, mHeight);
     const qreal zoom = viewTrans.m11();
     const auto filter = eFilterSettings::sDisplay(zoom, mResolution);
-    const qreal qInvZoom = 1/viewTrans.m11();
+    const qreal qInvZoom = 1/viewTrans.m11() * pixelRatio;
     const float invZoom = toSkScalar(qInvZoom);
     const SkMatrix skViewTrans = toSkMatrix(viewTrans);
     const QColor bgColor = mBackgroundColor->getColor();
