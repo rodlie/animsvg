@@ -214,6 +214,13 @@ UILayout::UILayout(QWidget *parent)
     mBottom = new QSplitter(this);
     mBottom->setOrientation(Qt::Horizontal);
     mMiddle->addWidget(mBottom);
+
+    setCollapsible(indexOf(mLeft), false);
+    setCollapsible(indexOf(mMiddle), false);
+    setCollapsible(indexOf(mRight), false);
+
+    mMiddle->setCollapsible(mMiddle->indexOf(mTop), false);
+    mMiddle->setCollapsible(mMiddle->indexOf(mBottom), false);
 }
 
 UILayout::~UILayout()
@@ -332,15 +339,19 @@ void UILayout::addDock(const Item &item)
     switch (item.pos) {
     case UIDock::Position::Left:
         mLeft->addWidget(dock);
+        mLeft->setCollapsible(mLeft->indexOf(dock), false);
         break;
     case UIDock::Position::Right:
         mRight->addWidget(dock);
+        mRight->setCollapsible(mRight->indexOf(dock), false);
         break;
     case UIDock::Position::Up:
         mTop->addWidget(dock);
+        mTop->setCollapsible(mTop->indexOf(dock), false);
         break;
     case UIDock::Position::Down:
         mBottom->addWidget(dock);
+        mBottom->setCollapsible(mBottom->indexOf(dock), false);
         break;
     }
     connectDock(dock);
@@ -458,6 +469,7 @@ void UILayout::updateDock(QSplitter *container,
     for (int i = 0; i < container->count(); ++i) {
         UIDock *dock = qobject_cast<UIDock*>(container->widget(i));
         if (!dock) { continue; }
+        container->setCollapsible(container->indexOf(dock), false);
         dock->setPosition(pos);
         dock->setIndex(container->indexOf(dock));
         qDebug() << "==> update dock" << dock->getLabel() << dock->getPosition() << dock->getIndex();
