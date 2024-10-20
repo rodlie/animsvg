@@ -41,14 +41,29 @@ Generic instructions for building Friction on supported systems.
 * `cmake` must be available in `PATH`
 * `python3` must be available in `PATH`
 * [LLVM](https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.7/LLVM-15.0.7-win64.exe) installed to default location
-* Qt 5.15.14 libraries and headers in `friction\sdk`
+* Qt 5.15 libraries and headers in `friction\sdk`
   * See [configure_qt5.bat](src/scripts/configure_qt5.bat) and [build_qt5.bat](src/scripts/build_qt5.bat)
-* QScintilla 2.14.1 libraries and headers in `friction\sdk`
+* QScintilla libraries and headers in `friction\sdk`
   * See [build_qscintilla.bat](src/scripts/build_qscintilla.bat)
-* FFmpeg 4.2.9 libraries and headers in `friction\sdk`
+* FFmpeg 4.2 libraries and headers in `friction\sdk`
   * See [build_mxe_ffmpeg.sh](src/scripts/build_mxe_ffmpeg.sh) and [mxe](https://github.com/friction2d/mxe)
 
 Binary SDK available [here](https://github.com/friction2d/friction-sdk/releases).
+
+## Requirements on macOS
+
+* macOS Monterey 12.7 x86-64
+* Xcode 14.2 *(Apple clang 14)*
+
+Install required packages from macports:
+
+```
+sudo port install qt5-qtbase qt5-qttools qt5-qtmultimedia qt5-qtdeclarative qscintilla-qt5 ffmpeg pkgconfig ninja
+```
+### Notes
+
+* FFmpeg in macports is not supported *(render issues)*, a custom Portfile or build will be made available.
+* `python` and `python3` must be available in `PATH` and point to a Python 3 install.
 
 ## Get Source
 
