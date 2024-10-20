@@ -1045,13 +1045,19 @@ void MainWindow::setupMenuBar()
     });
 
     help->addSeparator();
+
+    QString cmdDefKey = "Ctrl+Space";
+#ifdef Q_OS_MAC
+    cmdDefKey = "Alt+Space";
+#endif
+
     help->addAction(QIcon::fromTheme("cmd"),
                     tr("Command Palette"), this, [this]() {
         CommandPalette dialog(mDocument, this);
         dialog.exec();
     }, QKeySequence(AppSupport::getSettings("shortcuts",
                                             "cmdPalette",
-                                            "Ctrl+Space").toString()));
+                                            cmdDefKey).toString()));
 
     help->addSeparator();
     help->addAction(QIcon::fromTheme("renderlayers"),
@@ -1075,6 +1081,7 @@ void MainWindow::setupMenuBar()
 
     setMenuBar(mMenuBar);
 
+#ifndef Q_OS_MAC
     const auto frictionButton = new QPushButton(this);
     frictionButton->setFlat(true);
     frictionButton->setIcon(QIcon::fromTheme(AppSupport::getAppID()));
@@ -1086,6 +1093,7 @@ void MainWindow::setupMenuBar()
 
     mMenuBar->setCornerWidget(frictionButton,
                               Qt::TopRightCorner);
+#endif
 }
 
 BoundingBox *MainWindow::getCurrentBox()
@@ -1325,8 +1333,11 @@ void MainWindow::setupToolBar()
     mToolbar->setFocusPolicy(Qt::NoFocus);
     mToolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     mToolbar->setMovable(false);
+#ifdef Q_OS_MAC
+    mToolbar->setStyleSheet(QString("font-size: %1pt;").arg(font().pointSize()));
+#endif
     eSizesUI::widget.add(mToolbar, [this](const int size) {
-        mToolbar->setIconSize(QSize(size, size));
+        mToolbar->setIconSize({size, size});
     });
     addToolBar(Qt::TopToolBarArea, mToolbar);
 }

@@ -46,6 +46,9 @@ CanvasToolBar::CanvasToolBar(QWidget *parent)
     setWindowTitle(tr("Canvas Toolbar"));
     setObjectName("CanvasToolBar");
     setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+#ifdef Q_OS_MAC
+    setStyleSheet(QString("font-size: %1pt;").arg(font().pointSize()));
+#endif
 
     {
         const auto space = new QWidget(this);
