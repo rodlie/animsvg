@@ -106,7 +106,6 @@ void MemoryChecker::sGetFreeKB(intKB& procFreeKB, intKB& sysFreeKB)
         bytes_in_use_by_app = info.resident_size;
     }
 #endif
-#endif
 
     enveUsedB = longB(static_cast<qint64>(bytes_in_use_by_app));
 
@@ -135,6 +134,7 @@ void MemoryChecker::sGetFreeKB(intKB& procFreeKB, intKB& sysFreeKB)
         const int pageSize = 4;
         freeExternal.fValue += vmstat.inactive_count * pageSize;
         freeExternal.fValue += vmstat.free_count * pageSize;
+#endif
 #endif
 
     const intKB enveUsedKB(enveUsedB);
