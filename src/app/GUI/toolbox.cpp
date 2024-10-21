@@ -248,8 +248,8 @@ void MainWindow::setupToolBoxMain()
     mToolBoxGroupMain->addAction(nullModeAct);
 
     // pickMode
-    /*QAction *pickModeAct = new QAction(QIcon::fromTheme("pick"),
-                                       tr("Pick Mode"),
+    QAction *pickModeAct = new QAction(QIcon::fromTheme("pick"),
+                                       tr("Color Pick Mode"),
                                        this);
     pickModeAct->setCheckable(true);
     pickModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
@@ -269,7 +269,8 @@ void MainWindow::setupToolBoxMain()
                     pickModeAct->setChecked(true);
                 }
             });
-    mToolBoxGroupMain->addAction(pickModeAct);*/
+
+    mToolBoxGroupMain->addAction(pickModeAct);
 
     mToolBoxMain->addActions(mToolBoxGroupMain->actions());
 

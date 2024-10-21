@@ -51,6 +51,8 @@
 #include "MovablePoints/smartnodepoint.h"
 #include "MovablePoints/pathpivot.h"
 
+#include <QDesktopWidget>
+#include <QScreen>
 #include <QMouseEvent>
 #include <QMenu>
 #include <QInputDialog>
@@ -242,7 +244,7 @@ void Canvas::handleLeftButtonMousePress(const eMouseEvent& e) {
             mDrawPath.lineTo(e.fPos);
         }
     } else if(mCurrentMode == CanvasMode::pickFillStroke) {
-        mPressedBox = getBoxAtFromAllDescendents(e.fPos);
+        //mPressedBox = getBoxAtFromAllDescendents(e.fPos);
     } else if(mCurrentMode == CanvasMode::circleCreate) {
         const auto newPath = enve::make_shared<Circle>();
         newPath->planCenterPivotPosition();
@@ -512,6 +514,17 @@ void Canvas::drawPathFinish(const qreal invScale) {
     drawPathClear();
 }
 
+const QColor Canvas::pickPixelColor(const QPoint &pos)
+{
+    QScreen *screen = QApplication::screenAt(pos);
+    if (!screen) { return QColor(); }
+    WId wid = QApplication::desktop()->winId();
+    QImage img = screen->grabWindow(wid,
+                                    pos.x(), pos.y(),
+                                    1, 1).toImage();
+    return QColor(img.pixel(0, 0));
+}
+
 void Canvas::handleLeftMouseRelease(const eMouseEvent &e) {
     if(e.fMouseGrabbing) e.fReleaseMouse();
     if(mCurrentNormalSegment.isValid()) {
@@ -541,31 +554,7 @@ void Canvas::handleLeftMouseRelease(const eMouseEvent &e) {
             drawPathFinish(1/e.fScale);
         }
     } else if(mCurrentMode == CanvasMode::pickFillStroke) {
-        if(mPressedBox && enve_cast<PathBox*>(mPressedBox)) {
-            const auto srcPathBox = static_cast<PathBox*>(mPressedBox.data());
-            for(const auto& box : mSelectedBoxes) {
-                if(const auto pathBox = enve_cast<PathBox*>(box)) {
-                    if(e.ctrlMod()) {
-                        if(e.shiftMod()) {
-                            pathBox->duplicateStrokeSettingsFrom(
-                                        srcPathBox->getStrokeSettings());
-                        } else {
-                            pathBox->duplicateFillSettingsFrom(
-                                        srcPathBox->getFillSettings());
-                        }
-                    } else {
-                        if(e.shiftMod()) {
-                            pathBox->duplicateStrokeSettingsNotAnimatedFrom(
-                                        srcPathBox->getStrokeSettings());
-                        } else {
-                            pathBox->duplicateFillSettingsNotAnimatedFrom(
-                                        srcPathBox->getFillSettings());
-                        }
-                    }
-                }
-            }
-        }
-        //mCanvasWindow->setCanvasMode(MOVE_PATH);
+        emit currentPickedColor(pickPixelColor(e.fGlobalPos));
     }
     mValueInput.clearAndDisableInput();
     mTransMode = TransformMode::none;

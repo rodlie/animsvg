@@ -75,7 +75,6 @@ set(
     widgets/canvassettingswidget.cpp
     widgets/canvastoolbar.cpp
     widgets/changewidthwidget.cpp
-    widgets/colorpickingwidget.cpp
     widgets/colortoolbar.cpp
     widgets/colortoolbutton.cpp
     widgets/colorlabel.cpp
@@ -147,7 +146,6 @@ set(
     widgets/canvassettingswidget.h
     widgets/canvastoolbar.h
     widgets/changewidthwidget.h
-    widgets/colorpickingwidget.h
     widgets/colortoolbar.h
     widgets/colortoolbutton.h
     widgets/colorlabel.h
