@@ -154,6 +154,7 @@ MainWindow::MainWindow(Document& document,
     , mViewFillStrokeAct(nullptr)
     , mRenderWindow(nullptr)
     , mRenderWindowAct(nullptr)
+    , mColorPickLabel(nullptr)
 {
     Q_ASSERT(!sInstance);
     sInstance = this;
@@ -188,6 +189,8 @@ MainWindow::MainWindow(Document& document,
             this, &MainWindow::openApplyExpressionDialog);
     connect(&mDocument, &Document::newVideo,
             this, &MainWindow::handleNewVideoClip);
+    connect(&mDocument, &Document::currentPixelColor,
+            this, &MainWindow::handleCurrentPixelColor);
 
     setWindowIcon(QIcon::fromTheme(AppSupport::getAppName()));
 
@@ -326,6 +329,10 @@ MainWindow::MainWindow(Document& document,
     mCanvasToolBar->addWidget(workspaceLayoutCombo);
 
     statusBar()->addPermanentWidget(mCanvasToolBar);
+
+    mColorPickLabel = new QLabel(this);
+    mColorPickLabel->setVisible(false);
+    statusBar()->addWidget(mColorPickLabel);
 
     // final layout
     mUI = new UILayout(this);
@@ -1349,6 +1356,11 @@ void MainWindow::updateCanvasModeButtonsChecked()
     mToolBoxDraw->setEnabled(drawMode);
     mToolBoxDraw->setVisible(drawMode);
     mLocalPivotAct->setEnabled(pointMode || boxMode);
+
+    if (mColorPickLabel) {
+        mColorPickLabel->clear();
+        mColorPickLabel->setVisible(mode == CanvasMode::pickFillStroke);
+    }
 }
 
 void MainWindow::setResolutionValue(const qreal value)
@@ -2090,4 +2102,18 @@ void MainWindow::handleNewVideoClip(const VideoBox::VideoSpecs &specs)
     // open dialog if ask
     AdjustSceneDialog dialog(scene, specs, this);
     dialog.exec();
- }
+}
+
+void MainWindow::handleCurrentPixelColor(const QColor &color)
+{
+    if (!color.isValid()) {
+        mColorPickLabel->clear();
+        return;
+    }
+    mColorPickLabel->setText(QString("&nbsp;&nbsp;<span style=\"background-color: %4;\">"
+                                     "&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;"
+                                     "<b>RGB</b> %1, %2, %3").arg(QString::number(color.redF()),
+                                                                  QString::number(color.greenF()),
+                                                                  QString::number(color.blueF()),
+                                                                  color.name()));
+}

@@ -215,6 +215,8 @@ private:
 
     void handleNewVideoClip(const VideoBox::VideoSpecs &specs);
 
+    void handleCurrentPixelColor(const QColor &color);
+
     TimelineDockWidget *mTimeline;
     RenderWidget *mRenderWidget;
 
@@ -379,6 +381,8 @@ private:
 
     void initRenderPresets(const bool reinstall = false);
     void askInstallRenderPresets();
+
+    QLabel *mColorPickLabel;
 
 protected:
     void keyPressEvent(QKeyEvent *event);

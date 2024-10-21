@@ -70,13 +70,18 @@ void Canvas::mousePressEvent(const eMouseEvent &e) {
     }
 }
 
-void Canvas::mouseMoveEvent(const eMouseEvent &e) {
-    if(mStylusDrawing) return;
-    if(isPreviewingOrRendering()) return;
+void Canvas::mouseMoveEvent(const eMouseEvent &e)
+{
+    if (mStylusDrawing) { return; }
+    if (isPreviewingOrRendering()) { return; }
 
     const bool leftPressed = e.fButtons & Qt::LeftButton;
 
-    if(!leftPressed && !e.fMouseGrabbing) {
+    if (!leftPressed && !e.fMouseGrabbing) {
+        if (mCurrentMode == CanvasMode::pickFillStroke) {
+            emit currentHoverColor(pickPixelColor(e.fGlobalPos));
+            return;
+        }
         const auto lastHoveredBox = mHoveredBox;
         const auto lastHoveredPoint = mHoveredPoint_d;
         const auto lastNSegment = mHoveredNormalSegment;
@@ -153,17 +158,25 @@ void Canvas::mouseMoveEvent(const eMouseEvent &e) {
         e.fGrabMouse();
 }
 
-void Canvas::mouseReleaseEvent(const eMouseEvent &e) {
-    if(isPreviewingOrRendering()) return;
-    if(e.fButton == Qt::RightButton) {
-        if(mCurrentMode == CanvasMode::paint) {
-        } else if(mCurrentMode == CanvasMode::drawPath) {
+void Canvas::mouseReleaseEvent(const eMouseEvent &e)
+{
+    if (isPreviewingOrRendering()) { return; }
+    if (e.fButton == Qt::RightButton) {
+        switch(mCurrentMode) {
+        case CanvasMode::paint:
+            break;
+        case CanvasMode::drawPath:
             drawPathClear();
-        } else {
+            break;
+        case CanvasMode::pickFillStroke:
+            emit currentPickedColor(QColor());
+            emit currentHoverColor(QColor());
+            break;
+        default:
             handleRightButtonMouseRelease(e);
         }
     }
-    if(e.fButton != Qt::LeftButton) return;
+    if (e.fButton != Qt::LeftButton) { return; }
     schedulePivotUpdate();
     /*if(mCurrentMode == CanvasMode::paint) {
         const auto paintMode = mDocument.fPaintMode;

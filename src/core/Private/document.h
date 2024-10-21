@@ -214,6 +214,7 @@ signals:
     void openExpressionDialog(QrealAnimator* const target);
     void openApplyExpressionDialog(QrealAnimator* const target);
     void newVideo(const VideoBox::VideoSpecs specs);
+    void currentPixelColor(const QColor &color);
 };
 
 #endif // DOCUMENT_H
