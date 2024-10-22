@@ -128,6 +128,7 @@ void CanvasWindow::setCanvasMode(const CanvasMode mode)
         setCursor(Qt::ArrowCursor);
         break;
     case CanvasMode::pickFillStroke:
+    case CanvasMode::pickFillStrokeEvent:
         setCursor(Qt::PointingHandCursor);
         break;
     case CanvasMode::circleCreate:

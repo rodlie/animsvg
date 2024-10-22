@@ -243,7 +243,8 @@ void Canvas::handleLeftButtonMousePress(const eMouseEvent& e) {
             drawPathClear();
             mDrawPath.lineTo(e.fPos);
         }
-    } else if(mCurrentMode == CanvasMode::pickFillStroke) {
+    } else if (mCurrentMode == CanvasMode::pickFillStroke ||
+               mCurrentMode == CanvasMode::pickFillStrokeEvent) {
         //mPressedBox = getBoxAtFromAllDescendents(e.fPos);
     } else if(mCurrentMode == CanvasMode::circleCreate) {
         const auto newPath = enve::make_shared<Circle>();
@@ -302,7 +303,8 @@ void Canvas::cancelCurrentTransform() {
         }
     } else if(mCurrentMode == CanvasMode::pathCreate) {
 
-    } else if(mCurrentMode == CanvasMode::pickFillStroke) {
+    } else if (mCurrentMode == CanvasMode::pickFillStroke ||
+               mCurrentMode == CanvasMode::pickFillStrokeEvent) {
         //mCanvasWindow->setCanvasMode(MOVE_PATH);
     }
     mValueInput.clearAndDisableInput();
@@ -574,7 +576,7 @@ void Canvas::handleLeftMouseRelease(const eMouseEvent &e) {
         } else {
             drawPathFinish(1/e.fScale);
         }
-    } else if(mCurrentMode == CanvasMode::pickFillStroke) {
+    } else if (mCurrentMode == CanvasMode::pickFillStrokeEvent) {
         emit currentPickedColor(pickPixelColor(e.fGlobalPos));
     }
     mValueInput.clearAndDisableInput();

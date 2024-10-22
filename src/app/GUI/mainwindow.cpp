@@ -1359,7 +1359,8 @@ void MainWindow::updateCanvasModeButtonsChecked()
 
     if (mColorPickLabel) {
         mColorPickLabel->clear();
-        mColorPickLabel->setVisible(mode == CanvasMode::pickFillStroke);
+        mColorPickLabel->setVisible(mode == CanvasMode::pickFillStroke ||
+                                    mode == CanvasMode::pickFillStrokeEvent);
     }
 }
 

@@ -286,7 +286,7 @@ void ColorSettingsWidget::startColorPicking()
     const auto scene = *Document::sInstance->fActiveScene;
     if (!scene) { return; }
     CanvasMode lastMode = Document::sInstance->fCanvasMode;
-    Document::sInstance->setCanvasMode(CanvasMode::pickFillStroke);
+    Document::sInstance->setCanvasMode(CanvasMode::pickFillStrokeEvent);
     auto conn = std::make_shared<QMetaObject::Connection>();
     *conn = connect(scene, &Canvas::currentPickedColor,
                     this, [this, conn, lastMode](const QColor &color) {
