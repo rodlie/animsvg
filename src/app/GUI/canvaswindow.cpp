@@ -312,6 +312,9 @@ void CanvasWindow::mouseMoveEvent(QMouseEvent *event)
 
 void CanvasWindow::wheelEvent(QWheelEvent *event)
 {
+#ifdef Q_OS_MAC
+    if (event->angleDelta().y() == 0) { return; }
+#endif
     if (!mCurrentCanvas) { return; }
     const auto ePos = event->position();
     if (event->angleDelta().y() > 0) {
