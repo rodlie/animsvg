@@ -66,7 +66,8 @@ public:
     PaintType getPaintType() const;
     Gradient *getGradient() const;
     void setGradient(Gradient *gradient);
-    void setCurrentColor(const QColor &color);
+    void setCurrentColor(const QColor &color,
+                         const bool &history = false);
     ColorAnimator *getColorAnimator();
     void setGradientPointsPos(const QPointF& pt1, const QPointF& pt2);
 
