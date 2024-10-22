@@ -737,6 +737,8 @@ private:
     void drawPathFinish(const qreal invScale);
 
     const QColor pickPixelColor(const QPoint &pos);
+    void applyPixelColor(const QColor &color,
+                         const bool &fill);
 
     qreal mLastDRot = 0;
     int mRotHalfCycles = 0;
