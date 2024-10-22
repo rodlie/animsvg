@@ -78,7 +78,8 @@ void Canvas::mouseMoveEvent(const eMouseEvent &e)
     const bool leftPressed = e.fButtons & Qt::LeftButton;
 
     if (!leftPressed && !e.fMouseGrabbing) {
-        if (mCurrentMode == CanvasMode::pickFillStroke) {
+        if (mCurrentMode == CanvasMode::pickFillStroke ||
+            mCurrentMode == CanvasMode::pickFillStrokeEvent) {
             emit currentHoverColor(pickPixelColor(e.fGlobalPos));
             return;
         }
@@ -169,6 +170,9 @@ void Canvas::mouseReleaseEvent(const eMouseEvent &e)
             drawPathClear();
             break;
         case CanvasMode::pickFillStroke:
+            applyPixelColor(pickPixelColor(e.fGlobalPos), false);
+            break;
+        case CanvasMode::pickFillStrokeEvent:
             emit currentPickedColor(QColor());
             emit currentHoverColor(QColor());
             break;
@@ -177,6 +181,11 @@ void Canvas::mouseReleaseEvent(const eMouseEvent &e)
         }
     }
     if (e.fButton != Qt::LeftButton) { return; }
+    if (e.fButton == Qt::LeftButton &&
+        mCurrentMode == CanvasMode::pickFillStroke) {
+        applyPixelColor(pickPixelColor(e.fGlobalPos), true);
+        return;
+    }
     schedulePivotUpdate();
     /*if(mCurrentMode == CanvasMode::paint) {
         const auto paintMode = mDocument.fPaintMode;

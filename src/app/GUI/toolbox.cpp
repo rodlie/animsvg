@@ -265,7 +265,8 @@ void MainWindow::setupToolBoxMain()
             &Document::canvasModeSet,
             this,
             [this, pickModeAct]() {
-                if (mDocument.fCanvasMode == CanvasMode::pickFillStroke) {
+                if (mDocument.fCanvasMode == CanvasMode::pickFillStroke ||
+                    mDocument.fCanvasMode == CanvasMode::pickFillStrokeEvent) {
                     pickModeAct->setChecked(true);
                 }
             });

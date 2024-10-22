@@ -56,7 +56,8 @@ enum class CanvasMode : short {
     textCreate,
 
     nullCreate,
-    pickFillStroke
+    pickFillStroke,
+    pickFillStrokeEvent
 };
 
 enum class UpdateReason {

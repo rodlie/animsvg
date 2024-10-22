@@ -386,7 +386,17 @@ void PaintSettingsAnimator::setGradient(Gradient* gradient) {
     setGradientVar(gradient);
 }
 
-void PaintSettingsAnimator::setCurrentColor(const QColor &color) {
+void PaintSettingsAnimator::setCurrentColor(const QColor &color,
+                                            const bool &history)
+{
+    if (history) {
+        UndoRedo ur;
+        const auto oldValue = mColor->getColor();
+        const auto newValue = color;
+        ur.fUndo = [this, oldValue]() { setCurrentColor(oldValue); };
+        ur.fRedo = [this, newValue]() { setCurrentColor(newValue); };
+        prp_addUndoRedo(ur);
+    }
     mColor->setColor(color);
 }
 
