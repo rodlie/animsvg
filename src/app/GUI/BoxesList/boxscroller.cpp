@@ -62,7 +62,7 @@ void BoxScroller::paintEvent(QPaintEvent *) {
     }
 
     if(mDropTarget.isValid()) {
-        p.setPen(QPen(Qt::white, 2));
+        p.setPen(QPen(ThemeSupport::getThemeColorWhite(), 2));
         p.drawRect(mCurrentDragRect);
     }
 

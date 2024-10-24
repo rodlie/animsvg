@@ -38,7 +38,7 @@
 const QList<QColor> ANIMATOR_COLORS = {ThemeSupport::getThemeColorRed(),
                                        ThemeSupport::getThemeColorBlue(),
                                        ThemeSupport::getThemeColorYellow(),
-                                       ThemeSupport::getThemeColorPink(),
+                                       ThemeSupport::getThemeColorPurple(),
                                        ThemeSupport::getThemeColorGreen()};
 
 class Key;

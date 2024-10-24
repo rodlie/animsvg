@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
     splash.show();
     splash.raise();
     splash.showMessage(QObject::tr("Loading ..."),
-                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+                       Qt::AlignLeft | Qt::AlignBottom, ThemeSupport::getThemeColorWhite());
 
     // init hardware
 #ifdef Q_OS_WIN
@@ -205,7 +205,7 @@ int main(int argc, char *argv[])
 
     splash.raise();
     splash.showMessage(QObject::tr("Initializing ..."),
-                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+                       Qt::AlignLeft | Qt::AlignBottom, ThemeSupport::getThemeColorWhite());
 
     // load settings
     try { settings.loadFromFile(); }
@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
     // init shaders
     splash.raise();
     splash.showMessage(QObject::tr("Loading Shaders ..."),
-                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+                       Qt::AlignLeft | Qt::AlignBottom, ThemeSupport::getThemeColorWhite());
     try {
         effectsLoader.iniShaderEffects();
     } catch(const std::exception& e) {
@@ -268,7 +268,7 @@ int main(int argc, char *argv[])
     // init audio
     splash.raise();
     splash.showMessage(QObject::tr("Loading Audio ..."),
-                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+                       Qt::AlignLeft | Qt::AlignBottom, ThemeSupport::getThemeColorWhite());
     eSoundSettings soundSettings;
     AudioHandler audioHandler;
 
@@ -285,7 +285,7 @@ int main(int argc, char *argv[])
     // init encoder
     splash.raise();
     splash.showMessage(QObject::tr("Loading Encoder ..."),
-                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+                       Qt::AlignLeft | Qt::AlignBottom, ThemeSupport::getThemeColorWhite());
     const auto videoEncoder = enve::make_shared<VideoEncoder>();
     RenderHandler renderHandler(document, audioHandler,
                                 *videoEncoder, memoryHandler);
@@ -295,7 +295,7 @@ int main(int argc, char *argv[])
 
     splash.raise();
     splash.showMessage(QObject::tr("Loading User Interface ..."),
-                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+                       Qt::AlignLeft | Qt::AlignBottom, ThemeSupport::getThemeColorWhite());
 
     // load UI
     const QString openProject = argc > 1 ? argv[1] : QString();

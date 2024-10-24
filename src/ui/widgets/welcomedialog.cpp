@@ -120,7 +120,7 @@ WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
 void WelcomeDialog::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
-    p.fillRect(0, 0, width(), height(), Qt::black);
+    p.fillRect(0, 0, width(), height(), ThemeSupport::getThemeColorBlack());
     p.end();
 }
 

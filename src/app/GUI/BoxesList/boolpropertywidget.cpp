@@ -81,7 +81,7 @@ void BoolPropertyWidget::paintEvent(QPaintEvent *) {
         value = mTarget->getValue();
     }
     if(value) {
-        p.setPen(QPen(Qt::white, 2.));
+        p.setPen(QPen(ThemeSupport::getThemeColorWhite(), 2.));
         p.drawLine(QPoint(6, height()/2), QPoint(width()/2, height() - 6));
         p.drawLine(QPoint(width()/2, height() - 6), QPoint(width() - 6, 6));
     }

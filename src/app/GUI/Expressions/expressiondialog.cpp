@@ -163,7 +163,7 @@ public:
         setUnmatchedBraceBackgroundColor(QColor(33, 33, 38)/*"#555555"*/);
         setMatchedBraceForegroundColor("#D6CF9A");
         setUnmatchedBraceForegroundColor(QColor(255, 115, 115));
-        setCaretForegroundColor(Qt::white);
+        setCaretForegroundColor(ThemeSupport::getThemeColorWhite());
         setCaretWidth(2);
 
         setAutoCompletionThreshold(1);

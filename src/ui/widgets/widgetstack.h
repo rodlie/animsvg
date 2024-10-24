@@ -36,6 +36,7 @@
 
 #include "GUI/global.h"
 #include "XML/xmlexporthelpers.h"
+#include "themesupport.h"
 
 #define STACK_TMPL_DEFS \
     int (QWidget::*DimGetter)() const, void (*DimSetter)(QWidget*, int), \
@@ -167,11 +168,11 @@ protected:
     void paintEvent(QPaintEvent *) {
         QPainter p(this);
         if(pressed()) {
-            p.fillRect(rect().adjusted(0, 3, 0, -4), Qt::black);
+            p.fillRect(rect().adjusted(0, 3, 0, -4), ThemeSupport::getThemeColorBlack());
         } else if(hover()) {
-            p.fillRect(rect().adjusted(0, 4, 0, -4), Qt::black);
+            p.fillRect(rect().adjusted(0, 4, 0, -4), ThemeSupport::getThemeColorBlack());
         } else {
-            p.fillRect(rect().adjusted(0, 5, 0, -4), Qt::black);
+            p.fillRect(rect().adjusted(0, 5, 0, -4), ThemeSupport::getThemeColorBlack());
         }
         p.end();
     }
@@ -211,11 +212,11 @@ protected:
     void paintEvent(QPaintEvent *) {
         QPainter p(this);
         if(pressed()) {
-            p.fillRect(rect().adjusted(3, 0, -4, 0), Qt::black);
+            p.fillRect(rect().adjusted(3, 0, -4, 0), ThemeSupport::getThemeColorBlack());
         } else if(hover()) {
-            p.fillRect(rect().adjusted(4, 0, -4, 0), Qt::black);
+            p.fillRect(rect().adjusted(4, 0, -4, 0), ThemeSupport::getThemeColorBlack());
         } else {
-            p.fillRect(rect().adjusted(5, 0, -4, 0), Qt::black);
+            p.fillRect(rect().adjusted(5, 0, -4, 0), ThemeSupport::getThemeColorBlack());
         }
         p.end();
     }

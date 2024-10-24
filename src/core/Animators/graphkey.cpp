@@ -26,6 +26,7 @@
 #include "graphkey.h"
 #include "qrealpoint.h"
 #include "animator.h"
+#include "themesupport.h"
 
 GraphKey::GraphKey(const int frame,
                    Animator * const parentAnimator) :
@@ -309,10 +310,10 @@ CtrlsMode GraphKey::getCtrlsMode() const {
 void GraphKey::drawGraphKey(QPainter *p, const QColor &paintColor) const {
     if(isSelected()) {
         p->save();
-        QPen pen(Qt::black, 1.5);
+        QPen pen(ThemeSupport::getThemeColorBlack(), 1.5);
         pen.setCosmetic(true);
 
-        QPen pen2(Qt::white, .75);
+        QPen pen2(ThemeSupport::getThemeColorWhite(), .75);
         pen2.setCosmetic(true);
 
         const QPointF thisPos(getAbsFrame(), getValueForGraph());

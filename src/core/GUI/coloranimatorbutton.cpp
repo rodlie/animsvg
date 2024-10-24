@@ -27,6 +27,8 @@
 #include "Animators/coloranimator.h"
 #include "colorsetting.h"
 #include "GUI/ewidgets.h"
+#include "themesupport.h"
+
 #include <QVBoxLayout>
 #include <QDialog>
 
@@ -69,7 +71,7 @@ void ColorAnimatorButton::paintEvent(QPaintEvent *) {
                 mColorTarget->getColor() : mColor;
     QPainter p(this);
     if(mHover) p.setPen(Qt::red);
-    else p.setPen(Qt::white);
+    else p.setPen(ThemeSupport::getThemeColorWhite());
     p.setBrush(color);
     p.drawRect(0, 0, width() - 1, height() - 1);
 }

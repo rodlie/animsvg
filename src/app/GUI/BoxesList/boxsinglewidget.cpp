@@ -824,9 +824,9 @@ void BoxSingleWidget::paintEvent(QPaintEvent *) {
             if (bsTarget->isSelected()) {
                 p.fillRect(mFillWidget->geometry(),
                            ThemeSupport::getThemeHighlightSelectedColor(50));
-                p.setPen(Qt::white);
+                p.setPen(ThemeSupport::getThemeColorWhite());
             } else {
-                p.setPen(Qt::white);
+                p.setPen(ThemeSupport::getThemeColorWhite());
             }
         } else if (enve_cast<BlendEffectBoxShadow*>(prop)) {
             p.fillRect(rect(), QColor(0, 255, 125, 50));
@@ -842,7 +842,7 @@ void BoxSingleWidget::paintEvent(QPaintEvent *) {
                     const int id = keysView->graphGetAnimatorId(graphAnim);
                     const auto color = id >= 0 ?
                                 keysView->sGetAnimatorColor(id) :
-                                QColor(Qt::black);
+                                QColor(ThemeSupport::getThemeColorBlack());
                     const QRect visRect(mVisibleButton->pos(),
                                         mVisibleButton->size());
                     const int adj = qRound(4*qreal(mVisibleButton->width())/20);

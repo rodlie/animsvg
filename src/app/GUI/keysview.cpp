@@ -556,7 +556,7 @@ void KeysView::paintEvent(QPaintEvent *) {
         }
     }
 
-    p.setPen(QPen(Qt::black, 1));
+    p.setPen(QPen(ThemeSupport::getThemeColorBlack(), 1));
 
     if(mGraphViewed) {
         p.save();
@@ -574,7 +574,7 @@ void KeysView::paintEvent(QPaintEvent *) {
         drawKeys(&p, mPixelsPerFrame, viewedFrameRange);
         p.restore();
         if(mSelecting) {
-            p.setPen(QPen(Qt::white, 1.5, Qt::DotLine));
+            p.setPen(QPen(ThemeSupport::getThemeColorWhite(), 1.5, Qt::DotLine));
             p.setBrush(Qt::NoBrush);
             p.drawRect(QRectF((mSelectionRect.x() - mMinViewedFrame)*mPixelsPerFrame,
                               mSelectionRect.y() - mViewedTop,

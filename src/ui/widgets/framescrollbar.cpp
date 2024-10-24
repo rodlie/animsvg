@@ -172,19 +172,19 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
                                      mFm.height());
             p.fillRect(rect, QBrush(col, Qt::SolidPattern));
             p.drawRect(rect);
-            p.setPen(Qt::black);
+            p.setPen(ThemeSupport::getThemeColorBlack());
             p.drawText(rect, Qt::AlignCenter, drawValue);
         }
 
         // draw minor
-        p.setPen(QPen(Qt::darkGray, 2));
+        p.setPen(QPen(ThemeSupport::getThemeColorDarkGray(), 2));
         for (int i = mMinFrame; i <= mMaxFrame; i += iInc) {
             const qreal xTT = xT + (i - mFrameRange.fMin + 1)*pixPerFrame;
             p.drawLine(QPointF(xTT, threeFourthsHeight + 6), QPointF(xTT, height()));
         }
 
         // draw main
-        p.setPen(QPen(Qt::white, 2));
+        p.setPen(QPen(ThemeSupport::getThemeColorWhite(), 2));
         p.translate(-(eSizesUI::widget/2), 0);
         bool timecode = mDisplayTime && mFps > 0;
         if (qAbs(pixPerFrame) > 0.11) {

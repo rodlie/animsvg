@@ -32,6 +32,7 @@
 #include "../interoptimalanimatort.h"
 #include "differsinterpolate.h"
 #include "smartpath.h"
+#include "themesupport.h"
 
 using SmartPathKey = InterpolationKeyT<SmartPath>;
 
@@ -138,7 +139,7 @@ private:
 
     SkPath mResultPath;
     Mode mMode = Mode::normal;
-    QColor mPathColor = Qt::white;
+    QColor mPathColor = ThemeSupport::getThemeColorWhite();
 };
 
 #endif // SMARTPATHANIMATOR_H

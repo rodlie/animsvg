@@ -63,9 +63,9 @@ void SavedColorButton::paintEvent(QPaintEvent *) {
         p.drawTiledPixmap(rect(), *ALPHA_MESH_PIX);
     }
     p.fillRect(rect(), mColor);
-    p.setPen(Qt::black);
+    p.setPen(ThemeSupport::getThemeColorBlack());
     p.drawRect(0, 0, width() - 1, height() - 1);
-    p.setPen(Qt::white);
+    p.setPen(ThemeSupport::getThemeColorWhite());
     p.drawRect(3, 3, width() - 7, height() - 7);
     if(mSelected) {
         if(mHovered) {

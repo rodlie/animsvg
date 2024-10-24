@@ -28,7 +28,7 @@
 #include "Animators/complexanimator.h"
 #include "Animators/qpointfanimator.h"
 #include "Animators/coloranimator.h"
-
+#include "themesupport.h"
 #include "expressioneditor.h"
 
 ExpressionHighlighter::ExpressionHighlighter(
@@ -54,7 +54,7 @@ ExpressionHighlighter::ExpressionHighlighter(
 //    const auto propPathRegex = QRegularExpression(propPath);
 
     mPropPathFormat.setFontWeight(QFont::Bold);
-    mPropPathFormat.setForeground(Qt::white);
+    mPropPathFormat.setForeground(ThemeSupport::getThemeColorWhite());
 //    rule.pattern = propPathRegex;
 //    rule.format = mPropPathFormat;
 //    mHighlightingRules.append(rule);

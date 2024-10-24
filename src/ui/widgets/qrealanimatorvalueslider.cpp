@@ -183,8 +183,8 @@ void QrealAnimatorValueSlider::paint(QPainter *p) {
             QDoubleSlider::paint(p,
                                  disabled ? ThemeSupport::getThemeButtonBaseColor(200) : ThemeSupport::getThemeHighlightAlternativeColor(),
                                  key ? (disabled ? ThemeSupport::getThemeAlternateColor() : ThemeSupport::getThemeHighlightSelectedColor()) : (disabled ? ThemeSupport::getThemeAlternateColor() : ThemeSupport::getThemeHighlightColor()),
-                                 key ? (disabled ? Qt::gray : ThemeSupport::getThemeHighlightSelectedColor()) : (disabled ? Qt::darkGray : ThemeSupport::getThemeButtonBorderColor()),
-                                 disabled ? Qt::darkGray : Qt::black);
+                                 key ? (disabled ? Qt::gray : ThemeSupport::getThemeHighlightSelectedColor()) : (disabled ? ThemeSupport::getThemeColorDarkGray() : ThemeSupport::getThemeButtonBorderColor()),
+                                 disabled ? ThemeSupport::getThemeColorDarkGray() : ThemeSupport::getThemeColorBlack());
         } else {
             QDoubleSlider::paint(p, !isTargetDisabled() && isEnabled());
         }

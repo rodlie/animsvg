@@ -131,7 +131,7 @@ void BoxTargetWidget::paintEvent(QPaintEvent *) {
     }
     p.drawRoundedRect(rect().adjusted(1, 1, -1, -1), 5., 5.);
 
-    p.setPen(Qt::white);
+    p.setPen(ThemeSupport::getThemeColorWhite());
     const auto target = mProperty->getTarget();
     if(!target) {
         p.drawText(rect(), Qt::AlignCenter, "-none-");

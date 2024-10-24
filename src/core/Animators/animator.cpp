@@ -554,8 +554,8 @@ void anim_drawKey(QPainter * const p,
     if(key->isSelected()) p->setBrush(selectedColor);
     else p->setBrush(color);
 
-    if(key->isHovered()) p->setPen(QPen(Qt::black, 1.5));
-    else p->setPen(QPen(Qt::black, 0.5));
+    if(key->isHovered()) p->setPen(QPen(ThemeSupport::getThemeColorBlack(), 1.5));
+    else p->setPen(QPen(ThemeSupport::getThemeColorBlack(), 0.5));
 
     const int frameRelToStart = key->getRelFrame() - startFrame;
     const QPointF keyCenter((frameRelToStart + 0.5)*pixelsPerFrame,

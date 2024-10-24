@@ -26,6 +26,7 @@
 #include "changewidthwidget.h"
 #include "GUI/global.h"
 #include "simplemath.h"
+#include "themesupport.h"
 
 #include <QMouseEvent>
 #include <QPainter>
@@ -45,11 +46,11 @@ void ChangeWidthWidget::updatePos() {
 void ChangeWidthWidget::paintEvent(QPaintEvent *) {
     QPainter p(this);
     if(mPressed) {
-        p.fillRect(rect().adjusted(3, 0, -4, 0), Qt::black);
+        p.fillRect(rect().adjusted(3, 0, -4, 0), ThemeSupport::getThemeColorBlack());
     } else if(mHover) {
-        p.fillRect(rect().adjusted(4, 0, -4, 0), Qt::black);
+        p.fillRect(rect().adjusted(4, 0, -4, 0), ThemeSupport::getThemeColorBlack());
     } else {
-        p.fillRect(rect().adjusted(5, 0, -4, 0), Qt::black);
+        p.fillRect(rect().adjusted(5, 0, -4, 0), ThemeSupport::getThemeColorBlack());
     }
     p.end();
 }

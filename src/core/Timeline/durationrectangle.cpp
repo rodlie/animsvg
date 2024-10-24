@@ -248,16 +248,16 @@ void DurationRectangle::draw(QPainter * const p,
 
     p->fillRect(durRect.adjusted(0, 1, 0, -1), fillColor);
     if (mHovered) {
-        p->setPen(QPen(Qt::white, .5));
+        p->setPen(QPen(ThemeSupport::getThemeColorWhite(), .5));
         p->drawRect(durRect);
     }
 
-    if (mMinFrame.isHovered()) { p->setPen(QPen(Qt::white)); }
-    else { p->setPen(QPen(Qt::black)); }
+    if (mMinFrame.isHovered()) { p->setPen(QPen(ThemeSupport::getThemeColorWhite())); }
+    else { p->setPen(QPen(ThemeSupport::getThemeColorBlack())); }
     p->drawLine(durRect.topLeft(), durRect.bottomLeft());
 
-    if (mMaxFrame.isHovered()) { p->setPen(QPen(Qt::white)); }
-    else { p->setPen(QPen(Qt::black)); }
+    if (mMaxFrame.isHovered()) { p->setPen(QPen(ThemeSupport::getThemeColorWhite())); }
+    else { p->setPen(QPen(ThemeSupport::getThemeColorBlack())); }
     p->drawLine(durRect.topRight(), durRect.bottomRight());
 
 //    p->setPen(Qt::black);

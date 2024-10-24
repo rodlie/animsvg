@@ -245,7 +245,7 @@ void Document::setBrush(BrushContexedWrapper * const brush) {
     }
     emit brushChanged(brush);
     emit brushSizeChanged(fBrush ? fBrush->getBrushSize() : 0.f);
-    emit brushColorChanged(fBrush ? fBrush->getColor() : Qt::white);
+    emit brushColorChanged(fBrush ? fBrush->getColor() : ThemeSupport::getThemeColorWhite());
 }
 
 void Document::setBrushColor(const QColor &color) {

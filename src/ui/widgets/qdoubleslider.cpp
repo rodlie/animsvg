@@ -193,8 +193,8 @@ void QDoubleSlider::setValueRange(const qreal min, const qreal max) {
 void QDoubleSlider::paint(QPainter * const p, const bool enabled) {
     paint(p, enabled ? ThemeSupport::getThemeButtonBaseColor() : ThemeSupport::getThemeAlternateColor(),
           enabled ? ThemeSupport::getThemeButtonBorderColor(150) : ThemeSupport::getThemeBaseColor(),
-          enabled ? ThemeSupport::getThemeButtonBorderColor() : Qt::darkGray,
-          enabled ? Qt::white : Qt::darkGray);
+          enabled ? ThemeSupport::getThemeButtonBorderColor() : ThemeSupport::getThemeColorDarkGray(),
+          enabled ? ThemeSupport::getThemeColorWhite() : ThemeSupport::getThemeColorDarkGray());
 }
 
 QString QDoubleSlider::valueToText(const qreal value) const {

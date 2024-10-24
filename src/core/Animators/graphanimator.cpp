@@ -27,6 +27,7 @@
 #include "graphkey.h"
 #include "qrealpoint.h"
 #include "svgexporthelpers.h"
+#include "themesupport.h"
 
 GraphAnimator::GraphAnimator(const QString& name) : Animator(name) {
     connect(this, &Animator::anim_addedKey, [this](Key * key) {
@@ -130,7 +131,7 @@ void GraphAnimator::graph_drawKeysPath(QPainter * const p,
     if(idRange.fMin == -1 || idRange.fMax == -1) return;
     p->save();
     p->translate(absFrameRange.fMin - relFrameRange.fMin, 0);
-    QPen pen(Qt::black, 4);
+    QPen pen(ThemeSupport::getThemeColorBlack(), 4);
     pen.setCosmetic(true);
     p->setPen(pen);
     for(int i = idRange.fMin; i <= idRange.fMax; i++) {
