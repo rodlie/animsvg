@@ -69,7 +69,7 @@ void CanvasWindow::resizeEvent(QResizeEvent *e)
     GLWindow::resizeEvent(e);
 }
 
-void CanvasWindow::fitCanvasToSize()
+void CanvasWindow::fitCanvasToSize(const bool &fitWidth)
 {
     if (mFitToSizeBlocked) {
         mFitToSizeBlocked = false;
@@ -83,7 +83,7 @@ void CanvasWindow::fitCanvasToSize()
     const qreal widHeight = height() * pixelRatio;
     const qreal widthScale = (widWidth - eSizesUI::widget) / canvasSize.width();
     const qreal heightScale = (widHeight - eSizesUI::widget) / canvasSize.height();
-    const qreal minScale = qMin(widthScale, heightScale);
+    const qreal minScale = fitWidth ? widthScale : qMin(widthScale, heightScale);
     translateView({(widWidth - canvasSize.width() * minScale) * 0.5,
                    (widHeight - canvasSize.height() * minScale) * 0.5});
     mViewTransform.scale(minScale, minScale);
@@ -92,7 +92,7 @@ void CanvasWindow::fitCanvasToSize()
 
 void CanvasWindow::zoomInView()
 {
-    if (!mCurrentCanvas) {  }return;
+    if (!mCurrentCanvas) { return; }
     const auto canvasSize = mCurrentCanvas->getCanvasSize();
     mViewTransform.translate(canvasSize.width() * 0.5, canvasSize.height() * 0.5);
     mViewTransform.scale(1.1, 1.1);
@@ -112,6 +112,12 @@ bool CanvasWindow::event(QEvent *e)
 {
     if (e->type() == QEvent::ShowToParent) { fitCanvasToSize(); }
     else if (e->type() == QEvent::Show) { KFT_setFocus(); }
+#ifdef Q_OS_MAC
+    if (e->type() == QEvent::NativeGesture) {
+        auto g = dynamic_cast<QNativeGestureEvent*>(e);
+        return handleNativeGestures(g);
+    }
+#endif
     return QWidget::event(e);
 }
 
