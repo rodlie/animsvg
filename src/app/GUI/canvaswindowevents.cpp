@@ -115,7 +115,11 @@ bool CanvasWindow::event(QEvent *e)
 #ifdef Q_OS_MAC
     if (e->type() == QEvent::NativeGesture) {
         auto g = dynamic_cast<QNativeGestureEvent*>(e);
-        return handleNativeGestures(g);
+        if (g->gestureType() == Qt::ZoomNativeGesture) {
+            return handleNativeGestures(g);
+        } else if (g->gestureType() == Qt::SmartZoomNativeGesture) {
+            handleNativeGestures(g);
+        }
     }
 #endif
     return QWidget::event(e);
