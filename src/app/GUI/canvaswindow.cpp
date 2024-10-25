@@ -577,8 +577,8 @@ bool CanvasWindow::handleSelectAllKeyPress(QKeyEvent* event)
 bool CanvasWindow::handleNativeGestures(QNativeGestureEvent *event)
 {
     if (!event || !mCurrentCanvas) { return false; }
-    const auto ePos = event->pos();
     if (event->gestureType() == Qt::ZoomNativeGesture) {
+        const auto ePos = event->localPos();
         if (event->value() == 0) { return false; }
         if (event->value() > 0) { zoomView(1.1, ePos); }
         else { zoomView(0.9, ePos); }
