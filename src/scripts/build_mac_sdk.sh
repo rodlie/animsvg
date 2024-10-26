@@ -475,4 +475,9 @@ if [ ! -f "${SDK}/lib/pkgconfig/libavcodec.pc" ]; then
      make install
 fi # ffmpeg
 
+(cd ${SDK}/lib ;
+install_name_tool -change libvpx.8.dylib @rpath/libvpx.8.dylib libavformat.58.dylib
+install_name_tool -change libvpx.8.dylib @rpath/libvpx.8.dylib libavcodec.58.dylib
+)
+
 echo "Friction macOS SDK done!"
