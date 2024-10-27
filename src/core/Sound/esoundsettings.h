@@ -35,7 +35,11 @@ extern "C" {
 #include "../core_global.h"
 
 struct CORE_EXPORT eSoundSettingsData {
+#ifdef Q_OS_MAC
+    int fSampleRate = 22050;
+#else
     int fSampleRate = 44100;
+#endif
     AVSampleFormat fSampleFormat = AV_SAMPLE_FMT_FLT;
     uint64_t fChannelLayout = AV_CH_LAYOUT_STEREO;
 
