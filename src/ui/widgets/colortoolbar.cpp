@@ -109,9 +109,9 @@ void ColorToolBar::setupWidgets(Document &document)
 
     mColorFillAct = new QAction(QIcon::fromTheme("color"),
                                 tr("Fill"), this);
-    mColorStrokeAct = new QAction(QIcon::fromTheme("color"),
+    mColorStrokeAct = new QAction(QIcon::fromTheme("color_stroke"),
                                   tr("Stroke"), this);
-    mColorBackgroundAct = new QAction(QIcon::fromTheme("color"),
+    mColorBackgroundAct = new QAction(QIcon::fromTheme("color_background"),
                                       tr("Background"), this);
 
     mColorFillAct->setToolTip(tr("Fill Color"));
