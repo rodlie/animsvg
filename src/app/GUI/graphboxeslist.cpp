@@ -482,7 +482,11 @@ void KeysView::graphDeletePressed() {
     mGPressedPoint = nullptr;
 }
 
-void KeysView::graphWheelEvent(QWheelEvent *event) {
+void KeysView::graphWheelEvent(QWheelEvent *event)
+{
+#ifdef Q_OS_MAC
+    if (event->angleDelta().y() == 0) { return; }
+#endif
     if(event->modifiers() & Qt::ControlModifier) {
         qreal valUnderMouse;
         qreal frame;

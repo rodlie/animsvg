@@ -1001,8 +1001,9 @@ void AppSupport::checkFFmpeg(const bool &isRenderer)
 
 void AppSupport::initEnv(const bool &isRenderer)
 {
+#if defined(Q_OS_WIN)
+    Q_UNUSED(isRenderer)
     // windows theme integration
-#ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
     // Set window title bar color based on dark/light theme
     // https://www.qt.io/blog/dark-mode-on-windows-11-with-qt-6.5
@@ -1011,12 +1012,14 @@ void AppSupport::initEnv(const bool &isRenderer)
                        QSettings::NativeFormat);
     if (registry.value("AppsUseLightTheme", 0).toInt() == 0) { qputenv("QT_QPA_PLATFORM", "windows:darkmode=1"); }
 #endif
-#else
+#elif defined(Q_OS_LINUX)
     if (isRenderer) { // Force Mesa if Renderer
         qputenv("LIBGL_ALWAYS_SOFTWARE", "1");
     }
     // Force XCB on Linux until we support Wayland
     qputenv("QT_QPA_PLATFORM", isRenderer ? "offscreen" : "xcb");
+#else
+    Q_UNUSED(isRenderer)
 #endif
 }
 

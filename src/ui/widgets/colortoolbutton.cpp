@@ -189,6 +189,9 @@ void ColorToolButton::mousePressEvent(QMouseEvent *e)
 
 void ColorToolButton::wheelEvent(QWheelEvent *e)
 {
+#ifdef Q_OS_MAC
+    if (e->angleDelta().y() == 0) { return; }
+#endif
     if (mColorTarget) {
         const bool ctrl = QGuiApplication::keyboardModifiers().testFlag(Qt::ControlModifier);
         const bool shift = QGuiApplication::keyboardModifiers().testFlag(Qt::ShiftModifier);

@@ -770,6 +770,11 @@ void Canvas::updatePivot()
 
 void Canvas::setCanvasMode(const CanvasMode mode)
 {
+    if (mCurrentMode == CanvasMode::pickFillStroke ||
+        mCurrentMode == CanvasMode::pickFillStrokeEvent) {
+        emit currentPickedColor(QColor());
+        emit currentHoverColor(QColor());
+    }
     mCurrentMode = mode;
     mSelecting = false;
     mStylusDrawing = false;

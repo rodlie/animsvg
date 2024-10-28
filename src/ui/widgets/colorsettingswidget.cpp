@@ -24,7 +24,6 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "colorsettingswidget.h"
-#include "widgets/colorpickingwidget.h"
 #include "colorhelpers.h"
 #include "widgets/colorlabel.h"
 #include "GUI/global.h"
@@ -32,6 +31,7 @@
 #include "appsupport.h"
 #include "Private/esettings.h"
 #include "Private/document.h"
+#include "canvas.h"
 
 #include <QResizeEvent>
 #include <QWindow>
@@ -283,12 +283,21 @@ void ColorSettingsWidget::moveAlphaWidgetToTab(const int tabId) {
 
 void ColorSettingsWidget::startColorPicking()
 {
-    const auto wid = new ColorPickingWidget(this->screen(), this);
-    connect(wid, &ColorPickingWidget::colorSelected,
-            [this](const QColor & color) {
-        emitStartFullColorChangedSignal();
-        setDisplayedColor(color);
-        emitFinishFullColorChangedSignal();
+    const auto scene = *Document::sInstance->fActiveScene;
+    if (!scene) { return; }
+    CanvasMode lastMode = Document::sInstance->fCanvasMode;
+    Document::sInstance->setCanvasMode(CanvasMode::pickFillStrokeEvent);
+    auto conn = std::make_shared<QMetaObject::Connection>();
+    *conn = connect(scene, &Canvas::currentPickedColor,
+                    this, [this, conn, lastMode](const QColor &color) {
+        qDebug() << "selected color" << color << color.isValid();
+        if (color.isValid()) {
+            emitStartFullColorChangedSignal();
+            setDisplayedColor(color);
+            emitFinishFullColorChangedSignal();
+        }
+        disconnect(*conn);
+        Document::sInstance->setCanvasMode(lastMode);
     });
 }
 

@@ -154,6 +154,7 @@ MainWindow::MainWindow(Document& document,
     , mViewFillStrokeAct(nullptr)
     , mRenderWindow(nullptr)
     , mRenderWindowAct(nullptr)
+    , mColorPickLabel(nullptr)
 {
     Q_ASSERT(!sInstance);
     sInstance = this;
@@ -188,6 +189,8 @@ MainWindow::MainWindow(Document& document,
             this, &MainWindow::openApplyExpressionDialog);
     connect(&mDocument, &Document::newVideo,
             this, &MainWindow::handleNewVideoClip);
+    connect(&mDocument, &Document::currentPixelColor,
+            this, &MainWindow::handleCurrentPixelColor);
 
     setWindowIcon(QIcon::fromTheme(AppSupport::getAppName()));
 
@@ -326,6 +329,10 @@ MainWindow::MainWindow(Document& document,
     mCanvasToolBar->addWidget(workspaceLayoutCombo);
 
     statusBar()->addPermanentWidget(mCanvasToolBar);
+
+    mColorPickLabel = new QLabel(this);
+    mColorPickLabel->setVisible(false);
+    statusBar()->addWidget(mColorPickLabel);
 
     // final layout
     mUI = new UILayout(this);
@@ -1045,13 +1052,19 @@ void MainWindow::setupMenuBar()
     });
 
     help->addSeparator();
+
+    QString cmdDefKey = "Ctrl+Space";
+#ifdef Q_OS_MAC
+    cmdDefKey = "Alt+Space";
+#endif
+
     help->addAction(QIcon::fromTheme("cmd"),
                     tr("Command Palette"), this, [this]() {
         CommandPalette dialog(mDocument, this);
         dialog.exec();
     }, QKeySequence(AppSupport::getSettings("shortcuts",
                                             "cmdPalette",
-                                            "Ctrl+Space").toString()));
+                                            cmdDefKey).toString()));
 
     help->addSeparator();
     help->addAction(QIcon::fromTheme("renderlayers"),
@@ -1075,6 +1088,7 @@ void MainWindow::setupMenuBar()
 
     setMenuBar(mMenuBar);
 
+#ifndef Q_OS_MAC
     const auto frictionButton = new QPushButton(this);
     frictionButton->setFlat(true);
     frictionButton->setIcon(QIcon::fromTheme(AppSupport::getAppID()));
@@ -1086,6 +1100,7 @@ void MainWindow::setupMenuBar()
 
     mMenuBar->setCornerWidget(frictionButton,
                               Qt::TopRightCorner);
+#endif
 }
 
 BoundingBox *MainWindow::getCurrentBox()
@@ -1325,8 +1340,11 @@ void MainWindow::setupToolBar()
     mToolbar->setFocusPolicy(Qt::NoFocus);
     mToolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     mToolbar->setMovable(false);
+#ifdef Q_OS_MAC
+    mToolbar->setStyleSheet(QString("font-size: %1pt;").arg(font().pointSize()));
+#endif
     eSizesUI::widget.add(mToolbar, [this](const int size) {
-        mToolbar->setIconSize(QSize(size, size));
+        mToolbar->setIconSize({size, size});
     });
     addToolBar(Qt::TopToolBarArea, mToolbar);
 }
@@ -1349,6 +1367,12 @@ void MainWindow::updateCanvasModeButtonsChecked()
     mToolBoxDraw->setEnabled(drawMode);
     mToolBoxDraw->setVisible(drawMode);
     mLocalPivotAct->setEnabled(pointMode || boxMode);
+
+    if (mColorPickLabel) {
+        mColorPickLabel->clear();
+        mColorPickLabel->setVisible(mode == CanvasMode::pickFillStroke ||
+                                    mode == CanvasMode::pickFillStrokeEvent);
+    }
 }
 
 void MainWindow::setResolutionValue(const qreal value)
@@ -2090,4 +2114,18 @@ void MainWindow::handleNewVideoClip(const VideoBox::VideoSpecs &specs)
     // open dialog if ask
     AdjustSceneDialog dialog(scene, specs, this);
     dialog.exec();
- }
+}
+
+void MainWindow::handleCurrentPixelColor(const QColor &color)
+{
+    if (!color.isValid()) {
+        mColorPickLabel->clear();
+        return;
+    }
+    mColorPickLabel->setText(QString("&nbsp;&nbsp;<span style=\"background-color: %4;\">"
+                                     "&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;"
+                                     "<b>RGB</b> %1, %2, %3").arg(QString::number(color.redF()),
+                                                                  QString::number(color.greenF()),
+                                                                  QString::number(color.blueF()),
+                                                                  color.name()));
+}

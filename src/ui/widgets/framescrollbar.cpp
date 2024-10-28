@@ -265,7 +265,11 @@ const QPair<bool, int> FrameScrollBar::getFrameOut()
     return {out.enabled, out.frame};
 }
 
-void FrameScrollBar::wheelEvent(QWheelEvent *event) {
+void FrameScrollBar::wheelEvent(QWheelEvent *event)
+{
+#ifdef Q_OS_MAC
+    if (event->angleDelta().y() == 0) { return; }
+#endif
     if(mRange) {
         if(event->modifiers() & Qt::CTRL) {
             if(event->angleDelta().y() > 0) {

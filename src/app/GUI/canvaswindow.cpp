@@ -128,6 +128,7 @@ void CanvasWindow::setCanvasMode(const CanvasMode mode)
         setCursor(Qt::ArrowCursor);
         break;
     case CanvasMode::pickFillStroke:
+    case CanvasMode::pickFillStrokeEvent:
         setCursor(Qt::PointingHandCursor);
         break;
     case CanvasMode::circleCreate:
@@ -311,6 +312,26 @@ void CanvasWindow::mouseMoveEvent(QMouseEvent *event)
 
 void CanvasWindow::wheelEvent(QWheelEvent *event)
 {
+#ifdef Q_OS_MAC
+    const bool alt = event->modifiers() & Qt::AltModifier;
+    if (!alt) { // handle event as pan gesture if not alt modifier
+        if (event->phase() == Qt::ScrollUpdate ||
+            event->phase() == Qt::ScrollMomentum) {
+            auto pos = mPrevMousePos;
+            if (event->angleDelta().y() != 0) {
+                pos.setY(pos.y() + event->angleDelta().y());
+            }
+            if (event->angleDelta().x() != 0) {
+                pos.setX(pos.x() + event->angleDelta().x());
+            }
+            translateView(pos - mPrevMousePos);
+            mPrevMousePos = pos;
+            update();
+        }
+        return;
+    }
+    if (event->angleDelta().y() == 0) { return; }
+#endif
     if (!mCurrentCanvas) { return; }
     const auto ePos = event->position();
     if (event->angleDelta().y() > 0) {
@@ -551,6 +572,23 @@ bool CanvasWindow::handleSelectAllKeyPress(QKeyEvent* event)
     } else { return false; }
     return true;
 }
+
+#ifdef Q_OS_MAC
+bool CanvasWindow::handleNativeGestures(QNativeGestureEvent *event)
+{
+    if (!event || !mCurrentCanvas) { return false; }
+    if (event->gestureType() == Qt::ZoomNativeGesture) {
+        const auto ePos = event->localPos();
+        if (event->value() == 0) { return false; }
+        if (event->value() > 0) { zoomView(1.1, ePos); }
+        else { zoomView(0.9, ePos); }
+        update();
+    } else if (event->gestureType() == Qt::SmartZoomNativeGesture) {
+        fitCanvasToSize(event->value() == 0 ? true : false);
+    } else { return false; }
+    return true;
+}
+#endif
 
 // This does nothing ...
 /*bool CanvasWindow::handleShiftKeysKeyPress(QKeyEvent* event) {

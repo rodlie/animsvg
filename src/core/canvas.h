@@ -450,6 +450,8 @@ signals:
     void openMarkerEditor();
     void openExpressionDialog(QrealAnimator* const target);
     void openApplyExpressionDialog(QrealAnimator* const target);
+    void currentPickedColor(const QColor &color);
+    void currentHoverColor(const QColor &color);
 
 public:
     void makePointCtrlsSymmetric();
@@ -733,6 +735,10 @@ private:
 
     void drawPathClear();
     void drawPathFinish(const qreal invScale);
+
+    const QColor pickPixelColor(const QPoint &pos);
+    void applyPixelColor(const QColor &color,
+                         const bool &fill);
 
     qreal mLastDRot = 0;
     int mRotHalfCycles = 0;

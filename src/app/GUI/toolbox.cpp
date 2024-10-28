@@ -248,8 +248,8 @@ void MainWindow::setupToolBoxMain()
     mToolBoxGroupMain->addAction(nullModeAct);
 
     // pickMode
-    /*QAction *pickModeAct = new QAction(QIcon::fromTheme("pick"),
-                                       tr("Pick Mode"),
+    QAction *pickModeAct = new QAction(QIcon::fromTheme("pick"),
+                                       tr("Color Pick Mode"),
                                        this);
     pickModeAct->setCheckable(true);
     pickModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
@@ -265,11 +265,13 @@ void MainWindow::setupToolBoxMain()
             &Document::canvasModeSet,
             this,
             [this, pickModeAct]() {
-                if (mDocument.fCanvasMode == CanvasMode::pickFillStroke) {
+                if (mDocument.fCanvasMode == CanvasMode::pickFillStroke ||
+                    mDocument.fCanvasMode == CanvasMode::pickFillStrokeEvent) {
                     pickModeAct->setChecked(true);
                 }
             });
-    mToolBoxGroupMain->addAction(pickModeAct);*/
+
+    mToolBoxGroupMain->addAction(pickModeAct);
 
     mToolBoxMain->addActions(mToolBoxGroupMain->actions());
 
