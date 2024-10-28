@@ -879,6 +879,18 @@ void MainWindow::setupMenuBar()
     });
     cmdAddAction(mFitViewAction);
 
+    const auto fitViewWidth = zoomMenu->addAction(QIcon::fromTheme("zoom_all"),
+                                                  tr("Fit to Canvas Width"));
+    fitViewWidth->setShortcut(QKeySequence("Ctrl+9"));
+    connect(fitViewWidth, &QAction::triggered,
+            this, []() {
+        const auto target = KeyFocusTarget::KFT_getCurrentTarget();
+        const auto cwTarget = dynamic_cast<CanvasWindow*>(target);
+        if (!cwTarget) { return; }
+        cwTarget->fitCanvasToSize(true);
+    });
+    cmdAddAction(fitViewWidth);
+
     mResetZoomAction = zoomMenu->addAction(tr("Reset Zoom", "MenuBar_View_Zoom"));
     mResetZoomAction->setShortcut(QKeySequence("Ctrl+1"));
     connect(mResetZoomAction, &QAction::triggered,
