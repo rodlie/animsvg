@@ -91,10 +91,10 @@ void MemoryChecker::sGetFreeKB(intKB& procFreeKB, intKB& sysFreeKB)
     const longB availPhysB(statex.ullAvailPhys);
     freeExternal = intKB(availPhysB);
 #elif defined(Q_OS_UNIX)
-    size_t physical_memory_used = 0;
     size_t bytes_in_use_by_app = 0;
 #if defined(Q_OS_LINUX)
-    size_t virtual_memory_used = 0;
+    size_t physical_memory_used;
+    size_t virtual_memory_used;
     MallocExtension::instance()->eMemoryStats(&virtual_memory_used,
                                               &physical_memory_used,
                                               &bytes_in_use_by_app);
@@ -109,8 +109,8 @@ void MemoryChecker::sGetFreeKB(intKB& procFreeKB, intKB& sysFreeKB)
 
     enveUsedB = longB(static_cast<qint64>(bytes_in_use_by_app));
 
-    freeInternal = physical_memory_used - bytes_in_use_by_app;
 #if defined(Q_OS_LINUX)
+        freeInternal = physical_memory_used - bytes_in_use_by_app;
         int found = 0;
         FILE * const meminfo = fopen("/proc/meminfo", "r");
         if (!meminfo) { RuntimeThrow("Failed to open /proc/meminfo"); }
@@ -145,6 +145,7 @@ void MemoryChecker::sGetFreeKB(intKB& procFreeKB, intKB& sysFreeKB)
     }
 
     sysFreeKB = intKB(longB(freeInternal)) + freeExternal;
+    //qDebug() << "Free" << intMB(sysFreeKB).fValue << "Used" << intMB(enveUsedKB).fValue;
 
 #if defined(Q_OS_LINUX)
     const qint64 releaseBytes = 500L*1024L*1024L;
