@@ -421,6 +421,48 @@ void QDoubleSlider::mouseMoveEvent(QMouseEvent *event) {
     Document::sInstance->updateScenes();
 }
 
+#ifdef Q_OS_MAC
+void QDoubleSlider::wheelEvent(QWheelEvent *event)
+{
+    //qDebug() << event->phase() << event->angleDelta().x() << event->angleDelta().y();
+    event->accept();
+
+    if (event->phase() == Qt::NoScrollPhase) {
+        mLastValue = mValue;
+        startTransform(mLastValue);
+
+        const bool up = event->angleDelta().y() > 0;
+        const qreal step = 0.1 * (up ? 10 : -10) * mPrefferedValueStep;
+
+        mLastValue = clamped(mLastValue + step);
+        setValue(mLastValue);
+        Document::sInstance->updateScenes();
+
+        finishTransform(mLastValue);
+        Document::sInstance->actionFinished();
+        return;
+    }
+
+    if (event->phase() == Qt::ScrollBegin) {
+        mLastValue = mValue;
+        startTransform(mLastValue);
+        return;
+    } else if (event->phase() == Qt::ScrollEnd) {
+        finishTransform(mLastValue);
+        Document::sInstance->actionFinished();
+        return;
+    }
+    if (event->angleDelta().x() == 0 ||
+        (event->phase() != Qt::ScrollUpdate &&
+         event->phase() != Qt::ScrollMomentum)) { return; }
+
+    const qreal step = 0.1 * event->angleDelta().x() * mPrefferedValueStep;
+    mLastValue = clamped(mLastValue + step);
+    setValue(mLastValue);
+    Document::sInstance->updateScenes();
+}
+#endif
+
 void QDoubleSlider::enterEvent(QEvent *)
 {
     mHovered = true;

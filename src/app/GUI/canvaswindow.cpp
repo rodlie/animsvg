@@ -314,7 +314,7 @@ void CanvasWindow::wheelEvent(QWheelEvent *event)
 {
 #ifdef Q_OS_MAC
     const bool alt = event->modifiers() & Qt::AltModifier;
-    if (!alt) { // handle event as pan gesture if not alt modifier
+    if (!alt && event->phase() != Qt::NoScrollPhase) {
         if (event->phase() == Qt::ScrollUpdate ||
             event->phase() == Qt::ScrollMomentum) {
             auto pos = mPrevMousePos;
@@ -330,7 +330,8 @@ void CanvasWindow::wheelEvent(QWheelEvent *event)
         }
         return;
     }
-    if (event->angleDelta().y() == 0) { return; }
+    if (event->angleDelta().y() == 0 &&
+        event->phase() != Qt::NoScrollPhase) { return; }
 #endif
     if (!mCurrentCanvas) { return; }
     const auto ePos = event->position();

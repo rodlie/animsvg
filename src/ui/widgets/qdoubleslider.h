@@ -32,6 +32,10 @@
 #include <QLineEdit>
 #include <QDoubleValidator>
 
+#ifdef Q_OS_MAC
+#include <QWheelEvent>
+#endif
+
 class UI_EXPORT SliderEdit : public QLineEdit {
     Q_OBJECT
 public:
@@ -108,6 +112,10 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
+
+#ifdef Q_OS_MAC
+    void wheelEvent(QWheelEvent *event);
+#endif
 
     void enterEvent(QEvent *);
     void leaveEvent(QEvent *);
