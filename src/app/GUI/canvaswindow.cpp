@@ -578,7 +578,7 @@ bool CanvasWindow::handleNativeGestures(QNativeGestureEvent *event)
 {
     if (!event || !mCurrentCanvas) { return false; }
     if (event->gestureType() == Qt::ZoomNativeGesture) {
-        const auto ePos = event->localPos();
+        const auto ePos = mapFromGlobal(event->globalPos());
         if (event->value() == 0) { return false; }
         if (event->value() > 0) { zoomView(1.1, ePos); }
         else { zoomView(0.9, ePos); }
