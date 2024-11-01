@@ -505,14 +505,14 @@ QCheckBox::indicator:hover:unchecked {
 
 QTreeView::indicator:checked,
 QCheckBox::indicator:checked {
-    image: url(:/icons/hicolor/%11x%11/actions/dialog-ok.png);
+    image: url(:/icons/hicolor/%11x%11/friction/box-checked.png);
     width: %7px;
     height: %7px;
 }
 
 QTreeView::indicator:unchecked,
 QCheckBox::indicator:unchecked {
-    image: url(:/icons/hicolor/%11x%11/actions/dialog-cancel.png);
+    image: url(:/icons/hicolor/%11x%11/friction/box-unchecked.png);
     width: %7px;
     height: %7px;
 }
@@ -532,19 +532,19 @@ QMenu::item {
 }
 
 QMenu::indicator:non-exclusive:unchecked {
-    image: url(:/icons/hicolor/%11x%11/actions/dialog-cancel.png);
+    image: url(:/icons/hicolor/%11x%11/friction/box-unchecked.png);
 }
 
 QMenu::indicator:non-exclusive:unchecked:selected {
-    image: url(:/icons/hicolor/%11x%11/actions/dialog-cancel.png);
+    image: url(:/icons/hicolor/%11x%11/friction/box-unchecked.png);
 }
 
 QMenu::indicator:non-exclusive:checked {
-    image: url(:/icons/hicolor/%11x%11/actions/dialog-ok.png);
+    image: url(:/icons/hicolor/%11x%11/friction/box-checked.png);
 }
 
 QMenu::indicator:non-exclusive:checked:selected {
-    image: url(:/icons/hicolor/%11x%11/actions/dialog-ok.png);
+    image: url(:/icons/hicolor/%11x%11/friction/box-checked.png);
 }
 
 QProgressBar {
