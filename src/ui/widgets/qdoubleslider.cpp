@@ -425,14 +425,18 @@ void QDoubleSlider::mouseMoveEvent(QMouseEvent *event) {
 void QDoubleSlider::wheelEvent(QWheelEvent *event)
 {
     //qDebug() << event->inverted() << event->phase() << event->angleDelta().x() << event->angleDelta().y();
-    event->accept();
 
-    if (event->phase() == Qt::NoScrollPhase) {
+
+    const bool alt = event->modifiers() & Qt::AltModifier;
+    const bool ctrl = event->modifiers() & Qt::ControlModifier;
+
+    if (event->phase() == Qt::NoScrollPhase && (alt || ctrl)) {
+        event->accept();
         mLastValue = mValue;
         startTransform(mLastValue);
 
         const bool up = event->angleDelta().y() > 0;
-        const qreal step = 0.1 * (up ? 10 : -10) * mPrefferedValueStep;
+        const qreal step = 0.1 * (up ? (ctrl ? 50 : 10) : (ctrl ? -50 : -10)) * mPrefferedValueStep;
 
         mLastValue = clamped(mLastValue + step);
         setValue(mLastValue);
@@ -444,10 +448,12 @@ void QDoubleSlider::wheelEvent(QWheelEvent *event)
     }
 
     if (event->phase() == Qt::ScrollBegin) {
+        event->accept();
         mLastValue = mValue;
         startTransform(mLastValue);
         return;
     } else if (event->phase() == Qt::ScrollEnd) {
+        event->accept();
         finishTransform(mLastValue);
         Document::sInstance->actionFinished();
         return;
@@ -456,6 +462,7 @@ void QDoubleSlider::wheelEvent(QWheelEvent *event)
         (event->phase() != Qt::ScrollUpdate &&
          event->phase() != Qt::ScrollMomentum)) { return; }
 
+    event->accept();
     const qreal step = 0.1 * (event->inverted() ?
                                   event->angleDelta().x() :
                                   -event->angleDelta().x()) * mPrefferedValueStep;
