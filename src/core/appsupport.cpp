@@ -492,7 +492,7 @@ const QString AppSupport::getRasterEffectHardwareSupportString(const QString &ef
 
 const QByteArray AppSupport::filterShader(QByteArray data)
 {
-#ifdef Q_OS_WIN
+#ifndef Q_OS_LINUX
     if (HardwareInfo::sGpuVendor() == GpuVendor::intel) {
         return data.replace("texture2D", "texture");
     }
