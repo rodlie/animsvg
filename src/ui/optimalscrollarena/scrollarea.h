@@ -29,6 +29,9 @@
 #include "ui_global.h"
 
 #include <QScrollArea>
+#ifdef Q_OS_MAC
+#include <QWheelEvent>
+#endif
 
 class UI_EXPORT ScrollArea : public QScrollArea
 {
@@ -46,6 +49,9 @@ signals:
 
 protected:
     void resizeEvent(QResizeEvent *e);
+#ifdef Q_OS_MAC
+    void wheelEvent(QWheelEvent *event);
+#endif
 
 private:
     int mLastHeight = 0;

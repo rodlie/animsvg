@@ -27,6 +27,8 @@
 #include <QResizeEvent>
 #include <QScrollBar>
 
+#include "GUI/global.h"
+
 ScrollArea::ScrollArea(QWidget * const parent) : QScrollArea(parent) {
     setFocusPolicy(Qt::NoFocus);
     //verticalScrollBar()->setSingleStep(20);
@@ -57,7 +59,14 @@ void ScrollArea::resizeEvent(QResizeEvent *e) {
     }
     QScrollArea::resizeEvent(e);
 }
-#include "GUI/global.h"
+
+#ifdef Q_OS_MAC
+void ScrollArea::wheelEvent(QWheelEvent *event)
+{
+    callWheelEvent(event);
+}
+#endif
+
 void ScrollArea::callWheelEvent(QWheelEvent *event)
 {
 #ifdef Q_OS_MAC
