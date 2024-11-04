@@ -424,9 +424,6 @@ void QDoubleSlider::mouseMoveEvent(QMouseEvent *event) {
 #ifdef Q_OS_MAC
 void QDoubleSlider::wheelEvent(QWheelEvent *event)
 {
-    //qDebug() << event->inverted() << event->phase() << event->angleDelta().x() << event->angleDelta().y();
-
-
     const bool alt = event->modifiers() & Qt::AltModifier;
     const bool ctrl = event->modifiers() & Qt::ControlModifier;
 
