@@ -48,12 +48,10 @@ void Document::updateScenes() {
 
 void Document::actionFinished() {
     updateScenes();
-    for(const auto& scene : fVisibleScenes) {
+    for (const auto& scene : fVisibleScenes) {
         const auto newUndoRedo = scene.first->newUndoRedoSet();
         if (newUndoRedo) {
-#ifdef Q_OS_MAC
-            scene.first->updateAllBoxes(UpdateReason::userChange);
-#endif
+            qDebug() << "document changed";
             emit documentChanged();
         }
     }
