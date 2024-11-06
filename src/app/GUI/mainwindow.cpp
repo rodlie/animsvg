@@ -169,19 +169,7 @@ MainWindow::MainWindow(Document& document,
     connect(&mDocument, &Document::documentChanged,
             this, [this]() {
         setFileChangedSinceSaving(true);
-#ifdef Q_OS_MAC
-        // macOS cache hack!
-        // Will clear all cache on document changed instead of affected frames,
-        // better than nothing I guess... :/
-        const auto state = RenderHandler::sInstance->currentPreviewState();
-        const bool active = state == PreviewState::playing || state == PreviewState::rendering;
-        const bool paused = state == PreviewState::paused;
-        if (active || paused) { RenderHandler::sInstance->interruptPreview(); }
-        MemoryHandler::sInstance->clearMemory();
-        if (active) { RenderHandler::sInstance->renderPreview(); }
-#else
         mTimeline->stopPreview();
-#endif
     });
     connect(&mDocument, &Document::activeSceneSet,
             this, &MainWindow::updateSettingsForCurrentCanvas);
