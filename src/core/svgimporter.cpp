@@ -172,6 +172,7 @@ protected:
     QMatrix mRelTransform;
 
     QString mId;
+    QString mLabel;
 
     FillSvgAttributes mFillAttributes;
     StrokeSvgAttributes mStrokeAttributes;
@@ -1143,6 +1144,7 @@ void BoxSvgAttributes::loadBoundingBoxAttributes(const QDomElement &element) {
     }
 
     mId = element.attribute("id", mId);
+    mLabel = element.attribute("inkscape:label", mLabel);
 
     const QString fillAttributesStr = element.attribute("fill");
     if(!fillAttributesStr.isEmpty()) setFillAttribute(fillAttributesStr);
@@ -1286,9 +1288,12 @@ void StrokeSvgAttributes::apply(BoundingBox *box, const qreal scale) const {
     //box->setStrokePaintType(mPaintType, mColor, mGradient);
 }
 
-void BoxSvgAttributes::apply(BoundingBox *box) const {
-    if(!mId.isEmpty()) box->prp_setName(mId);
-    if(const auto path = enve_cast<PathBox*>(box)) {
+void BoxSvgAttributes::apply(BoundingBox *box) const
+{
+    if (!mLabel.isEmpty()) { box->prp_setName(mLabel); }
+    else if (!mId.isEmpty()) { box->prp_setName(mId); }
+
+    if (const auto path = enve_cast<PathBox*>(box)) {
         const qreal m11 = mRelTransform.m11();
         const qreal m12 = mRelTransform.m12();
         const qreal m21 = mRelTransform.m21();
@@ -1298,7 +1303,7 @@ void BoxSvgAttributes::apply(BoundingBox *box) const {
         const qreal syAbs = qSqrt(m12*m12 + m22*m22);
         mStrokeAttributes.apply(path, (sxAbs + syAbs)*0.5);
         mFillAttributes.apply(path);
-        if(const auto text = enve_cast<TextBox*>(box)) {
+        if (const auto text = enve_cast<TextBox*>(box)) {
             text->setFont(mTextAttributes.getFont());
         }
     }
