@@ -35,13 +35,17 @@ namespace Friction
     {
         class UI_EXPORT ToolBar : public QToolBar
         {
+            Q_OBJECT
         public:
             explicit ToolBar(const QString &title,
-                             QWidget *parent = nullptr);
+                             QWidget *parent = nullptr,
+                             const bool &iconsOnly = false);
             explicit ToolBar(const QString &title,
                              const QString &objectName,
-                             QWidget *parent = nullptr);
+                             QWidget *parent = nullptr,
+                             const bool iconsOnly = false);
         private:
+            bool mIconsOnly;
             void setup();
             void showContextMenu(const QPoint &pos);
             QAction* addSpacer(QWidget *widget);

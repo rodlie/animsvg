@@ -28,16 +28,20 @@
 #include <QMenu>
 
 Friction::Ui::ToolBar::ToolBar(const QString &title,
-                               QWidget *parent)
+                               QWidget *parent,
+                               const bool &iconsOnly)
     : QToolBar(title, parent)
+    , mIconsOnly(iconsOnly)
 {
     setup();
 }
 
 Friction::Ui::ToolBar::ToolBar(const QString &title,
                                const QString &objectName,
-                               QWidget *parent)
+                               QWidget *parent,
+                               const bool iconsOnly)
     : QToolBar(title, parent)
+    , mIconsOnly(iconsOnly)
 {
     setObjectName(objectName);
     setup();
@@ -58,9 +62,10 @@ void Friction::Ui::ToolBar::setup()
                                        false).toBool());
     setFocusPolicy(Qt::NoFocus);
 
-    setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    setToolButtonStyle(mIconsOnly ? Qt::ToolButtonIconOnly : Qt::ToolButtonTextBesideIcon);
     connect(this, &QToolBar::orientationChanged,
             this, [this]() {
+        if (mIconsOnly) { return; }
         setToolButtonStyle(orientation() == Qt::Horizontal ?
                                Qt::ToolButtonTextBesideIcon :
                                Qt::ToolButtonIconOnly);
