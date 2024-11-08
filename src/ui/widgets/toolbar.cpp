@@ -27,19 +27,21 @@
 
 #include <QMenu>
 
-Friction::Ui::ToolBar::ToolBar(const QString &title,
-                               QWidget *parent,
-                               const bool &iconsOnly)
+using namespace Friction::Ui;
+
+ToolBar::ToolBar(const QString &title,
+                 QWidget *parent,
+                 const bool &iconsOnly)
     : QToolBar(title, parent)
     , mIconsOnly(iconsOnly)
 {
     setup();
 }
 
-Friction::Ui::ToolBar::ToolBar(const QString &title,
-                               const QString &objectName,
-                               QWidget *parent,
-                               const bool iconsOnly)
+ToolBar::ToolBar(const QString &title,
+                 const QString &objectName,
+                 QWidget *parent,
+                 const bool iconsOnly)
     : QToolBar(title, parent)
     , mIconsOnly(iconsOnly)
 {
@@ -47,7 +49,20 @@ Friction::Ui::ToolBar::ToolBar(const QString &title,
     setup();
 }
 
-void Friction::Ui::ToolBar::setup()
+void ToolBar::updateActions()
+{
+    const auto disabled = AppSupport::getSettings("ui",
+                                                  QString("ToolBarActionsDisabled_%1")
+                                                      .arg(objectName())).toStringList();
+    for (const auto &act : actions()) {
+        if (act->objectName().isEmpty()) { continue; }
+        if (disabled.contains(act->objectName())) {
+            act->setVisible(false);
+        }
+    }
+}
+
+void ToolBar::setup()
 {
 #ifdef Q_OS_MAC
     mToolbar->setStyleSheet(QString("font-size: %1pt;").arg(font().pointSize()));
@@ -80,13 +95,14 @@ void Friction::Ui::ToolBar::setup()
     });
 }
 
-void Friction::Ui::ToolBar::showContextMenu(const QPoint &pos)
+void ToolBar::showContextMenu(const QPoint &pos)
 {
     QMenu menu(this);
-
-    const auto act = menu.addAction(QIcon::fromTheme("window"), windowTitle());
-    act->setEnabled(false);
-    menu.addSeparator();
+    {
+        const auto act = menu.addAction(QIcon::fromTheme("window"), windowTitle());
+        act->setEnabled(false);
+        menu.addSeparator();
+    }
 
     menu.addAction(QIcon::fromTheme(isMovable() ? "locked" : "unlocked"),
                    tr(isMovable() ? "Lock" : "Unlock"),
@@ -97,13 +113,55 @@ void Friction::Ui::ToolBar::showContextMenu(const QPoint &pos)
                                 isMovable());
     });
 
+    const auto disabled = AppSupport::getSettings("ui",
+                                                  QString("ToolBarActionsDisabled_%1")
+                                                      .arg(objectName())).toStringList();
+    const auto acts = actions();
+    if (acts.count() > 0) { menu.addSeparator(); }
+
+    for (const auto &act : acts) {
+        if (act->objectName().isEmpty()) { continue; }
+        const auto mAct = menu.addAction(act->text());
+        mAct->setCheckable(true);
+        mAct->setData(act->objectName());
+        mAct->setChecked(!disabled.contains(act->objectName()));
+        connect(mAct, &QAction::triggered,
+                this, [this, mAct](bool checked) {
+            setEnableAction(mAct->data().toString(), checked);
+        });
+    }
+
     menu.exec(mapToGlobal(pos));
 }
 
-QAction *Friction::Ui::ToolBar::addSpacer(QWidget *widget)
+QAction* ToolBar::addSpacer(QWidget *widget)
 {
     if (!widget) { return nullptr; }
     widget->setSizePolicy(QSizePolicy::Expanding,
                           QSizePolicy::Minimum);
     return addWidget(widget);
+}
+
+void ToolBar::setEnableAction(const QString &title,
+                              const bool &enable)
+{
+    for (const auto &act : actions()) {
+        if (act->objectName().isEmpty()) { continue; }
+        if (act->objectName() == title) {
+            act->setVisible(enable);
+            QStringList disabled = AppSupport::getSettings("ui",
+                                                           QString("ToolBarActionsDisabled_%1")
+                                                               .arg(objectName())).toStringList();
+            if (enable && disabled.contains(title)) {
+                disabled.removeAll(title);
+            } else if (!enable && !disabled.contains(title)) {
+                disabled << title;
+            } else { break; }
+            AppSupport::setSettings("ui",
+                                    QString("ToolBarActionsDisabled_%1").arg(objectName()),
+                                    disabled,
+                                    false);
+            break;
+        }
+    }
 }

@@ -44,11 +44,15 @@ namespace Friction
                              const QString &objectName,
                              QWidget *parent = nullptr,
                              const bool iconsOnly = false);
+            void updateActions();
+
         private:
             bool mIconsOnly;
             void setup();
             void showContextMenu(const QPoint &pos);
             QAction* addSpacer(QWidget *widget);
+            void setEnableAction(const QString &title,
+                                 const bool &enable);
         };
     }
 }
