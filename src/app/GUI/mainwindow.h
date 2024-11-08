@@ -226,9 +226,7 @@ private:
     QActionGroup *mToolBoxGroupMain;
     QActionGroup *mToolBoxGroupNodes;
 
-    QToolBar *mToolBoxMain;
-    QToolBar *mToolBoxNodes;
-    QToolBar *mToolBoxDraw;
+    Friction::Ui::ToolBar *mToolBoxMain;
 
     UILayout *mUI;
 
@@ -281,6 +279,7 @@ private:
     QAction *mLocalPivotAct;
 
     QToolButton *mNodeVisibility;
+    QAction *mNodeVisibilityAct;
 
     Friction::Ui::FontsWidget *mFontWidget;
     QAction* mFontWidgetAct;
@@ -288,6 +287,14 @@ private:
     QAction *mDrawPathAuto;
     QDoubleSlider *mDrawPathSmooth;
     QDoubleSlider *mDrawPathMaxError;
+
+    QAction *mToolBoxDrawActLabel1;
+    QAction *mToolBoxDrawActLabel2;
+    QAction *mToolBoxDrawActIcon1;
+    QAction *mToolBoxDrawActIcon2;
+    QAction *mToolBoxDrawActMaxError;
+    QAction *mToolBoxDrawActSmooth;
+    QAction *mToolBoxDrawActSep;
 
     QMenuBar *mMenuBar;
     QMenu *mFileMenu;
@@ -355,6 +362,9 @@ private:
     void setupToolBoxMain();
     void setupToolBoxNodes();
     void setupToolBoxDraw();
+
+    void setEnableToolBoxNodes(const bool &enable);
+    void setEnableToolBoxDraw(const bool &enable);
 
     bool mBackupOnSave;
     bool mAutoSave;

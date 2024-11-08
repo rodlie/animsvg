@@ -48,17 +48,6 @@ private:
     QSlider *mInterfaceScaling;
 
     QComboBox *mImportFileDir;
-
-    QCheckBox *mToolBarActionNew;
-    QCheckBox *mToolBarActionOpen;
-    QCheckBox *mToolBarActionImport;
-    QCheckBox *mToolBarActionSave;
-    //QCheckBox *mToolBarActionScene;
-    QCheckBox *mToolBarActionRender;
-    QCheckBox *mToolBarActionPreview;
-    QCheckBox *mToolBarActionExport;
-
-    void setupToolBarWidgets(QVBoxLayout *lay);
 };
 
 #endif // GENERALSETTINGSWIDGET_H

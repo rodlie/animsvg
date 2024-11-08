@@ -102,8 +102,6 @@ MainWindow::MainWindow(Document& document,
     , mToolBoxGroupMain(nullptr)
     , mToolBoxGroupNodes(nullptr)
     , mToolBoxMain(nullptr)
-    , mToolBoxNodes(nullptr)
-    , mToolBoxDraw(nullptr)
     , mUI(nullptr)
     , mSaveAct(nullptr)
     , mSaveAsAct(nullptr)
@@ -124,11 +122,19 @@ MainWindow::MainWindow(Document& document,
     , mViewFullScreenAct(nullptr)
     , mLocalPivotAct(nullptr)
     , mNodeVisibility(nullptr)
+    , mNodeVisibilityAct(nullptr)
     , mFontWidget(nullptr)
     , mFontWidgetAct(nullptr)
     , mDrawPathAuto(nullptr)
     , mDrawPathSmooth(nullptr)
     , mDrawPathMaxError(nullptr)
+    , mToolBoxDrawActLabel1(nullptr)
+    , mToolBoxDrawActLabel2(nullptr)
+    , mToolBoxDrawActIcon1(nullptr)
+    , mToolBoxDrawActIcon2(nullptr)
+    , mToolBoxDrawActMaxError(nullptr)
+    , mToolBoxDrawActSmooth(nullptr)
+    , mToolBoxDrawActSep(nullptr)
     , mDocument(document)
     , mActions(actions)
     , mAudioHandler(audioHandler)
@@ -393,15 +399,17 @@ void MainWindow::setupMenuBar()
                                              this, &MainWindow::newFile,
                                              Qt::CTRL + Qt::Key_N);
     newAct->setData(tr("New Project"));
+    newAct->setObjectName("NewProjectAct");
+
     cmdAddAction(newAct);
-    if (eSettings::instance().fToolBarActionNew) {
-        mToolbar->addAction(newAct);
-    }
+
     const auto openAct = mFileMenu->addAction(QIcon::fromTheme("file_folder"),
                                               tr("Open", "MenuBar_File"),
                                               this, qOverload<>(&MainWindow::openFile),
                                               Qt::CTRL + Qt::Key_O);
     openAct->setData(tr("Open Project"));
+    openAct->setObjectName("OpenProjectAct");
+
     cmdAddAction(openAct);
     mRecentMenu = mFileMenu->addMenu(QIcon::fromTheme("file_folder"),
                                      tr("Open Recent", "MenuBar_File"));
@@ -412,6 +420,8 @@ void MainWindow::setupMenuBar()
                                                 Qt::CTRL + Qt::Key_L);
     mLinkedAct->setEnabled(false);
     mLinkedAct->setData(tr("Link File"));
+    mLinkedAct->setObjectName("LinkFileAct");
+
     cmdAddAction(mLinkedAct);
 
     mImportAct = mFileMenu->addAction(QIcon::fromTheme("file_import"),
@@ -419,6 +429,7 @@ void MainWindow::setupMenuBar()
                                       this, qOverload<>(&MainWindow::importFile),
                                       Qt::CTRL + Qt::Key_I);
     mImportAct->setEnabled(false);
+    mImportAct->setObjectName("ImportFileAct");
     cmdAddAction(mImportAct);
 
     mImportSeqAct = mFileMenu->addAction(QIcon::fromTheme("renderlayers"),
@@ -426,10 +437,6 @@ void MainWindow::setupMenuBar()
                                          this, &MainWindow::importImageSequence);
     mImportSeqAct->setEnabled(false);
     cmdAddAction(mImportSeqAct);
-
-    if (eSettings::instance().fToolBarActionOpen) {
-        mToolbar->addAction(openAct);
-    }
 
     mRevertAct = mFileMenu->addAction(QIcon::fromTheme("loop_back"),
                                       tr("Revert", "MenuBar_File"),
@@ -446,6 +453,7 @@ void MainWindow::setupMenuBar()
                                     Qt::CTRL + Qt::Key_S);
     mSaveAct->setEnabled(false);
     mSaveAct->setData(tr("Save Project"));
+    mSaveAct->setObjectName("SaveProjectAct");
     cmdAddAction(mSaveAct);
 
     mSaveAsAct = mFileMenu->addAction(QIcon::fromTheme("disk_drive"),
@@ -472,6 +480,7 @@ void MainWindow::setupMenuBar()
     mPreviewSVGAct->setEnabled(false);
     mPreviewSVGAct->setToolTip(tr("Preview SVG Animation in Web Browser"));
     mPreviewSVGAct->setData(mPreviewSVGAct->toolTip());
+    mPreviewSVGAct->setObjectName("PreviewSVGAct");
     cmdAddAction(mPreviewSVGAct);
 
     mExportSVGAct = mFileMenu->addAction(QIcon::fromTheme("output"),
@@ -483,15 +492,8 @@ void MainWindow::setupMenuBar()
     mExportSVGAct->setEnabled(false);
     mExportSVGAct->setToolTip(tr("Export SVG Animation for the Web"));
     mExportSVGAct->setData(mExportSVGAct->toolTip());
+    mExportSVGAct->setObjectName("ExportSVGAct");
     cmdAddAction(mExportSVGAct);
-
-    if (eSettings::instance().fToolBarActionSave) {
-        mToolbar->addAction(mSaveAct);
-    }
-
-    if (eSettings::instance().fToolBarActionImport) {
-        mToolbar->addAction(mImportAct);
-    }
 
     mFileMenu->addSeparator();
     mCloseProjectAct = mFileMenu->addAction(QIcon::fromTheme("dialog-cancel"),
@@ -1084,20 +1086,23 @@ void MainWindow::setupMenuBar()
                     tr("Reinstall default render profiles"),
                     this, &MainWindow::askInstallRenderPresets);
 
-    if (eSettings::instance().fToolBarActionRender) {
-        mRenderVideoAct = mToolbar->addAction(QIcon::fromTheme("render_animation"),
-                                              tr("Render"),
-                                              this, &MainWindow::openRendererWindow);
-        mRenderVideoAct->setEnabled(false);
-    }
 
-    if (eSettings::instance().fToolBarActionPreview) {
-        mToolbar->addAction(mPreviewSVGAct);
-    }
+    // toolbar actions
+    mToolbar->addAction(newAct);
+    mToolbar->addAction(openAct);
+    mToolbar->addAction(mSaveAct);
+    mToolbar->addAction(mImportAct);
+    mToolbar->addAction(mLinkedAct);
 
-    if (eSettings::instance().fToolBarActionExport) {
-        mToolbar->addAction(mExportSVGAct);
-    }
+    mRenderVideoAct = mToolbar->addAction(QIcon::fromTheme("render_animation"),
+                                          tr("Render"),
+                                          this, &MainWindow::openRendererWindow);
+    mRenderVideoAct->setEnabled(false);
+    mRenderVideoAct->setObjectName("RenderVideoAct");
+
+    mToolbar->addAction(mPreviewSVGAct);
+    mToolbar->addAction(mExportSVGAct);
+    mToolbar->updateActions();
 
     setMenuBar(mMenuBar);
 
@@ -1348,7 +1353,7 @@ void MainWindow::updateSettingsForCurrentCanvas(Canvas* const scene)
 
 void MainWindow::setupToolBar()
 {
-    mToolbar = new Ui::ToolBar(tr("Main Toolbar"),
+    mToolbar = new Ui::ToolBar(tr("Toolbar"),
                                "MainToolBar",
                                this);
     addToolBar(Qt::TopToolBarArea, mToolbar);
@@ -1367,10 +1372,8 @@ void MainWindow::updateCanvasModeButtonsChecked()
     const bool pointMode = mode == CanvasMode::pointTransform;
     const bool drawMode = mode == CanvasMode::drawPath;
 
-    mToolBoxNodes->setEnabled(pointMode);
-    mToolBoxNodes->setVisible(pointMode);
-    mToolBoxDraw->setEnabled(drawMode);
-    mToolBoxDraw->setVisible(drawMode);
+    setEnableToolBoxNodes(pointMode);
+    setEnableToolBoxDraw(drawMode);
     mLocalPivotAct->setEnabled(pointMode || boxMode);
 
     if (mColorPickLabel) {

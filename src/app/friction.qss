@@ -583,21 +583,14 @@ QSlider::handle:horizontal:disabled {
     background: transparent;
 }
 
-QToolBar#ToolBoxDraw::separator,
-QToolBar#ToolBoxNodes::separator {
+Friction--Ui--ToolBar::separator {
     background-color: %4;
 }
 
-QToolBar#ToolBoxDraw::separator:vertical,
-QToolBar#ToolBoxNodes::separator:vertical {
+Friction--Ui--ToolBar::separator:vertical {
     height: 1px;
 }
 
-QToolBar#ToolBoxDraw::separator:horizontal,
-QToolBar#ToolBoxNodes::separator:horizontal {
+Friction--Ui--ToolBar::separator:horizontal {
     width: 1px;
-}
-
-VLabel {
-    padding-right: 1px;
 }
