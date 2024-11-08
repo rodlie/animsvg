@@ -72,6 +72,9 @@ void ToolBar::setup()
         setObjectName(windowTitle().replace(" ", "").simplified());
     }
 
+    mIconsOnly = AppSupport::getSettings("ui",
+                                         QString("ToolBarIconsOnly_%1").arg(objectName()),
+                                                                            mIconsOnly).toBool();
     setMovable(AppSupport::getSettings("ui",
                                        QString("ToolBarMovable_%1").arg(objectName()),
                                        false).toBool());
@@ -112,6 +115,23 @@ void ToolBar::showContextMenu(const QPoint &pos)
                                 QString("ToolBarMovable_%1").arg(objectName()),
                                 isMovable());
     });
+
+    {
+        const auto act = menu.addAction(tr("Labels"));
+        act->setCheckable(true);
+        act->setChecked(!mIconsOnly);
+        connect(act, &QAction::triggered,
+                this, [this](bool checked) {
+            mIconsOnly = !checked;
+            setToolButtonStyle(mIconsOnly ?
+                                   Qt::ToolButtonIconOnly :
+                                   Qt::ToolButtonTextBesideIcon);
+            update();
+            AppSupport::setSettings("ui",
+                                    QString("ToolBarIconsOnly_%1").arg(objectName()),
+                                    mIconsOnly);
+        });
+    }
 
     const auto disabled = AppSupport::getSettings("ui",
                                                   QString("ToolBarActionsDisabled_%1")
