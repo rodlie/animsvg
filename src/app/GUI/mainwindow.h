@@ -55,6 +55,7 @@
 #include "window.h"
 #include "widgets/aboutwidget.h"
 #include "widgets/uilayout.h"
+#include "widgets/toolbar.h"
 
 class VideoEncoder;
 class RenderWidget;
@@ -220,7 +221,7 @@ private:
     TimelineDockWidget *mTimeline;
     RenderWidget *mRenderWidget;
 
-    QToolBar *mToolbar;
+    Friction::Ui::ToolBar *mToolbar;
 
     QActionGroup *mToolBoxGroupMain;
     QActionGroup *mToolBoxGroupNodes;

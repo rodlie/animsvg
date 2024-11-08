@@ -71,7 +71,7 @@ WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
     const auto buttonLay = new QHBoxLayout(buttonWid);
     buttonLay->setMargin(0);
 
-    const auto newButton = new QPushButton(QIcon::fromTheme("file_new"),
+    const auto newButton = new QPushButton(QIcon::fromTheme("file_blank"),
                                            tr("New"),
                                            this);
     newButton->setFocusPolicy(Qt::NoFocus);

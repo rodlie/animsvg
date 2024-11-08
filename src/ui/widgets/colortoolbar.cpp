@@ -165,7 +165,7 @@ void ColorToolBar::adjustWidgets()
 
     setToolButtonStyle(horiz ?
                            Qt::ToolButtonTextBesideIcon :
-                           Qt::ToolButtonTextUnderIcon);
+                           Qt::ToolButtonIconOnly);
 
     mColorFill->setMinimumWidth(min);
     mColorStroke->setMinimumWidth(min);

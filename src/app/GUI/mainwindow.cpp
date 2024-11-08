@@ -193,6 +193,7 @@ MainWindow::MainWindow(Document& document,
             this, &MainWindow::handleCurrentPixelColor);
 
     setWindowIcon(QIcon::fromTheme(AppSupport::getAppName()));
+    setContextMenuPolicy(Qt::NoContextMenu);
 
     mAutoSaveTimer = new QTimer(this);
     connect (mAutoSaveTimer, &QTimer::timeout,
@@ -387,7 +388,7 @@ void MainWindow::setupMenuBar()
 
     mFileMenu = mMenuBar->addMenu(tr("File", "MenuBar"));
 
-    const auto newAct = mFileMenu->addAction(QIcon::fromTheme("file_new"),
+    const auto newAct = mFileMenu->addAction(QIcon::fromTheme("file_blank"),
                                              tr("New", "MenuBar_File"),
                                              this, &MainWindow::newFile,
                                              Qt::CTRL + Qt::Key_N);
@@ -1347,17 +1348,9 @@ void MainWindow::updateSettingsForCurrentCanvas(Canvas* const scene)
 
 void MainWindow::setupToolBar()
 {
-    mToolbar = new QToolBar(tr("Toolbar"), this);
-    mToolbar->setObjectName("MainToolBar");
-    mToolbar->setFocusPolicy(Qt::NoFocus);
-    mToolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    mToolbar->setMovable(false);
-#ifdef Q_OS_MAC
-    mToolbar->setStyleSheet(QString("font-size: %1pt;").arg(font().pointSize()));
-#endif
-    eSizesUI::widget.add(mToolbar, [this](const int size) {
-        mToolbar->setIconSize({size, size});
-    });
+    mToolbar = new Ui::ToolBar(tr("Main Toolbar"),
+                               "MainToolBar",
+                               this);
     addToolBar(Qt::TopToolBarArea, mToolbar);
 }
 
