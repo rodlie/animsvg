@@ -106,8 +106,8 @@ RenderSettingsDialog::RenderSettingsDialog(const RenderInstanceSettings &setting
         if (!mCurrentScene) { return; }
         const auto fIn = mCurrentScene->getFrameIn();
         const auto fOut = mCurrentScene->getFrameOut();
-        if (fIn.enabled) { mMinFrameSpin->setValue(fIn.frame); }
-        if (fOut.enabled) { mMaxFrameSpin->setValue(fOut.frame); }
+        mMinFrameSpin->setValue(fIn.enabled ? fIn.frame : mCurrentScene->getMinFrame());
+        mMaxFrameSpin->setValue(fOut.enabled ? fOut.frame : mCurrentScene->getMaxFrame());
     });
 
     mFrameRangeButton->setMenu(frameRangeMenu);
