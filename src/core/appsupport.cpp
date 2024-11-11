@@ -322,10 +322,14 @@ const QString AppSupport::getAppUserExPresetsPath()
 
 const QString AppSupport::getSVGO()
 {
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN)
     const QString svgo = "svgo-win.exe";
-#else
+#elif defined(Q_OS_LINUX)
     const QString svgo = "svgo-linux";
+#elif defined(Q_OS_MAC)
+    const QString svgo = "svgo-macos";
+#else
+    const QString svgo = "svgo";
 #endif
     const QString path = QString("%1/%2").arg(getAppPath(), svgo);
     if (QFile::exists(path)) { return path; }
