@@ -8,6 +8,7 @@
 #include <QDoubleSpinBox>
 #include <QHBoxLayout>
 #include <QComboBox>
+#include <QPushButton>
 
 class RenderSettingsDialog : public QDialog {
     Q_OBJECT
@@ -49,6 +50,7 @@ private:
     QLabel *mFrameRangeLabel = nullptr;
     QSpinBox *mMinFrameSpin = nullptr;
     QSpinBox *mMaxFrameSpin = nullptr;
+    QPushButton *mFrameRangeButton;
 
 //    QLabel *mFpsLabel = nullptr;
 //    QDoubleSpinBox *mFpsSpin = nullptr;

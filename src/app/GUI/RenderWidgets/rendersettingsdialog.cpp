@@ -4,13 +4,14 @@
 #include "Private/document.h"
 #include "canvas.h"
 
-RenderSettingsDialog::RenderSettingsDialog(
-        const RenderInstanceSettings &settings,
-        QWidget *parent) :
-    QDialog(parent),
-    mInitialScene(settings.getTargetCanvas()),
-    mCurrentScene(mInitialScene),
-    mInitialSettings(settings.getRenderSettings()) {
+RenderSettingsDialog::RenderSettingsDialog(const RenderInstanceSettings &settings,
+                                           QWidget *parent)
+    : QDialog(parent)
+    , mInitialScene(settings.getTargetCanvas())
+    , mCurrentScene(mInitialScene)
+    , mInitialSettings(settings.getRenderSettings())
+    , mFrameRangeButton(nullptr)
+{
     setWindowTitle(tr("Render Settings"));
 
     const auto mainLayout = new QVBoxLayout(this);
@@ -19,14 +20,14 @@ RenderSettingsDialog::RenderSettingsDialog(
     const auto sceneLay = new QHBoxLayout;
     mSceneLabel = new QLabel(tr("Scene"));
     mSceneCombo = new QComboBox();
-    for(const auto& canvas : Document::sInstance->fScenes) {
+    for (const auto& canvas : Document::sInstance->fScenes) {
         mSceneCombo->addItem(canvas->prp_getName());
     }
-    if(mCurrentScene) mSceneCombo->setCurrentText(mCurrentScene->prp_getName());
+    if (mCurrentScene) {  mSceneCombo->setCurrentText(mCurrentScene->prp_getName()); }
     connect(mSceneCombo, qOverload<int>(&QComboBox::currentIndexChanged),
             this, [this](const int id) {
         const auto newScene = Document::sInstance->fScenes.at(id).get();
-        if(newScene) {
+        if (newScene) {
             const auto frameRange = newScene->getFrameRange();
             mMinFrameSpin->setValue(frameRange.fMin);
             mMaxFrameSpin->setValue(frameRange.fMax);
@@ -85,10 +86,37 @@ RenderSettingsDialog::RenderSettingsDialog(
     mMinFrameSpin->setValue(mInitialSettings.fMinFrame);
     mMaxFrameSpin->setValue(mInitialSettings.fMaxFrame);
 
+    const auto frameRangeMenu = new QMenu(this);
+    mFrameRangeButton = new QPushButton(QIcon::fromTheme("preferences"),
+                                        QString(),
+                                        this);
+    mFrameRangeButton->setObjectName("FlatButton");
+    mFrameRangeButton->setToolTip(tr("Frame Range Options"));
+
+    frameRangeMenu->addAction(QIcon::fromTheme("sequence"),
+                              tr("Scene Range"),
+                              this, [this]() {
+        if (!mCurrentScene) { return; }
+        mMinFrameSpin->setValue(mCurrentScene->getMinFrame());
+        mMaxFrameSpin->setValue(mCurrentScene->getMaxFrame());
+    });
+    frameRangeMenu->addAction(QIcon::fromTheme("sequence"),
+                              tr("In/Out Range"),
+                              this, [this]() {
+        if (!mCurrentScene) { return; }
+        const auto fIn = mCurrentScene->getFrameIn();
+        const auto fOut = mCurrentScene->getFrameOut();
+        if (fIn.enabled) { mMinFrameSpin->setValue(fIn.frame); }
+        if (fOut.enabled) { mMaxFrameSpin->setValue(fOut.frame); }
+    });
+
+    mFrameRangeButton->setMenu(frameRangeMenu);
+
     rangeLay->addWidget(mFrameRangeLabel);
     rangeLay->addWidget(mMinFrameSpin);
     rangeLay->addWidget(new QLabel(" - "));
     rangeLay->addWidget(mMaxFrameSpin);
+    rangeLay->addWidget(mFrameRangeButton);
 
     mainLayout->addLayout(rangeLay);
 

@@ -446,12 +446,12 @@ void Canvas::setFrameOut(const bool enabled,
     emit requestUpdate();
 }
 
-const FrameMarker Canvas::getFrameIn()
+const FrameMarker Canvas::getFrameIn() const
 {
     return mIn;
 }
 
-const FrameMarker Canvas::getFrameOut()
+const FrameMarker Canvas::getFrameOut() const
 {
     return mOut;
 }

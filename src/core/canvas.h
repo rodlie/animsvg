@@ -357,8 +357,8 @@ public:
                     const int frameIn);
     void setFrameOut(const bool enabled,
                      const int frameOut);
-    const FrameMarker getFrameIn();
-    const FrameMarker getFrameOut();
+    const FrameMarker getFrameIn() const;
+    const FrameMarker getFrameOut() const;
 
     void setMarker(const QString &title,
                    const int frame);
