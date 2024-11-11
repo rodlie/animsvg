@@ -65,7 +65,7 @@ void ToolBar::updateActions()
 void ToolBar::setup()
 {
 #ifdef Q_OS_MAC
-    mToolbar->setStyleSheet(QString("font-size: %1pt;").arg(font().pointSize()));
+    setStyleSheet(QString("font-size: %1pt;").arg(font().pointSize()));
 #endif
 
     if (objectName().isEmpty()) {
