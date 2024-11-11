@@ -35,29 +35,49 @@ class UI_EXPORT VLabel : public QLabel
     Q_OBJECT
 
 public:
-    explicit VLabel(QWidget *parent = nullptr)
-        : QLabel(parent) {}
+    explicit VLabel(QWidget *parent = nullptr,
+                    const Qt::Orientation &orientation = Qt::Vertical)
+        : QLabel(parent)
+        , mOrientation(orientation)
+    {}
     explicit VLabel(const QString &text,
-                    QWidget *parent = nullptr)
-        : QLabel(text, parent) {}
+                    QWidget *parent = nullptr,
+                    const Qt::Orientation &orientation = Qt::Vertical)
+        : QLabel(text, parent)
+        , mOrientation(orientation)
+    {}
+    void setOrientation(Qt::Orientation orientation)
+    {
+        mOrientation = orientation;
+        update();
+    }
 
 protected:
-    void paintEvent(QPaintEvent*)
+    void paintEvent(QPaintEvent *e)
     {
+        if (mOrientation == Qt::Horizontal) {
+            QLabel::paintEvent(e);
+            return;
+        }
         QStylePainter painter(this);
         painter.rotate(90);
         painter.drawText(0, -(sizeHint().width() / 2)-2, text());
     }
     QSize sizeHint() const
     {
+        if (mOrientation == Qt::Horizontal) { return QLabel::sizeHint(); }
         const auto s = QLabel::sizeHint();
         return QSize(s.height(), s.width());
     }
     QSize minimumSizeHint() const
     {
+        if (mOrientation == Qt::Horizontal) { return QLabel::minimumSizeHint(); }
         const auto s = QLabel::minimumSizeHint();
         return QSize(s.height(), s.width());
     }
+
+private:
+    Qt::Orientation mOrientation;
 };
 
 #endif // VLABEL_H

@@ -43,14 +43,6 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     , mDefaultInterfaceScaling(nullptr)
     , mInterfaceScaling(nullptr)
     , mImportFileDir(nullptr)
-    , mToolBarActionNew(nullptr)
-    , mToolBarActionOpen(nullptr)
-    , mToolBarActionImport(nullptr)
-    , mToolBarActionSave(nullptr)
-    //, mToolBarActionScene(nullptr)
-    , mToolBarActionRender(nullptr)
-    , mToolBarActionPreview(nullptr)
-    , mToolBarActionExport(nullptr)
 {
     const auto mGeneralWidget = new QWidget(this);
     mGeneralWidget->setContentsMargins(0, 0, 0, 0);
@@ -148,8 +140,6 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     mProjectLayout->addSpacing(10);
     mProjectLayout->addWidget(mImportFileWidget);
 
-    setupToolBarWidgets(mGeneralLayout);
-
     mGeneralLayout->addStretch();
     addWidget(mGeneralWidget);
 
@@ -177,15 +167,6 @@ void GeneralSettingsWidget::applySettings()
     mSett.fInterfaceScaling = mInterfaceScaling->value() * 0.01;
     mSett.fImportFileDirOpt = mImportFileDir->currentData().toInt();
 
-    mSett.fToolBarActionNew = mToolBarActionNew->isChecked();
-    mSett.fToolBarActionOpen = mToolBarActionOpen->isChecked();
-    mSett.fToolBarActionImport = mToolBarActionImport->isChecked();
-    mSett.fToolBarActionSave = mToolBarActionSave->isChecked();
-    //mSett.fToolBarActionScene = mToolBarActionScene->isChecked();
-    mSett.fToolBarActionRender = mToolBarActionRender->isChecked();
-    mSett.fToolBarActionPreview = mToolBarActionPreview->isChecked();
-    mSett.fToolBarActionExport = mToolBarActionExport->isChecked();
-
     //eSizesUI::font.updateSize();
     //eSizesUI::widget.updateSize();
 }
@@ -208,63 +189,10 @@ void GeneralSettingsWidget::updateSettings(bool restore)
     mInterfaceScaling->setEnabled(!mDefaultInterfaceScaling->isChecked());
     mInterfaceScaling->setValue(mDefaultInterfaceScaling->isChecked() ? 100 : 100 * mSett.fInterfaceScaling);
 
-    mToolBarActionNew->setChecked(mSett.fToolBarActionNew);
-    mToolBarActionOpen->setChecked(mSett.fToolBarActionOpen);
-    mToolBarActionImport->setChecked(mSett.fToolBarActionImport);
-    mToolBarActionSave->setChecked(mSett.fToolBarActionSave);
-    //mToolBarActionScene->setChecked(mSett.fToolBarActionScene);
-    mToolBarActionRender->setChecked(mSett.fToolBarActionRender);
-    mToolBarActionPreview->setChecked(mSett.fToolBarActionPreview);
-    mToolBarActionExport->setChecked(mSett.fToolBarActionExport);
-
     for (int i = 0; i < mImportFileDir->count(); i++) {
         if (mImportFileDir->itemData(i).toInt() == mSett.fImportFileDirOpt) {
             mImportFileDir->setCurrentIndex(i);
             return;
         }
     }
-}
-
-void GeneralSettingsWidget::setupToolBarWidgets(QVBoxLayout *lay)
-{
-    if (!lay) { return; }
-
-    const auto area = new QScrollArea(this);
-    const auto container = new QGroupBox(this);
-    container->setObjectName("BlueBox");
-    const auto containerLayout = new QVBoxLayout(container);
-    const auto containerInner = new QWidget(this);
-    const auto containerInnerLayout = new TwoColumnLayout();
-    containerInner->setLayout(containerInnerLayout);
-
-    area->setWidget(containerInner);
-    area->setWidgetResizable(true);
-    area->setContentsMargins(0, 0, 0, 0);
-    area->setFrameShape(QFrame::NoFrame);
-
-    container->setTitle(tr("Toolbar Actions"));
-
-    container->setContentsMargins(0, 0, 0, 0);
-
-    containerInnerLayout->setMargin(5);
-    //containerLayout->setMargin(0);
-
-    containerLayout->addWidget(area);
-
-    mToolBarActionNew = new QCheckBox(tr("New"), this);
-    mToolBarActionOpen = new QCheckBox(tr("Open"), this);
-    mToolBarActionImport = new QCheckBox(tr("Import"), this);
-    mToolBarActionSave = new QCheckBox(tr("Save"), this);
-    //mToolBarActionScene = new QCheckBox(tr("Scene"), this);
-    mToolBarActionRender = new QCheckBox(tr("Render"), this);
-    mToolBarActionPreview = new QCheckBox(tr("Preview SVG"), this);
-    mToolBarActionExport = new QCheckBox(tr("Export SVG"), this);
-
-    containerInnerLayout->addPair(mToolBarActionNew, mToolBarActionOpen);
-    containerInnerLayout->addPair(mToolBarActionImport, mToolBarActionSave);
-    containerInnerLayout->addPair(mToolBarActionRender, mToolBarActionPreview);
-    containerInnerLayout->addWidgetToFirstColumn(mToolBarActionExport);
-    containerLayout->addStretch();
-
-    lay->addWidget(container);
 }

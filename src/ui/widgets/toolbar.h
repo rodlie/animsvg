@@ -27,6 +27,7 @@
 #include "ui_global.h"
 
 #include <QToolBar>
+#include <QAction>
 
 namespace Friction
 {
@@ -34,17 +35,24 @@ namespace Friction
     {
         class UI_EXPORT ToolBar : public QToolBar
         {
+            Q_OBJECT
         public:
-            explicit ToolBar(QWidget *parent = nullptr)
-            : QToolBar(parent) {
-                setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-                connect(this, &QToolBar::orientationChanged,
-                        this, [this]() {
-                    setToolButtonStyle(orientation() == Qt::Horizontal ?
-                                           Qt::ToolButtonTextBesideIcon :
-                                           Qt::ToolButtonIconOnly);
-                });
-            }
+            explicit ToolBar(const QString &title,
+                             QWidget *parent = nullptr,
+                             const bool &iconsOnly = false);
+            explicit ToolBar(const QString &title,
+                             const QString &objectName,
+                             QWidget *parent = nullptr,
+                             const bool iconsOnly = false);
+            void updateActions();
+
+        private:
+            bool mIconsOnly;
+            void setup();
+            void showContextMenu(const QPoint &pos);
+            QAction* addSpacer(QWidget *widget);
+            void setEnableAction(const QString &title,
+                                 const bool &enable);
         };
     }
 }

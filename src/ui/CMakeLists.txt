@@ -101,6 +101,7 @@ set(
     widgets/savedcolorswidget.cpp
     widgets/scenechooser.cpp
     widgets/settingswidget.cpp
+    widgets/toolbar.cpp
     widgets/twocolumnlayout.cpp
     widgets/uilayout.cpp
     widgets/welcomedialog.cpp
