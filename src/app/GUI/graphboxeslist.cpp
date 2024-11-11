@@ -489,6 +489,7 @@ void KeysView::graphWheelEvent(QWheelEvent *event)
 #endif
     if (event->modifiers() & Qt::ControlModifier) {
         emit wheelEventSignal(event);
+        return;
     } else if (event->modifiers() & Qt::ShiftModifier) {
         qreal valUnderMouse;
         qreal frame;
