@@ -654,14 +654,14 @@ bool ExpressionDialog::populateEasingPresets()
         mEasingPresetsBox->clear();
         mEasingPresetsBox->addItem(tr("Select preset ..."));
     }
-    for (int i = 0; i < presets.size(); ++i) {
-        QFileInfo file(presets.at(i).second);
+    for (const auto &preset : presets) {
+        QFileInfo file(preset.path);
         if (mEasingPresetsBox->findText(file.baseName(), Qt::MatchExactly) > -1) {
             qWarning() << "expression preset already exists, skip:" << file.absoluteFilePath();
             continue;
         }
-        mEasingPresetsBox->addItem(QIcon::fromTheme("easing"),
-                                   presets.at(i).first,
+        mEasingPresetsBox->addItem(QIcon::fromTheme(preset.icon.isEmpty() ? "easing" : preset.icon),
+                                   preset.title,
                                    file.absoluteFilePath());
     }
     return true;

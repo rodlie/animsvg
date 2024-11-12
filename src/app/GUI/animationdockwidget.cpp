@@ -130,9 +130,9 @@ void AnimationDockWidget::generateEasingActions(QPushButton *button,
     const QString easeInOutText = tr("Ease In/Out ");
 
     const auto menu = new QMenu(this);
-    const auto menuIn = new QMenu(easeInText, menu);
-    const auto menuOut = new QMenu(easeOutText, menu);
-    const auto menuInOut = new QMenu(easeInOutText, menu);
+    const auto menuIn = new QMenu(easeInText.simplified(), menu);
+    const auto menuOut = new QMenu(easeOutText.simplified(), menu);
+    const auto menuInOut = new QMenu(easeInOutText.simplified(), menu);
 
     menuIn->setIcon(easeIcon);
     menuOut->setIcon(easeIcon);
@@ -140,9 +140,13 @@ void AnimationDockWidget::generateEasingActions(QPushButton *button,
 
     const auto presets = AppSupport::getEasingPresets();
     for (const auto &preset : presets) {
-        const auto presetAct = new QAction(easeIcon, QString(), this);
-        presetAct->setData(preset.second);
-        QString title = preset.first;
+        const auto presetAct = new QAction(QIcon::fromTheme(preset.icon.isEmpty() ?
+                                                                "easing" :
+                                                                preset.icon),
+                                           QString(),
+                                           this);
+        presetAct->setData(preset.path);
+        QString title = preset.title;
         if (title.startsWith(easeInText)) {
             title.replace(easeInText, "");
             menuIn->addAction(presetAct);

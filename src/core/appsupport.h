@@ -46,6 +46,12 @@ public:
         QString bindings;
         QString script;
     };
+    struct EasingPreset
+    {
+        QString icon;
+        QString title;
+        QString path;
+    };
     explicit AppSupport(QObject *parent = nullptr);
     static QVariant getSettings(const QString &group,
                                 const QString &key,
@@ -135,7 +141,7 @@ public:
     static void printVersion();
     static void printHelp(const bool &isRenderer);
     static const ExpressionPreset readEasingPreset(const QString &filename);
-    static const QList<QPair<QString,QString>> getEasingPresets();
+    static const QList<EasingPreset> getEasingPresets();
     static void handlePortableFirstRun();
 };
 

@@ -1084,42 +1084,42 @@ const AppSupport::ExpressionPreset AppSupport::readEasingPreset(const QString &f
     return preset;
 }
 
-const QList<QPair<QString, QString> > AppSupport::getEasingPresets()
+const QList<AppSupport::EasingPreset> AppSupport::getEasingPresets()
 {
-    QList<QPair<QString, QString> > presets;
+    QList<EasingPreset> presets;
 
-    presets.push_back({tr("Ease In Back"), ":/easing/presets/easeInBack.js"});
-    presets.push_back({tr("Ease In Bounce"), ":/easing/presets/easeInBounce.js"});
-    presets.push_back({tr("Ease In Circ"), ":/easing/presets/easeInCirc.js"});
-    presets.push_back({tr("Ease In Cubic"), ":/easing/presets/easeInCubic.js"});
-    presets.push_back({tr("Ease In Elastic"), ":/easing/presets/easeInElastic.js"});
-    presets.push_back({tr("Ease In Expo"), ":/easing/presets/easeInExpo.js"});
-    presets.push_back({tr("Ease In Quad"), ":/easing/presets/easeInQuad.js"});
-    presets.push_back({tr("Ease In Quart"), ":/easing/presets/easeInQuart.js"});
-    presets.push_back({tr("Ease In Quint"), ":/easing/presets/easeInQuint.js"});
-    presets.push_back({tr("Ease In Sine"), ":/easing/presets/easeInSine.js"});
+    presets.push_back({"easing-back-in", tr("Ease In Back"), ":/easing/presets/easeInBack.js"});
+    presets.push_back({"easing-bounce-in", tr("Ease In Bounce"), ":/easing/presets/easeInBounce.js"});
+    presets.push_back({"easing-circ-in", tr("Ease In Circ"), ":/easing/presets/easeInCirc.js"});
+    presets.push_back({"easing-cubic-in", tr("Ease In Cubic"), ":/easing/presets/easeInCubic.js"});
+    presets.push_back({"easing-elastic-in", tr("Ease In Elastic"), ":/easing/presets/easeInElastic.js"});
+    presets.push_back({"easing-expo-in", tr("Ease In Expo"), ":/easing/presets/easeInExpo.js"});
+    presets.push_back({"easing-quad-in", tr("Ease In Quad"), ":/easing/presets/easeInQuad.js"});
+    presets.push_back({"easing-quart-in", tr("Ease In Quart"), ":/easing/presets/easeInQuart.js"});
+    presets.push_back({"easing-quint-in", tr("Ease In Quint"), ":/easing/presets/easeInQuint.js"});
+    presets.push_back({"easing-sine-in", tr("Ease In Sine"), ":/easing/presets/easeInSine.js"});
 
-    presets.push_back({tr("Ease Out Back"), ":/easing/presets/easeOutBack.js"});
-    presets.push_back({tr("Ease Out Bounce"), ":/easing/presets/easeOutBounce.js"});
-    presets.push_back({tr("Ease Out Circ"), ":/easing/presets/easeOutCirc.js"});
-    presets.push_back({tr("Ease Out Cubic"), ":/easing/presets/easeOutCubic.js"});
-    presets.push_back({tr("Ease Out Elastic"), ":/easing/presets/easeOutElastic.js"});
-    presets.push_back({tr("Ease Out Expo"), ":/easing/presets/easeOutExpo.js"});
-    presets.push_back({tr("Ease Out Quad"), ":/easing/presets/easeOutQuad.js"});
-    presets.push_back({tr("Ease Out Quart"), ":/easing/presets/easeOutQuart.js"});
-    presets.push_back({tr("Ease Out Quint"), ":/easing/presets/easeOutQuint.js"});
-    presets.push_back({tr("Ease Out Sine"), ":/easing/presets/easeOutSine.js"});
+    presets.push_back({"easing-back-out", tr("Ease Out Back"), ":/easing/presets/easeOutBack.js"});
+    presets.push_back({"easing-bounce-out", tr("Ease Out Bounce"), ":/easing/presets/easeOutBounce.js"});
+    presets.push_back({"easing-circ-out", tr("Ease Out Circ"), ":/easing/presets/easeOutCirc.js"});
+    presets.push_back({"easing-cubic-out", tr("Ease Out Cubic"), ":/easing/presets/easeOutCubic.js"});
+    presets.push_back({"easing-elastic-out", tr("Ease Out Elastic"), ":/easing/presets/easeOutElastic.js"});
+    presets.push_back({"easing-expo-out", tr("Ease Out Expo"), ":/easing/presets/easeOutExpo.js"});
+    presets.push_back({"easing-quad-out", tr("Ease Out Quad"), ":/easing/presets/easeOutQuad.js"});
+    presets.push_back({"easing-quart-out", tr("Ease Out Quart"), ":/easing/presets/easeOutQuart.js"});
+    presets.push_back({"easing-quint-out", tr("Ease Out Quint"), ":/easing/presets/easeOutQuint.js"});
+    presets.push_back({"easing-sine-out", tr("Ease Out Sine"), ":/easing/presets/easeOutSine.js"});
 
-    presets.push_back({tr("Ease In/Out Back"), ":/easing/presets/easeInOutBack.js"});
-    presets.push_back({tr("Ease In/Out Bounce"), ":/easing/presets/easeInOutBounce.js"});
-    presets.push_back({tr("Ease In/Out Circ"), ":/easing/presets/easeInOutCirc.js"});
-    presets.push_back({tr("Ease In/Out Cubis"), ":/easing/presets/easeInOutCubic.js"});
-    presets.push_back({tr("Ease In/Out Elastic"), ":/easing/presets/easeInOutElastic.js"});
-    presets.push_back({tr("Ease In/Out Expo"), ":/easing/presets/easeInOutExpo.js"});
-    presets.push_back({tr("Ease In/Out Quad"), ":/easing/presets/easeInOutQuad.js"});
-    presets.push_back({tr("Ease In/Out Quart"), ":/easing/presets/easeInOutQuart.js"});
-    presets.push_back({tr("Ease In/Out Quint"), ":/easing/presets/easeInOutQuint.js"});
-    presets.push_back({tr("Ease In/Out Sine"), ":/easing/presets/easeInOutSine.js"});
+    presets.push_back({"easing-back-in-out", tr("Ease In/Out Back"), ":/easing/presets/easeInOutBack.js"});
+    presets.push_back({"easing-bounce-in-out", tr("Ease In/Out Bounce"), ":/easing/presets/easeInOutBounce.js"});
+    presets.push_back({"easing-circ-in-out", tr("Ease In/Out Circ"), ":/easing/presets/easeInOutCirc.js"});
+    presets.push_back({"easing-cubic-in-out", tr("Ease In/Out Cubis"), ":/easing/presets/easeInOutCubic.js"});
+    presets.push_back({"easing-elastic-in-out", tr("Ease In/Out Elastic"), ":/easing/presets/easeInOutElastic.js"});
+    presets.push_back({"easing-expo-in-out", tr("Ease In/Out Expo"), ":/easing/presets/easeInOutExpo.js"});
+    presets.push_back({"easing-quad-in-out", tr("Ease In/Out Quad"), ":/easing/presets/easeInOutQuad.js"});
+    presets.push_back({"easing-quart-in-out", tr("Ease In/Out Quart"), ":/easing/presets/easeInOutQuart.js"});
+    presets.push_back({"easing-quint-in-out", tr("Ease In/Out Quint"), ":/easing/presets/easeInOutQuint.js"});
+    presets.push_back({"easing-sine-in-out", tr("Ease In/Out Sine"), ":/easing/presets/easeInOutSine.js"});
 
     return presets;
 }

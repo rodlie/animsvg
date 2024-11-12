@@ -512,8 +512,12 @@ void MainWindow::setupMenuExtras()
         const QIcon easeIcon(QIcon::fromTheme("easing"));
         const auto presets = AppSupport::getEasingPresets();
         for (const auto &preset : presets) {
-            const auto presetAct = new QAction(easeIcon, preset.second, this);
-            presetAct->setData(preset.first);
+            const auto presetAct = new QAction(QIcon::fromTheme(preset.icon.isEmpty() ?
+                                                                    "easing" :
+                                                                    preset.icon),
+                                               preset.path,
+                                               this);
+            presetAct->setData(preset.title);
             cmdAddAction(presetAct);
             connect(presetAct, &QAction::triggered,
                     this, [this, presetAct]() {
