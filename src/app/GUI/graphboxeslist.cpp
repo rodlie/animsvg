@@ -25,6 +25,7 @@
 
 #include <QPainter>
 #include <QMouseEvent>
+#include "Animators/SmartPath/smartpathanimator.h"
 #include "Animators/transformanimator.h"
 #include "Expressions/expression.h"
 #include "Expressions/propertybindingparser.h"
@@ -82,8 +83,15 @@ void KeysView::graphEasingApply(QrealAnimator *anim,
                                 const FrameRange &range,
                                 const QString &easing)
 {
+    if (!anim) { return; }
+    if (const auto spa = enve_cast<SmartPathAnimator*>(anim)) {
+        qDebug() << "SmartPathAnimator does not support expressions";
+        // emit a warning or something
+        return;
+    }
     if (!graphEasingApplyExpression(anim, range, easing)) {
-        // add warning or something
+        qDebug() << "Failed to apply expression on" << anim->prp_getName() << range.fMin << range.fMax;
+        // emit a warning or something
     }
 }
 
