@@ -26,6 +26,7 @@
 #include <QToolButton>
 #include <QStackedLayout>
 #include <QDesktopWidget>
+#include <QStatusBar>
 
 #include "timelinewidget.h"
 #include "widgets/framescrollbar.h"
@@ -201,6 +202,13 @@ TimelineWidget::TimelineWidget(Document &document,
 
     mKeysView = new KeysView(mBoxesListWidget, this);
     mKeysViewLayout->addWidget(mKeysView);
+
+    connect(mKeysView, &KeysView::statusMessage,
+            this, [](const QString &message) {
+        if (MainWindow::sGetInstance()->statusBar()) {
+            MainWindow::sGetInstance()->statusBar()->showMessage(message, 5000);
+        }
+    });
 
     const auto high1 = mBoxesListWidget->requestHighlighter();
     const auto high2 = mKeysView->requestHighlighter();

@@ -141,6 +141,7 @@ protected:
 signals:
     void changedViewedFrames(FrameRange);
     void wheelEventSignal(QWheelEvent*);
+    void statusMessage(const QString &message);
 public:
     static QColor sGetAnimatorColor(const int i);
 

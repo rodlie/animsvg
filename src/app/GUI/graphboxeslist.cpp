@@ -85,13 +85,11 @@ void KeysView::graphEasingApply(QrealAnimator *anim,
 {
     if (!anim) { return; }
     if (const auto spa = enve_cast<SmartPathAnimator*>(anim)) {
-        qDebug() << "SmartPathAnimator does not support expressions";
-        // emit a warning or something
+        emit statusMessage(tr("Smart paths does not support easing"));
         return;
     }
     if (!graphEasingApplyExpression(anim, range, easing)) {
-        qDebug() << "Failed to apply expression on" << anim->prp_getName() << range.fMin << range.fMax;
-        // emit a warning or something
+        emit statusMessage(tr("Failed to apply easing on %1").arg(anim->prp_getName()));
     }
 }
 
