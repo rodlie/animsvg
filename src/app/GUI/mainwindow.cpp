@@ -810,39 +810,11 @@ void MainWindow::setupMenuBar()
         cmdAddAction(qAct);
     }
 
+    setupMenuScene();
 
-    mSceneMenu = mMenuBar->addMenu(tr("Scene", "MenuBar"));
     mEffectsMenu = mMenuBar->addMenu(tr("Effects"));
     mEffectsMenu->setEnabled(false);
     setupMenuEffects();
-
-    const auto newSceneAct = mSceneMenu->addAction(QIcon::fromTheme("file_new"),
-                                                   tr("New Scene", "MenuBar_Scene"),
-                                                   this, [this]() {
-        SceneSettingsDialog::sNewSceneDialog(mDocument, this);
-    });
-    cmdAddAction(newSceneAct);
-
-    const auto deleteSceneAct = mSceneMenu->addAction(QIcon::fromTheme("cancel"),
-                                                      tr("Delete Scene", "MenuBar_Scene"));
-    mActions.deleteSceneAction->connect(deleteSceneAct);
-    cmdAddAction(deleteSceneAct);
-
-    const auto scenePropAct = mSceneMenu->addAction(QIcon::fromTheme("sequence"),
-                                                    tr("Scene Properties", "MenuBar_Scene"));
-    mActions.sceneSettingsAction->connect(scenePropAct);
-    cmdAddAction(scenePropAct);
-
-    mSceneMenu->addSeparator();
-
-    mAddToQueAct = mSceneMenu->addAction(QIcon::fromTheme("render_animation"),
-                                         tr("Add to Render Queue", "MenuBar_Scene"),
-                                         this, &MainWindow::addCanvasToRenderQue,
-                                         QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                              "addToQue",
-                                                                              "F12").toString()));
-    mAddToQueAct->setEnabled(false);
-    cmdAddAction(mAddToQueAct);
 
     const auto zoomMenu = mViewMenu->addMenu(QIcon::fromTheme("zoom"), tr("Zoom","MenuBar_View"));
 
@@ -1119,6 +1091,77 @@ void MainWindow::setupMenuBar()
     mMenuBar->setCornerWidget(frictionButton,
                               Qt::TopRightCorner);
 #endif
+}
+
+void MainWindow::setupMenuScene()
+{
+    mSceneMenu = mMenuBar->addMenu(tr("Scene", "MenuBar"));
+
+    const auto newSceneAct = mSceneMenu->addAction(QIcon::fromTheme("file_new"),
+                                                   tr("New Scene", "MenuBar_Scene"),
+                                                   this, [this]() {
+        SceneSettingsDialog::sNewSceneDialog(mDocument, this);
+    });
+    cmdAddAction(newSceneAct);
+
+    const auto deleteSceneAct = mSceneMenu->addAction(QIcon::fromTheme("cancel"),
+                                                      tr("Delete Scene", "MenuBar_Scene"));
+    mActions.deleteSceneAction->connect(deleteSceneAct);
+    cmdAddAction(deleteSceneAct);
+
+    const auto scenePropAct = mSceneMenu->addAction(QIcon::fromTheme("sequence"),
+                                                    tr("Scene Properties", "MenuBar_Scene"));
+    mActions.sceneSettingsAction->connect(scenePropAct);
+    cmdAddAction(scenePropAct);
+
+    mSceneMenu->addSeparator();
+
+    mAddToQueAct = mSceneMenu->addAction(QIcon::fromTheme("render_animation"),
+                                         tr("Add to Render Queue", "MenuBar_Scene"),
+                                         this, &MainWindow::addCanvasToRenderQue,
+                                         QKeySequence(AppSupport::getSettings("shortcuts",
+                                                                              "addToQue",
+                                                                              "F12").toString()));
+    mAddToQueAct->setEnabled(false);
+    cmdAddAction(mAddToQueAct);
+
+    mSceneMenu->addSeparator();
+    mSceneMenu->addAction(QIcon::fromTheme("sequence"),
+                          tr("Set In"), this, [this]() {
+        const auto scene = *mDocument.fActiveScene;
+        if (!scene) { return; }
+        scene->setFrameIn(true, scene->getCurrentFrame());
+    });
+    mSceneMenu->addAction(QIcon::fromTheme("sequence"),
+                          tr("Set Out"), this, [this]() {
+        const auto scene = *mDocument.fActiveScene;
+        if (!scene) { return; }
+        scene->setFrameOut(true, scene->getCurrentFrame());
+    });
+    mSceneMenu->addAction(QIcon::fromTheme("sequence"),
+                          tr("Clear In/Out"), this, [this]() {
+        const auto scene = *mDocument.fActiveScene;
+        if (!scene) { return; }
+        scene->setFrameIn(false, 0);
+        scene->setFrameOut(false, 0);
+    });
+    mSceneMenu->addSeparator();
+    mSceneMenu->addAction(QIcon::fromTheme("dialog-information"),
+                          tr("Add Marker"), this, [this]() {
+        const auto scene = *mDocument.fActiveScene;
+        if (!scene) { return; }
+        scene->setMarker(scene->getCurrentFrame());
+    });
+    mSceneMenu->addAction(QIcon::fromTheme("trash"),
+                          tr("Clear Markers"), this, [this]() {
+        const auto scene = *mDocument.fActiveScene;
+        if (!scene) { return; }
+        scene->clearMarkers();
+    });
+    mSceneMenu->addAction(QIcon::fromTheme("dialog-information"),
+                          tr("Edit Markers"), this, [this]() {
+        openMarkerEditor();
+    });
 }
 
 BoundingBox *MainWindow::getCurrentBox()

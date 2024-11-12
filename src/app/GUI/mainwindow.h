@@ -330,6 +330,7 @@ private:
 
     void setupToolBar();
     void setupMenuBar();
+    void setupMenuScene();
     void setupMenuEffects();
     void setupMenuExtras();
     void setupPropertiesActions();
