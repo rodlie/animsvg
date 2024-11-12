@@ -311,25 +311,18 @@ void SceneSettingsDialog::sNewSceneDialog(Document& document,
     dialog->show();
 }
 
-void SceneSettingsDialog::updateDuration() {
-    const QString typetime = mTypeTime->currentData().toString();
+void SceneSettingsDialog::updateDuration(int index)
+{
     const qreal fps = mFPSSpinBox->value();
-    int index = mTypeTime->currentIndex();
-
-    if (mMinFrameSpin->value() >= mMaxFrameSpin->value()) {
-        return;
-    }
-
     switch(index) {
         case 0: // Convert seconds to frames
-            mMinFrameSpin->setValue(mMinFrameSpin->value() * fps);
-            mMaxFrameSpin->setValue(mMaxFrameSpin->value() * fps);
+            mMinFrameSpin->setValue(qRound(mMinFrameSpin->value() * fps));
+            mMaxFrameSpin->setValue(qRound(mMaxFrameSpin->value() * fps));
             break;
         case 1: // Convert frames to seconds
-            mMinFrameSpin->setValue(mMinFrameSpin->value() / fps);
-            mMaxFrameSpin->setValue(mMaxFrameSpin->value() / fps);
+            mMinFrameSpin->setValue(qRound(mMinFrameSpin->value() / fps));
+            mMaxFrameSpin->setValue(qRound(mMaxFrameSpin->value() / fps));
             break;
-        default:
-            return;
+        default:;
     }
 }

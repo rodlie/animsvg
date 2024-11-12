@@ -75,7 +75,7 @@ public:
 
 private:
     bool validate();
-    void updateDuration();
+    void updateDuration(int index);
 
     Canvas * mTargetCanvas = nullptr;
 
