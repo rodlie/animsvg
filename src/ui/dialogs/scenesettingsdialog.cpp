@@ -186,6 +186,8 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
     connect(mCancelButton, &QPushButton::released,
             this, &SceneSettingsDialog::reject);
     connect(this, &QDialog::rejected, this, &QDialog::close);
+    connect(mTypeTime, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &SceneSettingsDialog::updateDuration);
 
     validate();
 
@@ -307,4 +309,20 @@ void SceneSettingsDialog::sNewSceneDialog(Document& document,
     });
 
     dialog->show();
+}
+
+void SceneSettingsDialog::updateDuration(int index)
+{
+    const qreal fps = mFPSSpinBox->value();
+    switch(index) {
+        case 0: // Convert seconds to frames
+            mMinFrameSpin->setValue(qRound(mMinFrameSpin->value() * fps));
+            mMaxFrameSpin->setValue(qRound(mMaxFrameSpin->value() * fps));
+            break;
+        case 1: // Convert frames to seconds
+            mMinFrameSpin->setValue(qRound(mMinFrameSpin->value() / fps));
+            mMaxFrameSpin->setValue(qRound(mMaxFrameSpin->value() / fps));
+            break;
+        default:;
+    }
 }
