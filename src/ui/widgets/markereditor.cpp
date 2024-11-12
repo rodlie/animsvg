@@ -81,9 +81,10 @@ void MarkerEditor::setup()
     connect(addButton, &QPushButton::clicked,
             this, [this]() {
         auto item = new QTreeWidgetItem(mTree);
-        item->setText(1, "0");
-        item->setText(0, "0");
-        item->setData(0, Qt::UserRole, 0);
+        const int frame = mScene ? mScene->getCurrentFrame() : 0;
+        item->setText(1, QString::number(frame));
+        item->setText(0, QString::number(frame));
+        item->setData(0, Qt::UserRole, frame);
         item->setCheckState(0, Qt::Checked);
         item->setFlags(item->flags() | Qt::ItemIsEditable);
         mTree->addTopLevelItem(item);
