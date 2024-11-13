@@ -41,6 +41,13 @@ class UI_EXPORT FrameScrollBar : public QWidget
 {
     Q_OBJECT
 public:
+    struct InteractiveMarker
+    {
+        int frame;
+        bool enabled;
+        bool in;
+        bool out;
+    };
     explicit FrameScrollBar(const int minSpan,
                             const int maxSpan,
                             const bool range,
@@ -115,7 +122,7 @@ private:
 
     QFontMetrics mFm;
 
-    FrameMarker mGrabbedMarker;
+    InteractiveMarker mGrabbedMarker;
 
     QColor mHandleColor = ThemeSupport::getThemeButtonBorderColor();
     qptr<Canvas> mCurrentCanvas;

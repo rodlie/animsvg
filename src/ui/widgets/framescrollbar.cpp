@@ -40,7 +40,7 @@ FrameScrollBar::FrameScrollBar(const int minSpan,
                                QWidget *parent)
     : QWidget(parent)
     , mFm(QFontMetrics(font()))
-    , mGrabbedMarker({"", false, 0})
+    , mGrabbedMarker({0, false, false, false})
 {
     mDisplayTime = AppSupport::getSettings("ui",
                                            "DisplayTimecode",
@@ -431,8 +431,13 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
     mPressed = true;
     mLastMousePressFrame = posToFrame(event->x() );
     bool hasMarker = mCurrentCanvas ? mCurrentCanvas->hasMarker(mLastMousePressFrame) : false;
-    if (event->button() == Qt::LeftButton && hasMarker) { // grab current marker
+    bool hasMarkerIn = mCurrentCanvas ? mCurrentCanvas->hasMarkerIn(mLastMousePressFrame) : false;
+    bool hasMarkerOut = mCurrentCanvas ? mCurrentCanvas->hasMarkerOut(mLastMousePressFrame) : false;
+    if (event->button() == Qt::LeftButton &&
+        (hasMarker || hasMarkerIn || hasMarkerOut)) { // grab current marker
         mGrabbedMarker.enabled = true;
+        mGrabbedMarker.in = hasMarkerIn;
+        mGrabbedMarker.out = hasMarkerOut;
         mGrabbedMarker.frame = mLastMousePressFrame;
         return;
     }
@@ -449,8 +454,18 @@ void FrameScrollBar::mouseMoveEvent(QMouseEvent *event)
 {
     qreal newFrame = posToFrame(event->x() );
     if (mGrabbedMarker.enabled && mCurrentCanvas) { // move grabbed marker
-        if (mCurrentCanvas->hasMarker(newFrame)) { return; }
-        mCurrentCanvas->moveMarkerFrame(mGrabbedMarker.frame, newFrame);
+        if (mGrabbedMarker.in) {
+            if (mCurrentCanvas->hasMarkerIn(newFrame) ||
+                mCurrentCanvas->hasMarkerOut(newFrame)) { return; }
+            mCurrentCanvas->setFrameIn(true, newFrame);
+        } else if (mGrabbedMarker.out) {
+            if (mCurrentCanvas->hasMarkerOut(newFrame) ||
+                mCurrentCanvas->hasMarkerIn(newFrame)) { return; }
+            mCurrentCanvas->setFrameOut(true, newFrame);
+        } else {
+            if (mCurrentCanvas->hasMarker(newFrame)) { return; }
+            mCurrentCanvas->moveMarkerFrame(mGrabbedMarker.frame, newFrame);
+        }
         mGrabbedMarker.frame = newFrame;
         return;
     }
@@ -466,6 +481,8 @@ void FrameScrollBar::mouseReleaseEvent(QMouseEvent *)
     mPressed = false;
     if (mGrabbedMarker.enabled) { // release grabbed marker
         mGrabbedMarker.enabled = false;
+        mGrabbedMarker.in = false;
+        mGrabbedMarker.out = false;
         mGrabbedMarker.frame = 0;
     }
     update();

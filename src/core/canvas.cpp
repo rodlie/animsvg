@@ -433,6 +433,7 @@ void Canvas::setFrameRange(const FrameRange &range)
 void Canvas::setFrameIn(const bool enabled,
                         const int frameIn)
 {
+    if (enabled && mOut.enabled && frameIn >= mOut.frame) { return; }
     mIn.enabled = enabled;
     mIn.frame = frameIn;
     emit requestUpdate();
@@ -441,6 +442,7 @@ void Canvas::setFrameIn(const bool enabled,
 void Canvas::setFrameOut(const bool enabled,
                          const int frameOut)
 {
+    if (enabled && mIn.enabled && frameOut <= mIn.frame) { return; }
     mOut.enabled = enabled;
     mOut.frame = frameOut;
     emit requestUpdate();
@@ -501,6 +503,16 @@ bool Canvas::hasMarker(const int frame,
         index++;
     }
     return false;
+}
+
+bool Canvas::hasMarkerIn(const int frame)
+{
+    return mIn.enabled && mIn.frame == frame;
+}
+
+bool Canvas::hasMarkerOut(const int frame)
+{
+    return mOut.enabled && mOut.frame == frame;
 }
 
 bool Canvas::hasMarkerEnabled(const int frame)
