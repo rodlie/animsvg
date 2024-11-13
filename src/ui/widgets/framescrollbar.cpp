@@ -26,6 +26,8 @@
 #include "framescrollbar.h"
 #include <QMouseEvent>
 #include <QPainter>
+#include <QMenu>
+
 #include "GUI/global.h"
 #include "colorhelpers.h"
 #include "appsupport.h"
@@ -38,6 +40,7 @@ FrameScrollBar::FrameScrollBar(const int minSpan,
                                QWidget *parent)
     : QWidget(parent)
     , mFm(QFontMetrics(font()))
+    , mGrabbedMarker({"", false, 0})
 {
     mDisplayTime = AppSupport::getSettings("ui",
                                            "DisplayTimecode",
@@ -199,12 +202,14 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         }
 
         // draw handle
-        QPainterPath path;
-        path.moveTo(handleRect.left() + (handleRect.width() / 2), handleRect.bottom());
-        path.lineTo(handleRect.topLeft());
-        path.lineTo(handleRect.topRight());
-        path.lineTo(handleRect.left() + (handleRect.width() / 2), handleRect.bottom());
-        p.fillPath(path, ThemeSupport::getThemeHighlightColor());
+        if (!mGrabbedMarker.enabled) {
+            QPainterPath path;
+            path.moveTo(handleRect.left() + (handleRect.width() / 2), handleRect.bottom());
+            path.lineTo(handleRect.topLeft());
+            path.lineTo(handleRect.topRight());
+            path.lineTo(handleRect.left() + (handleRect.width() / 2), handleRect.bottom());
+            p.fillPath(path, ThemeSupport::getThemeHighlightColor());
+        }
     }
 
     p.end();
@@ -310,7 +315,7 @@ bool FrameScrollBar::setFirstViewedFrame(const int firstFrame) {
     }
 
 }
-#include <QMenu>
+
 void FrameScrollBar::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::RightButton && !mRange) {
@@ -425,6 +430,12 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
     }
     mPressed = true;
     mLastMousePressFrame = posToFrame(event->x() );
+    bool hasMarker = mCurrentCanvas ? mCurrentCanvas->hasMarker(mLastMousePressFrame) : false;
+    if (event->button() == Qt::LeftButton && hasMarker) { // grab current marker
+        mGrabbedMarker.enabled = true;
+        mGrabbedMarker.frame = mLastMousePressFrame;
+        return;
+    }
     if (mLastMousePressFrame < mFirstViewedFrame ||
         mLastMousePressFrame > mFirstViewedFrame + mViewedFramesSpan) {
         setFirstViewedFrame(qRound(mLastMousePressFrame - mViewedFramesSpan/2.));
@@ -434,17 +445,29 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
     update();
 }
 
-void FrameScrollBar::mouseMoveEvent(QMouseEvent *event) {
+void FrameScrollBar::mouseMoveEvent(QMouseEvent *event)
+{
     qreal newFrame = posToFrame(event->x() );
+    if (mGrabbedMarker.enabled && mCurrentCanvas) { // move grabbed marker
+        if (mCurrentCanvas->hasMarker(newFrame)) { return; }
+        mCurrentCanvas->moveMarkerFrame(mGrabbedMarker.frame, newFrame);
+        mGrabbedMarker.frame = newFrame;
+        return;
+    }
     int moveFrame = qRound(newFrame - mLastMousePressFrame);
-    if(setFirstViewedFrame(mSavedFirstFrame + moveFrame)) {
+    if (setFirstViewedFrame(mSavedFirstFrame + moveFrame)) {
         emitTriggeredChange();
         update();
     }
 }
 
-void FrameScrollBar::mouseReleaseEvent(QMouseEvent *) {
+void FrameScrollBar::mouseReleaseEvent(QMouseEvent *)
+{
     mPressed = false;
+    if (mGrabbedMarker.enabled) { // release grabbed marker
+        mGrabbedMarker.enabled = false;
+        mGrabbedMarker.frame = 0;
+    }
     update();
 }
 

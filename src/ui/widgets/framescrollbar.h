@@ -115,6 +115,8 @@ private:
 
     QFontMetrics mFm;
 
+    FrameMarker mGrabbedMarker;
+
     QColor mHandleColor = ThemeSupport::getThemeButtonBorderColor();
     qptr<Canvas> mCurrentCanvas;
 };

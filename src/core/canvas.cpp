@@ -530,6 +530,18 @@ bool Canvas::editMarker(const int frame,
     return false;
 }
 
+void Canvas::moveMarkerFrame(const int markerFrame,
+                             const int newFrame)
+{
+    if (markerFrame == newFrame) { return; }
+    qDebug() << "moveMarkerFrame" << markerFrame << newFrame;
+    int index = getMarkerIndex(markerFrame);
+    if (index >= 0) {
+        mMarkers.at(index).frame = newFrame;
+        emit newFrameRange(mRange);
+    }
+}
+
 const QString Canvas::getMarkerText(int frame)
 {
     for (const auto &mark: mMarkers) {

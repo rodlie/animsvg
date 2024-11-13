@@ -371,6 +371,8 @@ public:
     bool editMarker(const int frame,
                     const QString &title,
                     const bool enabled);
+    void moveMarkerFrame(const int markerFrame,
+                         const int newFrame);
     const QString getMarkerText(int frame);
     int getMarkerIndex(const int frame);
     const std::vector<FrameMarker> getMarkers();
