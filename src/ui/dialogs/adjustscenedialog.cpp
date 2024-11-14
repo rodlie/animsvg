@@ -45,6 +45,9 @@ AdjustSceneDialog::AdjustSceneDialog(Canvas *scene,
 
     setMinimumWidth(400);
     setWindowTitle(tr("Adjust scene to clip?"));
+#ifdef Q_OS_MAC
+    setWindowFlag(Qt::Tool);
+#endif
 
     const auto mLayout = new QVBoxLayout(this);
 

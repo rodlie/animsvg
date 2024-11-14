@@ -34,6 +34,9 @@
 RenderOutputWidget::RenderOutputWidget(const int canvasWidth,
                                        const int canvasHeight,
                                        QWidget *parent) : QDialog(parent) {
+#ifdef Q_OS_MAC
+    setWindowFlag(Qt::Tool);
+#endif
     mCanvasWidth = canvasWidth;
     mCanvasHeight = canvasHeight;
 

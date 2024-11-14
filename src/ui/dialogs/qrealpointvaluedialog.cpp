@@ -30,6 +30,9 @@ QrealPointValueDialog::QrealPointValueDialog(QrealPoint *point,
                                              QWidget *parent) :
     QDialog(parent) {
     setWindowTitle("Edit key");
+#ifdef Q_OS_MAC
+    setWindowFlag(Qt::Tool);
+#endif
     mMainLayout = new QVBoxLayout(this);
     setLayout(mMainLayout);
 

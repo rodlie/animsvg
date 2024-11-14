@@ -37,6 +37,9 @@ ApplyExpressionDialog::ApplyExpressionDialog(QrealAnimator* const target,
                                              QWidget * const parent) :
     QDialog(parent), mTarget(target) {
     setWindowTitle("Apply Expression " + target->prp_getName());
+#ifdef Q_OS_MAC
+    setWindowFlag(Qt::Tool);
+#endif
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     const auto mainLayout = new QVBoxLayout(this);

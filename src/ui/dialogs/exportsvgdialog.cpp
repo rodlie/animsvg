@@ -46,6 +46,9 @@ ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
     : QDialog(parent)
 {
     setWindowTitle(tr("Export SVG"));
+#ifdef Q_OS_MAC
+    setWindowFlag(Qt::Tool);
+#endif
 
     const auto settingsLayout = new QVBoxLayout();
 

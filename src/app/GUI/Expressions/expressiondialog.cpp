@@ -299,7 +299,7 @@ ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
 {
     setWindowTitle(tr("Expression %1").arg(target->prp_getName()));
 #ifdef Q_OS_MAC
-    setWindowFlag(Qt::WindowStaysOnTopHint);
+    setWindowFlag(Qt::Tool);
 #endif
 
     const auto windowLayout = new QVBoxLayout(this);

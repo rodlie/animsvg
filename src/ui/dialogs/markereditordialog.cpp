@@ -38,7 +38,7 @@ MarkerEditorDialog::MarkerEditorDialog(Canvas *scene,
 {
     setWindowTitle(tr("Marker Editor"));
 #ifdef Q_OS_MAC
-    setWindowFlag(Qt::WindowStaysOnTopHint);
+    setWindowFlag(Qt::Tool);
 #endif
 
     const auto lay = new QVBoxLayout(this);

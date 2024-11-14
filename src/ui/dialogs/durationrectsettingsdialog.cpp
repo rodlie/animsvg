@@ -31,6 +31,9 @@
 DurationRectSettingsDialog::DurationRectSettingsDialog(
         DurationRectangle* const target, QWidget *parent) :
     QDialog(parent), mTarget(target) {
+#ifdef Q_OS_MAC
+    setWindowFlag(Qt::Tool);
+#endif
     const auto values = mTarget->getValues();
     const auto mainLayout = new QVBoxLayout(this);
     const auto twoColumnLayout = new TwoColumnLayout();

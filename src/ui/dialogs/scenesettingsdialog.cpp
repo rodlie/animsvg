@@ -74,6 +74,9 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
     mEnableResolutionPresetsAuto = presetsResolutionSettings.second;
 
     setWindowTitle(tr("Scene Properties"));
+#ifdef Q_OS_MAC
+    setWindowFlag(Qt::Tool);
+#endif
     mMainLayout = new QVBoxLayout(this);
     mMainLayout->setSizeConstraint(QLayout::SetFixedSize);
 

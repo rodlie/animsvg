@@ -43,11 +43,14 @@ CommandPalette::CommandPalette(Document& document,
     , mSuggestions(nullptr)
     , mHistoryCounter(-1)
 {
-    setWindowFlags(Qt::Window | Qt::FramelessWindowHint
+
 #ifdef Q_OS_MAC
-                   | Qt::WindowStaysOnTopHint
+    setWindowFlags(Qt::Tool
+#else
+    setWindowFlags(Qt::Window
 #endif
-                   );
+    | Qt::FramelessWindowHint);
+
     setAttribute(Qt::WA_NoSystemBackground);
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_TransparentForMouseEvents);
