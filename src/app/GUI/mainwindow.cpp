@@ -1475,7 +1475,7 @@ bool MainWindow::askForSaving() {
         QString file = info.baseName();
         if (file.isEmpty()) { file = tr("Untitled"); }
 
-        const QString question = tr("Save changes to document \"%1\"?",
+        const QString question = tr("Save changes to document \"%1\"?          ", // empty spaces at the end of the question to make room for buttons
                                     "AskSaveDialog_Question");
         const QString questionWithTarget = question.arg(file);
         const QString closeNoSave =  tr("Close without saving",
