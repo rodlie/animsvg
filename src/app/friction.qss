@@ -602,3 +602,9 @@ Friction--Ui--ToolBar::separator:vertical {
 Friction--Ui--ToolBar::separator:horizontal {
     width: 1px;
 }
+
+QMessageBox QPushButton {
+    min-width: 50px;
+    padding-left: 6px;
+    padding-right: 6px;
+}
