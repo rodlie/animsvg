@@ -433,6 +433,7 @@ void Canvas::setFrameRange(const FrameRange &range)
 void Canvas::setFrameIn(const bool enabled,
                         const int frameIn)
 {
+    if (enabled && mOut.enabled && frameIn >= mOut.frame) { return; }
     mIn.enabled = enabled;
     mIn.frame = frameIn;
     emit requestUpdate();
@@ -441,6 +442,7 @@ void Canvas::setFrameIn(const bool enabled,
 void Canvas::setFrameOut(const bool enabled,
                          const int frameOut)
 {
+    if (enabled && mIn.enabled && frameOut <= mIn.frame) { return; }
     mOut.enabled = enabled;
     mOut.frame = frameOut;
     emit requestUpdate();
@@ -503,6 +505,16 @@ bool Canvas::hasMarker(const int frame,
     return false;
 }
 
+bool Canvas::hasMarkerIn(const int frame)
+{
+    return mIn.enabled && mIn.frame == frame;
+}
+
+bool Canvas::hasMarkerOut(const int frame)
+{
+    return mOut.enabled && mOut.frame == frame;
+}
+
 bool Canvas::hasMarkerEnabled(const int frame)
 {
     for (const auto &mark : mMarkers) {
@@ -528,6 +540,18 @@ bool Canvas::editMarker(const int frame,
         return true;
     }
     return false;
+}
+
+void Canvas::moveMarkerFrame(const int markerFrame,
+                             const int newFrame)
+{
+    if (markerFrame == newFrame) { return; }
+    qDebug() << "moveMarkerFrame" << markerFrame << newFrame;
+    int index = getMarkerIndex(markerFrame);
+    if (index >= 0) {
+        mMarkers.at(index).frame = newFrame;
+        emit newFrameRange(mRange);
+    }
 }
 
 const QString Canvas::getMarkerText(int frame)
