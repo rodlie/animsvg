@@ -636,6 +636,9 @@ void GraphAnimator::graph_saveSVG(SvgExporter& exp,
 
         anim.setAttribute("calcMode", "spline");
         anim.setAttribute("values", values.join(';'));
+        if (motion) {
+            anim.setAttribute("keyPoints", values.join(';'));
+        }
         anim.setAttribute("keyTimes", keyTimes.join(';'));
         anim.setAttribute("keySplines", keySplines.join(';'));
 
