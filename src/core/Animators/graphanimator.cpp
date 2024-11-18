@@ -558,7 +558,7 @@ void GraphAnimator::graph_saveSVG(SvgExporter& exp,
             anim.setAttribute("attributeName", attrName);
             if (!type.isEmpty()) { anim.setAttribute("type", type);  }
         } else {
-            //if (motionRotate) { anim.setAttribute("rotate", "auto"); }
+            if (motionRotate) { anim.setAttribute("rotate", "auto"); }
             if (!motionPath.isEmpty()) {
                 auto mpath = exp.createElement("mpath");
                 mpath.setAttribute("href", QString("#%1").arg(AppSupport::filterId(motionPath)));
