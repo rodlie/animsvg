@@ -163,27 +163,26 @@ const VideoBox::VideoSpecs VideoBox::getSpecs()
     return specs;
 }
 
-void VideoBox::soundDataChanged() {
+void VideoBox::soundDataChanged()
+{
     const auto pScene = getParentScene();
     const auto soundHandler = mFileHandler ?
                 mFileHandler->getSoundHandler() : nullptr;
     const auto durRect = getDurationRectangle();
-    if(soundHandler) {
-        if(!mSound->SWT_isVisible()) {
-            if(pScene) {
-                pScene->getSoundComposition()->addSound(mSound);
-            }
+    if (soundHandler) {
+        if (!mSound->SWT_isVisible()) {
+            if (pScene) { pScene->getSoundComposition()->addSound(mSound); }
         }
         durRect->setSoundCacheHandler(&soundHandler->getCacheHandler());
     } else {
-        if(mSound->SWT_isVisible()) {
-            if(pScene) {
-                pScene->getSoundComposition()->removeSound(mSound);
-            }
+        if (mSound->SWT_isVisible()) {
+            if (pScene) { pScene->getSoundComposition()->removeSound(mSound); }
         }
         durRect->setSoundCacheHandler(nullptr);
     }
     mSound->setSoundDataHandler(soundHandler);
     mSound->SWT_setVisible(soundHandler);
-    mSound->setVisible(soundHandler);
+
+    // why? this does not make any sense to me
+    //mSound->setVisible(soundHandler);
 }
