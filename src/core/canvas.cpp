@@ -552,6 +552,7 @@ void Canvas::moveMarkerFrame(const int markerFrame,
     if (index >= 0) {
         mMarkers.at(index).frame = newFrame;
         emit newFrameRange(mRange);
+        emit markersChanged();
     }
 }
 
