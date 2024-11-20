@@ -41,6 +41,10 @@ MarkerEditor::MarkerEditor(Canvas *scene,
     lay->addWidget(mTree);
     setup();
     populate();
+        
+    if (mScene) {
+        connect(mScene, &Canvas::markersChanged, this, &MarkerEditor::populate);
+    }
 }
 
 void MarkerEditor::setup()

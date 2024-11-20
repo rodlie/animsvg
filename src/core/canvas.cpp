@@ -477,6 +477,7 @@ void Canvas::setMarker(const QString &title,
 void Canvas::setMarker(const int frame)
 {
     setMarker(QString::number(mMarkers.size()), frame);
+    emit markersChanged();
 }
 
 void Canvas::setMarkerEnabled(const int frame,
@@ -578,6 +579,7 @@ const std::vector<FrameMarker> Canvas::getMarkers()
 void Canvas::clearMarkers()
 {
     mMarkers.clear();
+    emit markersChanged();
     emit requestUpdate();
 }
 
