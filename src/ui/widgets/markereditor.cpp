@@ -80,8 +80,14 @@ void MarkerEditor::setup()
 
     connect(addButton, &QPushButton::clicked,
             this, [this]() {
-        auto item = new QTreeWidgetItem(mTree);
         const int frame = mScene ? mScene->getCurrentFrame() : 0;
+        for (int i = 0; i < mTree->topLevelItemCount(); ++i) {
+            auto existingItem = mTree->topLevelItem(i);
+            if (existingItem && existingItem->data(0, Qt::UserRole).toInt() == frame) {
+                return;
+            }
+        }
+        auto item = new QTreeWidgetItem(mTree);
         mTree->blockSignals(true);
         item->setText(1, QString::number(frame));
         item->setText(0, QString::number(frame));
