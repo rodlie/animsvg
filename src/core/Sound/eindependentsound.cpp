@@ -25,128 +25,148 @@
 
 #include "eindependentsound.h"
 
+#include <QInputDialog>
+
+#include "typemenu.h"
 #include "Timeline/fixedlenanimationrect.h"
 #include "fileshandler.h"
+#include "ReadWrite/basicreadwrite.h"
 
-SoundFileHandler* soundFileHandlerGetter(const QString& path) {
+SoundFileHandler* soundFileHandlerGetter(const QString& path)
+{
     return FilesHandler::sInstance->getFileHandler<SoundFileHandler>(path);
 }
 
-qsptr<FixedLenAnimationRect> createIndependentSoundDur(
-        eIndependentSound* const sound) {
+qsptr<FixedLenAnimationRect> createIndependentSoundDur(eIndependentSound* const sound)
+{
     const auto result = enve::make_shared<FixedLenAnimationRect>(*sound, true);
     return result;
 }
 
-eIndependentSound::eIndependentSound() :
-    eSoundObjectBase(createIndependentSoundDur(this)),
-    mFileHandler(this,
-                 [](const QString& path) {
-                     return soundFileHandlerGetter(path);
-                 },
-                 [this](SoundFileHandler* obj) {
-                     fileHandlerAfterAssigned(obj);
-                 },
-                 [this](ConnContext& conn, SoundFileHandler* obj) {
-                     fileHandlerConnector(conn, obj);
-                 }) {
+eIndependentSound::eIndependentSound()
+    : eSoundObjectBase(createIndependentSoundDur(this))
+    , mFileHandler(this,
+                   [](const QString& path) {
+                       return soundFileHandlerGetter(path);
+                   },
+                   [this](SoundFileHandler* obj) {
+                       fileHandlerAfterAssigned(obj);
+                   },
+                   [this](ConnContext& conn, SoundFileHandler* obj) {
+                       fileHandlerConnector(conn, obj);
+                   })
+{}
 
-}
-
-void eIndependentSound::fileHandlerConnector(ConnContext &conn, SoundFileHandler *obj) {
+void eIndependentSound::fileHandlerConnector(ConnContext &conn,
+                                             SoundFileHandler *obj)
+{
     conn << connect(obj, &SoundFileHandler::pathChanged,
                     this, &eSoundObjectBase::prp_afterWholeInfluenceRangeChanged);
     conn << connect(obj, &SoundFileHandler::reloaded,
                     this, &eSoundObjectBase::prp_afterWholeInfluenceRangeChanged);
 }
 
-void eIndependentSound::fileHandlerAfterAssigned(SoundFileHandler *obj) {
+void eIndependentSound::fileHandlerAfterAssigned(SoundFileHandler *obj)
+{
     if(obj) {
-        const auto newDataHandler = FileDataCacheHandler::
-                sGetDataHandler<SoundDataHandler>(obj->path());
+        const auto newDataHandler = FileDataCacheHandler::sGetDataHandler<SoundDataHandler>(obj->path());
         setSoundDataHandler(newDataHandler);
     } else {
         setSoundDataHandler(nullptr);
     }
 }
 
-#include <QInputDialog>
-#include "typemenu.h"
-void eIndependentSound::prp_setupTreeViewMenu(PropertyMenu * const menu) {
-    if(menu->hasActionsForType<eIndependentSound>()) return;
+
+void eIndependentSound::prp_setupTreeViewMenu(PropertyMenu * const menu)
+{
+    if (menu->hasActionsForType<eIndependentSound>()) { return; }
     menu->addedActionsForType<eIndependentSound>();
     eSoundObjectBase::prp_setupTreeViewMenu(menu);
-    const auto widget = menu->getParentWidget();
-    const PropertyMenu::PlainSelectedOp<eIndependentSound> stretchOp =
-            [this, widget](eIndependentSound * sound) {
+
+    const PropertyMenu::PlainTriggeredOp stretchOp = [this]() {
         bool ok = false;
-        const int stretch = QInputDialog::getInt(
-                    widget, "Stretch " + sound->prp_getName(),
-                    "Stretch:", qRound(getStretch()*100),
-                    -1000, 1000, 1, &ok);
-        if(!ok) return;
-        sound->setStretch(stretch*0.01);
+        const int stretch = QInputDialog::getInt(nullptr,
+                                                 tr("Stretch"),
+                                                 tr("Stretch"),
+                                                 qRound(getStretch() * 100),
+                                                 -1000,
+                                                 1000,
+                                                 1,
+                                                 &ok);
+        if (!ok) { return; }
+        setStretch(stretch * 0.01);
     };
-    menu->addPlainAction(QIcon::fromTheme("width"), tr("Stretch"), stretchOp);
+    menu->addPlainAction(QIcon::fromTheme("width"),
+                         tr("Stretch"),
+                         stretchOp);
 
     const PropertyMenu::PlainTriggeredOp deleteOp = [this]() {
         removeFromParent_k();
     };
-    menu->addPlainAction(QIcon::fromTheme("trash"), tr("Delete"), deleteOp);
+    menu->addPlainAction(QIcon::fromTheme("trash"),
+                         tr("Delete"),
+                         deleteOp);
 }
 
 bool eIndependentSound::SWT_shouldBeVisible(const SWT_RulesCollection &rules,
                                             const bool parentSatisfies,
-                                            const bool parentMainTarget) const {
+                                            const bool parentMainTarget) const
+{
     Q_UNUSED(parentMainTarget);
-    if(rules.fRule == SWT_BoxRule::visible && !isVisible()) return false;
-    if(rules.fRule == SWT_BoxRule::selected && !isSelected()) return false;
-    if(rules.fType == SWT_Type::sound) return true;
-    if(rules.fType == SWT_Type::graphics) return false;
+    if (rules.fRule == SWT_BoxRule::visible && !isVisible()) { return false; }
+    if (rules.fRule == SWT_BoxRule::selected && !isSelected()) { return false; }
+    if (rules.fType == SWT_Type::sound) { return true; }
+    if (rules.fType == SWT_Type::graphics) { return false; }
     return parentSatisfies;
 }
 
-void eIndependentSound::setFilePathNoRename(const QString &path) {
+void eIndependentSound::setFilePathNoRename(const QString &path)
+{
     mFileHandler.assign(path);
 }
 
-void eIndependentSound::setFilePath(const QString &path) {
+void eIndependentSound::setFilePath(const QString &path)
+{
     setFilePathNoRename(path);
     rename(QFileInfo(path).completeBaseName());
 }
 
-void eIndependentSound::updateDurationRectLength() {
-    if(cacheHandler() && getParentScene()) {
+void eIndependentSound::updateDurationRectLength()
+{
+    if (cacheHandler() && getParentScene()) {
         const qreal secs = durationSeconds();
         const qreal fps = getCanvasFPS();
-        const int frames = qCeil(qAbs(secs*fps*getStretch()));
-        const auto flaRect = static_cast<FixedLenAnimationRect*>(
-                    getDurationRectangle());
+        const int frames = qCeil(qAbs(secs * fps * getStretch()));
+        const auto flaRect = static_cast<FixedLenAnimationRect*>(getDurationRectangle());
         flaRect->setAnimationFrameDuration(frames);
     }
 }
 
-#include "ReadWrite/basicreadwrite.h"
-void eIndependentSound::prp_writeProperty_impl(eWriteStream& dst) const {
+void eIndependentSound::prp_writeProperty_impl(eWriteStream& dst) const
+{
     eBoxOrSound::prp_writeProperty_impl(dst);
     dst.writeFilePath(mFileHandler.path());
 }
 
-void eIndependentSound::prp_readProperty_impl(eReadStream& src) {
+void eIndependentSound::prp_readProperty_impl(eReadStream& src)
+{
     eBoxOrSound::prp_readProperty_impl(src);
     const QString filePath = src.readFilePath();
-    if(!filePath.isEmpty()) setFilePathNoRename(filePath);
+    if (!filePath.isEmpty()) { setFilePathNoRename(filePath); }
 }
 
-QDomElement eIndependentSound::prp_writePropertyXEV_impl(const XevExporter& exp) const {
+QDomElement eIndependentSound::prp_writePropertyXEV_impl(const XevExporter& exp) const
+{
     auto result = eBoxOrSound::prp_writePropertyXEV_impl(exp);
     const QString& absSrc = mFileHandler.path();
     XevExportHelpers::setAbsAndRelFileSrc(absSrc, result, exp);
     return result;
 }
 
-void eIndependentSound::prp_readPropertyXEV_impl(const QDomElement& ele, const XevImporter& imp) {
+void eIndependentSound::prp_readPropertyXEV_impl(const QDomElement& ele,
+                                                 const XevImporter& imp)
+{
     eBoxOrSound::prp_readPropertyXEV_impl(ele, imp);
     const QString absSrc = XevExportHelpers::getAbsAndRelFileSrc(ele, imp);
-    if(!absSrc.isEmpty()) setFilePathNoRename(absSrc);
+    if (!absSrc.isEmpty()) { setFilePathNoRename(absSrc); }
 }
