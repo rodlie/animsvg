@@ -60,7 +60,7 @@ VideoBox::VideoBox() : AnimationBox("Video", eBoxType::video),
     const auto flar = getDurationRectangle()->ref<FixedLenAnimationRect>();
     mSound = enve::make_shared<eVideoSound>(flar);
     ca_addChild(mSound);
-    mSound->hide();
+    //mSound->hide(); // should be on by default
     mSound->SWT_hide();
 
     connect(this, &eBoxOrSound::parentChanged,
