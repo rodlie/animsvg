@@ -30,7 +30,7 @@
 
 class NullObjectType : public ComboBoxProperty {
     enum class Type {
-        square, circle, crosshair, triangle
+        square, circle, triangle, crosshair
     };
 public:
     NullObjectType(ColorAnimator* const color,
@@ -53,8 +53,8 @@ NullObjectType::NullObjectType(ColorAnimator* const color,
                                QrealAnimator* const size) :
     ComboBoxProperty("type", QStringList()  << "square" <<
                                                "circle" <<
-                                               "crosshair" <<
-                                               "triangle"),
+                                               "triangle" <<
+                                               "crosshair"),
     mColor(color), mSize(size) {
     prp_setDrawingOnCanvasEnabled(true);
 
