@@ -38,6 +38,7 @@ private:
     qsptr<BoolProperty> mPathWise;
     qsptr<QrealAnimator> mMin;
     qsptr<QrealAnimator> mMax;
+    qsptr<QrealAnimator> mOffset;
 };
 
 #endif // SUBPATHEFFECT_H
