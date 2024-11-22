@@ -44,6 +44,7 @@ namespace EvFormat {
         svgBeginEnd = 29,
         formatOptions = 30,
         formatOptions2 = 31,
+        subPathOffset = 32,
 
         nextVersion
     };
