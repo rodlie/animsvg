@@ -27,6 +27,7 @@
 
 #include <QInputDialog>
 
+#include "ReadWrite/evformat.h"
 #include "typemenu.h"
 #include "Timeline/fixedlenanimationrect.h"
 #include "fileshandler.h"
@@ -146,6 +147,7 @@ void eIndependentSound::prp_writeProperty_impl(eWriteStream& dst) const
 {
     eBoxOrSound::prp_writeProperty_impl(dst);
     dst.writeFilePath(mFileHandler.path());
+    dst << getStretch();
 }
 
 void eIndependentSound::prp_readProperty_impl(eReadStream& src)
@@ -153,6 +155,11 @@ void eIndependentSound::prp_readProperty_impl(eReadStream& src)
     eBoxOrSound::prp_readProperty_impl(src);
     const QString filePath = src.readFilePath();
     if (!filePath.isEmpty()) { setFilePathNoRename(filePath); }
+    if (src.evFileVersion() >= EvFormat::avStretch) {
+        qreal stretch;
+        src >> stretch;
+        setStretch(stretch);
+    }
 }
 
 QDomElement eIndependentSound::prp_writePropertyXEV_impl(const XevExporter& exp) const
