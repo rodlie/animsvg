@@ -7,15 +7,18 @@ DATE=`date +%Y%m%d%H%M`
 URL=https://github.com/friction2d
 BACKUP_DIR=${DIR}/friction-git-backup-${DATE}
 REPOS="
-friction
-friction2d.github.io
-skia
-gperftools
-sfntly
-friction-shader-plugins
-mxe
-friction-examples
 friction-icon-theme
+friction
+skia
+friction2d.github.io
+friction-shader-plugins
+friction-sdk
+mxe
+friction-svgo
+friction-unit-tests
+gperftools
+friction-examples
+sfntly
 "
 
 mkdir -p ${BACKUP_DIR}
