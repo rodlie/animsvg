@@ -24,6 +24,7 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "videobox.h"
+#include "ReadWrite/evformat.h"
 
 extern "C" {
     #include <libavcodec/avcodec.h>
@@ -103,12 +104,18 @@ void VideoBox::fileHandlerAfterAssigned(VideoFileHandler *obj) {
 void VideoBox::writeBoundingBox(eWriteStream& dst) const {
     AnimationBox::writeBoundingBox(dst);
     dst.writeFilePath(mFileHandler->path());
+    dst << getStretch();
 }
 
 void VideoBox::readBoundingBox(eReadStream& src) {
     AnimationBox::readBoundingBox(src);
     const QString path = src.readFilePath();
     setFilePathNoRename(path);
+    if (src.evFileVersion() >= EvFormat::avStretch) {
+        qreal stretch;
+        src >> stretch;
+        setStretch(stretch);
+    }
 }
 
 QDomElement VideoBox::prp_writePropertyXEV_impl(const XevExporter& exp) const {
