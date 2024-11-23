@@ -41,9 +41,14 @@ SubPathEffect::SubPathEffect() :
     mMax->setValueRange(-999, 999);
     mMax->setCurrentBaseValue(100);
 
+    mOffset = enve::make_shared<QrealAnimator>("offset");
+    mOffset->setValueRange(-999, 999);
+    mOffset->setCurrentBaseValue(0);
+
     ca_addChild(mPathWise);
     ca_addChild(mMin);
     ca_addChild(mMax);
+    ca_addChild(mOffset);
 }
 
 class SubPathEffectCaller : public PathEffectCaller {
@@ -121,7 +126,9 @@ void SubPathEffectCaller::apply(SkPath &path) {
 stdsptr<PathEffectCaller> SubPathEffect::getEffectCaller(
         const qreal relFrame, const qreal influence) const {
     const bool pathWise = mPathWise->getValue();
-    const qreal minFrac = mMin->getEffectiveValue(relFrame)*0.01*influence;
-    const qreal maxFrac = mMax->getEffectiveValue(relFrame)*0.01*influence + 1 - influence;
+    const qreal offset = mOffset->getEffectiveValue(relFrame);
+    const qreal minFrac = (mMin->getEffectiveValue(relFrame) + offset) * 0.01 * influence;
+    const qreal maxFrac = (mMax->getEffectiveValue(relFrame) + offset) * 0.01 * influence + 1 - influence;
+
     return enve::make_shared<SubPathEffectCaller>(pathWise, minFrac, maxFrac);
 }
