@@ -45,6 +45,7 @@ set(
     dialogs/adjustscenedialog.cpp
     dialogs/applyexpressiondialog.cpp
     dialogs/commandpalette.cpp
+    dialogs/dialog.cpp
     dialogs/durationrectsettingsdialog.cpp
     dialogs/exportsvgdialog.cpp
     dialogs/markereditordialog.cpp
@@ -116,6 +117,7 @@ set(
     dialogs/adjustscenedialog.h
     dialogs/applyexpressiondialog.h
     dialogs/commandpalette.h
+    dialogs/dialog.h
     dialogs/durationrectsettingsdialog.h
     dialogs/exportsvgdialog.h
     dialogs/markereditordialog.h
