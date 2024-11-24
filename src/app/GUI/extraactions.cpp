@@ -84,7 +84,7 @@ void MainWindow::setupMenuExtras()
     }
     // add in
     {
-        const auto act = menu->addAction(QIcon::fromTheme("pivot-align-left"),
+        const auto act = menu->addAction(QIcon::fromTheme("range-in"),
                                          tr("In at ..."));
         act->setData("cmd:in");
         act->setToolTip(QString("<p><b>%1</b> %2 <i>%3</i></p>").arg(tr("Frame In"),
@@ -94,7 +94,7 @@ void MainWindow::setupMenuExtras()
     }
     // add out
     {
-        const auto act = menu->addAction(QIcon::fromTheme("pivot-align-right"),
+        const auto act = menu->addAction(QIcon::fromTheme("range-out"),
                                          tr("Out at ..."));
         act->setData("cmd:out");
         act->setToolTip(QString("<p><b>%1</b> %2 <i>%3</i></p>").arg(tr("Frame Out"),
@@ -126,7 +126,7 @@ void MainWindow::setupMenuExtras()
         cmdAddAction(act);
     }
     {
-        const auto act = menu->addAction(QIcon::fromTheme("trash"/* TODO: find new (blender) icon! */),
+        const auto act = menu->addAction(QIcon::fromTheme("range-clear"),
                                          tr("Clear In/Out"));
         connect(act, &QAction::triggered,
                 this, [this](){
