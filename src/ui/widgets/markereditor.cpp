@@ -58,7 +58,11 @@ void MarkerEditor::setup()
         ThemeSupport::getDefaultPalette(
             ThemeSupport::getThemeButtonBorderColor()));
 
-    mTree->setHeaderLabels(QStringList() << tr("Frame") << tr("Comment"));
+    mTree->setHeaderLabels(QStringList()
+                           << tr("Visibility")
+                           << tr("Frame")
+                           << tr("Comment"));
+
     mTree->setTabKeyNavigation(true);
     mTree->setAlternatingRowColors(true);
     mTree->setSortingEnabled(false);
@@ -66,16 +70,23 @@ void MarkerEditor::setup()
     mTree->setRootIsDecorated(false);
     mTree->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
+    mTree->headerItem()->setText(0, QString());
+    mTree->headerItem()->setIcon(0, QIcon::fromTheme("visible"));
+    mTree->headerItem()->setIcon(1, QIcon::fromTheme("sequence"));
+    mTree->headerItem()->setIcon(2, QIcon::fromTheme("markers-add"));
+
+    mTree->resizeColumnToContents(0);
+
     connect(mTree, &QTreeWidget::itemChanged,
             this, [this](QTreeWidgetItem *item) {
-        if (!mScene || item->text(0).isEmpty()) { return; }
-        const int oframe = item->data(0, Qt::UserRole).toInt();
-        const int frame = item->text(0).toInt();
-        const QString title = item->text(1);
+        if (!mScene || item->text(1).isEmpty()) { return; }
+        const int oframe = item->data(1, Qt::UserRole).toInt();
+        const int frame = item->text(1).toInt();
+        const QString title = item->text(2);
         const bool checked = item->checkState(0) == Qt::Checked;
         if (frame != oframe && duplicate(item, frame)) {
             mTree->blockSignals(true);
-            item->setText(0, QString::number(oframe));
+            item->setText(1, QString::number(oframe));
             mTree->blockSignals(false);
             return;
         }
@@ -91,7 +102,7 @@ void MarkerEditor::setup()
         mScene->updateMarkers();
 
         mTree->blockSignals(true);
-        item->setData(0, Qt::UserRole, frame);
+        item->setData(1, Qt::UserRole, frame);
         mTree->blockSignals(false);
     });
 }
@@ -104,9 +115,9 @@ void MarkerEditor::populate()
     mTree->blockSignals(true);
     for (const auto &marker : markers) {
         auto item = new QTreeWidgetItem(mTree);
-        item->setText(1, marker.title);
-        item->setText(0, QString::number(marker.frame));
-        item->setData(0, Qt::UserRole, marker.frame);
+        item->setText(2, marker.title);
+        item->setText(1, QString::number(marker.frame));
+        item->setData(1, Qt::UserRole, marker.frame);
         item->setCheckState(0, marker.enabled ? Qt::Checked : Qt::Unchecked);
         item->setFlags(item->flags() | Qt::ItemIsEditable);
         mTree->addTopLevelItem(item);
@@ -120,7 +131,7 @@ bool MarkerEditor::duplicate(QTreeWidgetItem *item,
     for (int i = 0; i < mTree->topLevelItemCount(); i++) {
         auto tItem = mTree->topLevelItem(i);
         if (!tItem) { continue; }
-        if (tItem->text(0).toInt() == frame) {
+        if (tItem->text(1).toInt() == frame) {
             if (tItem != item) { return true; }
         }
     }
@@ -133,7 +144,7 @@ void MarkerEditor::addMarker()
     const int frame = mScene->getCurrentFrame();
     for (int i = 0; i < mTree->topLevelItemCount(); ++i) {
         auto existingItem = mTree->topLevelItem(i);
-        if (existingItem && existingItem->data(0, Qt::UserRole).toInt() == frame) {
+        if (existingItem && existingItem->data(1, Qt::UserRole).toInt() == frame) {
             return;
         }
     }
@@ -144,7 +155,7 @@ void MarkerEditor::removeMarker()
 {
     auto item = mTree->selectedItems().count() > 0 ? mTree->selectedItems().at(0) : nullptr;
     if (!item) { return; }
-    const int frame = item->text(0).toInt();
+    const int frame = item->text(1).toInt();
     if (mScene) { mScene->removeMarker(frame); }
     delete mTree->takeTopLevelItem(mTree->indexOfTopLevelItem(item));
 }
