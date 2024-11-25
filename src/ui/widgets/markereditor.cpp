@@ -68,7 +68,6 @@ void MarkerEditor::setup()
     mTree->setSortingEnabled(false);
     mTree->setHeaderHidden(false);
     mTree->setRootIsDecorated(false);
-    mTree->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     mTree->headerItem()->setText(0, QString());
     mTree->headerItem()->setIcon(0, QIcon::fromTheme("visible"));
