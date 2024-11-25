@@ -42,6 +42,9 @@ namespace Friction
         public:
             explicit MarkerEditor(Canvas *scene = nullptr,
                                   QWidget *parent = nullptr);
+            void addMarker();
+            void removeMarker();
+            void clearMarkers(); 
 
         private:
             Canvas *mScene;

@@ -44,15 +44,28 @@ MarkerEditorDialog::MarkerEditorDialog(Canvas *scene,
     const auto lay = new QVBoxLayout(this);
     const auto editor = new MarkerEditor(scene, this);
     const auto footer = new QHBoxLayout();
-    const auto button = new QPushButton(QIcon::fromTheme("close"),
-                                        tr("Close"));
 
-    button->setFocusPolicy(Qt::NoFocus);
-    connect(button, &QPushButton::clicked,
-            this, &QDialog::close);
+    const auto addButton = new QPushButton(QIcon::fromTheme("plus"), tr(""));
+    const auto remButton = new QPushButton(QIcon::fromTheme("minus"), tr(""));
+    const auto clearButton = new QPushButton(QIcon::fromTheme("trash"), tr(""));
+    const auto closeButton = new QPushButton(QIcon::fromTheme("close"), tr("Close"));
 
+    addButton->setFocusPolicy(Qt::NoFocus);
+    remButton->setFocusPolicy(Qt::NoFocus);
+    clearButton->setFocusPolicy(Qt::NoFocus);
+    closeButton->setFocusPolicy(Qt::StrongFocus);
+    closeButton->setFocus();
+
+    connect(addButton, &QPushButton::clicked, editor, &MarkerEditor::addMarker);
+    connect(remButton, &QPushButton::clicked, editor, &MarkerEditor::removeMarker);
+    connect(clearButton, &QPushButton::clicked, editor, &MarkerEditor::clearMarkers);
+    connect(closeButton, &QPushButton::clicked, this, &QDialog::close);
+
+    footer->addWidget(addButton);
+    footer->addWidget(remButton);
+    footer->addWidget(clearButton);
     footer->addStretch();
-    footer->addWidget(button);
+    footer->addWidget(closeButton);
 
     lay->addWidget(editor);
     lay->addLayout(footer);

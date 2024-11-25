@@ -25,7 +25,7 @@
 #include "GUI/global.h"
 #include "themesupport.h"
 
-#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QPushButton>
 
 using namespace Friction::Ui;
@@ -36,12 +36,12 @@ MarkerEditor::MarkerEditor(Canvas *scene,
     , mScene(scene)
     , mTree(nullptr)
 {
-    const auto lay = new QHBoxLayout(this);
+    const auto lay = new QVBoxLayout(this);
     mTree = new QTreeWidget(this);
     lay->addWidget(mTree);
     setup();
     populate();
-        
+    
     if (mScene) {
         connect(mScene, &Canvas::markersChanged, this, &MarkerEditor::populate);
     }
@@ -60,57 +60,6 @@ void MarkerEditor::setup()
     mTree->setHeaderHidden(false);
     mTree->setRootIsDecorated(false);
     mTree->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-
-    const auto addButton = new QPushButton(QIcon::fromTheme("plus"),
-                                           QString(),
-                                           this);
-    addButton->setObjectName("FlatButton");
-    addButton->setFocusPolicy(Qt::NoFocus);
-
-    const auto remButton = new QPushButton(QIcon::fromTheme("minus"),
-                                           QString(),
-                                           this);
-    remButton->setObjectName("FlatButton");
-    remButton->setFocusPolicy(Qt::NoFocus);
-
-    mTree->addScrollBarWidget(remButton, Qt::AlignBottom);
-    mTree->addScrollBarWidget(addButton, Qt::AlignBottom);
-
-    eSizesUI::widget.add(addButton, [addButton,
-                                     remButton](const int size) {
-        addButton->setFixedHeight(size);
-        remButton->setFixedHeight(size);
-    });
-
-    connect(addButton, &QPushButton::clicked,
-            this, [this]() {
-        const int frame = mScene ? mScene->getCurrentFrame() : 0;
-        for (int i = 0; i < mTree->topLevelItemCount(); ++i) {
-            auto existingItem = mTree->topLevelItem(i);
-            if (existingItem && existingItem->data(0, Qt::UserRole).toInt() == frame) {
-                return;
-            }
-        }
-        auto item = new QTreeWidgetItem(mTree);
-        mTree->blockSignals(true);
-        item->setText(1, QString::number(frame));
-        item->setText(0, QString::number(frame));
-        item->setData(0, Qt::UserRole, frame);
-        mTree->blockSignals(false);
-        item->setCheckState(0, Qt::Checked);
-        item->setFlags(item->flags() | Qt::ItemIsEditable);
-        mTree->addTopLevelItem(item);
-    });
-
-    connect(remButton, &QPushButton::pressed, this, [this]() {
-        auto item = mTree->selectedItems().count() > 0 ?
-                        mTree->selectedItems().at(0) : nullptr;
-        if (!item) { return; }
-        const int frame = item->text(0).toInt();
-        if (mScene) { mScene->removeMarker(frame); }
-        delete mTree->takeTopLevelItem(
-            mTree->indexOfTopLevelItem(item));
-    });
 
     connect(mTree, &QTreeWidget::itemChanged,
             this, [this](QTreeWidgetItem *item) {
@@ -167,8 +116,44 @@ bool MarkerEditor::duplicate(QTreeWidgetItem *item,
         auto tItem = mTree->topLevelItem(i);
         if (!tItem) { continue; }
         if (tItem->text(0).toInt() == frame) {
-            if (tItem != item) { return true ;}
+            if (tItem != item) { return true; }
         }
     }
     return false;
+}
+
+void MarkerEditor::addMarker()
+{
+    const int frame = mScene ? mScene->getCurrentFrame() : 0;
+    for (int i = 0; i < mTree->topLevelItemCount(); ++i) {
+        auto existingItem = mTree->topLevelItem(i);
+        if (existingItem && existingItem->data(0, Qt::UserRole).toInt() == frame) {
+            return;
+        }
+    }
+    auto item = new QTreeWidgetItem(mTree);
+    mTree->blockSignals(true);
+    item->setText(1, QString::number(frame));
+    item->setText(0, QString::number(frame));
+    item->setData(0, Qt::UserRole, frame);
+    mTree->blockSignals(false);
+    item->setCheckState(0, Qt::Checked);
+    item->setFlags(item->flags() | Qt::ItemIsEditable);
+    mTree->addTopLevelItem(item);
+}
+
+void MarkerEditor::removeMarker()
+{
+    auto item = mTree->selectedItems().count() > 0 ? mTree->selectedItems().at(0) : nullptr;
+    if (!item) { return; }
+    const int frame = item->text(0).toInt();
+    if (mScene) { mScene->removeMarker(frame); }
+    delete mTree->takeTopLevelItem(mTree->indexOfTopLevelItem(item));
+}
+
+void MarkerEditor::clearMarkers()
+{
+    if (!mScene) { return; }
+    mScene->clearMarkers();
+    mTree->clear();
 }
