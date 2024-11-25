@@ -63,7 +63,7 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
                                            const qreal fps,
                                            ColorAnimator * const bg,
                                            QWidget * const parent)
-    : QDialog(parent)
+    : Friction::Ui::Dialog(parent)
 {
     const auto presetsFpsSettings = AppSupport::getFpsPresetStatus();
     const auto presetsResolutionSettings = AppSupport::getResolutionPresetStatus();
