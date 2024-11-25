@@ -29,12 +29,13 @@
 #include <QDialog>
 
 #include "canvas.h"
+#include "dialog.h"
 
 namespace Friction
 {
     namespace Ui
     {
-        class UI_EXPORT MarkerEditorDialog : public QDialog
+        class UI_EXPORT MarkerEditorDialog : public Dialog
         {
             Q_OBJECT
         public:

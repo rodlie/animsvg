@@ -34,12 +34,9 @@ using namespace Friction::Ui;
 
 MarkerEditorDialog::MarkerEditorDialog(Canvas *scene,
                                        QWidget *parent)
-    : QDialog{parent}
+    : Dialog{parent}
 {
     setWindowTitle(tr("Marker Editor"));
-#ifdef Q_OS_MAC
-    setWindowFlag(Qt::WindowStaysOnTopHint);
-#endif
 
     setContentsMargins(0, 0, 0, 0);
     const auto lay = new QVBoxLayout(this);
