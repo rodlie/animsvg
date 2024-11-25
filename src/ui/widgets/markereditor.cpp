@@ -129,23 +129,15 @@ bool MarkerEditor::duplicate(QTreeWidgetItem *item,
 
 void MarkerEditor::addMarker()
 {
-    const int frame = mScene ? mScene->getCurrentFrame() : 0;
+    if (!mScene) { return; }
+    const int frame = mScene->getCurrentFrame();
     for (int i = 0; i < mTree->topLevelItemCount(); ++i) {
         auto existingItem = mTree->topLevelItem(i);
         if (existingItem && existingItem->data(0, Qt::UserRole).toInt() == frame) {
             return;
         }
     }
-    const int marker = (mTree->topLevelItemCount() - 1) >= 0 ? mTree->topLevelItemCount() : 0;
-    auto item = new QTreeWidgetItem(mTree);
-    mTree->blockSignals(true);
-    item->setText(1, QString::number(marker));
-    item->setText(0, QString::number(frame));
-    item->setData(0, Qt::UserRole, frame);
-    mTree->blockSignals(false);
-    item->setCheckState(0, Qt::Checked);
-    item->setFlags(item->flags() | Qt::ItemIsEditable);
-    mTree->addTopLevelItem(item);
+    mScene->setMarker(frame);
 }
 
 void MarkerEditor::removeMarker()
