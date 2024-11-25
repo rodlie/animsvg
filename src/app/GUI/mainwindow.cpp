@@ -1126,19 +1126,19 @@ void MainWindow::setupMenuScene()
     cmdAddAction(mAddToQueAct);
 
     mSceneMenu->addSeparator();
-    mSceneMenu->addAction(QIcon::fromTheme("sequence"),
+    mSceneMenu->addAction(QIcon::fromTheme("range-in"),
                           tr("Set In"), this, [this]() {
         const auto scene = *mDocument.fActiveScene;
         if (!scene) { return; }
         scene->setFrameIn(true, scene->getCurrentFrame());
     });
-    mSceneMenu->addAction(QIcon::fromTheme("sequence"),
+    mSceneMenu->addAction(QIcon::fromTheme("range-out"),
                           tr("Set Out"), this, [this]() {
         const auto scene = *mDocument.fActiveScene;
         if (!scene) { return; }
         scene->setFrameOut(true, scene->getCurrentFrame());
     });
-    mSceneMenu->addAction(QIcon::fromTheme("sequence"),
+    mSceneMenu->addAction(QIcon::fromTheme("range-clear"),
                           tr("Clear In/Out"), this, [this]() {
         const auto scene = *mDocument.fActiveScene;
         if (!scene) { return; }
@@ -1146,7 +1146,7 @@ void MainWindow::setupMenuScene()
         scene->setFrameOut(false, 0);
     });
     mSceneMenu->addSeparator();
-    mSceneMenu->addAction(QIcon::fromTheme("dialog-information"),
+    mSceneMenu->addAction(QIcon::fromTheme("markers-add"),
                           tr("Add Marker"), this, [this]() {
         const auto scene = *mDocument.fActiveScene;
         if (!scene) { return; }
@@ -1158,7 +1158,7 @@ void MainWindow::setupMenuScene()
         if (!scene) { return; }
         scene->clearMarkers();
     });
-    mSceneMenu->addAction(QIcon::fromTheme("dialog-information"),
+    mSceneMenu->addAction(QIcon::fromTheme("markers-edit"),
                           tr("Edit Markers"), this, [this]() {
         openMarkerEditor();
     });

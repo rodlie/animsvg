@@ -58,6 +58,17 @@ void setDefaultFormat()
     //format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     //format.setSwapInterval(0); // Disable vertical refresh syncing
     QSurfaceFormat::setDefaultFormat(format);
+
+    const QString oVersion = QString("%1.%2").arg(QString::number(QSurfaceFormat::defaultFormat().version().first),
+                                                  QString::number(QSurfaceFormat::defaultFormat().version().second));
+    const auto oDepth = QSurfaceFormat::defaultFormat().depthBufferSize();
+    const auto oStencil = QSurfaceFormat::defaultFormat().stencilBufferSize();
+    const auto oSamples = QSurfaceFormat::defaultFormat().samples();
+    qWarning() << "OpenGL Format:"
+               << "version" << oVersion.toDouble()
+               << "depth" << oDepth
+               << "stencil" << oStencil
+               << "samples" << oSamples;
 }
 
 void generateAlphaMesh(QPixmap& alphaMesh,

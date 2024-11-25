@@ -33,7 +33,8 @@ include(friction-ffmpeg)
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 
 if(${LINUX_DEPLOY})
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+    set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
 endif()
 
 option(USE_SKIA_SYSTEM_LIBS "Use skia (third-party) system libraries on Linux" ON)

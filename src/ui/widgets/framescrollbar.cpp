@@ -341,17 +341,17 @@ void FrameScrollBar::mousePressEvent(QMouseEvent *event)
 
         bool hasMarker = mCurrentCanvas ? mCurrentCanvas->hasMarker(mCurrentCanvas->getCurrentFrame()) : false;
 
-        const auto setFrameInAct = new QAction(QIcon::fromTheme("sequence"),
+        const auto setFrameInAct = new QAction(QIcon::fromTheme("range-in"),
                                                tr("Set In"), this);
-        const auto setFrameOutAct = new QAction(QIcon::fromTheme("sequence"),
+        const auto setFrameOutAct = new QAction(QIcon::fromTheme("range-out"),
                                                 tr("Set Out"), this);
-        const auto clearFrameOutAct = new QAction(QIcon::fromTheme("trash"),
+        const auto clearFrameOutAct = new QAction(QIcon::fromTheme("range-clear"),
                                                   tr("Clear In/Out"), this);
-        const auto setMarkerAct = new QAction(QIcon::fromTheme("dialog-information"),
+        const auto setMarkerAct = new QAction(QIcon::fromTheme("markers-add"),
                                               tr(hasMarker ? "Remove Marker" : "Add Marker"), this);
         const auto clearMarkersAct = new QAction(QIcon::fromTheme("trash"),
                                                  tr("Clear Markers"), this);
-        const auto openMarkerEditorAct = new QAction(QIcon::fromTheme("dialog-information"),
+        const auto openMarkerEditorAct = new QAction(QIcon::fromTheme("markers-edit"),
                                                      tr("Edit Markers"), this);
         const auto splitDurationAct = new QAction(QIcon::fromTheme("cut"),
                                                   tr("Split Clip"), this);

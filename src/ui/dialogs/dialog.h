@@ -21,24 +21,24 @@
 #
 */
 
-// Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
+#ifndef DIALOG_H
+#define DIALOG_H
 
-#ifndef SUBPATHEFFECT_H
-#define SUBPATHEFFECT_H
-#include "PathEffects/patheffect.h"
+#include "ui_global.h"
 
-class CORE_EXPORT SubPathEffect : public PathEffect {
-    e_OBJECT
-protected:
-    SubPathEffect();
-public:
-    stdsptr<PathEffectCaller> getEffectCaller(
-            const qreal relFrame, const qreal influence) const;
-private:
-    qsptr<BoolProperty> mPathWise;
-    qsptr<QrealAnimator> mMin;
-    qsptr<QrealAnimator> mMax;
-    qsptr<QrealAnimator> mOffset;
-};
+#include <QDialog>
 
-#endif // SUBPATHEFFECT_H
+namespace Friction
+{
+    namespace Ui
+    {
+        class UI_EXPORT Dialog : public QDialog
+        {
+            Q_OBJECT
+        public:
+            explicit Dialog(QWidget *parent = nullptr);
+        };
+    }
+}
+
+#endif // DIALOG_H
