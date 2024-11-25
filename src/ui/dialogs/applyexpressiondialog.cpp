@@ -34,8 +34,10 @@
 #include "Private/document.h"
 
 ApplyExpressionDialog::ApplyExpressionDialog(QrealAnimator* const target,
-                                             QWidget * const parent) :
-    QDialog(parent), mTarget(target) {
+                                             QWidget * const parent)
+    : Friction::Ui::Dialog(parent)
+    , mTarget(target)
+{
     setWindowTitle("Apply Expression " + target->prp_getName());
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
