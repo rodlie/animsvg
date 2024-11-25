@@ -37,13 +37,18 @@ MarkerEditor::MarkerEditor(Canvas *scene,
     , mTree(nullptr)
 {
     const auto lay = new QVBoxLayout(this);
+
+    setContentsMargins(0, 0, 0, 0);
+    lay->setContentsMargins(0, 0, 0, 0);
+
     mTree = new QTreeWidget(this);
     lay->addWidget(mTree);
     setup();
     populate();
     
     if (mScene) {
-        connect(mScene, &Canvas::markersChanged, this, &MarkerEditor::populate);
+        connect(mScene,&Canvas::markersChanged,
+                this, &MarkerEditor::populate);
     }
 }
 
@@ -131,9 +136,10 @@ void MarkerEditor::addMarker()
             return;
         }
     }
+    const int marker = (mTree->topLevelItemCount() - 1) >= 0 ? mTree->topLevelItemCount() : 0;
     auto item = new QTreeWidgetItem(mTree);
     mTree->blockSignals(true);
-    item->setText(1, QString::number(frame));
+    item->setText(1, QString::number(marker));
     item->setText(0, QString::number(frame));
     item->setData(0, Qt::UserRole, frame);
     mTree->blockSignals(false);

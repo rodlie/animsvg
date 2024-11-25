@@ -41,14 +41,23 @@ MarkerEditorDialog::MarkerEditorDialog(Canvas *scene,
     setWindowFlag(Qt::WindowStaysOnTopHint);
 #endif
 
+    setContentsMargins(0, 0, 0, 0);
     const auto lay = new QVBoxLayout(this);
     const auto editor = new MarkerEditor(scene, this);
     const auto footer = new QHBoxLayout();
 
-    const auto addButton = new QPushButton(QIcon::fromTheme("plus"), tr(""));
-    const auto remButton = new QPushButton(QIcon::fromTheme("minus"), tr(""));
-    const auto clearButton = new QPushButton(QIcon::fromTheme("trash"), tr(""));
-    const auto closeButton = new QPushButton(QIcon::fromTheme("close"), tr("Close"));
+    const auto addButton = new QPushButton(QIcon::fromTheme("plus"),
+                                           QString(),
+                                           this);
+    const auto remButton = new QPushButton(QIcon::fromTheme("minus"),
+                                           QString(),
+                                           this);
+    const auto clearButton = new QPushButton(QIcon::fromTheme("trash"),
+                                             QString(),
+                                             this);
+    const auto closeButton = new QPushButton(QIcon::fromTheme("close"),
+                                             tr("Close"),
+                                             this);
 
     addButton->setToolTip(tr("Add a new marker"));
     remButton->setToolTip(tr("Remove the selected marker from the list"));
@@ -60,10 +69,14 @@ MarkerEditorDialog::MarkerEditorDialog(Canvas *scene,
     closeButton->setFocusPolicy(Qt::StrongFocus);
     closeButton->setFocus();
 
-    connect(addButton, &QPushButton::clicked, editor, &MarkerEditor::addMarker);
-    connect(remButton, &QPushButton::clicked, editor, &MarkerEditor::removeMarker);
-    connect(clearButton, &QPushButton::clicked, editor, &MarkerEditor::clearMarkers);
-    connect(closeButton, &QPushButton::clicked, this, &QDialog::close);
+    connect(addButton, &QPushButton::clicked,
+            editor, &MarkerEditor::addMarker);
+    connect(remButton, &QPushButton::clicked,
+            editor, &MarkerEditor::removeMarker);
+    connect(clearButton, &QPushButton::clicked,
+            editor, &MarkerEditor::clearMarkers);
+    connect(closeButton, &QPushButton::clicked,
+            this, &QDialog::close);
 
     footer->addWidget(addButton);
     footer->addWidget(remButton);
