@@ -286,7 +286,7 @@ void addBasicDefs(QsciAPIs* const target) {
 
 ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
                                    QWidget * const parent)
-    : QDialog(parent)
+    : Friction::Ui::Dialog(parent)
     , mTarget(target)
     , mTab(nullptr)
     , mTabEasingPreset(0)
@@ -298,9 +298,6 @@ ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
     , mEasingPresetEndFrameSpin(nullptr)
 {
     setWindowTitle(tr("Expression %1").arg(target->prp_getName()));
-#ifdef Q_OS_MAC
-    setWindowFlag(Qt::WindowStaysOnTopHint);
-#endif
 
     const auto windowLayout = new QVBoxLayout(this);
     setLayout(windowLayout);

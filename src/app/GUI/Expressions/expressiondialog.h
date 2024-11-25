@@ -36,6 +36,7 @@
 #include <QDoubleSpinBox>
 
 #include "conncontext.h"
+#include "dialogs/dialog.h"
 
 class QrealAnimator;
 class ExpressionEditor;
@@ -46,7 +47,7 @@ class JSEditor;
 
 class QsciAPIs;
 
-class ExpressionDialog : public QDialog
+class ExpressionDialog : public Friction::Ui::Dialog
 {
 public:
     ExpressionDialog(QrealAnimator* const target,
