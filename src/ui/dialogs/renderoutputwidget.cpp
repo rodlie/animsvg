@@ -33,7 +33,9 @@
 
 RenderOutputWidget::RenderOutputWidget(const int canvasWidth,
                                        const int canvasHeight,
-                                       QWidget *parent) : QDialog(parent) {
+                                       QWidget *parent)
+    : Friction::Ui::Dialog(parent)
+{
     mCanvasWidth = canvasWidth;
     mCanvasHeight = canvasHeight;
 
