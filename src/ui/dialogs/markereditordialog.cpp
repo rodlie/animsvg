@@ -50,6 +50,10 @@ MarkerEditorDialog::MarkerEditorDialog(Canvas *scene,
     const auto clearButton = new QPushButton(QIcon::fromTheme("trash"), tr(""));
     const auto closeButton = new QPushButton(QIcon::fromTheme("close"), tr("Close"));
 
+    addButton->setToolTip(tr("Add a new marker"));
+    remButton->setToolTip(tr("Remove the selected marker from the list"));
+    clearButton->setToolTip(tr("Clear all markers"));
+
     addButton->setFocusPolicy(Qt::NoFocus);
     remButton->setFocusPolicy(Qt::NoFocus);
     clearButton->setFocusPolicy(Qt::NoFocus);
