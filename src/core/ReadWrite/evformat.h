@@ -45,6 +45,7 @@ namespace EvFormat {
         formatOptions = 30,
         formatOptions2 = 31,
         subPathOffset = 32,
+        avStretch = 33,
 
         nextVersion
     };
