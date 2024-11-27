@@ -456,6 +456,7 @@ signals:
     void openApplyExpressionDialog(QrealAnimator* const target);
     void currentPickedColor(const QColor &color);
     void currentHoverColor(const QColor &color);
+    void markersChanged();
 
 public:
     void makePointCtrlsSymmetric();

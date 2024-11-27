@@ -28,9 +28,11 @@
 
 #include <QDialogButtonBox>
 
-DurationRectSettingsDialog::DurationRectSettingsDialog(
-        DurationRectangle* const target, QWidget *parent) :
-    QDialog(parent), mTarget(target) {
+DurationRectSettingsDialog::DurationRectSettingsDialog(DurationRectangle* const target,
+                                                       QWidget *parent)
+    : Friction::Ui::Dialog(parent)
+    , mTarget(target)
+{
     const auto values = mTarget->getValues();
     const auto mainLayout = new QVBoxLayout(this);
     const auto twoColumnLayout = new TwoColumnLayout();

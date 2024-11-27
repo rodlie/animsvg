@@ -79,7 +79,17 @@ const HddCachableCacheHandler *eSoundObjectBase::getCacheHandler() const {
     return &mCacheHandler->getCacheHandler();
 }
 
-void eSoundObjectBase::setStretch(const qreal stretch) {
+void eSoundObjectBase::setStretch(const qreal stretch)
+{
+    {
+        prp_pushUndoRedoName(tr("Stretch"));
+        UndoRedo ur;
+        const auto oldValue = mStretch;
+        const auto newValue = stretch;
+        ur.fUndo = [this, oldValue]() { setStretch(oldValue); };
+        ur.fRedo = [this, newValue]() { setStretch(newValue); };
+        prp_addUndoRedo(ur);
+    }
     mStretch = stretch;
     updateDurationRectLength();
     prp_afterWholeInfluenceRangeChanged();

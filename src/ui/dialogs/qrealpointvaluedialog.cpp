@@ -27,9 +27,10 @@
 #include "Animators/qrealpoint.h"
 
 QrealPointValueDialog::QrealPointValueDialog(QrealPoint *point,
-                                             QWidget *parent) :
-    QDialog(parent) {
-    setWindowTitle("Edit key");
+                                             QWidget *parent)
+    : Friction::Ui::Dialog(parent)
+{
+    setWindowTitle(tr("Edit key"));
     mMainLayout = new QVBoxLayout(this);
     setLayout(mMainLayout);
 

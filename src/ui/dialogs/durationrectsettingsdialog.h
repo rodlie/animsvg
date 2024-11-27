@@ -33,12 +33,13 @@
 #include <QLabel>
 #include <QPushButton>
 #include "Timeline/durationrectangle.h"
+#include "dialog.h"
 
 class QHBoxLayout;
 class QVBoxLayout;
 class TwoColumnLayout;
 
-class UI_EXPORT DurationRectSettingsDialog : public QDialog
+class UI_EXPORT DurationRectSettingsDialog : public Friction::Ui::Dialog
 {
 public:
     DurationRectSettingsDialog(DurationRectangle* const target,

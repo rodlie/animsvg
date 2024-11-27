@@ -30,10 +30,12 @@
 #include <QTemporaryFile>
 #include <QComboBox>
 
+#include "dialog.h"
+
 class SceneChooser;
 class ComplexTask;
 
-class UI_EXPORT ExportSvgDialog : public QDialog
+class UI_EXPORT ExportSvgDialog : public Friction::Ui::Dialog
 {
 public:
     ExportSvgDialog(QWidget* const parent = nullptr,

@@ -29,12 +29,14 @@
 #include "ui_global.h"
 
 #include "Animators/qrealanimator.h"
-#include <QDialog>
+#include "dialog.h"
+
 #include <QDoubleSpinBox>
 #include <QHBoxLayout>
 #include <QPushButton>
 
-class UI_EXPORT QrealPointValueDialog : public QDialog {
+class UI_EXPORT QrealPointValueDialog : public Friction::Ui::Dialog
+{
     Q_OBJECT
 public:
     QrealPointValueDialog(QrealPoint *point, QWidget *parent);

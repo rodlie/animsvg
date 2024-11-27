@@ -28,7 +28,6 @@
 
 #include "ui_global.h"
 
-#include <QDialog>
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QSpinBox>
@@ -39,26 +38,27 @@
 
 #include "smartPointers/ememory.h"
 #include "framerange.h"
+#include "dialog.h"
 
 class Document;
 class Canvas;
 class ColorAnimator;
 class ColorAnimatorButton;
 
-class UI_EXPORT SceneSettingsDialog : public QDialog
+class UI_EXPORT SceneSettingsDialog : public Friction::Ui::Dialog
 {
 public:
     SceneSettingsDialog(Canvas * const canvas,
-                         QWidget * const parent = nullptr);
+                        QWidget * const parent = nullptr);
     SceneSettingsDialog(const QString &defName,
-                         QWidget * const parent = nullptr);
+                        QWidget * const parent = nullptr);
     SceneSettingsDialog(const QString &name,
-                         const int width,
-                         const int height,
-                         const FrameRange &range,
-                         const qreal fps,
-                         ColorAnimator * const bg,
-                         QWidget * const parent = nullptr);
+                        const int width,
+                        const int height,
+                        const FrameRange &range,
+                        const qreal fps,
+                        ColorAnimator * const bg,
+                        QWidget * const parent = nullptr);
 
     int getCanvasWidth() const;
     int getCanvasHeight() const;

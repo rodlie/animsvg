@@ -33,7 +33,7 @@
 AdjustSceneDialog::AdjustSceneDialog(Canvas *scene,
                                      const VideoBox::VideoSpecs &specs,
                                      QWidget *parent)
-    : QDialog(parent)
+    : Friction::Ui::Dialog(parent)
 {
     if (!scene ||
         specs.dim.width() < 1 ||

@@ -245,15 +245,22 @@ bool toColor(const QString &colorStr, QColor &color)
         str.remove(isRGB ? "rgb" : "rgba").remove(";").remove("(").remove(")");
         QStringList components = str.split(",", Qt::SkipEmptyParts);
         if (components.size() >= 3) {
+            const bool isFloat = components[0].contains("%") ||
+                                 components[1].contains("%") ||
+                                 components[2].contains("%");
+            const bool hasAlpha = components.size() == 4;
+
             qreal r = components[0].contains("%") ? components[0].remove("%").simplified().toFloat() / 100. :
-                                                    components[0].simplified().toFloat();
+                                                    components[0].simplified().toInt();
             qreal g = components[1].contains("%") ? components[1].remove("%").simplified().toFloat() / 100. :
-                                                    components[1].simplified().toFloat();
+                                                    components[1].simplified().toInt();
             qreal b = components[2].contains("%") ? components[2].remove("%").simplified().toFloat() / 100. :
-                                                    components[2].simplified().toFloat();
-            qreal a = components.size() == 4 ? components[3].contains("%") ? components[3].remove("%").simplified().toFloat() / 100. :
-                                                                             components[3].simplified().toFloat() : 1.0;
-            color.setRgbF(r, g, b, a);
+                                                    components[2].simplified().toInt();
+            qreal a = hasAlpha ? components[3].contains("%") ? components[3].remove("%").simplified().toFloat() / 100. :
+                                 components[3].simplified().toFloat() : 1.0;
+            if (isFloat) { color.setRgbF(r, g, b); }
+            else { color.setRgb(r, g, b); }
+            if (hasAlpha) { color.setAlphaF(a); }
         } else { return false; }
     } else {
         if (QColor::isValidColor(colorStr.simplified())) { color = QColor(colorStr.simplified()); }

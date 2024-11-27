@@ -30,8 +30,9 @@
 
 #include "canvas.h"
 #include "Boxes/videobox.h"
+#include "dialog.h"
 
-class UI_EXPORT AdjustSceneDialog : public QDialog
+class UI_EXPORT AdjustSceneDialog : public Friction::Ui::Dialog
 {
 public:
     AdjustSceneDialog(Canvas *scene,

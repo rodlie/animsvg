@@ -43,7 +43,7 @@
 
 ExportSvgDialog::ExportSvgDialog(QWidget* const parent,
                                  const QString &warnings)
-    : QDialog(parent)
+    : Friction::Ui::Dialog(parent)
 {
     setWindowTitle(tr("Export SVG"));
 

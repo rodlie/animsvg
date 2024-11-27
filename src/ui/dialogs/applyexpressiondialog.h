@@ -33,8 +33,9 @@
 #include <QDoubleSpinBox>
 
 #include "Animators/qrealanimator.h"
+#include "dialog.h"
 
-class UI_EXPORT ApplyExpressionDialog : public QDialog
+class UI_EXPORT ApplyExpressionDialog : public Friction::Ui::Dialog
 {
 public:
     ApplyExpressionDialog(QrealAnimator* const target,

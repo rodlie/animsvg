@@ -35,7 +35,10 @@
 #include <QComboBox>
 #include <QSpinBox>
 
-class UI_EXPORT RenderOutputWidget : public QDialog {
+#include "dialog.h"
+
+class UI_EXPORT RenderOutputWidget : public Friction::Ui::Dialog
+{
     Q_OBJECT
 public:
     explicit RenderOutputWidget(const int canvasWidth,

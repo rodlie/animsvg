@@ -24,6 +24,7 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "videobox.h"
+#include "ReadWrite/evformat.h"
 
 extern "C" {
     #include <libavcodec/avcodec.h>
@@ -60,7 +61,7 @@ VideoBox::VideoBox() : AnimationBox("Video", eBoxType::video),
     const auto flar = getDurationRectangle()->ref<FixedLenAnimationRect>();
     mSound = enve::make_shared<eVideoSound>(flar);
     ca_addChild(mSound);
-    mSound->hide();
+    //mSound->hide(); // should be on by default
     mSound->SWT_hide();
 
     connect(this, &eBoxOrSound::parentChanged,
@@ -103,12 +104,18 @@ void VideoBox::fileHandlerAfterAssigned(VideoFileHandler *obj) {
 void VideoBox::writeBoundingBox(eWriteStream& dst) const {
     AnimationBox::writeBoundingBox(dst);
     dst.writeFilePath(mFileHandler->path());
+    dst << getStretch();
 }
 
 void VideoBox::readBoundingBox(eReadStream& src) {
     AnimationBox::readBoundingBox(src);
     const QString path = src.readFilePath();
     setFilePathNoRename(path);
+    if (src.evFileVersion() >= EvFormat::avStretch) {
+        qreal stretch;
+        src >> stretch;
+        setStretch(stretch);
+    }
 }
 
 QDomElement VideoBox::prp_writePropertyXEV_impl(const XevExporter& exp) const {
@@ -163,27 +170,26 @@ const VideoBox::VideoSpecs VideoBox::getSpecs()
     return specs;
 }
 
-void VideoBox::soundDataChanged() {
+void VideoBox::soundDataChanged()
+{
     const auto pScene = getParentScene();
     const auto soundHandler = mFileHandler ?
                 mFileHandler->getSoundHandler() : nullptr;
     const auto durRect = getDurationRectangle();
-    if(soundHandler) {
-        if(!mSound->SWT_isVisible()) {
-            if(pScene) {
-                pScene->getSoundComposition()->addSound(mSound);
-            }
+    if (soundHandler) {
+        if (!mSound->SWT_isVisible()) {
+            if (pScene) { pScene->getSoundComposition()->addSound(mSound); }
         }
         durRect->setSoundCacheHandler(&soundHandler->getCacheHandler());
     } else {
-        if(mSound->SWT_isVisible()) {
-            if(pScene) {
-                pScene->getSoundComposition()->removeSound(mSound);
-            }
+        if (mSound->SWT_isVisible()) {
+            if (pScene) { pScene->getSoundComposition()->removeSound(mSound); }
         }
         durRect->setSoundCacheHandler(nullptr);
     }
     mSound->setSoundDataHandler(soundHandler);
     mSound->SWT_setVisible(soundHandler);
-    mSound->setVisible(soundHandler);
+
+    // why? this does not make any sense to me
+    //mSound->setVisible(soundHandler);
 }
