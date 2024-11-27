@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@
 #include <QDoubleSpinBox>
 
 #include "conncontext.h"
+#include "dialogs/dialog.h"
 
 class QrealAnimator;
 class ExpressionEditor;
@@ -46,7 +47,7 @@ class JSEditor;
 
 class QsciAPIs;
 
-class ExpressionDialog : public QDialog
+class ExpressionDialog : public Friction::Ui::Dialog
 {
 public:
     ExpressionDialog(QrealAnimator* const target,

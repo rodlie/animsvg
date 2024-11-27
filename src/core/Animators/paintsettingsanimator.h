@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -66,7 +66,8 @@ public:
     PaintType getPaintType() const;
     Gradient *getGradient() const;
     void setGradient(Gradient *gradient);
-    void setCurrentColor(const QColor &color);
+    void setCurrentColor(const QColor &color,
+                         const bool &history = false);
     ColorAnimator *getColorAnimator();
     void setGradientPointsPos(const QPointF& pt1, const QPointF& pt2);
 

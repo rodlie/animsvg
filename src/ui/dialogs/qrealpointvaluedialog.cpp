@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,9 +27,10 @@
 #include "Animators/qrealpoint.h"
 
 QrealPointValueDialog::QrealPointValueDialog(QrealPoint *point,
-                                             QWidget *parent) :
-    QDialog(parent) {
-    setWindowTitle("Edit key");
+                                             QWidget *parent)
+    : Friction::Ui::Dialog(parent)
+{
+    setWindowTitle(tr("Edit key"));
     mMainLayout = new QVBoxLayout(this);
     setLayout(mMainLayout);
 

@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -95,13 +95,13 @@ void ExternalLinkBoxT<T, FHandler>::setupCanvasMenu(PropertyMenu * const menu) {
     [](ExternalLinkBoxT * box) {
         box->reload();
     };
-    menu->addPlainAction("Reload", reloadOp);
+    menu->addPlainAction(QIcon::fromTheme("loop"), QObject::tr("Reload"), reloadOp);
 
     const PropertyMenu::PlainSelectedOp<ExternalLinkBoxT> setSrcOp =
     [](ExternalLinkBoxT * box) {
         box->changeSourceFile();
     };
-    menu->addPlainAction("Set Source File...", setSrcOp);
+    menu->addPlainAction(QIcon::fromTheme("document-new"), QObject::tr("Set Source File"), setSrcOp);
 
     T::setupCanvasMenu(menu);
 }

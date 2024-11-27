@@ -29,6 +29,7 @@
 #include "Private/esettings.h"
 #include "smartPointers/ememory.h"
 #include "ReadWrite/basicreadwrite.h"
+#include "formatoptions.h"
 
 extern "C" {
     #include <libavcodec/avcodec.h>
@@ -49,6 +50,9 @@ struct CORE_EXPORT OutputSettings
     void write(eWriteStream& dst) const;
     void read(eReadStream& src);
 
+    void writeFormatOptions(eWriteStream &dst) const;
+    void readFormatOptions(eReadStream &src);
+
     const AVOutputFormat *fOutputFormat = nullptr;
 
     bool fVideoEnabled = false;
@@ -56,6 +60,7 @@ struct CORE_EXPORT OutputSettings
     AVPixelFormat fVideoPixelFormat = AV_PIX_FMT_NONE;
     int fVideoBitrate = 0;
     int fVideoProfile = FF_PROFILE_UNKNOWN;
+    Friction::Core::FormatOptions fVideoOptions;
 
     bool fAudioEnabled = false;
     const AVCodec *fAudioCodec = nullptr;
@@ -90,12 +95,16 @@ public:
     static QList<qsptr<OutputSettingsProfile>> sOutputProfiles;
     static bool sOutputProfilesLoaded;
 
+    static Friction::Core::FormatOptions toFormatOptions(const Friction::Core::FormatOptionsList &list);
+    static Friction::Core::FormatOptionsList toFormatOptionsList(const Friction::Core::FormatOptions &options);
+    static bool isValidFormatOptionsList(const Friction::Core::FormatOptionsList &list);
+
 signals:
     void changed();
 
 private:
     QString mPath;
-    QString mName = "Untitled";
+    QString mName = tr("Untitled");
     OutputSettings mSettings;
 };
 

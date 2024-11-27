@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -615,13 +615,13 @@ void Animator::prp_setupTreeViewMenu(PropertyMenu * const menu) {
     [](Animator * animTarget) {
         animTarget->anim_saveCurrentValueAsKey();
     };
-    menu->addPlainAction("Add Key(s)", aOp)->setDisabled(anim_getKeyOnCurrentFrame());
+    menu->addPlainAction(QIcon::fromTheme("plus"), tr("Add Key(s)"), aOp)->setDisabled(anim_getKeyOnCurrentFrame());
 
     const PropertyMenu::PlainSelectedOp<Animator> dOp =
     [](Animator * animTarget) {
         animTarget->anim_deleteCurrentKeyAction();
     };
-    menu->addPlainAction("Delete Key(s)", dOp)->setEnabled(anim_getKeyOnCurrentFrame());
+    menu->addPlainAction(QIcon::fromTheme("trash"), tr("Delete Key(s)"), dOp)->setEnabled(anim_getKeyOnCurrentFrame());
 
     menu->addSeparator();
     Property::prp_setupTreeViewMenu(menu);

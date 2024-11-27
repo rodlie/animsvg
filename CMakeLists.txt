@@ -1,7 +1,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ endif()
 if(${BUILD_ENGINE})
     add_subdirectory(src/engine)
 endif()
-if(UNIX)
+if(UNIX AND NOT APPLE)
     option(BUILD_TESTING "Don't build gperftools tests" OFF)
     add_subdirectory(src/gperftools)
 endif()

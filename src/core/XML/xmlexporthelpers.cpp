@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -141,7 +141,7 @@ SimpleBrushWrapper* XevExportHelpers::brushFromElement(const QDomElement& ele) {
 }
 
 QMatrix XmlExportHelpers::stringToMatrix(const QString& str) {
-    const auto vals = str.split(' ', QT_SKIP_EMPTY);
+    const auto vals = str.split(' ', Qt::SkipEmptyParts);
     if(vals.count() != 6) RuntimeThrow("Invalid matrix value '" + str + "'");
     const qreal m11 = stringToDouble(vals[0]);
     const qreal m12 = stringToDouble(vals[1]);

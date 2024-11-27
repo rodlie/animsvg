@@ -9,6 +9,7 @@ Source0: friction-__FRICTION_VERSION__.tar
 AutoReq: no
 %global debug_package %{nil}
 %global __provides_exclude_from /opt
+%global __os_install_post %{nil}
 
 %description
 Powerful and versatile motion graphics and animation application that allows you to create stunning vector and raster animations for web and video platforms with ease.

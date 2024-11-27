@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -103,20 +103,19 @@ cmake -GNinja \
 ..
 
 VERSION=`cat version.txt`
-if [ "${REL}" != 1 ] && [ "${CUSTOM}" = "" ]; then
+if [ "${REL}" != 1 ]; then
     VERSION="${VERSION}-${GIT_COMMIT}"
 fi
 
 cmake --build .
 
-# TODO: add option to keep skia build for reuse
-#if [ "${BUILD_ENGINE}" = "ON" ]; then
-#    (cd src/engine ;
-#        tar cvvf skia-build-${GIT_COMMIT}.tar skia
-#        mkdir -p /mnt/builds/${VERSION} || true
-#        mv skia-build-${GIT_COMMIT}.tar /mnt/builds/${VERSION}
-#    )
-#fi
+if [ "${BUILD_ENGINE}" = "ON" ]; then
+    (cd src/engine ;
+        tar cvvf skia-build-${GIT_COMMIT}.tar skia
+        mkdir -p /mnt/builds/${VERSION} || true
+        mv skia-build-${GIT_COMMIT}.tar /mnt/builds/${VERSION}/
+    )
+fi
 
 FRICTION_INSTALL_DIR=friction-${VERSION}
 mkdir -p ${BUILD}/${FRICTION_INSTALL_DIR}/opt/friction/{bin,lib,share} || true

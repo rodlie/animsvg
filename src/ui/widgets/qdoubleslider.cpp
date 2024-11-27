@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -37,11 +37,9 @@
 SliderEdit::SliderEdit(QWidget* const parent) :
     QLineEdit(parent) {
     setAttribute(Qt::WA_TranslucentBackground);
-    setStyleSheet("background-color: rgba(0, 0, 0, 0);"
-                  "color: black;");
-    /*eSizesUI::widget.add(this, [this](const int size) {
+    eSizesUI::widget.add(this, [this](const int size) {
         setFixedHeight(size);
-    });*/
+    });
 
     connect(this, &QLineEdit::editingFinished,
             this, &SliderEdit::lineEditingFinished);
@@ -68,6 +66,7 @@ void SliderEdit::keyPressEvent(QKeyEvent* e) {
 void SliderEdit::hideEvent(QHideEvent* e) {
     releaseMouse();
     unsetCursor();
+    emit hoverChanged();
     QLineEdit::hideEvent(e);
 }
 
@@ -75,6 +74,12 @@ void SliderEdit::showEvent(QShowEvent* e) {
     grabMouse();
     setCursor(Qt::IBeamCursor);
     QLineEdit::showEvent(e);
+}
+
+void SliderEdit::leaveEvent(QEvent *e)
+{
+    emit hoverChanged();
+    QLineEdit::leaveEvent(e);
 }
 
 void SliderEdit::lineEditingFinished() {
@@ -106,6 +111,12 @@ QDoubleSlider::QDoubleSlider(const qreal minVal, const qreal maxVal,
     mLineEdit = new SliderEdit(this);
     mLineEdit->hide();
 
+    connect(mLineEdit, &SliderEdit::hoverChanged,
+            this, [this] {
+        mHovered = false;
+        unsetCursor();
+        update();
+    });
     connect(mLineEdit, &SliderEdit::valueSet,
             this, [this](const qreal value) {
         const qreal clampedValue = clamped(value);
@@ -212,7 +223,8 @@ void QDoubleSlider::paint(QPainter *p,
     p->setRenderHint(QPainter::Antialiasing);
     QRectF boundingRect = rect().adjusted(1, 1, -1, -1);
     p->setPen(Qt::NoPen);
-    p->setBrush(allFill);
+    if (mHovered) { p->setBrush(ThemeSupport::getThemeBaseDarkerColor()); }
+    else { p->setBrush(allFill); }
     if(mLeftNeighbour) {
         p->setClipRect(width()/2, 0, width()/2, height());
     } else if(mRightNeighbour) {
@@ -234,13 +246,14 @@ void QDoubleSlider::paint(QPainter *p,
             p->setPen(Qt::NoPen);
             const qreal valFrac = (mValue - mMinValue)/(mMaxValue - mMinValue);
             const qreal valWidth = clamp(valFrac*width(), 0, width() - 3);
-            p->setBrush(sliderFill);
+            if (mHovered) { p->setBrush(ThemeSupport::getThemeHighlightDarkerColor()); }
+            else { p->setBrush(sliderFill); }
             const qreal heightRemoval = qMax(0., eSizesUI::widget/2 - valWidth)*0.5;
             p->drawRoundedRect(QRectF(1, 1, valWidth, height() - 2).
                                adjusted(0, heightRemoval,
                                         0, -heightRemoval), xR, xR);
         }
-        p->setPen(text);
+        p->setPen(mHovered ? Qt::white : text);
         if(mShowName) {
             p->drawText(rect(), Qt::AlignCenter,
                         mName + ": " + mValueString);
@@ -406,4 +419,66 @@ void QDoubleSlider::mouseMoveEvent(QMouseEvent *event) {
 
     cursor().setPos(mGlobalPressPos);
     Document::sInstance->updateScenes();
+}
+
+#ifdef Q_OS_MAC
+void QDoubleSlider::wheelEvent(QWheelEvent *event)
+{
+    const bool alt = event->modifiers() & Qt::AltModifier;
+    const bool ctrl = event->modifiers() & Qt::ControlModifier;
+
+    if (event->phase() == Qt::NoScrollPhase && (alt || ctrl)) {
+        event->accept();
+        mLastValue = mValue;
+        startTransform(mLastValue);
+
+        const bool up = event->angleDelta().y() > 0;
+        const qreal step = 0.1 * (up ? (ctrl ? 50 : 10) : (ctrl ? -50 : -10)) * mPrefferedValueStep;
+
+        mLastValue = clamped(mLastValue + step);
+        setValue(mLastValue);
+        Document::sInstance->updateScenes();
+
+        finishTransform(mLastValue);
+        Document::sInstance->actionFinished();
+        return;
+    }
+
+    if (event->phase() == Qt::ScrollBegin) {
+        event->accept();
+        mLastValue = mValue;
+        startTransform(mLastValue);
+        return;
+    } else if (event->phase() == Qt::ScrollEnd) {
+        event->accept();
+        finishTransform(mLastValue);
+        Document::sInstance->actionFinished();
+        return;
+    }
+    if (event->angleDelta().x() == 0 ||
+        (event->phase() != Qt::ScrollUpdate &&
+         event->phase() != Qt::ScrollMomentum)) { return; }
+
+    event->accept();
+    const qreal step = 0.1 * (event->inverted() ?
+                                  event->angleDelta().x() :
+                                  -event->angleDelta().x()) * mPrefferedValueStep;
+    mLastValue = clamped(mLastValue + step);
+    setValue(mLastValue);
+    Document::sInstance->updateScenes();
+}
+#endif
+
+void QDoubleSlider::enterEvent(QEvent *)
+{
+    mHovered = true;
+    setCursor(Qt::SizeHorCursor);
+    update();
+}
+
+void QDoubleSlider::leaveEvent(QEvent *)
+{
+    mHovered = false;
+    unsetCursor();
+    update();
 }

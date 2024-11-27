@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -57,7 +57,8 @@ void PaintSettingsAnimator::prp_writeProperty_impl(eWriteStream& dst) const {
     mGradientTransform->prp_writeProperty_impl(dst);
 }
 
-void PaintSettingsAnimator::prp_readProperty_impl(eReadStream& src) {
+void PaintSettingsAnimator::prp_readProperty_impl(eReadStream& src)
+{
     mColor->prp_readProperty_impl(src);
     PaintType paintType;
     src.read(&paintType, sizeof(PaintType));
@@ -65,18 +66,29 @@ void PaintSettingsAnimator::prp_readProperty_impl(eReadStream& src) {
     int gradRWId; src >> gradRWId;
     int gradDocId; src >> gradDocId;
     SimpleTask::sScheduleContexted(this, [this, gradRWId, gradDocId]() {
-        const auto parentScene = getParentScene();
-        if(!parentScene) return;
+        auto parentScene = getParentScene();
+        if (!parentScene) { return; }
         SceneBoundGradient* gradient = nullptr;
-        if(gradRWId != -1)
+        if (gradRWId != -1) {
             gradient = parentScene->getGradientWithRWId(gradRWId);
-        if(!gradient && gradDocId != -1)
+        }
+        if (!gradient && gradDocId != -1) {
             gradient = parentScene->getGradientWithDocumentId(gradDocId);
+            if (!gradient) { // gradient is in a different scene
+                gradient = parentScene->getGradientWithDocumentSceneId(gradDocId);
+                if (gradient) {
+                    const auto newGrad = parentScene->createNewGradient();
+                    const auto clipboard = enve::make_shared<PropertyClipboard>(gradient);
+                    clipboard->paste(newGrad);
+                    gradient = newGrad;
+                }
+            }
+        }
         setGradientVar(gradient);
     });
 
     mGradientPoints->prp_readProperty_impl(src);
-    if(src.evFileVersion() > 7) {
+    if (src.evFileVersion() > 7) {
         mGradientTransform->prp_readProperty_impl(src);
     }
     setPaintType(paintType);
@@ -374,7 +386,17 @@ void PaintSettingsAnimator::setGradient(Gradient* gradient) {
     setGradientVar(gradient);
 }
 
-void PaintSettingsAnimator::setCurrentColor(const QColor &color) {
+void PaintSettingsAnimator::setCurrentColor(const QColor &color,
+                                            const bool &history)
+{
+    if (history) {
+        UndoRedo ur;
+        const auto oldValue = mColor->getColor();
+        const auto newValue = color;
+        ur.fUndo = [this, oldValue]() { setCurrentColor(oldValue); };
+        ur.fRedo = [this, newValue]() { setCurrentColor(newValue); };
+        prp_addUndoRedo(ur);
+    }
     mColor->setColor(color);
 }
 

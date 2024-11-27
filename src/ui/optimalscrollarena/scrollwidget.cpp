@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -61,6 +61,7 @@ void ScrollWidget::setMainTarget(SingleWidgetTarget *target) {
 
 void ScrollWidget::setCurrentRule(const SWT_BoxRule rule) {
     mVisiblePartWidget->setCurrentRule(rule);
+    emit boxRuleChanged(rule);
 }
 
 void ScrollWidget::setCurrentTarget(SingleWidgetTarget *targetP,

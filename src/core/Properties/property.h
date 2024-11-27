@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -56,7 +56,8 @@ enum class CanvasMode : short {
     textCreate,
 
     nullCreate,
-    pickFillStroke
+    pickFillStroke,
+    pickFillStrokeEvent
 };
 
 enum class UpdateReason {
@@ -250,6 +251,8 @@ public:
 
     bool prp_isParentBoxSelected() const;
     bool prp_isParentBoxContained() const;
+    bool prp_isParentBoxContained(BoundingBox *box,
+                                  eBoxOrSound *ebox) const;
 
     bool prp_drawsOnCanvas() const
     { return mDrawOnCanvas; }

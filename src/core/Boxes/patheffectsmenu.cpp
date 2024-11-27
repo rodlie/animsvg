@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 template <typename T, typename U>
 void addPathEffectActionToMenu(const QString& text, PropertyMenu * const menu,
                                void (U::*adder)(const qsptr<PathEffect>&)) {
-    menu->addPlainAction<U>(text, [adder](U * obj) {
+    menu->addPlainAction<U>(QIcon::fromTheme("effect"), text, [adder](U * obj) {
         (obj->*adder)(enve::make_shared<T>());
     });
 }
@@ -64,25 +64,25 @@ void PathEffectsMenu::addPathEffectsToBoxActionMenu(PropertyMenu * const menu) {
     menu->addSharedMenu("Path Effects");
     menu->addSection("Path Effects");
 
-    const auto pathEffectsMenu = menu->addMenu("Path Effects");
+    const auto pathEffectsMenu = menu->addMenu(QIcon::fromTheme("effect"), "Path Effects");
     addPathEffectsActionToMenu(pathEffectsMenu,
                                &BoundingBox::addPathEffect);
 
-    const auto fillPathEffectsMenu = menu->addMenu("Fill Effects");
+    const auto fillPathEffectsMenu = menu->addMenu(QIcon::fromTheme("effect"), "Fill Effects");
     addPathEffectsActionToMenu(fillPathEffectsMenu,
                                &BoundingBox::addFillPathEffect);
 
-    const auto outlineBasePathEffectsMenu = menu->addMenu("Outline Base Effects");
+    const auto outlineBasePathEffectsMenu = menu->addMenu(QIcon::fromTheme("effect"), "Outline Base Effects");
     addPathEffectsActionToMenu(outlineBasePathEffectsMenu,
                                &BoundingBox::addOutlineBasePathEffect);
 
-    const auto outlinePathEffectsMenu = menu->addMenu("Outline Effects");
+    const auto outlinePathEffectsMenu = menu->addMenu(QIcon::fromTheme("effect"), "Outline Effects");
     addPathEffectsActionToMenu(outlinePathEffectsMenu,
                                &BoundingBox::addOutlinePathEffect);
 }
 
 #include "PathEffects/patheffectcollection.h"
 void PathEffectsMenu::addPathEffectsToCollectionActionMenu(PropertyMenu * const menu) {
-    const auto addEffectMenu = menu->addMenu("Add Effect");
+    const auto addEffectMenu = menu->addMenu(QIcon::fromTheme("effect"), "Add Effect");
     addPathEffectsActionToMenu(addEffectMenu, &PathEffectCollection::addChild);
 }

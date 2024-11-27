@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include "svgimporter.h"
 
 #include <QtXml/QDomDocument>
+#include <QRegularExpression>
 
 #include "Boxes/containerbox.h"
 #include "colorhelpers.h"
@@ -171,6 +172,7 @@ protected:
     QMatrix mRelTransform;
 
     QString mId;
+    QString mLabel;
 
     FillSvgAttributes mFillAttributes;
     StrokeSvgAttributes mStrokeAttributes;
@@ -220,33 +222,49 @@ void extractSvgAttributes(const QString &string,
     }
 }
 
+bool isColorRGB(const QString &colorStr)
+{
+    static QRegularExpression rx(RGXS "rgb\\(.*\\)" RGXS,
+                                 QRegularExpression::CaseInsensitiveOption);
+    return rx.match(colorStr).hasMatch();
+}
 
-bool toColor(const QString &colorStr, QColor &color) {
-    QRegExp rx = QRegExp(RGXS "rgb\\(.*\\)" RGXS, Qt::CaseInsensitive);
-    if(rx.exactMatch(colorStr)) {
-        rx = QRegExp(RGXS "rgb\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\)" RGXS, Qt::CaseInsensitive);
-        if(rx.exactMatch(colorStr)) {
-            rx.indexIn(colorStr);
-            QStringList intRGB = rx.capturedTexts();
-            color.setRgb(intRGB.at(1).toInt(),
-                         intRGB.at(2).toInt(),
-                         intRGB.at(3).toInt());
-        } else {
-            rx = QRegExp(RGXS "rgb\\(\\s*(\\d+)\\s*%\\s*,\\s*(\\d+)\\s*%\\s*,\\s*(\\d+)\\s*%\\s*\\)" RGXS, Qt::CaseInsensitive);
-            rx.indexIn(colorStr);
-            QStringList intRGB = rx.capturedTexts();
-            color.setRgbF(intRGB.at(1).toInt()/100.,
-                          intRGB.at(2).toInt()/100.,
-                          intRGB.at(3).toInt()/100.);
+bool isColorRGBA(const QString &colorStr)
+{
+    static QRegularExpression rx(RGXS "rgba\\(.*\\)" RGXS,
+                                 QRegularExpression::CaseInsensitiveOption);
+    return rx.match(colorStr).hasMatch();
+}
 
-        }
+bool toColor(const QString &colorStr, QColor &color)
+{
+    const bool isRGB = isColorRGB(colorStr);
+    const bool isRGBA = isColorRGBA(colorStr);
+    if (isRGB || isRGBA) {
+        QString str = colorStr.toLower().simplified();
+        str.remove(isRGB ? "rgb" : "rgba").remove(";").remove("(").remove(")");
+        QStringList components = str.split(",", Qt::SkipEmptyParts);
+        if (components.size() >= 3) {
+            const bool isFloat = components[0].contains("%") ||
+                                 components[1].contains("%") ||
+                                 components[2].contains("%");
+            const bool hasAlpha = components.size() == 4;
+
+            qreal r = components[0].contains("%") ? components[0].remove("%").simplified().toFloat() / 100. :
+                                                    components[0].simplified().toInt();
+            qreal g = components[1].contains("%") ? components[1].remove("%").simplified().toFloat() / 100. :
+                                                    components[1].simplified().toInt();
+            qreal b = components[2].contains("%") ? components[2].remove("%").simplified().toFloat() / 100. :
+                                                    components[2].simplified().toInt();
+            qreal a = hasAlpha ? components[3].contains("%") ? components[3].remove("%").simplified().toFloat() / 100. :
+                                 components[3].simplified().toFloat() : 1.0;
+            if (isFloat) { color.setRgbF(r, g, b); }
+            else { color.setRgb(r, g, b); }
+            if (hasAlpha) { color.setAlphaF(a); }
+        } else { return false; }
     } else {
-        rx = QRegExp(RGXS "#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})" RGXS, Qt::CaseInsensitive);
-        if(rx.exactMatch(colorStr)) {
-            color = QColor(colorStr);
-        } else {
-            return false;
-        }
+        if (QColor::isValidColor(colorStr.simplified())) { color = QColor(colorStr.simplified()); }
+        else { return false; }
     }
     return true;
 }
@@ -1133,6 +1151,7 @@ void BoxSvgAttributes::loadBoundingBoxAttributes(const QDomElement &element) {
     }
 
     mId = element.attribute("id", mId);
+    mLabel = element.attribute("inkscape:label", mLabel);
 
     const QString fillAttributesStr = element.attribute("fill");
     if(!fillAttributesStr.isEmpty()) setFillAttribute(fillAttributesStr);
@@ -1145,6 +1164,18 @@ void BoxSvgAttributes::loadBoundingBoxAttributes(const QDomElement &element) {
 
     const QString strokeOp = element.attribute("stroke-opacity");
     if(!strokeOp.isEmpty()) mFillAttributes.setColorOpacity(toDouble(strokeOp));
+
+    const QString strokeWidth = element.attribute("stroke-width").simplified();
+    if (mStrokeAttributes.getPaintType() != NOPAINT) {
+        if (strokeWidth.isEmpty() || strokeWidth.contains("%")) {
+            if (mStrokeAttributes.getLineWidth() < 1.0) {
+                mStrokeAttributes.setLineWidth(1.0); // spec says 1 as default
+            }
+            // TODO: A percentage value is always computed as a percentage of the normalized viewBox diagonal length.
+        } else {
+            mStrokeAttributes.setLineWidth(stripPx(strokeWidth).simplified().toDouble());
+        }
+    }
 
     const QString matrixStr = element.attribute("transform");
 //    const QString transCenterX = element.attribute("inkscape:transform-center-x");
@@ -1264,9 +1295,12 @@ void StrokeSvgAttributes::apply(BoundingBox *box, const qreal scale) const {
     //box->setStrokePaintType(mPaintType, mColor, mGradient);
 }
 
-void BoxSvgAttributes::apply(BoundingBox *box) const {
-    if(!mId.isEmpty()) box->prp_setName(mId);
-    if(const auto path = enve_cast<PathBox*>(box)) {
+void BoxSvgAttributes::apply(BoundingBox *box) const
+{
+    if (!mLabel.isEmpty()) { box->prp_setName(mLabel); }
+    else if (!mId.isEmpty()) { box->prp_setName(mId); }
+
+    if (const auto path = enve_cast<PathBox*>(box)) {
         const qreal m11 = mRelTransform.m11();
         const qreal m12 = mRelTransform.m12();
         const qreal m21 = mRelTransform.m21();
@@ -1276,7 +1310,7 @@ void BoxSvgAttributes::apply(BoundingBox *box) const {
         const qreal syAbs = qSqrt(m12*m12 + m22*m22);
         mStrokeAttributes.apply(path, (sxAbs + syAbs)*0.5);
         mFillAttributes.apply(path);
-        if(const auto text = enve_cast<TextBox*>(box)) {
+        if (const auto text = enve_cast<TextBox*>(box)) {
             text->setFont(mTextAttributes.getFont());
         }
     }

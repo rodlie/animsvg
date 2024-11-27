@@ -42,7 +42,7 @@ void BlendEffect::prp_setupTreeViewMenu(PropertyMenu * const menu) {
                     DynamicComplexAnimatorBase<BlendEffect>>();
             parent->removeChild(prop->template ref<BlendEffect>());
         };
-        menu->addPlainAction("Delete", dOp);
+        menu->addPlainAction(QIcon::fromTheme("trash"), tr("Delete"), dOp);
     }
 
     menu->addSeparator();

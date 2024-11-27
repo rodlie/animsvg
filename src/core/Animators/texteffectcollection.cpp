@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ void TextEffectCollection::prp_setupTreeViewMenu(PropertyMenu * const menu) {
     [](TextEffectCollection * coll) {
         coll->addChild(enve::make_shared<TextEffect>());
     };
-    menu->addPlainAction("Add Effect", aOp);
+    menu->addPlainAction(QIcon::fromTheme("effect"), tr("Add Effect"), aOp);
     menu->addSeparator();
     DynamicComplexAnimator<TextEffect>::prp_setupTreeViewMenu(menu);
 }

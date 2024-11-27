@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -43,7 +43,11 @@ CommandPalette::CommandPalette(Document& document,
     , mSuggestions(nullptr)
     , mHistoryCounter(-1)
 {
-    setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+    setWindowFlags(Qt::Window | Qt::FramelessWindowHint
+#ifdef Q_OS_MAC
+                   | Qt::WindowStaysOnTopHint
+#endif
+                   );
     setAttribute(Qt::WA_NoSystemBackground);
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_TransparentForMouseEvents);
@@ -76,6 +80,10 @@ CommandPalette::CommandPalette(Document& document,
     mUserInput->addAction(QIcon::fromTheme("zoom"), QLineEdit::LeadingPosition);
     mUserInput->installEventFilter(this);
     mUserInput->setFocus();
+
+#ifdef Q_OS_MAC
+    mSuggestions->installEventFilter(this);
+#endif
 
     connect(mUserInput, &QLineEdit::textChanged, this, [this](const auto &input) {
         mSuggestions->clear();
@@ -416,5 +424,18 @@ bool CommandPalette::eventFilter(QObject *obj, QEvent *e)
         }
         return false;
     }
+#ifdef Q_OS_MAC
+    else if (obj == mSuggestions) {
+        if (e->type() == QEvent::KeyPress) {
+            QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
+            if (keyEvent->key() == Qt::Key_Return) {
+                if (mSuggestions->currentItem()) {
+                    emit mSuggestions->itemActivated(mSuggestions->currentItem());
+                    return true;
+                }
+            }
+        }
+    }
+#endif
     return QDialog::eventFilter(obj, e);
 }

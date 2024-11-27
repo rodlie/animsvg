@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@
 
 #include "ui_global.h"
 
-#include <QDialog>
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QSpinBox>
@@ -39,26 +38,27 @@
 
 #include "smartPointers/ememory.h"
 #include "framerange.h"
+#include "dialog.h"
 
 class Document;
 class Canvas;
 class ColorAnimator;
 class ColorAnimatorButton;
 
-class UI_EXPORT SceneSettingsDialog : public QDialog
+class UI_EXPORT SceneSettingsDialog : public Friction::Ui::Dialog
 {
 public:
     SceneSettingsDialog(Canvas * const canvas,
-                         QWidget * const parent = nullptr);
+                        QWidget * const parent = nullptr);
     SceneSettingsDialog(const QString &defName,
-                         QWidget * const parent = nullptr);
+                        QWidget * const parent = nullptr);
     SceneSettingsDialog(const QString &name,
-                         const int width,
-                         const int height,
-                         const FrameRange &range,
-                         const qreal fps,
-                         ColorAnimator * const bg,
-                         QWidget * const parent = nullptr);
+                        const int width,
+                        const int height,
+                        const FrameRange &range,
+                        const qreal fps,
+                        ColorAnimator * const bg,
+                        QWidget * const parent = nullptr);
 
     int getCanvasWidth() const;
     int getCanvasHeight() const;
@@ -75,6 +75,7 @@ public:
 
 private:
     bool validate();
+    void updateDuration(int index);
 
     Canvas * mTargetCanvas = nullptr;
 

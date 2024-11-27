@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ void RasterEffect::prp_setupTreeViewMenu(PropertyMenu * const menu) {
         const auto parent = eff->getParent<DynamicComplexAnimatorBase<RasterEffect>>();
         parent->removeChild(eff->ref<RasterEffect>());
     };
-    menu->addPlainAction("Delete Effect(s)", dOp);
+    menu->addPlainAction(QIcon::fromTheme("trash"), tr("Delete Effect(s)"), dOp);
 }
 
 QMimeData *RasterEffect::SWT_createMimeData() {

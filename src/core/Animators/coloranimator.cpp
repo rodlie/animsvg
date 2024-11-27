@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -283,7 +283,7 @@ void ColorAnimator::saveColorSVG(SvgExporter &exp,
 }
 
 void ColorAnimator::prp_setupTreeViewMenu(PropertyMenu * const menu) {
-    const auto colorModeMenu = menu->addMenu("Color Mode");
+    const auto colorModeMenu = menu->addMenu(QIcon::fromTheme("color"), tr("Color Mode"));
 
     const PropertyMenu::CheckSelectedOp<ColorAnimator> rgbOp =
     [](ColorAnimator * anim, bool checked) {

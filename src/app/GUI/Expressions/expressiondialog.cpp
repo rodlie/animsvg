@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -286,7 +286,7 @@ void addBasicDefs(QsciAPIs* const target) {
 
 ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
                                    QWidget * const parent)
-    : QDialog(parent)
+    : Friction::Ui::Dialog(parent)
     , mTarget(target)
     , mTab(nullptr)
     , mTabEasingPreset(0)
@@ -481,11 +481,7 @@ ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
     tabGroup->addButton(mBindingsButton, 0);
     tabGroup->addButton(mDefinitionsButon, 1);
     tabGroup->setExclusive(true);
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     connect(tabGroup, qOverload<int, bool>(&QButtonGroup::idToggled),
-#else
-    connect(tabGroup, qOverload<int, bool>(&QButtonGroup::buttonToggled),
-#endif
             this, [this](const int id, const bool checked) {
         if(checked) setCurrentTabId(id);
     });

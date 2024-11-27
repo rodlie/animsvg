@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -64,10 +64,10 @@ void Property::prp_drawCanvasControls(
 void Property::prp_setupTreeViewMenu(PropertyMenu * const menu) {
     const auto clipboard = Document::sInstance->getPropertyClipboard();
     const bool compat = clipboard && clipboard->compatibleTarget(this);
-    menu->addPlainAction("Paste", [this, clipboard]() {
+    menu->addPlainAction(QIcon::fromTheme("paste"), tr("Paste"), [this, clipboard]() {
         clipboard->paste(this);
     })->setEnabled(compat);
-    menu->addPlainAction("Copy", [this]() {
+    menu->addPlainAction(QIcon::fromTheme("copy"), tr("Copy"), [this]() {
         const auto clipboard = enve::make_shared<PropertyClipboard>(this);
         Document::sInstance->replaceClipboard(clipboard);
     });
@@ -367,7 +367,22 @@ bool Property::prp_isParentBoxContained() const
     const auto pBox = getFirstAncestor<eBoxOrSound>();
     if (pBox && mParentScene) {
         const auto contained = mParentScene->getContainedBoxes();
-        for (const auto &box : contained) { if (box == pBox) { return true; } }
+        for (const auto &box : contained) {
+            if (box == pBox) { return true; }
+            if (prp_isParentBoxContained(box, pBox)) { return true; }
+        }
+    }
+    return false;
+}
+
+bool Property::prp_isParentBoxContained(BoundingBox *box,
+                                        eBoxOrSound *ebox) const
+{
+    if (box == ebox) { return true; }
+    if (const auto cbox = enve_cast<ContainerBox*>(box)) {
+        for (const auto &bbox : cbox->getContainedBoxes()) {
+            if (prp_isParentBoxContained(bbox, ebox)) { return true; }
+        }
     }
     return false;
 }

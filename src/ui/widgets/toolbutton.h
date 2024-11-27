@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,8 +21,8 @@
 #
 */
 
-#ifndef TOOLBUTTON_H
-#define TOOLBUTTON_H
+#ifndef FRICTION_TOOLBUTTON_H
+#define FRICTION_TOOLBUTTON_H
 
 #include "ui_global.h"
 
@@ -35,51 +35,57 @@
 #include <QList>
 #include <QUrl>
 
-class UI_EXPORT ToolButton : public QToolButton
+namespace Friction
 {
-    Q_OBJECT
-public:
-    explicit ToolButton(QWidget *parent = nullptr,
-                        bool autoPopup = true)
-        : QToolButton(parent)
-        , mAutoPopup(autoPopup)
+    namespace Ui
     {
+        class UI_EXPORT ToolButton : public QToolButton
+        {
+            Q_OBJECT
+        public:
+            explicit ToolButton(QWidget *parent = nullptr,
+                                bool autoPopup = true)
+            : QToolButton(parent)
+            , mAutoPopup(autoPopup)
+            {
 
-    }
+            }
 
-public slots:
-    void setAutoPopup(const bool &state)
-    {
-        mAutoPopup = state;
-    }
+        public slots:
+            void setAutoPopup(const bool &state)
+            {
+                mAutoPopup = state;
+            }
 
-signals:
-    void droppedUrls(const QList<QUrl> &urls);
+        signals:
+            void droppedUrls(const QList<QUrl> &urls);
 
-private:
-    bool mAutoPopup;
+        private:
+            bool mAutoPopup;
 
-protected:
-    void enterEvent(QEvent *event) override
-    {
-        if (mAutoPopup) { showMenu(); }
-        QToolButton::enterEvent(event);
+        protected:
+            void enterEvent(QEvent *event) override
+            {
+                if (mAutoPopup) { showMenu(); }
+                QToolButton::enterEvent(event);
+            }
+            void dropEvent(QDropEvent *event) override
+            {
+                if (event->mimeData()->hasUrls()) {
+                    emit droppedUrls(event->mimeData()->urls());
+                    event->acceptProposedAction();
+                }
+            }
+            void dragEnterEvent(QDragEnterEvent *event) override
+            {
+                if (event->mimeData()->hasUrls()) { event->acceptProposedAction(); }
+            }
+            void dragMoveEvent(QDragMoveEvent *event) override
+            {
+                event->acceptProposedAction();
+            }
+        };
     }
-    void dropEvent(QDropEvent *event) override
-    {
-        if (event->mimeData()->hasUrls()) {
-            emit droppedUrls(event->mimeData()->urls());
-            event->acceptProposedAction();
-        }
-    }
-    void dragEnterEvent(QDragEnterEvent *event) override
-    {
-        if (event->mimeData()->hasUrls()) { event->acceptProposedAction(); }
-    }
-    void dragMoveEvent(QDragMoveEvent *event) override
-    {
-        event->acceptProposedAction();
-    }
-};
+}
 
-#endif // TOOLBUTTON_H
+#endif // FRICTION_TOOLBUTTON_H

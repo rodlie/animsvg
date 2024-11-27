@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,15 +24,16 @@ CWD=`pwd`
 MKJOBS=${MKJOBS:-2}
 COMMIT=`git rev-parse --short=8 HEAD`
 BRANCH=`git rev-parse --abbrev-ref HEAD`
+CUSTOM=${CUSTOM:-"CI"}
 
 BUILD_ENGINE=${BUILD_ENGINE:-"OFF"}
 REL=${REL:-0}
 APPIMG=20240401
-SDK=20240609
-SKIA=7e480cd3
+SDK=20240915
+SKIA=b3029621
 URL=https://github.com/friction2d/friction-sdk/releases/download/${SDK}
 APPIMAGE_TAR=friction-appimage-tools-${APPIMG}.tar.xz
-SDK_TAR=friction-vfxplatform-CY2021-sdk-${SDK}.tar.bz2
+SDK_TAR=friction-vfxplatform-CY2021-sdk-${SDK}v2.tar.xz
 SKIA_TAR=skia-build-${SKIA}.tar.xz
 
 mkdir -p distfiles/sdk || true
@@ -59,4 +60,4 @@ fi
 
 cd ${CWD}
 
-BUILD_ENGINE=${BUILD_ENGINE} LOCAL_BUILD=0 MKJOBS=${MKJOBS} REL=${REL} BRANCH=${BRANCH} COMMIT=${COMMIT} ./src/scripts/run_docker.sh
+BUILD_ENGINE=${BUILD_ENGINE} LOCAL_BUILD=0 MKJOBS=${MKJOBS} REL=${REL} BRANCH=${BRANCH} COMMIT=${COMMIT} CUSTOM=${CUSTOM} ./src/scripts/run_docker.sh

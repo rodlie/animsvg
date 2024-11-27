@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -79,7 +79,7 @@ void RenderInstanceWidget::iniGUI()
     setObjectName("darkWidget");
     mNameLabel = new QLineEdit(this);
     mNameLabel->setFocusPolicy(Qt::NoFocus);
-    mNameLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    //mNameLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     mNameLabel->setFixedHeight(eSizesUI::button);
     //mNameLabel->setObjectName("RenderTitleWidget");
     mNameLabel->setReadOnly(true);

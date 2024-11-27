@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 
 #ifndef OUTPUTSETTINGSDIALOG_H
 #define OUTPUTSETTINGSDIALOG_H
+
 #include <QDialog>
 #include <QHBoxLayout>
 #include <QPushButton>
@@ -33,8 +34,12 @@
 #include <QDoubleSpinBox>
 #include <QGroupBox>
 #include <QCheckBox>
+#include <QTreeWidget>
+#include <QTreeView>
+
 #include "renderinstancesettings.h"
 #include "widgets/twocolumnlayout.h"
+
 #define COMPLIENCE FF_COMPLIANCE_NORMAL
 
 class OutputSettingsDialog : public QDialog {
@@ -125,6 +130,13 @@ protected:
     QPushButton *mOkButton = nullptr;
     QPushButton *mCancelButton = nullptr;
     QPushButton *mResetButton = nullptr;
+
+    QTreeWidget *mFormatOptionsTree;
+    void setupFormatOptionsTree();
+    void populateFormatOptionsTree(const Friction::Core::FormatOptions &options);
+    QComboBox *createComboBoxFormatOptType(int selected = Friction::Core::FormatType::fTypeMeta);
+    Friction::Core::FormatOptions getFormatOptions();
+
     void addVideoCodec(const AVCodec * const codec,
                        const AVOutputFormat *outputFormat,
                        const QString &currentCodecName);

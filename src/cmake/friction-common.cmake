@@ -1,7 +1,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(LINUX_DEPLOY "Linux Deploy" OFF)
+option(MAC_DEPLOY "Mac Deploy" OFF)
 option(WIN_DEPLOY "Windows Deploy" OFF)
 option(BUILD_ENGINE "Build Engine" ON)
 set(ENGINE_LIB_PATH "/mnt/skia" CACHE STRING "Path to prebuilt skia library")
@@ -36,11 +37,16 @@ endif()
 if(${WIN_DEPLOY})
     add_definitions(-DWIN_DEPLOY)
 endif()
+if(${MAC_DEPLOY})
+    add_definitions(-DMAC_DEPLOY)
+endif()
 
-if(UNIX AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    message(FATAL_ERROR "Only Clang is supported.")
-elseif(WIN32 AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    message(FATAL_ERROR "Only MSVC is supported.")
+if(NOT APPLE)
+    if(UNIX AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        message(FATAL_ERROR "Only Clang is supported.")
+    elseif(WIN32 AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        message(FATAL_ERROR "Only MSVC is supported.")
+    endif()
 endif()
 
 if(UNIX)

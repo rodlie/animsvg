@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,18 +24,18 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "colorsettingswidget.h"
-#include "GUI/mainwindow.h"
-#include <QResizeEvent>
-#include <QWindow>
-#include <QMenu>
-#include "GUI/ColorWidgets/colorpickingwidget.h"
 #include "colorhelpers.h"
 #include "widgets/colorlabel.h"
 #include "GUI/global.h"
-#include "widgets/actionbutton.h"
 #include "widgets/savedcolorswidget.h"
 #include "appsupport.h"
+#include "Private/esettings.h"
+#include "Private/document.h"
+#include "canvas.h"
 
+#include <QResizeEvent>
+#include <QWindow>
+#include <QMenu>
 #include <QShortcut>
 
 void ColorSettingsWidget::updateWidgetTargets()
@@ -102,6 +102,10 @@ void ColorSettingsWidget::setTarget(ColorAnimator * const target) {
                         this, &ColorSettingsWidget::updateWidgetTargets);
         conn << connect(target, &ColorAnimator::colorChanged,
                         mBookmarkedColors, &SavedColorsWidget::setColor);
+        conn << connect(target, &ColorAnimator::colorChanged,
+                        this, [this]() {
+            if (isHidden()) { updateWidgetTargets(); }
+        });
         mBookmarkedColors->setColor(getCurrentQColor());
 
     }
@@ -138,6 +142,26 @@ ColorSetting ColorSettingsWidget::getColorSetting(
                     alphaVal,
                     type);
     }
+}
+
+void ColorSettingsWidget::setColorModeVisible(const bool &visible)
+{
+    mColorModeLabel->setVisible(visible);
+    mColorModeCombo->setVisible(visible);
+}
+
+void ColorSettingsWidget::setCurrentTab(const int &index)
+{
+    if (index >= 0 && index < mTabWidget->count()) {
+        mTabWidget->setCurrentIndex(index);
+        moveAlphaWidgetToTab(index);
+    }
+}
+
+void ColorSettingsWidget::showEvent(QShowEvent *e)
+{
+    updateWidgetTargets();
+    QWidget::showEvent(e);
 }
 
 void ColorSettingsWidget::emitColorChangedSignal() {
@@ -257,15 +281,23 @@ void ColorSettingsWidget::moveAlphaWidgetToTab(const int tabId) {
                 mTabWidget->widget(tabId)->minimumSizeHint());*/
 }
 
-void ColorSettingsWidget::startColorPicking() {
-    const auto parent = MainWindow::sGetInstance();
-    const auto screen = parent->windowHandle()->screen();
-    const auto wid = new ColorPickingWidget(screen, parent);
-    connect(wid, &ColorPickingWidget::colorSelected,
-            [this](const QColor & color) {
-        emitStartFullColorChangedSignal();
-        setDisplayedColor(color);
-        emitFinishFullColorChangedSignal();
+void ColorSettingsWidget::startColorPicking()
+{
+    const auto scene = *Document::sInstance->fActiveScene;
+    if (!scene) { return; }
+    CanvasMode lastMode = Document::sInstance->fCanvasMode;
+    Document::sInstance->setCanvasMode(CanvasMode::pickFillStrokeEvent);
+    auto conn = std::make_shared<QMetaObject::Connection>();
+    *conn = connect(scene, &Canvas::currentPickedColor,
+                    this, [this, conn, lastMode](const QColor &color) {
+        qDebug() << "selected color" << color << color.isValid();
+        if (color.isValid()) {
+            emitStartFullColorChangedSignal();
+            setDisplayedColor(color);
+            emitFinishFullColorChangedSignal();
+        }
+        disconnect(*conn);
+        Document::sInstance->setCanvasMode(lastMode);
     });
 }
 
@@ -398,8 +430,10 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     mWidgetsLayout->addWidget(mTabWidget);
     mRGBLayout->addLayout(aLayout);
 
+    mHexLabel = new QLabel("Hex", this);
+
     hexLayout = new QHBoxLayout;
-    hexLayout->addWidget(new QLabel("Hex", this));
+    hexLayout->addWidget(mHexLabel);
     mHexEdit = new QLineEdit("#FF000000", this);
     mHexEdit->setFocusPolicy(Qt::ClickFocus);
     hexLayout->addWidget(mHexEdit);
@@ -456,6 +490,15 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
 
     connect(mTabWidget, &QTabWidget::currentChanged,
             this, &ColorSettingsWidget::moveAlphaWidgetToTab);
+
+    connect(mTabWidget, &QTabWidget::currentChanged,
+            this, [](int index){
+        const auto settings = eSettings::sInstance;
+        if (settings->fDefaultFillStrokeIndex != index) {
+            settings->fDefaultFillStrokeIndex = index;
+            settings->saveKeyToFile("DefaultFillStrokeIndex");
+        }
+    });
 
     connect(rSpin, &QrealAnimatorValueSlider::valueEdited,
             this, &ColorSettingsWidget::setRed);
@@ -612,8 +655,7 @@ ColorSettingsWidget::ColorSettingsWidget(QWidget *parent)
     mTabWidget->setSizePolicy(QSizePolicy::MinimumExpanding,
                               QSizePolicy::Maximum);
     setDisplayedColor(Qt::black);
-
-    moveAlphaWidgetToTab(0);
+    setCurrentTab(eSettings::instance().fDefaultFillStrokeIndex);
 }
 
 QColor ColorSettingsWidget::getCurrentQColor() {

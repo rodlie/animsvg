@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -95,7 +95,7 @@ void FixedLenAnimationRect::writeDurationRectangleXEV(QDomElement& ele) const {
 void FixedLenAnimationRect::readDurationRectangleXEV(const QDomElement& ele) {
     DurationRectangle::readDurationRectangleXEV(ele);
     const auto animRangeStr = ele.attribute("animFrameRange");
-    const auto animRangeStrs = animRangeStr.split(' ', QT_SKIP_EMPTY);
+    const auto animRangeStrs = animRangeStr.split(' ', Qt::SkipEmptyParts);
     if(animRangeStrs.count() != 2) RuntimeThrow("Invalid frame range " + animRangeStr);
     mMinAnimationFrame = XmlExportHelpers::stringToInt(animRangeStrs[0]);
     mMaxAnimationFrame = XmlExportHelpers::stringToInt(animRangeStrs[1]);

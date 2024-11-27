@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -69,12 +69,8 @@ for so in ${LIB_DIR}/*.so*; do
 done
 
 cp ${SDK}/plugins/audio/libqtmedia_pulse.so ${PLUG_DIR}/audio/
-cp ${SDK}/plugins/generic/libqevdevkeyboardplugin.so ${PLUG_DIR}/generic/
-cp ${SDK}/plugins/generic/libqevdevmouseplugin.so ${PLUG_DIR}/generic/
-cp ${SDK}/plugins/generic/libqevdevtabletplugin.so ${PLUG_DIR}/generic/
-cp ${SDK}/plugins/generic/libqevdevtouchplugin.so ${PLUG_DIR}/generic/
-cp ${SDK}/plugins/generic/libqtuiotouchplugin.so ${PLUG_DIR}/generic/
 cp ${SDK}/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so ${PLUG_DIR}/platforminputcontexts/
+cp ${SDK}/plugins/platforms/libqminimal.so ${PLUG_DIR}/platforms/
 cp ${SDK}/plugins/platforms/libqoffscreen.so ${PLUG_DIR}/platforms/
 cp ${SDK}/plugins/platforms/libqxcb.so ${PLUG_DIR}/platforms/
 cp ${SDK}/plugins/xcbglintegrations/libqxcb-glx-integration.so ${PLUG_DIR}/xcbglintegrations/
@@ -139,7 +135,8 @@ echo "[Paths]" > ${BUILD}/${FRICTION_PKG}/opt/friction/bin/qt.conf
 echo "Prefix = .." >> ${BUILD}/${FRICTION_PKG}/opt/friction/bin/qt.conf
 echo "Plugins = plugins" >> ${BUILD}/${FRICTION_PKG}/opt/friction/bin/qt.conf
 
-(cd ${BUILD}/${FRICTION_PKG}/opt/friction/bin ; patchelf --set-rpath '$ORIGIN/../lib' friction)
+#(cd ${BUILD}/${FRICTION_PKG}/opt/friction/bin ; patchelf --set-rpath '$ORIGIN/../lib' friction)
+
 (cd ${BUILD}/${FRICTION_PKG}/opt/friction/lib ;
 for so in *.so*; do
     patchelf --set-rpath '$ORIGIN' ${so}
@@ -148,7 +145,6 @@ done
 
 PLUGS="
 audio
-generic
 platforminputcontexts
 platforms
 xcbglintegrations

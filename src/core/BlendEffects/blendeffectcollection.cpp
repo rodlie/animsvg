@@ -17,14 +17,14 @@ void BlendEffectCollection::prp_setupTreeViewMenu(PropertyMenu * const menu) {
         [](BlendEffectCollection * coll) {
             coll->addChild(enve::make_shared<MoveBlendEffect>());
         };
-        menu->addPlainAction("New Move Effect", aOp);
+        menu->addPlainAction(QIcon::fromTheme("effect"), tr("New Move Effect"), aOp);
     }
     {
         const PropertyMenu::PlainSelectedOp<BlendEffectCollection> aOp =
         [](BlendEffectCollection * coll) {
             coll->addChild(enve::make_shared<TargetedBlendEffect>());
         };
-        menu->addPlainAction("New Targeted Effect", aOp);
+        menu->addPlainAction(QIcon::fromTheme("effect"), tr("New Targeted Effect"), aOp);
     }
     menu->addSeparator();
     BlendEffectCollectionBase::prp_setupTreeViewMenu(menu);

@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@
 #include <QComboBox>
 #include <QTimer>
 
+#include "widgets/fontswidget.h"
 #include "Private/Tasks/taskscheduler.h"
 #include "Private/document.h"
 #include "Sound/audiohandler.h"
@@ -48,34 +49,29 @@
 #include "fileshandler.h"
 #include "ekeyfilter.h"
 #include "GUI/RenderWidgets/renderwidget.h"
+#include "widgets/colortoolbar.h"
 #include "widgets/qdoubleslider.h"
+#include "widgets/canvastoolbar.h"
 #include "window.h"
 #include "widgets/aboutwidget.h"
 #include "widgets/uilayout.h"
-#include "widgets/toolbutton.h"
+#include "widgets/toolbar.h"
 
 class VideoEncoder;
 class RenderWidget;
 class ActionButton;
 class BoxesList;
-class FontsWidget;
 class UpdateScheduler;
 class AnimationDockWidget;
 class ColorSettingsWidget;
 class FillStrokeSettingsWidget;
 class TimelineDockWidget;
-//class BrushSelectionWidget;
 class CanvasWindow;
 class MemoryHandler;
 
 class ObjectSettingsWidget;
 class BoxScrollWidget;
 class ScrollArea;
-class UsageWidget;
-//class CentralWidget;
-//class CloseSignalingDockWidget;
-//class PaintColorWidget;
-//class SoundComposition;
 
 class MainWindow : public QMainWindow
 {
@@ -88,8 +84,6 @@ public:
                const QString &openProject = QString(),
                QWidget * const parent = nullptr);
     ~MainWindow();
-
-//    void (MainWindow::*mBoxesUpdateFinishedFunction)(void) = nullptr;
 
     static MainWindow *sGetInstance();
 
@@ -114,11 +108,8 @@ public:
 
     void updateCanvasModeButtonsChecked();
 
-    //void addBoxAwaitingUpdate(BoundingBox *box);
     void setCurrentBox(BoundingBox *box);
-
-//    void nextSaveOutputFrame();
-//    void nextPlayPreviewFrame();
+    void setCurrentBoxFocus(BoundingBox *box);
 
     void setResolution(qreal percent);
 
@@ -126,17 +117,8 @@ public:
 
     void addCanvas(Canvas * const newCanvas);
 
-    /*FontsWidget *getFontsWidget() const {
-        return mFontWidget;
-    }*/
     SimpleBrushWrapper *getCurrentBrush() const;
 
-    /*UsageWidget* getUsageWidget() const {
-        return mUsageWidget;
-    }*/
-
-    //void playPreview();
-   // void stopPreview();
     void setResolutionValue(const qreal value);
 
     void addCanvasToRenderQue();
@@ -156,20 +138,10 @@ public:
         object->installEventFilter(mLineFilter);
     }
 
-    //void togglePaintBrushDockVisible()
-    //{ mBrushDockAction->toggle(); }
-
-    //void toggleFillStrokeSettingsDockVisible()
-    //{ mFillAndStrokeDockAct->toggle(); }
-
     void readSettings(const QString &openProject = QString());
     void writeSettings();
 
 public:
-    //void saveOutput(QString renderDest);
-    //void renderOutput();
-    //void sendNextBoxForUpdate();
-
     void newFile();
     bool askForSaving();
     void openFile();
@@ -195,6 +167,11 @@ public:
     void cmdAddAction(QAction *act);
     LayoutHandler* getLayoutHandler();
     TimelineDockWidget* getTimeLineWidget();
+    void focusFontWidget(const bool focus = true);
+    void focusColorWidget();
+    void openMarkerEditor();
+    void openExpressionDialog(QrealAnimator* const target);
+    void openApplyExpressionDialog(QrealAnimator* const target);
 
 protected:
     void lockFinished();
@@ -204,10 +181,8 @@ protected:
 private:
     bool mShutdown;
     QWidget *mWelcomeDialog;
-    //CentralWidget *mCentralWidget;
     QStackedWidget *mStackWidget;
 
-    QTabWidget *mTabColorText;
     QTabWidget *mTabProperties;
 
     void openWelcomeDialog();
@@ -241,48 +216,17 @@ private:
 
     void handleNewVideoClip(const VideoBox::VideoSpecs &specs);
 
-//    bool mRendering = false;
-
-//    bool mCancelLastBoxUpdate = false;
-//    BoundingBox *mLastUpdatedBox = nullptr;
-//    QList<BoundingBox*> mBoxesAwaitingUpdate;
-//    bool mNoBoxesAwaitUpdate = true;
-
-    /*CloseSignalingDockWidget *mFillStrokeSettingsDock;
-    CloseSignalingDockWidget *mTimelineDock;
-    CloseSignalingDockWidget *mSelectedObjectDock;
-    CloseSignalingDockWidget *mFilesDock;
-    CloseSignalingDockWidget *mBrushSettingsDock;
-    CloseSignalingDockWidget *mAlignDock;*/
-
-    /*QWidget *mFillStrokeSettingsDockBar;
-    QWidget *mTimelineDockBar;
-    QWidget *mSelectedObjectDockBar;
-    QWidget *mFilesDockBar;
-    QWidget *mBrushSettingsDockBar;
-    QWidget *mAlignDockBar;*/
+    void handleCurrentPixelColor(const QColor &color);
 
     TimelineDockWidget *mTimeline;
     RenderWidget *mRenderWidget;
-    //BrushSelectionWidget *mBrushSelectionWidget = nullptr;
 
-    //QStatusBar* mStatusBar;
-    //UsageWidget* mUsageWidget = nullptr;
-
-    QStackedWidget *mToolBoxStack;
-    QStackedWidget *mToolBoxExtraStack;
-    int mToolBoxMainIndex;
-    int mToolBoxNodesIndex;
-    int mToolBoxDrawIndex;
-
-    QToolBar *mToolbar;
+    Friction::Ui::ToolBar *mToolbar;
 
     QActionGroup *mToolBoxGroupMain;
     QActionGroup *mToolBoxGroupNodes;
 
-    QToolBar *mToolBoxMain;
-    QToolBar *mToolBoxNodes;
-    QToolBar *mToolBoxDraw;
+    Friction::Ui::ToolBar *mToolBoxMain;
 
     UILayout *mUI;
 
@@ -335,13 +279,22 @@ private:
     QAction *mLocalPivotAct;
 
     QToolButton *mNodeVisibility;
+    QAction *mNodeVisibilityAct;
 
-    FontsWidget *mFontWidget;
+    Friction::Ui::FontsWidget *mFontWidget;
     QAction* mFontWidgetAct;
 
     QAction *mDrawPathAuto;
     QDoubleSlider *mDrawPathSmooth;
     QDoubleSlider *mDrawPathMaxError;
+
+    QAction *mToolBoxDrawActLabel1;
+    QAction *mToolBoxDrawActLabel2;
+    QAction *mToolBoxDrawActIcon1;
+    QAction *mToolBoxDrawActIcon2;
+    QAction *mToolBoxDrawActMaxError;
+    QAction *mToolBoxDrawActSmooth;
+    QAction *mToolBoxDrawActSep;
 
     QMenuBar *mMenuBar;
     QMenu *mFileMenu;
@@ -365,7 +318,6 @@ private:
     LayoutHandler *mLayoutHandler = nullptr;
 
     FillStrokeSettingsWidget *mFillStrokeSettings;
-    //PaintColorWidget* mPaintColorWidget;
 
     bool mChangedSinceSaving = false;
     bool mEventFilterDisabled = true;
@@ -377,10 +329,11 @@ private:
     ScrollArea *mObjectSettingsScrollArea;
 
     void setupToolBar();
-    void connectToolBarActions();
     void setupMenuBar();
+    void setupMenuScene();
     void setupMenuEffects();
     void setupMenuExtras();
+    void setupPropertiesActions();
 
     BoundingBox* getCurrentBox();
 
@@ -394,8 +347,6 @@ private:
 
     QList<SceneBoundGradient*> mLoadedGradientsList;
 
-   // void checkLockDocks();
-
     int mStackIndexScene;
     int mStackIndexWelcome;
 
@@ -405,17 +356,16 @@ private:
     int mTabAssetsIndex;
     int mTabQueueIndex;
 
-    QComboBox *mResolutionComboBox;
-    void setResolutionText(QString text);
-
-    /*QAction* addSlider(const QString &name,
-                       QDoubleSlider* const slider,
-                       QToolBar* const toolBar);*/
+    Friction::Ui::ColorToolBar *mColorToolBar;
+    Friction::Ui::CanvasToolBar *mCanvasToolBar;
 
     void setupToolBox();
     void setupToolBoxMain();
     void setupToolBoxNodes();
     void setupToolBoxDraw();
+
+    void setEnableToolBoxNodes(const bool &enable);
+    void setEnableToolBoxDraw(const bool &enable);
 
     bool mBackupOnSave;
     bool mAutoSave;
@@ -434,6 +384,8 @@ private:
     void openTimelineWindow();
     void closedTimelineWindow();
 
+    QAction *mViewFillStrokeAct;
+
     Window *mRenderWindow;
     QAction *mRenderWindowAct;
     void openRenderQueueWindow();
@@ -441,6 +393,8 @@ private:
 
     void initRenderPresets(const bool reinstall = false);
     void askInstallRenderPresets();
+
+    QLabel *mColorPickLabel;
 
 protected:
     void keyPressEvent(QKeyEvent *event);

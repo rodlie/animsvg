@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,22 +33,16 @@
 #include "GUI/global.h"
 
 #include "../mainwindow.h"
+#include "widgets/twocolumnlayout.h"
 
 GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     : SettingsWidget(parent)
     , mAutoBackup(nullptr)
     , mAutoSave(nullptr)
     , mAutoSaveTimer(nullptr)
-    //, mDefaultInterfaceScaling(nullptr)
-    //, mInterfaceScaling(nullptr)
+    , mDefaultInterfaceScaling(nullptr)
+    , mInterfaceScaling(nullptr)
     , mImportFileDir(nullptr)
-    , mToolBarActionNew(nullptr)
-    , mToolBarActionOpen(nullptr)
-    , mToolBarActionSave(nullptr)
-    , mToolBarActionScene(nullptr)
-    , mToolBarActionRender(nullptr)
-    , mToolBarActionPreview(nullptr)
-    , mToolBarActionExport(nullptr)
 {
     const auto mGeneralWidget = new QWidget(this);
     mGeneralWidget->setContentsMargins(0, 0, 0, 0);
@@ -90,7 +84,7 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
 
     mProjectLayout->addWidget(mAutoSaveWidget);
 
-    /*const auto mScaleWidget = new QGroupBox(this);
+    const auto mScaleWidget = new QGroupBox(this);
     mScaleWidget->setObjectName("BlueBox");
     mScaleWidget->setTitle(tr("Interface Scaling"));
     mScaleWidget->setContentsMargins(0, 0, 0, 0);
@@ -116,6 +110,10 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     mDefaultInterfaceScaling = new QCheckBox(this);
     mDefaultInterfaceScaling->setText(tr("Auto"));
     mDefaultInterfaceScaling->setToolTip(tr("Use scaling reported by the system."));
+    connect(mDefaultInterfaceScaling, &QCheckBox::stateChanged,
+            this, [this]() {
+        mInterfaceScaling->setEnabled(!mDefaultInterfaceScaling->isChecked());
+    });
 
     mScaleContainerLayout->addWidget(mDefaultInterfaceScaling);
 
@@ -123,7 +121,7 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     infoLabel->setText(tr("Changes here will require a restart of Friction."));
     mScaleLayout->addWidget(infoLabel);
 
-    mGeneralLayout->addWidget(mScaleWidget);*/
+    mGeneralLayout->addWidget(mScaleWidget);
 
     const auto mImportFileWidget = new QWidget(this);
     mImportFileWidget->setContentsMargins(0, 0, 0, 0);
@@ -142,15 +140,13 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent)
     mProjectLayout->addSpacing(10);
     mProjectLayout->addWidget(mImportFileWidget);
 
-    setupToolBarWidgets(mGeneralLayout);
-
     mGeneralLayout->addStretch();
     addWidget(mGeneralWidget);
 
     eSizesUI::widget.add(mAutoBackup, [this](const int size) {
         mAutoBackup->setFixedHeight(size);
         mAutoSave->setFixedHeight(size);
-        //mDefaultInterfaceScaling->setFixedHeight(size);
+        mDefaultInterfaceScaling->setFixedHeight(size);
     });
 }
 
@@ -167,20 +163,12 @@ void GeneralSettingsWidget::applySettings()
                             (mAutoSaveTimer->value() * 60) * 1000);
     MainWindow::sGetInstance()->updateAutoSaveBackupState();
 
-    //mSett.fDefaultInterfaceScaling = mDefaultInterfaceScaling->isChecked();
-    //mSett.fInterfaceScaling = mInterfaceScaling->value() * 0.01;
+    mSett.fDefaultInterfaceScaling = mDefaultInterfaceScaling->isChecked();
+    mSett.fInterfaceScaling = mInterfaceScaling->value() * 0.01;
     mSett.fImportFileDirOpt = mImportFileDir->currentData().toInt();
 
-    mSett.fToolBarActionNew = mToolBarActionNew->isChecked();
-    mSett.fToolBarActionOpen = mToolBarActionOpen->isChecked();
-    mSett.fToolBarActionSave = mToolBarActionSave->isChecked();
-    mSett.fToolBarActionScene = mToolBarActionScene->isChecked();
-    mSett.fToolBarActionRender = mToolBarActionRender->isChecked();
-    mSett.fToolBarActionPreview = mToolBarActionPreview->isChecked();
-    mSett.fToolBarActionExport = mToolBarActionExport->isChecked();
-
-    eSizesUI::font.updateSize();
-    eSizesUI::widget.updateSize();
+    //eSizesUI::font.updateSize();
+    //eSizesUI::widget.updateSize();
 }
 
 void GeneralSettingsWidget::updateSettings(bool restore)
@@ -197,16 +185,9 @@ void GeneralSettingsWidget::updateSettings(bool restore)
     if (ms < 60000) { ms = 60000; }
     mAutoSaveTimer->setValue((ms / 1000) / 60);
 
-    //mDefaultInterfaceScaling->setChecked(mSett.fDefaultInterfaceScaling);
-    //mInterfaceScaling->setValue(mDefaultInterfaceScaling->isChecked() ? 100 : 100 * mSett.fInterfaceScaling);
-
-    mToolBarActionNew->setChecked(mSett.fToolBarActionNew);
-    mToolBarActionOpen->setChecked(mSett.fToolBarActionOpen);
-    mToolBarActionSave->setChecked(mSett.fToolBarActionSave);
-    mToolBarActionScene->setChecked(mSett.fToolBarActionScene);
-    mToolBarActionRender->setChecked(mSett.fToolBarActionRender);
-    mToolBarActionPreview->setChecked(mSett.fToolBarActionPreview);
-    mToolBarActionExport->setChecked(mSett.fToolBarActionExport);
+    mDefaultInterfaceScaling->setChecked(mSett.fDefaultInterfaceScaling);
+    mInterfaceScaling->setEnabled(!mDefaultInterfaceScaling->isChecked());
+    mInterfaceScaling->setValue(mDefaultInterfaceScaling->isChecked() ? 100 : 100 * mSett.fInterfaceScaling);
 
     for (int i = 0; i < mImportFileDir->count(); i++) {
         if (mImportFileDir->itemData(i).toInt() == mSett.fImportFileDirOpt) {
@@ -214,53 +195,4 @@ void GeneralSettingsWidget::updateSettings(bool restore)
             return;
         }
     }
-}
-
-void GeneralSettingsWidget::setupToolBarWidgets(QVBoxLayout *lay)
-{
-    if (!lay) { return; }
-
-    const auto area = new QScrollArea(this);
-    const auto container = new QGroupBox(this);
-    container->setObjectName("BlueBox");
-    const auto containerLayout = new QVBoxLayout(container);
-    const auto containerInner = new QWidget(this);
-    const auto containerInnerLayout = new QVBoxLayout(containerInner);
-
-    area->setWidget(containerInner);
-    area->setWidgetResizable(true);
-    area->setContentsMargins(0, 0, 0, 0);
-    area->setFrameShape(QFrame::NoFrame);
-
-    container->setTitle(tr("Toolbar Actions"));
-
-    container->setContentsMargins(0, 0, 0, 0);
-
-    containerInnerLayout->setMargin(5);
-    //containerLayout->setMargin(0);
-
-    containerLayout->addWidget(area);
-
-    mToolBarActionNew = new QCheckBox(tr("New"), this);
-    containerInnerLayout->addWidget(mToolBarActionNew);
-
-    mToolBarActionOpen = new QCheckBox(tr("Open"), this);
-    containerInnerLayout->addWidget(mToolBarActionOpen);
-
-    mToolBarActionSave = new QCheckBox(tr("Save"), this);
-    containerInnerLayout->addWidget(mToolBarActionSave);
-
-    mToolBarActionScene = new QCheckBox(tr("Scene"), this);
-    containerInnerLayout->addWidget(mToolBarActionScene);
-
-    mToolBarActionRender = new QCheckBox(tr("Render"), this);
-    containerInnerLayout->addWidget(mToolBarActionRender);
-
-    mToolBarActionPreview = new QCheckBox(tr("Preview"), this);
-    containerInnerLayout->addWidget(mToolBarActionPreview);
-
-    mToolBarActionExport = new QCheckBox(tr("Export"), this);
-    containerInnerLayout->addWidget(mToolBarActionExport);
-
-    lay->addWidget(container);
 }

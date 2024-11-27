@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,8 +26,8 @@
 #include "fillstrokesettings.h"
 #include "gradientwidgets/gradientwidget.h"
 #include "canvas.h"
-#include "qrealanimatorvalueslider.h"
-#include "GUI/ColorWidgets/colorsettingswidget.h"
+#include "widgets/qrealanimatorvalueslider.h"
+#include "widgets/colorsettingswidget.h"
 #include "paintsettingsapplier.h"
 #include "Animators/gradient.h"
 #include "Private/esettings.h"
@@ -36,7 +36,10 @@
 #include "GUI/global.h"
 
 FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
-                                                   QWidget * const parent)
+                                                   QWidget * const parent,
+                                                   const bool noScroll,
+                                                   const bool fillOnly,
+                                                   const bool strokeOnly)
     : QWidget(parent)
     , mDocument(document)
     , mTarget(PaintSetting::FILL)
@@ -109,12 +112,12 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     const auto lineLabel = new QLabel(tr("Width"), this);
 
     mLineWidthSpin = new QrealAnimatorValueSlider(0, 1000, 0.5, this);
-    mLineWidthSpin->setMinimumHeight(25);
     mLineWidthSpin->setMinimumWidth(100);
 
     lineLayout->addWidget(lineLabel);
     lineLayout->addStretch();
     lineLayout->addWidget(mLineWidthSpin);
+    lineLayout->addStretch();
 
     const auto actions = Actions::sInstance;
     connect(mLineWidthSpin, &QrealAnimatorValueSlider::editingStarted,
@@ -270,11 +273,12 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
         mFillGradientButton->setFixedHeight(eSizesUI::button);
         mLinearGradientButton->setFixedHeight(eSizesUI::button);
         mRadialGradientButton->setFixedHeight(eSizesUI::button);
+        mLineWidthSpin->setFixedHeight(eSizesUI::button);
     });
 
     // layout
     mStrokeSettingsWidget = new QWidget(this);
-    const auto mStrokeSettingsLayout = new QVBoxLayout(mStrokeSettingsWidget);
+    const auto mStrokeSettingsLayout = new QHBoxLayout(mStrokeSettingsWidget);
 
     mStrokeSettingsWidget->setContentsMargins(0, 0, 0, 0);
     mStrokeSettingsLayout->setMargin(0);
@@ -314,14 +318,18 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     mMainLayout->addWidget(mColorsSettingsWidget);
     mMainLayout->addStretch();
 
-    const auto mFillStrokeArea = new ScrollArea(this);
-    mFillAndStrokeWidget->setObjectName("DarkWidget");
-    mFillStrokeArea->setWidget(mFillAndStrokeWidget);
-
     const auto mLayout = new QVBoxLayout(this);
-    mLayout->setContentsMargins(0,0,0,0);
+    mLayout->setContentsMargins(0, 0, 0, 0);
     mLayout->setMargin(0);
-    mLayout->addWidget(mFillStrokeArea);
+
+    mFillAndStrokeWidget->setObjectName("DarkWidget");
+    if (noScroll) {
+        mLayout->addWidget(mFillAndStrokeWidget);
+    } else {
+        const auto mFillStrokeArea = new ScrollArea(this);
+        mFillStrokeArea->setWidget(mFillAndStrokeWidget);
+        mLayout->addWidget(mFillStrokeArea);
+    }
 
     // defaults
     mLinearGradientButton->setChecked(true);
@@ -329,6 +337,12 @@ FillStrokeSettingsWidget::FillStrokeSettingsWidget(Document &document,
     setFillTarget();
     setCapStyle(SkPaint::kRound_Cap);
     setJoinStyle(SkPaint::kRound_Join);
+
+    if (fillOnly || strokeOnly) {
+        mTargetWidget->setVisible(false);
+        if (fillOnly) { setFillTarget(); }
+        else { setStrokeTarget(); }
+    }
 }
 
 void FillStrokeSettingsWidget::setLinearGradientAction()
@@ -518,6 +532,12 @@ void FillStrokeSettingsWidget::setCurrentSettings(PaintSettingsAnimator *fillPai
 {
     setFillValuesFromFillSettings(fillPaintSettings);
     setStrokeValuesFromStrokeSettings(strokePaintSettings);
+
+    /*const bool hasFill = fillPaintSettings ? fillPaintSettings->getPaintType() != PaintType::NOPAINT : false;
+    const bool hasStroke = strokePaintSettings ? strokePaintSettings->getPaintType() != PaintType::NOPAINT : false;
+    if (hasStroke && !hasFill) { setStrokeTarget(); }
+    else { setFillTarget(); }*/
+
     if (mTarget == PaintSetting::FILL) { setFillTarget(); }
     else { setStrokeTarget(); }
 }

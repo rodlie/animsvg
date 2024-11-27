@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -49,8 +49,9 @@ BoxWithPathEffects::BoxWithPathEffects(
 }
 
 #include "patheffectsmenu.h"
-void BoxWithPathEffects::setupCanvasMenu(PropertyMenu * const menu) {
-    if(menu->hasActionsForType<BoxWithPathEffects>()) return;
+void BoxWithPathEffects::setupCanvasMenu(PropertyMenu * const menu)
+{
+    if (menu->hasActionsForType<BoxWithPathEffects>()) { return; }
     menu->addedActionsForType<BoxWithPathEffects>();
 
     BoundingBox::setupCanvasMenu(menu);

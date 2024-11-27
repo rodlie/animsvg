@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,9 +39,13 @@ void StaticComplexAnimator::prp_readProperty_impl(eReadStream &src)
 {
     const auto& children = ca_getChildren();
     const auto SVGProperties = QStringList() << "begin event" << "end event";
+    const bool isSubPathEffect = prp_getName() == "sub-path effect";
+
     for (const auto& prop : children) {
         if (src.evFileVersion() < EvFormat::svgBeginEnd &&
             SVGProperties.contains(prop->prp_getName())) { continue; }
+        if (src.evFileVersion() < EvFormat::subPathOffset &&
+            isSubPathEffect && prop->prp_getName() == "offset") { continue; }
         prop->prp_readProperty(src);
     }
 }

@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -388,9 +388,9 @@ QString SmartPath::toXEV() const {
 void SmartPath::loadXEV(const QStringRef& xev) {
     ListOfNodes listOfNodes;
 
-    const auto nodes = xev.split(',', QT_SKIP_EMPTY);
+    const auto nodes = xev.split(',', Qt::SkipEmptyParts);
     for(const auto& node : nodes) {
-        const auto values = node.split(' ', QT_SKIP_EMPTY);
+        const auto values = node.split(' ', Qt::SkipEmptyParts);
         if(values.count() == 1) {
             const qreal t = XmlExportHelpers::stringToDouble(values[0]);
             listOfNodes.append(Node(t));

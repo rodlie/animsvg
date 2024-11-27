@@ -1,7 +1,7 @@
 @echo off
 
 REM ### BUILD FRICTION ON WINDOWS
-REM # Copyright (c) Friction contributors
+REM # Copyright (c) Ole-André Rodlie and contributors
 REM # GPLv3+
 
 set OPT=%1
@@ -23,7 +23,7 @@ if "%OPT%" == "debug" (
 
 set CWD=%cd%
 set SDK_DIR=%CWD%\sdk
-set SDK_VERSION=20240805
+set SDK_VERSION=20240915
 
 set PATH=%SDK_DIR%\bin;%PATH%
 
@@ -36,8 +36,8 @@ set COMMIT=
 for /f %%i in ('git rev-parse --short^=8 HEAD') do set COMMIT=%%i
 
 if not exist "sdk\" ( 
-    curl -OL "https://github.com/friction2d/friction-sdk/releases/download/%SDK_VERSION%/friction-sdk-%SDK_VERSION%-windows-x64.7z"
-    7z x friction-sdk-%SDK_VERSION%-windows-x64.7z
+    curl -OL "https://github.com/friction2d/friction-sdk/releases/download/%SDK_VERSION%/friction-msvc-2017-sdk-%SDK_VERSION%.7z"
+    7z x friction-msvc-2017-sdk-%SDK_VERSION%.7z
 )
 
 if exist "build\" (
@@ -74,7 +74,6 @@ copy "%SDK_DIR%\bin\Qt5Gui.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\Qt5Multimedia.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\Qt5Network.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\Qt5OpenGL.dll" "%OUTPUT_DIR%\"
-copy "%SDK_DIR%\bin\Qt5PrintSupport.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\Qt5Qml.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\Qt5Widgets.dll" "%OUTPUT_DIR%\"
 copy "%SDK_DIR%\bin\Qt5Xml.dll" "%OUTPUT_DIR%\"

@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ GradientsListWidget::GradientsListWidget(QWidget *parent)
     setObjectName("NoMarginVerticalScrollBar");
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     eSizesUI::widget.add(this, [this](const int size) {
-        setFixedHeight(6 * size);
+        setFixedHeight(4 * size);
         verticalScrollBar()->setSingleStep(size);
     });
     mDisplayedGradients = new DisplayedGradientsWidget(this);

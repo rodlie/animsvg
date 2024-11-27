@@ -35,5 +35,6 @@
         <file>xdg/friction.xml</file>
         <file>xdg/friction.desktop</file>
         <file>icons/hicolor/scalable/apps/graphics.friction.Friction.svg</file>
+        <file>pixmaps/splash.png</file>
     </qresource>
 </RCC>

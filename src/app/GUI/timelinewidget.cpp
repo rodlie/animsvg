@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include <QToolButton>
 #include <QStackedLayout>
 #include <QDesktopWidget>
+#include <QStatusBar>
 
 #include "timelinewidget.h"
 #include "widgets/framescrollbar.h"
@@ -77,9 +78,10 @@ TimelineWidget::TimelineWidget(Document &document,
 
     const auto iconsDir = eSettings::sIconsDir();
 
-    QMenu * const settingsMenu = mCornerMenuBar->addMenu(QIcon::fromTheme("filter"),
-                                                         tr("Filters"));
-    QMenu * const objectsMenu = settingsMenu->addMenu(tr("State"));
+    const QIcon filterIcon = QIcon::fromTheme("filter");
+
+    QMenu * const settingsMenu = mCornerMenuBar->addMenu(filterIcon, tr("Filters"));
+    QMenu * const objectsMenu = settingsMenu->addMenu(filterIcon, tr("State"));
 
     const auto ruleActionAdder = [this, objectsMenu](
             const SWT_BoxRule rule, const QString& text) {
@@ -102,7 +104,7 @@ TimelineWidget::TimelineWidget(Document &document,
     ruleActionAdder(SWT_BoxRule::unlocked, "Unlocked");
     ruleActionAdder(SWT_BoxRule::locked, "Locked");
 
-    QMenu * const targetMenu = settingsMenu->addMenu("Target");
+    QMenu * const targetMenu = settingsMenu->addMenu(filterIcon, "Target");
 
     const auto targetActionAdder = [this, targetMenu](
             const SWT_Target target, const QString& text) {
@@ -120,7 +122,7 @@ TimelineWidget::TimelineWidget(Document &document,
     targetActionAdder(SWT_Target::canvas, "Current Scene")->setChecked(true);
     targetActionAdder(SWT_Target::group, "Current Group");
 
-    QMenu * const typeMenu = settingsMenu->addMenu("Type");
+    QMenu * const typeMenu = settingsMenu->addMenu(filterIcon, "Type");
 
     const auto typeActionAdder = [this, typeMenu](
             const SWT_Type type, const QString& text) {
@@ -200,6 +202,13 @@ TimelineWidget::TimelineWidget(Document &document,
 
     mKeysView = new KeysView(mBoxesListWidget, this);
     mKeysViewLayout->addWidget(mKeysView);
+
+    connect(mKeysView, &KeysView::statusMessage,
+            this, [](const QString &message) {
+        if (MainWindow::sGetInstance()->statusBar()) {
+            MainWindow::sGetInstance()->statusBar()->showMessage(message, 5000);
+        }
+    });
 
     const auto high1 = mBoxesListWidget->requestHighlighter();
     const auto high2 = mKeysView->requestHighlighter();

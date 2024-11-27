@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -44,20 +44,10 @@ private:
     QCheckBox *mAutoSave;
     QSpinBox *mAutoSaveTimer;
 
-    //QCheckBox *mDefaultInterfaceScaling;
-    //QSlider *mInterfaceScaling;
+    QCheckBox *mDefaultInterfaceScaling;
+    QSlider *mInterfaceScaling;
 
     QComboBox *mImportFileDir;
-
-    QCheckBox *mToolBarActionNew;
-    QCheckBox *mToolBarActionOpen;
-    QCheckBox *mToolBarActionSave;
-    QCheckBox *mToolBarActionScene;
-    QCheckBox *mToolBarActionRender;
-    QCheckBox *mToolBarActionPreview;
-    QCheckBox *mToolBarActionExport;
-
-    void setupToolBarWidgets(QVBoxLayout *lay);
 };
 
 #endif // GENERALSETTINGSWIDGET_H

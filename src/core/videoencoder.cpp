@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -40,6 +40,8 @@
         RuntimeThrow(message); \
     } \
 }
+
+using namespace Friction::Core;
 
 VideoEncoder *VideoEncoder::sInstance = nullptr;
 
@@ -204,6 +206,27 @@ static void addVideoStream(OutputStream * const ost,
     if (VideoEncoder::isValidProfile(codec,
                                      outSettings.fVideoProfile)) {
         c->profile = outSettings.fVideoProfile;
+    }
+
+    for (const auto &opt : outSettings.fVideoOptions.fValues) {
+        switch (opt.fType) {
+        case FormatType::fTypeCodec:
+            av_opt_set(c->priv_data,
+                       opt.fKey.toStdString().c_str(),
+                       opt.fValue.toStdString().c_str(), 0);
+            break;
+        case FormatType::fTypeFormat:
+            av_opt_set(oc->priv_data,
+                       opt.fKey.toStdString().c_str(),
+                       opt.fValue.toStdString().c_str(), 0);
+            break;
+        case FormatType::fTypeMeta:
+            av_dict_set(&oc->metadata,
+                        opt.fKey.toStdString().c_str(),
+                        opt.fValue.toStdString().c_str(), 0);
+            break;
+        default:;
+        }
     }
 
     c->gop_size      = 12; /* emit one intra frame every twelve frames at most */

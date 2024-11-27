@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,31 +25,15 @@
 
 #include "appsupport.h"
 #include "widgets/vlabel.h"
+#include "widgets/toolbar.h"
+
+using namespace Friction;
 
 void MainWindow::setupToolBox()
 {
-    mToolBoxStack = new QStackedWidget(this);
-    mToolBoxStack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-
-    mToolBoxExtraStack = new QStackedWidget(this);
-    mToolBoxExtraStack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-
     setupToolBoxMain();
     setupToolBoxNodes();
     setupToolBoxDraw();
-
-    eSizesUI::widget.add(mToolBoxMain, [this](const int size) {
-        mToolBoxMain->setIconSize(QSize(size, size));
-        mToolBoxNodes->setIconSize(QSize(size, size));
-        mToolBoxDraw->setIconSize(QSize(size, size));
-    });
-
-    mToolBoxMainIndex = mToolBoxStack->addWidget(mToolBoxMain);
-    mToolBoxNodesIndex = mToolBoxExtraStack->addWidget(mToolBoxNodes);
-    mToolBoxDrawIndex = mToolBoxExtraStack->addWidget(mToolBoxDraw);
-
-    mToolBoxStack->setCurrentIndex(mToolBoxMainIndex);
-    mToolBoxExtraStack->setCurrentIndex(mToolBoxNodesIndex);
 
     // set default
     mDocument.setCanvasMode(CanvasMode::boxTransform);
@@ -57,8 +41,10 @@ void MainWindow::setupToolBox()
 
 void MainWindow::setupToolBoxMain()
 {
-    mToolBoxMain = new QToolBar(this);
-    mToolBoxMain->setOrientation(Qt::Vertical);
+    mToolBoxMain = new Ui::ToolBar(tr("ToolBox"),
+                                   "ToolBoxMain",
+                                   this,
+                                   true);
 
     mToolBoxGroupMain = new QActionGroup(this);
 
@@ -74,19 +60,18 @@ void MainWindow::setupToolBoxMain()
             &QAction::triggered,
             this,
             [boxTransformAct, this]() {
-                if (boxTransformAct->isChecked()) { mActions.setMovePathMode(); }
-            });
+        if (boxTransformAct->isChecked()) { mActions.setMovePathMode(); }
+    });
     connect(&mDocument,
             &Document::canvasModeSet,
             this,
             [this, boxTransformAct]() {
-                if (mDocument.fCanvasMode == CanvasMode::boxTransform) {
-                    boxTransformAct->setChecked(true);
-                }
-            });
+        if (mDocument.fCanvasMode == CanvasMode::boxTransform) {
+            boxTransformAct->setChecked(true);
+        }
+    });
     boxTransformAct->setChecked(true); // default
     mToolBoxGroupMain->addAction(boxTransformAct);
-    //cmdAddAction(boxTransformAct);
 
     // pointTransform
     QAction *pointTransformAct = new QAction(QIcon::fromTheme("pointTransform"),
@@ -96,22 +81,20 @@ void MainWindow::setupToolBoxMain()
     pointTransformAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                         "pointTransform",
                                                                         "F2").toString()));
-    //cmdAddAction(pointTransformAct);
-
     connect(pointTransformAct,
             &QAction::triggered,
             this,
             [pointTransformAct, this]() {
-                if (pointTransformAct->isChecked()) { mActions.setMovePointMode(); }
-            });
+        if (pointTransformAct->isChecked()) { mActions.setMovePointMode(); }
+    });
     connect(&mDocument,
             &Document::canvasModeSet,
             this,
             [this, pointTransformAct]() {
-                if (mDocument.fCanvasMode == CanvasMode::pointTransform) {
-                    pointTransformAct->setChecked(true);
-                }
-            });
+        if (mDocument.fCanvasMode == CanvasMode::pointTransform) {
+            pointTransformAct->setChecked(true);
+        }
+    });
     mToolBoxGroupMain->addAction(pointTransformAct);
 
     // addPointMode
@@ -122,21 +105,20 @@ void MainWindow::setupToolBoxMain()
     addPointModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                       "pathCreate",
                                                                       "F3").toString()));
-    //cmdAddAction(addPointModeAct);
     connect(addPointModeAct,
             &QAction::triggered,
             this,
             [addPointModeAct, this]() {
-                if (addPointModeAct->isChecked()) { mActions.setAddPointMode(); }
-            });
+        if (addPointModeAct->isChecked()) { mActions.setAddPointMode(); }
+    });
     connect(&mDocument,
             &Document::canvasModeSet,
             this,
             [this, addPointModeAct]() {
-                if (mDocument.fCanvasMode == CanvasMode::pathCreate) {
-                    addPointModeAct->setChecked(true);
-                }
-            });
+        if (mDocument.fCanvasMode == CanvasMode::pathCreate) {
+            addPointModeAct->setChecked(true);
+        }
+    });
     mToolBoxGroupMain->addAction(addPointModeAct);
 
     // drawPathMode
@@ -147,46 +129,21 @@ void MainWindow::setupToolBoxMain()
     drawPathModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                       "drawPath",
                                                                       "F4").toString()));
-    //cmdAddAction(drawPathModeAct);
     connect(drawPathModeAct,
             &QAction::triggered,
             this,
             [drawPathModeAct, this]() {
-                if (drawPathModeAct->isChecked()) { mActions.setDrawPathMode(); }
-            });
+        if (drawPathModeAct->isChecked()) { mActions.setDrawPathMode(); }
+    });
     connect(&mDocument,
             &Document::canvasModeSet,
             this,
             [this, drawPathModeAct]() {
-                if (mDocument.fCanvasMode == CanvasMode::drawPath) {
-                    drawPathModeAct->setChecked(true);
-                }
-            });
-    mToolBoxGroupMain->addAction(drawPathModeAct);
-
-    // paintMode
-    /*QAction *paintModeAct = new QAction(QIcon::fromTheme("paint"),
-                                                         tr("Paint"),
-                                                         this);
-    paintModeAct->setCheckable(true);
-    paintModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
-                                                                   "paintMode",
-                                                                   "F5").toString()));
-    connect(paintModeAct,
-            &QAction::triggered,
-            this,
-            [paintModeAct, this]() {
-        if (paintModeAct->isChecked()) { mActions.setPaintMode(); }
-    });
-    connect(&mDocument,
-            &Document::canvasModeSet,
-            this,
-            [this, paintModeAct]() {
-        if (mDocument.fCanvasMode == CanvasMode::paint) {
-            paintModeAct->setChecked(true);
+        if (mDocument.fCanvasMode == CanvasMode::drawPath) {
+            drawPathModeAct->setChecked(true);
         }
     });
-    mToolBoxGroupMain->addAction(paintModeAct);*/
+    mToolBoxGroupMain->addAction(drawPathModeAct);
 
     // circleMode
     QAction *circleModeAct = new QAction(QIcon::fromTheme("circleCreate"),
@@ -196,21 +153,20 @@ void MainWindow::setupToolBoxMain()
     circleModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                     "circleMode",
                                                                     "F5").toString()));
-    //cmdAddAction(circleModeAct);
     connect(circleModeAct,
             &QAction::triggered,
             this,
             [circleModeAct, this]() {
-                if (circleModeAct->isChecked()) { mActions.setCircleMode(); }
-            });
+        if (circleModeAct->isChecked()) { mActions.setCircleMode(); }
+    });
     connect(&mDocument,
             &Document::canvasModeSet,
             this,
             [this, circleModeAct]() {
-                if (mDocument.fCanvasMode == CanvasMode::circleCreate) {
-                    circleModeAct->setChecked(true);
-                }
-            });
+        if (mDocument.fCanvasMode == CanvasMode::circleCreate) {
+            circleModeAct->setChecked(true);
+        }
+    });
     mToolBoxGroupMain->addAction(circleModeAct);
 
     // rectangleMode
@@ -221,21 +177,20 @@ void MainWindow::setupToolBoxMain()
     rectModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                   "rectMode",
                                                                   "F6").toString()));
-    //cmdAddAction(rectModeAct);
     connect(rectModeAct,
             &QAction::triggered,
             this,
             [rectModeAct, this]() {
-                if (rectModeAct->isChecked()) { mActions.setRectangleMode(); }
-            });
+        if (rectModeAct->isChecked()) { mActions.setRectangleMode(); }
+    });
     connect(&mDocument,
             &Document::canvasModeSet,
             this,
             [this, rectModeAct]() {
-                if (mDocument.fCanvasMode == CanvasMode::rectCreate) {
-                    rectModeAct->setChecked(true);
-                }
-            });
+        if (mDocument.fCanvasMode == CanvasMode::rectCreate) {
+            rectModeAct->setChecked(true);
+        }
+    });
     mToolBoxGroupMain->addAction(rectModeAct);
 
     // textMode
@@ -251,17 +206,17 @@ void MainWindow::setupToolBoxMain()
             &QAction::triggered,
             this,
             [textModeAct, this]() {
-                if (textModeAct->isChecked()) { mActions.setTextMode(); }
-            });
+        if (textModeAct->isChecked()) { mActions.setTextMode(); }
+    });
     connect(&mDocument,
             &Document::canvasModeSet,
             this,
             [this, textModeAct]() {
-                if (mDocument.fCanvasMode == CanvasMode::textCreate) {
-                    mTabColorText->setCurrentIndex(mTabTextIndex);
-                    textModeAct->setChecked(true);
-                }
-            });
+        if (mDocument.fCanvasMode == CanvasMode::textCreate) {
+            focusFontWidget(true);
+            textModeAct->setChecked(true);
+        }
+    });
     mToolBoxGroupMain->addAction(textModeAct);
 
     // nullMode
@@ -272,26 +227,25 @@ void MainWindow::setupToolBoxMain()
     nullModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
                                                                   "nullMode",
                                                                   "F8").toString()));
-    //cmdAddAction(nullModeAct);
     connect(nullModeAct,
             &QAction::triggered,
             this,
             [nullModeAct, this]() {
-                if (nullModeAct->isChecked()) { mActions.setNullMode(); }
-            });
+        if (nullModeAct->isChecked()) { mActions.setNullMode(); }
+    });
     connect(&mDocument,
             &Document::canvasModeSet,
             this,
             [this, nullModeAct]() {
-                if (mDocument.fCanvasMode == CanvasMode::nullCreate) {
-                    nullModeAct->setChecked(true);
-                }
-            });
+        if (mDocument.fCanvasMode == CanvasMode::nullCreate) {
+            nullModeAct->setChecked(true);
+        }
+    });
     mToolBoxGroupMain->addAction(nullModeAct);
 
     // pickMode
     QAction *pickModeAct = new QAction(QIcon::fromTheme("pick"),
-                                       tr("Pick Mode"),
+                                       tr("Color Pick Mode"),
                                        this);
     pickModeAct->setCheckable(true);
     pickModeAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
@@ -301,23 +255,24 @@ void MainWindow::setupToolBoxMain()
             &QAction::triggered,
             this,
             [pickModeAct, this]() {
-                if (pickModeAct->isChecked()) { mActions.setPickPaintSettingsMode(); }
-            });
+        if (pickModeAct->isChecked()) { mActions.setPickPaintSettingsMode(); }
+    });
     connect(&mDocument,
             &Document::canvasModeSet,
             this,
             [this, pickModeAct]() {
-                if (mDocument.fCanvasMode == CanvasMode::pickFillStroke) {
-                    pickModeAct->setChecked(true);
-                }
-            });
-    mToolBoxGroupMain->addAction(pickModeAct);
-    //cmdAddAction(pickModeAct);
+        if (mDocument.fCanvasMode == CanvasMode::pickFillStroke ||
+            mDocument.fCanvasMode == CanvasMode::pickFillStrokeEvent) {
+            pickModeAct->setChecked(true);
+        }
+    });
 
-    mToolBoxMain->addActions(mToolBoxGroupMain->actions());
+    mToolBoxGroupMain->addAction(pickModeAct);
 
     // pivot
-    mLocalPivotAct = new QAction(mDocument.fLocalPivot ? QIcon::fromTheme("pivotLocal") : QIcon::fromTheme("pivotGlobal"),
+    mLocalPivotAct = new QAction(mDocument.fLocalPivot ?
+                                     QIcon::fromTheme("pivotLocal") :
+                                     QIcon::fromTheme("pivotGlobal"),
                                  tr("Pivot Global / Local"),
                                  this);
     mLocalPivotAct->setShortcut(QKeySequence(AppSupport::getSettings("shortcuts",
@@ -325,26 +280,24 @@ void MainWindow::setupToolBoxMain()
                                                                      "P").toString()));
     connect(mLocalPivotAct, &QAction::triggered,
             this, [this]() {
-                mDocument.fLocalPivot = !mDocument.fLocalPivot;
-                for (const auto& scene : mDocument.fScenes) { scene->updatePivot(); }
-                Document::sInstance->actionFinished();
-                mLocalPivotAct->setIcon(mDocument.fLocalPivot ? QIcon::fromTheme("pivotLocal") : QIcon::fromTheme("pivotGlobal"));
-            });
+        mDocument.fLocalPivot = !mDocument.fLocalPivot;
+        for (const auto& scene : mDocument.fScenes) { scene->updatePivot(); }
+        Document::sInstance->actionFinished();
+        mLocalPivotAct->setIcon(mDocument.fLocalPivot ?
+                                    QIcon::fromTheme("pivotLocal") :
+                                    QIcon::fromTheme("pivotGlobal"));
+    });
 
-    const auto spacer = new QWidget(this);
-    spacer->setSizePolicy(QSizePolicy::Minimum,
-                          QSizePolicy::Expanding);
-    mToolBoxMain->addWidget(spacer);
-    mToolBoxMain->addAction(mLocalPivotAct);
+    mToolBoxGroupMain->addAction(mLocalPivotAct);
+    mToolBoxMain->addActions(mToolBoxGroupMain->actions());
+
+    addToolBar(Qt::LeftToolBarArea, mToolBoxMain);
 }
 
 void MainWindow::setupToolBoxNodes()
 {
-    mToolBoxNodes = new QToolBar(this);
-    mToolBoxNodes->setObjectName(QString::fromUtf8("ViewerNodeBar"));
-    mToolBoxNodes->setOrientation(Qt::Vertical);
-
     mToolBoxGroupNodes = new QActionGroup(this);
+    mToolBoxGroupNodes->addAction(mToolBoxMain->addSeparator());
 
     // nodeConnect
     mActionConnectPointsAct = new QAction(QIcon::fromTheme("nodeConnect"),
@@ -427,8 +380,6 @@ void MainWindow::setupToolBoxNodes()
             this, [this]() { mActions.makeSegmentCurve(); });
     mToolBoxGroupNodes->addAction(mActionCurveAct);
 
-    mToolBoxNodes->addActions(mToolBoxGroupNodes->actions());
-
     // nodeVisibility
     mNodeVisibility = new QToolButton(this);
     mNodeVisibility->setObjectName(QString::fromUtf8("ToolButton"));
@@ -452,72 +403,125 @@ void MainWindow::setupToolBoxNodes()
     mNodeVisibility->setDefaultAction(nodeVisibilityAction1);
     connect(mNodeVisibility, &QToolButton::triggered,
             this, [this](QAction *act) {
-                qDebug() << "set node visibility" << act->data().toInt();
-                mNodeVisibility->setDefaultAction(act);
-                mDocument.fNodeVisibility = static_cast<NodeVisiblity>(act->data().toInt());
-                Document::sInstance->actionFinished();
-            });
+        mNodeVisibility->setDefaultAction(act);
+        mDocument.fNodeVisibility = static_cast<NodeVisiblity>(act->data().toInt());
+        Document::sInstance->actionFinished();
+    });
 
-    QWidget *spacer = new QWidget(this);
-    spacer->setSizePolicy(QSizePolicy::Minimum,
-                          QSizePolicy::Expanding);
-    mToolBoxNodes->addWidget(spacer);
-    mToolBoxNodes->addWidget(mNodeVisibility);
+    mToolBoxMain->addActions(mToolBoxGroupNodes->actions());
+    mNodeVisibilityAct = mToolBoxMain->addWidget(mNodeVisibility);
+
+    setEnableToolBoxNodes(false);
 }
 
 void MainWindow::setupToolBoxDraw()
 {
     mDocument.fDrawPathManual = false;
-    mDrawPathAuto = new QAction(mDocument.fDrawPathManual ? QIcon::fromTheme("drawPathAutoUnchecked") : QIcon::fromTheme("drawPathAutoChecked"),
+    mDrawPathAuto = new QAction(mDocument.fDrawPathManual ?
+                                    QIcon::fromTheme("drawPathAutoUnchecked") :
+                                    QIcon::fromTheme("drawPathAutoChecked"),
                                 tr("Automatic/Manual Fitting"),
                                 this);
     connect(mDrawPathAuto, &QAction::triggered,
             this, [this]() {
-                mDocument.fDrawPathManual = !mDocument.fDrawPathManual;
-                qDebug() << "manual fitting?" << mDocument.fDrawPathManual;
-                mDrawPathMaxError->setDisabled(mDocument.fDrawPathManual);
-                mDrawPathAuto->setIcon(mDocument.fDrawPathManual ? QIcon::fromTheme("drawPathAutoUnchecked") : QIcon::fromTheme("drawPathAutoChecked"));
-            });
+        mDocument.fDrawPathManual = !mDocument.fDrawPathManual;
+        mDrawPathMaxError->setDisabled(mDocument.fDrawPathManual);
+        mDrawPathAuto->setIcon(mDocument.fDrawPathManual ?
+                                   QIcon::fromTheme("drawPathAutoUnchecked") :
+                                   QIcon::fromTheme("drawPathAutoChecked"));
+    });
 
     mDrawPathMaxError = new QDoubleSlider(1, 200, 1, this, false);
-    mDrawPathMaxError->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    mDrawPathMaxError->setSizePolicy(QSizePolicy::MinimumExpanding,
+                                     QSizePolicy::Preferred);
     mDrawPathMaxError->setNumberDecimals(0);
-    mDrawPathMaxError->setMinimumHeight(25);
+    mDrawPathMaxError->setMinimumSize({eSizesUI::widget,
+                                       eSizesUI::widget});
     mDrawPathMaxError->setDisplayedValue(mDocument.fDrawPathMaxError);
     connect(mDrawPathMaxError, &QDoubleSlider::valueEdited,
             this, [this](const qreal value) {
-                mDocument.fDrawPathMaxError = qFloor(value);
-            });
+        mDocument.fDrawPathMaxError = qFloor(value);
+    });
 
     mDrawPathSmooth = new QDoubleSlider(1, 200, 1, this, false);
-    mDrawPathSmooth->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    mDrawPathSmooth->setMinimumHeight(25);
+    mDrawPathSmooth->setSizePolicy(QSizePolicy::MinimumExpanding,
+                                   QSizePolicy::Preferred);
     mDrawPathSmooth->setNumberDecimals(0);
+    mDrawPathSmooth->setMinimumSize({eSizesUI::widget,
+                                     eSizesUI::widget});
     mDrawPathSmooth->setDisplayedValue(mDocument.fDrawPathSmooth);
     connect(mDrawPathSmooth, &QDoubleSlider::valueEdited,
             this, [this](const qreal value) {
-                mDocument.fDrawPathSmooth = qFloor(value);
-            });
+        mDocument.fDrawPathSmooth = qFloor(value);
+    });
 
-    const auto label1 = new VLabel(QString("%1 :").arg(tr("Max Error")), this);
-    const auto label2 = new VLabel(QString("%1 :").arg(tr("Smooth")), this);
+    eSizesUI::widget.add(mDrawPathMaxError, [this](const int size) {
+        mDrawPathMaxError->setMinimumSize({size, size});
+        mDrawPathSmooth->setMinimumSize({size, size});
+    });
 
-    const auto spacer = new QWidget(this);
-    spacer->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+    connect(mToolBoxMain, &QToolBar::orientationChanged,
+            this, [this](Qt::Orientation orientation) {
+        const auto policyH = orientation == Qt::Vertical ?
+                                 QSizePolicy::MinimumExpanding :
+                                 QSizePolicy::Preferred;
+        const auto policyV = orientation == Qt::Vertical ?
+                                 QSizePolicy::Preferred :
+                                 QSizePolicy::MinimumExpanding;
+        mDrawPathMaxError->setSizePolicy(policyH, policyV);
+        mDrawPathSmooth->setSizePolicy(policyH, policyV);
+    });
 
-    mToolBoxDraw = new QToolBar(this);
-    mToolBoxDraw->setObjectName(QString::fromUtf8("ViewerNodeBar"));
-    mToolBoxDraw->setOrientation(Qt::Vertical);
+    const auto label1 = new VLabel(QString("%1 ").arg(tr("Max Error")),
+                                   this,
+                                   mToolBoxMain->orientation());
+    const auto label2 = new VLabel(QString("%1 ").arg(tr("Smooth")),
+                                   this,
+                                   mToolBoxMain->orientation());
 
-    mToolBoxDraw->addSeparator();
-    mToolBoxDraw->addWidget(label1);
-    mToolBoxDraw->addSeparator();
-    mToolBoxDraw->addWidget(mDrawPathMaxError);
-    mToolBoxDraw->addSeparator();
-    mToolBoxDraw->addWidget(label2);
-    mToolBoxDraw->addSeparator();
-    mToolBoxDraw->addWidget(mDrawPathSmooth);
-    mToolBoxDraw->addWidget(spacer);
-    mToolBoxDraw->addAction(mDrawPathAuto);
+    connect(mToolBoxMain, &QToolBar::orientationChanged,
+            this, [label1, label2](Qt::Orientation orientation){
+        label1->setOrientation(orientation);
+        label2->setOrientation(orientation);
+    });
+
+    mToolBoxDrawActSep = mToolBoxMain->addSeparator();
+
+    mToolBoxDrawActIcon1 = mToolBoxMain->addAction(QIcon::fromTheme("drawPath"),
+                                                   QString());
+    mToolBoxDrawActIcon1->setDisabled(true);
+
+    mToolBoxDrawActLabel1 = mToolBoxMain->addWidget(label1);
+    mToolBoxDrawActMaxError = mToolBoxMain->addWidget(mDrawPathMaxError);
+
+    mToolBoxDrawActIcon2 = mToolBoxMain->addAction(QIcon::fromTheme("drawPath"),
+                                                   QString());
+    mToolBoxDrawActIcon2->setDisabled(true);
+
+    mToolBoxDrawActLabel2 = mToolBoxMain->addWidget(label2);
+    mToolBoxDrawActSmooth = mToolBoxMain->addWidget(mDrawPathSmooth);
+    mToolBoxMain->addAction(mDrawPathAuto);
+
+    setEnableToolBoxDraw(false);
+}
+
+void MainWindow::setEnableToolBoxNodes(const bool &enable)
+{
+    mToolBoxGroupNodes->setVisible(enable);
+    if (mNodeVisibilityAct) {
+        mNodeVisibilityAct->setVisible(enable);
+    }
+}
+
+void MainWindow::setEnableToolBoxDraw(const bool &enable)
+{
+    if (mToolBoxDrawActSep) { mToolBoxDrawActSep->setVisible(enable); }
+    if (mToolBoxDrawActLabel1) { mToolBoxDrawActLabel1->setVisible(enable); }
+    if (mToolBoxDrawActLabel2) { mToolBoxDrawActLabel2->setVisible(enable); }
+    if (mToolBoxDrawActIcon1) { mToolBoxDrawActIcon1->setVisible(enable); }
+    if (mToolBoxDrawActIcon2) { mToolBoxDrawActIcon2->setVisible(enable); }
+    if (mToolBoxDrawActMaxError) { mToolBoxDrawActMaxError->setVisible(enable); }
+    if (mToolBoxDrawActSmooth) { mToolBoxDrawActSmooth->setVisible(enable); }
+    if (mDrawPathAuto) { mDrawPathAuto->setVisible(enable); }
 }
 

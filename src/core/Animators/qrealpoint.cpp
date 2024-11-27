@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -159,13 +159,15 @@ void QrealPoint::draw(QPainter * const p,
     if (mHovered) { gDrawCosmeticEllipse(p, center, mRadius + 1, mRadius + 1); }
     else { gDrawCosmeticEllipse(p, center, mRadius, mRadius); }
 
-
-    //p->setBrush(paintColor);
-    p->setBrush(Qt::white);
-
-    if (!isSelected()) { p->setBrush(/*paintColor.lighter()*/Qt::gray); }
+    if (isSelected() || mHovered) { p->setBrush(Qt::white); }
+    else { p->setBrush(Qt::gray); }
 
     gDrawCosmeticEllipse(p, center, mRadius - 1, mRadius - 1);
+
+    if (isSelected() || mHovered) {
+        p->setBrush(paintColor);
+        gDrawCosmeticEllipse(p, center, mRadius/2 - 1, mRadius/2 - 1);
+    }
 }
 
 void QrealPoint::setSelected(const bool selected) {

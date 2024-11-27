@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -35,7 +35,10 @@
 #include <QComboBox>
 #include <QSpinBox>
 
-class UI_EXPORT RenderOutputWidget : public QDialog {
+#include "dialog.h"
+
+class UI_EXPORT RenderOutputWidget : public Friction::Ui::Dialog
+{
     Q_OBJECT
 public:
     explicit RenderOutputWidget(const int canvasWidth,

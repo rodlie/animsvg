@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,22 +29,27 @@
 #include "ui_global.h"
 
 #include "widgets/colorwidget.h"
+#include "Animators/gradient.h"
 
 class UI_EXPORT ColorLabel : public ColorWidget
 {
     Q_OBJECT
 
 public:
-    explicit ColorLabel(QWidget *parent = nullptr);
+    explicit ColorLabel(QWidget *parent = nullptr,
+                        const bool &bookmark = true);
     void saveCurrentColorAsLast();
     void setLastColorHSV(GLfloat h, GLfloat s, GLfloat v);
     void mousePressEvent(QMouseEvent *e);
     void setAlpha(const qreal alpha_t);
     void addBookmark();
+    void setGradient(Gradient *gradient);
 
 private:
     void paintGL();
     qreal mAlpha = 1;
+    bool mBookmark;
+    QPointer<Gradient> mGradient;
 };
 
 #endif // COLORLABEL_H

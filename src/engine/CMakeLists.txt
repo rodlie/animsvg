@@ -1,7 +1,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,10 +26,15 @@ ProcessorCount(N)
 
 option(USE_SKIA_SYSTEM_LIBS "Use skia (third-party) system libraries on Linux" ON)
 option(LINUX_DEPLOY "Linux Deploy" OFF)
+option(MAC_DEPLOY "Mac Deploy" OFF)
 option(SYNC_SKIA_DEPS "Sync third-party depends" ON)
 
 set(SKIA_SRC "${CMAKE_CURRENT_SOURCE_DIR}/skia")
 set(SKIA_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/skia")
+
+if(APPLE)
+    set(USE_SKIA_SYSTEM_LIBS OFF)
+endif()
 
 if(${USE_SKIA_SYSTEM_LIBS} AND UNIX)
     set(SKIA_ENABLE_EXTERNAL "true")
@@ -71,6 +76,15 @@ else()
     else()
         set(SKIA_ARGS "${SKIA_ARGS} extra_cflags=[\"-Wno-error\", \"-Wno-psabi\"]")
     endif()
+    if(APPLE)
+        set(GN_PATH ${SKIA_SRC}/bin/gn.bin)
+        set(SKIA_UPDATE_CMD python3 "tools/git-sync-deps")
+        if(${MAC_DEPLOY})
+            set(SKIA_ARGS "${SKIA_ARGS} extra_cflags_cc=[\"-frtti\", \"-mmacosx-version-min=12.7\"]")
+        else()
+            set(SKIA_ARGS "${SKIA_ARGS} extra_cflags_cc=[\"-frtti\"]")
+        endif()
+    endif()
 endif()
 
 set(SKIA_ARGS "${SKIA_ARGS} is_official_build=true is_debug=false")
@@ -86,6 +100,9 @@ if(WIN32 OR NOT ${USE_SKIA_SYSTEM_LIBS})
 endif()
 if(UNIX AND NOT APPLE)
     set(SKIA_ARGS "${SKIA_ARGS} skia_use_system_freetype2=${SKIA_ENABLE_EXTERNAL}")
+endif()
+if(APPLE)
+    set(SKIA_ARGS "${SKIA_ARGS} skia_use_libgifcodec=false")
 endif()
 
 message("-- skia args: ${SKIA_ARGS}")

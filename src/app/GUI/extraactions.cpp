@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 */
 
 #include "mainwindow.h"
+
+#include "GUI/BoxesList/boxscrollwidget.h"
 
 void MainWindow::setupMenuExtras()
 {
@@ -82,7 +84,7 @@ void MainWindow::setupMenuExtras()
     }
     // add in
     {
-        const auto act = menu->addAction(QIcon::fromTheme("pivot-align-left"),
+        const auto act = menu->addAction(QIcon::fromTheme("range-in"),
                                          tr("In at ..."));
         act->setData("cmd:in");
         act->setToolTip(QString("<p><b>%1</b> %2 <i>%3</i></p>").arg(tr("Frame In"),
@@ -92,7 +94,7 @@ void MainWindow::setupMenuExtras()
     }
     // add out
     {
-        const auto act = menu->addAction(QIcon::fromTheme("pivot-align-right"),
+        const auto act = menu->addAction(QIcon::fromTheme("range-out"),
                                          tr("Out at ..."));
         act->setData("cmd:out");
         act->setToolTip(QString("<p><b>%1</b> %2 <i>%3</i></p>").arg(tr("Frame Out"),
@@ -124,7 +126,7 @@ void MainWindow::setupMenuExtras()
         cmdAddAction(act);
     }
     {
-        const auto act = menu->addAction(QIcon::fromTheme("trash"/* TODO: find new (blender) icon! */),
+        const auto act = menu->addAction(QIcon::fromTheme("range-clear"),
                                          tr("Clear In/Out"));
         connect(act, &QAction::triggered,
                 this, [this](){
@@ -521,4 +523,38 @@ void MainWindow::setupMenuExtras()
             });
         }
     }
+}
+
+void MainWindow::setupPropertiesActions()
+{
+    const auto menu = mViewMenu->addMenu(QIcon::fromTheme("filter"),
+                                         tr("Properties Filter"));
+    const int defaultRule = AppSupport::getSettings("ui",
+                                                    "propertiesFilter",
+                                                    (int)SWT_BoxRule::selected).toInt();
+    const auto ruleActionAdder = [this, menu, defaultRule](const SWT_BoxRule rule,
+                                                           const QString& text) {
+        const auto slot = [this, rule]() {
+            mObjectSettingsWidget->setCurrentRule(rule);
+            AppSupport::setSettings("ui", "propertiesFilter", (int)rule);
+        };
+        const auto action = menu->addAction(text, this, slot);
+        action->setCheckable(true);
+        action->setChecked((int)rule == defaultRule);
+        connect(mObjectSettingsWidget, &BoxScrollWidget::boxRuleChanged,
+                action, [action, rule](const SWT_BoxRule setRule) {
+                    action->setChecked(rule == setRule);
+                });
+        return action;
+    };
+
+    const auto group = new QActionGroup(this);
+    group->addAction(ruleActionAdder(SWT_BoxRule::all, tr("All")));
+    group->addAction(ruleActionAdder(SWT_BoxRule::selected, tr("Selected")));
+    group->addAction(ruleActionAdder(SWT_BoxRule::animated, tr("Animated")));
+    group->addAction(ruleActionAdder(SWT_BoxRule::notAnimated, tr("Not Animated")));
+    group->addAction(ruleActionAdder(SWT_BoxRule::visible, tr("Visible")));
+    group->addAction(ruleActionAdder(SWT_BoxRule::hidden, tr("Hidden")));
+    group->addAction(ruleActionAdder(SWT_BoxRule::unlocked, tr("Unlocked")));
+    group->addAction(ruleActionAdder(SWT_BoxRule::locked, tr("Locked")));
 }

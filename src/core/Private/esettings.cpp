@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -196,14 +196,9 @@ eSettings::eSettings(const int cpuThreads,
                      fDefaultInterfaceScaling,
                      "defaultInterfaceScaling", true);
 
-    gSettings << std::make_shared<eIntSetting>(fImportFileDirOpt, "ImportFileDirOpt", ImportFileDirRecent);
-    gSettings << std::make_shared<eBoolSetting>(fToolBarActionNew, "ToolBarActionNew", true);
-    gSettings << std::make_shared<eBoolSetting>(fToolBarActionOpen, "ToolBarActionOpen", true);
-    gSettings << std::make_shared<eBoolSetting>(fToolBarActionSave, "ToolBarActionSave", true);
-    gSettings << std::make_shared<eBoolSetting>(fToolBarActionScene, "ToolBarActionScene", true);
-    gSettings << std::make_shared<eBoolSetting>(fToolBarActionRender, "ToolBarActionRender", true);
-    gSettings << std::make_shared<eBoolSetting>(fToolBarActionPreview, "ToolBarActionPreview", true);
-    gSettings << std::make_shared<eBoolSetting>(fToolBarActionExport, "ToolBarActionExport", true);
+    gSettings << std::make_shared<eIntSetting>(fImportFileDirOpt,
+                                               "ImportFileDirOpt",
+                                               ImportFileDirRecent);
 
     gSettings << std::make_shared<eBoolSetting>(
                      fCanvasRtlSupport,
@@ -248,6 +243,10 @@ eSettings::eSettings(const int cpuThreads,
     gSettings << std::make_shared<eIntSetting>(fAdjustSceneFromFirstClip,
                                                "AdjustSceneFromFirstClip",
                                                AdjustSceneAsk);
+
+    gSettings << std::make_shared<eIntSetting>(fDefaultFillStrokeIndex,
+                                              "DefaultFillStrokeIndex",
+                                               0);
 
     /*gSettings << std::make_shared<eBoolSetting>(
                      fTimelineAlternateRow,

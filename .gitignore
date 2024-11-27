@@ -26,3 +26,7 @@ friction-distfiles
 svgo-linux
 svgo-win.exe
 skia-build
+qt-*
+sdk
+build-release
+

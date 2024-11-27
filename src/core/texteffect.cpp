@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -294,7 +294,7 @@ void TextEffect::prp_setupTreeViewMenu(PropertyMenu * const menu) {
         const auto parent = eff->getParent<DynamicComplexAnimatorBase<TextEffect>>();
         parent->removeChild(eff->ref<TextEffect>());
     };
-    menu->addPlainAction("Delete Effect(s)", dOp);
+    menu->addPlainAction(QIcon::fromTheme("trash"), tr("Delete Effect(s)"), dOp);
 }
 
 QMimeData *TextEffect::SWT_createMimeData() {

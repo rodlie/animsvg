@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -142,15 +142,16 @@ SmartPathCollection *SmartVectorPath::getPathAnimator() {
 }
 
 #include "typemenu.h"
-void SmartVectorPath::setupCanvasMenu(PropertyMenu * const menu) {
-    if(menu->hasActionsForType<SmartVectorPath>()) return;
+void SmartVectorPath::setupCanvasMenu(PropertyMenu * const menu)
+{
+    if (menu->hasActionsForType<SmartVectorPath>()) { return; }
     menu->addedActionsForType<SmartVectorPath>();
     PathBox::setupCanvasMenu(menu);
     PropertyMenu::PlainSelectedOp<SmartVectorPath> op = [](SmartVectorPath * box) {
         box->applyCurrentTransform();
     };
     menu->addSeparator();
-    menu->addPlainAction("Apply Transformation", op);
+    menu->addPlainAction(QIcon::fromTheme("loop2"), tr("Apply Transformation"), op);
 }
 
 void SmartVectorPath::applyCurrentTransform() {

@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ void qCubicSegment1DAnimator::prp_readPropertyXEV_impl(
         const QDomElement& ele, const XevImporter& imp) {
     Q_UNUSED(imp)
     readValuesXEV(ele, [](qCubicSegment1D& seg, const QStringRef& str) {
-        const auto valueStrs = str.split(' ', QT_SKIP_EMPTY);
+        const auto valueStrs = str.split(' ', Qt::SkipEmptyParts);
         if(valueStrs.count() == 4) {
             const qreal p0 = XmlExportHelpers::stringToDouble(valueStrs[0]);
             const qreal c1 = XmlExportHelpers::stringToDouble(valueStrs[1]);

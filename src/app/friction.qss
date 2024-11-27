@@ -1,7 +1,7 @@
 /*
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -172,6 +172,7 @@ QToolBar
     border: 0;
 }
 
+QSpinBox#ComboSpinBox,
 QComboBox,
 QPushButton,
 QToolButton,
@@ -197,17 +198,16 @@ QAction:unchecked {
     border-color: rgba(0, 0, 0, 0);
 }
 
+QSpinBox#ComboSpinBox:hover,
 QComboBox:hover,
 QPushButton:hover,
 QToolButton:hover,
 QPushButton:checked,
 QToolButton:checked,
-QAction:checked,
-QCheckBox::indicator:unchecked:hover
+QAction:checked
 {
     background-color: %3;
     border-color: %4;
-    
 }
 
 QDoubleSpinBox,
@@ -304,6 +304,7 @@ QPushButton#WelcomeRecentButton:hover {
 }*/
 
 QPushButton#FlatButton,
+QPushButton#AboutButton,
 QToolButton#FlatButton {
     background-color: none;
     border: 0;
@@ -311,15 +312,19 @@ QToolButton#FlatButton {
 }
 
 QPushButton#FlatButton,
+QPushButton#AboutButton,
 QToolButton#FlatButton {
     border-radius: 2%;
 }
 
-QCheckBox::indicator:unchecked:hover,
 QPushButton#FlatButton:hover,
 QToolButton#FlatButton:hover {
     background-color: rgb(19, 19, 21);
     border-color: rgb(104, 144, 206);
+}
+
+QPushButton#AboutButton:hover {
+    background-color: none;
 }
 
 QTabWidget#ThirdPartyBrowser { border: 0; }
@@ -491,21 +496,63 @@ QWidget#RenderContentWidget {
     border: 1px solid %1;
 }
 
-QCheckBox::indicator:hover,
-QCheckBox::indicator:hover:unchecked {
-    background-color: %4;
-}
-
+QTreeView::indicator:checked,
 QCheckBox::indicator:checked {
-    image: url(:/icons/hicolor/%11x%11/actions/dialog-ok.png);
+    image: url(:/icons/hicolor/%11x%11/friction/box-checked.png);
     width: %7px;
     height: %7px;
 }
 
+QTreeView::indicator:unchecked,
 QCheckBox::indicator:unchecked {
-    image: url(:/icons/hicolor/%11x%11/actions/dialog-cancel.png);
+    image: url(:/icons/hicolor/%11x%11/friction/box-unchecked.png);
     width: %7px;
     height: %7px;
+}
+
+
+QTreeView::indicator:checked:hover,
+QCheckBox::indicator:checked:hover {
+    image: url(:/icons/hicolor/%11x%11/friction/box-checked-hover.png);
+    width: %7px;
+    height: %7px;
+}
+
+QTreeView::indicator:unchecked:hover,
+QCheckBox::indicator:unchecked:hover {
+    image: url(:/icons/hicolor/%11x%11/friction/box-unchecked-hover.png);
+    width: %7px;
+    height: %7px;
+}
+
+QMenu::icon {
+    padding-left: 6px;
+}
+
+QMenu::indicator {
+    width: %7px;
+    height: %7px;
+}
+
+QMenu::item {
+    background-color: transparent;
+    padding: 4px 16px 4px 4px;
+}
+
+QMenu::indicator:non-exclusive:unchecked {
+    image: url(:/icons/hicolor/%11x%11/friction/box-unchecked.png);
+}
+
+QMenu::indicator:non-exclusive:unchecked:selected {
+    image: url(:/icons/hicolor/%11x%11/friction/box-unchecked.png);
+}
+
+QMenu::indicator:non-exclusive:checked {
+    image: url(:/icons/hicolor/%11x%11/friction/box-checked.png);
+}
+
+QMenu::indicator:non-exclusive:checked:selected {
+    image: url(:/icons/hicolor/%11x%11/friction/box-checked.png);
 }
 
 QProgressBar {
@@ -521,4 +568,37 @@ QProgressBar::chunk {
 
 QCheckBox::disabled {
     color: %13;
+}
+
+QToolBar#DarkToolBar {
+    background-color: %5;
+}
+
+QToolBar#ColorToolBar QToolButton:hover,
+QToolBar#CanvasToolBar QToolButton:hover
+{
+    background-color: transparent;
+    border-color: transparent;
+}
+
+QFrame#PopWidget {
+    border: 2px solid %4;
+    border-radius: 2%;
+    background-color: %5;
+}
+
+QSlider::handle:horizontal:disabled {
+    background: transparent;
+}
+
+Friction--Ui--ToolBar::separator {
+    background-color: %4;
+}
+
+Friction--Ui--ToolBar::separator:vertical {
+    height: 1px;
+}
+
+Friction--Ui--ToolBar::separator:horizontal {
+    width: 1px;
 }

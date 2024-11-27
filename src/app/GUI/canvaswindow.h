@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,6 +27,9 @@
 #define CANVASWINDOW_H
 
 #include <QWidget>
+#ifdef Q_OS_MAC
+#include <QNativeGestureEvent>
+#endif
 #include "widgets/glwindow.h"
 #include "singlewidgettarget.h"
 #include "misc/keyfocustarget.h"
@@ -158,6 +161,9 @@ private:
     bool handleStartTransformKeyPress(const eKeyEvent &e);
     bool handleSelectAllKeyPress(QKeyEvent *event);
     //bool handleShiftKeysKeyPress(QKeyEvent *event);
+#ifdef Q_OS_MAC
+    bool handleNativeGestures(QNativeGestureEvent *event);
+#endif
 
 signals:
     void changeCanvasFrameRange(FrameRange);
@@ -171,7 +177,7 @@ public:
     void zoomView(const qreal scaleBy,
                   const QPointF &absOrigin);
 
-    void fitCanvasToSize();
+    void fitCanvasToSize(const bool &fitWidth = false);
     void resetTransformation();
     void zoomInView();
     void zoomOutView();

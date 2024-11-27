@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -81,7 +81,7 @@ private:
     static void sAddToMenu(PropertyMenu * const menu,
                            const CustomHandler<B, C>& creator,
                            void (U::*adder)(const qsptr<B>&)) {
-        menu->addPlainAction<U>(creator.mName(),
+        menu->addPlainAction<U>(QIcon::fromTheme("preferences"), creator.mName(),
         [adder, creator](U * const obj) {
             const auto cEffect = creator.mCreatorNew();
             (obj->*adder)(qSharedPointerCast<B>(cEffect));

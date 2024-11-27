@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ gcc -v
 
 SDK=${SDK:-"/opt/friction"}
 SRC=${SDK}/src
-DIST=${DIST:-"/mnt/mxe/pkg"}
+DIST=${DIST:-"/mnt"}
 MKJOBS=${MKJOBS:-32}
 
 # Keep in sync with https://github.com/friction2d/mxe
@@ -42,7 +42,7 @@ LSMASH_V=2.14.5
 X264_V=20180806-2245
 X265_V=3.5
 AOM_V=3.6.1
-FFMPEG_V=4.2.9
+FFMPEG_V=4.2.10
 
 export PATH="${SDK}/bin:${PATH}"
 export PKG_CONFIG_PATH="${SDK}/lib/pkgconfig"

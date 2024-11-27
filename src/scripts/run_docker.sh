@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ MKJOBS=${MKJOBS:-32}
 ONLY_SDK=${ONLY_SDK:-0}
 LOCAL_BUILD=${LOCAL_BUILD:-1}
 DOWNLOAD_SDK=${DOWNLOAD_SDK:-0}
-SDK_VERSION="20240609"
+SDK_VERSION="20240915v2"
 TAR_VERSION=${TAR_VERSION:-""}
 
 DOCKER="docker run"

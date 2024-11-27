@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,10 +27,10 @@
 #include "swt_abstraction.h"
 #include "singlewidgettarget.h"
 #include "optimalscrollarena/scrollwidgetvisiblepart.h"
-#include "GUI/ColorWidgets/colorsettingswidget.h"
+#include "widgets/colorsettingswidget.h"
 
 #include "Boxes/containerbox.h"
-#include "GUI/qrealanimatorvalueslider.h"
+#include "widgets/qrealanimatorvalueslider.h"
 #include "boxscroller.h"
 #include "GUI/keysview.h"
 #include "pointhelpers.h"
@@ -48,7 +48,7 @@
 #include "BlendEffects/blendeffectcollection.h"
 #include "BlendEffects/blendeffectboxshadow.h"
 #include "Sound/eindependentsound.h"
-
+#include "GUI/propertynamedialog.h"
 #include "Animators/SmartPath/smartpathcollection.h"
 
 #include "typemenu.h"
@@ -707,19 +707,29 @@ void BoxSingleWidget::mouseMoveEvent(QMouseEvent *event) {
     drag->exec(Qt::CopyAction | Qt::MoveAction);
 }
 
-void BoxSingleWidget::mouseReleaseEvent(QMouseEvent *event) {
-    if(!mTarget) return;
-    if(event->x() < mFillWidget->x() ||
-       event->x() > mFillWidget->x() + mFillWidget->width()) return;
-    setSelected(false);
-    if(pointToLen(event->pos() - mDragStartPos) > eSizesUI::widget/2) return;
-    const bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
+void BoxSingleWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (!mTarget) { return; }
     const auto target = mTarget->getTarget();
-    if(enve_cast<BoundingBox*>(target) || enve_cast<eIndependentSound*>(target)) {
+
+    const auto bbox = enve_cast<BoundingBox*>(target);
+    if (event->button() == Qt::MidButton && bbox) {
+        PropertyNameDialog::sRenameBox(bbox, this);
+        return;
+    }
+
+    if (event->x() < mFillWidget->x() ||
+        event->x() > mFillWidget->x() + mFillWidget->width()) { return; }
+    setSelected(false);
+
+    if (pointToLen(event->pos() - mDragStartPos) > eSizesUI::widget/2) { return; }
+
+    const bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
+    if (enve_cast<BoundingBox*>(target) || enve_cast<eIndependentSound*>(target)) {
         const auto boxTarget = static_cast<eBoxOrSound*>(target);
         boxTarget->selectionChangeTriggered(shiftPressed);
         Document::sInstance->actionFinished();
-    } else if(const auto pTarget = enve_cast<Property*>(target)) {
+    } else if (const auto pTarget = enve_cast<Property*>(target)) {
         pTarget->prp_selectionChangeTriggered(shiftPressed);
     }
 }

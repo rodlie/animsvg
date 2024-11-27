@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -119,6 +119,8 @@ AboutWidget::AboutWidget(QWidget *parent)
     parties << "skia_bundle" << "gperftools" << "qt"  << "qscintilla" << "ffmpeg" << "unwind" << "xcb" << "xkbcommon";
 #elif defined WIN_DEPLOY
     parties << "skia_bundle" << "qt"  << "qscintilla" << "ffmpeg_win";
+#elif defined MAC_DEPLOY
+    parties << "skia_bundle" << "qt" << "qscintilla" << "ffmpeg_mac";
 #else
     #ifdef FRICTION_BUNDLE_SKIA_BUNDLE
         parties << "skia_bundle";

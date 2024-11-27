@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,12 +29,14 @@
 #include "ui_global.h"
 
 #include "Animators/qrealanimator.h"
-#include <QDialog>
+#include "dialog.h"
+
 #include <QDoubleSpinBox>
 #include <QHBoxLayout>
 #include <QPushButton>
 
-class UI_EXPORT QrealPointValueDialog : public QDialog {
+class UI_EXPORT QrealPointValueDialog : public Friction::Ui::Dialog
+{
     Q_OBJECT
 public:
     QrealPointValueDialog(QrealPoint *point, QWidget *parent);

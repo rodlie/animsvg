@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ AlignWidget::AlignWidget(QWidget* const parent)
     , mRelativeTo(nullptr)
 {
     const auto mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(5, 5, 5, 5);
     setLayout(mainLayout);
 
     const auto combosLay = new QHBoxLayout;

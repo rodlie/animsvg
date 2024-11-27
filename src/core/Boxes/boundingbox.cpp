@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -54,6 +54,9 @@
 #include "svgexporter.h"
 #include "svgexporthelpers.h"
 #include "internallinkcanvas.h"
+
+#include <QInputDialog>
+#include <QMessageBox>
 
 int BoundingBox::sNextDocumentId = 0;
 QList<BoundingBox*> BoundingBox::sDocumentBoxes;
@@ -765,48 +768,48 @@ QPointF BoundingBox::mapRelPosToAbs(const QPointF &relPos) const {
     return mTransformAnimator->mapRelPosToAbs(relPos);
 }
 
-void BoundingBox::setupCanvasMenu(PropertyMenu * const menu) {
-    if(menu->hasActionsForType<BoundingBox>()) return;
+void BoundingBox::setupCanvasMenu(PropertyMenu * const menu)
+{
+    if (menu->hasActionsForType<BoundingBox>()) { return; }
     menu->addedActionsForType<BoundingBox>();
+
     const auto pScene = getParentScene();
     Q_ASSERT(pScene);
 
-    menu->addSection("Box");
-
-    menu->addPlainAction("Create Link", [pScene]() {
+    menu->addPlainAction(QIcon::fromTheme("linked"), tr("Create Link"), [pScene]() {
         pScene->createLinkBoxForSelected();
     });
-    menu->addPlainAction("Center Pivot", [pScene]() {
+    menu->addPlainAction(QIcon::fromTheme("pivot-align-center"), tr("Center Pivot"), [pScene]() {
         pScene->centerPivotForSelected();
     });
 
     menu->addSeparator();
 
-    menu->addPlainAction("Copy", [pScene]() {
+    menu->addPlainAction(QIcon::fromTheme("copy"), tr("Copy"), [pScene]() {
         pScene->copyAction();
     })->setShortcut(Qt::CTRL + Qt::Key_C);
 
-    menu->addPlainAction("Cut", [pScene]() {
+    menu->addPlainAction(QIcon::fromTheme("cut"), tr("Cut"), [pScene]() {
         pScene->cutAction();
     })->setShortcut(Qt::CTRL + Qt::Key_X);
 
-    menu->addPlainAction("Duplicate", [pScene]() {
+    menu->addPlainAction(QIcon::fromTheme("duplicate"), tr("Duplicate"), [pScene]() {
         pScene->duplicateAction();
     })->setShortcut(Qt::CTRL + Qt::Key_D);
 
-    menu->addPlainAction("Delete", [pScene]() {
+    menu->addPlainAction(QIcon::fromTheme("trash"), tr("Delete"), [pScene]() {
         pScene->removeSelectedBoxesAndClearList();
     })->setShortcut(Qt::Key_Delete);
 
     menu->addSeparator();
 
-    menu->addPlainAction("Group", [pScene]() {
+    menu->addPlainAction(QIcon::fromTheme("group"), tr("Group"), [pScene]() {
         pScene->groupSelectedBoxes();
     })->setShortcut(Qt::CTRL + Qt::Key_G);
 
     menu->addSeparator();
 
-    const auto rasterEffectsMenu = menu->addMenu("Raster Effects");
+    const auto rasterEffectsMenu = menu->addMenu(QIcon::fromTheme("effect"), tr("Raster Effects"));
     RasterEffectMenuCreator::addEffects(
                 rasterEffectsMenu, &BoundingBox::addRasterEffect);
 }
@@ -1131,14 +1134,27 @@ bool BoundingBox::getSVGPropertiesVisible()
     return false;
 }
 
-#include <QInputDialog>
-void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu) {
-    if(menu->hasActionsForType<BoundingBox>()) return;
+void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu)
+{
+    if (menu->hasActionsForType<BoundingBox>()) { return; }
     menu->addedActionsForType<BoundingBox>();
+
     const auto parentWidget = menu->getParentWidget();
-    menu->addPlainAction("Rename", [this, parentWidget]() {
+    menu->addPlainAction(QIcon::fromTheme("dialog-information"), tr("Rename"), [this, parentWidget]() {
         PropertyNameDialog::sRenameBox(this, parentWidget);
     });
+
+    const auto pScene = getParentScene();
+    if (pScene) {
+        menu->addPlainAction(QIcon::fromTheme("trash"), tr("Delete"), [pScene]() {
+            /*const int ask = QMessageBox::question(nullptr,
+                                                  tr("Delete?"),
+                                                  tr("Are you sure you want to delete selected item(s)?"));
+            if (ask != QMessageBox::Yes) { return; }*/
+            pScene->removeSelectedBoxesAndClearList();
+        })->setShortcut(Qt::Key_Delete);
+    }
+
     menu->addSeparator();
     {
         const PropertyMenu::CheckSelectedOp<BoundingBox> visRangeOp =
@@ -1154,7 +1170,7 @@ void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu) {
         [](BoundingBox* const box, const bool checked) {
             box->setCustomPropertiesVisible(checked);
         };
-        menu->addCheckableAction("Custom Properties",
+        menu->addCheckableAction(tr("Custom Properties"),
                                  mCustomProperties->SWT_isVisible(),
                                  visRangeOp);
     }
@@ -1163,31 +1179,34 @@ void BoundingBox::prp_setupTreeViewMenu(PropertyMenu * const menu) {
         [](BoundingBox* const box, const bool checked) {
             box->setBlendEffectsVisible(checked);
         };
-        menu->addCheckableAction("Blend Effects",
+        menu->addCheckableAction(tr("Blend Effects"),
                                  mBlendEffectCollection->SWT_isVisible(),
                                  visRangeOp);
     }
     menu->addSeparator();
+
     const PropertyMenu::CheckSelectedOp<BoundingBox> visRangeOp =
     [](BoundingBox* const box, const bool checked) {
-        if(box->durationRectangleLocked()) return;
+        if (box->durationRectangleLocked()) { return; }
         const bool hasDur = box->hasDurationRectangle();
-        if(hasDur == checked) return;
-        if(checked) box->createDurationRectangle();
-        else box->setDurationRectangle(nullptr);
+        if (hasDur == checked) { return; }
+        if (checked) { box->createDurationRectangle(); }
+        else { box->setDurationRectangle(nullptr); }
     };
-    menu->addCheckableAction("Visibility Range",
+    menu->addCheckableAction(tr("Visibility Range"),
                              hasDurationRectangle(),
                              visRangeOp)->setEnabled(!durationRectangleLocked());
-    menu->addPlainAction("Visibility Range Settings...",
+
+    menu->addPlainAction(QIcon::fromTheme("visible"), tr("Visibility Range Settings"),
                          [this]() {
         const auto durRect = getDurationRectangle();
-        if(!durRect) return;
+        if (!durRect) { return; }
         const auto& instance = DialogsInterface::instance();
         instance.showDurationSettingsDialog(durRect);
     })->setEnabled(hasDurationRectangle());
+
     menu->addSeparator();
-    setupCanvasMenu(menu->addMenu("Actions"));
+    setupCanvasMenu(menu->addMenu(QIcon::fromTheme("preferences"), tr("Actions")));
 }
 
 void BoundingBox::getMotionBlurProperties(QList<Property*> &list) const {

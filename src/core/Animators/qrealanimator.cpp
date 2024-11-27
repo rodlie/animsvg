@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -58,20 +58,20 @@ void QrealAnimator::prp_setupTreeViewMenu(PropertyMenu * const menu) {
         const auto& intrface = DialogsInterface::instance();
         intrface.showExpressionDialog(aTarget);
     };
-    menu->addPlainAction("Set Expression", sOp);
+    menu->addPlainAction(QIcon::fromTheme("preferences"), tr("Set Expression"), sOp);
 
     const PropertyMenu::PlainSelectedOp<QrealAnimator> aOp =
     [](QrealAnimator * aTarget) {
         const auto& intrface = DialogsInterface::instance();
         intrface.showApplyExpressionDialog(aTarget);
     };
-    menu->addPlainAction("Apply Expression...", aOp)->setEnabled(hasExpression());
+    menu->addPlainAction(QIcon::fromTheme("dialog-ok"), tr("Apply Expression"), aOp)->setEnabled(hasExpression());
 
     const PropertyMenu::PlainSelectedOp<QrealAnimator> cOp =
     [](QrealAnimator * aTarget) {
         aTarget->clearExpressionAction();
     };
-    menu->addPlainAction("Clear Expression", cOp)->setEnabled(hasExpression());
+    menu->addPlainAction(QIcon::fromTheme("trash"), tr("Clear Expression"), cOp)->setEnabled(hasExpression());
     menu->addSeparator();
     Animator::prp_setupTreeViewMenu(menu);
 }

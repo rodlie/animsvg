@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -41,6 +41,13 @@ class UI_EXPORT FrameScrollBar : public QWidget
 {
     Q_OBJECT
 public:
+    struct InteractiveMarker
+    {
+        int frame;
+        bool enabled;
+        bool in;
+        bool out;
+    };
     explicit FrameScrollBar(const int minSpan,
                             const int maxSpan,
                             const bool range,
@@ -115,7 +122,9 @@ private:
 
     QFontMetrics mFm;
 
-    QColor mHandleColor = ThemeSupport::getThemeButtonBaseColor();
+    InteractiveMarker mGrabbedMarker;
+
+    QColor mHandleColor = ThemeSupport::getThemeButtonBorderColor();
     qptr<Canvas> mCurrentCanvas;
 };
 

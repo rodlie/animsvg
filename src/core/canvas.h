@@ -357,17 +357,29 @@ public:
                     const int frameIn);
     void setFrameOut(const bool enabled,
                      const int frameOut);
-    const FrameMarker getFrameIn();
-    const FrameMarker getFrameOut();
+    const FrameMarker getFrameIn() const;
+    const FrameMarker getFrameOut() const;
 
     void setMarker(const QString &title,
                    const int frame);
     void setMarker(const int frame);
+    void setMarkerEnabled(const int frame, const bool &enabled);
     bool hasMarker(const int frame,
                    const bool removeExists = false);
+    bool hasMarkerIn(const int frame);
+    bool hasMarkerOut(const int frame);
+    bool hasMarkerEnabled(const int frame);
+    bool removeMarker(const int frame);
+    bool editMarker(const int frame,
+                    const QString &title,
+                    const bool enabled);
+    void moveMarkerFrame(const int markerFrame,
+                         const int newFrame);
     const QString getMarkerText(int frame);
+    int getMarkerIndex(const int frame);
     const std::vector<FrameMarker> getMarkers();
     void clearMarkers();
+    void updateMarkers();
 
     void addKeySelectedProperties();
 
@@ -439,6 +451,12 @@ signals:
     void gradientRemoved(SceneBoundGradient*);
     void openTextEditor();
     void requestEasingAction(const QString &easing);
+    void openMarkerEditor();
+    void openExpressionDialog(QrealAnimator* const target);
+    void openApplyExpressionDialog(QrealAnimator* const target);
+    void currentPickedColor(const QColor &color);
+    void currentHoverColor(const QColor &color);
+    void markersChanged();
 
 public:
     void makePointCtrlsSymmetric();
@@ -702,6 +720,7 @@ public:
 
     SceneBoundGradient * getGradientWithRWId(const int rwId) const;
     SceneBoundGradient * getGradientWithDocumentId(const int id) const;
+    SceneBoundGradient * getGradientWithDocumentSceneId(const int id) const;
 
     void addNullObject(NullObject* const obj);
     void removeNullObject(NullObject* const obj);
@@ -714,13 +733,17 @@ private:
 
     void clearGradientRWIds() const;
     QList<SmartNodePoint*> getSortedSelectedNodes();
-    void openTextEditorForTextBox(TextBox *textBox);
+    //void openTextEditorForTextBox(TextBox *textBox);
 
     void scaleSelected(const eMouseEvent &e);
     void rotateSelected(const eMouseEvent &e);
 
     void drawPathClear();
     void drawPathFinish(const qreal invScale);
+
+    const QColor pickPixelColor(const QPoint &pos);
+    void applyPixelColor(const QColor &color,
+                         const bool &fill);
 
     qreal mLastDRot = 0;
     int mRotHalfCycles = 0;

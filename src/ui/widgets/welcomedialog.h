@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,6 +32,10 @@
 #include <QMenu>
 #include <functional>
 
+#include <QPaintEvent>
+#include <QShowEvent>
+#include <QPushButton>
+
 class UI_EXPORT WelcomeDialog : public QWidget
 {
 public:
@@ -40,7 +44,11 @@ public:
                   const std::function<void()> &openFunc,
                   QWidget * const parent = nullptr);
 protected:
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
+    void showEvent(QShowEvent *e) override;
+
+private:
+    QPushButton *mRecentButton;
 };
 
 #endif // WELCOMEDIALOG_H

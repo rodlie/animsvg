@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ void eEffect::prp_setupTreeViewMenu(PropertyMenu * const menu)
 {
     StaticComplexAnimator::prp_setupTreeViewMenu(menu);
     const auto parentWidget = menu->getParentWidget();
-    menu->addPlainAction(tr("Rename"), [this, parentWidget]() {
+    menu->addPlainAction(QIcon::fromTheme("dialog-information"), tr("Rename"), [this, parentWidget]() {
         PropertyNameDialog::sRenameProperty(this, parentWidget);
     });
 }

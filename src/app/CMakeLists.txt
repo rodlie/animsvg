@@ -1,7 +1,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,10 +33,15 @@ include(friction-ffmpeg)
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 
 if(${LINUX_DEPLOY})
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+    set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
 endif()
 
 option(USE_SKIA_SYSTEM_LIBS "Use skia (third-party) system libraries on Linux" ON)
+if(APPLE)
+    set(USE_SKIA_SYSTEM_LIBS OFF)
+endif()
+
 if(${USE_SKIA_SYSTEM_LIBS} AND UNIX)
     pkg_check_modules(EXPAT REQUIRED expat)
     pkg_check_modules(FREETYPE REQUIRED freetype2)
@@ -54,7 +59,7 @@ endif()
 
 if(APPLE)
     set(ICON_FILE ${CMAKE_CURRENT_SOURCE_DIR}/icons/${PROJECT_NAME}.icns)
-    set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
+    set(MACOSX_BUNDLE_BUNDLE_NAME "Friction")
     set(MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION})
     set(MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION})
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
@@ -173,8 +178,6 @@ set(
     GUI/timelinehighlightwidget.cpp
     GUI/timelinewidget.cpp
     GUI/timelinewrappernode.cpp
-    GUI/ColorWidgets/colorsettingswidget.cpp
-    GUI/ColorWidgets/colorpickingwidget.cpp
     GUI/window.cpp
     effectsloader.cpp
     eimporters.cpp
@@ -197,9 +200,6 @@ set(
     GUI/graphboxeslist.cpp
     GUI/keysview.cpp
     GUI/mainwindow.cpp
-    GUI/qrealanimatorvalueslider.cpp
-    GUI/fontswidget.cpp
-    GUI/fillstrokesettings.cpp
     GUI/toolbox.cpp
     GUI/extraactions.cpp
     GUI/effectactions.cpp
@@ -229,8 +229,6 @@ set(
     GUI/timelinehighlightwidget.h
     GUI/timelinewidget.h
     GUI/timelinewrappernode.h
-    GUI/ColorWidgets/colorsettingswidget.h
-    GUI/ColorWidgets/colorpickingwidget.h
     effectsloader.h
     eimporters.h
     renderhandler.h
@@ -248,12 +246,9 @@ set(
     GUI/RenderWidgets/outputsettingsdisplaywidget.h
     GUI/animationdockwidget.h
     GUI/canvaswindow.h
-    GUI/fillstrokesettings.h
-    GUI/fontswidget.h
     GUI/keysview.h
     GUI/mainwindow.h
     GUI/window.h
-    GUI/qrealanimatorvalueslider.h
 )
 
 set(
@@ -283,9 +278,9 @@ if(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE TRUE)
 endif()
 
-#if(WIN32)
-#    set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
-#endif()
+if(WIN32)
+    set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
+endif()
 
 target_link_directories(
     ${PROJECT_NAME}

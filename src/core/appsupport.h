@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,14 +33,6 @@
 #include <QSettings>
 
 #include "hardwareenums.h"
-
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-#define QT_ENDL Qt::endl
-#define QT_SKIP_EMPTY Qt::SkipEmptyParts
-#else
-#define QT_ENDL endl
-#define QT_SKIP_EMPTY QString::SkipEmptyParts
-#endif
 
 class CORE_EXPORT AppSupport : public QObject
 {
@@ -126,10 +118,22 @@ public:
     static int getProjectVersion(const QString &fileName = QString());
     static const QPair<QStringList,bool> hasWriteAccess();
     static bool isAppPortable();
+    static bool isAppImage();
     static const QString getAppImagePath();
     static bool hasXDGDesktopIntegration();
     static bool setupXDGDesktopIntegration();
     static bool removeXDGDesktopIntegration();
+    static void initXDGDesktop(const bool &isRenderer);
+    static bool hasArg(int argc,
+                       char *argv[],
+                       const QString &find);
+    static void checkPerms(const bool &isRenderer);
+    static void checkFFmpeg(const bool &isRenderer);
+    static void initEnv(const bool &isRenderer);
+    static QPair<bool,int> handleXDGArgs(const bool &isRenderer,
+                                         const QStringList &args);
+    static void printVersion();
+    static void printHelp(const bool &isRenderer);
     static const ExpressionPreset readEasingPreset(const QString &filename);
     static const QList<QPair<QString,QString>> getEasingPresets();
     static void handlePortableFirstRun();

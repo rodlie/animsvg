@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -48,9 +48,12 @@ void Document::updateScenes() {
 
 void Document::actionFinished() {
     updateScenes();
-    for(const auto& scene : fVisibleScenes) {
+    for (const auto& scene : fVisibleScenes) {
         const auto newUndoRedo = scene.first->newUndoRedoSet();
-        if(newUndoRedo) emit documentChanged();
+        if (newUndoRedo) {
+            qDebug() << "document changed";
+            emit documentChanged();
+        }
     }
 }
 
@@ -159,6 +162,20 @@ void Document::setActiveScene(Canvas * const scene) {
                         this, &Document::clearActiveScene);
         conn << connect(fActiveScene, &Canvas::openTextEditor,
                         this, [this] () { emit openTextEditor(); });
+        conn << connect(fActiveScene, &Canvas::openMarkerEditor,
+                        this, [this] () { emit openMarkerEditor(); });
+        conn << connect(fActiveScene, &Canvas::openExpressionDialog,
+                        this, [this](QrealAnimator* const target) {
+            emit openExpressionDialog(target);
+        });
+        conn << connect(fActiveScene, &Canvas::openApplyExpressionDialog,
+                        this, [this](QrealAnimator* const target) {
+            emit openApplyExpressionDialog(target);
+        });
+        conn << connect(fActiveScene, &Canvas::currentHoverColor,
+                        this, [this](const QColor &color) {
+            emit currentPixelColor(color);
+        });
         emit currentBoxChanged(fActiveScene->getCurrentBox());
         emit selectedPaintSettingsChanged();
     }

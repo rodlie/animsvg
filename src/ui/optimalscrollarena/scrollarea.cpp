@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@
 #include "scrollarea.h"
 #include <QResizeEvent>
 #include <QScrollBar>
+
+#include "GUI/global.h"
 
 ScrollArea::ScrollArea(QWidget * const parent) : QScrollArea(parent) {
     setFocusPolicy(Qt::NoFocus);
@@ -57,9 +59,19 @@ void ScrollArea::resizeEvent(QResizeEvent *e) {
     }
     QScrollArea::resizeEvent(e);
 }
-#include "GUI/global.h"
+
+#ifdef Q_OS_MAC
+void ScrollArea::wheelEvent(QWheelEvent *event)
+{
+    callWheelEvent(event);
+}
+#endif
+
 void ScrollArea::callWheelEvent(QWheelEvent *event)
 {
+#ifdef Q_OS_MAC
+    if (event->angleDelta().y() == 0) { return; }
+#endif
     if (event->modifiers() & Qt::CTRL || event->modifiers() & Qt::SHIFT) { return; }
     if (event->angleDelta().y() > 0) {
         scrollBy(0, -eSizesUI::widget);

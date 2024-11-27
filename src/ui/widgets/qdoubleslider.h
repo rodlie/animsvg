@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,17 +32,23 @@
 #include <QLineEdit>
 #include <QDoubleValidator>
 
+#ifdef Q_OS_MAC
+#include <QWheelEvent>
+#endif
+
 class UI_EXPORT SliderEdit : public QLineEdit {
     Q_OBJECT
 public:
     SliderEdit(QWidget* const parent);
 signals:
     void valueSet(const qreal value);
+    void hoverChanged();
 protected:
     void mousePressEvent(QMouseEvent* e) override;
     void keyPressEvent(QKeyEvent *e) override;
     void hideEvent(QHideEvent *e) override;
     void showEvent(QShowEvent *e) override;
+    void leaveEvent(QEvent *e) override;
 private:
     void lineEditingFinished();
 
@@ -107,6 +113,13 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
 
+#ifdef Q_OS_MAC
+    void wheelEvent(QWheelEvent *event);
+#endif
+
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
+
     void paint(QPainter *p,
                const QColor &allFill,
                const QColor &sliderFill,
@@ -151,6 +164,8 @@ private:
     qreal mLastValue;
     bool mShowValueSlider = true;
     bool mAutoAdjustWidth = true;
+
+    bool mHovered = false;
 };
 
 #endif // QDOUBLESLIDER_H

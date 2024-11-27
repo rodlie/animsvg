@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -54,6 +54,12 @@ public:
                                  ColorAnimator* const target) {
         return sInstance->colorWidget(parent, target);
     }
+    static QWidget* sColorWidget(QWidget* const parent,
+                                 ColorAnimator* const target,
+                                 const bool showColorMode)
+    {
+        return sInstance->colorWidget(parent, target, showColorMode);
+    }
 protected:
     virtual QWidget* colorWidget(QWidget* const parent,
                                  const QColor& iniColor,
@@ -61,6 +67,9 @@ protected:
                                  const Func<void(const ColorSetting&)>& slot) = 0;
     virtual QWidget* colorWidget(QWidget* const parent,
                                  ColorAnimator* const target) = 0;
+    virtual QWidget* colorWidget(QWidget* const parent,
+                                 ColorAnimator* const target,
+                                 const bool showColorMode) = 0;
 };
 
 #endif // EWIDGETS_H

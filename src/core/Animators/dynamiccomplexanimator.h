@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ public:
         [](DynamicComplexAnimatorBase<T> * animTarget) {
             animTarget->ca_removeAllChildren();
         };
-        menu->addPlainAction("Clear", dOp)->setEnabled(this->ca_getNumberOfChildren());
+        menu->addPlainAction(QIcon::fromTheme("trash"), tr("Clear"), dOp)->setEnabled(this->ca_getNumberOfChildren());
     }
 
     void insertChild(const qsptr<T>& child, const int index) {

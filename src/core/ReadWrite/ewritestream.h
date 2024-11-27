@@ -6,6 +6,7 @@
 
 #include "efuturepos.h"
 #include "../XML/runtimewriteid.h"
+
 #include <functional>
 
 class SimpleBrushWrapper;

@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,31 +32,35 @@
 #include "skia/skiaincludes.h"
 #include "skia/skqtconversions.h"
 #include "GUI/global.h"
+#include <QGuiApplication>
 
 ValueInput::ValueInput() {
     const int dpi = QApplication::desktop()->logicalDpiX();
-    mFont = toSkFont(QApplication::font(), dpi, 72);
+    mFont = toSkFont(QApplication::font(),
+                     dpi * qApp->desktop()->devicePixelRatioF(),
+                     72);
 }
 
 void ValueInput::draw(SkCanvas *canvas, const int y) {
     SkPaint paint;
-
+    const qreal pixelRatio = qApp->desktop()->devicePixelRatioF();
     const auto transStr = getText();
-    const int textWidth = QApplication::fontMetrics().horizontalAdvance(transStr);
-    const SkRect inputRect =
-            SkRect::MakeXYWH(2*eSizesUI::widget, y,
-                             textWidth + eSizesUI::widget, eSizesUI::widget);
+    const int textWidth = QApplication::fontMetrics().horizontalAdvance(transStr)*pixelRatio;
+    const SkRect inputRect = SkRect::MakeXYWH(2*eSizesUI::widget*pixelRatio,
+                                              y*pixelRatio,
+                                              textWidth + eSizesUI::widget*pixelRatio,
+                                              eSizesUI::widget*pixelRatio);
     paint.setStyle(SkPaint::kFill_Style);
     paint.setColor(SkColorSetRGB(225, 225, 225));
     canvas->drawRect(inputRect, paint);
     paint.setColor(SK_ColorBLACK);
     paint.setStyle(SkPaint::kStrokeAndFill_Style);
-    paint.setStrokeWidth(.1f);
+    paint.setStrokeWidth(.1f*pixelRatio);
 
     const auto stdStr = transStr.toStdString();
     canvas->drawString(stdStr.c_str(),
-           inputRect.x() + eSizesUI::widget*0.5f,
-           inputRect.y() + inputRect.height()*0.5f + eSizesUI::font*0.2f,
+           inputRect.x() + eSizesUI::widget*0.5f*pixelRatio,
+           inputRect.y() + inputRect.height()*0.5f + eSizesUI::font*0.2f*pixelRatio,
            mFont, paint);
 }
 

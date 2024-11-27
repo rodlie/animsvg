@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -92,8 +92,6 @@ void KeysView::setCurrentScene(Canvas * const scene)
     if (mCurrentScene) {
         disconnect(mCurrentScene.data(), &Canvas::objectSelectionChanged,
                    this, &KeysView::graphUpdateVisible);
-        disconnect(mCurrentScene.data(), &Canvas::requestUpdate,
-                   this, &KeysView::sceneRequestedUpdate);
         disconnect(mCurrentScene.data(), &Canvas::requestEasingAction,
                    this, &KeysView::graphEasingAction);
     }
@@ -101,16 +99,9 @@ void KeysView::setCurrentScene(Canvas * const scene)
     if (mCurrentScene) {
         connect(mCurrentScene.data(), &Canvas::objectSelectionChanged,
                 this, &KeysView::graphUpdateVisible);
-        connect(mCurrentScene.data(), &Canvas::requestUpdate,
-                this, &KeysView::sceneRequestedUpdate);
         connect(mCurrentScene.data(), &Canvas::requestEasingAction,
                 this, &KeysView::graphEasingAction);
     }
-    graphUpdateVisible();
-}
-
-void KeysView::sceneRequestedUpdate()
-{
     graphUpdateVisible();
 }
 
@@ -223,7 +214,7 @@ bool KeysView::hasFrameOut(const int frame)
 bool KeysView::hasFrameMarker(const int frame)
 {
     if (!mCurrentScene) { return false; }
-    return mCurrentScene->hasMarker(frame);
+    return mCurrentScene->hasMarkerEnabled(frame);
 }
 
 void KeysView::resizeEvent(QResizeEvent *e) {
@@ -358,7 +349,7 @@ void KeysView::mousePressEvent(QMouseEvent *e) {
                 const QString editStr = tr("Edit duration");
                 const QString splitStr = tr("Split Clip");
                 menu.addAction(QIcon::fromTheme("sequence"), editStr);
-                menu.addAction(QIcon::fromTheme("image-missing"), splitStr);
+                menu.addAction(QIcon::fromTheme("cut"), splitStr);
                 const auto selectedAction = menu.exec(e->globalPos());
                 if (selectedAction) {
                     if (selectedAction->text() == editStr) {

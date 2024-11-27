@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 
 #include <QPainter>
 #include <QMouseEvent>
+#include "Animators/SmartPath/smartpathanimator.h"
 #include "Animators/transformanimator.h"
 #include "Expressions/expression.h"
 #include "Expressions/propertybindingparser.h"
@@ -82,8 +83,13 @@ void KeysView::graphEasingApply(QrealAnimator *anim,
                                 const FrameRange &range,
                                 const QString &easing)
 {
+    if (!anim) { return; }
+    if (const auto spa = enve_cast<SmartPathAnimator*>(anim)) {
+        emit statusMessage(tr("Smart paths does not support easing"));
+        return;
+    }
     if (!graphEasingApplyExpression(anim, range, easing)) {
-        // add warning or something
+        emit statusMessage(tr("Failed to apply easing on %1").arg(anim->prp_getName()));
     }
 }
 
@@ -482,33 +488,30 @@ void KeysView::graphDeletePressed() {
     mGPressedPoint = nullptr;
 }
 
-void KeysView::graphWheelEvent(QWheelEvent *event) {
-    if(event->modifiers() & Qt::ControlModifier) {
+void KeysView::graphWheelEvent(QWheelEvent *event)
+{
+#ifdef Q_OS_MAC
+    if (event->angleDelta().y() == 0) { return; }
+#endif
+    if (event->modifiers() & Qt::ControlModifier) {
+        emit wheelEventSignal(event);
+        return;
+    } else if (event->modifiers() & Qt::ShiftModifier) {
         qreal valUnderMouse;
         qreal frame;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         const auto ePos = event->position();
-#else
-        const auto ePos = event->posF();
-#endif
         graphGetValueAndFrameFromPos(ePos,
                                      valUnderMouse, frame);
         qreal graphScaleInc;
-        if(event->angleDelta().y() > 0) {
-            graphScaleInc = 0.1;
-        } else {
-            graphScaleInc = -0.1;
-        }
+        if (event->angleDelta().y() > 0) { graphScaleInc = 0.1; }
+        else { graphScaleInc = -0.1; }
         graphSetMinShownVal(mMinShownVal +
                             (valUnderMouse - mMinShownVal)*graphScaleInc);
         mPixelsPerValUnit += graphScaleInc*mPixelsPerValUnit;
         graphUpdateDimensions();
     } else {
-        if(event->angleDelta().y() > 0) {
-            graphIncMinShownVal(1);
-        } else {
-            graphIncMinShownVal(-1);
-        }
+        if (event->angleDelta().y() > 0) { graphIncMinShownVal(1); }
+        else { graphIncMinShownVal(-1); }
     }
 
     update();
@@ -578,9 +581,12 @@ void KeysView::graphUpdateVisible()
         const auto all = mCurrentScene->getSelectedForGraph(id);
         if (all) {
             qDebug() << "selected for graph" << all->count();
-            for (const auto anim : *all) {
+            for (auto anim : *all) {
                 if (graphValidateVisible(anim)) { graphAddToViewedAnimatorList(anim); }
-                else { graphRemoveViewedAnimator(anim); }
+                else {
+                    anim->prp_setSelected(false);
+                    graphRemoveViewedAnimator(anim);
+                }
             }
         }
     }

@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -107,46 +107,20 @@ void ImageBox::reload() {
     if(mFileHandler) mFileHandler->reloadAction();
 }
 
-void ImageBox::setupCanvasMenu(PropertyMenu * const menu) {
-    if(menu->hasActionsForType<ImageBox>()) return;
+void ImageBox::setupCanvasMenu(PropertyMenu * const menu)
+{
+    if (menu->hasActionsForType<ImageBox>()) { return; }
     menu->addedActionsForType<ImageBox>();
 
     const PropertyMenu::PlainSelectedOp<ImageBox> reloadOp =
-    [](ImageBox * box) {
-        box->reload();
-    };
-    menu->addPlainAction("Reload", reloadOp);
+    [](ImageBox * box) { box->reload(); };
+    menu->addPlainAction(QIcon::fromTheme("loop"), tr("Reload"), reloadOp);
 
     const PropertyMenu::PlainSelectedOp<ImageBox> setSrcOp =
-    [](ImageBox * box) {
-        box->changeSourceFile();
-    };
-    menu->addPlainAction("Set Source File...", setSrcOp);
+    [](ImageBox * box) { box->changeSourceFile(); };
+    menu->addPlainAction(QIcon::fromTheme("document-new"), tr("Set Source File"), setSrcOp);
 
     menu->addSeparator();
-
-    /*const PropertyMenu::PlainSelectedOp<ImageBox> createPaintObj =
-    [](ImageBox * box) {
-        const qptr<ImageBox> boxPtr = box;
-        const auto loader = [boxPtr]() {
-            if(!boxPtr) return;
-            const auto parent = boxPtr->getParentGroup();
-            if(!parent) return;
-            const auto img = boxPtr->mFileHandler->getImage();
-            if(!img) return;
-            const auto paintObj = enve::make_shared<PaintBox>();
-            paintObj->getSurface()->loadPixmap(img);
-            boxPtr->copyBoundingBoxDataTo(paintObj.get());
-            parent->addContained(paintObj);
-        };
-        if(box->mFileHandler->hasImage()) {
-            loader();
-        } else {
-            const auto task = box->mFileHandler->scheduleLoad();
-            if(task) task->addDependent({loader, nullptr});
-        }
-    };
-    menu->addPlainAction("Create Paint Object", createPaintObj);*/
 
     BoundingBox::setupCanvasMenu(menu);
 }

@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -136,11 +136,11 @@ void SmartNodePoint::canvasContextMenu(PointTypeMenu * const menu) {
             PointTypeMenu::PlainSelectedOp<SmartNodePoint> op = [](SmartNodePoint * pt) {
                 pt->actionDemoteToDissolved(false);
             };
-            menu->addPlainAction("Demote to dissolved", op);
+            menu->addPlainAction(QIcon::fromTheme("preferences"), QObject::tr("Demote to dissolved"), op);
             PointTypeMenu::PlainSelectedOp<SmartNodePoint> opApprox = [](SmartNodePoint * pt) {
                 pt->actionDemoteToDissolved(true);
             };
-            menu->addPlainAction("Demote to dissolved approx.", opApprox);
+            menu->addPlainAction(QIcon::fromTheme("preferences"), QObject::tr("Demote to dissolved approx."), opApprox);
             menu->addSeparator();
         }
         PointTypeMenu::AllOp<SmartNodePoint> op =
@@ -150,20 +150,20 @@ void SmartNodePoint::canvasContextMenu(PointTypeMenu * const menu) {
                 pt->deselect();
             }
         };
-        menu->addPlainAction("Remove", op);
+        menu->addPlainAction(QIcon::fromTheme("trash"), QObject::tr("Remove"), op);
         PointTypeMenu::PlainSelectedOp<SmartNodePoint> opApprox = [](SmartNodePoint * pt) {
             pt->actionRemove(true);
         };
-        menu->addPlainAction("Remove approx.", opApprox);
+        menu->addPlainAction(QIcon::fromTheme("trash"), QObject::tr("Remove approx."), opApprox);
     } else { //if(isDissolved()) {
         PointTypeMenu::PlainSelectedOp<SmartNodePoint> op = [](SmartNodePoint * pt) {
             pt->actionPromoteToNormal();
         };
-        menu->addPlainAction("Promote to normal", op);
+        menu->addPlainAction(QIcon::fromTheme("preferences"), QObject::tr("Promote to normal"), op);
         PointTypeMenu::PlainSelectedOp<SmartNodePoint> rOp = [](SmartNodePoint * pt) {
             pt->actionRemove(false);
         };
-        menu->addPlainAction("Remove", rOp);
+        menu->addPlainAction(QIcon::fromTheme("trash"), QObject::tr("Remove"), rOp);
     }
 }
 #include "Private/document.h"

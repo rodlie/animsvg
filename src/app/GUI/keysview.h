@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -67,7 +67,6 @@ public:
                       QWidget *parent = nullptr);
 
     void setCurrentScene(Canvas* const scene);
-    void sceneRequestedUpdate();
 
     void setGraphViewed(const bool bT);
 
@@ -142,6 +141,7 @@ protected:
 signals:
     void changedViewedFrames(FrameRange);
     void wheelEventSignal(QWheelEvent*);
+    void statusMessage(const QString &message);
 public:
     static QColor sGetAnimatorColor(const int i);
 

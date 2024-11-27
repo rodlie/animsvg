@@ -30,10 +30,12 @@
 #include <QTemporaryFile>
 #include <QComboBox>
 
+#include "dialog.h"
+
 class SceneChooser;
 class ComplexTask;
 
-class UI_EXPORT ExportSvgDialog : public QDialog
+class UI_EXPORT ExportSvgDialog : public Friction::Ui::Dialog
 {
 public:
     ExportSvgDialog(QWidget* const parent = nullptr,
@@ -43,6 +45,8 @@ public:
 private:
     ComplexTask* exportTo(const QString& file,
                           bool preview = false);
+
+    void finishedDialog(const QString &fileName);
 
     QSharedPointer<QTemporaryFile> mPreviewFile;
     QPushButton *mPreviewButton;
@@ -56,6 +60,7 @@ private:
     QCheckBox *mFixedSize;
     QCheckBox *mLoop;
     QCheckBox *mOptimize;
+    QCheckBox *mNotify;
 
     QComboBox *mImageFormat;
     QSpinBox *mImageQuality;

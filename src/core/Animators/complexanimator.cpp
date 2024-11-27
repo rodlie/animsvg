@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -331,11 +331,7 @@ void ComplexAnimator::ca_swapChildren(Property * const child1,
                                       Property * const child2) {
     const int id1 = ca_getChildPropertyIndex(child1);
     const int id2 = ca_getChildPropertyIndex(child2);
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
     ca_mChildren.swapItemsAt(id1, id2);
-#else
-    ca_mChildren.swap(id1, id2);
-#endif
     prp_afterWholeInfluenceRangeChanged();
     emit ca_childMoved(child1);
     emit ca_childMoved(child2);

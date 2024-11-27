@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -51,6 +51,8 @@
 #include "MovablePoints/smartnodepoint.h"
 #include "MovablePoints/pathpivot.h"
 
+#include <QDesktopWidget>
+#include <QScreen>
 #include <QMouseEvent>
 #include <QMenu>
 #include <QInputDialog>
@@ -241,8 +243,9 @@ void Canvas::handleLeftButtonMousePress(const eMouseEvent& e) {
             drawPathClear();
             mDrawPath.lineTo(e.fPos);
         }
-    } else if(mCurrentMode == CanvasMode::pickFillStroke) {
-        mPressedBox = getBoxAtFromAllDescendents(e.fPos);
+    } else if (mCurrentMode == CanvasMode::pickFillStroke ||
+               mCurrentMode == CanvasMode::pickFillStrokeEvent) {
+        //mPressedBox = getBoxAtFromAllDescendents(e.fPos);
     } else if(mCurrentMode == CanvasMode::circleCreate) {
         const auto newPath = enve::make_shared<Circle>();
         newPath->planCenterPivotPosition();
@@ -300,7 +303,8 @@ void Canvas::cancelCurrentTransform() {
         }
     } else if(mCurrentMode == CanvasMode::pathCreate) {
 
-    } else if(mCurrentMode == CanvasMode::pickFillStroke) {
+    } else if (mCurrentMode == CanvasMode::pickFillStroke ||
+               mCurrentMode == CanvasMode::pickFillStrokeEvent) {
         //mCanvasWindow->setCanvasMode(MOVE_PATH);
     }
     mValueInput.clearAndDisableInput();
@@ -512,6 +516,38 @@ void Canvas::drawPathFinish(const qreal invScale) {
     drawPathClear();
 }
 
+const QColor Canvas::pickPixelColor(const QPoint &pos)
+{
+    QScreen *screen = QApplication::screenAt(pos);
+    if (!screen) { return QColor(); }
+    WId wid = QApplication::desktop()->winId();
+    QImage img = screen->grabWindow(wid,
+                                    pos.x(), pos.y(),
+                                    1, 1).toImage();
+    return QColor(img.pixel(0, 0));
+}
+
+void Canvas::applyPixelColor(const QColor &color,
+                             const bool &fill)
+{
+    if (!color.isValid()) { return; }
+    for (const auto& box : mSelectedBoxes) {
+        if (fill) {
+            auto settings = box->getFillSettings();
+            if (settings) {
+                settings->setCurrentColor(color, true);
+                box->fillStrokeSettingsChanged();
+            }
+        } else {
+            auto settings = box->getStrokeSettings();
+            if (settings) {
+                settings->setCurrentColor(color, true);
+                box->fillStrokeSettingsChanged();
+            }
+        }
+    }
+}
+
 void Canvas::handleLeftMouseRelease(const eMouseEvent &e) {
     if(e.fMouseGrabbing) e.fReleaseMouse();
     if(mCurrentNormalSegment.isValid()) {
@@ -540,37 +576,8 @@ void Canvas::handleLeftMouseRelease(const eMouseEvent &e) {
         } else {
             drawPathFinish(1/e.fScale);
         }
-    } else if(mCurrentMode == CanvasMode::pickFillStroke) {
-        if(mPressedBox && enve_cast<PathBox*>(mPressedBox)) {
-            const auto srcPathBox = static_cast<PathBox*>(mPressedBox.data());
-            for(const auto& box : mSelectedBoxes) {
-                if(const auto pathBox = enve_cast<PathBox*>(box)) {
-                    if(e.ctrlMod()) {
-                        if(e.shiftMod()) {
-                            pathBox->duplicateStrokeSettingsFrom(
-                                        srcPathBox->getStrokeSettings());
-                        } else {
-                            pathBox->duplicateFillSettingsFrom(
-                                        srcPathBox->getFillSettings());
-                        }
-                    } else {
-                        if(e.shiftMod()) {
-                            pathBox->duplicateStrokeSettingsNotAnimatedFrom(
-                                        srcPathBox->getStrokeSettings());
-                        } else {
-                            pathBox->duplicateFillSettingsNotAnimatedFrom(
-                                        srcPathBox->getFillSettings());
-                        }
-                    }
-                }
-            }
-        }
-        //mCanvasWindow->setCanvasMode(MOVE_PATH);
-    } else if(mCurrentMode == CanvasMode::textCreate) {
-        if(mCurrentTextBox) {
-            //mCurrentTextBox->openTextEditor(e.fWidget);
-            emit openTextEditor();
-        }
+    } else if (mCurrentMode == CanvasMode::pickFillStrokeEvent) {
+        emit currentPickedColor(pickPixelColor(e.fGlobalPos));
     }
     mValueInput.clearAndDisableInput();
     mTransMode = TransformMode::none;

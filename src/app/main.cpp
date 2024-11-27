@@ -24,12 +24,8 @@
 #include <iostream>
 #include <QApplication>
 #include <QSurfaceFormat>
-#include <QProcess>
 #include <QDesktopWidget>
-//#include <QScreen>
-#include <QMessageBox>
-
-#include <libavutil/ffversion.h>
+#include <QSplashScreen>
 
 #include "hardwareinfo.h"
 #include "Private/esettings.h"
@@ -47,16 +43,7 @@
 #include <QtPlatformHeaders/QWindowsWindowFunctions>
 #endif
 
-extern "C" {
-    #include <libavformat/avformat.h>
-}
-
 #include <QJSEngine>
-
-#define TIME_BEGIN const auto t1 = std::chrono::high_resolution_clock::now();
-#define TIME_END(name) const auto t2 = std::chrono::high_resolution_clock::now(); \
-                       const auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count(); \
-                       qDebug() << name << duration << "us" << QT_ENDL;
 
 #define GPU_NOT_COMPATIBLE gPrintException("Your GPU drivers do not seem to be compatible.")
 
@@ -71,6 +58,17 @@ void setDefaultFormat()
     //format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     //format.setSwapInterval(0); // Disable vertical refresh syncing
     QSurfaceFormat::setDefaultFormat(format);
+
+    const QString oVersion = QString("%1.%2").arg(QString::number(QSurfaceFormat::defaultFormat().version().first),
+                                                  QString::number(QSurfaceFormat::defaultFormat().version().second));
+    const auto oDepth = QSurfaceFormat::defaultFormat().depthBufferSize();
+    const auto oStencil = QSurfaceFormat::defaultFormat().stencilBufferSize();
+    const auto oSamples = QSurfaceFormat::defaultFormat().samples();
+    qWarning() << "OpenGL Format:"
+               << "version" << oVersion.toDouble()
+               << "depth" << oDepth
+               << "stencil" << oStencil
+               << "samples" << oSamples;
 }
 
 void generateAlphaMesh(QPixmap& alphaMesh,
@@ -89,27 +87,16 @@ void generateAlphaMesh(QPixmap& alphaMesh,
 
 int main(int argc, char *argv[])
 {
-#ifdef Q_OS_WIN
-#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
-    // Set window title bar color based on dark/light theme
-    // https://www.qt.io/blog/dark-mode-on-windows-11-with-qt-6.5
-    // https://learn.microsoft.com/en-us/answers/questions/1161597/how-to-detect-windows-application-dark-mode
-    QSettings registry("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
-                       QSettings::NativeFormat);
-    if (registry.value("AppsUseLightTheme", 0).toInt() == 0) { qputenv("QT_QPA_PLATFORM",
-                                                                       "windows:darkmode=1"); }
-#endif
-#endif
+    // check if cli renderer (not supported yet)
+    const bool isRenderer = false; // AppSupport::hasArg(argc, argv, "--renderer");
 
-#ifdef Q_OS_LINUX
-    // Force XCB on Linux until we support Wayland
-    qputenv("QT_QPA_PLATFORM", "xcb");
-#endif
+    // init env variables
+    AppSupport::initEnv(isRenderer);
 
-    std::cout << QString("%1 %2 - %3").arg(AppSupport::getAppDisplayName(),
-                                           AppSupport::getAppVersion(),
-                                           AppSupport::getAppUrl()).toStdString() << std::endl << "---" << std::endl;
+    // version info
+    AppSupport::printVersion();
 
+    // init app
     QApplication::setApplicationDisplayName(AppSupport::getAppDisplayName());
     QApplication::setApplicationName(AppSupport::getAppName());
     QApplication::setOrganizationName(AppSupport::getAppCompany());
@@ -122,29 +109,31 @@ int main(int argc, char *argv[])
 #endif
     QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
     QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
-    QApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
+    QApplication::setAttribute(isRenderer ? Qt::AA_UseSoftwareOpenGL : Qt::AA_UseDesktopOpenGL);
 
     setDefaultFormat();
     QApplication app(argc, argv);
     setlocale(LC_NUMERIC, "C");
 
+    // handle XDG args
 #ifdef Q_OS_LINUX
-    if (AppSupport::isAppPortable()) {
-        const auto args = QApplication::arguments();
-        if (args.contains("--xdg-remove")) {
-            const bool removedXDG = AppSupport::removeXDGDesktopIntegration();
-            qWarning() << "Removed XDG Integration:" << removedXDG;
-            return removedXDG ? 0 : -1;
-        } else if (args.contains("--xdg-install")) {
-            const bool installedXDG = AppSupport::setupXDGDesktopIntegration();
-            qWarning() << "Installed XDG Integration:" << installedXDG;
-            return installedXDG ? 0 : -1;
-        }
-    }
+    const auto handleXDGActs = AppSupport::handleXDGArgs(isRenderer,
+                                                         QApplication::arguments());
+    if (handleXDGActs.first) { return handleXDGActs.second; }
 #endif
 
+    // init splash
+    QSplashScreen splash(QPixmap(":/pixmaps/splash.png"));
+    splash.show();
+    splash.raise();
+    splash.showMessage(QObject::tr("Loading ..."),
+                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+
+    // init hardware
 #ifdef Q_OS_WIN
-    QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
+    if (!isRenderer) {
+        QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
+    }
 #endif
 
 #ifndef Q_OS_DARWIN
@@ -167,12 +156,18 @@ int main(int argc, char *argv[])
               << "OpenGL Version: " << HardwareInfo::sGpuVersionString().toStdString() << std::endl
               << "---" << std::endl;
 
+    // init settings
     eSettings settings(HardwareInfo::sCpuThreads(),
                        HardwareInfo::sRamKB());
 
+    // setup UI scaling and theme
     OS_FONT = QApplication::font();
-    eSizesUI::font.setEvaluator([]() {
+    eSizesUI::font.setEvaluator([&settings]() {
         const auto fm = QFontMetrics(OS_FONT);
+        if (!settings.fDefaultInterfaceScaling) {
+            const qreal scaling = qBound(0.5, settings.fInterfaceScaling, 1.5);
+            return qRound(fm.height() * scaling);
+        }
         return fm.height();
     });
     eSizesUI::widget.setEvaluator([]() {
@@ -205,67 +200,35 @@ int main(int argc, char *argv[])
         generateAlphaMesh(alphaMesh, size/2);
     });
     ALPHA_MESH_PIX = &alphaMesh;
-    std::cout << "Generated Alpha Mesh" << std::endl;
 
     ThemeSupport::setupTheme(eSizesUI::widget);
 
+    // check permissions
+    AppSupport::checkPerms(isRenderer);
+
+    // portable
     AppSupport::handlePortableFirstRun();
+
+    // check XDG integration
 #ifdef Q_OS_LINUX
-    if (AppSupport::isAppPortable()) {
-        if (!AppSupport::hasXDGDesktopIntegration()) {
-            QString appPath("friction");
-            const QString appimage = AppSupport::getAppImagePath();
-            if (!appimage.isEmpty()) { appPath = appimage.split("/").takeLast(); }
-            const auto ask = QMessageBox::question(nullptr,
-                                                   QObject::tr("Setup Desktop Integration"),
-                                                   QObject::tr("Would you like to setup desktop integration?"
-                                                               " This will add Friction to your application launcher"
-                                                               " and add required mime types.<br><br>"
-                                                               "You also can manage the desktop integration with:"
-                                                               "<br><br><code>%1 --xdg-install</code>"
-                                                               "<br><code>%1 --xdg-remove</code>").arg(appPath));
-            if (ask == QMessageBox::Yes) {
-                if (!AppSupport::setupXDGDesktopIntegration()) {
-                    QMessageBox::warning(nullptr,
-                                         QObject::tr("Desktop Integration Failed"),
-                                         QObject::tr("Failed to install the required files for desktop integration,"
-                                                     " please check your permissions."));
-                }
-            } else {
-                AppSupport::setSettings("portable", "ignoreXDG", true);
-            }
-        }
-    }
+    AppSupport::initXDGDesktop(isRenderer);
 #endif
 
-    //#ifdef QT_DEBUG
-    //    const qint64 pId = QCoreApplication::applicationPid();
-    //    QProcess * const process = new QProcess(&w);
-    //    process->start("prlimit --data=3000000000 --pid " + QString::number(pId));
-    //#endif
+    splash.raise();
+    splash.showMessage(QObject::tr("Initializing ..."),
+                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
 
-    try {
-        settings.loadFromFile();
-        std::cout << "Loaded settings" << std::endl;
-    } catch(const std::exception& e) {
-        gPrintExceptionCritical(e);
-    }
+    // load settings
+    try { settings.loadFromFile(); }
+    catch(const std::exception& e) { gPrintExceptionCritical(e); }
 
-    // check permissions
-    const auto perms = AppSupport::hasWriteAccess();
-    if (!perms.second) {
-        QMessageBox::warning(nullptr,
-                             QObject::tr("Permission issue"),
-                             QObject::tr("Friction needs read/write access to:<br><br>- %1").arg(perms.first.join("<br>- ")));
-    }
-
+    // init handlers
     eFilterSettings filterSettings;
-
     eWidgetsImpl widImpl;
     ImportHandler importHandler;
-
     MemoryHandler memoryHandler;
     TaskScheduler taskScheduler;
+
     QObject::connect(&memoryHandler, &MemoryHandler::enteredCriticalState,
                      &taskScheduler, &TaskScheduler::enterCriticalMemoryState);
     QObject::connect(&memoryHandler, &MemoryHandler::finishedCriticalState,
@@ -291,6 +254,10 @@ int main(int argc, char *argv[])
     //effectsLoader.iniCustomRasterEffects();
     //std::cout << "Custom raster effects initialized" << std::endl;
 
+    // init shaders
+    splash.raise();
+    splash.showMessage(QObject::tr("Loading Shaders ..."),
+                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
     try {
         effectsLoader.iniShaderEffects();
     } catch(const std::exception& e) {
@@ -299,41 +266,49 @@ int main(int argc, char *argv[])
     }
     QObject::connect(&effectsLoader, &EffectsLoader::programChanged,
     [&document](ShaderEffectProgram * program) {
-        for(const auto& scene : document.fScenes)
+        for (const auto& scene : document.fScenes) {
             scene->updateIfUsesProgram(program);
+        }
         document.actionFinished();
     });
-    std::cout << "Shader effects initialized" << std::endl;
 
     // disabled for now
     //effectsLoader.iniCustomBoxes();
     //std::cout << "Custom objects initialized" << std::endl;
 
+    // init audio
+    splash.raise();
+    splash.showMessage(QObject::tr("Loading Audio ..."),
+                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
     eSoundSettings soundSettings;
     AudioHandler audioHandler;
 
-    try {
-        audioHandler.initializeAudio(soundSettings.sData(),
-                                     AppSupport::getSettings(QString::fromUtf8("audio"),
-                                                             QString::fromUtf8("output")).toString());
-    } catch(const std::exception& e) {
-        gPrintExceptionCritical(e);
+    if (!isRenderer) {
+        try {
+            audioHandler.initializeAudio(soundSettings.sData(),
+                                         AppSupport::getSettings(QString::fromUtf8("audio"),
+                                                                 QString::fromUtf8("output")).toString());
+        } catch(const std::exception& e) {
+            gPrintExceptionCritical(e);
+        }
     }
-    std::cout << "Audio initialized" << std::endl;
 
+    // init encoder
+    splash.raise();
+    splash.showMessage(QObject::tr("Loading Encoder ..."),
+                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
     const auto videoEncoder = enve::make_shared<VideoEncoder>();
     RenderHandler renderHandler(document, audioHandler,
                                 *videoEncoder, memoryHandler);
-    std::cout << "Render handler initialized" << std::endl;
 
-#ifndef QT_DEBUG
-    if (avformat_version() >= 3812708) {
-        QMessageBox::critical(nullptr,
-                              QObject::tr("Unsupported FFmpeg version"),
-                              QObject::tr("Friction is built against an unsupported FFmpeg version. Use at own risk and don't report any issues upstream."));
-    }
-#endif
+    // check for ffmpeg version
+    AppSupport::checkFFmpeg(isRenderer);
 
+    splash.raise();
+    splash.showMessage(QObject::tr("Loading User Interface ..."),
+                       Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+
+    // load UI
     const QString openProject = argc > 1 ? argv[1] : QString();
     MainWindow w(document,
                  actions,
@@ -341,6 +316,7 @@ int main(int argc, char *argv[])
                  renderHandler,
                  openProject);
     w.show();
+    splash.finish(&w);
 
     try {
         return app.exec();

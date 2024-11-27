@@ -236,10 +236,11 @@ void Canvas::renderSk(SkCanvas* const canvas,
     mDrawnSinceQue = true;
     SkPaint paint;
     paint.setStyle(SkPaint::kFill_Style);
+    const qreal pixelRatio = qApp->devicePixelRatio();
     const SkRect canvasRect = SkRect::MakeWH(mWidth, mHeight);
     const qreal zoom = viewTrans.m11();
     const auto filter = eFilterSettings::sDisplay(zoom, mResolution);
-    const qreal qInvZoom = 1/viewTrans.m11();
+    const qreal qInvZoom = 1/viewTrans.m11() * pixelRatio;
     const float invZoom = toSkScalar(qInvZoom);
     const SkMatrix skViewTrans = toSkMatrix(viewTrans);
     const QColor bgColor = mBackgroundColor->getColor();
@@ -432,6 +433,7 @@ void Canvas::setFrameRange(const FrameRange &range)
 void Canvas::setFrameIn(const bool enabled,
                         const int frameIn)
 {
+    if (enabled && mOut.enabled && frameIn >= mOut.frame) { return; }
     mIn.enabled = enabled;
     mIn.frame = frameIn;
     emit requestUpdate();
@@ -440,17 +442,18 @@ void Canvas::setFrameIn(const bool enabled,
 void Canvas::setFrameOut(const bool enabled,
                          const int frameOut)
 {
+    if (enabled && mIn.enabled && frameOut <= mIn.frame) { return; }
     mOut.enabled = enabled;
     mOut.frame = frameOut;
     emit requestUpdate();
 }
 
-const FrameMarker Canvas::getFrameIn()
+const FrameMarker Canvas::getFrameIn() const
 {
     return mIn;
 }
 
-const FrameMarker Canvas::getFrameOut()
+const FrameMarker Canvas::getFrameOut() const
 {
     return mOut;
 }
@@ -458,14 +461,32 @@ const FrameMarker Canvas::getFrameOut()
 void Canvas::setMarker(const QString &title,
                        const int frame)
 {
-    if (hasMarker(frame, true)) { return; }
-    mMarkers.push_back({title.isEmpty() ? QString::number(mMarkers.size()) : title, true, frame});
+    if (hasMarker(frame)) {
+        if (!hasMarkerEnabled(frame)) {
+            setMarkerEnabled(frame, true);
+        } else { removeMarker(frame); }
+        return;
+    }
+    mMarkers.push_back({title.isEmpty() ?
+                            QString::number(mMarkers.size()) :
+                            title,
+                        true, frame});
     emit requestUpdate();
 }
 
 void Canvas::setMarker(const int frame)
 {
     setMarker(QString::number(mMarkers.size()), frame);
+    emit markersChanged();
+}
+
+void Canvas::setMarkerEnabled(const int frame,
+                              const bool &enabled)
+{
+    const int index = getMarkerIndex(frame);
+    if (index < 0) { return; }
+    mMarkers.at(index).enabled = enabled;
+    updateMarkers();
 }
 
 bool Canvas::hasMarker(const int frame,
@@ -485,12 +506,70 @@ bool Canvas::hasMarker(const int frame,
     return false;
 }
 
+bool Canvas::hasMarkerIn(const int frame)
+{
+    return mIn.enabled && mIn.frame == frame;
+}
+
+bool Canvas::hasMarkerOut(const int frame)
+{
+    return mOut.enabled && mOut.frame == frame;
+}
+
+bool Canvas::hasMarkerEnabled(const int frame)
+{
+    for (const auto &mark : mMarkers) {
+        if (mark.frame == frame) { return mark.enabled; }
+    }
+    return false;
+}
+
+bool Canvas::removeMarker(const int frame)
+{
+    return hasMarker(frame, true);
+}
+
+bool Canvas::editMarker(const int frame,
+                        const QString &title,
+                        const bool enabled)
+{
+    int index = getMarkerIndex(frame);
+    if (index >= 0) {
+        mMarkers.at(index).title = title;
+        mMarkers.at(index).enabled = enabled;
+        emit newFrameRange(mRange);
+        return true;
+    }
+    return false;
+}
+
+void Canvas::moveMarkerFrame(const int markerFrame,
+                             const int newFrame)
+{
+    if (markerFrame == newFrame) { return; }
+    qDebug() << "moveMarkerFrame" << markerFrame << newFrame;
+    int index = getMarkerIndex(markerFrame);
+    if (index >= 0) {
+        mMarkers.at(index).frame = newFrame;
+        emit newFrameRange(mRange);
+        emit markersChanged();
+    }
+}
+
 const QString Canvas::getMarkerText(int frame)
 {
     for (const auto &mark: mMarkers) {
         if (mark.frame == frame) { return mark.title; }
     }
     return QString();
+}
+
+int Canvas::getMarkerIndex(const int frame)
+{
+    for (size_t i = 0; i < mMarkers.size(); i++) {
+        if (mMarkers.at(i).frame == frame) { return i; }
+    }
+    return -1;
 }
 
 const std::vector<FrameMarker> Canvas::getMarkers()
@@ -501,6 +580,13 @@ const std::vector<FrameMarker> Canvas::getMarkers()
 void Canvas::clearMarkers()
 {
     mMarkers.clear();
+    emit markersChanged();
+    emit requestUpdate();
+}
+
+void Canvas::updateMarkers()
+{
+    emit newFrameRange(mRange);
     emit requestUpdate();
 }
 
@@ -711,6 +797,11 @@ void Canvas::updatePivot()
 
 void Canvas::setCanvasMode(const CanvasMode mode)
 {
+    if (mCurrentMode == CanvasMode::pickFillStroke ||
+        mCurrentMode == CanvasMode::pickFillStrokeEvent) {
+        emit currentPickedColor(QColor());
+        emit currentHoverColor(QColor());
+    }
     mCurrentMode = mode;
     mSelecting = false;
     mStylusDrawing = false;
@@ -783,10 +874,20 @@ bool Canvas::handleTransormationInputKeyEvent(const eKeyEvent &e)
 
 void Canvas::deleteAction()
 {
-    if (mCurrentMode == CanvasMode::pointTransform) {
+    switch(mCurrentMode) {
+    case CanvasMode::pointTransform:
         removeSelectedPointsAndClearList();
-    } else if (mCurrentMode == CanvasMode::boxTransform) {
+        break;
+    case CanvasMode::boxTransform:
+    case CanvasMode::circleCreate:
+    case CanvasMode::rectCreate:
+    case CanvasMode::textCreate:
+    case CanvasMode::nullCreate:
+    case CanvasMode::drawPath:
+    case CanvasMode::pathCreate:
         removeSelectedBoxesAndClearList();
+        break;
+    default:;
     }
 }
 
@@ -816,10 +917,10 @@ void Canvas::splitAction()
 {
     if (mSelectedBoxes.isEmpty() || mSelectedBoxes.count() > 1) { return; }
 
-    const auto vidBox = enve_cast<VideoBox*>(mSelectedBoxes.getList().at(0));
-    if (!vidBox) { return; }
+    const auto bBox = enve_cast<BoundingBox*>(mSelectedBoxes.getList().at(0));
+    if (!bBox) { return; }
 
-    const auto dRect = vidBox->getDurationRectangle();
+    const auto dRect = bBox->getDurationRectangle();
     if (!dRect) { return; }
 
     const auto frame = getCurrentFrame();
@@ -844,14 +945,14 @@ void Canvas::splitAction()
     dRect->setValues({values.fShift, offset, values.fMax});
     cRect->setValues({values.fShift, values.fMin, offset});
 
-    for (int i = box->getZIndex(); i < vidBox->getZIndex(); i = box->getZIndex()) {
+    for (int i = box->getZIndex(); i < bBox->getZIndex(); i = box->getZIndex()) {
         box->moveDown();
     }
 
     mSelectedBoxes.removeObj(box);
     box->setSelected(false);
-    mSelectedBoxes.addObj(vidBox);
-    vidBox->setSelected(true);
+    mSelectedBoxes.addObj(bBox);
+    bBox->setSelected(true);
 
     mDocument.actionFinished();
 }
@@ -1248,7 +1349,9 @@ void Canvas::writeMarkers(eWriteStream &dst) const
     QStringList markers;
     for (auto &marker: mMarkers) {
         QString title = marker.title.isEmpty() ? tr("Marker") : marker.title;
-        markers << QString("%1:%2").arg(title, QString::number(marker.frame));
+        markers << QString("%1:%2:%3").arg(title,
+                                           QString::number(marker.frame),
+                                           QString::number(marker.enabled ? 1 : 0));
     }
     dst << markers.join(",").toUtf8();
 }
@@ -1265,11 +1368,13 @@ void Canvas::readMarkers(eReadStream &src)
     const auto markers = QString::fromUtf8(markerData).split(",");
     for (auto &marker: markers) {
         const auto content = marker.split(":");
-        if (content.size() != 2) { continue; }
-        QString title = content.at(0).isEmpty() ? tr("Marker") : content.at(0);
-        int frame = content.at(1).toInt();
-        if (hasMarker(frame)) { continue; }
-        mMarkers.push_back({title, true, frame});
+        if (content.size() >= 2) {
+            const QString title = content.at(0).isEmpty() ? tr("Marker") : content.at(0);
+            const bool enabled = content.size() > 2 ? content.at(2).toInt() : true;
+            const int frame = content.at(1).toInt();
+            if (hasMarker(frame)) { continue; }
+            mMarkers.push_back({title.simplified(), enabled, frame});
+        }
     }
 }
 
@@ -1399,6 +1504,16 @@ SceneBoundGradient *Canvas::getGradientWithDocumentId(const int id) const
 {
     for (const auto &grad : mGradients) {
         if (grad->getDocumentId() == id) { return grad.get(); }
+    }
+    return nullptr;
+}
+
+SceneBoundGradient *Canvas::getGradientWithDocumentSceneId(const int id) const
+{
+    for (const auto &scene : mDocument.fScenes) {
+        for (const auto &grad : scene->mGradients) {
+            if (grad->getDocumentId() == id) { return grad.get(); }
+        }
     }
     return nullptr;
 }

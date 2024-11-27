@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ void TransformEffect::prp_setupTreeViewMenu(PropertyMenu * const menu) {
                     DynamicComplexAnimatorBase<TransformEffect>>();
             parent->removeChild(prop->template ref<TransformEffect>());
         };
-        menu->addPlainAction("Delete", dOp);
+        menu->addPlainAction(QIcon::fromTheme("trash"), tr("Delete"), dOp);
     }
 
     menu->addSeparator();

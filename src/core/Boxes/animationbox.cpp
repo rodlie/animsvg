@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -94,6 +94,22 @@ void AnimationBox::animationDataChanged() {
         mFrameRemapping->setFrameCount(frameCount);
     }
     prp_afterWholeInfluenceRangeChanged();
+}
+
+void AnimationBox::setStretch(const qreal stretch)
+{
+    {
+        prp_pushUndoRedoName(tr("Stretch"));
+        UndoRedo ur;
+        const auto oldValue = mStretch;
+        const auto newValue = stretch;
+        ur.fUndo = [this, oldValue]() { setStretch(oldValue); };
+        ur.fRedo = [this, newValue]() { setStretch(newValue); };
+        prp_addUndoRedo(ur);
+    }
+    mStretch = stretch;
+    prp_afterWholeInfluenceRangeChanged();
+    updateAnimationRange();
 }
 
 bool AnimationBox::shouldScheduleUpdate() {
@@ -209,29 +225,27 @@ private:
     int mI = 0;
 };
 
-void AnimationBox::setupCanvasMenu(PropertyMenu * const menu) {
-    if(menu->hasActionsForType<AnimationBox>()) return;
+void AnimationBox::setupCanvasMenu(PropertyMenu * const menu)
+{
+    if (menu->hasActionsForType<AnimationBox>()) { return; }
     menu->addedActionsForType<AnimationBox>();
+
     const auto widget = menu->getParentWidget();
 
     const PropertyMenu::PlainSelectedOp<AnimationBox> reloadOp =
-    [](AnimationBox * box) {
-        box->reload();
-    };
-    menu->addPlainAction("Reload", reloadOp);
+    [](AnimationBox * box) { box->reload(); };
+    menu->addPlainAction(QIcon::fromTheme("loop"), tr("Reload"), reloadOp);
 
     const PropertyMenu::PlainSelectedOp<AnimationBox> setSrcOp =
-    [](AnimationBox * box) {
-        box->changeSourceFile();
-    };
-    menu->addPlainAction("Set Source File...", setSrcOp);
+    [](AnimationBox * box) { box->changeSourceFile(); };
+    menu->addPlainAction(QIcon::fromTheme("document-new"), tr("Set Source File"), setSrcOp);
 
     const PropertyMenu::CheckSelectedOp<AnimationBox> remapOp =
     [](AnimationBox * box, bool checked) {
-        if(checked) box->enableFrameRemappingAction();
-        else box->disableFrameRemappingAction();
+        if (checked) { box->enableFrameRemappingAction(); }
+        else { box->disableFrameRemappingAction(); }
     };
-    menu->addCheckableAction("Frame Remapping",
+    menu->addCheckableAction(tr("Frame Remapping"),
                              mFrameRemapping->enabled(), remapOp);
 
     const PropertyMenu::PlainSelectedOp<AnimationBox> stretchOp =
@@ -242,24 +256,12 @@ void AnimationBox::setupCanvasMenu(PropertyMenu * const menu) {
                                                  "Stretch:",
                                                  qRound(box->getStretch()*100),
                                                  -1000, 1000, 1, &ok);
-        if(!ok) return;
+        if (!ok) { return; }
         box->setStretch(stretch*0.01);
     };
-    menu->addPlainAction("Stretch...", stretchOp);
+    menu->addPlainAction(QIcon::fromTheme("width"), tr("Stretch"), stretchOp);
 
-    /*menu->addSeparator();
-    const PropertyMenu::PlainSelectedOp<AnimationBox> createPaintObj =
-    [](AnimationBox * box) {
-        int firstAbsFrame;
-        int lastAbsFrame;
-        int increment;
-        const auto& instance = DialogsInterface::instance();
-        const bool ok = instance.execAnimationToPaint(
-                    box, firstAbsFrame, lastAbsFrame, increment);
-        if(ok) box->createPaintObject(firstAbsFrame, lastAbsFrame, increment);
-    };
-    menu->addPlainAction("Create Paint Object...", createPaintObj);*/
-
+    menu->addSeparator();
     BoundingBox::setupCanvasMenu(menu);
 }
 

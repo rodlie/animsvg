@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,19 +26,20 @@
 #include "welcomedialog.h"
 
 #include <QVBoxLayout>
-#include <QPushButton>
 #include <QPainter>
 #include <QLabel>
 
 #include "appsupport.h"
 #include "themesupport.h"
 #include "Private/esettings.h"
+#include "GUI/global.h"
 
 WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
                              const std::function<void()> &newFunc,
                              const std::function<void()> &openFunc,
                              QWidget * const parent)
     : QWidget(parent)
+    , mRecentButton(nullptr)
 {
     setObjectName(QString::fromUtf8("welcomeDialog"));
 
@@ -70,33 +71,50 @@ WelcomeDialog::WelcomeDialog(QMenu *recentMenu,
     const auto buttonLay = new QHBoxLayout(buttonWid);
     buttonLay->setMargin(0);
 
-    const auto newButton = new QPushButton(tr("New"), this);
+    const auto newButton = new QPushButton(QIcon::fromTheme("file_blank"),
+                                           tr("New"),
+                                           this);
+    newButton->setFocusPolicy(Qt::NoFocus);
     newButton->setObjectName("WelcomeButton");
     newButton->setSizePolicy(QSizePolicy::Preferred,
                              QSizePolicy::Expanding);
     connect(newButton, &QPushButton::released, newFunc);
 
-    const auto openButton = new QPushButton(this);
+    const auto openButton = new QPushButton(QIcon::fromTheme("file_folder"),
+                                            tr("Open"),
+                                            this);
+    openButton->setFocusPolicy(Qt::NoFocus);
     openButton->setObjectName("WelcomeButton");
-    openButton->setText(tr("Open"));
     openButton->setSizePolicy(QSizePolicy::Preferred,
                               QSizePolicy::Expanding);
     connect(openButton, &QPushButton::released, openFunc);
 
-    const auto recentButton = new QPushButton(tr("Open Recent"), this);
-    recentButton->setSizePolicy(QSizePolicy::Preferred,
-                                QSizePolicy::Preferred);
-    recentButton->setContentsMargins(0, 0, 0, 0);
-    recentButton->setObjectName("WelcomeRecentButton");
-    recentButton->setMenu(recentMenu);
+    mRecentButton = new QPushButton(QIcon::fromTheme("file_folder"),
+                                    tr("Recent Files"),
+                                    this);
+    mRecentButton->setFocusPolicy(Qt::NoFocus);
+    mRecentButton->setSizePolicy(QSizePolicy::Preferred,
+                                 QSizePolicy::Preferred);
+    mRecentButton->setContentsMargins(0, 0, 0, 0);
+    mRecentButton->setObjectName("WelcomeRecentButton");
+    mRecentButton->setMenu(recentMenu);
+    mRecentButton->setVisible(mRecentButton->menu()->children().count() > 1);
 
     thisLay->addWidget(mainWid, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     sceneLay->addWidget(logoLabel);
     sceneLay->addWidget(buttonWid);
-    sceneLay->addWidget(recentButton);
+    sceneLay->addWidget(mRecentButton);
     buttonLay->addWidget(newButton);
     buttonLay->addWidget(openButton);
     mainLay->addWidget(sceneWid);
+
+    eSizesUI::widget.add(newButton, [this,
+                                     newButton,
+                                     openButton](const int size) {
+        newButton->setIconSize({size, size});
+        openButton->setIconSize({size, size});
+        mRecentButton->setIconSize({size, size});
+    });
 }
 
 void WelcomeDialog::paintEvent(QPaintEvent *)
@@ -104,4 +122,10 @@ void WelcomeDialog::paintEvent(QPaintEvent *)
     QPainter p(this);
     p.fillRect(0, 0, width(), height(), Qt::black);
     p.end();
+}
+
+void WelcomeDialog::showEvent(QShowEvent *e)
+{
+    mRecentButton->setVisible(mRecentButton->menu()->children().count() > 1);
+    QWidget::showEvent(e);
 }

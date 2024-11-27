@@ -2,7 +2,7 @@
 #
 # Friction - https://friction.graphics
 #
-# Copyright (c) Friction contributors
+# Copyright (c) Ole-André Rodlie and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ DIST=${DIST:-"/mnt"}
 MKJOBS=${MKJOBS:-32}
 SRC_SUFFIX=tar.xz
 
-QT_V=5.15.14
+QT_V=5.15.15
 QSCINTILLA_V=2.14.1
 PELF_V=0.17.0
 CMAKE_V=3.26.3
@@ -180,7 +180,13 @@ if [ ! -f "${SDK}/lib/pkgconfig/xkbcommon.pc" ]; then
     rm -rf ${XKB_SRC} || true
     tar xf ${DIST}/x11/${XKB_SRC}.${SRC_SUFFIX}
     cd ${XKB_SRC}
-    ./configure ${DEFAULT_CONFIGURE} --disable-docs
+    ./configure ${DEFAULT_CONFIGURE} \
+    --disable-docs \
+    --with-xkb-config-root=/usr/share/X11/xkb \
+    --with-x-locale-root=/usr/share/X11/locale \
+    --with-default-rules=evdev \
+    --with-default-model=pc105 \
+    --with-default-layout=us
     make -j${MKJOBS}
     make install
 fi # libxkbcommon
@@ -198,6 +204,28 @@ if [ ! -f "${CMAKE_BIN}" ]; then
 fi # cmake
 
 # qt
+#    -no-feature-bearermanagement \
+#    -no-feature-dnslookup \
+#    -no-feature-dtls \
+#    -no-feature-ftp \
+#    -no-feature-gssapi \
+#    -no-feature-http \
+#    -no-feature-localserver \
+#    -no-feature-netlistmgr \
+#    -no-feature-networkdiskcache \
+#    -no-feature-networkinterface \
+#    -no-feature-networkproxy \
+#    -no-feature-qml-network \
+#    -no-feature-qml-xml-http-request \
+#    -no-feature-qml-animation \
+#    -no-feature-socks5 \
+#    -no-feature-sspi \
+#    -no-feature-udpsocket \
+#    -no-feature-printdialog \
+#    -no-feature-printer \
+#    -no-feature-printpreviewdialog \
+#    -no-feature-printpreviewwidget \
+#    -no-feature-pdf \
 if [ ! -f "${QMAKE_BIN}" ]; then
     cd ${SRC}
     QT_SRC="qt-everywhere-src-${QT_V}"
@@ -305,6 +333,9 @@ if [ ! -f "${SDK}/lib/libqscintilla2_friction_qt5.so" ]; then
     tar xf ${DIST}/qt/${QSC_SRC}.tar.gz
     cd ${QSC_SRC}/src
     sed -i 's/qscintilla2_qt/qscintilla2_friction_qt/g' qscintilla.pro
+    sed -i 's#!ios:QT += printsupport##' qscintilla.pro
+    sed -i 's#!ios:HEADERS += ./Qsci/qsciprinter.h##' qscintilla.pro
+    sed -i 's#!ios:SOURCES += qsciprinter.cpp##' qscintilla.pro
     ${SDK}/bin/qmake CONFIG+=release
     make -j${MKJOBS}
     cp -a libqscintilla2_friction_qt5* ${SDK}/lib/
