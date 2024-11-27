@@ -183,6 +183,25 @@ void FollowPathEffect::applyEffect(const qreal relFrame,
     posY += posYChange; //p1.y()*infl;
 }
 
+QDomNode findNodeRecursive(const QDomNode &node, const std::function<bool(const QDomNode&)> &predicate) {
+    // Verificar si el nodo actual cumple con el criterio
+    if (predicate(node)) {
+        return node;
+    }
+
+    // Recorrer los hijos del nodo actual
+    QDomNodeList children = node.childNodes();
+    for (int i = 0; i < children.size(); ++i) {
+        QDomNode found = findNodeRecursive(children.at(i), predicate);
+        if (!found.isNull()) {
+            return found; // Retornar el nodo si se encuentra
+        }
+    }
+
+    // Retornar un nodo nulo si no se encuentra
+    return QDomNode();
+}
+
 QDomElement FollowPathEffect::saveFollowPathSVG(SvgExporter &exp,
                                                 const FrameRange &visRange,
                                                 QDomElement &childElement,
@@ -207,5 +226,37 @@ QDomElement FollowPathEffect::saveFollowPathSVG(SvgExporter &exp,
     const auto transformed = transform->saveSVG(exp,
                                                 visRange,
                                                 parentElement);
-    return transformed;
+    
+    // Make a mutable copy  of `transformed`
+    QDomElement mutableTransformed = transformed;
+
+    // Recursive search of <animateMotion> node
+    QDomNode animateMotionNode = findNodeRecursive(mutableTransformed, [](const QDomNode &node) {
+        return node.isElement() && node.toElement().tagName() == "animateMotion";
+    });
+
+    // Recursive search of comment `<!--wrapper-end-->` (added in transformeffectcollection.cpp)
+    QDomNode wrapperEndComment = findNodeRecursive(mutableTransformed, [](const QDomNode &node) {
+        return node.isComment() && node.nodeValue().trimmed() == "wrapper-end";
+    });
+
+    if (!animateMotionNode.isNull() && !wrapperEndComment.isNull()) {
+        // Get nodes parents
+        QDomNode animateMotionParent = animateMotionNode.parentNode();
+        QDomNode commentParent = wrapperEndComment.parentNode();
+
+        // Check that parents aren't null
+        if (!animateMotionParent.isNull() && !commentParent.isNull()) {
+            // Detete animateMotionNode from his parent
+            animateMotionParent.removeChild(animateMotionNode);
+
+            // Insert animateMotionNode right before wrapperEndComment
+            commentParent.insertBefore(animateMotionNode, wrapperEndComment);
+
+            // Delete `<!--wrapper-end-->` comment
+            commentParent.removeChild(wrapperEndComment);
+        }
+    }
+
+    return mutableTransformed;
 }

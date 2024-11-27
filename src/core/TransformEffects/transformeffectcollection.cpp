@@ -107,7 +107,31 @@ QDomElement TransformEffectCollection::saveEffectsSVG(SvgExporter &exp,
                                                       QDomElement &childElement,
                                                       const QDomElement &parentElement) const
 {
-    QDomElement result = parentElement;
+
+    // Create a copy no constant of parentElement
+    QDomElement mutableParent = parentElement;
+
+    // Get the main doc
+    QDomDocument doc = mutableParent.ownerDocument();
+
+    // Create a new "wrapper" group
+    QDomElement wrapperGroup = doc.createElement("g");
+    wrapperGroup.setAttribute("class", "wrapper");
+
+    // Insert the wrapper before parentElement
+    QDomNode parentNode = mutableParent.parentNode();
+    if (!parentNode.isNull()) {
+        parentNode.insertBefore(wrapperGroup, mutableParent);
+    }
+
+    // Move parentElement inside the wrapper
+    wrapperGroup.appendChild(mutableParent);
+
+    // Add a comment to parentElement to mark the point where the 'animationMotion' must be placed (check followpatheffect.cpp file to see the replacement method)
+    auto comment = wrapperGroup.ownerDocument().createComment("wrapper-end");
+    wrapperGroup.appendChild(comment);
+
+    QDomElement result = wrapperGroup;
     const auto& children = ca_getChildren();
     for (const auto& effect : children) {
         if (const auto path = enve_cast<FollowPathEffect*>(effect.get())) {
