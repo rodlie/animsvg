@@ -25,6 +25,7 @@
 
 #include "Boxes/boundingbox.h"
 #include "Boxes/containerbox.h"
+#include "TransformEffects/followpatheffect.h"
 #include "canvas.h"
 #include "swt_abstraction.h"
 #include "Timeline/durationrectangle.h"
@@ -356,6 +357,23 @@ void BoundingBox::applyTransformEffects(
 
 bool BoundingBox::hasTransformEffects() const {
     return mTransformEffectCollection->ca_hasChildren();
+}
+
+const QStringList BoundingBox::checkTransformEffectsForSVGSupport()
+{
+    QStringList result;
+    const int totalEffects = mTransformEffectCollection->ca_getNumberOfChildren();
+    for (int i = 0; i < totalEffects; ++i) {
+        const auto effect = enve_cast<TransformEffect*>(mTransformEffectCollection->getChild(i));
+        if (!effect) { continue; }
+        if (!effect->isVisible()) { continue; }
+        bool isSafeForSVG = false;
+        if (const auto followPath = enve_cast<FollowPathEffect*>(effect)) {
+            isSafeForSVG = true;
+        }
+        if (!isSafeForSVG) { result.append(effect->prp_getName()); }
+    }
+    return result;
 }
 
 ContainerBox *BoundingBox::getFirstParentLayer() const {

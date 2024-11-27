@@ -435,6 +435,7 @@ public:
                                QMatrix& postTransform);
 
     bool hasTransformEffects() const;
+    const QStringList checkTransformEffectsForSVGSupport();
 
     ContainerBox* getFirstParentLayer() const;
 
