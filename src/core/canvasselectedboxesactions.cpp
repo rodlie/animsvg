@@ -700,17 +700,20 @@ void Canvas::createLinkBoxForSelected() {
         mCurrentContainer->addContained(selectedBox->createLink(false));
 }
 
-SmartVectorPath *Canvas::getPathResultingFromOperation(const SkPathOp& pathOp) {
+SmartVectorPath *Canvas::getPathResultingFromOperation(const SkPathOp& pathOp)
+{
     const auto newPath = enve::make_shared<SmartVectorPath>();
     newPath->planCenterPivotPosition();
     SkOpBuilder builder;
     bool first = true;
-    for(const auto &box : mSelectedBoxes) {
-        if(const auto pBox = enve_cast<PathBox*>(box)) {
+    const QList<BoundingBox*> boxes(mSelectedBoxes.rbegin(),
+                                    mSelectedBoxes.rend());
+    for (const auto &box : boxes) {
+        if (const auto pBox = enve_cast<PathBox*>(box)) {
             SkPath boxPath = pBox->getRelativePath();
             const QMatrix boxTrans = box->getRelativeTransformAtCurrentFrame();
             boxPath.transform(toSkMatrix(boxTrans));
-            if(first) {
+            if (first) {
                 builder.add(boxPath, SkPathOp::kUnion_SkPathOp);
                 first = false;
                 pBox->copyDataToOperationResult(newPath.get());
@@ -721,7 +724,7 @@ SmartVectorPath *Canvas::getPathResultingFromOperation(const SkPathOp& pathOp) {
     }
     SkPath resultPath;
     builder.resolve(&resultPath);
-    if(resultPath.isEmpty()) {
+    if (resultPath.isEmpty()) {
         return getPathResultingFromCombine();
     } else {
         newPath->loadSkPath(resultPath);
