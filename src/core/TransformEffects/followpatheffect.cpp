@@ -188,10 +188,11 @@ QDomElement FollowPathEffect::saveFollowPathSVG(SvgExporter &exp,
                                                 QDomElement &childElement,
                                                 QDomElement &parentElement) const
 {
+    Q_UNUSED(childElement)
     const auto target = targetProperty()->getTarget();
     if (!target) { return parentElement; }
     mComplete->saveQrealSVG(exp,
-                            childElement,
+                            parentElement,
                             visRange,
                             "transform",
                             1.,
