@@ -522,10 +522,13 @@ const QString Canvas::checkForUnsupportedBoxSVG(BoundingBox * const box)
     QString result;
     if (!box) { return result; }
     qDebug() << "check" << box->prp_getName() << "for SVG support";
-    if (box->hasTransformEffects()) {
-        result.append(QString("- %1 => %2 : %3\n").arg(prp_getName(),
-                                                       box->prp_getName(),
-                                                       tr("Transform effects are unsupported")));
+
+    const auto transformEffects = box->checkTransformEffectsForSVGSupport();
+    if (transformEffects.size() > 0) {
+        result.append(QString("- %1 => %2 : %3 %4\n").arg(prp_getName(),
+                                                          box->prp_getName(),
+                                                          transformEffects.join(", "),
+                                                          tr("is unsupported")));
     }
     if (box->hasEnabledBlendEffects()) {
         result.append(QString("- %1 => %2 : %3\n").arg(prp_getName(),
@@ -700,17 +703,20 @@ void Canvas::createLinkBoxForSelected() {
         mCurrentContainer->addContained(selectedBox->createLink(false));
 }
 
-SmartVectorPath *Canvas::getPathResultingFromOperation(const SkPathOp& pathOp) {
+SmartVectorPath *Canvas::getPathResultingFromOperation(const SkPathOp& pathOp)
+{
     const auto newPath = enve::make_shared<SmartVectorPath>();
     newPath->planCenterPivotPosition();
     SkOpBuilder builder;
     bool first = true;
-    for(const auto &box : mSelectedBoxes) {
-        if(const auto pBox = enve_cast<PathBox*>(box)) {
+    const QList<BoundingBox*> boxes(mSelectedBoxes.rbegin(),
+                                    mSelectedBoxes.rend());
+    for (const auto &box : boxes) {
+        if (const auto pBox = enve_cast<PathBox*>(box)) {
             SkPath boxPath = pBox->getRelativePath();
             const QMatrix boxTrans = box->getRelativeTransformAtCurrentFrame();
             boxPath.transform(toSkMatrix(boxTrans));
-            if(first) {
+            if (first) {
                 builder.add(boxPath, SkPathOp::kUnion_SkPathOp);
                 first = false;
                 pBox->copyDataToOperationResult(newPath.get());
@@ -721,7 +727,7 @@ SmartVectorPath *Canvas::getPathResultingFromOperation(const SkPathOp& pathOp) {
     }
     SkPath resultPath;
     builder.resolve(&resultPath);
-    if(resultPath.isEmpty()) {
+    if (resultPath.isEmpty()) {
         return getPathResultingFromCombine();
     } else {
         newPath->loadSkPath(resultPath);
