@@ -30,7 +30,7 @@
 
 class NullObjectType : public ComboBoxProperty {
     enum class Type {
-        square, circle, triangle
+        square, circle, triangle, crosshair
     };
 public:
     NullObjectType(ColorAnimator* const color,
@@ -53,11 +53,14 @@ NullObjectType::NullObjectType(ColorAnimator* const color,
                                QrealAnimator* const size) :
     ComboBoxProperty("type", QStringList()  << "square" <<
                                                "circle" <<
-                                               "triangle"),
+                                               "triangle" <<
+                                               "crosshair"),
     mColor(color), mSize(size) {
     prp_setDrawingOnCanvasEnabled(true);
 
     connect(this, &ComboBoxProperty::prp_currentFrameChanged,
+            this, &NullObjectType::updatePath);
+    connect(this, &ComboBoxProperty::prp_pathChanged,
             this, &NullObjectType::updatePath);
     connect(mSize, &QrealAnimator::prp_currentFrameChanged,
             this, &NullObjectType::updatePath);
@@ -113,6 +116,24 @@ void NullObjectType::updatePath() {
         mCurrentPath.moveTo(ten, -ten);
         mCurrentPath.lineTo(-ten, ten);
         break;
+    case Type::crosshair: {
+        const qreal circleRadius = ten * 7/8;
+        mCurrentPath.addCircle(0, 0, circleRadius);
+        const qreal lineLength = 2 * ten / 8;
+        mCurrentPath.moveTo(-circleRadius - lineLength, 0);
+        mCurrentPath.lineTo(-circleRadius + lineLength, 0);
+        mCurrentPath.moveTo(circleRadius - lineLength, 0);
+        mCurrentPath.lineTo(circleRadius + lineLength, 0);
+        mCurrentPath.moveTo(0, -circleRadius + lineLength);
+        mCurrentPath.lineTo(0, -circleRadius - lineLength);
+        mCurrentPath.moveTo(0, circleRadius + lineLength);
+        mCurrentPath.lineTo(0, circleRadius - lineLength);
+        mCurrentPath.moveTo(lineLength/2, 0);
+        mCurrentPath.lineTo(-lineLength/2, 0);
+        mCurrentPath.moveTo(0, + lineLength/2);
+        mCurrentPath.lineTo(0, - lineLength/2);
+        break;
+        }
     case Type::triangle:
         const qreal a = 3*ten/sqrt(3);
         const qreal h = ten + a*sqrt(3)/6;
@@ -140,6 +161,10 @@ bool NullObjectType::relPointInsidePath(const QPointF& relPos) {
         QRectF rect(-ten, -ten, 2*ten, 2*ten);
         return rect.contains(relPos);
     } case Type::circle: {
+        QPainterPath path;
+        path.addEllipse({0., 0.}, ten, ten);
+        return path.contains(relPos);
+    } case Type::crosshair: {
         QPainterPath path;
         path.addEllipse({0., 0.}, ten, ten);
         return path.contains(relPos);
