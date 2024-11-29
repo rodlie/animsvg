@@ -60,6 +60,8 @@ NullObjectType::NullObjectType(ColorAnimator* const color,
 
     connect(this, &ComboBoxProperty::prp_currentFrameChanged,
             this, &NullObjectType::updatePath);
+    connect(this, &ComboBoxProperty::prp_pathChanged,
+            this, &NullObjectType::updatePath);
     connect(mSize, &QrealAnimator::prp_currentFrameChanged,
             this, &NullObjectType::updatePath);
     updatePath();
