@@ -31,7 +31,6 @@
 #include "FileCacheHandlers/videocachehandler.h"
 #include "canvas.h"
 
-#include <QInputDialog>
 class eVideoSound;
 
 class CORE_EXPORT VideoBox : public AnimationBox {
@@ -75,7 +74,6 @@ private:
         
         auto const dataHandler = mFileHandler->getFrameHandler();
         if (!dataHandler) { return; }
-        dataHandler->mFrameHandlers.length();
         qsptr<VideoFrameHandler> vframeHandler;
         vframeHandler = enve::make_shared<VideoFrameHandler>(dataHandler);
 
