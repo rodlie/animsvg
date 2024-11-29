@@ -28,6 +28,7 @@
 #include "Boxes/pathbox.h"
 #include "Animators/qrealanimator.h"
 #include "Animators/transformanimator.h"
+#include "svgexporter.h"
 
 FollowPathEffect::FollowPathEffect() :
     TargetTransformEffect("follow path", TransformEffectType::followPath) {
@@ -180,4 +181,32 @@ void FollowPathEffect::applyEffect(const qreal relFrame,
 
     posX += posXChange; //p1.x()*infl;
     posY += posYChange; //p1.y()*infl;
+}
+
+QDomElement FollowPathEffect::saveFollowPathSVG(SvgExporter &exp,
+                                                const FrameRange &visRange,
+                                                QDomElement &childElement,
+                                                QDomElement &parentElement) const
+{
+    Q_UNUSED(childElement)
+    const auto target = targetProperty()->getTarget();
+    if (!target) { return parentElement; }
+    mComplete->saveQrealSVG(exp,
+                            parentElement,
+                            visRange,
+                            "transform",
+                            1.,
+                            false,
+                            "",
+                            "%1",
+                            "",
+                            "",
+                            true,
+                            mRotate->getValue(),
+                            target->prp_getName());
+    const auto transform = target->getBoxTransformAnimator();
+    const auto transformed = transform->saveSVG(exp,
+                                                visRange,
+                                                parentElement);
+    return transformed;
 }

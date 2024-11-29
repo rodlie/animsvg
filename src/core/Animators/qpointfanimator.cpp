@@ -260,11 +260,25 @@ void QPointFAnimator::saveQPointFSVGX(SvgExporter& exp,
                                       const bool transform,
                                       const QString& type,
                                       const QString &beginEvent,
-                                      const QString &endEvent) const
+                                      const QString &endEvent,
+                                      const bool motion,
+                                      const bool motionRotate,
+                                      const QString &motionPath) const
 {
     const QString templ = "%1 " + QString::number(y);
-    mXAnimator->saveQrealSVG(exp, parent, visRange, name, multiplier,
-                             transform, type, templ, beginEvent, endEvent);
+    mXAnimator->saveQrealSVG(exp,
+                             parent,
+                             visRange,
+                             name,
+                             multiplier,
+                             transform,
+                             type,
+                             templ,
+                             beginEvent,
+                             endEvent,
+                             motion,
+                             motionRotate,
+                             motionPath);
 }
 
 void QPointFAnimator::saveQPointFSVGY(SvgExporter& exp,
@@ -276,12 +290,25 @@ void QPointFAnimator::saveQPointFSVGY(SvgExporter& exp,
                                       const bool transform,
                                       const QString& type,
                                       const QString &beginEvent,
-                                      const QString &endEvent) const
+                                      const QString &endEvent,
+                                      const bool motion,
+                                      const bool motionRotate,
+                                      const QString &motionPath) const
 {
     const QString templ = QString::number(x) + " %1";
-    mYAnimator->saveQrealSVG(exp, parent, visRange, name, multiplier,
-                             transform, type, templ,
-                             beginEvent, endEvent);
+    mYAnimator->saveQrealSVG(exp,
+                             parent,
+                             visRange,
+                             name,
+                             multiplier,
+                             transform,
+                             type,
+                             templ,
+                             beginEvent,
+                             endEvent,
+                             motion,
+                             motionRotate,
+                             motionPath);
 }
 
 QDomElement QPointFAnimator::prp_writePropertyXEV_impl(const XevExporter& exp) const {

@@ -91,6 +91,35 @@ void TransformEffectCollection::prp_readProperty_impl(eReadStream &src) {
     }
 }
 
+bool TransformEffectCollection::hasEffectsSVG()
+{
+    const auto& children = ca_getChildren();
+    for (const auto& effect : children) {
+        if (const auto followPath = enve_cast<FollowPathEffect*>(effect.get())) {
+            return true;
+        }
+    }
+    return false;
+}
+
+QDomElement TransformEffectCollection::saveEffectsSVG(SvgExporter &exp,
+                                                      const FrameRange &visRange,
+                                                      QDomElement &childElement,
+                                                      const QDomElement &parentElement) const
+{
+    QDomElement result = parentElement;
+    const auto& children = ca_getChildren();
+    for (const auto& effect : children) {
+        if (const auto path = enve_cast<FollowPathEffect*>(effect.get())) {
+            result = path->saveFollowPathSVG(exp,
+                                             visRange,
+                                             childElement,
+                                             result);
+        }
+    }
+    return result;
+}
+
 void TransformEffectCollection::applyEffects(
         const qreal relFrame,
         qreal& pivotX, qreal& pivotY,

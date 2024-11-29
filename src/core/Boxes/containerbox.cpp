@@ -200,7 +200,7 @@ public:
                 }
             }
             if (!mItemMaskId.isEmpty()) {
-                mEle.setAttribute("mask", QString("url(#%1)").arg(QString(mItemMaskId).simplified().replace(" ", "")));
+                mEle.setAttribute("mask", QString("url(#%1Mask)").arg(AppSupport::filterId(mItemMaskId)));
             }
         }
     }

@@ -25,6 +25,7 @@
 
 #include "Boxes/boundingbox.h"
 #include "Boxes/containerbox.h"
+#include "TransformEffects/followpatheffect.h"
 #include "canvas.h"
 #include "swt_abstraction.h"
 #include "Timeline/durationrectangle.h"
@@ -356,6 +357,23 @@ void BoundingBox::applyTransformEffects(
 
 bool BoundingBox::hasTransformEffects() const {
     return mTransformEffectCollection->ca_hasChildren();
+}
+
+const QStringList BoundingBox::checkTransformEffectsForSVGSupport()
+{
+    QStringList result;
+    const int totalEffects = mTransformEffectCollection->ca_getNumberOfChildren();
+    for (int i = 0; i < totalEffects; ++i) {
+        const auto effect = enve_cast<TransformEffect*>(mTransformEffectCollection->getChild(i));
+        if (!effect) { continue; }
+        if (!effect->isVisible()) { continue; }
+        bool isSafeForSVG = false;
+        if (const auto followPath = enve_cast<FollowPathEffect*>(effect)) {
+            isSafeForSVG = true;
+        }
+        if (!isSafeForSVG) { result.append(effect->prp_getName()); }
+    }
+    return result;
 }
 
 ContainerBox *BoundingBox::getFirstParentLayer() const {
@@ -1433,15 +1451,29 @@ eTask* BoundingBox::saveSVGWithTransform(SvgExporter& exp,
     taskPtr->addDependent({[ptr, taskPtr, expPtr, parentPtr, visRange, maskId]() {
         auto& ele = taskPtr->element();
         if (ptr) {
+            ele.setAttribute("id", AppSupport::filterId(ptr->prp_getName()));
             SvgExportHelpers::assignVisibility(*expPtr, ele, visRange);
+
+            const auto transformEffects = ptr->mTransformEffectCollection.get();
+            const bool hasTransformEffects = transformEffects->hasEffectsSVG();
+
             const auto transform = ptr->mTransformAnimator.get();
             const auto transformed = transform->saveSVG(*expPtr, visRange, ele);
             const auto effects = ptr->mRasterEffectsAnimators.get();
-            const auto withEffects = effects->saveEffectsSVG(*expPtr, visRange, transformed);
+            const auto withEffects = hasTransformEffects ?
+                                         transformEffects->saveEffectsSVG(*expPtr,
+                                                                          visRange,
+                                                                          ele,
+                                                                          effects->saveEffectsSVG(*expPtr,
+                                                                                                  visRange,
+                                                                                                  transformed)) :
+                                         effects->saveEffectsSVG(*expPtr,
+                                                                 visRange,
+                                                                 transformed);
 
             if (maskId == ptr->prp_getName()) { // move mask to defs
                 auto& eleMask = taskPtr->initialize("mask");
-                eleMask.setAttribute("id", QString(ptr->prp_getName()).simplified().replace(" ", ""));
+                eleMask.setAttribute("id", QString("%1Mask").arg(AppSupport::filterId(ptr->prp_getName())));
                 eleMask.appendChild(withEffects);
                 expPtr->addToDefs(eleMask);
             } else {
