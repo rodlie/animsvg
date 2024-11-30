@@ -431,6 +431,9 @@ void CanvasWindow::writeStateXEV(QDomElement& ele,
 
 bool CanvasWindow::handleCutCopyPasteKeyPress(QKeyEvent *event)
 {
+#ifdef Q_OS_MAC
+    if (event->type() == QEvent::ShortcutOverride) { return false; }
+#endif
     if (event->modifiers() & Qt::ControlModifier &&
         event->key() == Qt::Key_V) {
         if (event->isAutoRepeat()) { return false; }
