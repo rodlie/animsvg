@@ -125,15 +125,15 @@ void ColorToolBar::setupWidgets(Document &document)
 
     mColorFillAct->setToolTip(QString(colorToolTip).arg(tr("Fill"),
                                                         tr("Adjust fill color for selected")));
-    mColorFill->setToolTip(mColorFillAct->toolTip());
+    //mColorFill->setToolTip(mColorFillAct->toolTip());
 
     mColorStrokeAct->setToolTip(QString(colorToolTip).arg(tr("Stroke"),
                                                           tr("Adjust stroke color for selected")));
-    mColorStroke->setToolTip(mColorStrokeAct->toolTip());
+    //mColorStroke->setToolTip(mColorStrokeAct->toolTip());
 
     mColorBackgroundAct->setToolTip(QString(colorToolTip).arg(tr("Background"),
                                                               tr("Adjust background color")));
-    mColorBackground->setToolTip(mColorBackgroundAct->toolTip());
+    //mColorBackground->setToolTip(mColorBackgroundAct->toolTip());
 
     connect(mColorFill, &ColorToolButton::message,
             this, [this](const QString &msg){ emit message(msg); });
