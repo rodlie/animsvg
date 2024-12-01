@@ -259,6 +259,8 @@ set(
 )
 if(${LINUX_DEPLOY})
     list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs_lin.qrc)
+elseif(${MAC_DEPLOY})
+    list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs_mac.qrc)
 elseif(${WIN_DEPLOY})
     list(APPEND RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/docs_win.qrc)
 else()
