@@ -493,10 +493,13 @@ void KeysView::graphWheelEvent(QWheelEvent *event)
 #ifdef Q_OS_MAC
     if (event->angleDelta().y() == 0) { return; }
 #endif
-    if (event->modifiers() & Qt::ControlModifier) {
+    const bool ctrl = (event->modifiers() & Qt::ControlModifier);
+    const bool shift = (event->modifiers() & Qt::ShiftModifier);
+    if (ctrl && !shift) {
         emit wheelEventSignal(event);
         return;
-    } else if (event->modifiers() & Qt::ShiftModifier) {
+    } else if (ctrl || shift) {
+        if (ctrl) { emit wheelEventSignal(event); }
         qreal valUnderMouse;
         qreal frame;
         const auto ePos = event->position();
@@ -509,6 +512,7 @@ void KeysView::graphWheelEvent(QWheelEvent *event)
                             (valUnderMouse - mMinShownVal)*graphScaleInc);
         mPixelsPerValUnit += graphScaleInc*mPixelsPerValUnit;
         graphUpdateDimensions();
+        if (ctrl) { return; }
     } else {
         if (event->angleDelta().y() > 0) { graphIncMinShownVal(1); }
         else { graphIncMinShownVal(-1); }
