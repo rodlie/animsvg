@@ -71,7 +71,7 @@ void MarkerEditor::setup()
 
     mTree->headerItem()->setText(0, QString());
     mTree->headerItem()->setIcon(0, QIcon::fromTheme("visible"));
-    mTree->headerItem()->setIcon(1, QIcon::fromTheme("sequence"));
+    mTree->headerItem()->setIcon(1, QIcon::fromTheme("frame"));
     mTree->headerItem()->setIcon(2, QIcon::fromTheme("markers-add"));
 
     mTree->resizeColumnToContents(0);

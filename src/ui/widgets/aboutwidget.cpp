@@ -120,7 +120,7 @@ AboutWidget::AboutWidget(QWidget *parent)
 #elif defined WIN_DEPLOY
     parties << "skia_bundle" << "qt"  << "qscintilla" << "ffmpeg_win";
 #elif defined MAC_DEPLOY
-    parties << "skia_bundle" << "qt" << "qscintilla" << "ffmpeg_mac";
+    parties << "skia_bundle" << "qt" << "qscintilla" << "ffmpeg";
 #else
     #ifdef FRICTION_BUNDLE_SKIA_BUNDLE
         parties << "skia_bundle";

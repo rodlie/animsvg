@@ -539,7 +539,9 @@ void MainWindow::setupMenuBar()
         const auto qAct = new NoShortcutAction(tr("Copy", "MenuBar_Edit"));
         qAct->setIcon(QIcon::fromTheme("copy"));
         mEditMenu->addAction(qAct);
+#ifndef Q_OS_MAC
         qAct->setShortcut(Qt::CTRL + Qt::Key_C);
+#endif
         mActions.copyAction->connect(qAct);
         cmdAddAction(qAct);
     }
@@ -548,7 +550,9 @@ void MainWindow::setupMenuBar()
         const auto qAct = new NoShortcutAction(tr("Cut", "MenuBar_Edit"));
         qAct->setIcon(QIcon::fromTheme("cut"));
         mEditMenu->addAction(qAct);
+#ifndef Q_OS_MAC
         qAct->setShortcut(Qt::CTRL + Qt::Key_X);
+#endif
         mActions.cutAction->connect(qAct);
         cmdAddAction(qAct);
     }
@@ -557,7 +561,9 @@ void MainWindow::setupMenuBar()
         const auto qAct = new NoShortcutAction(tr("Paste", "MenuBar_Edit"));
         qAct->setIcon(QIcon::fromTheme("paste"));
         mEditMenu->addAction(qAct);
+#ifndef Q_OS_MAC
         qAct->setShortcut(Qt::CTRL + Qt::Key_V);
+#endif
         mActions.pasteAction->connect(qAct);
         cmdAddAction(qAct);
     }

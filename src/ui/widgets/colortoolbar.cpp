@@ -114,9 +114,26 @@ void ColorToolBar::setupWidgets(Document &document)
     mColorBackgroundAct = new QAction(QIcon::fromTheme("color_background"),
                                       tr("Background"), this);
 
-    mColorFillAct->setToolTip(tr("Fill Color"));
-    mColorStrokeAct->setToolTip(tr("Stroke Color"));
-    mColorBackgroundAct->setToolTip(tr("Background Color"));
+    const QString colorToolTip = QString("<h3>%1 Color</h3>"
+                                         "<p>%2.</p>"
+                                         "<ul>"
+                                         "<li>Click to open popup</li>"
+                                         "<li><code>Scroll</code> to adjust color <b>hue</b></li>"
+                                         "<li><code>Scroll</code> + <code>Shift</code> to adjust color <b>value</b></li>"
+                                         "<li><code>Scroll</code> + <code>Ctrl</code> to adjust color <b>saturation</b></li>"
+                                         "</ul>");
+
+    mColorFillAct->setToolTip(QString(colorToolTip).arg(tr("Fill"),
+                                                        tr("Adjust fill color for selected")));
+    //mColorFill->setToolTip(mColorFillAct->toolTip());
+
+    mColorStrokeAct->setToolTip(QString(colorToolTip).arg(tr("Stroke"),
+                                                          tr("Adjust stroke color for selected")));
+    //mColorStroke->setToolTip(mColorStrokeAct->toolTip());
+
+    mColorBackgroundAct->setToolTip(QString(colorToolTip).arg(tr("Background"),
+                                                              tr("Adjust background color")));
+    //mColorBackground->setToolTip(mColorBackgroundAct->toolTip());
 
     connect(mColorFill, &ColorToolButton::message,
             this, [this](const QString &msg){ emit message(msg); });
