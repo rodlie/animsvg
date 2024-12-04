@@ -70,7 +70,9 @@ void EffectsRenderer::setBaseGlobalRect(SkIRect &currRect,
     }
 }
 
-HardwareSupport EffectsRenderer::nextHardwareSupport() const {
-    Q_ASSERT(!isEmpty());
+HardwareSupport EffectsRenderer::nextHardwareSupport() const
+{
+    //Q_ASSERT(!isEmpty());
+    if (isEmpty()) { return HardwareSupport::hardwareDefault; }
     return mEffects.at(mCurrentId)->hardwareSupport();
 }
