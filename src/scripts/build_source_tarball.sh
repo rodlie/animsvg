@@ -73,4 +73,4 @@ find . \( -name ".git" -o -name ".github" -o -name ".gitignore" -o -name ".gitmo
 
 cd ${BUILD_DIR}
 tar cvvf friction-${VERSION}.tar friction-${VERSION}
-bzip2 -9 friction-${VERSION}.tar
+xz -9 friction-${VERSION}.tar
