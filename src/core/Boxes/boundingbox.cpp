@@ -865,6 +865,12 @@ void BoundingBox::alignPivot(const Qt::Alignment align, const QRectF& to) {
     alignGeometry(QRectF(pivot, pivot), align, to);
 }
 
+void BoundingBox::alignPivot2(const Qt::Alignment align, const QRectF& to) {
+    const auto center = getRelCenterPosition();
+    mTransformAnimator->setPivotFixedTransform(center);
+    requestGlobalPivotUpdateIfSelected();
+}
+
 void BoundingBox::moveByAbs(const QPointF &trans) {
     mTransformAnimator->moveByAbs(trans);
 }

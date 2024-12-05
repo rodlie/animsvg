@@ -51,6 +51,7 @@ AlignWidget::AlignWidget(QWidget* const parent)
     mAlignPivot->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     mAlignPivot->setFocusPolicy(Qt::NoFocus);
     mAlignPivot->addItem(tr("Align Geometry"));
+    mAlignPivot->addItem(tr("Align Geometry (Pivot)"));
     mAlignPivot->addItem(tr("Align Pivot"));
     combosLay->addWidget(mAlignPivot);
 
@@ -61,6 +62,7 @@ AlignWidget::AlignWidget(QWidget* const parent)
     mRelativeTo->setFocusPolicy(Qt::NoFocus);
     mRelativeTo->addItem(tr("Relative to Scene"));
     mRelativeTo->addItem(tr("Relative to Last Selected"));
+    mRelativeTo->addItem(tr("Itself"));
     combosLay->addWidget(mRelativeTo);
 
     const auto buttonsLay = new QHBoxLayout;

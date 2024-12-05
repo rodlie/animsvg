@@ -69,11 +69,11 @@ class eKeyEvent;
 enum class CtrlsMode : short;
 
 enum class AlignPivot {
-    geometry, pivot
+    geometry, pivot, pivot2
 };
 
 enum class AlignRelativeTo {
-    scene, lastSelected
+    scene, lastSelected, itself
 };
 
 class CORE_EXPORT Canvas : public CanvasBase

@@ -298,6 +298,7 @@ public:
 
     void alignGeometry(const Qt::Alignment align, const QRectF& to);
     void alignPivot(const Qt::Alignment align, const QRectF& to);
+    void alignPivot2(const Qt::Alignment align, const QRectF& to);
 
     QMatrix getTotalTransform() const;
 

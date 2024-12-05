@@ -242,11 +242,19 @@ void MainWindow::setupMenuExtras()
                 align = Qt::AlignHCenter;
                 break;
             case 4: // Align Left - Geometry Relative to Scene -----------------------------------------------------------------------------------
+                // alignString = alignLeft;
+                // pivotString = alignGeometry;
+                // relString = alignScene;
+                // pivot = AlignPivot::geometry;   
+                // rel = AlignRelativeTo::scene;
+                // iconString = alignLeftIcon;
+                // alignBoth = false;
+                // align = Qt::AlignLeft;
                 alignString = alignLeft;
                 pivotString = alignGeometry;
                 relString = alignScene;
                 pivot = AlignPivot::geometry;
-                rel = AlignRelativeTo::scene;
+                rel = AlignRelativeTo::itself;
                 iconString = alignLeftIcon;
                 alignBoth = false;
                 align = Qt::AlignLeft;

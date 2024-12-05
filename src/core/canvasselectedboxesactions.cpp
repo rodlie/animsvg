@@ -864,6 +864,14 @@ void Canvas::alignSelectedBoxes(const Qt::Alignment align,
         skip = mLastSelectedBox;
         geometry = mLastSelectedBox->getAbsBoundingRect();
         break;
+    case AlignRelativeTo::itself:
+        // Usar el rectángulo del propio objeto como referencia
+        if (pivot == AlignPivot::pivot2) {
+            geometry = QRectF(0., 0., mWidth, mHeight);
+        } else {
+            geometry = QRectF(0., 0., mWidth, mHeight);
+        }
+        break;
     }
 
     pushUndoRedoName("align");
@@ -875,6 +883,9 @@ void Canvas::alignSelectedBoxes(const Qt::Alignment align,
             break;
         case AlignPivot::geometry:
             box->alignGeometry(align, geometry);
+            break;
+        case AlignPivot::pivot2:
+            box->alignPivot2(align, geometry);
             break;
         }
     }
