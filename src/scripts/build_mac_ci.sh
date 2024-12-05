@@ -29,6 +29,7 @@ SDK_TAR=friction-sdk-macOS12.7-v1.tar.bz2
 if [ ! -d "${CWD}/sdk" ]; then
     curl -OL ${URL}/${SDK_TAR}
     tar xf ${SDK_TAR}
+    (cd ${CWD}/sdk/bin ; ln -sf pkgconf pkg-config )
 fi
 
 git submodule update -i --recursive
