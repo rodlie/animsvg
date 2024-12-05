@@ -32,6 +32,16 @@ BUILD_DIR=${BUILD_DIR:-"${CWD}/build-release"}
 export PATH="${SDK}/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 export PKG_CONFIG_PATH="${SDK}/lib/pkgconfig"
 
+whereis cmake
+cmake --version
+
+whereis pkg-config
+pkg-config --version
+
+clang --version
+
+ls -l ${SDK}/bin
+
 if [ -d "${BUILD_DIR}" ]; then
     rm -rf ${BUILD_DIR}
 fi
