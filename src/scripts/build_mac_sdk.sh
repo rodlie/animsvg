@@ -106,7 +106,7 @@ if [ ! -f "${SDK}/bin/pkg-config" ]; then
     rm -rf ${PKGCONF_SRC} || true
     tar xf ${DIST}/tools/${PKGCONF_SRC}.tar.xz
     cd ${PKGCONF_SRC}
-    ./configure ${COMMON_CONFIGURE}
+    ./configure ${STATIC_CONFIGURE}
     make -j${MKJOBS}
     make install
     (cd ${SDK}/bin ; ln -sf pkgconf pkg-config)
