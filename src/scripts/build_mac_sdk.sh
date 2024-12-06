@@ -489,6 +489,16 @@ fi # ffmpeg
 (cd ${SDK}/lib ;
 install_name_tool -change libvpx.8.dylib @rpath/libvpx.8.dylib libavformat.58.dylib
 install_name_tool -change libvpx.8.dylib @rpath/libvpx.8.dylib libavcodec.58.dylib
+BASEPATH=`pwd`
+for lib in *.dylib; do
+    DY=`otool -L ${lib} | grep ${BASEPATH}`
+    for dylib in $DY; do
+        if [ -f "${dylib}" ]; then
+            BASE=`basename ${dylib}`
+            echo "install_name_tool -change ${dylib} @rpath/${BASE} ${lib}"
+        fi
+    done
+done
 )
 
 echo "Friction macOS SDK done!"

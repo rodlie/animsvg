@@ -71,12 +71,12 @@ fi
 
 cmake --build .
 
-if [ "${BUILD_ENGINE}" = "ON" ]; then
-    (cd src/engine ;
-        tar cvvf skia-build-macOS-${GIT_COMMIT}.tar skia
-        mv skia-build-macOS-${GIT_COMMIT}.tar ${BUILD_DIR}/
-    )
-fi
+#if [ "${BUILD_ENGINE}" = "ON" ]; then
+#    (cd src/engine ;
+#        tar cvvf skia-build-macOS-${GIT_COMMIT}.tar skia
+#        mv skia-build-macOS-${GIT_COMMIT}.tar ${BUILD_DIR}/
+#    )
+#fi
 
 mv src/app/friction.app src/app/Friction.app
 macdeployqt src/app/Friction.app
