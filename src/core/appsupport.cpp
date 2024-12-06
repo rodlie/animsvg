@@ -458,11 +458,8 @@ HardwareSupport AppSupport::getRasterEffectHardwareSupport(const QString &effect
                                                            HardwareSupport fallback)
 {
     if (effect.isEmpty()) { return fallback; }
-    QVariant variant;
-    QSettings settings;
-    settings.beginGroup("RasterEffects");
-    variant = settings.value(QString("%1HardwareSupport").arg(effect));
-    settings.endGroup();
+    const QVariant variant = getSettings("RasterEffects",
+                                         QString("%1HardwareSupport").arg(effect));
     if (variant.isValid()) {
         HardwareSupport supported = static_cast<HardwareSupport>(variant.toInt());
         if (supported == HardwareSupport::hardwareDefault) { return fallback; }
@@ -510,26 +507,20 @@ const QByteArray AppSupport::filterShader(QByteArray data)
 
 const QStringList AppSupport::getFpsPresets()
 {
-    QStringList presets;
-    QSettings settings;
-    settings.beginGroup("presets");
-    presets = settings.value("fps",
-                             QStringList()
-                             << "24"
-                             << "25"
-                             << "30"
-                             << "50"
-                             << "60").toStringList();
-    settings.endGroup();
+    QStringList presets = getSettings("presets",
+                                      "fps",
+                                      QStringList()
+                                          << "24"
+                                          << "25"
+                                          << "30"
+                                          << "50"
+                                          << "60").toStringList();
     return presets;
 }
 
 void AppSupport::saveFpsPresets(const QStringList &presets)
 {
-    QSettings settings;
-    settings.beginGroup("presets");
-    settings.setValue("fps", presets);
-    settings.endGroup();
+    setSettings("presets", "fps", presets);
 }
 
 void AppSupport::saveFpsPreset(const double value)
@@ -538,10 +529,7 @@ void AppSupport::saveFpsPreset(const double value)
     auto presets = getFpsPresets();
     if (presets.contains(QString::number(value))) { return; }
     presets << QString::number(value);
-    QSettings settings;
-    settings.beginGroup("presets");
-    settings.setValue("fps", presets);
-    settings.endGroup();
+    setSettings("presets", "fps", presets);
 }
 
 bool AppSupport::removeFpsPreset(const double value)
@@ -549,36 +537,27 @@ bool AppSupport::removeFpsPreset(const double value)
     if (value <= 0) { return false; }
     auto presets = getFpsPresets();
     if (!presets.removeAll(QString::number(value))) { return false; }
-    QSettings settings;
-    settings.beginGroup("presets");
-    settings.setValue("fps", presets);
-    settings.endGroup();
+    setSettings("presets", "fps", presets);
     return true;
 }
 
 QPair<bool, bool> AppSupport::getFpsPresetStatus()
 {
     QPair<bool, bool> status;
-    QSettings settings;
-    settings.beginGroup("presets");
-    status.first = settings.value("EnableFPS", true).toBool();
-    status.second = settings.value("EnableFPSAuto", true).toBool();
-    settings.endGroup();
+    status.first = getSettings("presets", "EnableFPS", true).toBool();
+    status.second = getSettings("presets", "EnableFPSAuto", true).toBool();
     return status;
 }
 
 const QStringList AppSupport::getResolutionPresetsList()
 {
-    QStringList presets;
-    QSettings settings;
-    settings.beginGroup("presets");
-    presets = settings.value("resolution",
-                             QStringList()
-                             << "1280x720"
-                             << "1920x1080"
-                             << "2560x1440"
-                             << "3840x2160").toStringList();
-    settings.endGroup();
+    QStringList presets = getSettings("presets",
+                                      "resolution",
+                                      QStringList()
+                                          << "1280x720"
+                                          << "1920x1080"
+                                          << "2560x1440"
+                                          << "3840x2160").toStringList();
     return presets;
 }
 
@@ -607,10 +586,7 @@ void AppSupport::saveResolutionPresets(const QList<QPair<int, int> > &presets)
         if (list.contains(val)) { continue; }
         list << val;
     }
-    QSettings settings;
-    settings.beginGroup("presets");
-    settings.setValue("resolution", list);
-    settings.endGroup();
+    setSettings("presets", "resolution", list);
 }
 
 void AppSupport::saveResolutionPreset(const int w,
@@ -621,10 +597,7 @@ void AppSupport::saveResolutionPreset(const int w,
     auto presets = getResolutionPresetsList();
     if (presets.contains(v)) { return; }
     presets << v;
-    QSettings settings;
-    settings.beginGroup("presets");
-    settings.setValue("resolution", presets);
-    settings.endGroup();
+    setSettings("presets", "resolution", presets);
 }
 
 bool AppSupport::removeResolutionPreset(const int w,
@@ -634,21 +607,15 @@ bool AppSupport::removeResolutionPreset(const int w,
     const auto v = QString("%1x%2").arg(w).arg(h);
     auto presets = getResolutionPresetsList();
     if (!presets.removeAll(v)) { return false; }
-    QSettings settings;
-    settings.beginGroup("presets");
-    settings.setValue("resolution", presets);
-    settings.endGroup();
+    setSettings("presets", "resolution", presets);
     return true;
 }
 
 QPair<bool, bool> AppSupport::getResolutionPresetStatus()
 {
     QPair<bool, bool> status;
-    QSettings settings;
-    settings.beginGroup("presets");
-    status.first = settings.value("EnableResolutions", true).toBool();
-    status.second = settings.value("EnableResolutionsAuto", true).toBool();
-    settings.endGroup();
+    status.first = getSettings("presets", "EnableResolutions", true).toBool();
+    status.second = getSettings("presets", "EnableResolutionsAuto", true).toBool();
     return status;
 }
 
