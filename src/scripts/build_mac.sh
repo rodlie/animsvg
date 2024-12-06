@@ -32,6 +32,12 @@ BUILD_DIR=${BUILD_DIR:-"${CWD}/build-release"}
 export PATH="${SDK}/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 export PKG_CONFIG_PATH="${SDK}/lib/pkgconfig"
 
+whereis python
+python --version
+
+whereis ninja
+ninja --version
+
 whereis cmake
 cmake --version
 
@@ -39,8 +45,6 @@ whereis pkg-config
 pkg-config --version
 
 clang --version
-
-ls -l ${SDK}/bin
 
 if [ -d "${BUILD_DIR}" ]; then
     rm -rf ${BUILD_DIR}
@@ -67,12 +71,12 @@ fi
 
 cmake --build .
 
-#if [ "${BUILD_ENGINE}" = "ON" ]; then
-#    (cd src/engine ;
-#        tar cvvf friction-skia-build-${GIT_COMMIT}.tar skia
-#        mv friction-skia-build-${GIT_COMMIT}.tar ${BUILD_DIR}/
-#    )
-#fi
+if [ "${BUILD_ENGINE}" = "ON" ]; then
+    (cd src/engine ;
+        tar cvvf skia-build-macOS-${GIT_COMMIT}.tar skia
+        mv skia-build-macOS-${GIT_COMMIT}.tar ${BUILD_DIR}/
+    )
+fi
 
 mv src/app/friction.app src/app/Friction.app
 macdeployqt src/app/Friction.app

@@ -22,6 +22,7 @@ set -e -x
 
 # keep in sync with other SDK's
 
+PYTHON_V=3.11.11
 NINJA_V=1.11.1
 CMAKE_V=3.26.3
 NASM_V=2.14.02
@@ -71,10 +72,20 @@ if [ ! -d "${SDK}" ]; then
     mkdir -p "${SDK}/bin"
     mkdir -p "${SDK}/src"
     (cd "${SDK}"; ln -sf lib lib64)
-    (cd "${SDK}/bin"; ln -sf /usr/bin/python3 python)
 fi
 
-alias python="/usr/bin/python3"
+# python
+if [ ! -f "${PYTHON_BIN}" ]; then
+    cd ${SRC}
+    PY_SRC=Python-${PYTHON_V}
+    rm -rf ${PY_SRC} || true
+    tar xf ${DIST}/tools/${PY_SRC}.tar.xz
+    cd ${PY_SRC}
+    ./configure ${COMMON_CONFIGURE}
+    make -j${MKJOBS}
+    make install
+    (cd ${SDK}/bin ; ln -sf python3 python)
+fi # python
 
 # ninja
 if [ ! -f "${NINJA_BIN}" ]; then
@@ -83,7 +94,7 @@ if [ ! -f "${NINJA_BIN}" ]; then
     rm -rf ${NINJA_SRC} || true
     tar xf ${DIST}/tools/${NINJA_SRC}.tar.gz
     cd ${NINJA_SRC}
-    ./configure.py --bootstrap
+    ${PYTHON_BIN} configure.py --bootstrap
     cp -a ninja ${NINJA_BIN}
 fi # ninja
 
