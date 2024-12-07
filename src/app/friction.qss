@@ -134,6 +134,7 @@ QTabBar::tab:top {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
+
 QTabWidget::pane {
     border-radius: 2%;
 }
@@ -159,6 +160,33 @@ QTabBar::tab:top:!selected:hover {
 
 QTabBar::tab:bottom:!selected:hover {
     border-top: 2px solid %8;
+}
+
+QTabBar::tear {
+    background-color: transparent;
+}
+
+QTabBar QToolButton {
+    margin-top: 2px;
+    background-color: %5;
+    border-color: %5;
+}
+
+QTabBar QToolButton:hover {
+    background-color: %4;
+    border-color: %5;
+}
+
+QTabBar QToolButton::right-arrow {
+    image: url(:/icons/hicolor/%11x%11/actions/go-next.png);
+    width: %10px;
+    height: %10px;
+}
+
+QTabBar QToolButton::left-arrow {
+    image: url(:/icons/hicolor/%11x%11/actions/go-previous.png);
+    width: %10px;
+    height: %10px;
 }
 
 QMenuBar::item:selected,
