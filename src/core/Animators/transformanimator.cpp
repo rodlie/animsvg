@@ -240,6 +240,12 @@ void BasicTransformAnimator::updateTotalTransform(const UpdateReason reason) {
     emit totalTransformChanged(reason);
 }
 
+void BasicTransformAnimator::setSVGEventsVisibility(const bool visible)
+{
+    mSVGBeginProperty->SWT_setVisible(visible);
+    mSVGEndProperty->SWT_setVisible(visible);
+}
+
 bool BasicTransformAnimator::rotationFlipped() const {
     return mInheritedTransform.m11() * mInheritedTransform.m22() < 0.;
 }

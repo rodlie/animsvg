@@ -107,6 +107,8 @@ public:
     QrealAnimator *getRotAnimator() const;
 
     void updateTotalTransform(const UpdateReason reason);
+    void setSVGEventsVisibility(const bool visible);
+
 protected:
     QList<qsptr<BasicTransformAnimator>> mChildBoxes;
 

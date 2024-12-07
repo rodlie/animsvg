@@ -111,6 +111,7 @@ TextEffect::TextEffect() : eEffect("text effect") {
                 0.5, 0, 1, 0.1, "smoothness");
 
     mTransform = enve::make_shared<AdvancedTransformAnimator>();
+    mTransform->setSVGEventsVisibility(false);
 
     mBasePathEffects = enve::make_shared<PathEffectCollection>();
     mBasePathEffects->ca_setHiddenWhenEmpty(false);
