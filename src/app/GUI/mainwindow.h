@@ -396,6 +396,9 @@ private:
 
     QLabel *mColorPickLabel;
 
+    QAction *mToolBarMainAct;
+    QAction *mToolBarColorAct;
+
 protected:
     void keyPressEvent(QKeyEvent *event);
     bool eventFilter(QObject *obj, QEvent *e);

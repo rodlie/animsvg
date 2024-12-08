@@ -174,8 +174,10 @@ SceneSettingsDialog::SceneSettingsDialog(const QString &name,
     mErrorLabel->setObjectName("errorLabel");
     mMainLayout->addWidget(mErrorLabel);
 
-    mOkButton = new QPushButton(tr("Ok"), this);
-    mCancelButton = new QPushButton(tr("Cancel"), this);
+    mOkButton = new QPushButton(QIcon::fromTheme("dialog-ok"),
+                                tr("Ok"), this);
+    mCancelButton = new QPushButton(QIcon::fromTheme("dialog-cancel"),
+                                    tr("Cancel"), this);
     mButtonsLayout = new QHBoxLayout();
     mMainLayout->addLayout(mButtonsLayout);
     mButtonsLayout->addWidget(mOkButton);
