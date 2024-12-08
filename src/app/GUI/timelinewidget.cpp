@@ -295,6 +295,13 @@ TimelineWidget::TimelineWidget(Document &document,
     connect(chww, &ChangeWidthWidget::widthSet,
             this, &TimelineWidget::setBoxesListWidth);
     setBoxesListWidth(chww->getCurrentWidth());
+
+    readSettings();
+}
+
+TimelineWidget::~TimelineWidget()
+{
+    writeSettings();
 }
 
 void TimelineWidget::setCurrentScene(Canvas * const scene) {
@@ -496,6 +503,19 @@ void TimelineWidget::writeStateXEV(QDomElement& ele, QDomDocument& doc,
     ele.setAttribute("objTarget", static_cast<int>(rules.fTarget));
 
     ele.setAttribute("search", mSearchLine->text());
+}
+
+void TimelineWidget::readSettings()
+{
+    const auto tWidth = AppSupport::getSettings("ui",
+                                                "TimeLineMenuWidth");
+    if (tWidth.isValid()) { setBoxesListWidth(tWidth.toInt()); }
+}
+
+void TimelineWidget::writeSettings()
+{
+    AppSupport::setSettings("ui", "TimeLineMenuWidth",
+                            mBoxesListScrollArea->width());
 }
 
 void TimelineWidget::moveSlider(int val) {

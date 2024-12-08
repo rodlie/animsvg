@@ -64,6 +64,7 @@ public:
                             QWidget * const menu,
                             QWidget *parent);
 
+    ~TimelineWidget();
     Canvas* getCurrrentScene() const {
         return mCurrentScene;
     }
@@ -80,6 +81,9 @@ public:
                       RuntimeIdToWriteId& objListIdConv);
     void writeStateXEV(QDomElement& ele, QDomDocument& doc,
                        RuntimeIdToWriteId& objListIdConv) const;
+    void readSettings();
+    void writeSettings();
+
 private:
     void setViewedFrameRange(const FrameRange &range);
     void setCanvasFrameRange(const FrameRange &range);
