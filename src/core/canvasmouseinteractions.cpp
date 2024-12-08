@@ -535,12 +535,18 @@ void Canvas::applyPixelColor(const QColor &color,
         if (fill) {
             auto settings = box->getFillSettings();
             if (settings) {
+                if (settings->getPaintType() == PaintType::NOPAINT) {
+                    settings->setPaintType(PaintType::FLATPAINT);
+                }
                 settings->setCurrentColor(color, true);
                 box->fillStrokeSettingsChanged();
             }
         } else {
             auto settings = box->getStrokeSettings();
             if (settings) {
+                if (settings->getPaintType() == PaintType::NOPAINT) {
+                    settings->setPaintType(PaintType::FLATPAINT);
+                }
                 settings->setCurrentColor(color, true);
                 box->fillStrokeSettingsChanged();
             }
