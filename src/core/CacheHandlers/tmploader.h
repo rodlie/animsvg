@@ -25,9 +25,12 @@
 
 #ifndef TMPLOADER_H
 #define TMPLOADER_H
+
 #include "Tasks/updatable.h"
 #include <QTemporaryFile>
 #include "hddcachablecont.h"
+
+#include "ReadWrite/ereadstream.h"
 
 class CORE_EXPORT TmpLoader : public eHddTask {
 public:

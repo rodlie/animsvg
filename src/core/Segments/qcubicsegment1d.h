@@ -32,9 +32,10 @@
 #include <QPointF>
 #include <QPainterPath>
 
+#include "ReadWrite/ereadstream.h"
+#include "ReadWrite/ewritestream.h"
+
 typedef std::pair<qreal, qreal> qrealPair;
-class eWriteStream;
-class eReadStream;
 
 struct CORE_EXPORT qCubicSegment1D {
     typedef std::pair<qCubicSegment1D, qCubicSegment1D> Pair;

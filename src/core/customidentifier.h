@@ -26,12 +26,13 @@
 #ifndef CUSTOMIDENTIFIER_H
 #define CUSTOMIDENTIFIER_H
 
-#include "ReadWrite/basicreadwrite.h"
-
 #include "exceptions.h"
 
 #include <QDomElement>
 #include <QVector>
+
+#include "ReadWrite/ereadstream.h"
+#include "ReadWrite/ewritestream.h"
 
 struct CORE_EXPORT CustomIdentifier {
     struct Version {

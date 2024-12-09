@@ -29,7 +29,9 @@
 #include "core_global.h"
 
 #include <QPointF>
-#include "ReadWrite/basicreadwrite.h"
+
+#include "ReadWrite/ereadstream.h"
+#include "ReadWrite/ewritestream.h"
 
 extern "C" {
     #include <libavcodec/avcodec.h>

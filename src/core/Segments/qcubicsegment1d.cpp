@@ -27,7 +27,6 @@
 #include "simplemath.h"
 #include "qcubicsegment2d.h"
 #include "skia/skiaincludes.h"
-#include "../ReadWrite/basicreadwrite.h"
 
 qCubicSegment1D qCubicSegment1D::normalized() const {
     const qreal min = minPointValue();

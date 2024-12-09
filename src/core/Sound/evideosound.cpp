@@ -25,8 +25,6 @@
 
 #include "evideosound.h"
 
-#include "ReadWrite/basicreadwrite.h"
-
 eVideoSound::eVideoSound(const qsptr<FixedLenAnimationRect> &durRect) :
     eSoundObjectBase(durRect) {}
 

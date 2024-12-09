@@ -25,8 +25,6 @@
 
 #include "samples.h"
 
-#include "../ReadWrite/basicreadwrite.h"
-
 void Samples::write(eWriteStream& dst) const {
     dst.write(&fFormat, sizeof(AVSampleFormat));
     dst << fPlanar;

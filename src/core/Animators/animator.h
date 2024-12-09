@@ -32,6 +32,9 @@ class QIODevice;
 #include "key.h"
 #include "overlappingkeylist.h"
 
+#include "ReadWrite/ereadstream.h"
+#include "ReadWrite/ewritestream.h"
+
 #include <QDomElement>
 
 class QPainter;

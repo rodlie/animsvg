@@ -31,7 +31,6 @@
 
 #include "../framerange.h"
 #include "../MovablePoints/pointshandler.h"
-#include "../ReadWrite/basicreadwrite.h"
 #include "../conncontextptr.h"
 
 #include <QJSEngine>

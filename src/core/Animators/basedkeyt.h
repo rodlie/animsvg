@@ -27,7 +27,6 @@
 #define BASEDKEYT_H
 #include "key.h"
 #include "../differsinterpolate.h"
-#include "../ReadWrite/basicreadwrite.h"
 #include "animator.h"
 
 template <typename B, typename T>

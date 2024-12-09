@@ -25,12 +25,13 @@
 
 #ifndef CLIPBOARDCONTAINER_H
 #define CLIPBOARDCONTAINER_H
+
 #include <QList>
 #include <QWeakPointer>
 #include <typeindex>
 #include "smartPointers/ememory.h"
-#include "ReadWrite/basicreadwrite.h"
 #include "Animators/SmartPath/smartpath.h"
+
 class QrealAnimator;
 class BoundingBox;
 class ContainerBox;

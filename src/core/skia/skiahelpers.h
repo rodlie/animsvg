@@ -26,10 +26,13 @@
 #ifndef SKIAHELPERS_H
 #define SKIAHELPERS_H
 
+#include "ReadWrite/ereadstream.h"
+#include "ReadWrite/ewritestream.h"
+
 #include "skiaincludes.h"
 #include "../exceptions.h"
+
 #include <QIODevice>
-#include "../ReadWrite/basicreadwrite.h"
 
 namespace SkiaHelpers {
     CORE_EXPORT

@@ -28,7 +28,7 @@
 #include "listofnodes.h"
 #include "smartPointers/stdselfref.h"
 #include "smartPointers/stdpointer.h"
-#include "../../ReadWrite/basicreadwrite.h"
+
 class SkPath;
 class CORE_EXPORT NodeList {
     friend class SmartPath;

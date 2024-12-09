@@ -26,7 +26,6 @@
 #ifndef KEY_H
 #define KEY_H
 #include "../smartPointers/ememory.h"
-#include "../ReadWrite/basicreadwrite.h"
 #include "../Properties/property.h"
 
 #include <QtCore>

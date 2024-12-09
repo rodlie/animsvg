@@ -25,9 +25,12 @@
 
 #ifndef TMPSAVER_H
 #define TMPSAVER_H
+
 #include "Tasks/updatable.h"
 #include <QTemporaryFile>
 #include "hddcachablecont.h"
+
+#include "ReadWrite/ewritestream.h"
 
 class CORE_EXPORT TmpSaver : public eHddTask {
     e_OBJECT

@@ -25,8 +25,8 @@
 
 #ifndef BASEDANIMATORT_H
 #define BASEDANIMATORT_H
+
 #include "animator.h"
-#include "../ReadWrite/basicreadwrite.h"
 #include "key.h"
 
 template <typename B, typename K, typename T>

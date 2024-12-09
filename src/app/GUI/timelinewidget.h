@@ -34,9 +34,11 @@
 
 #include "smartPointers/stdselfref.h"
 #include "framerange.h"
-#include "ReadWrite/basicreadwrite.h"
 #include "widgets/fakemenubar.h"
 #include "XML/runtimewriteid.h"
+
+#include "ReadWrite/ereadstream.h"
+#include "ReadWrite/ewritestream.h"
 
 class SWT_Abstraction;
 class FrameScrollBar;

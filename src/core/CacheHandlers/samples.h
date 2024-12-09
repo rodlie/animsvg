@@ -25,16 +25,18 @@
 
 #ifndef SAMPLES_H
 #define SAMPLES_H
+
 #include "smartPointers/stdselfref.h"
 #include "smartPointers/ememory.h"
 #include "framerange.h"
+
+#include "ReadWrite/ereadstream.h"
+#include "ReadWrite/ewritestream.h"
+
 extern "C" {
     #include <libavutil/samplefmt.h>
     #include <libavutil/channel_layout.h>
 }
-
-class eWriteStream;
-class eReadStream;
 
 struct CORE_EXPORT Samples : public StdSelfRef {
     e_OBJECT

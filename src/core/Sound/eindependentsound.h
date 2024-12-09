@@ -28,6 +28,9 @@
 
 #include "esoundobjectbase.h"
 
+#include "ReadWrite/ereadstream.h"
+#include "ReadWrite/ewritestream.h"
+
 class CORE_EXPORT eIndependentSound : public eSoundObjectBase {
     e_OBJECT
     e_DECLARE_TYPE(eIndependentSound)

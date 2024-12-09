@@ -33,8 +33,10 @@
 #include <QDomElement>
 #include "smartPointers/ememory.h"
 #include "widgets/widgetstack.h"
-#include "ReadWrite/basicreadwrite.h"
 #include "XML/runtimewriteid.h"
+
+#include "ReadWrite/ereadstream.h"
+#include "ReadWrite/ewritestream.h"
 
 enum class UI_EXPORT WrapperNodeType {
     base,

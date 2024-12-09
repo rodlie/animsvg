@@ -24,7 +24,6 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "RasterEffects/customrastereffect.h"
-#include "ReadWrite/basicreadwrite.h"
 
 CustomRasterEffect::CustomRasterEffect(const QString &name,
                                        const HardwareSupport hwSupport,

@@ -25,8 +25,8 @@
 
 #ifndef GRAPHKEY_H
 #define GRAPHKEY_H
+
 #include "key.h"
-#include "../ReadWrite/basicreadwrite.h"
 #include "clampedpoint.h"
 
 enum class QrealPointType : short;

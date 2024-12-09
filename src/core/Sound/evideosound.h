@@ -28,6 +28,9 @@
 
 #include "esoundobjectbase.h"
 
+#include "ReadWrite/ereadstream.h"
+#include "ReadWrite/ewritestream.h"
+
 class VideoBox;
 
 class CORE_EXPORT eVideoSound : public eSoundObjectBase {

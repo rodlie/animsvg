@@ -32,9 +32,11 @@
 
 #include "swt_abstraction.h"
 #include "swt_rulescollection.h"
-#include "ReadWrite/basicreadwrite.h"
 #include "XML/xevexporter.h"
 #include "XML/xevimporter.h"
+
+#include "ReadWrite/ereadstream.h"
+#include "ReadWrite/ewritestream.h"
 
 class QMenu;
 class QAction;

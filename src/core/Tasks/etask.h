@@ -29,7 +29,6 @@
 #include "../glhelpers.h"
 #include "../hardwareenums.h"
 #include "../switchablecontext.h"
-#include "../ReadWrite/basicreadwrite.h"
 #include "etaskbase.h"
 
 class CORE_EXPORT eTask : public StdSelfRef, public eTaskBase {

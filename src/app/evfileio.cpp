@@ -57,7 +57,6 @@
 #include "gradientwidgets/gradientwidget.h"
 #include <QMessageBox>
 #include "PathEffects/patheffectsinclude.h"
-#include "ReadWrite/basicreadwrite.h"
 #include "Boxes/internallinkcanvas.h"
 #include "Boxes/smartvectorpath.h"
 #include "Sound/soundcomposition.h"
@@ -67,6 +66,8 @@
 #include "GUI/RenderWidgets/renderwidget.h"
 #include "GUI/BoxesList/boxscrollwidget.h"
 #include "ReadWrite/evformat.h"
+#include "ReadWrite/ereadstream.h"
+#include "ReadWrite/ewritestream.h"
 #include "XML/runtimewriteid.h"
 
 void MainWindow::loadEVFile(const QString &path)

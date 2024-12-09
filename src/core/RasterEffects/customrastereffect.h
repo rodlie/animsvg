@@ -25,8 +25,10 @@
 
 #ifndef CUSTOMRASTEREFFECT_H
 #define CUSTOMRASTEREFFECT_H
+
 #include "rastereffect.h"
 #include "../customidentifier.h"
+#include "ReadWrite/ewritestream.h"
 
 class CORE_EXPORT CustomRasterEffect : public RasterEffect {
 protected:

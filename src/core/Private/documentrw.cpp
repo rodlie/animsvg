@@ -25,7 +25,6 @@
 
 #include "Private/document.h"
 
-#include "ReadWrite/basicreadwrite.h"
 #include "ReadWrite/xevformat.h"
 #include "ReadWrite/evformat.h"
 #include "XML/xmlexporthelpers.h"

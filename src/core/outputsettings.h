@@ -28,8 +28,10 @@
 #include <QString>
 #include "Private/esettings.h"
 #include "smartPointers/ememory.h"
-#include "ReadWrite/basicreadwrite.h"
 #include "formatoptions.h"
+
+#include "ReadWrite/ereadstream.h"
+#include "ReadWrite/ewritestream.h"
 
 extern "C" {
     #include <libavcodec/avcodec.h>

@@ -184,7 +184,6 @@ set(
     Private/memorystructs.cpp
     Properties/boolpropertycontainer.cpp
     Properties/boxtargetproperty.cpp
-    Properties/emimedata.cpp
     RasterEffects/blureffect.cpp
     RasterEffects/brightnesscontrasteffect.cpp
     RasterEffects/colorizeeffect.cpp
@@ -198,7 +197,6 @@ set(
     RasterEffects/rastereffectmenucreator.cpp
     RasterEffects/shadoweffect.cpp
     RasterEffects/wipeeffect.cpp
-    ReadWrite/basicreadwrite.cpp
     ReadWrite/ereadstream.cpp
     ReadWrite/ewritestream.cpp
     ReadWrite/filefooter.cpp
@@ -253,7 +251,6 @@ set(
     colorhelpers.cpp
     colorsetting.cpp
     conncontext.cpp
-    cpurendertools.cpp
     customidentifier.cpp
     drawpath.cpp
     eevent.cpp
@@ -268,12 +265,10 @@ set(
     matrixdecomposition.cpp
     memorydatahandler.cpp
     namefixer.cpp
-    paintsettings.cpp
     paintsettingsapplier.cpp
     pathoperations.cpp
     randomgrid.cpp
     simpletask.cpp
-    smartPointers/stdpointer.cpp
     smartPointers/stdselfref.cpp
     singlewidgettarget.cpp
     Properties/property.cpp
@@ -303,10 +298,8 @@ set(
     Animators/interpolationkey.cpp
     Animators/interpolationanimator.cpp
     framerange.cpp
-    Segments/quadsegment.cpp
-    Segments/conicsegment.cpp
+    #Segments/conicsegment.cpp
     Segments/cubiclist.cpp
-    Segments/cubicnode.cpp
     Segments/qcubicsegment2d.cpp
     Segments/qcubicsegment1d.cpp
     Animators/animatort.cpp
@@ -518,7 +511,6 @@ set(
     RasterEffects/rastereffectsinclude.h
     RasterEffects/shadoweffect.h
     RasterEffects/wipeeffect.h
-    ReadWrite/basicreadwrite.h
     ReadWrite/efuturepos.h
     ReadWrite/ereadstream.h
     ReadWrite/evformat.h

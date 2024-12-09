@@ -26,7 +26,6 @@
 #ifndef SMARTPATHANIMATOR_H
 #define SMARTPATHANIMATOR_H
 
-#include "../../ReadWrite/basicreadwrite.h"
 #include "../../MovablePoints/segment.h"
 #include "../../skia/skiahelpers.h"
 #include "../interoptimalanimatort.h"

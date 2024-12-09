@@ -25,8 +25,11 @@
 
 #ifndef CUSTOMPATHEFFECT_H
 #define CUSTOMPATHEFFECT_H
+
 #include "patheffect.h"
 #include "../customidentifier.h"
+
+#include "ReadWrite/ewritestream.h"
 
 class CORE_EXPORT CustomPathEffect : public PathEffect {
 public:

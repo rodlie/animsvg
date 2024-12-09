@@ -31,7 +31,6 @@
 #include "typemenu.h"
 #include "Timeline/fixedlenanimationrect.h"
 #include "fileshandler.h"
-#include "ReadWrite/basicreadwrite.h"
 
 SoundFileHandler* soundFileHandlerGetter(const QString& path)
 {

@@ -42,6 +42,8 @@
 #include "XML/runtimewriteid.h"
 #include "XML/xevzipfilesaver.h"
 #include "Boxes/videobox.h"
+#include "ReadWrite/ereadstream.h"
+#include "ReadWrite/ewritestream.h"
 
 class SceneBoundGradient;
 class FileDataCacheHandler;

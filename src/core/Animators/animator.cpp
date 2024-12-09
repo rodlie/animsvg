@@ -205,7 +205,7 @@ void Animator::anim_addKeysWhereOtherHasKeys(const Animator * const other) {
             anim_addKeyAtRelFrame(relFrame);
     }
 }
-#include "ReadWrite/basicreadwrite.h"
+
 void Animator::anim_readKeys(eReadStream& src) {
     int nKeys; src >> nKeys;
     if(nKeys < 0 || nKeys > 10000)
