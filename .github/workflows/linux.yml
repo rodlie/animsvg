@@ -13,7 +13,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: friction-ci-linux-x86_64
-        path: |
-          distfiles/builds/*/*.xz
-          distfiles/builds/*/*.rpm
-          distfiles/builds/*/*.AppImage
+        path: distfiles/builds/*/*.AppImage
