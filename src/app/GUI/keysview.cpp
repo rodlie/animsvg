@@ -385,7 +385,11 @@ stdsptr<KeysClipboard> KeysView::getSelectedKeysClipboardContainer() {
     return container;
 }
 
-bool KeysView::KFT_keyPressEvent(QKeyEvent *event) {
+bool KeysView::KFT_keyPressEvent(QKeyEvent *event)
+{
+#ifdef Q_OS_MAC
+    if (event->type() == QEvent::ShortcutOverride) { return false; }
+#endif
     bool inputHandled = false;
     if(mMovingKeys) {
         if(mValueInput.handleTransormationInputKeyEvent(event->key())) {

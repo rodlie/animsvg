@@ -574,7 +574,9 @@ void MainWindow::setupMenuBar()
         const auto qAct = new NoShortcutAction(tr("Duplicate", "MenuBar_Edit"));
         mEditMenu->addAction(qAct);
         qAct->setIcon(QIcon::fromTheme("duplicate"));
+#ifndef Q_OS_MAC
         qAct->setShortcut(Qt::CTRL + Qt::Key_D);
+#endif
         mActions.duplicateAction->connect(qAct);
         cmdAddAction(qAct);
     }
@@ -583,7 +585,9 @@ void MainWindow::setupMenuBar()
         const auto qAct = new NoShortcutAction(tr("Delete", "MenuBar_Edit"));
         qAct->setIcon(QIcon::fromTheme("trash"));
         mEditMenu->addAction(qAct);
+#ifndef Q_OS_MAC
         qAct->setShortcut(Qt::Key_Delete);
+#endif
         mActions.deleteAction->connect(qAct);
         cmdAddAction(qAct);
     }

@@ -633,6 +633,9 @@ bool CanvasWindow::KFT_keyReleaseEvent(QKeyEvent *event)
 
 bool CanvasWindow::KFT_keyPressEvent(QKeyEvent *event)
 {
+#ifdef Q_OS_MAC
+    if (event->type() == QEvent::ShortcutOverride) { return false; }
+#endif
     if (!mCurrentCanvas) { return false; }
     if (mCurrentCanvas->isPreviewingOrRendering()) { return false; }
     const QPoint globalPos = QCursor::pos();
