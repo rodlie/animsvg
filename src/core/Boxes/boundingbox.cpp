@@ -865,7 +865,7 @@ void BoundingBox::alignPivot(const Qt::Alignment align, const QRectF& to) {
     alignGeometry(QRectF(pivot, pivot), align, to);
 }
 
-void BoundingBox::alignPivot2(const Qt::Alignment align,
+void BoundingBox::alignPivotItself(const Qt::Alignment align,
                               const QRectF& to,
                               const AlignRelativeTo relativeTo,
                               const QPointF lastPivotAbsPos) {
