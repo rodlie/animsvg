@@ -300,7 +300,7 @@ public:
 
     void alignGeometry(const Qt::Alignment align, const QRectF& to);
     void alignPivot(const Qt::Alignment align, const QRectF& to);
-    void alignPivot2(const Qt::Alignment align,
+    void alignPivotItself(const Qt::Alignment align,
                      const QRectF& to,
                      const AlignRelativeTo relativeTo,
                      const QPointF lastPivotAbsPos);

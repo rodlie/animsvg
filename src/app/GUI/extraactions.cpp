@@ -485,7 +485,7 @@ void MainWindow::setupMenuExtras()
                 alignString = alignVCenter;
                 pivotString = alignPivot;
                 relString = alignLast;
-                pivot = AlignPivot::pivot2;
+                pivot = AlignPivot::pivotItself;
                 rel = AlignRelativeTo::boundingBox;
                 iconString = alignVCenterIcon;
                 alignBoth = false;
@@ -495,7 +495,7 @@ void MainWindow::setupMenuExtras()
                 alignString = alignVCenter;
                 pivotString = alignPivot;
                 relString = alignLast;
-                pivot = AlignPivot::pivot2;
+                pivot = AlignPivot::pivotItself;
                 rel = AlignRelativeTo::boundingBox;
                 iconString = alignVCenterIcon;
                 alignBoth = false;
@@ -505,7 +505,7 @@ void MainWindow::setupMenuExtras()
                 alignString = alignVCenter;
                 pivotString = alignPivot;
                 relString = alignLast;
-                pivot = AlignPivot::pivot2;
+                pivot = AlignPivot::pivotItself;
                 rel = AlignRelativeTo::boundingBox;
                 iconString = alignVCenterIcon;
                 alignBoth = false;
@@ -515,7 +515,7 @@ void MainWindow::setupMenuExtras()
                 alignString = alignVCenter;
                 pivotString = alignPivot;
                 relString = alignLast;
-                pivot = AlignPivot::pivot2;
+                pivot = AlignPivot::pivotItself;
                 rel = AlignRelativeTo::boundingBox;
                 iconString = alignVCenterIcon;
                 alignBoth = false;
@@ -525,7 +525,7 @@ void MainWindow::setupMenuExtras()
                 alignString = alignVCenter;
                 pivotString = alignPivot;
                 relString = alignLast;
-                pivot = AlignPivot::pivot2;
+                pivot = AlignPivot::pivotItself;
                 rel = AlignRelativeTo::boundingBox;
                 iconString = alignVCenterIcon;
                 alignBoth = false;
@@ -535,7 +535,7 @@ void MainWindow::setupMenuExtras()
                 alignString = alignVCenter;
                 pivotString = alignPivot;
                 relString = alignLast;
-                pivot = AlignPivot::pivot2;
+                pivot = AlignPivot::pivotItself;
                 rel = AlignRelativeTo::boundingBox;
                 iconString = alignVCenterIcon;
                 alignBoth = false;
@@ -545,7 +545,7 @@ void MainWindow::setupMenuExtras()
                 alignString = alignVCenter;
                 pivotString = alignPivot;
                 relString = alignLast;
-                pivot = AlignPivot::pivot2;
+                pivot = AlignPivot::pivotItself;
                 rel = AlignRelativeTo::scene;
                 iconString = alignVCenterIcon;
                 alignBoth = false;
@@ -555,7 +555,7 @@ void MainWindow::setupMenuExtras()
                 alignString = alignVCenter;
                 pivotString = alignPivot;
                 relString = alignLast;
-                pivot = AlignPivot::pivot2;
+                pivot = AlignPivot::pivotItself;
                 rel = AlignRelativeTo::scene;
                 iconString = alignVCenterIcon;
                 alignBoth = false;
@@ -565,7 +565,7 @@ void MainWindow::setupMenuExtras()
                 alignString = alignVCenter;
                 pivotString = alignPivot;
                 relString = alignLast;
-                pivot = AlignPivot::pivot2;
+                pivot = AlignPivot::pivotItself;
                 rel = AlignRelativeTo::scene;
                 iconString = alignVCenterIcon;
                 alignBoth = false;
@@ -575,7 +575,7 @@ void MainWindow::setupMenuExtras()
                 alignString = alignVCenter;
                 pivotString = alignPivot;
                 relString = alignLast;
-                pivot = AlignPivot::pivot2;
+                pivot = AlignPivot::pivotItself;
                 rel = AlignRelativeTo::scene;
                 iconString = alignVCenterIcon;
                 alignBoth = false;
@@ -585,7 +585,7 @@ void MainWindow::setupMenuExtras()
                 alignString = alignVCenter;
                 pivotString = alignPivot;
                 relString = alignLast;
-                pivot = AlignPivot::pivot2;
+                pivot = AlignPivot::pivotItself;
                 rel = AlignRelativeTo::scene;
                 iconString = alignVCenterIcon;
                 alignBoth = false;
@@ -595,7 +595,7 @@ void MainWindow::setupMenuExtras()
                 alignString = alignVCenter;
                 pivotString = alignPivot;
                 relString = alignLast;
-                pivot = AlignPivot::pivot2;
+                pivot = AlignPivot::pivotItself;
                 rel = AlignRelativeTo::scene;
                 iconString = alignVCenterIcon;
                 alignBoth = false;

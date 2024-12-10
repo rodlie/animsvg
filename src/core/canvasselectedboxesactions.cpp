@@ -884,8 +884,8 @@ void Canvas::alignSelectedBoxes(const Qt::Alignment align,
         case AlignPivot::geometry:
             box->alignGeometry(align, geometry);
             break;
-        case AlignPivot::pivot2:
-            box->alignPivot2(align, geometry, relativeTo, mLastSelectedBox->getPivotAbsPos());
+        case AlignPivot::pivotItself:
+            box->alignPivotItself(align, geometry, relativeTo, mLastSelectedBox->getPivotAbsPos());
             break;
         }
     }

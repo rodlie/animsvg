@@ -69,7 +69,7 @@ class eKeyEvent;
 enum class CtrlsMode : short;
 
 enum class AlignPivot {
-    geometry, pivot, pivot2
+    geometry, pivot, pivotItself
 };
 
 enum class AlignRelativeTo {
