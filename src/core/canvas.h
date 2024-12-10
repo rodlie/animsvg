@@ -73,7 +73,7 @@ enum class AlignPivot {
 };
 
 enum class AlignRelativeTo {
-    scene, lastSelected, itself
+    scene, lastSelected, lastSelectedPivot, boundingBox
 };
 
 class CORE_EXPORT Canvas : public CanvasBase

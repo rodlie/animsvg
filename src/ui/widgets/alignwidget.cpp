@@ -42,6 +42,21 @@ AlignWidget::AlignWidget(QWidget* const parent)
     mainLayout->setContentsMargins(5, 5, 5, 5);
     setLayout(mainLayout);
 
+    // Crear un layout para las etiquetas encima de los combos
+    const auto labelsLay = new QHBoxLayout;
+    mainLayout->insertLayout(0, labelsLay); // Insertar en la posición 0, encima de combosLay
+
+    // Crear las etiquetas
+    const auto labelAlignPivot = new QLabel(tr("Align:"), this);
+    labelAlignPivot->setAlignment(Qt::AlignLeft); // Alineación izquierda
+    labelsLay->addWidget(labelAlignPivot, 1); // Ocupa mitad del espacio
+
+    const auto labelRelativeTo = new QLabel(tr("Relative to:"), this);
+    labelRelativeTo->setAlignment(Qt::AlignLeft); // Alineación izquierda
+    labelsLay->addWidget(labelRelativeTo, 1); // Ocupa mitad del espacio
+
+    labelsLay->addStretch(); // Añadir un estiramiento opcional para asegurar el alineamiento
+
     const auto combosLay = new QHBoxLayout;
     mainLayout->addLayout(combosLay);
 
@@ -50,9 +65,9 @@ AlignWidget::AlignWidget(QWidget* const parent)
     mAlignPivot->setMinimumWidth(20);
     mAlignPivot->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     mAlignPivot->setFocusPolicy(Qt::NoFocus);
-    mAlignPivot->addItem(tr("Align Geometry"));
-    mAlignPivot->addItem(tr("Align Geometry (Pivot)"));
-    mAlignPivot->addItem(tr("Align Pivot"));
+    mAlignPivot->addItem(tr("Geometry"));
+    mAlignPivot->addItem(tr("Geometry (Pivot)"));
+    mAlignPivot->addItem(tr("Pivot"));
     combosLay->addWidget(mAlignPivot);
 
     //combosLay->addWidget(new QLabel(tr("Relative to")));
@@ -60,10 +75,61 @@ AlignWidget::AlignWidget(QWidget* const parent)
     mRelativeTo->setMinimumWidth(20);
     mRelativeTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     mRelativeTo->setFocusPolicy(Qt::NoFocus);
-    mRelativeTo->addItem(tr("Relative to Scene"));
-    mRelativeTo->addItem(tr("Relative to Last Selected"));
-    mRelativeTo->addItem(tr("Itself"));
+    mRelativeTo->addItem(tr("Scene"));
+    mRelativeTo->addItem(tr("Last Selected"));
     combosLay->addWidget(mRelativeTo);
+
+    // Conectar la señal de cambio de índice
+    connect(mAlignPivot, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int index) {
+        static bool isItem2Removed = true;
+
+        if (index == 2) { // Si el índice seleccionado en mAlignPivot es 2
+            if (isItem2Removed) {
+                // Volvemos a insertar el índice 2 si no está presente
+                mRelativeTo->insertItem(2, tr("Last Selected Pivot"));
+                mRelativeTo->insertItem(3, tr("Bounding Box"));
+                isItem2Removed = false;
+            }
+            mRelativeTo->setCurrentIndex(3); // Seleccionar el índice 2 en mRelativeTo
+        } else {
+            if (!isItem2Removed) {
+                // Eliminamos el índice 2 si está presente
+                mRelativeTo->removeItem(2);
+                mRelativeTo->removeItem(2);
+                isItem2Removed = true;
+                mRelativeTo->setCurrentIndex(0); // Seleccionar el índice 0 en mRelativeTo
+            }
+        }
+    });
+
+
+    // // Crear mRelativeToPivot
+    // mRelativeToPivot = new QComboBox(this);
+    // mRelativeToPivot->setMinimumWidth(20);
+    // mRelativeToPivot->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    // mRelativeToPivot->setFocusPolicy(Qt::NoFocus);
+    // // Añadir opciones a mRelativeToPivot
+    // mRelativeToPivot->addItem(tr("Bounding Box")); // Index 0
+    // mRelativeToPivot->addItem(tr("Scene"));        // Index 1
+    // combosLay->addWidget(mRelativeToPivot);
+
+    // // Inicialmente, ocultamos mRelativeToPivot
+    // mRelativeToPivot->hide();
+
+    // // Conectar el cambio de mAlignPivot
+    // connect(mAlignPivot, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int index) {
+    //     if (index == 2) {
+    //         // Mostrar mRelativeToPivot y ocultar mRelativeTo
+    //         mRelativeTo->hide();
+    //         mRelativeToPivot->show();
+    //         mRelativeToPivot->setCurrentIndex(0); // Seleccionar siempre el índice 0
+    //     } else {
+    //         // Mostrar mRelativeTo y ocultar mRelativeToPivot
+    //         mRelativeToPivot->hide();
+    //         mRelativeTo->show();
+    //         mRelativeTo->setCurrentIndex(0); // Seleccionar siempre el índice 0
+    //     }
+    // });
 
     const auto buttonsLay = new QHBoxLayout;
     mainLayout->addLayout(buttonsLay);
@@ -122,6 +188,29 @@ AlignWidget::AlignWidget(QWidget* const parent)
         triggerAlign(Qt::AlignBottom);
     });
     buttonsLay->addWidget(bottomButton);
+
+    connect(mRelativeTo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this, leftButton, rightButton, topButton, bottomButton]() {
+        if (mRelativeTo->currentIndex() == 2) {
+            leftButton->setEnabled(false);
+            leftButton->setIcon(QIcon());
+            rightButton->setEnabled(false);
+            rightButton->setIcon(QIcon());
+            topButton->setEnabled(false);
+            topButton->setIcon(QIcon());
+            bottomButton->setEnabled(false);
+            bottomButton->setIcon(QIcon());
+        } else {
+            leftButton->setEnabled(true);
+            leftButton->setIcon(QIcon::fromTheme("pivot-align-left"));
+            rightButton->setEnabled(true);
+            rightButton->setIcon(QIcon::fromTheme("pivot-align-right"));
+            topButton->setEnabled(true);
+            topButton->setIcon(QIcon::fromTheme("pivot-align-top"));
+            bottomButton->setEnabled(true);
+            bottomButton->setIcon(QIcon::fromTheme("pivot-align-bottom"));
+        }
+    });
+
 
     eSizesUI::widget.add(leftButton, [leftButton,
                                       hCenterButton,
