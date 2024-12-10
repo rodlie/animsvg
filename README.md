@@ -1,10 +1,10 @@
 # Friction
 
-[![Windows](https://github.com/friction2d/friction/actions/workflows/windows.yml/badge.svg)](https://github.com/friction2d/friction/actions/workflows/windows.yml?query=branch%3Amain) [![Linux](https://github.com/friction2d/friction/actions/workflows/linux.yml/badge.svg)](https://github.com/friction2d/friction/actions/workflows/linux.yml?query=branch%3Amain) [![GitHub](https://img.shields.io/badge/Source-GitHub-blue)](https://github.com/friction2d/friction) [![Codeberg](https://img.shields.io/badge/Source-Codeberg-blue)](https://codeberg.org/friction/friction)
+[![Windows](https://github.com/friction2d/friction/actions/workflows/windows.yml/badge.svg)](https://github.com/friction2d/friction/actions/workflows/windows.yml?query=branch%3Amain) [![Linux](https://github.com/friction2d/friction/actions/workflows/linux.yml/badge.svg)](https://github.com/friction2d/friction/actions/workflows/linux.yml?query=branch%3Amain) [![macOS](https://github.com/friction2d/friction/actions/workflows/mac.yml/badge.svg)](https://github.com/friction2d/friction/actions/workflows/mac.yml?query=branch%3Amain)
 
-[Friction](https://friction.graphics) is a powerful and versatile motion graphics application that allows you to create vector and raster animations for web and video with ease.
+[Friction](https://friction.graphics) is a powerful and versatile motion graphics application that allows you to create vector and raster animations for web and video.
 
-![Screenshot of Friction 1.0.0](https://friction.graphics/assets/screenshots/100/friction-100b1-screenshot.png?v=3)
+![Screenshot of Friction 1.0.0](https://friction.graphics/assets/screenshots/100/friction-100b2-screenshot.png?v=3)
 
 ## Contribute
 
