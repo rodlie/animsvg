@@ -42,35 +42,31 @@ AlignWidget::AlignWidget(QWidget* const parent)
     mainLayout->setContentsMargins(5, 5, 5, 5);
     setLayout(mainLayout);
 
-    // Crear un layout para las etiquetas encima de los combos
     const auto labelsLay = new QHBoxLayout;
-    mainLayout->insertLayout(0, labelsLay); // Insertar en la posición 0, encima de combosLay
+    mainLayout->insertLayout(0, labelsLay);
 
-    // Crear las etiquetas
     const auto labelAlignPivot = new QLabel(tr("Align:"), this);
-    labelAlignPivot->setAlignment(Qt::AlignLeft); // Alineación izquierda
-    labelsLay->addWidget(labelAlignPivot, 1); // Ocupa mitad del espacio
+    labelAlignPivot->setAlignment(Qt::AlignLeft);
+    labelsLay->addWidget(labelAlignPivot, 1);
 
     const auto labelRelativeTo = new QLabel(tr("Relative to:"), this);
-    labelRelativeTo->setAlignment(Qt::AlignLeft); // Alineación izquierda
-    labelsLay->addWidget(labelRelativeTo, 1); // Ocupa mitad del espacio
+    labelRelativeTo->setAlignment(Qt::AlignLeft);
+    labelsLay->addWidget(labelRelativeTo, 1);
 
-    labelsLay->addStretch(); // Añadir un estiramiento opcional para asegurar el alineamiento
+    labelsLay->addStretch();
 
     const auto combosLay = new QHBoxLayout;
     mainLayout->addLayout(combosLay);
 
-    //combosLay->addWidget(new QLabel(tr("Align")));
     mAlignPivot = new QComboBox(this);
     mAlignPivot->setMinimumWidth(20);
     mAlignPivot->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     mAlignPivot->setFocusPolicy(Qt::NoFocus);
     mAlignPivot->addItem(tr("Geometry"));
-    mAlignPivot->addItem(tr("Geometry (Pivot)"));
+    mAlignPivot->addItem(tr("Geometry by Pivot"));
     mAlignPivot->addItem(tr("Pivot"));
     combosLay->addWidget(mAlignPivot);
 
-    //combosLay->addWidget(new QLabel(tr("Relative to")));
     mRelativeTo = new QComboBox(this);
     mRelativeTo->setMinimumWidth(20);
     mRelativeTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -79,57 +75,25 @@ AlignWidget::AlignWidget(QWidget* const parent)
     mRelativeTo->addItem(tr("Last Selected"));
     combosLay->addWidget(mRelativeTo);
 
-    // Conectar la señal de cambio de índice
     connect(mAlignPivot, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int index) {
         static bool isItem2Removed = true;
 
-        if (index == 2) { // Si el índice seleccionado en mAlignPivot es 2
+        if (index == 2) {
             if (isItem2Removed) {
-                // Volvemos a insertar el índice 2 si no está presente
                 mRelativeTo->insertItem(2, tr("Last Selected Pivot"));
                 mRelativeTo->insertItem(3, tr("Bounding Box"));
                 isItem2Removed = false;
             }
-            mRelativeTo->setCurrentIndex(3); // Seleccionar el índice 2 en mRelativeTo
+            mRelativeTo->setCurrentIndex(3);
         } else {
             if (!isItem2Removed) {
-                // Eliminamos el índice 2 si está presente
                 mRelativeTo->removeItem(2);
                 mRelativeTo->removeItem(2);
                 isItem2Removed = true;
-                mRelativeTo->setCurrentIndex(0); // Seleccionar el índice 0 en mRelativeTo
+                mRelativeTo->setCurrentIndex(0);
             }
         }
     });
-
-
-    // // Crear mRelativeToPivot
-    // mRelativeToPivot = new QComboBox(this);
-    // mRelativeToPivot->setMinimumWidth(20);
-    // mRelativeToPivot->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    // mRelativeToPivot->setFocusPolicy(Qt::NoFocus);
-    // // Añadir opciones a mRelativeToPivot
-    // mRelativeToPivot->addItem(tr("Bounding Box")); // Index 0
-    // mRelativeToPivot->addItem(tr("Scene"));        // Index 1
-    // combosLay->addWidget(mRelativeToPivot);
-
-    // // Inicialmente, ocultamos mRelativeToPivot
-    // mRelativeToPivot->hide();
-
-    // // Conectar el cambio de mAlignPivot
-    // connect(mAlignPivot, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int index) {
-    //     if (index == 2) {
-    //         // Mostrar mRelativeToPivot y ocultar mRelativeTo
-    //         mRelativeTo->hide();
-    //         mRelativeToPivot->show();
-    //         mRelativeToPivot->setCurrentIndex(0); // Seleccionar siempre el índice 0
-    //     } else {
-    //         // Mostrar mRelativeTo y ocultar mRelativeToPivot
-    //         mRelativeToPivot->hide();
-    //         mRelativeTo->show();
-    //         mRelativeTo->setCurrentIndex(0); // Seleccionar siempre el índice 0
-    //     }
-    // });
 
     const auto buttonsLay = new QHBoxLayout;
     mainLayout->addLayout(buttonsLay);

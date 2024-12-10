@@ -881,10 +881,6 @@ void BoundingBox::alignPivotItself(const Qt::Alignment align,
     
     QPointF center = getRelCenterPosition();
 
-    // Obtener el último objeto seleccionado
-    // const BoundingBox* lastSelected = mSelectedBoxes.last();
-    // QPointF lastPivot = lastSelected->getPivotAbsPos();
-
     if (relativeTo == AlignRelativeTo::scene) {
         if (align & Qt::AlignVCenter) {
             center.setX(currentPivot.x());
@@ -912,16 +908,16 @@ void BoundingBox::alignPivotItself(const Qt::Alignment align,
         } else if (align & Qt::AlignHCenter) {
             center.setX(currentPivot.x() - currentPivotAbsPos.x() + to.center().x());
             center.setY(currentPivot.y());
-        } else if (align & Qt::AlignLeft) { // OK
+        } else if (align & Qt::AlignLeft) {
             center.setX(currentPivot.x() - currentPivotAbsPos.x() + to.topLeft().x());
             center.setY(currentPivot.y());
-        } else if (align & Qt::AlignRight) { // OK
+        } else if (align & Qt::AlignRight) {
             center.setX(currentPivot.x() + (to.topRight().x() - currentPivotAbsPos.x()));
             center.setY(currentPivot.y());
-        } else if (align & Qt::AlignTop) { // OK
+        } else if (align & Qt::AlignTop) {
             center.setX(currentPivot.x());
             center.setY(currentPivot.y() - currentPivotAbsPos.y() + to.topLeft().y());
-        } else if (align & Qt::AlignBottom) { // OK
+        } else if (align & Qt::AlignBottom) {
             center.setX(currentPivot.x());
             center.setY(currentPivot.y() + (to.bottomRight().y() - currentPivotAbsPos.y()));
         }
@@ -956,8 +952,11 @@ void BoundingBox::alignPivotItself(const Qt::Alignment align,
         }
     }
 
+    startPosTransform();
+    // TODO: get undo/redo to save last previous state
     mTransformAnimator->setPivotFixedTransform(center);
     requestGlobalPivotUpdateIfSelected();
+    finishTransform();
 }
 
 void BoundingBox::moveByAbs(const QPointF &trans) {
