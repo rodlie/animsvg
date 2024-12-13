@@ -104,6 +104,8 @@ protected:
     void enterEvent(QEvent *);
     void leaveEvent(QEvent *);
 
+    void keyPressEvent(QKeyEvent *event);
+
     void paintEvent(QPaintEvent *);
     void mouseDoubleClickEvent(QMouseEvent *e);
     void resizeEvent(QResizeEvent *);

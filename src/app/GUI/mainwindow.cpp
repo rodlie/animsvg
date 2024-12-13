@@ -1644,6 +1644,30 @@ bool MainWindow::processKeyEvent(QKeyEvent *event)
     return false;
 }
 
+bool MainWindow::processCanvasWindowKeyEvent(QKeyEvent *event)
+{
+#ifdef Q_OS_MAC
+    if (event->type() == QEvent::ShortcutOverride) { return false; }
+#endif
+    const bool ctrl = event->modifiers() & Qt::ControlModifier;
+    if (ctrl && event->key() == Qt::Key_V) {
+        if (event->isAutoRepeat()) { return false; }
+        (*mActions.pasteAction)();
+    } else if (ctrl && event->key() == Qt::Key_C) {
+        if (event->isAutoRepeat()) { return false; }
+        (*mActions.copyAction)();
+    } else if (ctrl && event->key() == Qt::Key_D) {
+        if (event->isAutoRepeat()) { return false; }
+        (*mActions.duplicateAction)();
+    } else if (ctrl && event->key() == Qt::Key_X) {
+        if (event->isAutoRepeat()) { return false; }
+        (*mActions.cutAction)();
+    } else if (event->key() == Qt::Key_Delete) {
+        (*mActions.deleteAction)();
+    } else { return false; }
+    return true;
+}
+
 void MainWindow::readSettings(const QString &openProject)
 {
     mUI->readSettings();

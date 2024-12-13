@@ -736,14 +736,24 @@ void BoxSingleWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void BoxSingleWidget::enterEvent(QEvent *)
 {
+    setFocus();
     mHover = true;
     update();
 }
 
 void BoxSingleWidget::leaveEvent(QEvent *)
 {
+    clearFocus();
     mHover = false;
     update();
+}
+
+void BoxSingleWidget::keyPressEvent(QKeyEvent *event)
+{
+    if (mHover) {
+        MainWindow::sGetInstance()->processCanvasWindowKeyEvent(event);
+    }
+    SingleWidget::keyPressEvent(event);
 }
 
 void BoxSingleWidget::mouseDoubleClickEvent(QMouseEvent *e)
