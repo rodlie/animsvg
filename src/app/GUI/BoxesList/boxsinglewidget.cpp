@@ -743,7 +743,6 @@ void BoxSingleWidget::enterEvent(QEvent *)
 
 void BoxSingleWidget::leaveEvent(QEvent *)
 {
-    //clearFocus();
     KeyFocusTarget::KFT_sSetLastTarget();
     mHover = false;
     update();
@@ -752,7 +751,7 @@ void BoxSingleWidget::leaveEvent(QEvent *)
 void BoxSingleWidget::keyPressEvent(QKeyEvent *event)
 {
     if (mHover) {
-        MainWindow::sGetInstance()->processCanvasWindowKeyEvent(event);
+        MainWindow::sGetInstance()->processBoxesListKeyEvent(event);
     }
     SingleWidget::keyPressEvent(event);
 }

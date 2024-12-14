@@ -129,7 +129,7 @@ public:
     stdsptr<void> lock();
 
     bool processKeyEvent(QKeyEvent *event);
-    bool processCanvasWindowKeyEvent(QKeyEvent *event);
+    bool processBoxesListKeyEvent(QKeyEvent *event);
 
     void installNumericFilter(QObject* const object) {
         object->installEventFilter(mNumericFilter);

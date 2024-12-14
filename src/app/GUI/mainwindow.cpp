@@ -1644,7 +1644,7 @@ bool MainWindow::processKeyEvent(QKeyEvent *event)
     return false;
 }
 
-bool MainWindow::processCanvasWindowKeyEvent(QKeyEvent *event)
+bool MainWindow::processBoxesListKeyEvent(QKeyEvent *event)
 {
 #ifdef Q_OS_MAC
     if (event->type() == QEvent::ShortcutOverride) { return false; }
