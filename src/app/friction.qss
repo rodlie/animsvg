@@ -634,3 +634,15 @@ Friction--Ui--ToolBar::separator:vertical {
 Friction--Ui--ToolBar::separator:horizontal {
     width: 1px;
 }
+
+QToolButton#PrevKeyframeButton {
+    margin-right: %10;
+}
+
+QToolButton#NextKeyframeButton {
+    margin-left: %10;
+}
+
+QToolButton#LoopButton {
+    margin-left: %7;
+}

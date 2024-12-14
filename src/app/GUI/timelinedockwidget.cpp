@@ -258,7 +258,18 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mMainWindow->cmdAddAction(mStopButton);
     mMainWindow->cmdAddAction(mLoopButton);
 
-    mRenderProgressAct->setVisible(false);
+    QToolButton* nextKeyframeButton = qobject_cast<QToolButton*>(mToolBar->widgetForAction(mNextKeyframeAct));
+    if (nextKeyframeButton) {
+        nextKeyframeButton->setObjectName("NextKeyframeButton");
+    }
+    QToolButton* prevKeyframeButton = qobject_cast<QToolButton*>(mToolBar->widgetForAction(mPrevKeyframeAct));
+    if (prevKeyframeButton) {
+        prevKeyframeButton->setObjectName("PrevKeyframeButton");
+    }
+    QToolButton* LoopButton = qobject_cast<QToolButton*>(mToolBar->widgetForAction(mLoopButton));
+    if (LoopButton) {
+        LoopButton->setObjectName("LoopButton");
+    }
 
     QWidget *spacerWidget2 = new QWidget(this);
     spacerWidget2->setSizePolicy(QSizePolicy::Expanding,
