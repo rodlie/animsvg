@@ -81,6 +81,10 @@ QSpinBox#SpinBoxNoButtons::down-button {
     width: 0;
     height: 0;
 }
+QSpinBox#SpinBoxNoButtons:hover {
+    background-color: %3;
+    border-color: %3;
+}
 
 QTabWidget#TabWidgetCenter::tab-bar {
     alignment: center;
