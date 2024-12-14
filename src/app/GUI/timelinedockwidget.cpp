@@ -230,8 +230,6 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     mRenderProgress->setFixedWidth(mCurrentFrameSpin->width());
     mRenderProgress->setFormat(tr("Cache %p%"));
 
-    mToolBar->addWidget(mFrameStartSpin);
-
     eSizesUI::widget.add(mToolBar, [this](const int size) {
         //mRenderProgress->setFixedHeight(eSizesUI::button);
         mToolBar->setIconSize(QSize(size, size));
@@ -244,13 +242,11 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
 
     mToolBar->addAction(mFrameRewindAct);
     mToolBar->addAction(mPrevKeyframeAct);
-    mToolBar->addAction(mNextKeyframeAct);
-    mToolBar->addAction(mFrameFastForwardAct);
-    mRenderProgressAct = mToolBar->addWidget(mRenderProgress);
-    mCurrentFrameSpinAct = mToolBar->addWidget(mCurrentFrameSpin);
     mToolBar->addAction(mPlayFromBeginningButton);
     mToolBar->addAction(mPlayButton);
     mToolBar->addAction(mStopButton);
+    mToolBar->addAction(mNextKeyframeAct);
+    mToolBar->addAction(mFrameFastForwardAct);
     mToolBar->addAction(mLoopButton);
 
     mMainWindow->cmdAddAction(mFrameRewindAct);
@@ -269,7 +265,13 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
                                  QSizePolicy::Minimum);
     mToolBar->addWidget(spacerWidget2);
 
+    mToolBar->addWidget(mFrameStartSpin);
+    mToolBar->addWidget(mCurrentFrameSpin);
+    mRenderProgressAct = mToolBar->addWidget(mRenderProgress);
+    mCurrentFrameSpinAct = mToolBar->addWidget(mCurrentFrameSpin);
     mToolBar->addWidget(mFrameEndSpin);
+
+    mRenderProgressAct->setVisible(false);
 
     mMainLayout->addWidget(mToolBar);
     mMainLayout->addSpacing(2);
