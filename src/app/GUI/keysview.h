@@ -122,6 +122,10 @@ protected:
 
     QPoint mLastMovePos;
 
+#ifdef Q_OS_MAC
+    bool event(QEvent *e);
+#endif
+
     void resizeEvent(QResizeEvent *e);
     void wheelEvent(QWheelEvent *e);
     void mousePressEvent(QMouseEvent *e);
@@ -142,6 +146,12 @@ signals:
     void changedViewedFrames(FrameRange);
     void wheelEventSignal(QWheelEvent*);
     void statusMessage(const QString &message);
+
+#ifdef Q_OS_MAC
+    void nativeEventSignal(QNativeGestureEvent *e);
+    void panEventSignal(QWheelEvent *e);
+#endif
+
 public:
     static QColor sGetAnimatorColor(const int i);
 
@@ -266,6 +276,8 @@ private:
 
     int mSavedMinViewedFrame = 0;
     int mSavedMaxViewedFrame = 0;
+
+    bool mPanEvent = false;
 
     // graph
 

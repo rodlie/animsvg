@@ -284,6 +284,14 @@ TimelineWidget::TimelineWidget(Document &document,
             this, &TimelineWidget::setViewedFrameRange);
     connect(mKeysView, &KeysView::wheelEventSignal,
             mFrameRangeScrollBar, &FrameScrollBar::callWheelEvent);
+
+#ifdef Q_OS_MAC
+    connect(mKeysView, &KeysView::panEventSignal,
+            mFrameRangeScrollBar, &FrameScrollBar::callPanEvent);
+    connect(mKeysView, &KeysView::nativeEventSignal,
+            mFrameRangeScrollBar, &FrameScrollBar::callNativeGestures);
+#endif
+
     mKeysViewLayout->addWidget(mFrameRangeScrollBar);
     //mSceneChooser->setCurrentScene(mDocument.fActiveScene); // why?
 

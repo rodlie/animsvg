@@ -82,6 +82,11 @@ public:
     void setCanvasFrameRange(const FrameRange& range);
     void callWheelEvent(QWheelEvent *event);
 
+#ifdef Q_OS_MAC
+    void callNativeGestures(QNativeGestureEvent *e);
+    void callPanEvent(QWheelEvent *e);
+#endif
+
 protected:
     qreal posToFrame(int xPos);
     void paintEvent(QPaintEvent *);
