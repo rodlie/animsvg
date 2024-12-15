@@ -1644,11 +1644,10 @@ bool MainWindow::processKeyEvent(QKeyEvent *event)
     return false;
 }
 
+#ifdef Q_OS_MAC
 bool MainWindow::processBoxesListKeyEvent(QKeyEvent *event)
 {
-#ifdef Q_OS_MAC
     if (event->type() == QEvent::ShortcutOverride) { return false; }
-#endif
     const bool ctrl = event->modifiers() & Qt::ControlModifier;
     if (ctrl && event->key() == Qt::Key_V) {
         if (event->isAutoRepeat()) { return false; }
@@ -1667,6 +1666,7 @@ bool MainWindow::processBoxesListKeyEvent(QKeyEvent *event)
     } else { return false; }
     return true;
 }
+#endif
 
 void MainWindow::readSettings(const QString &openProject)
 {

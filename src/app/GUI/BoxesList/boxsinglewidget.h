@@ -104,7 +104,9 @@ protected:
     void enterEvent(QEvent *);
     void leaveEvent(QEvent *);
 
+#ifdef Q_OS_MAC
     void keyPressEvent(QKeyEvent *event);
+#endif
 
     void paintEvent(QPaintEvent *);
     void mouseDoubleClickEvent(QMouseEvent *e);

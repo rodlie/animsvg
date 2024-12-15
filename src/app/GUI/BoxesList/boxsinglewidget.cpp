@@ -736,18 +736,23 @@ void BoxSingleWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void BoxSingleWidget::enterEvent(QEvent *)
 {
+#ifdef Q_OS_MAC
     setFocus();
+#endif
     mHover = true;
     update();
 }
 
 void BoxSingleWidget::leaveEvent(QEvent *)
 {
+#ifdef Q_OS_MAC
     KeyFocusTarget::KFT_sSetLastTarget();
+#endif
     mHover = false;
     update();
 }
 
+#ifdef Q_OS_MAC
 void BoxSingleWidget::keyPressEvent(QKeyEvent *event)
 {
     if (mHover) {
@@ -755,6 +760,7 @@ void BoxSingleWidget::keyPressEvent(QKeyEvent *event)
     }
     SingleWidget::keyPressEvent(event);
 }
+#endif
 
 void BoxSingleWidget::mouseDoubleClickEvent(QMouseEvent *e)
 {
