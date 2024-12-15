@@ -83,7 +83,7 @@ public:
                       RuntimeIdToWriteId& objListIdConv);
     void writeStateXEV(QDomElement& ele, QDomDocument& doc,
                        RuntimeIdToWriteId& objListIdConv) const;
-    void readSettings();
+    void readSettings(ChangeWidthWidget *chww);
     void writeSettings();
 
 private:

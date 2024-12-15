@@ -82,3 +82,9 @@ void ChangeWidthWidget::leaveEvent(QEvent *) {
     mHover = false;
     update();
 }
+
+void ChangeWidthWidget::setWidth(int w)
+{
+    mCurrentWidth = w;
+    updatePos();
+}
