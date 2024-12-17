@@ -24,6 +24,7 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "glwindow.h"
+#include "Private/esettings.h"
 #include "colorhelpers.h"
 #include <QPainter>
 #include <QDebug>
@@ -92,22 +93,27 @@ void GLWindow::initializeGL() {
     }
 }
 
-void GLWindow::initialize() {
+void GLWindow::initialize()
+{
     glClearColor(0, 0, 0, 1);
 
     glEnable(GL_BLEND);
     glDisable(GL_DEPTH_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    const auto intrface = GrGLMakeNativeInterface();
-    if(!intrface) RuntimeThrow("Failed to make native intrface.");
-    mGrContext = GrContext::MakeGL(intrface);
-    if(!mGrContext) RuntimeThrow("Failed to make GrContext.");
+    const auto interface = GrGLMakeNativeInterface();
+    if (!interface) { RuntimeThrow("Failed to make native interface."); }
+
+    GrContextOptions options;
+    options.fInternalMultisampleCount = eSettings::instance().fInternalMultisampleCount;
+
+    mGrContext = GrContext::MakeGL(interface, options);
+    if (!mGrContext) { RuntimeThrow("Failed to make GrContext."); }
 
     try {
         bindSkia(width(), height());
     } catch(...) {
-        RuntimeThrow("Failed to bind SKIA.");
+        RuntimeThrow("Failed to bind skia.");
     }
 }
 

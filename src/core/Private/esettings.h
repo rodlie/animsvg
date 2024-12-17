@@ -95,6 +95,9 @@ public:
     AccPreference fAccPreference = AccPreference::defaultPreference;
     bool fPathGpuAcc = true;
 
+    // MSAA
+    int fInternalMultisampleCount = 4;
+
     int fImportFileDirOpt = ImportFileDirRecent;
 
     bool fHddCache = true;

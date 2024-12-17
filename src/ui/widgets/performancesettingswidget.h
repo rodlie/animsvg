@@ -66,6 +66,7 @@ private:
     QLabel* mAccPreferenceGpuLabel = nullptr;
 
     QCheckBox* mPathGpuAccCheck = nullptr;
+    QComboBox *mMsaa = nullptr;
 
     QComboBox *mAudioDevicesCombo;
 

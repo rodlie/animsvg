@@ -122,6 +122,20 @@ PerformanceSettingsWidget::PerformanceSettingsWidget(QWidget *parent)
     gpuGroupLayout->addWidget(mAccPreferenceDescLabel);
 
     mPathGpuAccCheck = new QCheckBox(tr("Path GPU acceleration"), this);
+
+    // MSAA
+    const auto msaaLabel = new QLabel(tr("Multisample anti-aliasing"), this);
+    mMsaa = new QComboBox(this);
+    mMsaa->addItems({"0", "2", "4", "8", "16"});
+
+    const auto msaaWidget = new QWidget(this);
+    const auto msaaLayout = new QHBoxLayout(msaaWidget);
+    msaaWidget->setContentsMargins(0, 0, 0, 0);
+
+    msaaLayout->addWidget(msaaLabel);
+    msaaLayout->addWidget(mMsaa);
+
+    gpuGroupLayout->addWidget(msaaWidget);
     gpuGroupLayout->addWidget(mPathGpuAccCheck);
     addWidget(gpuGroup);
 
@@ -167,6 +181,7 @@ void PerformanceSettingsWidget::applySettings()
     mSett.fAccPreference = static_cast<AccPreference>(
                 mAccPreferenceSlider->value());
     mSett.fPathGpuAcc = mPathGpuAccCheck->isChecked();
+    mSett.fInternalMultisampleCount = mMsaa->currentText().toInt();
 
     saveRasterEffectsSupport();
 
@@ -193,6 +208,7 @@ void PerformanceSettingsWidget::updateSettings(bool restore)
     mAccPreferenceSlider->setValue(static_cast<int>(mSett.fAccPreference));
     updateAccPreferenceDesc();
     mPathGpuAccCheck->setChecked(mSett.fPathGpuAcc);
+    mMsaa->setCurrentText(QString::number(mSett.fInternalMultisampleCount));
 
     if (restore) {
         AudioHandler::sInstance->initializeAudio(QString(), true);
