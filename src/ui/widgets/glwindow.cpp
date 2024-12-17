@@ -101,13 +101,13 @@ void GLWindow::initialize()
     glDisable(GL_DEPTH_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    const auto interface = GrGLMakeNativeInterface();
-    if (!interface) { RuntimeThrow("Failed to make native interface."); }
+    const auto iface = GrGLMakeNativeInterface();
+    if (!iface) { RuntimeThrow("Failed to make native interface."); }
 
     GrContextOptions options;
     options.fInternalMultisampleCount = eSettings::instance().fInternalMultisampleCount;
 
-    mGrContext = GrContext::MakeGL(interface, options);
+    mGrContext = GrContext::MakeGL(iface, options);
     if (!mGrContext) { RuntimeThrow("Failed to make GrContext."); }
 
     try {
