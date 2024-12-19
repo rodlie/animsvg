@@ -182,6 +182,9 @@ eSettings::eSettings(const int cpuThreads,
     gSettings << std::make_shared<eBoolSetting>(
                      fPathGpuAcc,
                      "pathGpuAcc", true);
+    gSettings << std::make_shared<eIntSetting>(
+                     fInternalMultisampleCount,
+                     "msaa", 4);
     gSettings << std::make_shared<eBoolSetting>(
                      fHddCache,
                      "hddCache", true);
