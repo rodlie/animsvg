@@ -51,7 +51,7 @@ protected:
     PaintSettingsAnimator(const QString &name,
                           BoundingBox * const parent);
 
-    virtual void showHideChildrenBeforeChaningPaintType(
+    virtual void showHideChildrenBeforeChangingPaintType(
             const PaintType newPaintType);
 
     QDomElement prp_writePropertyXEV_impl(const XevExporter& exp) const;
@@ -130,7 +130,7 @@ struct CORE_EXPORT UpdatePaintSettings {
 
     virtual ~UpdatePaintSettings();
 
-    void applyPainterSettingsSk(SkPaint& paint, const float opactiy = 1.f);
+    void applyPainterSettingsSk(SkPaint& paint, const float opacity = 1.f);
 
     void updateGradient(const QGradientStops &stops,
                         const QPointF &start,
