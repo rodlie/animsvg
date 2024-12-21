@@ -7,6 +7,20 @@ Friction uses Qt as its GUI toolkit. **Qt forces you to register a Qt Account to
 
 ## Requirements on Linux
 
+## Debian and Ubuntu
+
+In apt, libraries always begin with `lib`. When they are to be used to compile something else they also end with `-dev`. Except for `libjpeg-turbo8`, `zlib1g`, and `libqscintilla2-qt5-dev`, which use more complex names.
+
+```
+sudo apt install pkg-config ninja-build python3 cmake clang \
+libunwind-dev libexpat-dev libharfbuzz-dev libfreetype-dev libfontconfig-dev libpng-dev libwebp-dev libicu-dev \
+libjpeg-turbo8 zlib1g libqscintilla2-qt5-dev
+```
+
+## Other distributions
+
+If you have another distribution you need to get the following packages:
+
 * pkg-config
 * ninja
 * python3
@@ -36,16 +50,6 @@ Friction uses Qt as its GUI toolkit. **Qt forces you to register a Qt Account to
 * libwebp
 * zlib
 * icu
-
-## Debian and Ubuntu
-
-In apt, libraries always begin with `lib`. When they are to be used to compile something else they also end with `-dev`. Except for `libjpeg-turbo8`, `zlib1g`, and `libqscintilla2-qt5-dev`, which use more complex names.
-
-```
-sudo apt install pkg-config ninja-build python3 cmake clang \
-libunwind-dev libexpat-dev libharfbuzz-dev libfreetype-dev libfontconfig-dev libpng-dev libwebp-dev libicu-dev \
-libjpeg-turbo8 zlib1g libqscintilla2-qt5-dev
-```
 
 ## Requirements on Windows
 
