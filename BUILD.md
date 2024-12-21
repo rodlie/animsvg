@@ -115,6 +115,12 @@ Now build:
 cmake --build . --config Release
 ```
 
+And finally run (from build directory):
+
+```
+./src/app/friction
+```
+
 ## Build on Windows
 
 All requirements must be installed in the correct folders, this is an example and should be adjusted to fit your environment.
@@ -131,4 +137,10 @@ cd build
 cmake -G "Visual Studio 15 2017" -A x64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=%SDK_DIR% ..
 
 cmake --build . --config Release
+```
+
+And finally run (from build directory):
+
+```
+.\src\app\friction.exe
 ```
