@@ -111,9 +111,9 @@ cmake --build .
 
 if [ "${BUILD_ENGINE}" = "ON" ]; then
     (cd src/engine ;
-        tar cvvf skia-build-${GIT_COMMIT}.tar skia
+        tar cf skia-static-${VERSION}-linux-x86_64.tar skia
         mkdir -p /mnt/builds/${VERSION} || true
-        mv skia-build-${GIT_COMMIT}.tar /mnt/builds/${VERSION}/
+        mv skia-static-${VERSION}-linux-x86_64.tar /mnt/builds/${VERSION}/
     )
 fi
 
