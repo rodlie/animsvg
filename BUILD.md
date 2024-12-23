@@ -9,14 +9,14 @@ Generic instructions for building Friction on supported systems.
 * python3
 * cmake *(3.12+)*
 * clang *(7+)*
-* Qt *(5.15.x)*
+* Qt *(6.8.x)*
     * Gui
     * Widgets
     * OpenGL
     * Multimedia
     * Qml
     * Xml
-* qscintilla
+* qscintilla-qt6
 * ffmpeg *(4.2.x)*
     * libavformat
     * libavcodec
@@ -58,7 +58,7 @@ Binary SDK available [here](https://github.com/friction2d/friction-sdk/releases)
 Install required packages from macports:
 
 ```
-sudo port install qt5-qtbase qt5-qttools qt5-qtmultimedia qt5-qtdeclarative qscintilla-qt5 ffmpeg pkgconfig ninja
+sudo port install qt6-qtbase qt6-qttools qt6-qtmultimedia qt6-qtdeclarative qscintilla-qt6 ffmpeg pkgconfig ninja
 ```
 ### Notes
 
