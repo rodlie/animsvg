@@ -41,8 +41,8 @@ Generic instructions for building Friction on supported systems.
 * `cmake` must be available in `PATH`
 * `python3` must be available in `PATH`
 * [LLVM](https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.7/LLVM-15.0.7-win64.exe) installed to default location
-* Qt 5.15 libraries and headers in `friction\sdk`
-  * See [configure_qt5.bat](src/scripts/configure_qt5.bat) and [build_qt5.bat](src/scripts/build_qt5.bat)
+* Qt 6.8 libraries and headers in `friction\sdk`
+  * See [configure_qt6.bat](src/scripts/configure_qt6.bat) and [build_qt6.bat](src/scripts/build_qt6.bat)
 * QScintilla libraries and headers in `friction\sdk`
   * See [build_qscintilla.bat](src/scripts/build_qscintilla.bat)
 * FFmpeg 4.2 libraries and headers in `friction\sdk`
