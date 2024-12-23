@@ -14,6 +14,8 @@ In apt, libraries always begin with `lib`. When they are to be used to compile s
 ```
 sudo apt install pkg-config ninja-build python3 cmake clang \
 libunwind-dev libexpat-dev libharfbuzz-dev libfreetype-dev libfontconfig-dev libpng-dev libwebp-dev libicu-dev \
+libavformat-dev libavcodec-dev libavutil-dev libswscale-dev libswresample-dev \
+qt5base qtdeclarative5-dev qml-module-qtquick-controls qtmultimedia5-dev \
 libjpeg-turbo8 zlib1g libqscintilla2-qt5-dev
 ```
 
