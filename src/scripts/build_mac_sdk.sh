@@ -22,6 +22,7 @@ set -e -x
 
 # keep in sync with other SDK's
 
+PYTHON_V=3.11.11
 NINJA_V=1.11.1
 CMAKE_V=3.26.3
 NASM_V=2.14.02
@@ -71,10 +72,20 @@ if [ ! -d "${SDK}" ]; then
     mkdir -p "${SDK}/bin"
     mkdir -p "${SDK}/src"
     (cd "${SDK}"; ln -sf lib lib64)
-    (cd "${SDK}/bin"; ln -sf /usr/bin/python3 python)
 fi
 
-alias python="/usr/bin/python3"
+# python
+if [ ! -f "${PYTHON_BIN}" ]; then
+    cd ${SRC}
+    PY_SRC=Python-${PYTHON_V}
+    rm -rf ${PY_SRC} || true
+    tar xf ${DIST}/tools/${PY_SRC}.tar.xz
+    cd ${PY_SRC}
+    ./configure ${COMMON_CONFIGURE}
+    make -j${MKJOBS}
+    make install
+    (cd ${SDK}/bin ; ln -sf python3 python)
+fi # python
 
 # ninja
 if [ ! -f "${NINJA_BIN}" ]; then
@@ -83,7 +94,7 @@ if [ ! -f "${NINJA_BIN}" ]; then
     rm -rf ${NINJA_SRC} || true
     tar xf ${DIST}/tools/${NINJA_SRC}.tar.gz
     cd ${NINJA_SRC}
-    ./configure.py --bootstrap
+    ${PYTHON_BIN} configure.py --bootstrap
     cp -a ninja ${NINJA_BIN}
 fi # ninja
 
@@ -106,7 +117,7 @@ if [ ! -f "${SDK}/bin/pkg-config" ]; then
     rm -rf ${PKGCONF_SRC} || true
     tar xf ${DIST}/tools/${PKGCONF_SRC}.tar.xz
     cd ${PKGCONF_SRC}
-    ./configure ${COMMON_CONFIGURE}
+    ./configure ${STATIC_CONFIGURE}
     make -j${MKJOBS}
     make install
     (cd ${SDK}/bin ; ln -sf pkgconf pkg-config)
@@ -478,6 +489,7 @@ fi # ffmpeg
 (cd ${SDK}/lib ;
 install_name_tool -change libvpx.8.dylib @rpath/libvpx.8.dylib libavformat.58.dylib
 install_name_tool -change libvpx.8.dylib @rpath/libvpx.8.dylib libavcodec.58.dylib
+sh ${CWD}/src/scripts/macos_fix_dylib.sh
 )
 
 echo "Friction macOS SDK done!"

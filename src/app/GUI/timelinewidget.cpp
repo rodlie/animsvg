@@ -284,6 +284,14 @@ TimelineWidget::TimelineWidget(Document &document,
             this, &TimelineWidget::setViewedFrameRange);
     connect(mKeysView, &KeysView::wheelEventSignal,
             mFrameRangeScrollBar, &FrameScrollBar::callWheelEvent);
+
+#ifdef Q_OS_MAC
+    connect(mKeysView, &KeysView::panEventSignal,
+            mFrameRangeScrollBar, &FrameScrollBar::callPanEvent);
+    connect(mKeysView, &KeysView::nativeEventSignal,
+            mFrameRangeScrollBar, &FrameScrollBar::callNativeGestures);
+#endif
+
     mKeysViewLayout->addWidget(mFrameRangeScrollBar);
     //mSceneChooser->setCurrentScene(mDocument.fActiveScene); // why?
 
@@ -294,9 +302,8 @@ TimelineWidget::TimelineWidget(Document &document,
     chww->raise();
     connect(chww, &ChangeWidthWidget::widthSet,
             this, &TimelineWidget::setBoxesListWidth);
-    setBoxesListWidth(chww->getCurrentWidth());
 
-    readSettings();
+    readSettings(chww);
 }
 
 TimelineWidget::~TimelineWidget()
@@ -505,11 +512,12 @@ void TimelineWidget::writeStateXEV(QDomElement& ele, QDomDocument& doc,
     ele.setAttribute("search", mSearchLine->text());
 }
 
-void TimelineWidget::readSettings()
+void TimelineWidget::readSettings(ChangeWidthWidget *chww)
 {
     const auto tWidth = AppSupport::getSettings("ui",
                                                 "TimeLineMenuWidth");
-    if (tWidth.isValid()) { setBoxesListWidth(tWidth.toInt()); }
+    setBoxesListWidth(tWidth.isValid() ? tWidth.toInt() : chww->getCurrentWidth());
+    if (tWidth.isValid()) { chww->setWidth(tWidth.toInt()); }
 }
 
 void TimelineWidget::writeSettings()

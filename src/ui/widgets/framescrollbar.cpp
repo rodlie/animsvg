@@ -546,6 +546,48 @@ void FrameScrollBar::callWheelEvent(QWheelEvent *event)
     update();
 }
 
+#ifdef Q_OS_MAC
+void FrameScrollBar::callNativeGestures(QNativeGestureEvent *e)
+{
+    if (!e || !mRange) { return; }
+    bool triggered = false;
+
+    if (e->gestureType() == Qt::ZoomNativeGesture) {
+        int newFramesSpan = mViewedFramesSpan;
+        if (e->value() < 0) { newFramesSpan *= 0.85; }
+        else { newFramesSpan *= 1.15; }
+        setFramesSpan(newFramesSpan);
+        triggered = true;
+    } else if (e->gestureType() == Qt::SmartZoomNativeGesture) {
+        setFramesSpan(mFrameRange.EMAX);
+        triggered = true;
+    }
+
+    if (!triggered) { return; }
+    emitTriggeredChange();
+    update();
+}
+
+void FrameScrollBar::callPanEvent(QWheelEvent *e)
+{
+    if (!e || !mRange) { return; }
+    bool triggered = false;
+
+    if (e->angleDelta().x() == 0) { return; }
+    if (e->angleDelta().x() > 0) {
+        setFirstViewedFrame(mFirstViewedFrame - mViewedFramesSpan / 20);
+        triggered = true;
+    } else {
+        setFirstViewedFrame(mFirstViewedFrame + mViewedFramesSpan / 20);
+        triggered = true;
+    }
+
+    if (!triggered) { return; }
+    emitTriggeredChange();
+    update();
+}
+#endif
+
 void FrameScrollBar::emitChange() {
     emit frameRangeChange(getViewedRange());
 }

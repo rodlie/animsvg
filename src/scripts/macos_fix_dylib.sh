@@ -20,17 +20,18 @@
 
 set -e -x
 
-CWD=`pwd`
+BASEPATH=`pwd`
 
-SDK=20240915
-URL=https://github.com/friction2d/friction-sdk/releases/download/${SDK}
-SDK_TAR=friction-sdk-macOS12.7-v4.tar.xz
-
-if [ ! -d "${CWD}/sdk" ]; then
-    curl -OL ${URL}/${SDK_TAR}
-    tar xf ${SDK_TAR}
-fi
-
-git submodule update -i --recursive
-
-CUSTOM=CI ./src/scripts/build_mac.sh
+for lib in *.dylib; do
+    DY=`otool -L ${lib} | grep ${BASEPATH}`
+    for dylib in $DY; do
+        if [ -f "${dylib}" ]; then
+            BASE=`basename ${dylib}`
+            if [ "${BASE}" = "${lib}" ]; then
+                install_name_tool -id @rpath/${BASE} ${lib}
+            else
+                install_name_tool -change ${dylib} @rpath/${BASE} ${lib}
+            fi
+        fi
+    done
+done

@@ -52,6 +52,8 @@ public:
         return mCurrentWidth;
     }
 
+    void setWidth(int w);
+
 signals:
     void widthSet(int);
 

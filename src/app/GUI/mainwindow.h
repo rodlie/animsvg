@@ -130,6 +130,10 @@ public:
 
     bool processKeyEvent(QKeyEvent *event);
 
+#ifdef Q_OS_MAC
+    bool processBoxesListKeyEvent(QKeyEvent *event);
+#endif
+
     void installNumericFilter(QObject* const object) {
         object->installEventFilter(mNumericFilter);
     }
