@@ -71,6 +71,10 @@ bool UpdateChecker::hasNewVersion(const fVersion &from,
     if (to.minor < from.minor) { return false; }
     if (to.patch < from.patch) { return false; }
     if (to.micro < from.micro) { return false; }
+    if (to.major == from.major &&
+        to.minor == from.minor &&
+        to.patch == from.patch &&
+        to.micro == from.micro) { return false; }
     return true;
 }
 
