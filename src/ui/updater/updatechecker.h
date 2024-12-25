@@ -62,6 +62,9 @@ namespace Friction
             void handleReply(QNetworkReply *reply);
 
             void checkXml(const QString &xml);
+
+            bool allowed();
+            void checkDate();
         };
     }
 }

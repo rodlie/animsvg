@@ -32,6 +32,9 @@
 #include <QDesktopServices>
 #include <QDateTime>
 #include <QTimer>
+#include <QDebug>
+
+#define UPDATE_INTERVAL_DAYS 7
 
 using namespace Friction::Ui;
 
@@ -43,24 +46,18 @@ UpdateChecker::UpdateChecker(QObject *parent)
     connect(mNet, &QNetworkAccessManager::finished,
             this, &UpdateChecker::handleReply);
 
-    const bool doCheck = AppSupport::getSettings("updater", "check", true).toBool();
-    if (!doCheck) { return; }
-
-    QDateTime lastCheck = AppSupport::getSettings("updater",
-                                                  "last",
-                                                  QDateTime::currentDateTime()).toDateTime();
-    int interval = AppSupport::getSettings("updater", "interval", 7).toInt();
-    if (lastCheck.daysTo(QDateTime::currentDateTime()) >= interval) {
-        QTimer::singleShot(5000, this, [this]() { check(); });
-    }
+    if (allowed()) { checkDate(); }
 }
 
 void UpdateChecker::check()
 {
+    AppSupport::setSettings("updater",
+                            "last",
+                            QDateTime::currentDateTime());
     const auto internalVersion = parseVersion(AppSupport::getAppVersion());
     if (internalVersion.major == 0) { return; }
 
-    AppSupport::setSettings("updater", "last", QDateTime::currentDateTime());
+    qDebug() << "check for updates ...";
     mNet->get(QNetworkRequest(QUrl("http://friction.graphics/update.xml")));
 }
 
@@ -154,9 +151,12 @@ void UpdateChecker::checkXml(const QString &xml)
     box.setText(tr("<h3>Friction %1</h3>"
                    "<p>Friction %1 is now available for download. "
                    "See release notes for more information.</p>").arg(xmlVersion));
-    box.addButton(tr("Ignore"), QMessageBox::NoRole);
-    const auto never = box.addButton(tr("Disable"), QMessageBox::ResetRole);
-    const auto download = box.addButton(tr("Download"), QMessageBox::YesRole);
+    box.addButton(tr("Ignore"),
+                  QMessageBox::NoRole);
+    const auto never = box.addButton(tr("Disable"),
+                                     QMessageBox::ResetRole);
+    const auto download = box.addButton(tr("Download"),
+                                        QMessageBox::YesRole);
     download->setFocus();
 
     box.exec();
@@ -165,6 +165,48 @@ void UpdateChecker::checkXml(const QString &xml)
         QString url = QString("https://friction.graphics/releases/friction-%1.html").arg(QString(xmlVersion).replace(".", ""));
         QDesktopServices::openUrl(QUrl::fromUserInput(url));
     } else if (box.clickedButton() == never) {
-        AppSupport::setSettings("updater", "check", false);
+        AppSupport::setSettings("updater",
+                                "check",
+                                false);
+    }
+}
+
+bool UpdateChecker::allowed()
+{
+    const int interval = AppSupport::getSettings("updater",
+                                                 "interval",
+                                                 UPDATE_INTERVAL_DAYS).toInt();
+    const bool firstRun = !AppSupport::getSettings("updater",
+                                                   "check").isValid();
+    if (firstRun) {
+        const int ask = QMessageBox::question(nullptr,
+                                              tr("Update Checker"),
+                                              tr("<h3>Enable Update Checker?</h3>"
+                                              "<p>Friction will check for updates every %1 days.</p>").arg(interval));
+        const bool allow = (ask == QMessageBox::Yes);
+        AppSupport::setSettings("updater",
+                                "check",
+                                allow);
+        return allow;
+    }
+    return AppSupport::getSettings("updater",
+                                   "check",
+                                   false).toBool();
+}
+
+void UpdateChecker::checkDate()
+{
+    const bool firstRun = !AppSupport::getSettings("updater",
+                                                   "last").toDateTime().isValid();
+    QDateTime lastCheck = AppSupport::getSettings("updater",
+                                                  "last",
+                                                  QDateTime::currentDateTime()).toDateTime();
+    const int interval = AppSupport::getSettings("updater",
+                                                 "interval",
+                                                 UPDATE_INTERVAL_DAYS).toInt();
+    const bool doCheck = (lastCheck.daysTo(QDateTime::currentDateTime()) >= interval || firstRun);
+
+    if (doCheck) {
+        QTimer::singleShot(5000, this, [this]() { check(); });
     }
 }
