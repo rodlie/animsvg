@@ -518,13 +518,21 @@ void Canvas::drawPathFinish(const qreal invScale) {
 
 const QColor Canvas::pickPixelColor(const QPoint &pos)
 {
+    // try the "safe" option first
+    if (QApplication::activeWindow()) {
+        const auto nPos = QApplication::activeWindow()->mapFromGlobal(pos);
+        return QApplication::activeWindow()->grab(QRect(QPoint(nPos.x(), nPos.y()),
+                                                        QSize(1, 1))).toImage().pixel(0, 0);
+    }
+
+    // "insecure" fallback (will not work in a sandbox or wayland)
+    // will prompt for permissions on macOS
+    // Windows and X11 don't care
     QScreen *screen = QApplication::screenAt(pos);
     if (!screen) { return QColor(); }
     WId wid = QApplication::desktop()->winId();
-    QImage img = screen->grabWindow(wid,
-                                    pos.x(), pos.y(),
-                                    1, 1).toImage();
-    return QColor(img.pixel(0, 0));
+    const auto pix = screen->grabWindow(wid, pos.x(), pos.y(), 1, 1);
+    return QColor(pix.toImage().pixel(0, 0));
 }
 
 void Canvas::applyPixelColor(const QColor &color,
