@@ -991,8 +991,9 @@ void AppSupport::initEnv(const bool &isRenderer)
     if (isRenderer) { // Force Mesa if Renderer
         qputenv("LIBGL_ALWAYS_SOFTWARE", "1");
     }
-    // Force XCB on Linux until we support Wayland
+#ifdef PROJECT_OFFICIAL
     qputenv("QT_QPA_PLATFORM", isRenderer ? "offscreen" : "xcb");
+#endif
 #else
     Q_UNUSED(isRenderer)
 #endif
