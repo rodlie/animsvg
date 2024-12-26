@@ -134,6 +134,16 @@ ExternalProject_Add(
     USES_TERMINAL_BUILD true
 )
 
+if(UNIX AND NOT APPLE)
+    include(GNUInstallDirs)
+    install(
+        FILES
+        ${SKIA_BUILD_DIR}/libskia.friction.so
+        DESTINATION
+        ${CMAKE_INSTALL_LIBDIR}
+    )
+endif()
+
 if(WIN32)
     add_custom_command(TARGET Engine POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SKIA_BUILD_DIR}/skia.dll.lib ${SKIA_BUILD_DIR}/skia.lib)
 endif()
