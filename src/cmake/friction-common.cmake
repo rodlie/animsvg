@@ -69,20 +69,6 @@ if(MSVC)
     add_definitions("/MP")
 endif()
 
-if(UNIX AND NOT APPLE)
-    option(STATIC_FFMPEG "Link against static ffmpeg" OFF)
-    if(${STATIC_FFMPEG})
-        set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-Bsymbolic")
-    endif()
-endif()
-
-if(NOT WIN32)
-    if ((NOT ${CMAKE_VERSION} VERSION_LESS 3.11) AND (NOT OpenGL_GL_PREFERENCE))
-        set(OpenGL_GL_PREFERENCE "GLVND")
-    endif()
-    find_package(OpenGL REQUIRED)
-endif()
-
 find_package(PkgConfig QUIET)
 find_package(QT NAMES Qt5 COMPONENTS Core REQUIRED)
 find_package(
@@ -120,10 +106,9 @@ else()
     if(APPLE)
         set(SKIA_LIBRARIES skia)
     else()
-        set(SKIA_LIBRARIES
-            skia
-            fontconfig
-            ${OPENGL_LIBRARY})
+        set(SKIA_LIBRARIES skia.friction)
+    endif()
+    if(UNIX AND NOT APPLE)
         pkg_check_modules(UNWIND REQUIRED libunwind)
         set(GPERF_INCLUDE_DIRS ${CMAKE_CURRENT_BINARY_DIR}/../gperftools ${UNWIND_INCLUDE_DIRS})
         set(GPERF_LIBRARIES tcmalloc_static ${UNWIND_LIBRARIES})

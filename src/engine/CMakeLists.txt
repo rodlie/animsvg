@@ -29,6 +29,10 @@ option(LINUX_DEPLOY "Linux Deploy" OFF)
 option(MAC_DEPLOY "Mac Deploy" OFF)
 option(SYNC_SKIA_DEPS "Sync third-party depends" ON)
 
+if(UNIX AND NOT APPLE)
+    option(USE_EGL "Use EGL in skia" OFF)
+endif()
+
 set(SKIA_SRC "${CMAKE_CURRENT_SOURCE_DIR}/skia")
 set(SKIA_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/skia")
 
@@ -72,6 +76,10 @@ else()
     endif()
     set(SKIA_ARGS "ar=\"${CMAKE_AR}\" cc=\"${CMAKE_C_COMPILER}\" cxx=\"${CMAKE_CXX_COMPILER}\"")
     if(UNIX AND NOT APPLE)
+        if(${USE_EGL})
+            set(SKIA_ARGS "${SKIA_ARGS} skia_use_egl=true")
+        endif()
+        set(SKIA_ARGS "${SKIA_ARGS} is_component_build=true")
         if (${LINUX_DEPLOY})
             set(SKIA_ARGS "${SKIA_ARGS} extra_cflags=[\"-Wno-error\"]")
         else()
@@ -125,6 +133,16 @@ ExternalProject_Add(
     USES_TERMINAL_CONFIGURE true
     USES_TERMINAL_BUILD true
 )
+
+if(UNIX AND NOT APPLE)
+    include(GNUInstallDirs)
+    install(
+        FILES
+        ${SKIA_BUILD_DIR}/libskia.friction.so
+        DESTINATION
+        ${CMAKE_INSTALL_LIBDIR}
+    )
+endif()
 
 if(WIN32)
     add_custom_command(TARGET Engine POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SKIA_BUILD_DIR}/skia.dll.lib ${SKIA_BUILD_DIR}/skia.lib)
