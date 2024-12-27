@@ -40,6 +40,8 @@
 
 class Canvas;
 
+enum class AlignRelativeTo;
+
 class QrealAction;
 class MovablePoint;
 
@@ -298,6 +300,10 @@ public:
 
     void alignGeometry(const Qt::Alignment align, const QRectF& to);
     void alignPivot(const Qt::Alignment align, const QRectF& to);
+    void alignPivotItself(const Qt::Alignment align,
+                          const QRectF& to,
+                          const AlignRelativeTo relativeTo,
+                          const QPointF lastPivotAbsPos);
 
     QMatrix getTotalTransform() const;
 
