@@ -30,11 +30,10 @@ BUILD_ENGINE=${BUILD_ENGINE:-"OFF"}
 REL=${REL:-0}
 APPIMG=20240401
 SDK=1.0.0
-SKIA=1.0.0-682c91fa
 URL=https://github.com/friction2d/friction-sdk/releases/download/v${SDK}
 APPIMAGE_TAR=friction-appimage-tools-${APPIMG}.tar.xz
 SDK_TAR=friction-sdk-${SDK}-linux-x86_64.tar.xz
-SKIA_TAR=skia-static-${SKIA}-linux-x86_64.tar.xz
+SKIA_TAR=skia-friction-09e64895-linux-x86_64.tar.xz
 
 mkdir -p distfiles/sdk || true
 

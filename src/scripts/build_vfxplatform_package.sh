@@ -29,6 +29,7 @@ FRICTION_PKG=friction-${VERSION}
 
 APPIMAGETOOL=bfe6e0c
 APPIMAGERUNTIME=1bb1157
+SKIA_LIB=${DISTFILES}/skia/libskia.friction.so
 
 if [ "${VERSION}" = "" ]; then
     echo "Missing version"
@@ -142,6 +143,12 @@ for so in *.so*; do
     patchelf --set-rpath '$ORIGIN' ${so}
 done
 )
+
+PKG_SKIA_LIB=${BUILD}/${FRICTION_PKG}/opt/friction/lib/libskia.friction.so
+if [ -f "${SKIA_LIB}" ] && [ ! -f "${PKG_SKIA_LIB}" ]; then
+    cp -a ${SKIA_LIB} ${BUILD}/${FRICTION_PKG}/opt/friction/lib/
+    strip -s ${PKG_SKIA_LIB}
+fi
 
 PLUGS="
 audio
