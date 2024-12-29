@@ -53,7 +53,7 @@ AboutWidget::AboutWidget(QWidget *parent)
                                                     AppSupport::getAppDisplayName(),
                                                     AppSupport::getAppID(),
                                                     QString::number(ThemeSupport::getIconSize(qRound(logoSize * devicePixelRatioF())).width()),
-                                                    QApplication::platformName());
+                                                    QApplication::platformName() == "xcb" ? "X11" : QApplication::platformName());
     const auto buildInfo = AppSupport::getAppBuildInfo(true);
     if (!buildInfo.isEmpty()) {
         label.append(buildInfo);
