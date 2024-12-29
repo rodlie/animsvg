@@ -103,6 +103,12 @@ int main(int argc, char *argv[])
     QApplication::setOrganizationDomain(AppSupport::getAppDomain());
     QApplication::setApplicationVersion(AppSupport::getAppVersion());
 
+#ifdef Q_OS_LINUX
+    if (AppSupport::isWayland()) {
+        QGuiApplication::setDesktopFileName(AppSupport::getAppID());
+    }
+#endif
+
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
@@ -123,8 +129,10 @@ int main(int argc, char *argv[])
 #endif
 
     // init splash
-    // don't show on wayland (broken)
-    const bool showSplash = QGuiApplication::platformName() != "wayland";
+    bool showSplash = true;
+#ifdef Q_OS_LINUX
+    showSplash = !AppSupport::isWayland();
+#endif
     QSplashScreen splash(QPixmap(":/icons/splash/splash-00001.png"));
     if (showSplash) {
         splash.show();

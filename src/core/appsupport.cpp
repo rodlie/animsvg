@@ -691,6 +691,11 @@ bool AppSupport::isAppImage()
     return !getAppImagePath().simplified().isEmpty();
 }
 
+bool AppSupport::isWayland()
+{
+    return QGuiApplication::platformName().startsWith("wayland");
+}
+
 const QString AppSupport::getAppImagePath()
 {
     return QString(qgetenv("APPIMAGE"));
@@ -876,6 +881,9 @@ bool AppSupport::setupXDGDesktopIntegration()
         }
     }
 
+    if (isWayland()) {
+        QGuiApplication::setDesktopFileName(getAppID());
+    }
     return true;
 }
 
