@@ -103,12 +103,6 @@ int main(int argc, char *argv[])
     QApplication::setOrganizationDomain(AppSupport::getAppDomain());
     QApplication::setApplicationVersion(AppSupport::getAppVersion());
 
-#ifdef Q_OS_LINUX
-    if (AppSupport::isWayland()) {
-        QGuiApplication::setDesktopFileName(AppSupport::getAppID());
-    }
-#endif
-
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
@@ -131,7 +125,10 @@ int main(int argc, char *argv[])
     // init splash
     bool showSplash = true;
 #ifdef Q_OS_LINUX
-    showSplash = !AppSupport::isWayland();
+    if (AppSupport::isWayland()) {
+        QGuiApplication::setDesktopFileName(AppSupport::getAppID());
+        showSplash = false;
+    }
 #endif
     QSplashScreen splash(QPixmap(":/icons/splash/splash-00001.png"));
     if (showSplash) {
