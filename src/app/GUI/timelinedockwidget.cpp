@@ -136,7 +136,7 @@ TimelineDockWidget::TimelineDockWidget(Document& document,
     connect(mStopButton, &QAction::triggered,
             this, &TimelineDockWidget::interruptPreview);
 
-    mLoopButton = new QAction(QIcon::fromTheme("loop3"),
+    mLoopButton = new QAction(QIcon::fromTheme("preview_loop"),
                               tr("Loop Preview"),
                               this);
     mLoopButton->setCheckable(true);
