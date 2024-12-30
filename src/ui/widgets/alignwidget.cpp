@@ -55,7 +55,7 @@ AlignWidget::AlignWidget(QWidget* const parent)
     const auto combosLay = new QHBoxLayout;
     mainLayout->addLayout(combosLay);
 
-    combosLay->addWidget(new QLabel(tr("Align")));
+    combosLay->addWidget(new QLabel(tr("Align"), this));
     mAlignPivot = new QComboBox(this);
     mAlignPivot->setMinimumWidth(20);
     mAlignPivot->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -65,7 +65,7 @@ AlignWidget::AlignWidget(QWidget* const parent)
     mAlignPivot->addItem(tr("Pivot")); // INDEX_ALIGN_PIVOT
     combosLay->addWidget(mAlignPivot);
 
-    combosLay->addWidget(new QLabel(tr("To")));
+    combosLay->addWidget(new QLabel(tr("To"), this));
     mRelativeTo = new QComboBox(this);
     mRelativeTo->setMinimumWidth(20);
     mRelativeTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
