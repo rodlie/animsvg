@@ -47,6 +47,9 @@ signals:
 
 private:
     void triggerAlign(const Qt::Alignment align);
+    void setComboBoxItemState(QComboBox *box,
+                              int index,
+                              bool enabled);
 
     QComboBox *mAlignPivot;
     QComboBox *mRelativeTo;

@@ -28,10 +28,20 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QStandardItemModel>
 
 #include "GUI/global.h"
 #include "Private/esettings.h"
 #include "themesupport.h"
+
+#define INDEX_ALIGN_GEOMETRY 0
+#define INDEX_ALIGN_GEOMETRY_PIVOT 1
+#define INDEX_ALIGN_PIVOT 2
+
+#define INDEX_REL_SCENE 0
+#define INDEX_REL_LAST_SELECTED 1
+#define INDEX_REL_LAST_SELECTED_PIVOT 2
+#define INDEX_REL_BOUNDINGBOX 3
 
 AlignWidget::AlignWidget(QWidget* const parent)
     : QWidget(parent)
@@ -45,23 +55,29 @@ AlignWidget::AlignWidget(QWidget* const parent)
     const auto combosLay = new QHBoxLayout;
     mainLayout->addLayout(combosLay);
 
-    //combosLay->addWidget(new QLabel(tr("Align")));
+    combosLay->addWidget(new QLabel(tr("Align"), this));
     mAlignPivot = new QComboBox(this);
     mAlignPivot->setMinimumWidth(20);
     mAlignPivot->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     mAlignPivot->setFocusPolicy(Qt::NoFocus);
-    mAlignPivot->addItem(tr("Align Geometry"));
-    mAlignPivot->addItem(tr("Align Pivot"));
+    mAlignPivot->addItem(tr("Geometry")); // INDEX_ALIGN_GEOMETRY
+    mAlignPivot->addItem(tr("Geometry by Pivot")); // INDEX_ALIGN_GEOMETRY_PIVOT
+    mAlignPivot->addItem(tr("Pivot")); // INDEX_ALIGN_PIVOT
     combosLay->addWidget(mAlignPivot);
 
-    //combosLay->addWidget(new QLabel(tr("Relative to")));
+    combosLay->addWidget(new QLabel(tr("To"), this));
     mRelativeTo = new QComboBox(this);
     mRelativeTo->setMinimumWidth(20);
     mRelativeTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     mRelativeTo->setFocusPolicy(Qt::NoFocus);
-    mRelativeTo->addItem(tr("Relative to Scene"));
-    mRelativeTo->addItem(tr("Relative to Last Selected"));
+    mRelativeTo->addItem(tr("Scene")); // INDEX_REL_SCENE
+    mRelativeTo->addItem(tr("Last Selected")); // INDEX_REL_LAST_SELECTED
+    mRelativeTo->addItem(tr("Last Selected Pivot")); // INDEX_REL_LAST_SELECTED_PIVOT
+    mRelativeTo->addItem(tr("Bounding Box")); // INDEX_REL_BOUNDINGBOX
     combosLay->addWidget(mRelativeTo);
+
+    setComboBoxItemState(mRelativeTo, INDEX_REL_LAST_SELECTED_PIVOT, false);
+    setComboBoxItemState(mRelativeTo, INDEX_REL_BOUNDINGBOX, false);
 
     const auto buttonsLay = new QHBoxLayout;
     mainLayout->addLayout(buttonsLay);
@@ -121,6 +137,31 @@ AlignWidget::AlignWidget(QWidget* const parent)
     });
     buttonsLay->addWidget(bottomButton);
 
+    connect(mAlignPivot,
+            QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [this](int index) {
+        setComboBoxItemState(mRelativeTo,
+                             INDEX_REL_LAST_SELECTED_PIVOT,
+                             index == INDEX_ALIGN_PIVOT);
+        setComboBoxItemState(mRelativeTo,
+                             INDEX_REL_BOUNDINGBOX,
+                             index == INDEX_ALIGN_PIVOT);
+        if (index == INDEX_ALIGN_PIVOT) { mRelativeTo->setCurrentIndex(INDEX_REL_BOUNDINGBOX); }
+        else { mRelativeTo->setCurrentIndex(INDEX_REL_SCENE); }
+    });
+
+    connect(mRelativeTo,
+            QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [leftButton,
+                   rightButton,
+                   topButton,
+                   bottomButton](int index) {
+        leftButton->setEnabled(index != INDEX_REL_LAST_SELECTED_PIVOT);
+        rightButton->setEnabled(index != INDEX_REL_LAST_SELECTED_PIVOT);
+        topButton->setEnabled(index != INDEX_REL_LAST_SELECTED_PIVOT);
+        bottomButton->setEnabled(index != INDEX_REL_LAST_SELECTED_PIVOT);
+    });
+
     eSizesUI::widget.add(leftButton, [leftButton,
                                       hCenterButton,
                                       rightButton,
@@ -142,4 +183,19 @@ void AlignWidget::triggerAlign(const Qt::Alignment align)
     const auto alignPivot = static_cast<AlignPivot>(mAlignPivot->currentIndex());
     const auto relativeTo = static_cast<AlignRelativeTo>(mRelativeTo->currentIndex());
     emit alignTriggered(align, alignPivot, relativeTo);
+}
+
+void AlignWidget::setComboBoxItemState(QComboBox *box,
+                                       int index,
+                                       bool enabled)
+{
+    auto model = qobject_cast<QStandardItemModel*>(box->model());
+    if (!model) { return; }
+
+    if (index >= box->count() || index < 0) { return; }
+
+    auto item = model->item(index);
+    if (!item) { return; }
+
+    item->setEnabled(enabled);
 }
