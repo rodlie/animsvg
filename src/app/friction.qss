@@ -480,7 +480,7 @@ QMenu::separator {
 }
 
 QMenu::item:disabled,
-AlignWidget QPushButton::disabled {
+AlignWidget QPushButton:disabled {
     background: transparent;
 }
 
@@ -595,7 +595,7 @@ QProgressBar::chunk {
     width: 5px;
 }
 
-QCheckBox::disabled {
+QCheckBox:disabled {
     color: %13;
 }
 
