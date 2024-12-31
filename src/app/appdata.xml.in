@@ -7,7 +7,7 @@
   <developer_name>@FRICTION_DISPLAY_NAME@</developer_name>
   <summary>@PROJECT_SUMMARY@</summary>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>GPL-3.0-or-later</project_license>
+  <project_license>GPL-3.0-only</project_license>
   <description>
     <p>@PROJECT_DESCRIPTION@</p>
   </description>
@@ -69,7 +69,7 @@
   </releases>
   <screenshots>
     <screenshot type="default">
-      <image>https://friction.graphics/assets/screenshots/096/friction-096-screenshot.jpg</image>
+      <image>https://friction.graphics/assets/screenshots/100/friction-100b2-screenshot.png</image>
       <caption>Friction user interface</caption>
     </screenshot>
   </screenshots>

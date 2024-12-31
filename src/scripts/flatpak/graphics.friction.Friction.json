@@ -22,6 +22,7 @@
             "buildsystem": "simple",
             "build-commands": [
                 "mv Friction/* /app/",
+                "rm -rf Friction",
                 "rm -f /app/friction",
                 "rm -f /app/bin/portable.txt",
                 "rm -f /app/share/icons/hicolor/*/mimetypes/application-x-graphics.friction.Friction.png",
