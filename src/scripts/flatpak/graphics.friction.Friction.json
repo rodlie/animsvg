@@ -31,8 +31,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://sourceforge.net/projects/friction/files/snapshots/1.0.0-9d77ca09/friction-1.0.0-9d77ca09-linux-x86_64.tar.xz",
-                    "sha256": "20f6788bd407029355cfcab99b3f48cef6556333eca7e06047cf93498c323ad4",
+                    "url": "https://sourceforge.net/projects/friction/files/snapshots/1.0.0-ea7fc674/friction-1.0.0-ea7fc674-linux-x86_64.tar.xz",
+                    "sha256": "003964418ba46bda3fab76f7bc8e5d266aa8d9181d7f5eb1721ae32ea99a7dc8",
                     "dest": "./Friction"
                 }
             ]
