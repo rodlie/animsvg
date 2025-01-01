@@ -979,8 +979,7 @@ void BoundingBox::alignPivotItself(const Qt::Alignment align,
     }
 
     startPivotTransform();
-    mTransformAnimator->setPivotFixedTransform(center);
-    requestGlobalPivotUpdateIfSelected();
+    setPivotRelPos(center);
     finishPivotTransform();
 }
 
