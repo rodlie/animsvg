@@ -22,7 +22,6 @@
             "buildsystem": "simple",
             "build-commands": [
                 "mv Friction/* /app/",
-                "rm -rf Friction",
                 "rm -f /app/friction",
                 "rm -f /app/bin/portable.txt",
                 "rm -f /app/share/icons/hicolor/*/mimetypes/application-x-graphics.friction.Friction.png",
@@ -31,8 +30,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://sourceforge.net/projects/friction/files/snapshots/1.0.0-ea7fc674/friction-1.0.0-ea7fc674-linux-x86_64.tar.xz",
-                    "sha256": "003964418ba46bda3fab76f7bc8e5d266aa8d9181d7f5eb1721ae32ea99a7dc8",
+                    "url": "https://sourceforge.net/projects/friction/files/snapshots/1.0.0-3bc2c83b/friction-1.0.0-3bc2c83b-linux-x86_64.tar.xz",
+                    "sha256": "09377fe840902048228df9f40acd2e9839ca9bb6a5084d32bb80175805aab545",
                     "dest": "./Friction"
                 }
             ]
