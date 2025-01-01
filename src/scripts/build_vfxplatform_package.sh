@@ -73,6 +73,9 @@ cp -a ${SDK}/plugins/platforms/libqxcb.so ${PLUG_DIR}/platforms/
 cp -a ${SDK}/plugins/platforms/libqwayland-generic.so ${PLUG_DIR}/platforms/
 cp -a ${SDK}/plugins/platforms/libqwayland-egl.so ${PLUG_DIR}/platforms/
 
+mkdir -p ${PLUG_DIR}/platformthemes
+cp -a ${SDK}/plugins/platformthemes/libqxdgdesktopportal.so ${PLUG_DIR}/platformthemes/
+
 cp -a ${SDK}/plugins/audio ${PLUG_DIR}/
 cp -a ${SDK}/plugins/xcbglintegrations ${PLUG_DIR}/
 cp -a ${SDK}/plugins/wayland-graphics-integration-client ${PLUG_DIR}/
