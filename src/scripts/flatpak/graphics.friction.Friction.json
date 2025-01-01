@@ -11,10 +11,7 @@
             "--socket=pulseaudio",
             "--device=dri",
             "--filesystem=xdg-documents",
-            "--filesystem=xdg-pictures",
-            "--filesystem=xdg-videos",
-            "--filesystem=xdg-music",
-            "--filesystem=xdg-desktop"
+            "--filesystem=xdg-pictures"
     ],
     "modules": [
         {
