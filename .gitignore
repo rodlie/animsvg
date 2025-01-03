@@ -32,4 +32,6 @@ build-release
 src/scripts/flatpak/.flatpak-builder
 src/scripts/flatpak/builddir
 src/scripts/flatpak/export
+src/scripts/flatpak/builder
+src/scripts/flatpak/repo-main
 
