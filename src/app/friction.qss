@@ -479,7 +479,8 @@ QMenu::separator {
   background-color: %4;
 }
 
-QMenu::item:disabled {
+QMenu::item:disabled,
+AlignWidget QPushButton::disabled {
     background: transparent;
 }
 

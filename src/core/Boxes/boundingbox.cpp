@@ -865,6 +865,125 @@ void BoundingBox::alignPivot(const Qt::Alignment align, const QRectF& to) {
     alignGeometry(QRectF(pivot, pivot), align, to);
 }
 
+void BoundingBox::alignPivotItself(const Qt::Alignment align,
+                                   const QRectF& to,
+                                   const AlignRelativeTo relativeTo,
+                                   const QPointF lastPivotAbsPos)
+{
+    QPointF currentPivot = mTransformAnimator->getPivot();
+    QPointF currentPivotAbsPos = getPivotAbsPos();
+
+    QPointF lastSelectedPivotAbsPos = lastPivotAbsPos;
+    
+    QPointF center = getRelCenterPosition();
+
+    switch (relativeTo) {
+    case AlignRelativeTo::scene:
+        switch (align) {
+        case Qt::AlignVCenter:
+            center.setX(currentPivot.x());
+            center.setY(currentPivot.y() - currentPivotAbsPos.y() + to.bottomRight().y()/2);
+            break;
+        case Qt::AlignHCenter:
+            center.setX(currentPivot.x() - currentPivotAbsPos.x() + to.bottomRight().x()/2);
+            center.setY(currentPivot.y());
+            break;
+        case Qt::AlignLeft:
+            center.setX(currentPivot.x() - currentPivotAbsPos.x());
+            center.setY(currentPivot.y());
+            break;
+        case Qt::AlignRight:
+            center.setX(currentPivot.x() + (to.topRight().x() - currentPivotAbsPos.x()));
+            center.setY(currentPivot.y());
+            break;
+        case Qt::AlignTop:
+            center.setX(currentPivot.x());
+            center.setY(currentPivot.y() - currentPivotAbsPos.y());
+            break;
+        case Qt::AlignBottom:
+            center.setX(currentPivot.x());
+            center.setY(currentPivot.y() + (to.bottomRight().y() - currentPivotAbsPos.y()));
+            break;
+        }
+        break;
+    case AlignRelativeTo::lastSelected:
+        switch (align) {
+        case Qt::AlignVCenter:
+            center.setX(currentPivot.x());
+            center.setY(currentPivot.y() - currentPivotAbsPos.y() + to.center().y());
+            break;
+        case Qt::AlignHCenter:
+            center.setX(currentPivot.x() - currentPivotAbsPos.x() + to.center().x());
+            center.setY(currentPivot.y());
+            break;
+        case Qt::AlignLeft:
+            center.setX(currentPivot.x() - currentPivotAbsPos.x() + to.topLeft().x());
+            center.setY(currentPivot.y());
+            break;
+        case Qt::AlignRight:
+            center.setX(currentPivot.x() + (to.topRight().x() - currentPivotAbsPos.x()));
+            center.setY(currentPivot.y());
+            break;
+        case Qt::AlignTop:
+            center.setX(currentPivot.x());
+            center.setY(currentPivot.y() - currentPivotAbsPos.y() + to.topLeft().y());
+            break;
+        case Qt::AlignBottom:
+            center.setX(currentPivot.x());
+            center.setY(currentPivot.y() + (to.bottomRight().y() - currentPivotAbsPos.y()));
+            break;
+        }
+        break;
+    case AlignRelativeTo::lastSelectedPivot:
+        switch (align) {
+        case Qt::AlignVCenter:
+            center.setX(currentPivot.x());
+            center.setY(currentPivot.y() - currentPivotAbsPos.y() + lastSelectedPivotAbsPos.y());
+            break;
+        case Qt::AlignHCenter:
+            center.setX(currentPivot.x() - currentPivotAbsPos.x() + lastSelectedPivotAbsPos.x());
+            center.setY(currentPivot.y());
+            break;
+        default:
+            center.setX(currentPivot.x());
+            center.setY(currentPivot.y());
+            break;
+        }
+        break;
+    case AlignRelativeTo::boundingBox:
+        switch (align) {
+        case Qt::AlignVCenter:
+            center.setX(currentPivot.x());
+            break;
+        case Qt::AlignHCenter:
+            center.setY(currentPivot.y());
+            break;
+        case Qt::AlignLeft:
+            center.setX(mRelRect.topLeft().x());
+            center.setY(currentPivot.y());
+            break;
+        case Qt::AlignRight:
+            center.setX(mRelRect.topRight().x());
+            center.setY(currentPivot.y());
+            break;
+        case Qt::AlignTop:
+            center.setX(currentPivot.x());
+            center.setY(mRelRect.topLeft().y());
+            break;
+        case Qt::AlignBottom:
+            center.setX(currentPivot.x());
+            center.setY(mRelRect.bottomLeft().y());
+            break;
+        }
+        break;
+    }
+
+    startPivotTransform();
+    mTransformAnimator->setPivotFixedTransform(center);
+    requestGlobalPivotUpdateIfSelected();
+    finishPivotTransform();
+}
+
 void BoundingBox::moveByAbs(const QPointF &trans) {
     mTransformAnimator->moveByAbs(trans);
 }
