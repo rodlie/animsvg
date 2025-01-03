@@ -18,11 +18,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-set -e -x
+#set -e -x
 
 BASEPATH=`pwd`
 
 for lib in *.dylib; do
+    echo "Check (and fix) rpath for ${lib} ..."
     DY=`otool -L ${lib} | grep ${BASEPATH}`
     for dylib in $DY; do
         if [ -f "${dylib}" ]; then
