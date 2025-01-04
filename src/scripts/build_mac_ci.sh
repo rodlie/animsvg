@@ -24,7 +24,7 @@ CWD=`pwd`
 
 SDK=1.0.0
 URL=https://github.com/friction2d/friction-sdk/releases/download/${SDK}
-SDK_TAR=friction-sdk-${SDK}-macOS-x86_64.tar.bz2
+SDK_TAR=friction-sdk-${SDK}-macOS-x86_64.tar.xz
 
 if [ ! -d "${CWD}/sdk" ]; then
     curl -OL ${URL}/${SDK_TAR}
