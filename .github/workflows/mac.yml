@@ -1,6 +1,6 @@
 name: macOS
 
-on: workflow_dispatch
+on: [push, pull_request]
 
 jobs:
   release:
