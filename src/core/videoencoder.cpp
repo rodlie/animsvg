@@ -287,7 +287,8 @@ static AVFrame *getVideoFrame(OutputStream * const ost,
 static void writeVideoFrame(AVFormatContext * const oc,
                             OutputStream * const ost,
                             const sk_sp<SkImage> &image,
-                            bool * const encodeVideo) {
+                            bool * const encodeVideo)
+{
     AVCodecContext * const c = ost->fCodec;
 
     AVFrame * frame;
@@ -297,31 +298,29 @@ static void writeVideoFrame(AVFormatContext * const oc,
         RuntimeThrow("Failed to retrieve video frame");
     }
 
-
     // encode the image
     const int ret = avcodec_send_frame(c, frame);
-    if(ret < 0) AV_RuntimeThrow(ret, "Error submitting a frame for encoding")
+    if (ret < 0) { AV_RuntimeThrow(ret, "Error submitting a frame for encoding") }
 
     while(ret >= 0) {
-        AVPacket pkt;
-        av_init_packet(&pkt);
+        AVPacket* pkt = av_packet_alloc();
+        const int recRet = avcodec_receive_packet(c, pkt);
 
-        const int recRet = avcodec_receive_packet(c, &pkt);
-        if(recRet >= 0) {
-            av_packet_rescale_ts(&pkt, c->time_base, ost->fStream->time_base);
-            pkt.stream_index = ost->fStream->index;
+        if (recRet >= 0) {
+            av_packet_rescale_ts(pkt, c->time_base, ost->fStream->time_base);
+            pkt->stream_index = ost->fStream->index;
 
             // Write the compressed frame to the media file.
-            const int interRet = av_interleaved_write_frame(oc, &pkt);
-            if(interRet < 0) AV_RuntimeThrow(interRet, "Error while writing video frame")
-        } else if(recRet == AVERROR(EAGAIN) || recRet == AVERROR_EOF) {
+            const int interRet = av_interleaved_write_frame(oc, pkt);
+            if (interRet < 0) { AV_RuntimeThrow(interRet, "Error while writing video frame") }
+        } else if (recRet == AVERROR(EAGAIN) || recRet == AVERROR_EOF) {
             *encodeVideo = ret != AVERROR_EOF;
             break;
         } else {
             AV_RuntimeThrow(recRet, "Error encoding a video frame")
         }
 
-        av_packet_unref(&pkt);
+        av_packet_unref(pkt);
     }
 }
 
@@ -452,28 +451,30 @@ static void openAudio(const AVCodec * const codec, OutputStream * const ost,
 static void encodeAudioFrame(AVFormatContext * const oc,
                              OutputStream * const ost,
                              AVFrame * const frame,
-                             bool * const encodeAudio) {
+                             bool * const encodeAudio)
+{
     const int ret = avcodec_send_frame(ost->fCodec, frame);
-    if(ret < 0) AV_RuntimeThrow(ret, "Error submitting a frame for encoding")
+    if (ret < 0) { AV_RuntimeThrow(ret, "Error submitting a frame for encoding") }
 
-    while(true) {
-        AVPacket pkt;
-        av_init_packet(&pkt);
+    while (true) {
+        AVPacket* pkt = av_packet_alloc();
+        const int recRet = avcodec_receive_packet(ost->fCodec, pkt);
 
-        const int recRet = avcodec_receive_packet(ost->fCodec, &pkt);
-        if(recRet >= 0) {
-            av_packet_rescale_ts(&pkt, ost->fCodec->time_base, ost->fStream->time_base);
-            pkt.stream_index = ost->fStream->index;
+        if (recRet >= 0) {
+            av_packet_rescale_ts(pkt, ost->fCodec->time_base, ost->fStream->time_base);
+            pkt->stream_index = ost->fStream->index;
 
             /* Write the compressed frame to the media file. */
-            const int interRet = av_interleaved_write_frame(oc, &pkt);
-            if(interRet < 0) AV_RuntimeThrow(interRet, "Error while writing audio frame")
-        } else if(recRet == AVERROR(EAGAIN) || recRet == AVERROR_EOF) {
+            const int interRet = av_interleaved_write_frame(oc, pkt);
+            if (interRet < 0) { AV_RuntimeThrow(interRet, "Error while writing audio frame") }
+        } else if (recRet == AVERROR(EAGAIN) || recRet == AVERROR_EOF) {
             *encodeAudio = recRet == AVERROR(EAGAIN);
             break;
         } else {
             AV_RuntimeThrow(recRet, "Error encoding an audio frame")
         }
+
+        av_packet_unref(pkt);
     }
 }
 
@@ -625,31 +626,38 @@ void VideoEncoder::finishEncodingSuccess() {
 }
 
 static void flushStream(OutputStream * const ost,
-                        AVFormatContext * const formatCtx) {
-    if(!ost) return;
-    if(!ost->fCodec) return;
-    AVPacket pkt;
-    av_init_packet(&pkt);
+                        AVFormatContext * const formatCtx)
+{
+    if (!ost) { return; }
+    if (!ost->fCodec) { return; }
+
+    AVPacket* pkt = av_packet_alloc();
     int ret = avcodec_send_frame(ost->fCodec, nullptr);
-    while(ret >= 0) {
-        ret = avcodec_receive_packet(ost->fCodec, &pkt);
-        if(ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
+
+    while (ret >= 0) {
+        ret = avcodec_receive_packet(ost->fCodec, pkt);
+        if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
             // Write packet
             avcodec_flush_buffers(ost->fCodec);
             break;
         }
-        if(pkt.pts != AV_NOPTS_VALUE)
-            pkt.pts = av_rescale_q(pkt.pts, ost->fCodec->time_base,
-                                   ost->fStream->time_base);
-        if(pkt.dts != AV_NOPTS_VALUE)
-            pkt.dts = av_rescale_q(pkt.dts, ost->fCodec->time_base,
-                                   ost->fStream->time_base);
-        if(pkt.duration > 0)
-            pkt.duration = av_rescale_q(pkt.duration, ost->fCodec->time_base,
-                                        ost->fStream->time_base);
-        pkt.stream_index = ost->fStream->index;
-        ret = av_interleaved_write_frame(formatCtx, &pkt);
+        if (pkt->pts != AV_NOPTS_VALUE) {
+            pkt->pts = av_rescale_q(pkt->pts, ost->fCodec->time_base,
+                                    ost->fStream->time_base);
+        }
+        if (pkt->dts != AV_NOPTS_VALUE) {
+            pkt->dts = av_rescale_q(pkt->dts, ost->fCodec->time_base,
+                                    ost->fStream->time_base);
+        }
+        if (pkt->duration > 0) {
+            pkt->duration = av_rescale_q(pkt->duration, ost->fCodec->time_base,
+                                         ost->fStream->time_base);
+        }
+        pkt->stream_index = ost->fStream->index;
+        ret = av_interleaved_write_frame(formatCtx, pkt);
     }
+
+    av_packet_unref(pkt);
 }
 
 static void closeStream(OutputStream * const ost) {
