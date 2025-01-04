@@ -23,7 +23,7 @@ set -e -x
 CWD=`pwd`
 
 SDK=1.0.0
-URL=https://github.com/friction2d/friction-sdk/releases/download/${SDK}
+URL=https://github.com/friction2d/friction-sdk/releases/download/v${SDK}
 SDK_TAR=friction-sdk-${SDK}-macOS-x86_64.tar.xz
 
 if [ ! -d "${CWD}/sdk" ]; then
