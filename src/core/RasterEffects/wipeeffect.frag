@@ -28,7 +28,7 @@ layout(location = 0) out vec4 fragColor;
 
 in vec2 texCoord;
 
-uniform sampler2D texture;
+uniform sampler2D tex;
 
 uniform float sharpness;
 uniform float direction;
@@ -70,5 +70,5 @@ void main(void) {
     } else {
         alpha = 1 - 0.5*(cos(PI*(f - x0)/(1 - sharpness)) + 1);
     }
-    fragColor = texture2D(texture, texCoord) * alpha;
+    fragColor = texture(tex, texCoord) * alpha;
 }

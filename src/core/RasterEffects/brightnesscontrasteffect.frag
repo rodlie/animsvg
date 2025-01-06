@@ -28,11 +28,11 @@ layout(location = 0) out vec4 fragColor;
 
 in vec2 texCoord;
 
-uniform sampler2D texture;
+uniform sampler2D tex;
 uniform float brightness;
 uniform float contrast;
 
 void main(void) {
-    vec4 color = texture2D(texture, texCoord);
+    vec4 color = texture(tex, texCoord);
     fragColor = vec4((color.rgb - 0.5*color.a) * (contrast + 1) + color.a*(0.5 + brightness), color.a);
 }

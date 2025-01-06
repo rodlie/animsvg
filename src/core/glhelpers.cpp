@@ -141,14 +141,14 @@ void gIniProgram(QGL33 * const gl, GLuint& program,
         QFile vShaderFile(vShaderPath);
         if(!vShaderFile.open(QIODevice::ReadOnly))
             RuntimeThrow("Could not open " + vShaderPath);
-        const QByteArray vData = AppSupport::filterShader(vShaderFile.readAll());
+        const QByteArray vData = vShaderFile.readAll();
         vertexCode = vData.toStdString();
         vShaderFile.close();
 
         QFile fShaderFile(fShaderPath);
         if(!fShaderFile.open(QIODevice::ReadOnly))
             RuntimeThrow("Could not open " + fShaderPath);
-        const QByteArray fData = AppSupport::filterShader(fShaderFile.readAll());
+        const QByteArray fData = fShaderFile.readAll();
         fragmentCode = fData.toStdString();
         fShaderFile.close();
     } catch(...) {
