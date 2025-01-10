@@ -32,7 +32,7 @@ layout(location = 0) out vec4 fragColor;
 
 in vec2 texCoord;
 
-uniform sampler2D texture;
+uniform sampler2D tex;
 
 uniform float seed;
 uniform float size;
@@ -69,5 +69,5 @@ void main(void) {
 
     float b = 0.25*(0.75 - 0.749*sharpness);
     float c = smoothstep(t + b, t - b, noise(texCoord * .4));
-    fragColor = mix(texture2D(texture, texCoord), vec4(0), c);
+    fragColor = mix(texture(tex, texCoord), vec4(0), c);
 }

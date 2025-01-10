@@ -28,7 +28,7 @@ layout(location = 0) out vec4 fragColor;
 
 in vec2 texCoord;
 
-uniform sampler2D texture;
+uniform sampler2D tex;
 
 uniform float influence;
 uniform float hue;
@@ -67,7 +67,7 @@ vec3 RGBtoHSL(in vec3 RGB) {
 }
 
 void main(void) {
-    vec4 texColor = texture2D(texture, texCoord);
+    vec4 texColor = texture(tex, texCoord);
     if(texColor.a < 0.00001f) {
         fragColor = texColor;
     } else {

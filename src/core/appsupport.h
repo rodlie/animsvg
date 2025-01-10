@@ -102,7 +102,6 @@ public:
                                                           HardwareSupport fallback);
     static const QString getRasterEffectHardwareSupportString(const QString &effect,
                                                               HardwareSupport fallback);
-    static const QByteArray filterShader(QByteArray data);
     static const QStringList getFpsPresets();
     static void saveFpsPresets(const QStringList &presets);
     static void saveFpsPreset(const double value);

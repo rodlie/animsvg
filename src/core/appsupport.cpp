@@ -509,20 +509,6 @@ const QString AppSupport::getRasterEffectHardwareSupportString(const QString &ef
     return result;
 }
 
-const QByteArray AppSupport::filterShader(QByteArray data)
-{
-#if defined(Q_OS_WIN)
-    if (HardwareInfo::sGpuVendor() == GpuVendor::intel) {
-        return data.replace("texture2D", "texture");
-    }
-    return data;
-#elif defined(Q_OS_MAC)
-    return data.replace("texture2D", "texture");
-#else
-    return data;
-#endif
-}
-
 const QStringList AppSupport::getFpsPresets()
 {
     QStringList presets = getSettings("presets",

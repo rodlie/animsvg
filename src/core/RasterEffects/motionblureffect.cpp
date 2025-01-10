@@ -223,10 +223,10 @@ void MotionBlurCaller::sInitialize(QGL33 * const gl) {
 
     gl->glUseProgram(sProgramId);
 
-    const GLint texture1 = gl->glGetUniformLocation(sProgramId, "texture1");
+    const GLint texture1 = gl->glGetUniformLocation(sProgramId, "tex1");
     gl->glUniform1i(texture1, 0);
 
-    const GLint texture2 = gl->glGetUniformLocation(sProgramId, "texture2");
+    const GLint texture2 = gl->glGetUniformLocation(sProgramId, "tex2");
     gl->glUniform1i(texture2, 1);
 
     sOpacity2Loc = gl->glGetUniformLocation(sProgramId, "opacity2");

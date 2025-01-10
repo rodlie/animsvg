@@ -64,7 +64,7 @@ void ShaderEffectProgram::reloadFragmentShader(
         valueLocs.append(loc);
     }
 
-    GLint texLocation = gl->glGetUniformLocation(newProgram, "texture");
+    GLint texLocation = gl->glGetUniformLocation(newProgram, "tex");
     if(texLocation < 0) {
         gl->glDeleteProgram(newProgram);
         RuntimeThrow("Invalid location received for 'texture'.");
