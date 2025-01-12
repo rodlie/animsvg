@@ -272,19 +272,24 @@ void Canvas::handleLeftButtonMousePress(const eMouseEvent& e) {
         addBoxToSelection(newPath.get());
 
         mCurrentRectangle = newPath.get();
-    } else if(mCurrentMode == CanvasMode::textCreate) {
-        const auto newPath = enve::make_shared<TextBox>();
-        newPath->planCenterPivotPosition();
-        newPath->setFontFamilyAndStyle(mDocument.fFontFamily,
-                                       mDocument.fFontStyle);
-        newPath->setFontSize(mDocument.fFontSize);
-        mCurrentContainer->addContained(newPath);
-        newPath->setAbsolutePos(e.fPos);
+    } else if (mCurrentMode == CanvasMode::textCreate) {
+        if (enve_cast<TextBox*>(mHoveredBox)) {
+            setCurrentBox(mHoveredBox);
+            emit openTextEditor();
+        } else {
+            const auto newPath = enve::make_shared<TextBox>();
+            newPath->planCenterPivotPosition();
+            newPath->setFontFamilyAndStyle(mDocument.fFontFamily,
+                                           mDocument.fFontStyle);
+            newPath->setFontSize(mDocument.fFontSize);
+            mCurrentContainer->addContained(newPath);
+            newPath->setAbsolutePos(e.fPos);
 
-        mCurrentTextBox = newPath.get();
+            mCurrentTextBox = newPath.get();
 
-        clearBoxesSelection();
-        addBoxToSelection(newPath.get());
+            clearBoxesSelection();
+            addBoxToSelection(newPath.get());
+        }
     }
 }
 
