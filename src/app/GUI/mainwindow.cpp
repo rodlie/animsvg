@@ -1016,6 +1016,7 @@ void MainWindow::setupMenuBar()
     connect(mViewFillStrokeAct, &QAction::triggered,
             this, [this](bool triggered) {
         mUI->setDockVisible("Fill and Stroke", triggered);
+        AppSupport::setSettings("ui", "FillStrokeVisible", triggered);
     });
 
     mTimelineWindowAct = mViewMenu->addAction(tr("Timeline in Window"));
@@ -1695,10 +1696,20 @@ void MainWindow::readSettings(const QString &openProject)
     const bool visibleToolBarColor = AppSupport::getSettings("ui",
                                                              "ToolBarColorVisible",
                                                              true).toBool();
+
+    const bool visibleFillStroke = AppSupport::getSettings("ui",
+                                                           "FillStrokeVisible",
+                                                           true).toBool();
+
     mToolBarMainAct->setChecked(visibleToolBarMain);
     mToolBarColorAct->setChecked(visibleToolBarColor);
     mToolbar->setVisible(visibleToolBarMain);
     mColorToolBar->setVisible(visibleToolBarColor);
+
+    mViewFillStrokeAct->setChecked(visibleFillStroke);
+    if (!visibleFillStroke) {
+        mUI->setDockVisible("Fill and Stroke", false);
+    }
 
     mViewFullScreenAct->blockSignals(true);
     mViewFullScreenAct->setChecked(isFull);
