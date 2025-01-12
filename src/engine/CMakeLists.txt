@@ -30,7 +30,7 @@ option(MAC_DEPLOY "Mac Deploy" OFF)
 option(SYNC_SKIA_DEPS "Sync third-party depends" ON)
 
 if(UNIX AND NOT APPLE)
-    option(USE_EGL "Use EGL" OFF)
+    option(USE_EGL "Use EGL" ON)
 endif()
 
 set(SKIA_SRC "${CMAKE_CURRENT_SOURCE_DIR}/skia")
