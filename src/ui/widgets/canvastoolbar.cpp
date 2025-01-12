@@ -37,6 +37,9 @@ CanvasToolBar::CanvasToolBar(QWidget *parent)
     , mSpinWidth(nullptr)
     , mSpinHeight(nullptr)
     , mComboResolution(nullptr)
+    , mIconsOnly(AppSupport::getSettings("ui",
+                                         "CanvasToolbarIconsOnly",
+                                         false).toBool())
 {
     eSizesUI::widget.add(this, [this](const int size) {
         this->setIconSize({size, size});
@@ -45,7 +48,14 @@ CanvasToolBar::CanvasToolBar(QWidget *parent)
     setEnabled(false);
     setWindowTitle(tr("Canvas Toolbar"));
     setObjectName("CanvasToolBar");
-    setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    setToolButtonStyle(mIconsOnly ?
+                           Qt::ToolButtonIconOnly :
+                           Qt::ToolButtonTextBesideIcon);
+
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, &QWidget::customContextMenuRequested,
+            this, &CanvasToolBar::showContextMenu);
+
 #ifdef Q_OS_MAC
     setStyleSheet(QString("font-size: %1pt;").arg(font().pointSize()));
 #endif
@@ -110,13 +120,13 @@ void CanvasToolBar::setupDimensions()
     mSpinHeight->setMaximum(99999);
     mSpinHeight->setKeyboardTracking(false);
 
-    addAction(new QAction(QIcon::fromTheme("width"),
-                          tr("Width"), this));
+    addAction(QIcon::fromTheme("width"),
+              tr("Width"));
     addWidget(mSpinWidth);
 
-    //addSeparator();
-    addAction(new QAction(QIcon::fromTheme("height"),
-                          tr("Height"), this));
+    addAction(QIcon::fromTheme("height"),
+              tr("Height"));
+
     addWidget(mSpinHeight);
 }
 
@@ -132,12 +142,10 @@ void CanvasToolBar::setupResolution()
     mComboResolution->lineEdit()->setInputMask("D00 %");
     mComboResolution->setCurrentText("100 %");
     mComboResolution->setInsertPolicy(QComboBox::NoInsert);
-    //mComboResolution->setSizePolicy(QSizePolicy::Preferred,
-    //                                QSizePolicy::Preferred);
 
     addSeparator();
-    addAction(new QAction(QIcon::fromTheme("resolution"),
-                          tr("Resolution"), this));
+    addAction(QIcon::fromTheme("resolution"),
+              tr("Resolution"));
 
     addWidget(mComboResolution);
 }
@@ -197,4 +205,32 @@ void CanvasToolBar::setDimension(const QSize dim,
     target->setCanvasSize(dim.width(),
                           dim.height());
     Document::sInstance->actionFinished();
+}
+
+void CanvasToolBar::showContextMenu(const QPoint &pos)
+{
+    QMenu menu(this);
+    {
+        const auto act = menu.addAction(QIcon::fromTheme("window"),
+                                        windowTitle());
+        act->setEnabled(false);
+        menu.addSeparator();
+    }
+    {
+        const auto act = menu.addAction(tr("Labels"));
+        act->setCheckable(true);
+        act->setChecked(!mIconsOnly);
+        connect(act, &QAction::triggered,
+                this, [this](bool checked) {
+            mIconsOnly = !checked;
+            setToolButtonStyle(mIconsOnly ?
+                                   Qt::ToolButtonIconOnly :
+                                   Qt::ToolButtonTextBesideIcon);
+            update();
+            AppSupport::setSettings("ui",
+                                    "CanvasToolbarIconsOnly",
+                                    mIconsOnly);
+        });
+    }
+    menu.exec(mapToGlobal(pos));
 }
