@@ -318,11 +318,12 @@ void CanvasWindow::wheelEvent(QWheelEvent *event)
         if (event->phase() == Qt::ScrollUpdate ||
             event->phase() == Qt::ScrollMomentum) {
             auto pos = mPrevMousePos;
+            const qreal zoom = mViewTransform.m11() * 1.5;
             if (event->angleDelta().y() != 0) {
-                pos.setY(pos.y() + event->angleDelta().y());
+                pos.setY(pos.y() + event->angleDelta().y() / zoom);
             }
             if (event->angleDelta().x() != 0) {
-                pos.setX(pos.x() + event->angleDelta().x());
+                pos.setX(pos.x() + event->angleDelta().x() / zoom);
             }
             translateView(pos - mPrevMousePos);
             mPrevMousePos = pos;
