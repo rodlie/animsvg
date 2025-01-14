@@ -97,12 +97,12 @@ public:
     void graphUpdateDimensions();
     void graphIncMinShownVal(const qreal inc);
     void graphSetMinShownVal(const qreal newMinShownVal);
-    void graphGetValueAndFrameFromPos(const QPointF &pos,
+    void graphGetValueAndFrameFromPos(const QVector3D &pos,
                                       qreal &value, qreal &frame) const;
-    void graphMiddleMove(const QPointF &movePos);
-    void gMiddlePress(const QPointF &pressPos);
+    void graphMiddleMove(const QVector3D &movePos);
+    void gMiddlePress(const QVector3D &pressPos);
     void gMouseRelease();
-    void graphMousePress(const QPointF &pressPos);
+    void graphMousePress(const QVector3D &pressPos);
     void graphMiddleRelease();
     void graphSetCtrlsModeForSelected(const CtrlsMode mode);
     void graphDeletePressed();
@@ -110,8 +110,8 @@ public:
     void scheduleGraphUpdateAfterKeysChanged();
     void graphUpdateAfterKeysChangedIfNeeded();
     void deleteSelectedKeys();
-    void middleMove(const QPointF &movePos);
-    void middlePress(const QPointF &pressPos);
+    void middleMove(const QVector3D &movePos);
+    void middlePress(const QVector3D &pressPos);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *e);
     void graphRemoveViewedAnimator(GraphAnimator * const animator);
@@ -161,7 +161,7 @@ public:
     void clearHovered();
 
     int graphGetAnimatorId(GraphAnimator * const anim);
-    QrealPoint *graphGetPointAtPos(const QPointF &pressPos) const;
+    QrealPoint *graphGetPointAtPos(const QVector3D &pressPos) const;
     bool graphValidateVisible(GraphAnimator * const animator);
     void graphUpdateVisible();
     bool graphIsSelected(GraphAnimator * const anim);
@@ -242,7 +242,7 @@ private:
     bool mSelecting = false;
     bool mGraphViewed = false;
     qreal mPixelsPerFrame;
-    QPointF mMiddlePressPos;
+    QVector3D mMiddlePressPos;
 
     bool mGraphUpdateAfterKeysChangedNeeded = false;
 

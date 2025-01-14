@@ -361,13 +361,13 @@ void KeysView::graphSetMinShownVal(const qreal newMinShownVal) {
     mMinShownVal = newMinShownVal;
 }
 
-void KeysView::graphGetValueAndFrameFromPos(const QPointF &pos,
+void KeysView::graphGetValueAndFrameFromPos(const QVector3D &pos,
                                             qreal &value, qreal &frame) const {
     value = (height() - pos.y())/mPixelsPerValUnit + mMinShownVal;
     frame = mMinViewedFrame + pos.x()/mPixelsPerFrame - 0.5;
 }
 
-QrealPoint * KeysView::graphGetPointAtPos(const QPointF &pressPos) const {
+QrealPoint * KeysView::graphGetPointAtPos(const QVector3D &pressPos) const {
     qreal value;
     qreal frame;
     graphGetValueAndFrameFromPos(pressPos, value, frame);
@@ -385,7 +385,7 @@ qreal KeysView::xToFrame(const qreal x) const {
     return x/mPixelsPerFrame + mMinViewedFrame;
 }
 
-void KeysView::graphMousePress(const QPointF &pressPos) {
+void KeysView::graphMousePress(const QVector3D &pressPos) {
     mFirstMove = true;
     QrealPoint * const pressedPoint = graphGetPointAtPos(pressPos);
     Key *parentKey = pressedPoint ? pressedPoint->getParentKey() : nullptr;
@@ -436,15 +436,15 @@ void KeysView::gMouseRelease() {
     }
 }
 
-void KeysView::gMiddlePress(const QPointF &pressPos) {
+void KeysView::gMiddlePress(const QVector3D &pressPos) {
     mSavedMinViewedFrame = mMinViewedFrame;
     mSavedMaxViewedFrame = mMaxViewedFrame;
     mSavedMinShownValue = mMinShownVal;
     mMiddlePressPos = pressPos;
 }
 
-void KeysView::graphMiddleMove(const QPointF &movePos) {
-    QPointF diffFrameValue = (movePos - mMiddlePressPos);
+void KeysView::graphMiddleMove(const QVector3D &movePos) {
+    QVector3D diffFrameValue = (movePos - mMiddlePressPos);
     diffFrameValue.setX(diffFrameValue.x()/mPixelsPerFrame);
     diffFrameValue.setY(diffFrameValue.y()/mPixelsPerValUnit);
     const int roundX = qRound(diffFrameValue.x() );

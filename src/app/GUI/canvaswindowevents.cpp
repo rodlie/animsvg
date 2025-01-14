@@ -31,23 +31,23 @@
 #include <QResizeEvent>
 #include <QEvent>
 
-QPointF CanvasWindow::mapToCanvasCoord(const QPointF& windowCoord)
+QVector3D CanvasWindow::mapToCanvasCoord(const QPointF& windowCoord)
 {
     qreal pixelRatio = devicePixelRatioF();
     return mViewTransform.inverted().scale(pixelRatio, pixelRatio).map(windowCoord);
 }
 
-void CanvasWindow::translateView(const QPointF &trans)
+void CanvasWindow::translateView(const QVector3D &trans)
 {
     if (!mCurrentCanvas) { return; }
     mViewTransform.translate(trans.x(), trans.y());
 }
 
 void CanvasWindow::zoomView(const qreal scaleBy,
-                            const QPointF &absOrigin)
+                            const QVector3D &absOrigin)
 {
     if (!mCurrentCanvas) { return; }
-    const QPointF transPoint = -mapToCanvasCoord(absOrigin);
+    const QVector3D transPoint = -mapToCanvasCoord(absOrigin);
 
     mViewTransform.translate(-transPoint.x(), -transPoint.y());
     mViewTransform.scale(scaleBy, scaleBy);
@@ -60,7 +60,7 @@ void CanvasWindow::resizeEvent(QResizeEvent *e)
         if (mOldSize.isValid()) {
             const auto dSize = e->size() - mOldSize;
             const qreal div = 2 * mViewTransform.m11();
-            const QPointF trans{dSize.width() / div, dSize.height() / div};
+            const QVector3D trans{dSize.width() / div, dSize.height() / div};
             translateView(trans);
         }
         // e->oldSize() returns {-1, -1} after chaning parent

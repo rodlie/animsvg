@@ -117,7 +117,7 @@ void KeysView::setGraphViewed(const bool bT) {
     update();
 }
 
-void KeysView::middlePress(const QPointF &pressPos) {
+void KeysView::middlePress(const QVector3D &pressPos) {
     mSavedMinViewedFrame = mMinViewedFrame;
     mSavedMaxViewedFrame = mMaxViewedFrame;
     mMiddlePressPos = pressPos;
@@ -130,7 +130,7 @@ void KeysView::setViewedVerticalRange(const int top,
     update();
 }
 
-void KeysView::middleMove(const QPointF &movePos) {
+void KeysView::middleMove(const QVector3D &movePos) {
     const qreal diffFrame = (movePos.x() - mMiddlePressPos.x())/
                                     mPixelsPerFrame;
     const int roundX = qRound(diffFrame);
@@ -229,7 +229,7 @@ void KeysView::wheelEvent(QWheelEvent *e) {
     } else {
         emit wheelEventSignal(e);
         if(mSelecting) {
-            const QPointF posU = mapFromGlobal(QCursor::pos()) +
+            const QVector3D posU = mapFromGlobal(QCursor::pos()) +
                            QPointF(-eSizesUI::widget/2, 0.);
             mSelectionRect.setBottom(posU.y() + mViewedTop);
         }
@@ -313,7 +313,7 @@ void KeysView::mousePressEvent(QMouseEvent *e) {
                 if(!mLastPressedMovable) {
                     mSelecting = true;
                     const qreal posUXFrame = xToFrame(posU.x());
-                    const QPointF xFramePos(posUXFrame, posU.y() + mViewedTop);
+                    const QVector3D xFramePos(posUXFrame, posU.y() + mViewedTop);
                     mSelectionRect.setTopLeft(xFramePos);
                     mSelectionRect.setBottomRight(xFramePos);
                 } else {
@@ -763,7 +763,7 @@ void KeysView::handleMouseMove(const QPoint &pos,
             const int dY = mLastPressPos.y() - posU.y();
             const qreal dValue = mValueInput.xOnlyMode() ? 0 : dY/mPixelsPerValUnit;
             const qreal dFrameV = mValueInput.yOnlyMode() ? 0 : dFrame;
-            const QPointF saved = mGPressedPoint->getSavedFrameAndValue();
+            const QVector3D saved = mGPressedPoint->getSavedFrameAndValue();
             const qreal rawFrame = saved.x() + dFrameV;
             const qreal rawValue = saved.y() + dValue;
             const qreal newFrame = qBound(mMinMoveFrame, rawFrame, mMaxMoveFrame);
@@ -871,7 +871,7 @@ void KeysView::handleMouseMove(const QPoint &pos,
                 mSelectionRect.setBottomRight({frame, value});
             } else {
                 const qreal posUXFrame = posU.x()/mPixelsPerFrame + mMinViewedFrame;
-                const QPointF br(posUXFrame, posU.y() + mViewedTop);
+                const QVector3D br(posUXFrame, posU.y() + mViewedTop);
                 mSelectionRect.setBottomRight(br);
             }
         }

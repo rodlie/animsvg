@@ -133,8 +133,8 @@ private:
 
     QSize mOldSize{-1, -1};
     QMatrix mViewTransform;
-    QPointF mPrevMousePos;
-    QPointF mPrevPressPos;
+    QVector3D mPrevMousePos;
+    QVector3D mPrevPressPos;
     //bool mValidPaintTarget = false;
 
     bool mBlockInput;
@@ -172,10 +172,10 @@ signals:
 public:
     void setCurrentCanvas(const int id);
 
-    QPointF mapToCanvasCoord(const QPointF& windowCoord);
-    void translateView(const QPointF &trans);
+    QVector3D mapToCanvasCoord(const QPointF& windowCoord);
+    void translateView(const QVector3D &trans);
     void zoomView(const qreal scaleBy,
-                  const QPointF &absOrigin);
+                  const QVector3D &absOrigin);
 
     void fitCanvasToSize(const bool &fitWidth = false);
     void resetTransformation();

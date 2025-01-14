@@ -727,7 +727,7 @@ int CanvasWindow::getMaxFrame()
 
 void CanvasWindow::dropEvent(QDropEvent *event)
 {
-    const QPointF pos = mapToCanvasCoord(event->posF());
+    const QVector3D pos = mapToCanvasCoord(event->posF());
     mActions.handleDropEvent(event, pos);
 }
 
