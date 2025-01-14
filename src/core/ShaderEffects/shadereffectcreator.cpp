@@ -48,7 +48,7 @@ bool ShaderEffectCreator::compatible(const QList<ShaderPropertyType> &props) con
             if(!iCompatible) return false;
         } break;
         case ShaderPropertyType::vec2Property: {
-            const bool iCompatible = enve_cast<QPointFAnimatorCreator*>(prop);
+            const bool iCompatible = enve_cast<QVector3DAnimatorCreator*>(prop);
             if(!iCompatible) return false;
         } break;
         case ShaderPropertyType::colorProperty: {
@@ -80,7 +80,7 @@ ShaderPropertyType creatorPropertyType(ShaderPropertyCreator* const prop) {
         return ShaderPropertyType::floatProperty;
     } else if(enve_cast<IntAnimatorCreator*>(prop)) {
         return ShaderPropertyType::intProperty;
-    } else if(enve_cast<QPointFAnimatorCreator*>(prop)) {
+    } else if(enve_cast<QVector3DAnimatorCreator*>(prop)) {
         return ShaderPropertyType::vec2Property;
     } else if(enve_cast<ColorAnimatorCreator*>(prop)) {
         return ShaderPropertyType::colorProperty;
@@ -313,7 +313,7 @@ void parseVec2PropertyCreators(const QString& name,
     const bool resolutionScaled = attrToBool(elem, name, "resolutionScaled", "false");
     const bool influenceScaled = attrToBool(elem, name, "influenceScaled", "false");
 
-    propC = enve::make_shared<QPointFAnimatorCreator>(
+    propC = enve::make_shared<QVector3DAnimatorCreator>(
                 iniVal, minVal, maxVal, stepVal, glValue,
                 nameX, nameY, name, nameUI);
     uniC = enve::make_shared<UniformSpecifierCreator>(

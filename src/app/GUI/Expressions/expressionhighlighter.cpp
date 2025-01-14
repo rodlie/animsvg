@@ -26,7 +26,7 @@
 #include "expressionhighlighter.h"
 
 #include "Animators/complexanimator.h"
-#include "Animators/qpointfanimator.h"
+#include "Animators/qvector3danimator.h"
 #include "Animators/coloranimator.h"
 
 #include "expressioneditor.h"
@@ -38,7 +38,7 @@ ExpressionHighlighter::ExpressionHighlighter(
     QSyntaxHighlighter(parent),
     mTarget(target),
     mSearchCtxt(target->getParent()),
-    mEditor(editor) {    
+    mEditor(editor) {
     HighlightingRule rule;
 
     mErrorFormat.setForeground(Qt::red);

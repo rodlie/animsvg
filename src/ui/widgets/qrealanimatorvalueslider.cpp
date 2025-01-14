@@ -24,7 +24,7 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "qrealanimatorvalueslider.h"
-#include "Animators/qpointfanimator.h"
+#include "Animators/qvector3danimator.h"
 #include "themesupport.h"
 #include "canvas.h"
 #include "Private/document.h"

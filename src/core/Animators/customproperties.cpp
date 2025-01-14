@@ -26,7 +26,7 @@
 #include "customproperties.h"
 
 #include "qrealanimator.h"
-#include "qpointfanimator.h"
+#include "qvector3danimator.h"
 
 #include "typemenu.h"
 

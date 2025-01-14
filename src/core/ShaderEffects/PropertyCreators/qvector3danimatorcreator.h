@@ -23,21 +23,22 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef QPOINTFANIMATORCREATOR_H
-#define QPOINTFANIMATORCREATOR_H
+#ifndef QVECTOR3DANIMATORCREATOR_H
+#define QVECTOR3DANIMATORCREATOR_H
 
-#include "Animators/qpointfanimator.h"
+#include "Animators/qvector3danimator.h"
 #include "shaderpropertycreator.h"
 
-class CORE_EXPORT QPointFAnimatorCreator : public ShaderPropertyCreator {
+class CORE_EXPORT QVector3DAnimatorCreator : public ShaderPropertyCreator {
     e_OBJECT
-    QPointFAnimatorCreator(const QVector3D intF iniVal,
+    QVector3DAnimatorCreator(const QVector3D intF iniVal,
                            const QVector3D minVal,
                            const QVector3D maxVal,
                            const QVector3D step,
                            const bool glValue,
                            const QString& nameX,
                            const QString& nameY,
+                           const QString& nameZ,
                            const QString& name,
                            const QString& nameUI) :
         ShaderPropertyCreator(glValue, name, nameUI),
@@ -58,4 +59,4 @@ class CORE_EXPORT QPointFAnimatorCreator : public ShaderPropertyCreator {
     }
 };
 
-#endif // QPOINTFANIMATORCREATOR_H
+#endif // QVECTOR3DANIMATORCREATOR_H

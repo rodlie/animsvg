@@ -3,7 +3,7 @@
 
 #include "rastereffect.h"
 
-#include "Animators/qpointfanimator.h"
+#include "Animators/qvector3danimator.h"
 
 class CORE_EXPORT OilEffect : public RasterEffect {
     e_OBJECT

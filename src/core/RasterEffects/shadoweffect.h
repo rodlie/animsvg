@@ -5,7 +5,7 @@
 
 #include "skia/skqtconversions.h"
 #include "Animators/coloranimator.h"
-#include "Animators/qpointfanimator.h"
+#include "Animators/qvector3danimator.h"
 #include "gpurendertools.h"
 
 class CORE_EXPORT ShadowEffect : public RasterEffect {

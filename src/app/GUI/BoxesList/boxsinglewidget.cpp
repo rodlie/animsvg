@@ -42,7 +42,7 @@
 #include "RasterEffects/rastereffectcollection.h"
 #include "Properties/boolproperty.h"
 #include "Properties/boolpropertycontainer.h"
-#include "Animators/qpointfanimator.h"
+#include "Animators/qvector3danimator.h"
 #include "Boxes/pathbox.h"
 #include "canvas.h"
 #include "BlendEffects/blendeffectcollection.h"

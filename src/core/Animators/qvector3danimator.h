@@ -50,8 +50,8 @@ public:
     QJSValue prp_getEffectiveJSValue(QJSEngine& e) const;
     QJSValue prp_getEffectiveJSValue(QJSEngine& e, const qreal relFrame) const;
 
-    void setBaseValue(const qreal valX, const qreal valY) {
-        setBaseValue({valX, valY});
+    void setBaseValue(const qreal valX, const qreal valY, const qreal valZ) {
+        setBaseValue({valX, valY, valZ});
     }
     void setBaseValue(const QVector3D &val);
 

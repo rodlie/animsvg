@@ -29,7 +29,7 @@
 #include "Boxes/textboxrenderdata.h"
 #include "Boxes/textbox.h"
 
-#include "Animators/qpointfanimator.h"
+#include "Animators/qvector3danimator.h"
 #include "MovablePoints/animatedpoint.h"
 
 class TextEffectPoint : public AnimatedPoint {

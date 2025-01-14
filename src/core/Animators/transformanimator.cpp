@@ -26,7 +26,7 @@
 #include "MovablePoints/boxpathpoint.h"
 #include "qrealanimator.h"
 #include "transformanimator.h"
-#include "qpointfanimator.h"
+#include "qvector3danimator.h"
 #include "MovablePoints/animatedpoint.h"
 #include "skia/skqtconversions.h"
 #include "matrixdecomposition.h"

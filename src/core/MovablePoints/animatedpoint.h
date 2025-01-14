@@ -30,7 +30,7 @@
 #include <QPointF>
 #include <QRectF>
 #include <QPainter>
-#include "Animators/qpointfanimator.h"
+#include "Animators/qvector3danimator.h"
 #include "skia/skiaincludes.h"
 
 class BoundingBox;
