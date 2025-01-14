@@ -447,8 +447,8 @@ QToolBar#animationDockWidget QPushButton {
     border-color: %2;
 }
 
-QToolBar#animationDockWidget QToolButton::hover,
-QToolBar#animationDockWidget QPushButton::hover {
+QToolBar#animationDockWidget QToolButton:hover,
+QToolBar#animationDockWidget QPushButton:hover {
     border-color: %4;
 }
 
@@ -479,7 +479,8 @@ QMenu::separator {
   background-color: %4;
 }
 
-QMenu::item:disabled {
+QMenu::item:disabled,
+AlignWidget QPushButton:disabled {
     background: transparent;
 }
 
@@ -594,7 +595,7 @@ QProgressBar::chunk {
     width: 5px;
 }
 
-QCheckBox::disabled {
+QCheckBox:disabled {
     color: %13;
 }
 

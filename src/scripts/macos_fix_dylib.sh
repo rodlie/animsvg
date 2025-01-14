@@ -1,4 +1,4 @@
-/*
+#!/bin/bash
 #
 # Friction - https://friction.graphics
 #
@@ -17,22 +17,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# See 'README.md' for more information.
-#
-*/
 
-// Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
+#set -e -x
 
-#version 330 core
-layout(location = 0) out vec4 fragColor;
+BASEPATH=`pwd`
 
-in vec2 texCoord;
-
-uniform sampler2D tex;
-uniform float brightness;
-uniform float contrast;
-
-void main(void) {
-    vec4 color = texture(tex, texCoord);
-    fragColor = vec4((color.rgb - 0.5*color.a) * (contrast + 1) + color.a*(0.5 + brightness), color.a);
-}
+for lib in *.dylib; do
+    echo "Check (and fix) rpath for ${lib} ..."
+    DY=`otool -L ${lib} | grep ${BASEPATH}`
+    for dylib in $DY; do
+        if [ -f "${dylib}" ]; then
+            BASE=`basename ${dylib}`
+            if [ "${BASE}" = "${lib}" ]; then
+                install_name_tool -id @rpath/${BASE} ${lib}
+            else
+                install_name_tool -change ${dylib} @rpath/${BASE} ${lib}
+            fi
+        fi
+    done
+done

@@ -123,11 +123,20 @@ int main(int argc, char *argv[])
 #endif
 
     // init splash
+    bool showSplash = true;
+#ifdef Q_OS_LINUX
+    if (AppSupport::isWayland()) {
+        QGuiApplication::setDesktopFileName(AppSupport::getAppID());
+        showSplash = false;
+    }
+#endif
     QSplashScreen splash(QPixmap(":/icons/splash/splash-00001.png"));
-    splash.show();
-    splash.raise();
-    splash.showMessage(QObject::tr("Loading ..."),
-                       Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    if (showSplash) {
+        splash.show();
+        splash.raise();
+        splash.showMessage(QObject::tr("Loading ..."),
+                           Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    }
 
     // init hardware
 #ifdef Q_OS_WIN
@@ -214,10 +223,12 @@ int main(int argc, char *argv[])
     AppSupport::initXDGDesktop(isRenderer);
 #endif
 
-    splash.raise();
-    splash.setPixmap(QPixmap(":/icons/splash/splash-00002.png"));
-    splash.showMessage(QObject::tr("Initializing ..."),
-                       Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    if (showSplash) {
+        splash.raise();
+        splash.setPixmap(QPixmap(":/icons/splash/splash-00002.png"));
+        splash.showMessage(QObject::tr("Initializing ..."),
+                           Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    }
 
     // load settings
     try { settings.loadFromFile(); }
@@ -256,10 +267,13 @@ int main(int argc, char *argv[])
     //std::cout << "Custom raster effects initialized" << std::endl;
 
     // init shaders
-    splash.raise();
-    splash.setPixmap(QPixmap(":/icons/splash/splash-00003.png"));
-    splash.showMessage(QObject::tr("Loading Shaders ..."),
-                       Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    if (showSplash) {
+        splash.raise();
+        splash.setPixmap(QPixmap(":/icons/splash/splash-00003.png"));
+        splash.showMessage(QObject::tr("Loading Shaders ..."),
+                           Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    }
+
     try {
         effectsLoader.iniShaderEffects();
     } catch(const std::exception& e) {
@@ -279,10 +293,13 @@ int main(int argc, char *argv[])
     //std::cout << "Custom objects initialized" << std::endl;
 
     // init audio
-    splash.raise();
-    splash.setPixmap(QPixmap(":/icons/splash/splash-00004.png"));
-    splash.showMessage(QObject::tr("Loading Audio ..."),
-                       Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    if (showSplash) {
+        splash.raise();
+        splash.setPixmap(QPixmap(":/icons/splash/splash-00004.png"));
+        splash.showMessage(QObject::tr("Loading Audio ..."),
+                           Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    }
+
     eSoundSettings soundSettings;
     AudioHandler audioHandler;
 
@@ -297,10 +314,12 @@ int main(int argc, char *argv[])
     }
 
     // init encoder
-    splash.raise();
-    splash.setPixmap(QPixmap(":/icons/splash/splash-00005.png"));
-    splash.showMessage(QObject::tr("Loading Encoder ..."),
-                       Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    if (showSplash) {
+        splash.raise();
+        splash.setPixmap(QPixmap(":/icons/splash/splash-00005.png"));
+        splash.showMessage(QObject::tr("Loading Encoder ..."),
+                           Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    }
     const auto videoEncoder = enve::make_shared<VideoEncoder>();
     RenderHandler renderHandler(document, audioHandler,
                                 *videoEncoder, memoryHandler);
@@ -308,10 +327,12 @@ int main(int argc, char *argv[])
     // check for ffmpeg version
     AppSupport::checkFFmpeg(isRenderer);
 
-    splash.raise();
-    splash.setPixmap(QPixmap(":/icons/splash/splash-00006.png"));
-    splash.showMessage(QObject::tr("Loading User Interface ..."),
-                       Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    if (showSplash) {
+        splash.raise();
+        splash.setPixmap(QPixmap(":/icons/splash/splash-00006.png"));
+        splash.showMessage(QObject::tr("Loading User Interface ..."),
+                           Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    }
 
     // load UI
     const QString openProject = argc > 1 ? argv[1] : QString();

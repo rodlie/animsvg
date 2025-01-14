@@ -42,9 +42,7 @@ namespace Friction
         {
         public:
             explicit CanvasToolBar(QWidget *parent = nullptr);
-
             void setCurrentCanvas(Canvas * const target);
-
             QComboBox* getResolutionComboBox();
 
         private:
@@ -57,12 +55,14 @@ namespace Friction
                                Canvas * const target);
             void setDimension(const QSize dim,
                               Canvas * const target);
+            void showContextMenu(const QPoint &pos);
 
             QSpinBox *mSpinWidth;
             QSpinBox *mSpinHeight;
             QComboBox *mComboResolution;
 
             ConnContextQPtr<Canvas> mCanvas;
+            bool mIconsOnly;
         };
     }
 }

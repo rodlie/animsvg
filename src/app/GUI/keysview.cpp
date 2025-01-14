@@ -223,12 +223,33 @@ void KeysView::resizeEvent(QResizeEvent *e) {
     if(mGraphViewed) graphResizeEvent(e);
 }
 
-void KeysView::wheelEvent(QWheelEvent *e) {
-    if(mGraphViewed) {
-        graphWheelEvent(e);
+void KeysView::wheelEvent(QWheelEvent *e)
+{
+#ifdef Q_OS_MAC
+    const bool alt = e->modifiers() & Qt::AltModifier;
+    const bool ctrl = e->modifiers() & Qt::ControlModifier;
+    const bool shift = e->modifiers() & Qt::ShiftModifier;
+    const bool noMod = !alt && !ctrl && !shift;
+    if (e->phase() != Qt::NoScrollPhase && noMod) {
+        if (e->phase() == Qt::ScrollBegin) {
+            mPanEvent = false;
+            const auto x = e->angleDelta().x();
+            const auto y = e->angleDelta().y();
+            if (x < 0) {
+                if (y > 0 || x < y || y == 0 || x == y) { mPanEvent = true; }
+            } else if (x > 0) {
+                if (y < 0 || x > y || y == 0 || x == y) { mPanEvent = true; }
+            }
+        } else if (e->phase() == Qt::ScrollEnd) { mPanEvent = false; }
+        //qDebug() << e->angleDelta().x() << e->angleDelta().y() << mPanEvent;
+        if (mPanEvent) { emit panEventSignal(e); }
+    }
+#endif
+    if (mGraphViewed) {
+        if (!mPanEvent) { graphWheelEvent(e); }
     } else {
-        emit wheelEventSignal(e);
-        if(mSelecting) {
+        if (!mPanEvent) { emit wheelEventSignal(e); }
+        if (mSelecting) {
             const QVector3D posU = mapFromGlobal(QCursor::pos()) +
                            QPointF(-eSizesUI::widget/2, 0.);
             mSelectionRect.setBottom(posU.y() + mViewedTop);
@@ -484,6 +505,21 @@ bool KeysView::KFT_keyPressEvent(QKeyEvent *event)
     } else return false;
     return true;
 }
+
+#ifdef Q_OS_MAC
+bool KeysView::event(QEvent *e)
+{
+    if (e->type() == QEvent::NativeGesture) {
+        auto g = dynamic_cast<QNativeGestureEvent*>(e);
+        if (g->gestureType() == Qt::ZoomNativeGesture ||
+            g->gestureType() == Qt::SmartZoomNativeGesture) {
+            emit nativeEventSignal(g);
+            return true;
+        }
+    }
+    return QWidget::event(e);
+}
+#endif
 
 void KeysView::drawKeys(QPainter * const p,
                         const qreal pixelsPerFrame,

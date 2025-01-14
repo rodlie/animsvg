@@ -272,19 +272,24 @@ void Canvas::handleLeftButtonMousePress(const eMouseEvent& e) {
         addBoxToSelection(newPath.get());
 
         mCurrentRectangle = newPath.get();
-    } else if(mCurrentMode == CanvasMode::textCreate) {
-        const auto newPath = enve::make_shared<TextBox>();
-        newPath->planCenterPivotPosition();
-        newPath->setFontFamilyAndStyle(mDocument.fFontFamily,
-                                       mDocument.fFontStyle);
-        newPath->setFontSize(mDocument.fFontSize);
-        mCurrentContainer->addContained(newPath);
-        newPath->setAbsolutePos(e.fPos);
+    } else if (mCurrentMode == CanvasMode::textCreate) {
+        if (enve_cast<TextBox*>(mHoveredBox)) {
+            setCurrentBox(mHoveredBox);
+            emit openTextEditor();
+        } else {
+            const auto newPath = enve::make_shared<TextBox>();
+            newPath->planCenterPivotPosition();
+            newPath->setFontFamilyAndStyle(mDocument.fFontFamily,
+                                           mDocument.fFontStyle);
+            newPath->setFontSize(mDocument.fFontSize);
+            mCurrentContainer->addContained(newPath);
+            newPath->setAbsolutePos(e.fPos);
 
-        mCurrentTextBox = newPath.get();
+            mCurrentTextBox = newPath.get();
 
-        clearBoxesSelection();
-        addBoxToSelection(newPath.get());
+            clearBoxesSelection();
+            addBoxToSelection(newPath.get());
+        }
     }
 }
 
@@ -518,13 +523,21 @@ void Canvas::drawPathFinish(const qreal invScale) {
 
 const QColor Canvas::pickPixelColor(const QPoint &pos)
 {
+    // try the "safe" option first
+    if (QApplication::activeWindow()) {
+        const auto nPos = QApplication::activeWindow()->mapFromGlobal(pos);
+        return QApplication::activeWindow()->grab(QRect(QPoint(nPos.x(), nPos.y()),
+                                                        QSize(1, 1))).toImage().pixel(0, 0);
+    }
+
+    // "insecure" fallback (will not work in a sandbox or wayland)
+    // will prompt for permissions on macOS
+    // Windows and X11 don't care
     QScreen *screen = QApplication::screenAt(pos);
     if (!screen) { return QColor(); }
     WId wid = QApplication::desktop()->winId();
-    QImage img = screen->grabWindow(wid,
-                                    pos.x(), pos.y(),
-                                    1, 1).toImage();
-    return QColor(img.pixel(0, 0));
+    const auto pix = screen->grabWindow(wid, pos.x(), pos.y(), 1, 1);
+    return QColor(pix.toImage().pixel(0, 0));
 }
 
 void Canvas::applyPixelColor(const QColor &color,

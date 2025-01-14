@@ -70,7 +70,7 @@ void OpenGLRasterEffectCaller::iniProgram(QGL33* const gl) {
 
     gl->glUseProgram(mProgramId);
 
-    const auto texLocation = gl->glGetUniformLocation(mProgramId, "texture");
+    const auto texLocation = gl->glGetUniformLocation(mProgramId, "tex");
     gl->glUniform1i(texLocation, 0);
 
     iniVars(gl);

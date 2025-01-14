@@ -79,6 +79,7 @@ public:
     static const QString getAppBranchUrl();
     static const QString getAppConfigPath();
     static const QString getAppPath();
+    static const QString getAppTempPath();
     static const QString getAppOutputProfilesPath();
     static const QString getAppPathEffectsPath();
     static const QString getAppRasterEffectsPath();
@@ -101,7 +102,6 @@ public:
                                                           HardwareSupport fallback);
     static const QString getRasterEffectHardwareSupportString(const QString &effect,
                                                               HardwareSupport fallback);
-    static const QByteArray filterShader(QByteArray data);
     static const QStringList getFpsPresets();
     static void saveFpsPresets(const QStringList &presets);
     static void saveFpsPreset(const double value);
@@ -119,6 +119,8 @@ public:
     static const QPair<QStringList,bool> hasWriteAccess();
     static bool isAppPortable();
     static bool isAppImage();
+    static bool isWayland();
+    static bool isFlatpak();
     static const QString getAppImagePath();
     static bool hasXDGDesktopIntegration();
     static bool setupXDGDesktopIntegration();

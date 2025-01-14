@@ -104,9 +104,9 @@ void OutlineSettingsAnimator::setPaintType(const PaintType paintType) {
     }
 }
 
-void OutlineSettingsAnimator::showHideChildrenBeforeChaningPaintType(
+void OutlineSettingsAnimator::showHideChildrenBeforeChangingPaintType(
         const PaintType newPaintType) {
-    PaintSettingsAnimator::showHideChildrenBeforeChaningPaintType(newPaintType);
+    PaintSettingsAnimator::showHideChildrenBeforeChangingPaintType(newPaintType);
     if(getPaintType() == BRUSHPAINT) ca_removeChild(mBrushSettings);
     if(newPaintType == BRUSHPAINT) ca_addChild(mBrushSettings);
 }

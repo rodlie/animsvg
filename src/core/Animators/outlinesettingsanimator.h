@@ -37,7 +37,7 @@ protected:
     QDomElement prp_writePropertyXEV_impl(const XevExporter& exp) const;
     void prp_readPropertyXEV_impl(const QDomElement& ele, const XevImporter& imp);
 public:
-    void showHideChildrenBeforeChaningPaintType(const PaintType newPaintType);
+    void showHideChildrenBeforeChangingPaintType(const PaintType newPaintType);
 
     void prp_writeProperty_impl(eWriteStream& dst) const;
     void prp_readProperty_impl(eReadStream& src);

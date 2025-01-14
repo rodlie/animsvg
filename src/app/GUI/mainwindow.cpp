@@ -331,8 +331,8 @@ MainWindow::MainWindow(Document& document,
     addToolBar(mColorToolBar);
 
     mCanvasToolBar->addSeparator();
-    mCanvasToolBar->addAction(new QAction(QIcon::fromTheme("workspace"),
-                                          tr("Layout"), this));
+    mCanvasToolBar->addAction(QIcon::fromTheme("workspace"),
+                              tr("Layout"));
     const auto workspaceLayoutCombo = mLayoutHandler->comboWidget();
     workspaceLayoutCombo->setMaximumWidth(150);
     mCanvasToolBar->addWidget(workspaceLayoutCombo);
@@ -1016,6 +1016,7 @@ void MainWindow::setupMenuBar()
     connect(mViewFillStrokeAct, &QAction::triggered,
             this, [this](bool triggered) {
         mUI->setDockVisible("Fill and Stroke", triggered);
+        AppSupport::setSettings("ui", "FillStrokeVisible", triggered);
     });
 
     mTimelineWindowAct = mViewMenu->addAction(tr("Timeline in Window"));
@@ -1644,6 +1645,30 @@ bool MainWindow::processKeyEvent(QKeyEvent *event)
     return false;
 }
 
+#ifdef Q_OS_MAC
+bool MainWindow::processBoxesListKeyEvent(QKeyEvent *event)
+{
+    if (event->type() == QEvent::ShortcutOverride) { return false; }
+    const bool ctrl = event->modifiers() & Qt::ControlModifier;
+    if (ctrl && event->key() == Qt::Key_V) {
+        if (event->isAutoRepeat()) { return false; }
+        (*mActions.pasteAction)();
+    } else if (ctrl && event->key() == Qt::Key_C) {
+        if (event->isAutoRepeat()) { return false; }
+        (*mActions.copyAction)();
+    } else if (ctrl && event->key() == Qt::Key_D) {
+        if (event->isAutoRepeat()) { return false; }
+        (*mActions.duplicateAction)();
+    } else if (ctrl && event->key() == Qt::Key_X) {
+        if (event->isAutoRepeat()) { return false; }
+        (*mActions.cutAction)();
+    } else if (event->key() == Qt::Key_Delete) {
+        (*mActions.deleteAction)();
+    } else { return false; }
+    return true;
+}
+#endif
+
 void MainWindow::readSettings(const QString &openProject)
 {
     mUI->readSettings();
@@ -1671,10 +1696,20 @@ void MainWindow::readSettings(const QString &openProject)
     const bool visibleToolBarColor = AppSupport::getSettings("ui",
                                                              "ToolBarColorVisible",
                                                              true).toBool();
+
+    const bool visibleFillStroke = AppSupport::getSettings("ui",
+                                                           "FillStrokeVisible",
+                                                           true).toBool();
+
     mToolBarMainAct->setChecked(visibleToolBarMain);
     mToolBarColorAct->setChecked(visibleToolBarColor);
     mToolbar->setVisible(visibleToolBarMain);
     mColorToolBar->setVisible(visibleToolBarColor);
+
+    mViewFillStrokeAct->setChecked(visibleFillStroke);
+    if (!visibleFillStroke) {
+        mUI->setDockVisible("Fill and Stroke", false);
+    }
 
     mViewFullScreenAct->blockSignals(true);
     mViewFullScreenAct->setChecked(isFull);

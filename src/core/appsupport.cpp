@@ -255,6 +255,24 @@ const QString AppSupport::getAppPath()
     return QApplication::applicationDirPath();
 }
 
+const QString AppSupport::getAppTempPath()
+{
+#ifdef Q_OS_LINUX
+    if (isFlatpak()) {
+        QString path = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+        if (!path.isEmpty()) {
+            path.append("/friction-temp");
+            if (!QFile::exists(path)) {
+                QDir dir(path);
+                dir.mkpath(path);
+            }
+            if (QFile::exists(path)) { return path; }
+        }
+    }
+#endif
+    return QDir::tempPath();
+}
+
 const QString AppSupport::getAppOutputProfilesPath()
 {
     QString path = QString::fromUtf8("%1/OutputProfiles").arg(getAppConfigPath());
@@ -491,20 +509,6 @@ const QString AppSupport::getRasterEffectHardwareSupportString(const QString &ef
     return result;
 }
 
-const QByteArray AppSupport::filterShader(QByteArray data)
-{
-#if defined(Q_OS_WIN)
-    if (HardwareInfo::sGpuVendor() == GpuVendor::intel) {
-        return data.replace("texture2D", "texture");
-    }
-    return data;
-#elif defined(Q_OS_MAC)
-    return data.replace("texture2D", "texture");
-#else
-    return data;
-#endif
-}
-
 const QStringList AppSupport::getFpsPresets()
 {
     QStringList presets = getSettings("presets",
@@ -689,6 +693,16 @@ bool AppSupport::isAppPortable()
 bool AppSupport::isAppImage()
 {
     return !getAppImagePath().simplified().isEmpty();
+}
+
+bool AppSupport::isWayland()
+{
+    return QGuiApplication::platformName().startsWith("wayland");
+}
+
+bool AppSupport::isFlatpak()
+{
+    return !QString(qgetenv("container")).isEmpty();
 }
 
 const QString AppSupport::getAppImagePath()
@@ -876,6 +890,9 @@ bool AppSupport::setupXDGDesktopIntegration()
         }
     }
 
+    if (isWayland()) {
+        QGuiApplication::setDesktopFileName(getAppID());
+    }
     return true;
 }
 
@@ -976,8 +993,8 @@ void AppSupport::checkFFmpeg(const bool &isRenderer)
 
 void AppSupport::initEnv(const bool &isRenderer)
 {
-#if defined(Q_OS_WIN)
     Q_UNUSED(isRenderer)
+#if defined(Q_OS_WIN)
     // windows theme integration
 #if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
     // Set window title bar color based on dark/light theme
@@ -988,13 +1005,9 @@ void AppSupport::initEnv(const bool &isRenderer)
     if (registry.value("AppsUseLightTheme", 0).toInt() == 0) { qputenv("QT_QPA_PLATFORM", "windows:darkmode=1"); }
 #endif
 #elif defined(Q_OS_LINUX)
-    if (isRenderer) { // Force Mesa if Renderer
-        qputenv("LIBGL_ALWAYS_SOFTWARE", "1");
-    }
-    // Force XCB on Linux until we support Wayland
-    qputenv("QT_QPA_PLATFORM", isRenderer ? "offscreen" : "xcb");
-#else
-    Q_UNUSED(isRenderer)
+#ifndef FRICTION_EGL
+    qputenv("QT_QPA_PLATFORM", "xcb");
+#endif
 #endif
 }
 

@@ -28,20 +28,20 @@ layout(location = 0) out vec4 fragColor;
 
 in vec2 texCoord;
 
-uniform sampler2D texture1;
-uniform sampler2D texture2;
+uniform sampler2D tex1;
+uniform sampler2D tex2;
 
 uniform vec4 rect2;
 uniform float opacity2;
 
 void main(void) {
-    vec4 color1 = texture2D(texture1, texCoord);
+    vec4 color1 = texture(tex1, texCoord);
     bool inRect2 = texCoord.x > rect2.x &&
                    texCoord.y > rect2.y &&
                    texCoord.x < rect2.z &&
                    texCoord.y < rect2.w;
     if(inRect2) {
-        vec4 color2 = opacity2*texture2D(texture2, (texCoord - rect2.xy)/(rect2.zw - rect2.xy));
+        vec4 color2 = opacity2*texture(tex2, (texCoord - rect2.xy)/(rect2.zw - rect2.xy));
         if(color2.a > color1.a) {
             float m2 = 1 - color1.a/color2.a;
             fragColor = color1 + color2*m2;

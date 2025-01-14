@@ -851,30 +851,44 @@ void Canvas::selectedPathsCombine() {
 
 void Canvas::alignSelectedBoxes(const Qt::Alignment align,
                                 const AlignPivot pivot,
-                                const AlignRelativeTo relativeTo) {
-    if(mSelectedBoxes.isEmpty()) return;
+                                const AlignRelativeTo relativeTo)
+{
+    if (mSelectedBoxes.isEmpty()) { return; }
     QRectF geometry;
     BoundingBox* skip = nullptr;
     switch(relativeTo) {
     case AlignRelativeTo::scene:
+    case AlignRelativeTo::boundingBox:
         geometry = QRectF(0., 0., mWidth, mHeight);
         break;
     case AlignRelativeTo::lastSelected:
-        if(!mLastSelectedBox) return;
+        if (!mLastSelectedBox) { return; }
         skip = mLastSelectedBox;
         geometry = mLastSelectedBox->getAbsBoundingRect();
         break;
+    case AlignRelativeTo::lastSelectedPivot:
+        if (!mLastSelectedBox) { return; }
+        skip = mLastSelectedBox;
+        geometry = QRectF(mLastSelectedBox->getPivotAbsPos(),
+                          mLastSelectedBox->getPivotAbsPos());
+        break;
     }
 
-    pushUndoRedoName("align");
-    for(const auto &box : mSelectedBoxes) {
-        if(box == skip) continue;
+    pushUndoRedoName(pivot == AlignPivot::pivotItself ? "pivot align" : "box align");
+    for (const auto &box : mSelectedBoxes) {
+        if (box == skip) { continue; }
         switch(pivot) {
         case AlignPivot::pivot:
             box->alignPivot(align, geometry);
             break;
         case AlignPivot::geometry:
             box->alignGeometry(align, geometry);
+            break;
+        case AlignPivot::pivotItself:
+            box->alignPivotItself(align,
+                                  geometry,
+                                  relativeTo,
+                                  mLastSelectedBox->getPivotAbsPos());
             break;
         }
     }

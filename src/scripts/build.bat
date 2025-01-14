@@ -23,7 +23,7 @@ if "%OPT%" == "debug" (
 
 set CWD=%cd%
 set SDK_DIR=%CWD%\sdk
-set SDK_VERSION=20240915
+set SDK_VERSION=1.0.0
 
 set PATH=%SDK_DIR%\bin;%PATH%
 
@@ -36,8 +36,8 @@ set COMMIT=
 for /f %%i in ('git rev-parse --short^=8 HEAD') do set COMMIT=%%i
 
 if not exist "sdk\" ( 
-    curl -OL "https://github.com/friction2d/friction-sdk/releases/download/%SDK_VERSION%/friction-msvc-2017-sdk-%SDK_VERSION%.7z"
-    7z x friction-msvc-2017-sdk-%SDK_VERSION%.7z
+    curl -OL "https://github.com/friction2d/friction-sdk/releases/download/v%SDK_VERSION%/friction-sdk-%SDK_VERSION%r2-windows-x64.7z"
+    7z x friction-sdk-%SDK_VERSION%r2-windows-x64.7z
 )
 
 if exist "build\" (
