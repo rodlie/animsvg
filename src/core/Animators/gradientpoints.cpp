@@ -56,8 +56,8 @@ void GradientPoints::applyTransform(const QMatrix4x4 &transform) {
     mEndAnimator->applyTransform(transform);
 }
 
-void GradientPoints::setPositions(const QPointF &startPos,
-                                  const QPointF &endPos) {
+void GradientPoints::setPositions(const QVector3D &startPos,
+                                  const QVector3D &endPos) {
     mStartPoint->setRelativePos(startPos);
     mEndPoint->setRelativePos(endPos);
 }
@@ -71,8 +71,8 @@ void GradientPoints::prp_drawCanvasControls(
         const float invScale, const bool ctrlPressed) {
     if(mode != CanvasMode::pointTransform) return;
     if(mEnabled) {
-        const SkPoint startPos = toSkPoint(mStartPoint->getAbsolutePos());
-        const SkPoint endPos = toSkPoint(mEndPoint->getAbsolutePos());
+        const SkPoint3 startPos = toSkPoint(mStartPoint->getAbsolutePos());
+        const SkPoint3 endPos = toSkPoint(mEndPoint->getAbsolutePos());
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setColor(SK_ColorBLACK);
@@ -87,19 +87,19 @@ void GradientPoints::prp_drawCanvasControls(
     }
 }
 
-QPointF GradientPoints::getStartPointAtRelFrame(const int relFrame) {
+QVector3D GradientPoints::getStartPointAtRelFrame(const int relFrame) {
     return mStartAnimator->getEffectiveValue(relFrame);
 }
 
-QPointF GradientPoints::getEndPointAtRelFrame(const int relFrame) {
+QVector3D GradientPoints::getEndPointAtRelFrame(const int relFrame) {
     return mEndAnimator->getEffectiveValue(relFrame);
 }
 
-QPointF GradientPoints::getStartPoint(const qreal relFrame) {
+QVector3D GradientPoints::getStartPoint(const qreal relFrame) {
     return mStartAnimator->getEffectiveValue(relFrame);
 }
 
-QPointF GradientPoints::getEndPoint(const qreal relFrame) {
+QVector3D GradientPoints::getEndPoint(const qreal relFrame) {
     return mEndAnimator->getEffectiveValue(relFrame);
 }
 

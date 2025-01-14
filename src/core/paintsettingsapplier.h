@@ -96,8 +96,8 @@ protected:
         target->setGradientPointsPos(mPt1, mPt2);
     }
 private:
-    const QPointF mPt1;
-    const QPointF mPt2;
+    const QVector3D mPt1;
+    const QVector3D mPt2;
 };
 
 class CORE_EXPORT GradientTransformSetting : public PaintSetting {

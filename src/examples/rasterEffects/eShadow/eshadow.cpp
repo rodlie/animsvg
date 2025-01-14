@@ -97,7 +97,7 @@ eShadow::getEffectCaller(const qreal relFrame, const qreal resolution,
     Q_UNUSED(data)
     const qreal blur = mBlurRadius->getEffectiveValue(relFrame)*resolution;
     const QColor color = mColor->getColor(relFrame);
-    const QPointF trans = mTranslation->getEffectiveValue(relFrame)*resolution;
+    const QVector3D trans = mTranslation->getEffectiveValue(relFrame)*resolution;
     const qreal opacity = mOpacity->getEffectiveValue(relFrame)*influence;
 
     const int iL = qMax(0, qCeil(blur - trans.x()));

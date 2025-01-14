@@ -558,11 +558,11 @@ void anim_drawKey(QPainter * const p,
     else p->setPen(QPen(Qt::black, 0.5));
 
     const int frameRelToStart = key->getRelFrame() - startFrame;
-    const QPointF keyCenter((frameRelToStart + 0.5)*pixelsPerFrame,
+    const QVector3D keyCenter((frameRelToStart + 0.5)*pixelsPerFrame,
                             0.5*rowHeight);
     switch(type) {
     case KeyFrameType::property: {
-        const QPointF tl = keyCenter + QPointF(-keyRadius, -keyRadius);
+        const QVector3D tl = keyCenter + QPointF(-keyRadius, -keyRadius);
         p->drawRect(QRectF(tl, QSizeF(2*keyRadius, 2*keyRadius)));
     } break;
     default: {

@@ -113,8 +113,8 @@ extern qreal qMax4(qreal v1, qreal v2,
                    qreal v3, qreal v4);
 
 CORE_EXPORT
-extern QRectF qRectF4Points(QPointF p1, QPointF c1,
-                            QPointF c2, QPointF p2);
+extern QRectF qRectF4Points(QVector3D p1, QVector3D c1,
+                            QVector3D c2, QVector3D p2);
 
 CORE_EXPORT
 extern bool isNonZero(const double val);
@@ -133,15 +133,15 @@ CORE_EXPORT
 extern double getAngleDeg(double x1, double y1, double x2, double y2);
 
 CORE_EXPORT
-extern QPointF rotateVector90Degrees(const QPointF &pt);
+extern QVector3D rotateVector90Degrees(const QVector3D &pt);
 
 CORE_EXPORT
-extern qreal degreesBetweenVectors(const QPointF &pt1,
-                                   const QPointF &pt2);
+extern qreal degreesBetweenVectors(const QVector3D &pt1,
+                                   const QVector3D &pt2);
 
 CORE_EXPORT
-extern qreal radiansBetweenVectors(const QPointF &pt1,
-                                   const QPointF &pt2);
+extern qreal radiansBetweenVectors(const QVector3D &pt1,
+                                   const QVector3D &pt2);
 
 template <typename T1, typename T2>
 qreal clamp(const qreal val, const T1 &min, const T2 &max) {
@@ -175,25 +175,25 @@ extern qreal gRandF(const qreal fMin = 0, const qreal fMax = 1);
 CORE_EXPORT
 extern float gSkRandF(const float fMin = 0, const float fMax = 1);
 CORE_EXPORT
-extern QPointF symmetricToPos(const QPointF &toMirror,
-                              const QPointF &mirrorCenter);
+extern QVector3D symmetricToPos(const QVector3D &toMirror,
+                              const QVector3D &mirrorCenter);
 CORE_EXPORT
-extern QPointF symmetricToPosNewLen(const QPointF& toMirror,
+extern QVector3D symmetricToPosNewLen(const QPointF& toMirror,
                                     const QPointF& mirrorCenter,
                                     const qreal newLen);
 CORE_EXPORT
-extern qreal pointToLen(QPointF point);
+extern qreal pointToLen(QVector3D point);
 CORE_EXPORT
 extern float pointToLen(const SkPoint& point);
 CORE_EXPORT
-extern QPointF scalePointToNewLen(const QPointF &point,
+extern QVector3D scalePointToNewLen(const QVector3D &point,
                                   const qreal newLen);
 CORE_EXPORT
-extern QPointF gRotPt(const QPointF& pt, const qreal deg);
+extern QVector3D gRotPt(const QPointF& pt, const qreal deg);
 CORE_EXPORT
-extern QPointF gQPointFDisplace(const QPointF& pt, const qreal displ);
+extern QVector3D gQPointFDisplace(const QPointF& pt, const qreal displ);
 
 CORE_EXPORT
-extern bool isPointZero(QPointF pos);
+extern bool isPointZero(QVector3D pos);
 
 #endif // SIMPLEMATH_H

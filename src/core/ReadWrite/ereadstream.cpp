@@ -121,7 +121,7 @@ eReadStream &eReadStream::operator>>(qreal &val) {
     return *this;
 }
 
-eReadStream &eReadStream::operator>>(QPointF &val) {
+eReadStream &eReadStream::operator>>(QVector3D &val) {
     read(&val, sizeof(QPointF));
     return *this;
 }

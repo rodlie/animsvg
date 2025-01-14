@@ -28,7 +28,7 @@ private:
 
     const float mRadius;
     const SkColor mColor;
-    const SkPoint mTranslation;
+    const SkPoint3 mTranslation;
     const SkScalar mOpacity;
 };
 
@@ -49,7 +49,7 @@ ShadowEffect::ShadowEffect() :
     ca_addChild(mBlurRadius);
 
     mTranslation->setValuesRange(-1000, 1000);
-    mTranslation->setBaseValue(QPointF(0, 0));
+    mTranslation->setBaseValue(QVector3D(0, 0, 0));
     ca_addChild(mTranslation);
 
     mColor->setColor(Qt::black);
@@ -101,7 +101,7 @@ ShadowEffect::getEffectCaller(
     Q_UNUSED(data)
     const qreal blur = mBlurRadius->getEffectiveValue(relFrame)*resolution;
     const QColor color = mColor->getColor(relFrame);
-    const QPointF trans = mTranslation->getEffectiveValue(relFrame)*resolution;
+    const QVector3D trans = mTranslation->getEffectiveValue(relFrame)*resolution;
     const qreal opacity = mOpacity->getEffectiveValue(relFrame)*influence;
 
     const int iL = qMax(0, qCeil(blur - trans.x()));

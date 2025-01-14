@@ -95,7 +95,7 @@ void ShaderEffectJS::clearSetters()
     mSetters.clear();
 }
 
-void ShaderEffectJS::addSetter(const QPointF &val)
+void ShaderEffectJS::addSetter(const QVector3D &val)
 {
     mSetters << toValue(val);
 }

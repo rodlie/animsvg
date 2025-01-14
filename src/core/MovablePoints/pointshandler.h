@@ -45,7 +45,7 @@ public:
     void removeFromSelection(MovablePoint* const pt);
     void clearSelection();
 
-    MovablePoint *getPointAtAbsPos(const QPointF &absPos,
+    MovablePoint *getPointAtAbsPos(const QVector3D &absPos,
                                    const CanvasMode mode,
                                    const qreal invScale);
 

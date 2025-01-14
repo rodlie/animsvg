@@ -32,7 +32,7 @@ PathPointsHandler::PathPointsHandler(
     scheduleNodesRemoval([this]() { flushNodesRemoval(); }),
     mTargetAnimator(targetAnimator) {}
 
-NormalSegment PathPointsHandler::getNormalSegment(const QPointF &absPos, const qreal invScale) const {
+NormalSegment PathPointsHandler::getNormalSegment(const QVector3D &absPos, const qreal invScale) const {
     qreal minDist = 5*invScale;
     NormalSegment bestSeg;
     for(int i = 0; i < count(); i++) {
@@ -121,12 +121,12 @@ void PathPointsHandler::removeNode(const int nodeId, const bool approx) {
     mTargetAnimator->actionRemoveNode(nodeId, approx);
 }
 
-SmartNodePoint* PathPointsHandler::addNewAtStart(const QPointF &relPos) {
+SmartNodePoint* PathPointsHandler::addNewAtStart(const QVector3D &relPos) {
     const int id = mTargetAnimator->actionAddNewAtStart(relPos);
     return getPointWithId<SmartNodePoint>(id);
 }
 
-SmartNodePoint* PathPointsHandler::addNewAtEnd(const QPointF &relPos) {
+SmartNodePoint* PathPointsHandler::addNewAtEnd(const QVector3D &relPos) {
     const int id = mTargetAnimator->actionAddNewAtEnd(relPos);
     return getPointWithId<SmartNodePoint>(id);
 }
@@ -151,7 +151,7 @@ void PathPointsHandler::demoteToDissolved(const int nodeId,
 }
 
 int PathPointsHandler::moveToClosestSegment(const int nodeId,
-                                            const QPointF &relPos) {
+                                            const QVector3D &relPos) {
     NormalSegment::SubSegment minSubSeg{nullptr, nullptr, nullptr};
     qreal minDist = TEN_MIL;
     for(int i = 0; i < count(); i++) {
@@ -231,7 +231,7 @@ SmartNodePoint *PathPointsHandler::getNextNormalNode(const int startId) const {
 }
 
 SmartNodePoint *PathPointsHandler::getClosestNode(
-        const QPointF &absPos, const qreal &maxDist) const {
+        const QVector3D &absPos, const qreal &maxDist) const {
     SmartNodePoint* result = nullptr;
     qreal minDist = maxDist;
     for(int i = 0; i < count(); i++) {

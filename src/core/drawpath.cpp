@@ -33,8 +33,8 @@ DrawPath::DrawPath() {}
 
 void DrawPath::lineTo(const QPointF& pos) {
     if(!mPts.isEmpty()) {
-        const QPointF lastPos = mPts.last();
-        const QPointF dPos = pos - lastPos;
+        const QVector3D lastPos = mPts.last();
+        const QVector3D dPos = pos - lastPos;
         const qreal dist = pointToLen(dPos);
         const int n = qFloor(dist/3);
         mPts.reserve(mPts.size() + n);
@@ -46,9 +46,9 @@ void DrawPath::lineTo(const QPointF& pos) {
     mPts.append(pos);
 }
 
-QPointF operator*(const QPointF& p1, const QPointF& p2);
+QVector3D operator*(const QPointF& p1, const QPointF& p2);
 
-QPointF operator/(const QPointF& p1, const QPointF& p2) {
+QVector3D operator/(const QPointF& p1, const QPointF& p2) {
     return {p1.x()/p2.x(), p1.y()/p2.y()};
 }
 

@@ -31,10 +31,10 @@
 
 class CORE_EXPORT QPointFAnimatorCreator : public ShaderPropertyCreator {
     e_OBJECT
-    QPointFAnimatorCreator(const QPointF iniVal,
-                           const QPointF minVal,
-                           const QPointF maxVal,
-                           const QPointF step,
+    QPointFAnimatorCreator(const QVector3D intF iniVal,
+                           const QVector3D minVal,
+                           const QVector3D maxVal,
+                           const QVector3D step,
                            const bool glValue,
                            const QString& nameX,
                            const QString& nameY,
@@ -45,10 +45,10 @@ class CORE_EXPORT QPointFAnimatorCreator : public ShaderPropertyCreator {
         fMaxVal(maxVal), fStep(step),
         fNameX(nameX), fNameY(nameY) {}
 
-    const QPointF fIniVal;
-    const QPointF fMinVal;
-    const QPointF fMaxVal;
-    const QPointF fStep;
+    const QVector3D fIniVal;
+    const QVector3D fMinVal;
+    const QVector3D fMaxVal;
+    const QVector3D fStep;
     const QString fNameX;
     const QString fNameY;
 

@@ -49,7 +49,7 @@ public:
     void afterQued();
 
     void initialize(const qreal relFrame,
-                    const QPointF &pos,
+                    const QVector3D &pos,
                     const QString &letter,
                     const SkFont &font,
                     TextBox * const parent,
@@ -58,8 +58,8 @@ public:
     void applyTransform(const QMatrix& transform);
 
     QRectF fBoundingRect;
-    QPointF fLetterPos;
-    QPointF fOriginalPos;
+    QVector3D fLetterPos;
+    QVector3D fOriginalPos;
 
     QList<stdsptr<PathEffectCaller>> fPathEffects;
     QList<stdsptr<PathEffectCaller>> fFillEffects;
@@ -83,8 +83,8 @@ public:
     void queAllLetters();
 
     QRectF fBoundingRect;
-    QPointF fWordPos;
-    QPointF fOriginalPos;
+    QVector3D fWordPos;
+    QVector3D fOriginalPos;
     QList<stdsptr<LetterRenderData>> fLetters;
 };
 
@@ -104,8 +104,8 @@ public:
     void applyTransform(const QMatrix4x4 &transform);
     void queAllWords();
 
-    QPointF fLinePos;
-    QPointF fOriginalPos;
+    QVector3D fLinePos;
+    QVector3D fOriginalPos;
     QString fString;
     QList<stdsptr<WordRenderData>> fWords;
 };

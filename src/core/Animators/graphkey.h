@@ -40,7 +40,7 @@ public:
     virtual void setValueForGraph(const qreal value) = 0;
     virtual qreal getValueForGraph() const = 0;
 
-    virtual void changeFrameAndValueBy(const QPointF &frameValueChange);
+    virtual void changeFrameAndValueBy(const QVector3D &frameValueChange);
 
     void startFrameTransform() final;
     void finishFrameTransform() final;

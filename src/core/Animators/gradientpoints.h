@@ -46,13 +46,13 @@ public:
 
     void setColors(const QColor &startColor, const QColor &endColor);
 
-    void setPositions(const QPointF &startPos, const QPointF &endPos);
+    void setPositions(const QVector3D &startPos, const QVector3D &endPos);
     void applyTransform(const QMatrix4x4 &transform);;
 
-    QPointF getStartPointAtRelFrame(const int relFrame);
-    QPointF getEndPointAtRelFrame(const int relFrame);
-    QPointF getStartPoint(const qreal relFrame);
-    QPointF getEndPoint(const qreal relFrame);
+    QVector3D getStartPointAtRelFrame(const int relFrame);
+    QVector3D getEndPointAtRelFrame(const int relFrame);
+    QVector3D getStartPoint(const qreal relFrame);
+    QVector3D getEndPoint(const qreal relFrame);
 
     bool enabled() const { return mEnabled; }
 

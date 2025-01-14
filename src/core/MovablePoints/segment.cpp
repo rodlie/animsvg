@@ -46,7 +46,7 @@ NormalSegment::NormalSegment(SmartNodePoint * const firstNode,
     updateDissolved();
 }
 
-SmartNodePoint *NormalSegment::divideAtAbsPos(const QPointF &absPos) {
+SmartNodePoint *NormalSegment::divideAtAbsPos(const QVector3D &absPos) {
     if(!isValid()) return nullptr;
     const qreal t = closestAbsT(absPos);
     return divideAtT(t);
@@ -78,13 +78,13 @@ SmartNodePoint *NormalSegment::getNodeAt(const int id) const {
 }
 
 NormalSegment::SubSegment NormalSegment::getClosestSubSegmentForDummy(
-        const QPointF &relPos, qreal &minDist) const {
+        const QVector3D &relPos, qreal &minDist) const {
     auto prevNode = mFirstNode;
     minDist = TEN_MIL;
     SubSegment bestSeg{nullptr, nullptr, nullptr};
     for(const auto &nextNode : mInnerDissolved) {
         const auto subSeg = SubSegment{prevNode, nextNode, this};
-        const QPointF halfPos = subSeg.getRelPosAtT(0.5);
+        const QVector3D halfPos = subSeg.getRelPosAtT(0.5);
         const qreal dist = pointToLen(halfPos - relPos);
         if(dist < minDist) {
             minDist = dist;
@@ -93,7 +93,7 @@ NormalSegment::SubSegment NormalSegment::getClosestSubSegmentForDummy(
         prevNode = nextNode;
     }
     const auto subSeg = SubSegment{prevNode, mLastNode, this};
-    const QPointF halfPos = subSeg.getRelPosAtT(0.5);
+    const QVector3D halfPos = subSeg.getRelPosAtT(0.5);
     const qreal dist = pointToLen(halfPos - relPos);
     if(dist < minDist) {
         minDist = dist;
@@ -107,15 +107,15 @@ void NormalSegment::updateDissolvedPos() const {
         inner->updateFromNodeDataPosOnly();
 }
 
-QPointF NormalSegment::getRelPosAtT(const qreal t) const {
+QVector3D NormalSegment::getRelPosAtT(const qreal t) const {
     return getAsRelSegment().posAtT(t);
 }
 
-QPointF NormalSegment::getAbsPosAtT(const qreal t) const {
+QVector3D NormalSegment::getAbsPosAtT(const qreal t) const {
     return getAsAbsSegment().posAtT(t);
 }
 
-void NormalSegment::makePassThroughAbs(const QPointF &absPos, const qreal t) {
+void NormalSegment::makePassThroughAbs(const QVector3D &absPos, const qreal t) {
     if(!mLastNode->getC0Enabled()) mLastNode->setC0Enabled(true);
     if(!mFirstNode->getC2Enabled()) mFirstNode->setC2Enabled(true);
 
@@ -126,7 +126,7 @@ void NormalSegment::makePassThroughAbs(const QPointF &absPos, const qreal t) {
     mLastNodeC0->moveToAbs(absSeg.c2());
 }
 
-void NormalSegment::makePassThroughRel(const QPointF &relPos, const qreal t) {
+void NormalSegment::makePassThroughRel(const QVector3D &relPos, const qreal t) {
     if(!mLastNode->getC0Enabled()) mLastNode->setC0Enabled(true);
     if(!mFirstNode->getC2Enabled()) mFirstNode->setC2Enabled(true);
 
@@ -230,9 +230,9 @@ NormalSegment::SubSegment NormalSegment::subSegmentAtT(const qreal t) const {
     return {firstNode, lastNode, this};
 }
 
-QPointF NormalSegment::getSlopeVector(const qreal t) {
-    const QPointF posAtT = getRelPosAtT(t);
-    const QPointF posAtTPlus = getRelPosAtT(t + 0.01);
+QVector3D NormalSegment::getSlopeVector(const qreal t) {
+    const QVector3D posAtT = getRelPosAtT(t);
+    const QVector3D posAtTPlus = getRelPosAtT(t + 0.01);
     return scalePointToNewLen(posAtTPlus - posAtT, 1);
 }
 
@@ -269,7 +269,7 @@ qreal NormalSegment::SubSegment::getParentTAtThisT(const qreal thisT) const {
     return gMapTFromFragment(getMinT(), getMaxT(), thisT);
 }
 
-QPointF NormalSegment::SubSegment::getRelPosAtT(const qreal thisT) const {
+QVector3D NormalSegment::SubSegment::getRelPosAtT(const qreal thisT) const {
     const qreal parentT = getParentTAtThisT(thisT);
     return fParentSeg->getRelPosAtT(parentT);
 }

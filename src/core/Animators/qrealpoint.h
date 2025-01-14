@@ -46,7 +46,7 @@ public:
     qreal getRelFrame();
     qreal getAbsFrame();
 
-    QPointF getSavedFrameAndValue() const;
+    QVector3D getSavedFrameAndValue() const;
     qreal getSavedFrame() const;
     qreal getSavedValue() const;
 

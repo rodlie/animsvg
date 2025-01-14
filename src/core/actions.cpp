@@ -726,7 +726,7 @@ eBoxOrSound *Actions::importFile(const QString &path) {
 eBoxOrSound *Actions::importFile(const QString &path,
                                  ContainerBox* const target,
                                  const int insertId,
-                                 const QPointF &relDropPos,
+                                 const QVector3D &relDropPos,
                                  const int frame) {
     const auto scene = target->getParentScene();
     auto block = scene ? scene->blockUndoRedo() :

@@ -113,8 +113,8 @@ protected:
     PaintType mPaintType = FLATPAINT;
     Gradient *mGradient = nullptr;
     GradientType mGradientType = GradientType::LINEAR;
-    QPointF mGradientP1;
-    QPointF mGradientP2;
+    QVector3D mGradientP1;
+    QVector3D mGradientP2;
     QMatrix4x4 mGradientTransform;
 };
 
@@ -1180,7 +1180,7 @@ void BoxSvgAttributes::loadBoundingBoxAttributes(const QDomElement &element) {
     const QString matrixStr = element.attribute("transform");
 //    const QString transCenterX = element.attribute("inkscape:transform-center-x");
 //    const QString transCenterY = element.attribute("inkscape:transform-center-y");
-//    QPointF transCenter;
+//    QVector3D transCenter;
 //    if(!transCenterX.isEmpty()) transCenter.setX(toDouble(transCenterX));
 //    if(!transCenterY.isEmpty()) transCenter.setY(toDouble(transCenterY));
     if(!matrixStr.isEmpty()) {

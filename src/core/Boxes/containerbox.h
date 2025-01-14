@@ -76,7 +76,7 @@ public:
                              BoxRenderData* const data,
                              Canvas* const scene);
 
-    virtual BoundingBox *getBoxAt(const QPointF &absPos);
+    virtual BoundingBox *getBoxAt(const QVector3D &absPos);
 
     void anim_setAbsFrame(const int frame);
 
@@ -84,11 +84,11 @@ public:
             const int id, const QStringList& path,
             QStringList * const completions) const;
 
-    BoundingBox *getBoxAtFromAllDescendents(const QPointF &absPos);
+    BoundingBox *getBoxAtFromAllDescendents(const QVector3D &absPos);
     void anim_scaleTime(const int pivotAbsFrame, const qreal scale);
     void updateAllBoxes(const UpdateReason reason);
 
-    bool relPointInsidePath(const QPointF &relPos) const;
+    bool relPointInsidePath(const QVector3D &relPos) const;
     void SWT_setupAbstraction(SWT_Abstraction *abstraction,
                                      const UpdateFuncs &updateFuncs,
                                      const int visiblePartWidgetId);
@@ -287,7 +287,7 @@ private:
     void removeContained(const qsptr<eBoxOrSound> &child);
 
     QMargins mForcedMargin;
-    
+
     bool mIsLayer = false;
     bool mIsCurrentGroup = false;
     bool mIsDescendantCurrentGroup = false;

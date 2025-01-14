@@ -180,7 +180,7 @@ stdsptr<RasterEffectCaller> OilEffect::getEffectCaller(
         const qreal influence, BoxRenderData* const data) const {
     Q_UNUSED(data)
     Q_UNUSED(influence)
-    const QPointF size = mBrushSize->getEffectiveValue(relFrame)*resolution;
+    const QVector3D size = mBrushSize->getEffectiveValue(relFrame)*resolution;
     const qreal acc = mAccuracy->getEffectiveValue(relFrame);
     const qreal len = mStrokeLength->getEffectiveValue(relFrame);
     const int maxStrokes = qRound(mMaxStrokes->getEffectiveValue(relFrame));

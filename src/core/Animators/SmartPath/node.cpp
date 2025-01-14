@@ -28,7 +28,7 @@
 
 Node::Node() { mType = NodeType::none; }
 
-Node::Node(const QPointF &p1) {
+Node::Node(const QVector3D &p1) {
     mC0 = p1;
     mP1 = p1;
     mC2 = p1;
@@ -38,7 +38,7 @@ Node::Node(const QPointF &p1) {
     mC2Enabled = false;
 }
 
-Node::Node(const QPointF &c0, const QPointF &p1, const QPointF &c2) {
+Node::Node(const QVector3D &c0, const QVector3D &p1, const QVector3D &c2) {
     mC0 = c0;
     mP1 = p1;
     mC2 = c2;

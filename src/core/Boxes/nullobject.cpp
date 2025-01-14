@@ -40,7 +40,7 @@ public:
                                 const float invScale, const bool ctrlPressed);
 
     void updatePath();
-    bool relPointInsidePath(const QPointF &relPos);
+    bool relPointInsidePath(const QVector3D &relPos);
     QRectF relBoundingRect();
 private:
     SkPath mCurrentPath;
@@ -207,7 +207,7 @@ NullObject::NullObject() : BoundingBox("null object", eBoxType::nullObject) {
     });
 }
 
-bool NullObject::relPointInsidePath(const QPointF &relPos) const {
+bool NullObject::relPointInsidePath(const QVector3D &relPos) const {
     return mType->relPointInsidePath(relPos);
 }
 

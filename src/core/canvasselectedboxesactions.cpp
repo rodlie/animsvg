@@ -333,7 +333,7 @@ void Canvas::scaleSelectedBoxesStartAndFinish(const qreal scaleBy)
     }
 }
 
-void Canvas::moveSelectedBoxesStartAndFinish(const QPointF moveBy)
+void Canvas::moveSelectedBoxesStartAndFinish(const QVector3D moveBy)
 {
     for (const auto &box : mSelectedBoxes) {
         box->startPosTransform();
@@ -343,7 +343,7 @@ void Canvas::moveSelectedBoxesStartAndFinish(const QPointF moveBy)
 }
 
 void Canvas::rotateSelectedBy(const qreal rotBy,
-                              const QPointF &absOrigin,
+                              const QVector3D &absOrigin,
                               const bool startTrans) {
     if(mDocument.fLocalPivot) {
         if(startTrans) {
@@ -373,7 +373,7 @@ void Canvas::rotateSelectedBy(const qreal rotBy,
 }
 
 void Canvas::scaleSelectedBy(const qreal scaleBy,
-                             const QPointF &absOrigin,
+                             const QVector3D &absOrigin,
                              const bool startTrans) {
     scaleSelectedBy(scaleBy, scaleBy, absOrigin, startTrans);
 }
@@ -409,9 +409,9 @@ void Canvas::scaleSelectedBy(const qreal scaleXBy,
     }
 }
 
-QPointF Canvas::getSelectedBoxesAbsPivotPos() {
-    if(mSelectedBoxes.isEmpty()) return QPointF(0, 0);
-    QPointF posSum(0, 0);
+QVector3D Canvas::getSelectedBoxesAbsPivotPos() {
+    if(mSelectedBoxes.isEmpty()) return QVector3D(0, 0, 0);
+    QVector3D posSum(0, 0);
     const int count = mSelectedBoxes.count();
     for(const auto &box : mSelectedBoxes)
         posSum += box->getPivotAbsPos();
@@ -642,7 +642,7 @@ void Canvas::deselectAllBoxes() {
         removeBoxFromSelection(box);
 }
 
-MovablePoint *Canvas::getPointAtAbsPos(const QPointF &absPos,
+MovablePoint *Canvas::getPointAtAbsPos(const QVector3D &absPos,
                                        const CanvasMode mode,
                                        const qreal invScale) {
     if(mode == CanvasMode::boxTransform || mode == CanvasMode::pointTransform) {
@@ -672,7 +672,7 @@ void Canvas::cancelSelectedBoxesTransform() {
     }
 }
 
-void Canvas::moveSelectedBoxesByAbs(const QPointF &by,
+void Canvas::moveSelectedBoxesByAbs(const QVector3D &by,
                                     const bool startTransform) {
     if(startTransform) {
         for(const auto &box : mSelectedBoxes) {
@@ -686,8 +686,8 @@ void Canvas::moveSelectedBoxesByAbs(const QPointF &by,
     }
 }
 
-//QPointF BoxesGroup::getRelCenterPosition() {
-//    QPointF posSum = QPointF(0., 0.);
+//QVector3D BoxesGroup::getRelCenterPosition() {
+//    QVector3D posSum = QPointF(0., 0.);
 //    if(mChildren.isEmpty()) return posSum;
 //    int count = mChildren.length();
 //    for(const auto& box : mChildren) {

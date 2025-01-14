@@ -37,7 +37,7 @@ class CORE_EXPORT PathPointsHandler : public PointsHandler {
 protected:
     PathPointsHandler(SmartPathAnimator * const targetAnimator);
 public:
-    NormalSegment getNormalSegment(const QPointF &absPos,
+    NormalSegment getNormalSegment(const QVector3D &absPos,
                                    const qreal invScale) const;
 
     void scheduleRemoveNode(const int nodeId);
@@ -45,8 +45,8 @@ public:
     // actions on NORMAL
     void setCtrlsMode(const int nodeId, const CtrlsMode mode);
     void removeNode(const int nodeId, const bool approx);
-    SmartNodePoint *addNewAtStart(const QPointF &relPos);
-    SmartNodePoint *addNewAtEnd(const QPointF &relPos);
+    SmartNodePoint *addNewAtStart(const QVector3D &relPos);
+    SmartNodePoint *addNewAtEnd(const QVector3D &relPos);
     // actions on DISSOLVED
 
     // actions on DUMMY and DISSOLVED

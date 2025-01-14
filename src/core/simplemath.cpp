@@ -46,18 +46,18 @@ float gSkRandF(const float fMin, const float fMax) {
     return fMin + f * (fMax - fMin);
 }
 
-qreal pointToLen(QPointF point) {
+qreal pointToLen(QVector3D point) {
     return qSqrt(point.x()*point.x() + point.y()*point.y());
 }
 
-float pointToLen(const SkPoint &point) {
+float pointToLen(const SkPoint3 &point) {
     return SkScalarSqrt(point.x()*point.x() + point.y()*point.y());
 }
 
-QPointF scalePointToNewLen(const QPointF& point,
+QVector3D scalePointToNewLen(const QPointF& point,
                            const qreal newLen) {
     const qreal currLen = pointToLen(point);
-    if(isZero4Dec(currLen)) return QPointF(0, 0);
+    if(isZero4Dec(currLen)) return QVector3D(0, 0, 0);
     return point * newLen / currLen;
 }
 
@@ -127,7 +127,7 @@ bool isZero1Dec(qreal val) {
     return qAbs(val) < 0.1;
 }
 
-bool isPointZero(QPointF pos) {
+bool isPointZero(QVector3D pos) {
     return pointToLen(pos) < 0.0001;
 }
 
@@ -219,36 +219,36 @@ qreal qMax4(qreal v1, qreal v2, qreal v3, qreal v4) {
     return qMax(v1, qMax(v2, qMax(v3, v4) ) );
 }
 
-QRectF qRectF4Points(QPointF p1, QPointF c1,
-                     QPointF c2, QPointF p2) {
+QRectF qRectF4Points(QVector3D p1, QVector3D c1,
+                     QVector3D c2, QVector3D p2) {
     return QRectF(QPointF(qMin4(p1.x(), c1.x(), c2.x(), p2.x()),
                           qMin4(p1.y(), c1.y(), c2.y(), p2.y())),
                   QPointF(qMax4(p1.x(), c1.x(), c2.x(), p2.x()),
                           qMax4(p1.y(), c1.y(), c2.y(), p2.y())));
 }
 
-QPointF rotateVector90Degrees(const QPointF &pt) {
+QVector3D rotateVector90Degrees(const QVector3D &pt) {
     return QPointF(-pt.y(), pt.x()); // y is downwards
 }
 
-qreal degreesBetweenVectors(const QPointF &pt1,
-                            const QPointF &pt2) {
+qreal degreesBetweenVectors(const QVector3D &pt1,
+                            const QVector3D &pt2) {
     return radiansBetweenVectors(pt1, pt2)*180./M_PI;
 }
 
-qreal radiansBetweenVectors(const QPointF &pt1,
-                            const QPointF &pt2) {
+qreal radiansBetweenVectors(const QVector3D &pt1,
+                            const QVector3D &pt2) {
     qreal dot = pt1.x()*pt2.x() + pt1.y()*pt2.y();
     qreal det = pt1.x()*pt2.y() - pt1.y()*pt2.x();
     return atan2(det, dot);
 }
 
-QPointF gRotPt(const QPointF &pt, const qreal deg) {
+QVector3D gRotPt(const QVector3D &pt, const qreal deg) {
     return {pt.x() * cos(deg*PI/180) - pt.y() * sin(deg*PI/180),
             pt.x() * sin(deg*PI/180) + pt.y() * cos(deg*PI/180)};
 }
 
-QPointF gQPointFDisplace(const QPointF& pt, const qreal displ) {
+QVector3D gQPointFDisplace(const QPointF& pt, const qreal displ) {
     return QPointF(pt.x() + gRandF(-displ, displ),
                    pt.y() + gRandF(-displ, displ));
 }

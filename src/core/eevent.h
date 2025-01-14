@@ -53,9 +53,9 @@ public:
         return fModifiers & Qt::CTRL;
     }
 
-    QPointF fPos;
-    QPointF fLastPos;
-    QPointF fLastPressPos;
+    QVector3D fPos;
+    QVector3D fLastPos;
+    QVector3D fLastPressPos;
     bool fMouseGrabbing;
     qreal fScale;
     QPoint fGlobalPos;

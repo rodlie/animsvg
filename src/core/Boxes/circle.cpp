@@ -41,7 +41,7 @@ Circle::Circle() : PathBox("Circle", eBoxType::circle) {
     getPointsHandler()->appendPt(mCenterPoint);
 
     mCenterPoint->disableSelection();
-    mCenterPoint->setRelativePos(QPointF(0, 0));
+    mCenterPoint->setRelativePos(QVector3D(0, 0, 0));
     ca_prependChild(mPathEffectsAnimators.data(),
                             mCenterAnimator);
 
@@ -80,19 +80,19 @@ Circle::Circle() : PathBox("Circle", eBoxType::circle) {
             this, pathUpdater);
 }
 
-void Circle::moveRadiusesByAbs(const QPointF &absTrans) {
+void Circle::moveRadiusesByAbs(const QVector3D &absTrans) {
     mVerticalRadiusPoint->moveByAbs(absTrans);
     mHorizontalRadiusPoint->moveByAbs(absTrans);
 }
 
 void Circle::setVerticalRadius(const qreal verticalRadius) {
-    const QPointF centerPos = mCenterPoint->getRelativePos();
+    const QVector3D centerPos = mCenterPoint->getRelativePos();
     mVerticalRadiusPoint->setRelativePos(
                 centerPos + QPointF(0, verticalRadius));
 }
 
 void Circle::setHorizontalRadius(const qreal horizontalRadius) {
-    const QPointF centerPos = mCenterPoint->getRelativePos();
+    const QVector3D centerPos = mCenterPoint->getRelativePos();
     mHorizontalRadiusPoint->setRelativePos(
                 centerPos + QPointF(horizontalRadius, 0));
 }
@@ -103,7 +103,7 @@ void Circle::setRadius(const qreal radius) {
 }
 
 SkPath Circle::getRelativePath(const qreal relFrame) const {
-    const QPointF center = mCenterAnimator->getEffectiveValue();
+    const QVector3D center = mCenterAnimator->getEffectiveValue();
     const qreal xRad = mHorizontalRadiusAnimator->getEffectiveXValue(relFrame);
     const qreal yRad = mVerticalRadiusAnimator->getEffectiveYValue(relFrame);
     SkPath path;
@@ -151,7 +151,7 @@ bool Circle::differenceInEditPathBetweenFrames(
     return mVerticalRadiusAnimator->prp_differencesBetweenRelFrames(frame1, frame2);
 }
 
-void Circle::setCenter(const QPointF &center) {
+void Circle::setCenter(const QVector3D &center) {
     mCenterAnimator->setBaseValue(center);
 }
 
@@ -188,13 +188,13 @@ CircleRadiusPoint::CircleRadiusPoint(QPointFAnimator * const associatedAnimator,
     disableSelection();
 }
 
-QPointF CircleRadiusPoint::getRelativePos() const {
-    const QPointF centerPos = mCenterPoint->getRelativePos();
+QVector3D CircleRadiusPoint::getRelativePos() const {
+    const QVector3D centerPos = mCenterPoint->getRelativePos();
     return AnimatedPoint::getRelativePos() + centerPos;
 }
 
-void CircleRadiusPoint::setRelativePos(const QPointF &relPos) {
-    const QPointF centerPos = mCenterPoint->getRelativePos();
+void CircleRadiusPoint::setRelativePos(const QVector3D &relPos) {
+    const QVector3D centerPos = mCenterPoint->getRelativePos();
     if(mXBlocked) {
         setValue(QPointF(0, relPos.y() - centerPos.y()));
     } else {

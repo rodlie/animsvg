@@ -45,7 +45,7 @@ void PathPivot::drawSk(SkCanvas * const canvas,
     Q_UNUSED(keyOnCurrent)
     Q_UNUSED(ctrlPressed)
     if (!isVisible(mode)) { return; }
-    const SkPoint absPos = toSkPoint(getAbsolutePos());
+    const SkPoint3 absPos = toSkPoint(getAbsolutePos());
     drawOnAbsPosSk(canvas,
                    absPos,
                    invScale,

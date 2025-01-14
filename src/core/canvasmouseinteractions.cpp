@@ -589,10 +589,10 @@ void Canvas::handleLeftMouseRelease(const eMouseEvent &e) {
     mTransMode = TransformMode::none;
 }
 
-QPointF Canvas::getMoveByValueForEvent(const eMouseEvent &e) {
+QVector3D Canvas::getMoveByValueForEvent(const eMouseEvent &e) {
     if(mValueInput.inputEnabled())
         return mValueInput.getPtValue();
-    const QPointF moveByPoint = e.fPos - e.fLastPressPos;
+    const QVector3D moveByPoint = e.fPos - e.fLastPressPos;
     mValueInput.setDisplayedValue(moveByPoint);
     if(mValueInput.yOnlyMode()) return {0, moveByPoint.y()};
     else if(mValueInput.xOnlyMode()) return {moveByPoint.x(), 0};
@@ -686,8 +686,8 @@ void Canvas::handleMovePointMouseMove(const eMouseEvent &e) {
 }
 
 void Canvas::scaleSelected(const eMouseEvent& e) {
-    const QPointF absPos = mRotPivot->getAbsolutePos();
-    const QPointF distMoved = e.fPos - e.fLastPressPos;
+    const QVector3D absPos = mRotPivot->getAbsolutePos();
+    const QVector3D distMoved = e.fPos - e.fLastPressPos;
 
     qreal scaleBy;
     if(mValueInput.inputEnabled()) {
@@ -720,7 +720,7 @@ void Canvas::scaleSelected(const eMouseEvent& e) {
 }
 
 void Canvas::rotateSelected(const eMouseEvent& e) {
-    const QPointF absPos = mRotPivot->getAbsolutePos();
+    const QVector3D absPos = mRotPivot->getAbsolutePos();
     qreal rot;
     if(mValueInput.inputEnabled()) {
         rot = mValueInput.getValue();

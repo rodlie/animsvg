@@ -34,11 +34,11 @@ NonAnimatedMovablePoint::NonAnimatedMovablePoint(
     setTransform(trans);
 }
 
-void NonAnimatedMovablePoint::setRelativePos(const QPointF &relPos) {
+void NonAnimatedMovablePoint::setRelativePos(const QVector3D &relPos) {
     setValue(relPos);
 }
 
-QPointF NonAnimatedMovablePoint::getRelativePos() const {
+QVector3D NonAnimatedMovablePoint::getRelativePos() const {
     return getValue();
 }
 

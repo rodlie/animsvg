@@ -43,7 +43,7 @@ public:
 
     stdsptr<BoxRenderData> createRenderData();
 
-    bool relPointInsidePath(const QPointF &relPos) const;
+    bool relPointInsidePath(const QVector3D &relPos) const;
     void anim_setAbsFrame(const int frame);
 
     void prp_setupTreeViewMenu(PropertyMenu * const menu);

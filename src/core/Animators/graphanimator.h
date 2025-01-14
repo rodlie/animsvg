@@ -76,7 +76,7 @@ public:
                                  const qreal frame,
                                  const qreal pixelsPerFrame,
                                  const qreal pixelsPerValUnit);
-    void graph_changeSelectedKeysFrameAndValueStart(const QPointF &frameVal);
+    void graph_changeSelectedKeysFrameAndValueStart(const QVector3D &frameVal);
     void graph_changeSelectedKeysFrameAndValue(const QPointF& frameVal);
     void graph_enableCtrlPtsForSelected();
     void graph_setCtrlsModeForSelectedKeys(const CtrlsMode mode);

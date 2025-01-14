@@ -188,7 +188,7 @@ void Canvas::cancelSelectedPointsTransform() {
     }
 }
 
-void Canvas::moveSelectedPointsByAbs(const QPointF &by,
+void Canvas::moveSelectedPointsByAbs(const QVector3D &by,
                                      const bool startTransform) {
     if(startTransform) {
         startSelectedPointsTransform();
@@ -276,9 +276,9 @@ void Canvas::clearLastPressedPoint() {
     }
 }
 
-QPointF Canvas::getSelectedPointsAbsPivotPos() {
-    if(mSelectedPoints_d.isEmpty()) return QPointF(0, 0);
-    QPointF posSum(0, 0);
+QVector3D Canvas::getSelectedPointsAbsPivotPos() {
+    if(mSelectedPoints_d.isEmpty()) return QVector3D(0, 0, 0);
+    QVector3D posSum(0, 0);
     for(const auto& point : mSelectedPoints_d) {
         posSum += point->getAbsolutePos();
     }
@@ -295,7 +295,7 @@ int Canvas::getPointsSelectionCount() const {
 }
 
 void Canvas::rotateSelectedPointsBy(const qreal rotBy,
-                                    const QPointF &absOrigin,
+                                    const QVector3D &absOrigin,
                                     const bool startTrans) {
     if(mSelectedPoints_d.isEmpty()) return;
     if(startTrans) {
@@ -321,7 +321,7 @@ void Canvas::rotateSelectedPointsBy(const qreal rotBy,
 
 void Canvas::scaleSelectedPointsBy(const qreal scaleXBy,
                                    const qreal scaleYBy,
-                                   const QPointF &absOrigin,
+                                   const QVector3D &absOrigin,
                                    const bool startTrans) {
     if(mSelectedPoints_d.isEmpty()) return;
     if(startTrans) {

@@ -48,7 +48,7 @@ public:
     void draw(QPainter *p, const int y);
 
     qreal getValue() const { return mInputValue; }
-    QPointF getPtValue() const {
+    QVector3D getPtValue() const {
         if(mTransMode == TransformMode::rotate ||
                mXYMode == DirectionMode::xy)
             return {mInputValue, mInputValue};
@@ -177,7 +177,7 @@ protected:
     DirectionMode mXYMode = DirectionMode::xy;
     QString mInputText;
     qreal mInputValue = 0;
-    QPointF mDisplayValue;
+    QVector3D mDisplayValue;
     bool mInputEnabled = false;
     bool mForce1D = false;
 };

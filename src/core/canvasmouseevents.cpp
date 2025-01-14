@@ -33,7 +33,7 @@
 #include "MovablePoints/pathpivot.h"
 #include "eevent.h"
 
-/*void Canvas::newPaintBox(const QPointF &pos) {
+/*void Canvas::newPaintBox(const QVector3D &pos) {
     const auto paintBox = enve::make_shared<PaintBox>();
     paintBox->planCenterPivotPosition();
     mCurrentContainer->addContained(paintBox);
@@ -145,7 +145,7 @@ void Canvas::mouseMoveEvent(const eMouseEvent &e)
             }
         } else if(mCurrentMode == CanvasMode::rectCreate) {
             if(e.shiftMod()) {
-                const QPointF trans = e.fPos - e.fLastPressPos;
+                const QVector3D trans = e.fPos - e.fLastPressPos;
                 const qreal valF = qMax(trans.x(), trans.y());
                 mCurrentRectangle->moveSizePointByAbs({valF, valF});
             } else {
@@ -243,7 +243,7 @@ void Canvas::mouseDoubleClickEvent(const eMouseEvent &e) {
 }
 
 void Canvas::tabletEvent(const QTabletEvent * const e,
-                         const QPointF &pos) {
+                         const QVector3D &pos) {
     Q_UNUSED(e)
     Q_UNUSED(pos)
     /*const auto type = e->type();

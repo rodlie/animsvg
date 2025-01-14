@@ -89,18 +89,18 @@ extern bool gIsSmooth(const QPointF& startPos,
 extern void gGetCtrlsSymmetricPos(const QPointF& startPos,
                                   const QPointF& centerPos,
                                   const QPointF& endPos,
-                                  QPointF &newStartPos,
-                                  QPointF &newEndPos);
+                                  QVector3D &newStartPos,
+                                  QVector3D &newEndPos);
 
 extern void gGetCtrlsSmoothPos(const QPointF& startPos,
                                const QPointF& centerPos,
                                const QPointF& endPos,
-                               QPointF &newStartPos,
-                               QPointF &newEndPos);
+                               QVector3D &newStartPos,
+                               QVector3D &newEndPos);
 
 extern qreal gCubicValueAtT(const qCubicSegment1D &seg,
                             const qreal t);
-extern QPointF gCubicValueAtT(const qCubicSegment2D &seg,
+extern QVector3D gCubicValueAtT(const qCubicSegment2D &seg,
                               const qreal t);
 
 //! @brief Only for beziers that do not have multiple points of the same x value,
@@ -113,11 +113,11 @@ extern qreal gTFromX(const qCubicSegment1D &seg,
                      const qreal x);
 
 
-extern QPointF gGetClosestPointOnLineSegment(const QPointF &a,
-                                             const QPointF &b,
-                                             const QPointF &p);
-extern QPointF gClosestPointOnRect(const QRectF &rect,
-                                   const QPointF &point,
+extern QVector3D gGetClosestPointOnLineSegment(const QVector3D &a,
+                                             const QVector3D &b,
+                                             const QVector3D &p);
+extern QVector3D gClosestPointOnRect(const QRectF &rect,
+                                   const QVector3D &point,
                                    qreal *dist = nullptr);
 
 extern qCubicSegment2D gBezierLeastSquareV1V2(
@@ -126,7 +126,7 @@ extern qCubicSegment2D gBezierLeastSquareV1V2(
 
 
 extern void gDrawCosmeticEllipse(QPainter *p,
-                                 const QPointF &absPos,
+                                 const QVector3D &absPos,
                                  const qreal rX, const qreal rY);
 
 
@@ -134,8 +134,8 @@ extern qreal gCubicGetTFurthestInDirection(const qCubicSegment2D& seg,
                                            const qreal deg);
 
 extern void gSmoothyAbsCtrlsForPtBetween(
-        const QPointF &lastP, const QPointF &currP,
-        const QPointF &nextP, QPointF &c1, QPointF &c2,
+        const QVector3D &lastP, const QVector3D &currP,
+        const QVector3D &nextP, QVector3D &c1, QVector3D &c2,
         qreal smoothness);
 extern void gSmoothyAbsCtrlsForPtBetween(
         const SkPoint &lastP, const SkPoint &currP,
@@ -194,13 +194,13 @@ qreal gMapTFromFragment(const qreal minAbsT,
 void gGetValuesForNodeInsertion(
         const QPointF& prevP1, QPointF& prevC2,
         QPointF& newC0, QPointF& newP1, QPointF& newC2,
-        QPointF &nextC0, const QPointF& nextP1,
+        QVector3D &nextC0, const QPointF& nextP1,
         qreal t);
 
 void gGetValuesForNodeRemoval(
-        const QPointF &prevP1, QPointF &prevC2,
-        const QPointF &pC0, const QPointF &pP1, const QPointF &pC2,
-        QPointF &nextC0, const QPointF &nextP1,
+        const QVector3D &prevP1, QVector3D &prevC2,
+        const QVector3D &pC0, const QVector3D &pP1, const QVector3D &pC2,
+        QVector3D &nextC0, const QVector3D &nextP1,
         qreal t);
 
 QList<SkPath> gBreakApart(const SkPath& src);

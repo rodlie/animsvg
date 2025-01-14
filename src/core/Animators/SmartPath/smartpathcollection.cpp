@@ -97,14 +97,14 @@ void SmartPathCollection::savePathsSVG(SvgExporter& exp,
     }
 }
 
-SmartNodePoint *SmartPathCollection::createNewSubPathAtRelPos(const QPointF &relPos) {
+SmartNodePoint *SmartPathCollection::createNewSubPathAtRelPos(const QVector3D &relPos) {
     const auto newPath = createNewPath();
     const auto handler = newPath->getPointsHandler();
     const auto pathHandler = static_cast<PathPointsHandler*>(handler);
     return pathHandler->addNewAtEnd(relPos);
 }
 
-SmartNodePoint *SmartPathCollection::createNewSubPathAtPos(const QPointF &absPos) {
+SmartNodePoint *SmartPathCollection::createNewSubPathAtPos(const QVector3D &absPos) {
     const auto trans = getTransformAnimator();
     const auto relPos = trans ? trans->mapAbsPosToRel(absPos) : absPos;
     return createNewSubPathAtRelPos(relPos);

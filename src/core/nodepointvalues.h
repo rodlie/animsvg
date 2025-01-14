@@ -29,9 +29,9 @@
 #include "core_global.h"
 
 struct CORE_EXPORT NodePointValues {
-    QPointF fC0;
-    QPointF fP1;
-    QPointF fC2;
+    QVector3D fC0;
+    QVector3D fP1;
+    QVector3D fC2;
 
     NodePointValues &operator/=(const qreal val) {
         qreal inv = 1/val;

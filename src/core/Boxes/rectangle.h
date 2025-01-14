@@ -39,12 +39,12 @@ public:
 
     void saveSVG(SvgExporter& exp, DomEleTask* const task) const;
 
-    void moveSizePointByAbs(const QPointF &absTrans);
+    void moveSizePointByAbs(const QVector3D &absTrans);
 
     MovablePoint *getBottomRightPoint();
 
-    void setTopLeftPos(const QPointF &pos);
-    void setBottomRightPos(const QPointF &pos);
+    void setTopLeftPos(const QVector3D &pos);
+    void setBottomRightPos(const QVector3D &pos);
     void setYRadius(const qreal radiusY);
     void setXRadius(const qreal radiusX);
 private:

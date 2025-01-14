@@ -32,7 +32,7 @@
 //template<typename T, typename Tw>
 //QList<QuadSegment<T> > ConicSegment<T, Tw>::toQuads() const {
 //    SkAutoConicToQuads helper;
-//    const SkPoint * const pts =
+//    const SkPoint3 * const pts =
 //            helper.computeQuads(SkConic(fP0, fP1, fP2, fW), 0.1f);
 //    int nQuads = helper.countQuads();
 

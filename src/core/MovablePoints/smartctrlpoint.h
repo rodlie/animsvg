@@ -40,7 +40,7 @@ public:
                 const float invScale,
                 const bool keyOnCurrent,
                 const bool ctrlPressed);
-    void setRelativePos(const QPointF &relPos);
+    void setRelativePos(const QVector3D &relPos);
     void rotateRelativeToSavedPivot(const qreal rotate);
 
     void startTransform();

@@ -34,14 +34,14 @@ protected:
     NonAnimatedMovablePoint(BasicTransformAnimator * const trans,
                             const MovablePointType type);
 public:
-    QPointF getRelativePos() const;
-    void setRelativePos(const QPointF &relPos);
+    QVector3D getRelativePos() const;
+    void setRelativePos(const QVector3D &relPos);
 
     void cancelTransform();
 
-    QPointF getValue() const { return mValue; }
+    QVector3D getValue() const { return mValue; }
     void setValue(const QPointF& value) { mValue = value; }
 private:
-    QPointF mValue;
+    QVector3D mValue;
 };
 #endif // NONANIMATEDMOVABLEPOINT_H

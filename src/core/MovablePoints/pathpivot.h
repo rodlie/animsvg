@@ -49,7 +49,7 @@ public:
     void setMousePos(const QPointF& pos) { mMousePos = pos; }
 private:
     const Canvas * const mCanvas = nullptr;
-    QPointF mMousePos;
+    QVector3D mMousePos;
 };
 
 #endif // PATHPIVOT_H

@@ -56,7 +56,7 @@ void SmartPathAnimator::actionRemoveNode(const int nodeId, const bool approx) {
     else prp_afterWholeInfluenceRangeChanged();
 }
 
-int SmartPathAnimator::actionAddNewAtStart(const QPointF &relPos) {
+int SmartPathAnimator::actionAddNewAtStart(const QVector3D &relPos) {
     return actionAddNewAtStart({false, false, CtrlsMode::corner,
                                 relPos, relPos, relPos});
 }
@@ -85,7 +85,7 @@ int SmartPathAnimator::actionAddNewAtStart(const NormalNodeData &data) {
     return id;
 }
 
-int SmartPathAnimator::actionAddNewAtEnd(const QPointF &relPos) {
+int SmartPathAnimator::actionAddNewAtEnd(const QVector3D &relPos) {
     return actionAddNewAtEnd({false, false, CtrlsMode::corner,
                               relPos, relPos, relPos});
 }
@@ -384,10 +384,10 @@ void SmartPathAnimator::actionReplaceSegments(
         const qreal len1 = withSegs.getTotalLength();
         const qreal len2 = oldSegs.getTotalLength();
         for(qreal t1 = 0.1; t1 < 0.95; t1 += 0.1) {
-            const QPointF pos = withSegs.posAtLength(t1*len1);
+            const QVector3D pos = withSegs.posAtLength(t1*len1);
             qreal minDist = 100000;
             for(qreal t2 = 0; t2 < 1.01; t2 += 0.05) {
-                const QPointF oldPos = oldSegs.posAtLength(t2*len2);
+                const QVector3D oldPos = oldSegs.posAtLength(t2*len2);
                 const qreal dist = pointToLen(oldPos - pos);
                 if(dist < minDist) minDist = dist;
             }
@@ -395,10 +395,10 @@ void SmartPathAnimator::actionReplaceSegments(
             count++;
         }
         for(qreal t2 = 0.1; t2 < 0.95; t2 += 0.1) {
-            const QPointF oldPos = oldSegs.posAtLength(t2*len2);
+            const QVector3D oldPos = oldSegs.posAtLength(t2*len2);
             qreal minDist = 100000;
             for(qreal t1 = 0; t1 < 1.01; t1 += 0.05) {
-                const QPointF pos = withSegs.posAtLength(t1*len1);
+                const QVector3D pos = withSegs.posAtLength(t1*len1);
                 const qreal dist = pointToLen(oldPos - pos);
                 if(dist < minDist) minDist = dist;
             }
@@ -563,9 +563,9 @@ void SmartPathAnimator::actionReplaceSegments(
         const int segId = i - skipped;
         const auto& seg = with.at(segId);
         const auto& nextSeg = with.at(segId + 1);
-        const QPointF c0 = reverse ? nextSeg.c1() : seg.c2();
-        const QPointF p1 = seg.p3();
-        const QPointF c2 = reverse ? seg.c2() : nextSeg.c1();
+        const QVector3D c0 = reverse ? nextSeg.c1() : seg.c2();
+        const QVector3D p1 = seg.p3();
+        const QVector3D c2 = reverse ? seg.c2() : nextSeg.c1();
 
         const CtrlsMode ctrlsMode = gGuessCtrlsMode(c0, p1, c2, true, true);
         const NormalNodeData values(true, true, ctrlsMode, c0, p1, c2);
@@ -584,7 +584,7 @@ void SmartPathAnimator::actionReplaceSegments(
     else changed();
 }
 
-int SmartPathAnimator::actionAddFirstNode(const QPointF &relPos) {
+int SmartPathAnimator::actionAddFirstNode(const QVector3D &relPos) {
     return actionAddFirstNode({false, false, CtrlsMode::symmetric,
                                relPos, relPos, relPos});
 }

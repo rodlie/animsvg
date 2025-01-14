@@ -103,8 +103,8 @@ public:
 
     void repaintIfNeeded();
     void setCanvasMode(const CanvasMode mode);
-    void startSelectionAtPoint(const QPointF &pos);
-    void moveSecondSelectionPoint(const QPointF &pos);
+    void startSelectionAtPoint(const QVector3D &pos);
+    void moveSecondSelectionPoint(const QVector3D &pos);
     void setPointCtrlsMode(const CtrlsMode mode);
     void setCurrentBoxesGroup(ContainerBox * const group);
 
@@ -119,9 +119,9 @@ public:
     //
     void finishSelectedPointsTransform();
     void finishSelectedBoxesTransform();
-    void moveSelectedPointsByAbs(const QPointF &by,
+    void moveSelectedPointsByAbs(const QVector3D &by,
                                  const bool startTransform);
-    void moveSelectedBoxesByAbs(const QPointF &by,
+    void moveSelectedBoxesByAbs(const QVector3D &by,
                                 const bool startTransform);
     void groupSelectedBoxes();
 
@@ -144,15 +144,15 @@ public:
     void convertSelectedPathStrokesToPath();
 
     void rotateSelectedBy(const qreal rotBy,
-                          const QPointF &absOrigin,
+                          const QVector3D &absOrigin,
                           const bool startTrans);
 
-    QPointF getSelectedBoxesAbsPivotPos();
+    QVector3D getSelectedBoxesAbsPivotPos();
     bool isBoxSelectionEmpty() const;
 
     void ungroupSelectedBoxes();
     void scaleSelectedBy(const qreal scaleBy,
-                         const QPointF &absOrigin,
+                         const QVector3D &absOrigin,
                          const bool startTrans);
     void cancelSelectedBoxesTransform();
     void cancelSelectedPointsTransform();
@@ -173,21 +173,21 @@ public:
 
     void scaleSelectedBy(const qreal scaleXBy,
                          const qreal scaleYBy,
-                         const QPointF &absOrigin,
+                         const QVector3D &absOrigin,
                          const bool startTrans);
 
     qreal getResolution() const;
     void setResolution(const qreal percent);
 
     void applyCurrentTransformToSelected();
-    QPointF getSelectedPointsAbsPivotPos();
+    QVector3D getSelectedPointsAbsPivotPos();
     bool isPointSelectionEmpty() const;
     void scaleSelectedPointsBy(const qreal scaleXBy,
                                const qreal scaleYBy,
-                               const QPointF &absOrigin,
+                               const QVector3D &absOrigin,
                                const bool startTrans);
     void rotateSelectedPointsBy(const qreal rotBy,
-                                const QPointF &absOrigin,
+                                const QVector3D &absOrigin,
                                 const bool startTrans);
     int getPointsSelectionCount() const;
 
@@ -236,7 +236,7 @@ public:
 
     void selectAndAddContainedPointsToSelection(const QRectF &absRect);
 //
-    //void newPaintBox(const QPointF &pos);
+    //void newPaintBox(const QVector3D &pos);
 
     void mousePressEvent(const eMouseEvent &e);
     void mouseReleaseEvent(const eMouseEvent &e);
@@ -245,7 +245,7 @@ public:
 
     struct TabletEvent
     {
-        TabletEvent(const QPointF &pos,
+        TabletEvent(const QVector3D &pos,
                     QTabletEvent* const e)
             : fPos(pos)
             , fType(e->type())
@@ -257,7 +257,7 @@ public:
 
         }
 
-        QPointF fPos;
+        QVector3D fPos;
         QEvent::Type fType;
         Qt::MouseButton fButton;
         Qt::MouseButtons fButtons;
@@ -269,7 +269,7 @@ public:
     };
 
     void tabletEvent(const QTabletEvent* const e,
-                     const QPointF &pos);
+                     const QVector3D &pos);
 
     bool keyPressEvent(QKeyEvent *event);
 
@@ -299,7 +299,7 @@ public:
         return QMatrix();
     }
 
-    QPointF mapAbsPosToRel(const QPointF &absPos)
+    QVector3D mapAbsPosToRel(const QVector3D &absPos)
     {
         return absPos;
     }
@@ -468,7 +468,7 @@ public:
 
     void newEmptyPaintFrameAction();
 
-    MovablePoint *getPointAtAbsPos(const QPointF &absPos,
+    MovablePoint *getPointAtAbsPos(const QVector3D &absPos,
                                    const CanvasMode mode,
                                    const qreal invScale);
     void clearLastPressedPoint();
@@ -540,7 +540,7 @@ public:
         emit displayTimeCodeChanged(timecode);
     }
 
-    BoundingBox *getBoxAt(const QPointF &absPos)
+    BoundingBox *getBoxAt(const QVector3D &absPos)
     {
         if (mClipToCanvasSize) {
             const auto bRect = Canvas::getCurrentBounds();
@@ -571,7 +571,7 @@ public:
     void rotateSelectedBoxesStartAndFinish(const qreal rotBy,
                                            bool inc = true);
     void scaleSelectedBoxesStartAndFinish(const qreal scaleBy);
-    void moveSelectedBoxesStartAndFinish(const QPointF moveBy);
+    void moveSelectedBoxesStartAndFinish(const QVector3D moveBy);
 
     bool shouldScheduleUpdate()
     {
@@ -856,7 +856,7 @@ protected:
     void handleAddSmartPointMouseRelease(const eMouseEvent &e);
 
     void updateTransformation(const eKeyEvent &e);
-    QPointF getMoveByValueForEvent(const eMouseEvent &e);
+    QVector3D getMoveByValueForEvent(const eMouseEvent &e);
     void cancelCurrentTransform();
 };
 

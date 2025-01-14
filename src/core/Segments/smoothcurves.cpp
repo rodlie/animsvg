@@ -34,8 +34,8 @@ public:
 private:
     const int mWindow;
     QVector<QPointF> mWindowData;
-    QPointF mSum;
-    QPointF mAverage;
+    QVector3D mSum;
+    QVector3D mAverage;
     int mIndex;
     bool mFilterComplete;
 };

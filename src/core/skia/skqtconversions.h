@@ -77,12 +77,13 @@ extern QMatrix4x4 toQMatrix(const SkMatrix &matrix);
 CORE_EXPORT
 extern SkMatrix toSkMatrix(const QMatrix4x4 &matrix);
 
-extern inline QPointF toQPointF(const SkPoint &point) {
-    return QPointF(toQreal(point.x()),
-                   toQreal(point.y()));
+extern inline QVector3D toQPointF(const SkPoint &point) {
+    return QVector3D(toQreal(point.x()),
+                     toQreal(point.y()),
+                     toQreal(point.z()));
 }
 
-extern inline SkPoint toSkPoint(const QPointF &point) {
+extern inline SkPoint toSkPoint(const QVector3D &point) {
     return SkPoint::Make(toSkScalar(point.x()),
                          toSkScalar(point.y()));
 }

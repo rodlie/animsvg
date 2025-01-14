@@ -90,7 +90,7 @@ void PathBoxRenderData::updateRelBoundingRect()
     fRelBoundingRect = toQRectF(totalPath.computeTightBounds());
 }
 
-QPointF PathBoxRenderData::getCenterPosition()
+QVector3D PathBoxRenderData::getCenterPosition()
 {
     return toQRectF(fEditPath.getBounds()).center();
 }

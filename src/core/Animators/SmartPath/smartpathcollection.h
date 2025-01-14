@@ -52,8 +52,8 @@ public:
                       const FrameRange& visRange,
                       const QList<Animator*> extInfl);
 
-    SmartNodePoint * createNewSubPathAtRelPos(const QPointF &relPos);
-    SmartNodePoint * createNewSubPathAtPos(const QPointF &absPos);
+    SmartNodePoint * createNewSubPathAtRelPos(const QVector3D &relPos);
+    SmartNodePoint * createNewSubPathAtPos(const QVector3D &absPos);
 
     SkPath getPathAtRelFrame(const qreal relFrame) const;
 

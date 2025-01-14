@@ -60,7 +60,7 @@ void PointsHandler::removeFromSelection(MovablePoint * const pt) {
 
 void PointsHandler::clearSelection() { mSelectedPts.clear(); }
 
-MovablePoint *PointsHandler::getPointAtAbsPos(const QPointF &absPos,
+MovablePoint *PointsHandler::getPointAtAbsPos(const QVector3D &absPos,
                                               const CanvasMode mode,
                                               const qreal invScale) {
     for(int i = mPts.count() - 1; i >= 0; i--) {

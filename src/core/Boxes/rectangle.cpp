@@ -38,7 +38,7 @@ RectangleBox::RectangleBox() : PathBox("RectangleBox", eBoxType::rectangle) {
                 mTopLeftAnimator.get(), mTransformAnimator.data(),
                 TYPE_PATH_POINT);
     getPointsHandler()->appendPt(mTopLeftPoint);
-    mTopLeftPoint->setRelativePos(QPointF(0, 0));
+    mTopLeftPoint->setRelativePos(QVector3D(0, 0, 0));
 
     mBottomRightAnimator = enve::make_shared<QPointFAnimator>("bottom right");
     mBottomRightPoint = enve::make_shared<AnimatedPoint>(
@@ -79,20 +79,20 @@ RectangleBox::RectangleBox() : PathBox("RectangleBox", eBoxType::rectangle) {
 
 SkPath RectangleBox::getRelativePath(const qreal relFrame) const {
     SkPath path;
-    const QPointF topLeft = mTopLeftAnimator->getEffectiveValue(relFrame);
-    const QPointF bottomRight = mBottomRightAnimator->getEffectiveValue(relFrame);
-    const QPointF radius = mRadiusAnimator->getEffectiveValue(relFrame);
+    const QVector3D topLeft = mTopLeftAnimator->getEffectiveValue(relFrame);
+    const QVector3D bottomRight = mBottomRightAnimator->getEffectiveValue(relFrame);
+    const QVector3D radius = mRadiusAnimator->getEffectiveValue(relFrame);
     const SkRect rect = SkRect::MakeLTRB(topLeft.x(), topLeft.y(),
                                          bottomRight.x(), bottomRight.y());
     path.addRoundRect(rect, radius.x(), radius.y());
     return path;
 }
 
-void RectangleBox::setTopLeftPos(const QPointF &pos) {
+void RectangleBox::setTopLeftPos(const QVector3D &pos) {
     mTopLeftPoint->setRelativePos(pos);
 }
 
-void RectangleBox::setBottomRightPos(const QPointF &pos) {
+void RectangleBox::setBottomRightPos(const QVector3D &pos) {
     mBottomRightPoint->setRelativePos(pos);
 }
 
@@ -104,7 +104,7 @@ void RectangleBox::setXRadius(const qreal radiusX) {
     mRadiusAnimator->getXAnimator()->setCurrentBaseValue(radiusX);
 }
 
-void RectangleBox::moveSizePointByAbs(const QPointF &absTrans) {
+void RectangleBox::moveSizePointByAbs(const QVector3D &absTrans) {
     mBottomRightPoint->moveByAbs(absTrans);
 }
 

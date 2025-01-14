@@ -63,8 +63,8 @@ public:
     void startPosTransform();
     void startScaleTransform();
 
-    void setRelativePos(const QPointF &relPos);
-    void moveByAbs(const QPointF &absTrans);
+    void setRelativePos(const QVector3D &relPos);
+    void moveByAbs(const QVector3D &absTrans);
 
     void rotateRelativeToSavedValue(const qreal x_rotRel, const qreal y_rotRel, const qreal z_rotRel);
     void translate(const qreal dX, const qreal dY, const qreal dZ);
@@ -82,24 +82,24 @@ public:
     qreal xScale();
     qreal yScale();
     qreal zScale();
-    QPointF pos();
+    QVector3D pos();
 
-    QPointF mapAbsPosToRel(const QPointF &absPos) const;
-    QPointF mapRelPosToAbs(const QPointF &relPos) const;
+    QVector3D mapAbsPosToRel(const QVector3D &absPos) const;
+    QVector3D mapRelPosToAbs(const QVector3D &relPos) const;
 
-    QPointF mapFromParent(const QPointF &parentRelPos) const;
+    QVector3D mapFromParent(const QVector3D &parentRelPos) const;
     SkPoint mapAbsPosToRel(const SkPoint &absPos) const;
     SkPoint mapRelPosToAbs(const SkPoint &relPos) const;
     SkPoint mapFromParent(const SkPoint &parentRelPos) const;
 
     void scaleRelativeToSavedValue(const qreal sx,
                                    const qreal sy,
-                                   const qreal sz
-                                   const QPointF &pivot);
+                                   const qreal sz,
+                                   const QVector3D &pivot);
     void rotateRelativeToSavedValue(const qreal x_rotRel,
                                     const qreal y_rotRel,
                                     const qreal z_rotRel,
-                                    const QPointF &pivot);
+                                    const QVector3D &pivot);
 
     void updateRelativeTransform(const UpdateReason reason);
     void updateInheritedTransform(const UpdateReason reason);
@@ -165,10 +165,10 @@ public:
 
     void resetShear();
     void resetPivot();
-    void setPivotFixedTransform(const QPointF &newPivot);
+    void setPivotFixedTransform(const QVector3D &newPivot);
 
-    QPointF getPivot(const qreal relFrame);
-    QPointF getPivot();
+    QVector3D getPivot(const qreal relFrame);
+    QVector3D getPivot();
     qreal getPivotX();
     qreal getPivotY();
     qreal getPivotZ();
@@ -186,8 +186,8 @@ public:
     void startPivotTransform();
 
     void finishPivotTransform();
-    QPointF getPivotAbs();
-    QPointF getPivotAbs(const qreal relFrame);
+    QVector3D getPivotAbs();
+    QVector3D getPivotAbs(const qreal relFrame);
 
     qreal getOpacity(const qreal relFrame);
 

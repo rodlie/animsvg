@@ -121,30 +121,30 @@ QList<CubicList> CubicList::sMakeFromSkPath(const SkPath &src) {
     QList<CubicList> result;
     QList<qCubicSegment2D> segs;
 
-    QPointF lastMovePos;
-    QPointF lastPos;
+    QVector3D lastMovePos;
+    QVector3D lastPos;
     SkPath::Iter iter(src, false);
     for(;;) {
-        SkPoint pts[4];
+        SkPoint3 pts[4];
         switch(iter.next(pts)) {
         case SkPath::kLine_Verb: {
-            QPointF pt1 = toQPointF(pts[1]);
+            QVector3D pt1 = toQPointF(pts[1]);
             segs << qCubicSegment2D(lastPos, lastPos, pt1, pt1);
             lastPos = pt1;
         } break;
         case SkPath::kQuad_Verb: {
-            QPointF pt2 = toQPointF(pts[2]);
+            QVector3D pt2 = toQPointF(pts[2]);
             segs << qCubicSegment2D::sFromQuad(lastPos, toQPointF(pts[1]), pt2);
             lastPos = pt2;
         } break;
         case SkPath::kConic_Verb: {
-            QPointF pt2 = toQPointF(pts[2]);
+            QVector3D pt2 = toQPointF(pts[2]);
             segs << qCubicSegment2D::sFromConic(lastPos, toQPointF(pts[1]), pt2,
                                                toQreal(iter.conicWeight()));
             lastPos = pt2;
         } break;
         case SkPath::kCubic_Verb: {
-            QPointF pt3 = toQPointF(pts[3]);
+            QVector3D pt3 = toQPointF(pts[3]);
             segs << qCubicSegment2D(lastPos,
                                     toQPointF(pts[1]),
                                     toQPointF(pts[2]),
@@ -181,17 +181,17 @@ qreal CubicList::getTotalLength() const {
 
 bool CubicList::isEmpty() const { return mSegments.isEmpty(); }
 
-qreal CubicList::minDistanceTo(const QPointF &p,
+qreal CubicList::minDistanceTo(const QVector3D &p,
                                qreal * const pBestT,
-                               QPointF * const pBestPos) const {
+                               QVector3D * const pBestPos) const {
     qreal bestT = 0;
-    QPointF bestPos;
+    QVector3D bestPos;
     qreal smallestDist = DBL_MAX;
     const int iMax = mSegments.count();
     for(int i = 0; i < iMax; i++) {
         auto& seg = mSegments[i];
         qreal thisT;
-        QPointF thisPos;
+        QVector3D thisPos;
         qreal thisDist = seg.minDistanceTo(p, &thisT, &thisPos);
         if(thisDist < smallestDist) {
             bestT = thisT;
@@ -208,12 +208,12 @@ qreal CubicList::minDistanceTo(const QPointF &p,
 void CubicList::opSmoothOut(const qreal smoothness) {
     if(mSegments.count() < 2) return;
     qCubicSegment2D * prevSeg = nullptr;
-    QPointF lastC2;
+    QVector3D lastC2;
     if(mClosed) {
         prevSeg = &mSegments[mSegments.count() - 2];
         auto& seg = mSegments.last();
-        QPointF c1 = prevSeg->c2();
-        QPointF c2 = seg.c1();
+        QVector3D c1 = prevSeg->c2();
+        QVector3D c2 = seg.c1();
         gSmoothyAbsCtrlsForPtBetween(prevSeg->p0(), seg.p0(), seg.p3(),
                                      c1, c2, smoothness);
         lastC2 = c2;
@@ -229,8 +229,8 @@ void CubicList::opSmoothOut(const qreal smoothness) {
                 continue;
             }
         }
-        QPointF c1 = prevSeg->c2();
-        QPointF c2 = seg.c1();
+        QVector3D c1 = prevSeg->c2();
+        QVector3D c2 = seg.c1();
         gSmoothyAbsCtrlsForPtBetween(prevSeg->p0(), seg.p0(), seg.p3(),
                                      c1, c2, smoothness);
         prevSeg->setC1(lastC2);
@@ -240,7 +240,7 @@ void CubicList::opSmoothOut(const qreal smoothness) {
     }
     if(!mClosed) {
         auto& seg = mSegments.last();
-        QPointF c1;
+        QVector3D c1;
         if(smoothness > 0) {
             c1 = (seg.c2() - seg.p3())*(1 - smoothness) + seg.p3();
         } else {

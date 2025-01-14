@@ -87,7 +87,7 @@ void qPointFAnimatorCreate(ShaderEffectJS &engine,
                            UniformSpecifiers& uniSpec)
 {
     const auto anim = static_cast<QPointFAnimator*>(property);
-    const QPointF val = anim->getEffectiveValue(relFrame)*resolution*influence;
+    const QVector3D val = anim->getEffectiveValue(relFrame)*resolution*influence;
     const QString valScript = vec2ValScript(anim->prp_getName(), val);
     engine.addSetter(val);
 

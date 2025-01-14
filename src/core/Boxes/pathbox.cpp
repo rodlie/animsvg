@@ -400,8 +400,8 @@ void PathBox::updateCurrentPreviewDataFromRenderData(
     BoundingBox::updateCurrentPreviewDataFromRenderData(renderData);
 }
 
-bool PathBox::relPointInsidePath(const QPointF &relPos) const {
-    const SkPoint relPosSk = toSkPoint(relPos);
+bool PathBox::relPointInsidePath(const QVector3D &relPos) const {
+    const SkPoint3 relPosSk = toSkPoint(relPos);
     if(getRelBoundingRectPath().contains(relPosSk.x(), relPosSk.y()) ) {
         if(mFillPathSk.contains(relPosSk.x(), relPosSk.y())) {
             return true;

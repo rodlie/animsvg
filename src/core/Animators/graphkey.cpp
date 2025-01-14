@@ -42,7 +42,7 @@ GraphKey::GraphKey(Animator * const parentAnimator) :
     GraphKey(0, parentAnimator) {}
 
 
-void GraphKey::changeFrameAndValueBy(const QPointF &frameValueChange) {
+void GraphKey::changeFrameAndValueBy(const QVector3D &frameValueChange) {
     const int newFrame = qRound(frameValueChange.x() + mSavedRelFrame);
     const bool frameChanged = newFrame != mRelFrame;
     if(!frameChanged) return;
@@ -220,7 +220,7 @@ QrealPoint *GraphKey::mousePress(const qreal frame,
     return nullptr;
 }
 
-QPointF operator*(const QPointF& p1, const QPointF& p2) {
+QVector3D operator*(const QPointF& p1, const QPointF& p2) {
     return {p1.x()*p2.x(), p1.y()*p2.y()};
 }
 
@@ -228,8 +228,8 @@ void GraphKey::updateCtrlFromCtrl(const QrealPointType type,
                                   const qreal pixelsPerFrame,
                                   const qreal pixelsPerValue) {
     if(mCtrlsMode == CtrlsMode::corner) return;
-    QPointF fromPt;
-    QPointF toPt;
+    QVector3D fromPt;
+    QVector3D toPt;
     QrealPoint *targetPt;
     if(type == QrealPointType::c1Pt) {
         toPt = QPointF(getC0Frame(), getC0Value());
@@ -240,10 +240,10 @@ void GraphKey::updateCtrlFromCtrl(const QrealPointType type,
         toPt = QPointF(getC1Frame(), getC1Value());
         targetPt = mC1Point.get();
     }
-    QPointF newFrameValue;
-    const QPointF graphPt(mRelFrame, getValueForGraph());
+    QVector3D newFrameValue;
+    const QVector3D graphPt(mRelFrame, getValueForGraph());
     if(mCtrlsMode == CtrlsMode::smooth) {
-        const QPointF pMult{pixelsPerFrame, pixelsPerValue};
+        const QVector3D pMult{pixelsPerFrame, pixelsPerValue};
         const auto dP = (toPt - graphPt)*pMult;
         const qreal len = pointToLen(dP);
 
@@ -260,9 +260,9 @@ void GraphKey::updateCtrlFromCtrl(const QrealPointType type,
 
 void GraphKey::setCtrlsModeAction(const CtrlsMode mode) {
     if(mCtrlsMode == mode) return;
-    const QPointF pos(mRelFrame, getValueForGraph());
-    QPointF c0Pos(getC0Frame(), getC0Value());
-    QPointF c1Pos(getC1Frame(), getC1Value());
+    const QVector3D pos(mRelFrame, getValueForGraph());
+    QVector3D c0Pos(getC0Frame(), getC0Value());
+    QVector3D c1Pos(getC1Frame(), getC1Value());
     if(mCtrlsMode == CtrlsMode::symmetric) {
         gGetCtrlsSymmetricPos(c0Pos, pos, c1Pos, c0Pos, c1Pos);
     } else if(mCtrlsMode == CtrlsMode::smooth) {
@@ -290,9 +290,9 @@ void GraphKey::setCtrlsModeAction(const CtrlsMode mode) {
 }
 
 void GraphKey::guessCtrlsMode() {
-    QPointF c0Pos(getC0Frame(), getC0Value());
-    const QPointF pos(mRelFrame, getValueForGraph());
-    QPointF c1Pos(getC1Frame(), getC1Value());
+    QVector3D c0Pos(getC0Frame(), getC0Value());
+    const QVector3D pos(mRelFrame, getValueForGraph());
+    QVector3D c1Pos(getC1Frame(), getC1Value());
     const auto ctrlsMode = gGuessCtrlsMode(c0Pos, pos, c1Pos,
                                            mC0Enabled, mC1Enabled);
     setCtrlsMode(ctrlsMode);
@@ -315,16 +315,16 @@ void GraphKey::drawGraphKey(QPainter *p, const QColor &paintColor) const {
         QPen pen2(Qt::white, .75);
         pen2.setCosmetic(true);
 
-        const QPointF thisPos(getAbsFrame(), getValueForGraph());
+        const QVector3D thisPos(getAbsFrame(), getValueForGraph());
         if(getC0Enabled()) {
-            const QPointF c0Pos(getC0AbsFrame(), getC0Value());
+            const QVector3D c0Pos(getC0AbsFrame(), getC0Value());
             p->setPen(pen);
             p->drawLine(thisPos, c0Pos);
             p->setPen(pen2);
             p->drawLine(thisPos, c0Pos);
         }
         if(getC1Enabled()) {
-            const QPointF c1Pos(getC1AbsFrame(), getC1Value());
+            const QVector3D c1Pos(getC1AbsFrame(), getC1Value());
             p->setPen(pen);
             p->drawLine(thisPos, c1Pos);
             p->setPen(pen2);
@@ -415,7 +415,7 @@ qreal GraphKey::getNextKeyValueForGraph() const {
 }
 
 bool GraphKey::isInsideRect(const QRectF &valueFrameRect) const {
-    const QPointF keyPoint(getAbsFrame(), getValueForGraph());
+    const QVector3D keyPoint(getAbsFrame(), getValueForGraph());
     return valueFrameRect.contains(keyPoint);
 }
 
@@ -450,7 +450,7 @@ void GraphKey::setC1Enabled(const bool enabled) {
 qreal GraphKey::getC0Frame() const {
     if(mC0Enabled) {
         if(mC1Enabled) {
-            const QPointF relTo{qreal(mRelFrame), getValueForGraph()};
+            const QVector3D relTo{qreal(mRelFrame), getValueForGraph()};
             return mC0Clamped.getClampedValue(relTo).x();
         } else {
             return mC0Clamped.getRawXValue();
@@ -462,7 +462,7 @@ qreal GraphKey::getC0Frame() const {
 qreal GraphKey::getC1Frame() const {
     if(mC1Enabled) {
         if(mC0Enabled) {
-            const QPointF relTo{qreal(mRelFrame), getValueForGraph()};
+            const QVector3D relTo{qreal(mRelFrame), getValueForGraph()};
             return mC1Clamped.getClampedValue(relTo).x();
         } else {
             return mC1Clamped.getRawXValue();
@@ -569,7 +569,7 @@ void GraphKey::setC1Value(const qreal value) {
 
 qreal GraphKey::getC0Value() const {
     if(mC0Enabled) {
-        const QPointF relTo{qreal(mRelFrame), getValueForGraph()};
+        const QVector3D elTo{qreal(mRelFrame), getValueForGraph()};
         return mC0Clamped.getClampedValue(relTo).y();
     }
     return getValueForGraph();
@@ -577,7 +577,7 @@ qreal GraphKey::getC0Value() const {
 
 qreal GraphKey::getC1Value() const {
     if(mC1Enabled) {
-        const QPointF relTo{qreal(mRelFrame), getValueForGraph()};
+        const QVector3D relTo{qreal(mRelFrame), getValueForGraph()};
         return mC1Clamped.getClampedValue(relTo).y();
     }
     return getValueForGraph();

@@ -118,8 +118,8 @@ qreal QrealPoint::getAbsFrame() {
     return mParentKey->relFrameToAbsFrameF(getRelFrame());
 }
 
-QPointF QrealPoint::getSavedFrameAndValue() const {
-    const QPointF keySaved(mParentKey->getRelFrame(),
+QVector3D QrealPoint::getSavedFrameAndValue() const {
+    const QVector3D keySaved(mParentKey->getRelFrame(),
                            mParentKey->getValueForGraph());
     if(mType == QrealPointType::keyPt) {
         return keySaved;
@@ -153,7 +153,7 @@ void QrealPoint::draw(QPainter * const p,
                       const QColor &paintColor)
 {
     Q_UNUSED(paintColor)
-    const QPointF center(getAbsFrame(), getValue());
+    const QVector3D center(getAbsFrame(), getValue());
 
     p->setBrush(ThemeSupport::getThemeBaseDarkColor());
     if (mHovered) { gDrawCosmeticEllipse(p, center, mRadius + 1, mRadius + 1); }

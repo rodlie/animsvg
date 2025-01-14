@@ -34,9 +34,9 @@ struct CORE_EXPORT NormalNodeData {
     NormalNodeData(const bool c0Enabled,
                    const bool c2Enabled,
                    const CtrlsMode ctrlsMode,
-                   const QPointF c0,
-                   const QPointF p1,
-                   const QPointF c2) {
+                   const QVector3D c0,
+                   const QVector3D p1,
+                   const QVector3D c2) {
         fC0Enabled = c0Enabled;
         fC2Enabled = c2Enabled;
         fC0 = c0;
@@ -57,9 +57,9 @@ struct CORE_EXPORT NormalNodeData {
     bool fC0Enabled;
     bool fC2Enabled;
     CtrlsMode fCtrlsMode;
-    QPointF fC0;
-    QPointF fP1;
-    QPointF fC2;
+    QVector3D fC0;
+    QVector3D fP1;
+    QVector3D fC2;
 };
 
 enum class NodeType : char {
@@ -89,9 +89,9 @@ struct CORE_EXPORT Node {
     static Node sInterpolateDissolved(const Node &node1, const Node &node2,
                                       const qreal weight2);
 
-    QPointF c0() const { return mC0Enabled ? mC0 : mP1; }
-    QPointF p1() const { return mP1; }
-    QPointF c2() const { return mC2Enabled ? mC2 : mP1; }
+    QVector3D c0() const { return mC0Enabled ? mC0 : mP1; }
+    QVector3D p1() const { return mP1; }
+    QVector3D c2() const { return mC2Enabled ? mC2 : mP1; }
     qreal t() const { return mT; }
 
     void setC0(const QPointF& c0) { mC0 = c0; }
@@ -136,9 +136,9 @@ protected:
     int mId = -1;
     //! @brief T value for segment defined by previous and next normal node
     qreal mT;
-    QPointF mC0;
-    QPointF mP1;
-    QPointF mC2;
+    QVector3D mC0;
+    QVector3D mP1;
+    QVector3D mC2;
 };
 
 #endif // NODE_H

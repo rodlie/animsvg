@@ -366,12 +366,12 @@ void Canvas::renderSk(SkCanvas* const canvas,
 
         paint.setARGB(255, 0, 75, 155);
         if(mHoveredPoint_d && mHoveredPoint_d->isSmartNodePoint()) {
-            const QPointF pos = mHoveredPoint_d->getAbsolutePos();
+            const QVector3D pos = mHoveredPoint_d->getAbsolutePos();
             const qreal r = 0.5*qInvZoom*mHoveredPoint_d->getRadius();
             canvas->drawCircle(pos.x(), pos.y(), r, paint);
         }
         if(mDrawPathFirst) {
-            const QPointF pos = mDrawPathFirst->getAbsolutePos();
+            const QVector3D pos = mDrawPathFirst->getAbsolutePos();
             const qreal r = 0.5*qInvZoom*mDrawPathFirst->getRadius();
             canvas->drawCircle(pos.x(), pos.y(), r, paint);
         }
@@ -774,12 +774,12 @@ void Canvas::newEmptyPaintFrameAction()
     //if(mPaintTarget.isValid()) mPaintTarget.newEmptyFrame();
 }
 
-void Canvas::moveSecondSelectionPoint(const QPointF &pos)
+void Canvas::moveSecondSelectionPoint(const QVector3D &pos)
 {
     mSelectionRect.setBottomRight(pos);
 }
 
-void Canvas::startSelectionAtPoint(const QPointF &pos)
+void Canvas::startSelectionAtPoint(const QVector3D &pos)
 {
     mSelecting = true;
     mSelectionRect.setTopLeft(pos);

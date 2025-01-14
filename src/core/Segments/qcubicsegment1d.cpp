@@ -277,12 +277,12 @@ qreal qCubicSegment1D::tWithBiggestValue() const {
 
 //    for(qreal len1 = 0; len1 < totalLen1;) { // t ? (0., 1.)
 //        qreal t1 = seg1.tAtLength(len1);
-//        QPointF pt1 = seg1.posAtT(t1);
+//        QVector3D pt1 = seg1.posAtT(t1);
 
 //        qreal smallestDist = DBL_MAX;
 //        for(qreal len2 = 0; len2 < totalLen2;) { // t ? (0., 1.)
 //            qreal t2 = seg2.tAtLength(len2);
-//            QPointF pt2 = seg2.posAtT(t2);
+//            QVector3D pt2 = seg2.posAtT(t2);
 //            qreal dist = pointToLen(pt1 - pt2);
 //            if(dist < smallestDist) smallestDist = dist;
 

@@ -128,7 +128,7 @@ bool QrealKey::differsFromKey(Key *key) const {
     return true;
 }
 
-void QrealKey::changeFrameAndValueBy(const QPointF &frameValueChange) {
+void QrealKey::changeFrameAndValueBy(const QVector3D &frameValueChange) {
     setValue(frameValueChange.y() + mSavedValue);
     GraphKey::changeFrameAndValueBy(frameValueChange);
 }

@@ -43,7 +43,7 @@ protected:
 
     BoxTargetProperty* targetProperty() const;
 private:
-    QPointF mPosBeforeTargetChange;
+    QVector3D mPosBeforeTargetChange;
     ConnContextQPtr<BoundingBox> mTargetConn;
     qsptr<BoxTargetProperty> mTarget;
 };

@@ -44,16 +44,16 @@ public:
     void saveValue();
     void restoreSavedValue();
 
-    QPointF getRawSavedValue() const;
+    QVector3D getRawSavedValue() const;
     qreal getRawSavedXValue() const;
     qreal getRawSavedYValue() const;
 
-    QPointF getRawValue() const;
+    QVector3D getRawValue() const;
     qreal getRawXValue() const;
     qreal getRawYValue() const;
 
-    QPointF getClampedSavedValue(const QPointF& relTo) const;
-    QPointF getClampedValue(const QPointF& relTo) const;
+    QVector3D getClampedSavedValue(const QPointF& relTo) const;
+    QVector3D getClampedValue(const QPointF& relTo) const;
 
     void setXValue(const qreal value);
     void setYValue(const qreal value);

@@ -310,7 +310,7 @@ void PaintSettingsAnimator::saveSVG(SvgExporter& exp,
             case GradientType::RADIAL: {
                 grad = exp.createElement("radialGradient");
 
-//                const QPointF distPt = p2 - p1;
+//                const QVector3D distPt = p2 - p1;
 //                const qreal radius = qSqrt(pow2(distPt.x()) + pow2(distPt.y()));
                 x1->saveQrealSVG(exp, grad, visRange, "cx");
                 y1->saveQrealSVG(exp, grad, visRange, "cy");
@@ -439,8 +439,8 @@ ColorAnimator *PaintSettingsAnimator::getColorAnimator() {
     return mColor.data();
 }
 
-void PaintSettingsAnimator::setGradientPointsPos(const QPointF &pt1,
-                                                 const QPointF &pt2) {
+void PaintSettingsAnimator::setGradientPointsPos(const QVector3D &pt1,
+                                                 const QVector3D &pt2) {
     if(!mGradientPoints) return;
     mGradientPoints->setPositions(pt1, pt2);
 }
@@ -469,8 +469,8 @@ void UpdatePaintSettings::applyPainterSettingsSk(
 }
 
 void UpdatePaintSettings::updateGradient(const QGradientStops &stops,
-                                         const QPointF &start,
-                                         const QPointF &finalStop,
+                                         const QVector3D &start,
+                                         const QVector3D &finalStop,
                                          const GradientType gradientType,
                                          const QMatrix& transform) {
     const int nStops = stops.count();
@@ -479,8 +479,8 @@ void UpdatePaintSettings::updateGradient(const QGradientStops &stops,
     QVector<float> gradPos(nStops);
 
     const QMatrix4x4 invertedTransform = transform.inverted();
-    const QPointF mappedStart = invertedTransform.map(start);
-    const QPointF mappedEnd = invertedTransform.map(finalStop);
+    const QVector3D mappedStart = invertedTransform.map(start);
+    const QVector3D mappedEnd = invertedTransform.map(finalStop);
 
     const float xInc = static_cast<float>(mappedEnd.x() - mappedStart.x());
     const float yInc = static_cast<float>(mappedEnd.y() - mappedStart.y());
@@ -508,7 +508,7 @@ void UpdatePaintSettings::updateGradient(const QGradientStops &stops,
                                                  SkTileMode::kClamp,
                                                  0, &skTransform);
     } else {
-        const QPointF distPt = mappedEnd - mappedStart;
+        const QVector3D distPt = mappedEnd - mappedStart;
         const qreal radius = qSqrt(pow2(distPt.x()) + pow2(distPt.y()));
         fGradient = SkGradientShader::MakeRadial(
                         toSkPoint(start), toSkScalar(radius),

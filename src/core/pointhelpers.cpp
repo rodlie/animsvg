@@ -41,20 +41,20 @@ qCubicSegment1D ySeg(const qCubicSegment2D &seg) {
     return {seg.p0().y(), seg.c1().y(), seg.c2().y(), seg.p3().y()};
 }
 
-QPointF symmetricToPos(const QPointF& toMirror,
+QVector3D symmetricToPos(const QPointF& toMirror,
                        const QPointF& mirrorCenter) {
-    const QPointF posDist = toMirror - mirrorCenter;
+    const QVector3D posDist = toMirror - mirrorCenter;
     return mirrorCenter - posDist;
 }
 
-QPointF symmetricToPosNewLen(const QPointF& toMirror,
+QVector3D symmetricToPosNewLen(const QPointF& toMirror,
                              const QPointF& mirrorCenter,
                              const qreal newLen) {
-    const QPointF posDist = toMirror - mirrorCenter;
+    const QVector3D posDist = toMirror - mirrorCenter;
     return mirrorCenter - scalePointToNewLen(posDist, newLen);
 }
 
-QPointF gCubicValueAtT(const qCubicSegment2D &seg, const qreal t) {
+QVector3D gCubicValueAtT(const qCubicSegment2D &seg, const qreal t) {
     return QPointF(gCubicValueAtT(xSeg(seg), t),
                    gCubicValueAtT(ySeg(seg), t));
 }
@@ -118,17 +118,17 @@ qreal gTFromX(const qCubicSegment1D &seg,
     return guessT;
 }
 
-bool gIsSymmetric(const QPointF &startPos,
-                  const QPointF &centerPos,
-                  const QPointF &endPos,
+bool gIsSymmetric(const QVector3D &startPos,
+                  const QVector3D &centerPos,
+                  const QVector3D &endPos,
                   const qreal threshold) {
     const auto sC0 = symmetricToPos(startPos, centerPos);
     return pointToLen(sC0 - endPos) < threshold;
 }
 
-bool gIsSmooth(const QPointF &startPos,
-               const QPointF &centerPos,
-               const QPointF &endPos,
+bool gIsSmooth(const QVector3D &startPos,
+               const QVector3D &centerPos,
+               const QVector3D &endPos,
                const qreal threshold) {
     const auto sC0 = symmetricToPosNewLen(startPos, centerPos,
                                           pointToLen(endPos - centerPos));
@@ -138,9 +138,9 @@ bool gIsSmooth(const QPointF &startPos,
 void gGetCtrlsSymmetricPos(const QPointF& startPos,
                            const QPointF& centerPos,
                            const QPointF& endPos,
-                           QPointF &newStartPos,
-                           QPointF &newEndPos) {
-    const QPointF symEndPos = symmetricToPos(endPos, centerPos);
+                           QVector3D &newStartPos,
+                           QVector3D &newEndPos) {
+    const QVector3D symEndPos = symmetricToPos(endPos, centerPos);
     const qreal len1 = pointToLen(symEndPos - centerPos);
     const qreal len2 = pointToLen(startPos - centerPos);
     const qreal lenSum = len1 + len2;
@@ -156,9 +156,9 @@ void gGetCtrlsSymmetricPos(const QPointF& startPos,
 void gGetCtrlsSmoothPos(const QPointF& startPos,
                         const QPointF& centerPos,
                         const QPointF& endPos,
-                        QPointF &newStartPos,
-                        QPointF &newEndPos) {
-    const QPointF symEndPos = symmetricToPos(endPos, centerPos);
+                        QVector3D &newStartPos,
+                        QVector3D &newEndPos) {
+    const QVector3D symEndPos = symmetricToPos(endPos, centerPos);
     const qreal len1 = pointToLen(endPos - centerPos);
     const qreal len2 = pointToLen(startPos - centerPos);
     const qreal lenSum = len1 + len2;
@@ -167,9 +167,9 @@ void gGetCtrlsSmoothPos(const QPointF& startPos,
         newEndPos = centerPos;
         return;
     }
-    const QPointF point1Rel = endPos - centerPos;
-    const QPointF point2Rel = startPos - centerPos;
-    const QPointF newStartDirection =
+    const QVector3D point1Rel = endPos - centerPos;
+    const QVector3D point2Rel = startPos - centerPos;
+    const QVector3D newStartDirection =
             scalePointToNewLen(
                 (symEndPos*len1 + startPos*len2)/lenSum - centerPos, 1);
     const qreal startCtrlPtLen =
@@ -358,7 +358,7 @@ qCubicSegment2D gBezierLeastSquareV1V2(const qCubicSegment2D &seg,
     qreal v1YInc = 0.;
     qreal v2YInc = 0.;
     for(int i = 0; i < vs.count(); i++) {
-        const QPointF &val = vs.at(i);
+        const QVector3D &val = vs.at(i);
         const qreal& t = ts.at(i);
         v1XInc += pow(1. - t, 2.)*t*(-seg.p0().x()*pow(1. - t, 3.) - 3.*seg.c2().x()*(1. - t)*pow(t, 2.) -
                  seg.p3().x()*pow(t, 3.) + val.x());
@@ -380,7 +380,7 @@ qCubicSegment2D gBezierLeastSquareV1V2(
         const QList<QPointF> &vs,
         const int minVs,
         const int maxVs) {
-    QPointF v1, v2;
+    QVector3D v1, v2;
     for(int j = 0; j < 50; j++) {
         qreal v1XInc = 0.;
         qreal v1Dec = 0.;
@@ -389,7 +389,7 @@ qCubicSegment2D gBezierLeastSquareV1V2(
         qreal v1YInc = 0.;
         qreal v2YInc = 0.;
         for(int i = minVs; i <= maxVs; i++) {
-            const QPointF &val = vs.at(i);
+            const QVector3D &val = vs.at(i);
             qreal t = (static_cast<qreal>(i) - minVs)/(maxVs - minVs);
             //qreal t = getClosestTValueBezier2D(seg.p0, seg.p1, seg.p2, seg.p3, val);
             v1XInc += pow(1. - t, 2.)*t*(-seg.p0().x()*pow(1. - t, 3.) - 3.*seg.c2().x()*(1. - t)*pow(t, 2.) -
@@ -416,11 +416,11 @@ qreal get1DAccuracyValue(const qreal x0,
     return qMax4(x0, x1, x2, x3) - qMin4(x0, x1, x2, x3);
 }
 
-QPointF gGetClosestPointOnLineSegment(const QPointF &a,
-                                      const QPointF &b,
-                                      const QPointF &p) {
-    QPointF AP(p - a); //Vector from A to P
-    QPointF AB(b - a); //Vector from A to B
+QVector3D gGetClosestPointOnLineSegment(const QVector3D &a,
+                                      const QVector3D &b,
+                                      const QVector3D &p) {
+    QVector3D AP(p - a); //Vector from A to P
+    QVector3D AB(b - a); //Vector from A to B
 
     qreal magnitudeAB = pow2(AB.x()) + pow2(AB.y()); //Magnitude of AB vector (it's length squared)
     qreal ABAPproduct = AP.x()*AB.x() + AP.y()*AB.y(); //The DOT product of a_to_p and a_to_b
@@ -435,14 +435,14 @@ QPointF gGetClosestPointOnLineSegment(const QPointF &a,
     }
 }
 
-QPointF gClosestPointOnRect(const QRectF &rect,
-                           const QPointF &point,
+QVector3D gClosestPointOnRect(const QRectF &rect,
+                           const QVector3D &point,
                            qreal *dist) {
     qreal minDist = DBL_MAX;
-    QPointF bestPos;
+    QVector3D bestPos;
     if(point.y() > rect.bottom()) {
         // check bottom
-        QPointF pt = gGetClosestPointOnLineSegment(rect.bottomLeft(),
+        QVector3D pt = gGetClosestPointOnLineSegment(rect.bottomLeft(),
                                                   rect.bottomRight(),
                                                   point);
         const qreal dist = pointToLen(pt - point);
@@ -452,7 +452,7 @@ QPointF gClosestPointOnRect(const QRectF &rect,
         }
     } else if(point.y() < rect.top()) {
         // check top
-        QPointF pt = gGetClosestPointOnLineSegment(rect.topLeft(),
+        QVector3D pt = gGetClosestPointOnLineSegment(rect.topLeft(),
                                                    rect.topRight(),
                                                    point);
         const qreal dist = pointToLen(pt - point);
@@ -464,7 +464,7 @@ QPointF gClosestPointOnRect(const QRectF &rect,
 
     if(point.x() > rect.right()) {
         // check right
-        QPointF pt = gGetClosestPointOnLineSegment(rect.topRight(),
+        QVector3D pt = gGetClosestPointOnLineSegment(rect.topRight(),
                                                    rect.bottomRight(),
                                                    point);
         const qreal dist = pointToLen(pt - point);
@@ -474,7 +474,7 @@ QPointF gClosestPointOnRect(const QRectF &rect,
         }
     } else if(point.y() < rect.left()) {
         // check left
-        QPointF pt = gGetClosestPointOnLineSegment(rect.bottomLeft(),
+        QVector3D pt = gGetClosestPointOnLineSegment(rect.bottomLeft(),
                                                   rect.topLeft(),
                                                   point);
         const qreal dist = pointToLen(pt - point);
@@ -488,7 +488,7 @@ QPointF gClosestPointOnRect(const QRectF &rect,
 }
 
 void gDrawCosmeticEllipse(QPainter *p,
-                          const QPointF &absPos,
+                          const QVector3D &absPos,
                           const qreal rX, const qreal rY) {
     const QTransform &transform = p->transform();
     p->drawEllipse(absPos,
@@ -497,23 +497,23 @@ void gDrawCosmeticEllipse(QPainter *p,
 }
 
 void gGetSmoothAbsCtrlsForPtBetween(
-        const SkPoint &prevP,
-        const SkPoint &currP,
-        const SkPoint &nextP,
-        SkPoint &c1, SkPoint &c2,
+        const SkPoint3 &prevP,
+        const SkPoint3 &currP,
+        const SkPoint3 &nextP,
+        SkPoint3 &c1, SkPoint3 &c2,
         const float smoothness) {
-//    SkPoint sLastP = prevP - currP;
+//    SkPoint3 sLastP = prevP - currP;
 //    sLastP.setLength(1);
-//    SkPoint sNextP = nextP - currP;
+//    SkPoint3 sNextP = nextP - currP;
 //    sNextP.setLength(1);
-//    SkPoint vectP = (sLastP + sNextP)*0.5f;
+//    SkPoint3 vectP = (sLastP + sNextP)*0.5f;
 //    vectP.set(vectP.y(), -vectP.x());
 //    if(vectP.dot(prevP - currP) > 0) vectP.negate();
 
-    const SkPoint vectP = (nextP - prevP)*0.5f*smoothness;
+    const SkPoint3 vectP = (nextP - prevP)*0.5f*smoothness;
 
     const float prevDist = (currP - prevP).length()*0.5f;
-    SkPoint prevVectP = vectP;
+    SkPoint3 prevVectP = vectP;
     prevVectP.negate();
     if(prevVectP.length() > prevDist) {
         prevVectP.setLength(prevDist);
@@ -521,7 +521,7 @@ void gGetSmoothAbsCtrlsForPtBetween(
     c1 = currP + prevVectP;
 
     const float nextDist = (currP - nextP).length()*0.5f;
-    SkPoint nextVectP = vectP;
+    SkPoint3 nextVectP = vectP;
     if(nextVectP.length() > nextDist) {
         nextVectP.setLength(nextDist);
     }
@@ -530,15 +530,15 @@ void gGetSmoothAbsCtrlsForPtBetween(
 }
 
 void gGetMaxSmoothAbsCtrlsForPtBetween(
-        const SkPoint &lastP,
-        const SkPoint &currP,
-        const SkPoint &nextP,
-        SkPoint &c1, SkPoint &c2) {
-    SkPoint sLastP = lastP - currP;
+        const SkPoint3 &lastP,
+        const SkPoint3 &currP,
+        const SkPoint3 &nextP,
+        SkPoint3 &c1, SkPoint3 &c2) {
+    SkPoint3 sLastP = lastP - currP;
     sLastP.setLength(1);
-    SkPoint sNextP = nextP - currP;
+    SkPoint3 sNextP = nextP - currP;
     sNextP.setLength(1);
-    SkPoint vectP = (sLastP + sNextP)*0.5f;
+    SkPoint3 vectP = (sLastP + sNextP)*0.5f;
     vectP.set(vectP.y(), -vectP.x());
 
     if(vectP.dot(lastP - currP) > 0) vectP.negate();
@@ -555,15 +555,15 @@ void gGetMaxSmoothAbsCtrlsForPtBetween(
 }
 
 void gGetMaxSmoothAbsCtrlsForPtBetween(
-        const QPointF &lastP,
-        const QPointF &currP,
-        const QPointF &nextP,
-        QPointF &c1, QPointF &c2) {
-    QPointF sLastP = lastP - currP;
+        const QVector3D &lastP,
+        const QVector3D &currP,
+        const QVector3D &nextP,
+        QVector3D &c1, QVector3D &c2) {
+    QVector3D sLastP = lastP - currP;
     sLastP = scalePointToNewLen(sLastP, 1);
-    QPointF sNextP = nextP - currP;
+    QVector3D sNextP = nextP - currP;
     sNextP = scalePointToNewLen(sNextP, 1);
-    QPointF vectP = (sLastP + sNextP)*0.5;
+    QVector3D vectP = (sLastP + sNextP)*0.5;
     vectP = QPointF(vectP.y(), -vectP.x());
 
     if(QPointF::dotProduct(vectP, lastP - currP) > 0) vectP = -vectP;
@@ -597,50 +597,50 @@ void smoothyAbsCtrlsForPtBetween(const T1 &lastP, const T1 &currP,
     }
 }
 
-void gSmoothyAbsCtrlsForPtBetween(const QPointF &lastP,
-                                  const QPointF &currP,
-                                  const QPointF &nextP,
-                                  QPointF &c1, QPointF &c2,
+void gSmoothyAbsCtrlsForPtBetween(const QVector3D &lastP,
+                                  const QVector3D &currP,
+                                  const QVector3D &nextP,
+                                  QVector3D &c1, QVector3D &c2,
                                   qreal smoothness) {
     smoothyAbsCtrlsForPtBetween(lastP, currP, nextP, c1, c2, smoothness);
 }
 
-void gSmoothyAbsCtrlsForPtBetween(const SkPoint &lastP,
-                                  const SkPoint &currP,
-                                  const SkPoint &nextP,
-                                  SkPoint &c1, SkPoint &c2,
+void gSmoothyAbsCtrlsForPtBetween(const SkPoint3 &lastP,
+                                  const SkPoint3 &currP,
+                                  const SkPoint3 &nextP,
+                                  SkPoint3 &c1, SkPoint3 &c2,
                                   float smoothness) {
     smoothyAbsCtrlsForPtBetween(lastP, currP, nextP, c1, c2, smoothness);
 }
 
 SkPath gPathToPolyline(const SkPath& path) {
     SkPath result;
-    QPointF lastMovePos;
-    QPointF lastPos;
+    QVector3D lastMovePos;
+    QVector3D lastPos;
     SkPath::Iter iter(path, false);
     for(;;) {
         qCubicSegment2D seg;
-        SkPoint pts[4];
+        SkPoint3 pts[4];
         switch(iter.next(pts)) {
         case SkPath::kLine_Verb: {
-            const QPointF pt1 = toQPointF(pts[1]);
+            const QVector3D pt1 = toQPointF(pts[1]);
             result.lineTo(pts[1]);
             lastPos = pt1;
             continue;
         }
         case SkPath::kQuad_Verb: {
-            const QPointF pt2 = toQPointF(pts[2]);
+            const QVector3D pt2 = toQPointF(pts[2]);
             seg = qCubicSegment2D::sFromQuad(lastPos, toQPointF(pts[1]), pt2);
             lastPos = pt2;
         } break;
         case SkPath::kConic_Verb: {
-            const QPointF pt2 = toQPointF(pts[2]);
+            const QVector3D pt2 = toQPointF(pts[2]);
             seg = qCubicSegment2D::sFromConic(lastPos, toQPointF(pts[1]), pt2,
                                              toQreal(iter.conicWeight()));
             lastPos = pt2;
         } break;
         case SkPath::kCubic_Verb: {
-            const QPointF pt3 = toQPointF(pts[3]);
+            const QVector3D pt3 = toQPointF(pts[3]);
             seg = qCubicSegment2D(lastPos, toQPointF(pts[1]),
                                   toQPointF(pts[2]), pt3);
             lastPos = pt3;
@@ -670,30 +670,30 @@ SkPath gPathToPolyline(const SkPath& path) {
 void gForEverySegmentInPath(
         const SkPath& path,
         const std::function<void(const qCubicSegment2D&)>& func) {
-    QPointF lastMovePos;
-    QPointF lastPos;
+    QVector3D lastMovePos;
+    QVector3D lastPos;
     SkPath::Iter iter(path, false);
     for(;;) {
-        SkPoint pts[4];
+        SkPoint3 pts[4];
         switch(iter.next(pts)) {
         case SkPath::kLine_Verb: {
-            const QPointF pt1 = toQPointF(pts[1]);
+            const QVector3D pt1 = toQPointF(pts[1]);
             func(qCubicSegment2D(lastPos, lastPos, pt1, pt1));
             lastPos = pt1;
         } break;
         case SkPath::kQuad_Verb: {
-            const QPointF pt2 = toQPointF(pts[2]);
+            const QVector3D pt2 = toQPointF(pts[2]);
             func(qCubicSegment2D::sFromQuad(lastPos, toQPointF(pts[1]), pt2));
             lastPos = pt2;
         } break;
         case SkPath::kConic_Verb: {
-            const QPointF pt2 = toQPointF(pts[2]);
+            const QVector3D pt2 = toQPointF(pts[2]);
             func(qCubicSegment2D::sFromConic(lastPos, toQPointF(pts[1]), pt2,
                                             toQreal(iter.conicWeight())));
             lastPos = pt2;
         } break;
         case SkPath::kCubic_Verb: {
-            const QPointF pt3 = toQPointF(pts[3]);
+            const QVector3D pt3 = toQPointF(pts[3]);
             func(qCubicSegment2D(lastPos, toQPointF(pts[1]),
                                  toQPointF(pts[2]), pt3));
             lastPos = pt3;
@@ -717,14 +717,14 @@ void gForEverySegmentInPath(
 void gForEverySegmentInPath(
         const SkPath& path,
         const std::function<void(const SkPath&)>& func) {
-    SkPoint lastMovePos{0, 0};
-    SkPoint lastPos{0, 0};
+    SkPoint3 lastMovePos{0, 0};
+    SkPoint3 lastPos{0, 0};
     SkPath::Iter iter(path, false);
     for(;;) {
-        SkPoint pts[4];
+        SkPoint3 pts[4];
         switch(iter.next(pts)) {
         case SkPath::kLine_Verb: {
-            const SkPoint pt1 = pts[1];
+            const SkPoint3 pt1 = pts[1];
             SkPath seg;
             seg.moveTo(lastPos);
             seg.lineTo(pt1);
@@ -732,7 +732,7 @@ void gForEverySegmentInPath(
             lastPos = pt1;
         } break;
         case SkPath::kQuad_Verb: {
-            const SkPoint pt2 = pts[2];
+            const SkPoint3 pt2 = pts[2];
             SkPath seg;
             seg.moveTo(lastPos);
             seg.quadTo(pts[1], pt2);
@@ -740,7 +740,7 @@ void gForEverySegmentInPath(
             lastPos = pt2;
         } break;
         case SkPath::kConic_Verb: {
-            const SkPoint pt2 = pts[2];
+            const SkPoint3 pt2 = pts[2];
             SkPath seg;
             seg.moveTo(lastPos);
             seg.conicTo(pts[1], pt2, iter.conicWeight());
@@ -748,7 +748,7 @@ void gForEverySegmentInPath(
             lastPos = pt2;
         } break;
         case SkPath::kCubic_Verb: {
-            const SkPoint pt3 = pts[3];
+            const SkPoint3 pt3 = pts[3];
             SkPath seg;
             seg.moveTo(lastPos);
             seg.cubicTo(pts[1], pts[2], pt3);
@@ -784,7 +784,7 @@ static void RotateCCW(SkPoint* pt) {
     RotateCCW(*pt, pt);
 }
 
-static void Perterb(SkPoint * const p,
+static void Perterb(SkPoint3 * const p,
                     const SkVector& tangent,
                     const float scale) {
     SkVector normal = tangent;
@@ -818,19 +818,19 @@ float randFloat(const qreal baseSeed,
     return static_cast<float>(randFloat01(baseSeed))*(max - min) + min;
 }
 
-SkPoint randPt(const qreal baseSeed, const SkPoint& pt,
+SkPoint3 randPt(const qreal baseSeed, const SkPoint& pt,
                const float min, const float max) {
     const auto xR = randFloat(baseSeed, min, max);
     const auto yR = randFloat(baseSeed, min, max);
     return {pt.x() + xR, pt.y() + yR};
 }
 
-SkPoint randPt(const qreal baseSeed,
+SkPoint3 randPt(const qreal baseSeed,
                const SkPoint& pt, const float dev) {
     return randPt(baseSeed, pt, -dev, dev);
 }
 
-SkPoint randPt(const qreal baseSeed, const float dev) {
+SkPoint3 randPt(const qreal baseSeed, const float dev) {
     const auto xR = randFloat(baseSeed, -dev, dev);
     const auto yR = randFloat(baseSeed, -dev, dev);
     return SkPoint::Make(xR, yR);
@@ -850,10 +850,10 @@ void gAtomicDisplaceFilterPath(const qreal baseSeed,
     qreal seedContourInc = 0;
     SkPath::Iter iter(src, false);
     SkPath::Iter nextIter(src, false);
-    SkPoint pts[4];
+    SkPoint3 pts[4];
     nextIter.next(pts);
-    SkPoint prevDisp{0, 0};
-    SkPoint firstDisp{0, 0};
+    SkPoint3 prevDisp{0, 0};
+    SkPoint3 firstDisp{0, 0};
     int i = 0;
     for(;;) {
         const auto nextVerb = nextIter.next(pts);
@@ -907,11 +907,11 @@ void gSpatialDisplaceFilterPath(const qreal baseSeed,
     dst->setFillType(src.getFillType());
 
     SkPath::Iter iter(src, false);
-    SkPoint pts[4];
-    SkPoint prevDisp{0, 0};
+    SkPoint3 pts[4];
+    SkPoint3 prevDisp{0, 0};
     for(;;) {
         const auto verb = iter.next(pts);
-        SkPoint targetPt{0, 0};
+        SkPoint3 targetPt{0, 0};
         switch(verb) {
         case SkPath::kLine_Verb: {
            targetPt = pts[1];
@@ -1007,8 +1007,8 @@ void displaceClosedPath(const qreal baseSeed,
         const SkPoint& currLast = pts[currLastId];
         const SkPoint& last = pts[lastId];
 
-        SkPoint currLastCtrlAfter;
-        SkPoint currLastCtrlBefore;
+        SkPoint3 currLastCtrlAfter;
+        SkPoint3 currLastCtrlBefore;
         if(zeroSmooth) {
             currLastCtrlAfter = currLast;
             currLastCtrlBefore = currLast;
@@ -1018,8 +1018,8 @@ void displaceClosedPath(const qreal baseSeed,
                         currLastCtrlBefore, currLastCtrlAfter, smoothness);
         }
 
-        SkPoint lastCtrlBefore;
-        SkPoint lastCtrlAfter;
+        SkPoint3 lastCtrlBefore;
+        SkPoint3 lastCtrlAfter;
         if(zeroSmooth) {
             lastCtrlBefore = last;
         } else {
@@ -1378,15 +1378,15 @@ qreal gMapTFromFragment(const qreal minAbsT,
 }
 
 void gGetValuesForNodeInsertion(
-        const QPointF &prevP1, QPointF &prevC2,
-        QPointF &newC0, QPointF &newP1, QPointF &newC2,
-        QPointF &nextC0, const QPointF &nextP1, qreal t) {
+        const QVector3D &prevP1, QVector3D &prevC2,
+        QVector3D &newC0, QVector3D &newP1, QVector3D &newC2,
+        QVector3D &nextC0, const QVector3D &nextP1, qreal t) {
     t = CLAMP(t, 0, 1);
     const qreal oneMinusT = 1 - t;
-    const QPointF P1_2 = prevC2*oneMinusT + nextC0*t;
+    const QVector3D P1_2 = prevC2*oneMinusT + nextC0*t;
 
-    const QPointF newPrevC2 = prevP1*oneMinusT + prevC2*t;
-    const QPointF newNextC0 = nextC0*oneMinusT + nextP1*t;
+    const QVector3D newPrevC2 = prevP1*oneMinusT + prevC2*t;
+    const QVector3D newNextC0 = nextC0*oneMinusT + nextP1*t;
 
     newC0 = newPrevC2*oneMinusT + P1_2*t;
     newC2 = P1_2*oneMinusT + newNextC0*t;
@@ -1397,9 +1397,9 @@ void gGetValuesForNodeInsertion(
 }
 
 void gGetValuesForNodeRemoval(
-        const QPointF &prevP1, QPointF &prevC2,
-        const QPointF &pC0, const QPointF &pP1, const QPointF &pC2,
-        QPointF &nextC0, const QPointF &nextP1,
+        const QVector3D &prevP1, QVector3D &prevC2,
+        const QVector3D &pC0, const QVector3D &pP1, const QVector3D &pC2,
+        QVector3D &nextC0, const QVector3D &nextP1,
         qreal t) {
     Q_UNUSED(pP1)
     t = CLAMP(t, 0, 1);
@@ -1422,7 +1422,7 @@ QList<SkPath> gBreakApart(const SkPath &src) {
     SkPath::Iter iter(src, false);
     SkPath current;
     for(;;) {
-        SkPoint pts[4];
+        SkPoint3 pts[4];
         switch(iter.next(pts)) {
         case SkPath::kLine_Verb: {
             current.lineTo(pts[1]);
@@ -1474,7 +1474,7 @@ CtrlsMode gGuessCtrlsMode(const QPointF& c0,
 
 bool gIsClockwise(const QList<qCubicSegment2D>& segs) {
     if(segs.isEmpty()) return false;
-    QPointF prevPos = segs.first().p0();
+    QVector3D prevPos = segs.first().p0();
     qreal sum = 0;
     const auto lineTo = [&prevPos, &sum](const QPointF& pos) {
         sum += (pos.x() - prevPos.x()) * (pos.y() + prevPos.y());

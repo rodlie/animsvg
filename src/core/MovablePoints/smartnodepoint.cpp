@@ -64,7 +64,7 @@ void SmartNodePoint::startTransform() {
     mParentAnimator->prp_startTransform();
 }
 
-void SmartNodePoint::saveTransformPivotAbsPos(const QPointF &absPivot) {
+void SmartNodePoint::saveTransformPivotAbsPos(const QVector3D &absPivot) {
     NonAnimatedMovablePoint::saveTransformPivotAbsPos(absPivot);
     if(!mC0Pt->isSelected()) mC0Pt->saveTransformPivotAbsPos(absPivot);
     if(!mC2Pt->isSelected()) mC2Pt->saveTransformPivotAbsPos(absPivot);
@@ -94,20 +94,20 @@ void SmartNodePoint::finishTransform() {
     mParentAnimator->prp_finishTransform();
 }
 
-int SmartNodePoint::moveToClosestSegment(const QPointF &absPos) {
-    const QPointF relPos = mapAbsoluteToRelative(absPos);
+int SmartNodePoint::moveToClosestSegment(const QVector3D &absPos) {
+    const QVector3D relPos = mapAbsoluteToRelative(absPos);
     return mHandler_k->moveToClosestSegment(getNodeId(), relPos);
 }
 
 #include <QApplication>
-void SmartNodePoint::setRelativePos(const QPointF &relPos) {
+void SmartNodePoint::setRelativePos(const QVector3D &relPos) {
     if(getType() == NodeType::normal) {
         NonAnimatedMovablePoint::setRelativePos(relPos);
         currentPath()->actionSetNormalNodeP1(getNodeId(), getRelativePos());
         mNextNormalSegment.afterChanged();
         if(mPrevNormalPoint) mPrevNormalPoint->afterNextNodeC0P1Changed();
 
-        const QPointF change = relPos - getSavedRelPos();
+        const QVector3D change = relPos - getSavedRelPos();
         mC0Pt->moveByRel(change);
         mC2Pt->moveByRel(change);
     } else if(getType() == NodeType::dissolved) {
@@ -182,7 +182,7 @@ bool SmartNodePoint::isVisible(const CanvasMode mode) const {
     return false;
 }
 
-MovablePoint *SmartNodePoint::getPointAtAbsPos(const QPointF &absPos,
+MovablePoint *SmartNodePoint::getPointAtAbsPos(const QVector3D &absPos,
                                                const CanvasMode mode,
                                                const qreal invScale) {
     if(mode == CanvasMode::pointTransform) {
@@ -197,29 +197,29 @@ MovablePoint *SmartNodePoint::getPointAtAbsPos(const QPointF &absPos,
     return MovablePoint::getPointAtAbsPos(absPos, mode, invScale);
 }
 
-void SmartNodePoint::moveC0ToAbsPos(const QPointF &c0) {
+void SmartNodePoint::moveC0ToAbsPos(const QVector3D &c0) {
     moveC0ToRelPos(mapAbsoluteToRelative(c0));
 }
 
-void SmartNodePoint::moveC2ToAbsPos(const QPointF &c2) {
+void SmartNodePoint::moveC2ToAbsPos(const QVector3D &c2) {
     moveC2ToRelPos(mapAbsoluteToRelative(c2));
 }
 
-void SmartNodePoint::moveC2ToRelPos(const QPointF &c2) {
+void SmartNodePoint::moveC2ToRelPos(const QVector3D &c2) {
     if(!getC2Enabled()) setC2Enabled(true);
     mC2Pt->setRelativePos(c2);
 }
 
-void SmartNodePoint::moveC0ToRelPos(const QPointF &c0) {
+void SmartNodePoint::moveC0ToRelPos(const QVector3D &c0) {
     if(!getC0Enabled()) setC0Enabled(true);
     mC0Pt->setRelativePos(c0);
 }
 
-QPointF SmartNodePoint::getC0AbsPos() const {
+QVector3D SmartNodePoint::getC0AbsPos() const {
     return mapRelativeToAbsolute(getC0Value());
 }
 
-QPointF SmartNodePoint::getC0Value() const {
+QVector3D SmartNodePoint::getC0Value() const {
     if(getC0Enabled()) return mC0Pt->getRelativePos();
     return getRelativePos();
 }
@@ -230,8 +230,8 @@ SmartCtrlPoint *SmartNodePoint::getC0Pt() {
 
 void SmartNodePoint::updateCtrlPtPos(SmartCtrlPoint * const pointToUpdate) {
     const auto otherPt = pointToUpdate == mC0Pt.get() ? mC2Pt.get() : mC0Pt.get();
-    const QPointF relPos = otherPt->getRelativePos();
-    QPointF newPos;
+    const QVector3D relPos = otherPt->getRelativePos();
+    QVector3D newPos;
     if(getCtrlsMode() == CtrlsMode::symmetric) {
         newPos = symmetricToPos(relPos, getRelativePos());
     } else if(getCtrlsMode() == CtrlsMode::smooth) {
@@ -244,11 +244,11 @@ void SmartNodePoint::updateCtrlPtPos(SmartCtrlPoint * const pointToUpdate) {
     pointToUpdate->::NonAnimatedMovablePoint::setRelativePos(newPos);
 }
 
-QPointF SmartNodePoint::getC2AbsPos() {
+QVector3D SmartNodePoint::getC2AbsPos() {
     return mapRelativeToAbsolute(getC2Value());
 }
 
-QPointF SmartNodePoint::getC2Value() const {
+QVector3D SmartNodePoint::getC2Value() const {
     if(mNode_d->getC2Enabled()) return mC2Pt->getRelativePos();
     return getRelativePos();
 }
@@ -263,7 +263,7 @@ void drawCtrlPtLine(SkCanvas * const canvas,
                     const SkPoint& skAbsPos,
                     const float invScale) {
     if(pointToLen(qCtrlAbsPos - qAbsPos) > 1) {
-        const SkPoint skCtrlAbsPos = toSkPoint(qCtrlAbsPos);
+        const SkPoint3 skCtrlAbsPos = toSkPoint(qCtrlAbsPos);
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setColor(SK_ColorBLACK);
@@ -283,8 +283,8 @@ void SmartNodePoint::drawSk(SkCanvas * const canvas,
                             const float invScale,
                             const bool keyOnCurrent,
                             const bool ctrlPressed) {
-    const QPointF qAbsPos = getAbsolutePos();
-    const SkPoint skAbsPos = toSkPoint(qAbsPos);
+    const QVector3D qAbsPos = getAbsolutePos();
+    const SkPoint3 skAbsPos = toSkPoint(qAbsPos);
 
     const auto& sett = eSettings::instance();
 
@@ -559,16 +559,16 @@ void SmartNodePoint::actionRemove(const bool approx) {
     return mHandler_k->removeNode(getNodeId(), approx);
 }
 
-SmartNodePoint* SmartNodePoint::actionAddPointRelPos(const QPointF &relPos) {
+SmartNodePoint* SmartNodePoint::actionAddPointRelPos(const QVector3D &relPos) {
     if(hasNextPoint()) return mHandler_k->addNewAtStart(relPos);
     else return mHandler_k->addNewAtEnd(relPos);
 }
 
-SmartNodePoint* SmartNodePoint::actionAddPointAbsPos(const QPointF &absPos) {
+SmartNodePoint* SmartNodePoint::actionAddPointAbsPos(const QVector3D &absPos) {
     return actionAddPointRelPos(mapAbsoluteToRelative(absPos));
 }
 
-void SmartNodePoint::c0Moved(const QPointF &c0) {
+void SmartNodePoint::c0Moved(const QVector3D &c0) {
     currentPath()->actionSetNormalNodeC0(getNodeId(), c0);
     if(getCtrlsMode() != CtrlsMode::corner) {
         updateCtrlPtPos(mC2Pt.get());
@@ -580,7 +580,7 @@ void SmartNodePoint::c0Moved(const QPointF &c0) {
     mParentAnimator->changed();
 }
 
-void SmartNodePoint::c2Moved(const QPointF &c2) {
+void SmartNodePoint::c2Moved(const QVector3D &c2) {
     currentPath()->actionSetNormalNodeC2(getNodeId(), c2);
     if(getCtrlsMode() != CtrlsMode::corner) {
         updateCtrlPtPos(mC0Pt.get());

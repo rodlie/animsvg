@@ -104,7 +104,7 @@ stdsptr<BoxRenderData> InternalLinkCanvas::createRenderData() {
     return enve::make_shared<LinkCanvasRenderData>(this);
 }
 
-bool InternalLinkCanvas::relPointInsidePath(const QPointF &relPos) const {
+bool InternalLinkCanvas::relPointInsidePath(const QVector3D &relPos) const {
     if(mClipToCanvas->getValue()) return getRelBoundingRect().contains(relPos);
     return InternalLinkGroupBox::relPointInsidePath(relPos);
 }

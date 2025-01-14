@@ -43,7 +43,7 @@ struct CORE_EXPORT PathBoxRenderData : public BoxRenderData
     UpdateStrokeSettings fStrokeSettings;
 
     void updateRelBoundingRect();
-    QPointF getCenterPosition();
+    QVector3D getCenterPosition();
 
 protected:
     void setupRenderData();

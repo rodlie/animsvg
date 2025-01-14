@@ -43,7 +43,7 @@ public:
     QrealKey(const qreal value, const int frame,
              QrealAnimator * const parentAnimator);
 
-    void changeFrameAndValueBy(const QPointF &frameValueChange);
+    void changeFrameAndValueBy(const QVector3D &frameValueChange);
 
     bool differsFromKey(Key *key) const;
 

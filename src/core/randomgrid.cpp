@@ -41,13 +41,13 @@ qreal RandomGrid::getGridSize(const qreal relFrame) const {
     return mGridSize->getEffectiveValue(relFrame);
 }
 
-qreal RandomGrid::getRandomValue(const qreal relFrame, const QPointF &pos) const {
+qreal RandomGrid::getRandomValue(const qreal relFrame, const QVector3D &pos) const {
     return sGetRandomValue(getBaseSeed(relFrame), getGridSize(relFrame), pos);
 }
 
 qreal RandomGrid::sGetRandomValue(const qreal baseSeed, const qreal gridSize,
-                                  const QPointF &pos) {
-    const QPointF gridIdF = pos/gridSize;
+                                  const QVector3D &pos) {
+    const QVector3D gridIdF = pos/gridSize;
     if(isInteger4Dec(gridIdF.x()) && isInteger4Dec(gridIdF.y())) {
         const QPoint gridId = QPoint{qRound(gridIdF.x()), qRound(gridIdF.y())};
         return sGetRandomValue(baseSeed, gridId);
@@ -80,7 +80,7 @@ qreal RandomGrid::sGetRandomValue(const qreal baseSeed, const qreal gridSize,
 
 qreal RandomGrid::sGetRandomValue(const qreal min, const qreal max,
                                   const qreal baseSeed, const qreal gridSize,
-                                  const QPointF &pos) {
+                                  const QVector3D &pos) {
     return sGetRandomValue(baseSeed, gridSize, pos)*(max - min) + min;
 }
 

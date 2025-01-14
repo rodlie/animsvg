@@ -41,10 +41,10 @@ void ContainerBoxRenderData::updateRelBoundingRect() {
     const auto invTrans = fTotalTransform.inverted();
     for(const auto &child : fChildrenRenderData) {
         if(child->fRelBoundingRect.isEmpty()) continue;
-        QPointF tl = child->fRelBoundingRect.topLeft();
-        QPointF tr = child->fRelBoundingRect.topRight();
-        QPointF br = child->fRelBoundingRect.bottomRight();
-        QPointF bl = child->fRelBoundingRect.bottomLeft();
+        QVector3D tl = child->fRelBoundingRect.topLeft();
+        QVector3D tr = child->fRelBoundingRect.topRight();
+        QVector3D br = child->fRelBoundingRect.bottomRight();
+        QVector3D bl = child->fRelBoundingRect.bottomLeft();
 
         const auto trans = child->fTotalTransform*invTrans;
 

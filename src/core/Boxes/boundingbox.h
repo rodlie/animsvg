@@ -136,14 +136,14 @@ public:
 
     void centerPivotPositionAction();
     void centerPivotPosition();
-    virtual QPointF getRelCenterPosition();
+    virtual QVector3D getRelCenterPosition();
 
     virtual void selectAndAddContainedPointsToList(
             const QRectF &absRect,
             const MovablePoint::PtOp& adder,
             const CanvasMode mode);
 
-    virtual bool relPointInsidePath(const QPointF &relPos) const;
+    virtual bool relPointInsidePath(const QVector3D &relPos) const;
 
     virtual void setFontSize(const qreal fontSize)
     { Q_UNUSED(fontSize) }
@@ -161,7 +161,7 @@ public:
                               QList<BlendEffect::Delayed> &delayed) const;
     virtual void drawHoveredSk(SkCanvas *canvas, const float invScale);
 
-    virtual BoundingBox *getBoxAtFromAllDescendents(const QPointF &absPos);
+    virtual BoundingBox *getBoxAtFromAllDescendents(const QVector3D &absPos);
 
     virtual FillSettingsAnimator *getFillSettings() const
     { return nullptr; }
@@ -190,7 +190,7 @@ public:
     virtual QMatrix4x4 getRelativeTransformAtFrame(const qreal relFrame) const;
     virtual QMatrix4x4 getInheritedTransformAtFrame(const qreal relFrame) const;
     virtual QMatrix4x4 getTotalTransformAtFrame(const qreal relFrame) const;
-    virtual QPointF mapAbsPosToRel(const QPointF &absPos);
+    virtual QVector3D mapAbsPosToRel(const QVector3D &absPos);
 
     virtual void applyPaintSetting(const PaintSettingsApplier &setting);
     virtual void addPathEffect(const qsptr<PathEffect>& effect)
@@ -279,14 +279,14 @@ public:
                                const float invScale,
                                const bool ctrlPressed);
 
-    void moveByRel(const QPointF &trans);
-    void moveByAbs(const QPointF &trans);
+    void moveByRel(const QVector3D &trans);
+    void moveByAbs(const QVector3D &trans);
     void rotateBy(const qreal rot);
     void scale(const qreal scaleBy);
     void scale(const qreal scaleXBy, const qreal scaleYBy);
     void setScale(const qreal scale);
     void setRotate(const qreal rot);
-    void saveTransformPivotAbsPos(const QPointF &absPivot);
+    void saveTransformPivotAbsPos(const QVector3D &absPivot);
 
     void startPosTransform();
     void startRotTransform();
@@ -301,10 +301,10 @@ public:
 
     QMatrix4x4 getTotalTransform() const;
 
-    MovablePoint *getPointAtAbsPos(const QPointF &absPos,
+    MovablePoint *getPointAtAbsPos(const QVector3D &absPos,
                                    const CanvasMode mode,
                                    const qreal invScale) const;
-    NormalSegment getNormalSegment(const QPointF &absPos,
+    NormalSegment getNormalSegment(const QVector3D &absPos,
                                    const qreal invScale) const;
     void drawBoundingRect(SkCanvas * const canvas,
                           const float invScale);
@@ -323,22 +323,22 @@ public:
 
     bool isContainedIn(const QRectF &absRect) const;
 
-    QPointF getPivotRelPos(const qreal relFrame);
-    QPointF getPivotAbsPos();
-    QPointF getPivotAbsPos(const qreal relFrame);
+    QVector3D getPivotRelPos(const qreal relFrame);
+    QVector3D getPivotAbsPos();
+    QVector3D getPivotAbsPos(const qreal relFrame);
 
-    QPointF getAbsolutePos() const;
-    bool absPointInsidePath(const QPointF &absPos);
+    QVector3D getAbsolutePos() const;
+    bool absPointInsidePath(const QVector3D &absPos);
 
-    void setPivotAbsPos(const QPointF &absPos);
-    void setPivotRelPos(const QPointF &relPos);
+    void setPivotAbsPos(const QVector3D &absPos);
+    void setPivotRelPos(const QVector3D &relPos);
 
     bool isAnimated() const;
 
     void rotateRelativeToSavedPivot(const qreal rot);
     void scaleRelativeToSavedPivot(const qreal scaleBy);
-    void setAbsolutePos(const QPointF &pos);
-    void setRelativePos(const QPointF &relPos);
+    void setAbsolutePos(const QVector3D &pos);
+    void setRelativePos(const QVector3D &relPos);
     void setOpacity(const qreal opacity);
 
     void scaleRelativeToSavedPivot(const qreal scaleXBy,
@@ -373,7 +373,7 @@ public:
 
     void setBlendModeSk(const SkBlendMode blendMode);
 
-    QPointF mapRelPosToAbs(const QPointF &relPos) const;
+    QVector3D mapRelPosToAbs(const QVector3D &relPos) const;
 
     void copyTransformationTo(BoundingBox * const targetBox) const;
     void copyRasterEffectsTo(BoundingBox * const targetBox) const;
@@ -492,7 +492,7 @@ private:
     bool mUpdatePlanned = false;
     UpdateReason mPlannedReason;
 
-    QPointF mSavedTransformPivot;
+    QVector3D mSavedTransformPivot;
 
     QRectF mRelRect;
     SkRect mRelRectSk;

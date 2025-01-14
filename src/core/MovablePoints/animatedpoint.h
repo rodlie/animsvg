@@ -48,9 +48,9 @@ protected:
     AnimatedPoint(QPointFAnimator * const associatedAnimator,
                   BasicTransformAnimator * const trans,
                   const MovablePointType type);
-public:    
-    QPointF getRelativePos() const;
-    void setRelativePos(const QPointF &relPos);
+public:
+    QVector3D getRelativePos() const;
+    void setRelativePos(const QVector3D &relPos);
 
     void startTransform();
     void finishTransform();
@@ -72,7 +72,7 @@ protected:
         mAssociatedAnimator_k->setBaseValue(value);
     }
 
-    QPointF getValue() const {
+    QVector3D getValue() const {
         return mAssociatedAnimator_k->getBaseValue();
     }
 private:

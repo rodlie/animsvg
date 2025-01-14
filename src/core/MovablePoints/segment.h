@@ -49,7 +49,7 @@ public:
 
     struct PointOnSegment {
         qreal fT;
-        QPointF fPos;
+        QVector3D fPos;
     };
     struct SubSegment {
         SmartNodePoint* fFirstPt;
@@ -64,7 +64,7 @@ public:
         qreal getMaxT() const;
 
         qreal getParentTAtThisT(const qreal thisT) const;
-        QPointF getRelPosAtT(const qreal thisT) const;
+        QVector3D getRelPosAtT(const qreal thisT) const;
     };
     NormalSegment();
     NormalSegment(SmartNodePoint * const firstNode,
@@ -73,11 +73,11 @@ public:
     SmartNodePoint* divideAtAbsPos(const QPointF& absPos);
     SmartNodePoint *divideAtT(const qreal &t);
 
-    QPointF getRelPosAtT(const qreal t) const;
-    QPointF getAbsPosAtT(const qreal t) const;
+    QVector3D getRelPosAtT(const qreal t) const;
+    QVector3D getAbsPosAtT(const qreal t) const;
 
-    void makePassThroughAbs(const QPointF &absPos, const qreal t);
-    void makePassThroughRel(const QPointF &relPos, const qreal t);
+    void makePassThroughAbs(const QVector3D &absPos, const qreal t);
+    void makePassThroughRel(const QVector3D &relPos, const qreal t);
 
     void finishPassThroughTransform();
     void startPassThroughTransform();
@@ -91,7 +91,7 @@ public:
     SmartNodePoint *getFirstNode() const;
     SmartNodePoint *getLastNode() const;
 
-    QPointF getSlopeVector(const qreal t);
+    QVector3D getSlopeVector(const qreal t);
 
     bool isValid() const;
     bool isNormal() const;

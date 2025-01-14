@@ -53,14 +53,14 @@ public:
     void setBaseValue(const qreal valX, const qreal valY) {
         setBaseValue({valX, valY});
     }
-    void setBaseValue(const QPointF &val);
+    void setBaseValue(const QVector3D &val);
 
-    void setBaseValueWithoutCallingUpdater(const QPointF &val);
+    void setBaseValueWithoutCallingUpdater(const QVector3D &val);
     void incBaseValuesWithoutCallingUpdater(const qreal x, const qreal y);
     void incBaseValues(const qreal x, const qreal y);
     void multCurrentValues(const qreal sx, const qreal sy);
 
-    QPointF getSavedValue();
+    QVector3D getSavedValue();
     qreal getSavedXValue();
     qreal getSavedYValue();
 
@@ -76,17 +76,17 @@ public:
 
     void setValuesRange(const qreal minVal, const qreal maxVal);
 
-    QPointF getBaseValue() const;
-    QPointF getBaseValueAtAbsFrame(const qreal frame) const;
-    QPointF getBaseValue(const qreal relFrame) const;
+    QVector3D getBaseValue() const;
+    QVector3D getBaseValueAtAbsFrame(const qreal frame) const;
+    QVector3D getBaseValue(const qreal relFrame) const;
 
     void setPrefferedValueStep(const qreal valueStep);
 
     bool getBeingTransformed();
 
-    QPointF getEffectiveValue() const;
-    QPointF getEffectiveValueAtAbsFrame(const qreal frame) const;
-    QPointF getEffectiveValue(const qreal relFrame) const;
+    QVector3D getEffectiveValue() const;
+    QVector3D getEffectiveValueAtAbsFrame(const qreal frame) const;
+    QVector3D getEffectiveValue(const qreal relFrame) const;
 
     qreal getEffectiveXValue();
     qreal getEffectiveXValue(const qreal relFrame);

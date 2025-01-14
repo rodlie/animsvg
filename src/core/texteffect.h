@@ -69,7 +69,7 @@ public:
 private:
     QMatrix4x4 getTransform(const qreal relFrame,
                          const qreal influence,
-                         const QPointF &addPivot) const;
+                         const QVector3D &addPivot) const;
 
     void applyToLetter(LetterRenderData * const letterData,
                        const qreal influence) const;

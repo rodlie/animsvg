@@ -49,25 +49,25 @@ void SmartCtrlPoint::drawSk(SkCanvas * const canvas, const CanvasMode mode,
     const QColor settColor = isSelected() ? sett.fPathControlSelectedColor :
                                             sett.fPathControlColor;
     const SkColor fillCol = toSkColor(settColor);
-    const SkPoint absPos = toSkPoint(getAbsolutePos());
+    const SkPoint3 absPos = toSkPoint(getAbsolutePos());
     drawOnAbsPosSk(canvas, absPos, invScale, fillCol);
 }
 
-void SmartCtrlPoint::setRelativePos(const QPointF &relPos) {
+void SmartCtrlPoint::setRelativePos(const QVector3D &relPos) {
     NonAnimatedMovablePoint::setRelativePos(relPos);
     if(mCtrlType == C0) mParentPoint_k->c0Moved(getRelativePos());
     else mParentPoint_k->c2Moved(getRelativePos());
 }
 
 void SmartCtrlPoint::rotateRelativeToSavedPivot(const qreal rotate) {
-    const QPointF savedValue = getSavedRelPos() - mParentPoint_k->getSavedRelPos();
+    const QVector3D savedValue = getSavedRelPos() - mParentPoint_k->getSavedRelPos();
     QMatrix4x4 mat;
     mat.rotate(rotate);
     setRelativePos(mat.map(savedValue) + mParentPoint_k->getRelativePos());
 }
 
 void SmartCtrlPoint::scale(const qreal sx, const qreal sy) {
-    const QPointF savedValue = getSavedRelPos() - mParentPoint_k->getSavedRelPos();
+    const QVector3D savedValue = getSavedRelPos() - mParentPoint_k->getSavedRelPos();
     QMatrix4x4 mat;
     mat.scale(sx, sy);
     setRelativePos(mat.map(savedValue) + mParentPoint_k->getRelativePos());

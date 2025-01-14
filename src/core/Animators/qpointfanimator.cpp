@@ -38,10 +38,10 @@ QPointFAnimator::QPointFAnimator(const QString &name) :
     ca_addChild(mYAnimator);
 }
 
-QPointFAnimator::QPointFAnimator(const QPointF &iniValue,
-                                 const QPointF &minValue,
-                                 const QPointF &maxValue,
-                                 const QPointF &valueStep,
+QPointFAnimator::QPointFAnimator(const QVector3D &iniValue,
+                                 const QVector3D &minValue,
+                                 const QVector3D &maxValue,
+                                 const QVector3D &valueStep,
                                  const QString &name) :
     QPointFAnimator(name) {
     mXAnimator->setValueRange(minValue.x(), maxValue.x());
@@ -51,10 +51,10 @@ QPointFAnimator::QPointFAnimator(const QPointF &iniValue,
     setBaseValue(iniValue);
 }
 
-QPointFAnimator::QPointFAnimator(const QPointF &iniValue,
-                                 const QPointF &minValue,
-                                 const QPointF &maxValue,
-                                 const QPointF &valueStep,
+QPointFAnimator::QPointFAnimator(const QVector3D &iniValue,
+                                 const QVector3D &minValue,
+                                 const QVector3D &maxValue,
+                                 const QVector3D &valueStep,
                                  const QString& nameX,
                                  const QString& nameY,
                                  const QString &name) :
@@ -86,30 +86,30 @@ QJSValue QPointFAnimator::prp_getEffectiveJSValue(QJSEngine& e, const qreal relF
     return toArray(e, getEffectiveValue(relFrame));
 }
 
-QPointF QPointFAnimator::getBaseValue() const {
+QVector3D QPointFAnimator::getBaseValue() const {
     return QPointF(mXAnimator->getCurrentBaseValue(),
                    mYAnimator->getCurrentBaseValue());
 }
 
-QPointF QPointFAnimator::getEffectiveValue() const {
+QVector3D QPointFAnimator::getEffectiveValue() const {
     return QPointF(mXAnimator->getEffectiveValue(),
                    mYAnimator->getEffectiveValue());
 }
 
-QPointF QPointFAnimator::getBaseValueAtAbsFrame(const qreal frame) const {
+QVector3D QPointFAnimator::getBaseValueAtAbsFrame(const qreal frame) const {
     return getBaseValue(prp_absFrameToRelFrameF(frame));
 }
 
-QPointF QPointFAnimator::getBaseValue(const qreal relFrame) const {
+QVector3D QPointFAnimator::getBaseValue(const qreal relFrame) const {
     return QPointF(mXAnimator->getBaseValue(relFrame),
                    mYAnimator->getBaseValue(relFrame));
 }
 
-QPointF QPointFAnimator::getEffectiveValueAtAbsFrame(const qreal frame) const {
+QVector3D QPointFAnimator::getEffectiveValueAtAbsFrame(const qreal frame) const {
     return getEffectiveValue(prp_absFrameToRelFrameF(frame));
 }
 
-QPointF QPointFAnimator::getEffectiveValue(const qreal relFrame) const {
+QVector3D QPointFAnimator::getEffectiveValue(const qreal relFrame) const {
     return QPointF(mXAnimator->getEffectiveValue(relFrame),
                    mYAnimator->getEffectiveValue(relFrame));
 }
@@ -140,7 +140,7 @@ qreal QPointFAnimator::getEffectiveYValue(const qreal relFrame) {
     return mYAnimator->getEffectiveValue(relFrame);
 }
 
-void QPointFAnimator::setBaseValue(const QPointF &val) {
+void QPointFAnimator::setBaseValue(const QVector3D &val) {
     mXAnimator->setCurrentBaseValue(val.x());
     mYAnimator->setCurrentBaseValue(val.y());
 }
@@ -152,7 +152,7 @@ void QPointFAnimator::setValuesRange(const qreal minVal,
 }
 
 void QPointFAnimator::setBaseValueWithoutCallingUpdater(
-        const QPointF &val) {
+        const QVector3D &val) {
     mXAnimator->setCurrentBaseValueNoUpdate(val.x());
     mYAnimator->setCurrentBaseValueNoUpdate(val.y());
 }
@@ -198,7 +198,7 @@ void QPointFAnimator::multCurrentValues(const qreal sx, const qreal sy) {
     mYAnimator->multCurrentBaseValue(sy);
 }
 
-QPointF QPointFAnimator::getSavedValue() {
+QVector3D QPointFAnimator::getSavedValue() {
     return QPointF(mXAnimator->getSavedBaseValue(),
                    mYAnimator->getSavedBaseValue());
 }
@@ -225,8 +225,8 @@ void QPointFAnimator::applyTransform(const QMatrix4x4 &transform) {
         for(int i = 0; i < nKeys; i++) {
             const auto xKey = xKeys.atId<QrealKey>(i);
             const auto yKey = yKeys.atId<QrealKey>(i);
-            const QPointF oldValue(xKey->getValue(), yKey->getValue());
-            const QPointF newValue = transform.map(oldValue);
+            const QVector3D oldValue(xKey->getValue(), yKey->getValue());
+            const QVector3D newValue = transform.map(oldValue);
             xKey->startValueTransform();
             yKey->startValueTransform();
             xKey->setValue(newValue.x());

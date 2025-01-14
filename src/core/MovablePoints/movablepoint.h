@@ -60,13 +60,13 @@ public:
 
     ~MovablePoint() { if(mRemoveFromSelection) mRemoveFromSelection(); }
 
-    virtual QPointF getRelativePos() const = 0;
-    virtual void setRelativePos(const QPointF &relPos) = 0;
+    virtual QVector3D getRelativePos() const = 0;
+    virtual void setRelativePos(const QVector3D &relPos) = 0;
 
     virtual void scale(const qreal scaleXBy, const qreal scaleYBy);
     virtual void scaleRelativeToSavedPivot(const qreal sx, const qreal sy);
     virtual void rotateRelativeToSavedPivot(const qreal rot);
-    virtual void saveTransformPivotAbsPos(const QPointF &absPivot);
+    virtual void saveTransformPivotAbsPos(const QVector3D &absPivot);
 
     virtual void startTransform();
     virtual void finishTransform() {}
@@ -85,7 +85,7 @@ public:
         Q_UNUSED(menu)
     }
 
-    virtual MovablePoint * getPointAtAbsPos(const QPointF &absPos,
+    virtual MovablePoint * getPointAtAbsPos(const QVector3D &absPos,
                                             const CanvasMode mode,
                                             const qreal invScale) {
         if(isPointAtAbsPos(absPos, mode, invScale)) return this;
@@ -100,14 +100,14 @@ public:
     virtual void updateRadius() { setRadius(5); }
 
     void moveToAbs(const QPointF& absPos);
-    void moveByAbs(const QPointF &absTrans);
-    void moveToRel(const QPointF &relPos);
-    void moveByRel(const QPointF &relTranslation);
-    QPointF getAbsolutePos() const;
-    bool isPointAtAbsPos(const QPointF &absPoint,
+    void moveByAbs(const QVector3D &absTrans);
+    void moveToRel(const QVector3D &relPos);
+    void moveByRel(const QVector3D &relTranslation);
+    QVector3D getAbsolutePos() const;
+    bool isPointAtAbsPos(const QVector3D &absPoint,
                          const CanvasMode mode,
                          const qreal invScale);
-    void setAbsolutePos(const QPointF &pos);
+    void setAbsolutePos(const QVector3D &pos);
 
     BasicTransformAnimator *getTransform();
 
@@ -154,10 +154,10 @@ public:
     void drawHovered(SkCanvas * const canvas,
                      const float invScale);
 
-    QPointF mapRelativeToAbsolute(const QPointF &relPos) const;
-    QPointF mapAbsoluteToRelative(const QPointF &absPos) const;
+    QVector3D mapRelativeToAbsolute(const QVector3D &relPos) const;
+    QVector3D mapAbsoluteToRelative(const QVector3D &absPos) const;
 
-    const QPointF &getSavedRelPos() const;
+    const QVector3D &getSavedRelPos() const;
 protected:
     void drawOnAbsPosSk(SkCanvas * const canvas,
                         const SkPoint &absPos,
@@ -171,8 +171,8 @@ private:
     bool mSelected = false;
     const MovablePointType mType;
     qreal mRadius = 5;
-    QPointF mPivot;
-    QPointF mSavedRelPos;
+    QVector3D mPivot;
+    QVector3D mSavedRelPos;
     BasicTransformAnimator * mTrans_cv = nullptr;
 };
 #endif // MOVABLEPOINT_H

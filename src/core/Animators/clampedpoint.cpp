@@ -59,11 +59,11 @@ void ClampedPoint::restoreSavedValue() {
     mY.restoreSavedValue();
 }
 
-QPointF ClampedPoint::getRawSavedValue() const {
+QVector3D ClampedPoint::getRawSavedValue() const {
     return {mX.getRawSavedValue(), mY.getRawSavedValue()};
 }
 
-QPointF ClampedPoint::getRawValue() const {
+QVector3D ClampedPoint::getRawValue() const {
     return {mX.getRawValue(), mY.getRawValue()};
 }
 
@@ -83,7 +83,7 @@ qreal ClampedPoint::getRawYValue() const {
     return mY.getRawValue();
 }
 
-QPointF ClampedPoint::getClampedSavedValue(const QPointF &relTo) const {
+QVector3D ClampedPoint::getClampedSavedValue(const QVector3D &relTo) const {
     const qreal xFracDiv = mX.getRawSavedValue() - relTo.x();
     qreal xFrac;
     if(isZero6Dec(xFracDiv)) xFrac = 1;
@@ -95,11 +95,11 @@ QPointF ClampedPoint::getClampedSavedValue(const QPointF &relTo) const {
     else yFrac = (mY.getClampedSavedValue() - relTo.y())/yFracDiv;
 
     const qreal minFrac = qMin(xFrac, yFrac);
-    const QPointF rawVals{mX.getRawSavedValue(), mY.getRawSavedValue()};
+    const QVector3D rawVals{mX.getRawSavedValue(), mY.getRawSavedValue()};
     return relTo + minFrac*(rawVals - relTo);
 }
 
-QPointF ClampedPoint::getClampedValue(const QPointF &relTo) const {
+QVector3D ClampedPoint::getClampedValue(const QVector3D &relTo) const {
     const qreal xFracDiv = mX.getRawValue() - relTo.x();
     qreal xFrac;
     if(isZero6Dec(xFracDiv)) xFrac = 1;
@@ -111,7 +111,7 @@ QPointF ClampedPoint::getClampedValue(const QPointF &relTo) const {
     else yFrac = (mY.getClampedValue() - relTo.y())/yFracDiv;
 
     const qreal minFrac = qMin(xFrac, yFrac);
-    const QPointF rawVals{mX.getRawValue(), mY.getRawValue()};
+    const QVector3D rawVals{mX.getRawValue(), mY.getRawValue()};
     return relTo + minFrac*(rawVals - relTo);
 }
 
@@ -123,7 +123,7 @@ void ClampedPoint::setYValue(const qreal value) {
     mY.setValue(value);
 }
 
-void ClampedPoint::setValue(const QPointF &value) {
+void ClampedPoint::setValue(const QVector3D &value) {
     mX.setValue(value.x());
     mY.setValue(value.y());
 }

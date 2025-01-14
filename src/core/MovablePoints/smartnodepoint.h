@@ -49,11 +49,11 @@ public:
     void finishTransform();
     void cancelTransform();
 
-    void saveTransformPivotAbsPos(const QPointF &absPivot);
+    void saveTransformPivotAbsPos(const QVector3D &absPivot);
     void rotateRelativeToSavedPivot(const qreal rot);
     void scaleRelativeToSavedPivot(const qreal sx, const qreal sy);
 
-    void setRelativePos(const QPointF &relPos);
+    void setRelativePos(const QVector3D &relPos);
 
     void remove();
 
@@ -67,16 +67,16 @@ public:
                 const bool keyOnCurrent,
                 const bool ctrlPressed);
     void setTransform(BasicTransformAnimator * const trans);
-    MovablePoint *getPointAtAbsPos(const QPointF &absPos,
+    MovablePoint *getPointAtAbsPos(const QVector3D &absPos,
                                    const CanvasMode mode,
                                    const qreal invScale);
     void updateRadius();
 
     void updateCtrlsRadius();
 
-    int moveToClosestSegment(const QPointF &absPos);
-    SmartNodePoint *actionAddPointRelPos(const QPointF &relPos);
-    SmartNodePoint* actionAddPointAbsPos(const QPointF &absPos);
+    int moveToClosestSegment(const QVector3D &absPos);
+    SmartNodePoint *actionAddPointRelPos(const QVector3D &relPos);
+    SmartNodePoint* actionAddPointAbsPos(const QVector3D &absPos);
     bool actionConnectToNormalPoint(SmartNodePoint * const other);
     void actionDisconnectFromNormalPoint(SmartNodePoint * const other);
     void actionMergeWithNormalPoint(SmartNodePoint * const other);
@@ -84,14 +84,14 @@ public:
     void actionDemoteToDissolved(const bool approx);
     void actionRemove(const bool approx);
 
-    //void moveByRel(const QPointF &relTranslation);
+    //void moveByRel(const QVector3D &relTranslation);
 
-    QPointF getC0AbsPos() const;
-    QPointF getC0Value() const;
+    QVector3D getC0AbsPos() const;
+    QVector3D getC0Value() const;
     SmartCtrlPoint *getC0Pt();
 
-    QPointF getC2AbsPos();
-    QPointF getC2Value() const;
+    QVector3D getC2AbsPos();
+    QVector3D getC2Value() const;
     SmartCtrlPoint *getC2Pt();
 
     SmartNodePoint *getNextPoint();
@@ -103,10 +103,10 @@ public:
     bool isSeparateNodePoint();
 
     void setCtrlsMode(const CtrlsMode mode);
-    void moveC2ToAbsPos(const QPointF &c2);
-    void moveC0ToAbsPos(const QPointF &c0);
-    void moveC2ToRelPos(const QPointF &c2);
-    void moveC0ToRelPos(const QPointF &c0);
+    void moveC2ToAbsPos(const QVector3D &c2);
+    void moveC0ToAbsPos(const QVector3D &c0);
+    void moveC2ToRelPos(const QVector3D &c2);
+    void moveC0ToRelPos(const QVector3D &c0);
 
     SmartPathAnimator *getTargetAnimator() const;
     SmartPath *getTargetPath() const {
@@ -128,7 +128,7 @@ public:
     bool isNextNormalSelected() const;
 
     bool isNeighbourNormalSelected() const;
-    //void moveByAbs(const QPointF &absTrans);
+    //void moveByAbs(const QVector3D &absTrans);
 
     SmartNodePoint *getConnectedSeparateNodePoint();
 
@@ -141,17 +141,17 @@ public:
         return mNode_d->t();
     }
 
-    QPointF getC0() const {
+    QVector3D getC0() const {
         Q_ASSERT(mNode_d);
         return mNode_d->c0();
     }
 
-    QPointF getP1() const {
+    QVector3D getP1() const {
         Q_ASSERT(mNode_d);
         return mNode_d->p1();
     }
 
-    QPointF getC2() const {
+    QVector3D getC2() const {
         Q_ASSERT(mNode_d);
         return mNode_d->c2();
     }

@@ -40,7 +40,7 @@ public:
     void queTasks();
     stdsptr<BoxRenderData> createRenderData() { return nullptr; }
     bool shouldScheduleUpdate() { return false; }
-    bool relPointInsidePath(const QPointF &relPos) const;
+    bool relPointInsidePath(const QVector3D &relPos) const;
 
     void drawNullObject(SkCanvas* const canvas, const CanvasMode mode,
                         const float invScale, const bool ctrlPressed);

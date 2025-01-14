@@ -93,13 +93,13 @@ public:
     void setPathEffectsVisible(const bool bT);
 
     eBoxOrSound* handleDropEvent(QDropEvent * const event,
-                                 const QPointF &relDropPos = QPointF(0, 0),
+                                 const QVector3D &relDropPos = QVector3D(0, 0, 0),
                                  const int frame = 0);
     eBoxOrSound* importFile(const QString &path);
     eBoxOrSound* importFile(const QString &path,
                             ContainerBox * const target,
                             const int insertId = 0,
-                            const QPointF &relDropPos = QPointF(0, 0),
+                            const QVector3D &relDropPos = QVector3D(0, 0, 0),
                             const int frame = 0);
     eBoxOrSound *linkFile(const QString &path);
 //

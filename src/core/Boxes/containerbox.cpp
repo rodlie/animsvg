@@ -661,9 +661,9 @@ FrameRange ContainerBox::getMotionBlurIdenticalRange(
 }
 
 
-bool ContainerBox::relPointInsidePath(const QPointF &relPos) const {
+bool ContainerBox::relPointInsidePath(const QVector3D &relPos) const {
     if(getRelBoundingRect().contains(relPos)) {
-        const QPointF absPos = mapRelPosToAbs(relPos);
+        const QVector3D absPos = mapRelPosToAbs(relPos);
         const auto minMax = getContainedMinMax();
         for(int i = minMax.fMin; i <= minMax.fMax; i++) {
             auto& box = mContainedBoxes.at(i);
@@ -718,7 +718,7 @@ void ContainerBox::setDescendantCurrentGroup(const bool bT) {
     parent->setDescendantCurrentGroup(bT);
 }
 
-BoundingBox *ContainerBox::getBoxAtFromAllDescendents(const QPointF &absPos) {
+BoundingBox *ContainerBox::getBoxAtFromAllDescendents(const QVector3D &absPos) {
     if(isLink()) return nullptr;
     BoundingBox* boxAtPos = nullptr;
     const auto minMax = getContainedMinMax();
@@ -1108,7 +1108,7 @@ bool ContainerBox::diffsAffectingContainedBoxes(
     return diffThis || diffInherited;
 }
 
-BoundingBox *ContainerBox::getBoxAt(const QPointF &absPos) {
+BoundingBox *ContainerBox::getBoxAt(const QVector3D &absPos) {
     BoundingBox* boxAtPos = nullptr;
     const auto minMax = getContainedMinMax();
     for(int i = minMax.fMin; i <= minMax.fMax; i++) {

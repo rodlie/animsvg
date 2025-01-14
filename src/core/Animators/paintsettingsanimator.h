@@ -133,8 +133,8 @@ struct CORE_EXPORT UpdatePaintSettings {
     void applyPainterSettingsSk(SkPaint& paint, const float opactiy = 1.f);
 
     void updateGradient(const QGradientStops &stops,
-                        const QPointF &start,
-                        const QPointF &finalStop,
+                        const QVector3D &start,
+                        const QVector3D &finalStop,
                         const GradientType gradientType,
                         const QMatrix4x4 &transform);
     PaintType fPaintType;

@@ -43,9 +43,9 @@ void SmartPath::actionRemoveNode(const int nodeId, const bool approx) {
     mNodesList.removeNode(nodeId, approx);
 }
 
-int SmartPath::actionAddFirstNode(const QPointF &c0,
-                                  const QPointF &p1,
-                                  const QPointF &c2) {
+int SmartPath::actionAddFirstNode(const QVector3D &c0,
+                                  const QVector3D &p1,
+                                  const QVector3D &c2) {
     const int insertId = mNodesList.appendNode(Node(c0, p1, c2));
     return insertId;
 }
@@ -133,7 +133,7 @@ int SmartPath::actionInsertNodeBetween(const int prevId,
 
 int SmartPath::actionInsertNodeBetween(
         const int prevId, const int nextId,
-        const QPointF &c0, const QPointF &p1, const QPointF &c2) {
+        const QVector3D &c0, const QVector3D &p1, const QVector3D &c2) {
     return insertNodeBetween(prevId, nextId, Node(c0, p1, c2));
 }
 
@@ -203,8 +203,8 @@ void SmartPath::actionSetDissolvedNodeT(const int nodeId, const qreal t) {
 }
 
 void SmartPath::actionSetNormalNodeValues(
-        const int nodeId, const QPointF &c0,
-        const QPointF &p1, const QPointF &c2) {
+        const int nodeId, const QVector3D &c0,
+        const QVector3D &p1, const QVector3D &c2) {
     Node * const node = mNodesList.at(nodeId);
     if(!node->isNormal()) return;
     node->setC0(c0);
@@ -219,19 +219,19 @@ void SmartPath::actionSetNormalNodeValues(const int nodeId,
     node->setNormalData(data);
 }
 
-void SmartPath::actionSetNormalNodeP1(const int nodeId, const QPointF &p1) {
+void SmartPath::actionSetNormalNodeP1(const int nodeId, const QVector3D &p1) {
     Node * const node = mNodesList.at(nodeId);
     if(!node->isNormal()) return;
     node->setP1(p1);
 }
 
-void SmartPath::actionSetNormalNodeC0(const int nodeId, const QPointF &c0) {
+void SmartPath::actionSetNormalNodeC0(const int nodeId, const QVector3D &c0) {
     Node * const node = mNodesList.at(nodeId);
     if(!node->isNormal()) return;
     node->setC0(c0);
 }
 
-void SmartPath::actionSetNormalNodeC2(const int nodeId, const QPointF &c2) {
+void SmartPath::actionSetNormalNodeC2(const int nodeId, const QVector3D &c2) {
     Node * const node = mNodesList.at(nodeId);
     if(!node->isNormal()) return;
     node->setC2(c2);
@@ -426,7 +426,7 @@ void SmartPath::loadXEV(const QStringRef& xev) {
 
 bool SmartPath::isClockwise() const {
     if(mNodesList.isEmpty()) return false;
-    QPointF prevPos = mNodesList.at(0)->p1();
+    QVector3D prevPos = mNodesList.at(0)->p1();
     qreal sum = 0;
     const auto lineTo = [&prevPos, &sum](const QPointF& pos) {
         sum += (pos.x() - prevPos.x()) * (pos.y() + prevPos.y());

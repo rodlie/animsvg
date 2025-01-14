@@ -180,7 +180,7 @@ void BoundingBox::clearRasterEffects() {
     mRasterEffectsAnimators->clear();
 }
 
-QPointF BoundingBox::getRelCenterPosition() {
+QVector3D BoundingBox::getRelCenterPosition() {
     return mRelRect.center();
 }
 
@@ -275,7 +275,7 @@ void BoundingBox::drawAllCanvasControls(SkCanvas * const canvas,
         prop->prp_drawCanvasControls(canvas, mode, invScale, ctrlPressed);
 }
 
-MovablePoint *BoundingBox::getPointAtAbsPos(const QPointF &absPos,
+MovablePoint *BoundingBox::getPointAtAbsPos(const QVector3D &absPos,
                                             const CanvasMode mode,
                                             const qreal invScale) const {
     for(int i = mCanvasProps.count() - 1; i >= 0; i--) {
@@ -288,7 +288,7 @@ MovablePoint *BoundingBox::getPointAtAbsPos(const QPointF &absPos,
     return nullptr;
 }
 
-NormalSegment BoundingBox::getNormalSegment(const QPointF &absPos,
+NormalSegment BoundingBox::getNormalSegment(const QVector3D &absPos,
                                             const qreal invScale) const {
     for(int i = mCanvasProps.count() - 1; i >= 0; i--) {
         const auto& prop = mCanvasProps.at(i);
@@ -493,7 +493,7 @@ void BoundingBox::clearParent() {
     else setParentTransform(nullptr);
 }
 
-void BoundingBox::setPivotRelPos(const QPointF &relPos) {
+void BoundingBox::setPivotRelPos(const QVector3D &relPos) {
     mTransformAnimator->setPivotFixedTransform(relPos);
     requestGlobalPivotUpdateIfSelected();
 }
@@ -506,19 +506,19 @@ void BoundingBox::finishPivotTransform() {
     mTransformAnimator->finishPivotTransform();
 }
 
-void BoundingBox::setPivotAbsPos(const QPointF &absPos) {
+void BoundingBox::setPivotAbsPos(const QVector3D &absPos) {
     setPivotRelPos(mapAbsPosToRel(absPos));
 }
 
-QPointF BoundingBox::getPivotAbsPos() {
+QVector3D BoundingBox::getPivotAbsPos() {
     return mTransformAnimator->getPivotAbs();
 }
 
-QPointF BoundingBox::getPivotRelPos(const qreal relFrame) {
+QVector3D BoundingBox::getPivotRelPos(const qreal relFrame) {
     return mTransformAnimator->getPivot(relFrame);
 }
 
-QPointF BoundingBox::getPivotAbsPos(const qreal relFrame) {
+QVector3D BoundingBox::getPivotAbsPos(const qreal relFrame) {
     return mTransformAnimator->getPivotAbs(relFrame);
 }
 
@@ -644,7 +644,7 @@ bool BoundingBox::isContainedIn(const QRectF &absRect) const {
     return absRect.contains(getAbsBoundingRect());
 }
 
-BoundingBox *BoundingBox::getBoxAtFromAllDescendents(const QPointF &absPos) {
+BoundingBox *BoundingBox::getBoxAtFromAllDescendents(const QVector3D &absPos) {
     if(absPointInsidePath(absPos)) return this;
     return nullptr;
 }
@@ -705,7 +705,7 @@ void BoundingBox::applyStrokeBrushTimeAction(const SegAction &action) {
     strokeSettings->applyStrokeBrushTimeAction(action);
 }
 
-QPointF BoundingBox::mapAbsPosToRel(const QPointF &absPos) {
+QVector3D BoundingBox::mapAbsPosToRel(const QVector3D &absPos) {
     return mTransformAnimator->mapAbsPosToRel(absPos);
 }
 
@@ -782,7 +782,7 @@ void BoundingBox::scaleRelativeToSavedPivot(const qreal scaleBy) {
     scaleRelativeToSavedPivot(scaleBy, scaleBy);
 }
 
-QPointF BoundingBox::mapRelPosToAbs(const QPointF &relPos) const {
+QVector3D BoundingBox::mapRelPosToAbs(const QVector3D &relPos) const {
     return mTransformAnimator->mapRelPosToAbs(relPos);
 }
 
@@ -835,7 +835,7 @@ void BoundingBox::setupCanvasMenu(PropertyMenu * const menu)
 void BoundingBox::alignGeometry(const QRectF& geometry,
                                 const Qt::Alignment align,
                                 const QRectF& to) {
-    QPointF moveBy{0., 0.};
+    QVector3D moveBy{0., 0.};
     if(align & Qt::AlignLeft) {
         moveBy.setX(to.left() - geometry.left());
     } else if(align & Qt::AlignHCenter) {
@@ -861,23 +861,23 @@ void BoundingBox::alignGeometry(const Qt::Alignment align, const QRectF& to) {
 }
 
 void BoundingBox::alignPivot(const Qt::Alignment align, const QRectF& to) {
-    const QPointF pivot = getPivotAbsPos();
+    const QVector3D pivot = getPivotAbsPos();
     alignGeometry(QRectF(pivot, pivot), align, to);
 }
 
-void BoundingBox::moveByAbs(const QPointF &trans) {
+void BoundingBox::moveByAbs(const QVector3D &trans) {
     mTransformAnimator->moveByAbs(trans);
 }
 
-void BoundingBox::moveByRel(const QPointF &trans) {
+void BoundingBox::moveByRel(const QVector3D &trans) {
     mTransformAnimator->moveRelativeToSavedValue(trans.x(), trans.y());
 }
 
-void BoundingBox::setAbsolutePos(const QPointF &pos) {
+void BoundingBox::setAbsolutePos(const QVector3D &pos) {
     setRelativePos(mParentTransform->mapAbsPosToRel(pos));
 }
 
-void BoundingBox::setRelativePos(const QPointF &relPos) {
+void BoundingBox::setRelativePos(const QVector3D &relPos) {
     mTransformAnimator->setPosition(relPos.x(), relPos.y());
 }
 
@@ -885,7 +885,7 @@ void BoundingBox::setOpacity(const qreal opacity) {
     mTransformAnimator->setOpacity(opacity);
 }
 
-void BoundingBox::saveTransformPivotAbsPos(const QPointF &absPivot) {
+void BoundingBox::saveTransformPivotAbsPos(const QVector3D &absPivot) {
     mSavedTransformPivot = mParentTransform->mapAbsPosToRel(absPivot) -
                            mTransformAnimator->getPivot();
 }
@@ -970,11 +970,11 @@ void BoundingBox::decReasonsNotToApplyUglyTransform() {
     mNReasonsNotToApplyUglyTransform--;
 }
 
-bool BoundingBox::relPointInsidePath(const QPointF &relPos) const {
+bool BoundingBox::relPointInsidePath(const QVector3D &relPos) const {
     return mRelRect.contains(relPos.toPoint());
 }
 
-bool BoundingBox::absPointInsidePath(const QPointF &absPoint) {
+bool BoundingBox::absPointInsidePath(const QVector3D &absPoint) {
     return relPointInsidePath(mapAbsPosToRel(absPoint));
 }
 
@@ -983,7 +983,7 @@ void BoundingBox::cancelTransform() {
     //updateTotalTransform();
 }
 
-QPointF BoundingBox::getAbsolutePos() const {
+QVector3D BoundingBox::getAbsolutePos() const {
     return QPointF(mTransformAnimator->getTotalTransform().dx(),
                    mTransformAnimator->getTotalTransform().dy());
 }

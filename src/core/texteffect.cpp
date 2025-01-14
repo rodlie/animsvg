@@ -38,15 +38,15 @@ public:
                     TextEffect* const effect) :
         AnimatedPoint(anim, TYPE_PATH_POINT), mTextEffect(effect) {}
 
-    QPointF getRelativePos() const {
+    QVector3D getRelativePos() const {
         const qreal height = mTextEffect->getGuideLineHeight();
-        const QPointF pos = AnimatedPoint::getRelativePos();
+        const QVector3D pos = AnimatedPoint::getRelativePos();
         if(mTextEffect->target() == TextFragmentType::line)
             return {pos.y()*height, pos.x()};
         return {pos.x(), -pos.y()*height};
     }
 
-    void setRelativePos(const QPointF &relPos) {
+    void setRelativePos(const QVector3D &relPos) {
         const qreal height = mTextEffect->getGuideLineHeight();
         if(mTextEffect->target() == TextFragmentType::line) {
             AnimatedPoint::setRelativePos({relPos.y(), relPos.x()/height});
@@ -187,10 +187,10 @@ void TextEffect::prp_drawCanvasControls(
     SkPath path;
 
     //const qreal dimInfl = mDiminishInfluence->getEffectiveValue();
-    const QPointF p1 = mP1Anim->getEffectiveValue();
-    const QPointF p2 = mP2Anim->getEffectiveValue();
-    const QPointF p3 = mP3Anim->getEffectiveValue();
-    const QPointF p4 = mP4Anim->getEffectiveValue();
+    const QVector3D p1 = mP1Anim->getEffectiveValue();
+    const QVector3D p2 = mP2Anim->getEffectiveValue();
+    const QVector3D p3 = mP3Anim->getEffectiveValue();
+    const QVector3D p4 = mP4Anim->getEffectiveValue();
 
     const qreal minX = qMin4(p1.x(), p2.x(), p3.x(), p4.x());
     const qreal maxX = qMax4(p1.x(), p2.x(), p3.x(), p4.x());
@@ -201,7 +201,7 @@ void TextEffect::prp_drawCanvasControls(
     QList<QPointF> pList{p1, p2, p3, p4};
     std::sort(pList.begin(), pList.end(), ptXLess);
 
-    QPointF prevPt = pList.first();
+    QVector3D prevPt = pList.first();
     path.moveTo(toSkScalar(prevPt.x()), -toSkScalar(prevPt.y()*height));
     const int iMax = pList.count() - 1;
     for(int i = 1; i <= iMax; i++) {
@@ -387,7 +387,7 @@ QrealSnapshot diminishGuide(const qreal ampl,
 
     QrealSnapshot result(ampl, 1, ampl);
 
-    QPointF prevPt = pList.first();
+    QVector3D prevPt = pList.first();
     const int iMax = pList.count() - 1;
     for(int i = 0; i <= iMax; i++) {
         const auto& pt = pList.at(i);
@@ -436,10 +436,10 @@ void TextEffect::apply(TextBoxRenderData * const textData) const {
     const qreal period = mPeriod->getEffectiveValue(relFrame);
 
     const qreal dimInfl = mDiminishInfluence->getEffectiveValue(relFrame);
-    const QPointF p1 = mP1Anim->getEffectiveValue(relFrame);
-    const QPointF p2 = mP2Anim->getEffectiveValue(relFrame);
-    const QPointF p3 = mP3Anim->getEffectiveValue(relFrame);
-    const QPointF p4 = mP4Anim->getEffectiveValue(relFrame);
+    const QVector3D p1 = mP1Anim->getEffectiveValue(relFrame);
+    const QVector3D p2 = mP2Anim->getEffectiveValue(relFrame);
+    const QVector3D p3 = mP3Anim->getEffectiveValue(relFrame);
+    const QVector3D p4 = mP4Anim->getEffectiveValue(relFrame);
     const qreal dimSmoothness = mDiminishSmoothness->getEffectiveValue(relFrame);
 
     const qreal perInfl = mPeriodicInfluence->getEffectiveValue(relFrame);

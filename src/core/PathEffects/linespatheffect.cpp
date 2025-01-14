@@ -53,7 +53,7 @@ void LinesEffectCaller::apply(SkPath &path) {
     path.reset();
     path.setFillType(srcFillType);
     QTransform rotate;
-    const QPointF pivot = pathBounds.center();
+    const QVector3D pivot = pathBounds.center();
     rotate.translate(pivot.x(), pivot.y());
     rotate.rotate(mAngle);
     rotate.translate(-pivot.x(), -pivot.y());
@@ -66,7 +66,7 @@ void LinesEffectCaller::apply(SkPath &path) {
 //    const QLineF transVec = QLineF::fromPolar(distInc, degAngle - 90);
     QLineF transVec = sideLine;
     transVec.setLength(mDist);
-    const QPointF transPt(transVec.dx(), transVec.dy());
+    const QVector3D transPt(transVec.dx(), transVec.dy());
     for(int i = 0; i < nLines; i++) {
         const QLineF iLine = firstLine.translated(i*transPt);
         QList<QPointF> intersections;

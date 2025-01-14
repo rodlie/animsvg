@@ -78,9 +78,9 @@ public:
 
     void removeNode(const int nodeId, const bool approx);
     void actionRemoveNode(const int nodeId, const bool approx);
-    int actionAddNewAtStart(const QPointF &relPos);
+    int actionAddNewAtStart(const QVector3D &relPos);
     int actionAddNewAtStart(const NormalNodeData &data);
-    int actionAddNewAtEnd(const QPointF &relPos);
+    int actionAddNewAtEnd(const QVector3D &relPos);
     int actionAddNewAtEnd(const NormalNodeData &data);
     int actionInsertNodeBetween(const int node1Id, const int node2Id, const qreal t);
     int insertNodeBetween(const int node1Id, const int node2Id, const qreal t);
@@ -130,7 +130,7 @@ signals:
     void pathBlendModeChagned(Mode);
     void emptied();
 private:
-    int actionAddFirstNode(const QPointF &relPos);
+    int actionAddFirstNode(const QVector3D &relPos);
     int actionAddFirstNode(const NormalNodeData &data);
 
     void updateAllPoints();

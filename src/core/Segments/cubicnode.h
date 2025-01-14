@@ -34,9 +34,9 @@ public:
         mC1 = c1; mP = p; mC2 = c2;
     }
 private:
-    QPointF mC1;
-    QPointF mP;
-    QPointF mC2;
+    QVector3D mC1;
+    QVector3D mP;
+    QVector3D mC2;
 };
 
 #endif // CUBICNODE_H

@@ -75,7 +75,7 @@ void GraphAnimator::graph_setCtrlsModeForSelectedKeys(const CtrlsMode mode) {
 }
 
 void GraphAnimator::graph_changeSelectedKeysFrameAndValueStart(
-        const QPointF &frameVal) {
+        const QVector3D &frameVal) {
     const auto& selectedKeys = anim_getSelectedKeys();
     for(const auto& key : selectedKeys) {
         const auto graphKey = GetAsGK(key);
@@ -106,7 +106,7 @@ void GraphAnimator::graph_cancelSelectedKeysTransform() {
 }
 
 void GraphAnimator::graph_changeSelectedKeysFrameAndValue(
-        const QPointF &frameVal) {
+        const QVector3D &frameVal) {
     const auto& selectedKeys = anim_getSelectedKeys();
     for(const auto& key : selectedKeys) {
         GetAsGK(key)->changeFrameAndValueBy(frameVal);

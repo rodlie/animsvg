@@ -49,8 +49,8 @@ public:
     void readBoundingBox(eReadStream& src) override
     { BoundingBox::readBoundingBox(src); }
 
-    bool relPointInsidePath(const QPointF &relPos) const override;
-    QPointF getRelCenterPosition() override;
+    bool relPointInsidePath(const QVector3D &relPos) const override;
+    QVector3D getRelCenterPosition() override;
 
     stdsptr<BoxRenderData> createRenderData() override;
 
@@ -103,14 +103,14 @@ qreal ILBB::getOpacity(const qreal relFrame) const {
 }
 
 template <typename BoxT>
-bool ILBB::relPointInsidePath(const QPointF &relPos) const {
+bool ILBB::relPointInsidePath(const QVector3D &relPos) const {
     const auto linkTarget = getLinkTarget();
     if(!linkTarget) return false;
     return linkTarget->relPointInsidePath(relPos);
 }
 
 template <typename BoxT>
-QPointF ILBB::getRelCenterPosition() {
+QVector3D ILBB::getRelCenterPosition() {
     const auto linkTarget = getLinkTarget();
     if(!linkTarget) return QPointF();
     return linkTarget->getRelCenterPosition();

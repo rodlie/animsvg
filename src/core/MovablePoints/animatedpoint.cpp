@@ -40,11 +40,11 @@ AnimatedPoint::AnimatedPoint(QPointFAnimator * const associatedAnimator,
     setTransform(trans);
 }
 
-void AnimatedPoint::setRelativePos(const QPointF &relPos) {
+void AnimatedPoint::setRelativePos(const QVector3D &relPos) {
     setValue(relPos);
 }
 
-QPointF AnimatedPoint::getRelativePos() const {
+QVector3D AnimatedPoint::getRelativePos() const {
     return getValue();
 }
 

@@ -43,7 +43,7 @@ void GradientPoint::drawSk(SkCanvas * const canvas, const CanvasMode mode,
     Q_UNUSED(mode)
     Q_UNUSED(ctrlPressed)
 
-    const SkPoint absPos = toSkPoint(getAbsolutePos());
+    const SkPoint3 absPos = toSkPoint(getAbsolutePos());
     canvas->save();
 
     const float scaledRadius = toSkScalar(getRadius())*invScale;

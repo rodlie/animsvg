@@ -59,7 +59,7 @@ public:
     SmartVectorPath *objectToVectorPathBox();
     SmartVectorPath *strokeToVectorPathBox();
 
-    bool relPointInsidePath(const QPointF &relPos) const;
+    bool relPointInsidePath(const QVector3D &relPos) const;
 
     void drawHoveredSk(SkCanvas *canvas, const float invScale);
 

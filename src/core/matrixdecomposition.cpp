@@ -69,14 +69,14 @@ TransformValues MatrixDecomposition::decompose(const QMatrix4x4 &transform) {
 }
 
 TransformValues MatrixDecomposition::decomposePivoted(
-        const QMatrix4x4 &transform, const QPointF &pivot) {
+        const QMatrix4x4 &transform, const QVector3D &pivot) {
     const TransformValues notPivoted = decompose(transform);
     TransformValues result = setPivotKeepTransform(notPivoted, pivot);
     return result;
 }
 
 TransformValues MatrixDecomposition::setPivotKeepTransform(
-        const TransformValues &transform, const QPointF &newPivot) {
+        const TransformValues &transform, const QVector3D &newPivot) {
     QMatrix4x4 newTransform;
     newTransform.translate(newPivot.x() + transform.fMoveX,
                            newPivot.y() + transform.fMoveY);

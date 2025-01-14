@@ -62,9 +62,9 @@ public:
 
     int actionInsertNodeBetween(const int prevId,
                                 const int nextId,
-                                const QPointF &c0,
-                                const QPointF &p1,
-                                const QPointF &c2);
+                                const QVector3D &c0,
+                                const QVector3D &p1,
+                                const QVector3D &c2);
     int actionInsertNodeBetween(const int prevId, const int nextId,
                                 const NodePointValues &vals);
     int actionInsertNodeBetween(const int prevId,

@@ -37,7 +37,7 @@ struct CORE_EXPORT CubicList {
 
     PosAndTan posAndTanAtLength(const qreal atLength) const {
         if(atLength < 0) {
-            if(mSegments.isEmpty()) return { QPointF(0, 0), QPointF(0, 0) };
+            if(mSegments.isEmpty()) return { QVector3D(0, 0, 0), QVector3D(0, 0, 0) };
             return { mSegments.first().p0(), mSegments.first().tanAtT(0) };
         }
         qreal currLen = 0;
@@ -49,13 +49,13 @@ struct CORE_EXPORT CubicList {
             if(currLen > atLength)
                 return seg.posAndTanAtLength(atLength - lastLen);
         }
-        if(mSegments.isEmpty()) return { QPointF(0, 0), QPointF(0, 0) };
+        if(mSegments.isEmpty()) return { QVector3D(0, 0, 0), QVector3D(0, 0, 0) };
         return { mSegments.last().p3(), mSegments.last().tanAtT(1) };
     }
 
-    QPointF posAtLength(const qreal atLength) const {
+    QVector3D posAtLength(const qreal atLength) const {
         if(atLength < 0) {
-            if(mSegments.isEmpty()) return QPointF(0, 0);
+            if(mSegments.isEmpty()) return QVector3D(0, 0, 0);
             return mSegments.first().p0();
         }
         qreal currLen = 0;
@@ -67,13 +67,13 @@ struct CORE_EXPORT CubicList {
             if(currLen > atLength)
                 return seg.posAtLength(atLength - lastLen);
         }
-        if(mSegments.isEmpty()) return QPointF(0, 0);
+        if(mSegments.isEmpty()) return QVector3D(0, 0, 0);
         return mSegments.last().p3();
     }
 
-    QPointF tanAtLength(const qreal atLength) const {
+    QVector3D tanAtLength(const qreal atLength) const {
         if(atLength < 0) {
-            if(mSegments.isEmpty()) return QPointF(0, 0);
+            if(mSegments.isEmpty()) return QVector3D(0, 0, 0);
             return mSegments.first().tanAtT(0);
         }
         qreal currLen = 0;
@@ -85,7 +85,7 @@ struct CORE_EXPORT CubicList {
             if(currLen > atLength)
                 return seg.tanAtLength(atLength - lastLen);
         }
-        if(mSegments.isEmpty()) return QPointF(0, 0);
+        if(mSegments.isEmpty()) return QVector3D(0, 0, 0);
         return mSegments.last().tanAtT(1);
     }
 
@@ -101,8 +101,8 @@ struct CORE_EXPORT CubicList {
         if(isEmpty()) return SkPath();
         SkPath path;
         bool first = true;
-        QPointF lastPos;
-        QPointF firstPos;
+        QVector3D lastPos;
+        QVector3D firstPos;
         for(const auto& cubic : mSegments) {
             if(first || pointToLen(cubic.p0() - lastPos) > 0.1) {
                 if(!first && isZero2Dec(pointToLen(firstPos - lastPos))) {
@@ -128,9 +128,9 @@ struct CORE_EXPORT CubicList {
         return mClosed;
     }
 
-    qreal minDistanceTo(const QPointF &p,
+    qreal minDistanceTo(const QVector3D &p,
                         qreal * const pBestT = nullptr,
-                        QPointF * const pBestPos = nullptr) const;
+                        QVector3D * const pBestPos = nullptr) const;
 
     void opSmoothOut(const qreal smoothness);
     void subdivide(const int sub = 1);

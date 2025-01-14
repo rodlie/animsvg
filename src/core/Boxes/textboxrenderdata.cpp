@@ -95,7 +95,7 @@ void LetterRenderData::afterQued() {
 }
 
 void LetterRenderData::initialize(const qreal relFrame,
-                                  const QPointF &pos,
+                                  const QVector3D &pos,
                                   const QString &letter,
                                   const SkFont &font,
                                   TextBox * const parent,
@@ -133,7 +133,7 @@ WordRenderData::WordRenderData(TextBox * const parent) :
 }
 
 void WordRenderData::initialize(const qreal relFrame,
-                                const QPointF &pos,
+                                const QVector3D &pos,
                                 const QString &word,
                                 const SkFont &font,
                                 const qreal letterSpacing,
@@ -184,7 +184,7 @@ LineRenderData::LineRenderData(TextBox * const parent) :
 }
 
 void LineRenderData::initialize(const qreal relFrame,
-                                const QPointF &pos,
+                                const QVector3D &pos,
                                 const QString &line,
                                 const SkFont &font,
                                 const qreal letterSpacing,

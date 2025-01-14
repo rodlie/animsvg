@@ -131,7 +131,7 @@ qreal GLSL_smoothstep(const qreal edge0,
     return t * t * (3.0 - 2.0 * t);
 }
 
-QPointF GLSL_smoothstep(const QPointF& edge0,
+QVector3D GLSL_smoothstep(const QPointF& edge0,
                         const QPointF& edge1,
                         const QPointF& x) {
     const qreal rx = GLSL_smoothstep(edge0.x(), edge1.x(), x.x());
@@ -139,7 +139,7 @@ QPointF GLSL_smoothstep(const QPointF& edge0,
     return {rx, ry};
 }
 
-QPointF GLSL_floor(const QPointF& p) {
+QVector3D GLSL_floor(const QPointF& p) {
     return {floor(p.x()), floor(p.y())};
 }
 
@@ -151,7 +151,7 @@ qreal GLSL_fract(const qreal x) {
     return x - floor(x);
 }
 
-QPointF GLSL_fract(const QPointF& p) {
+QVector3D GLSL_fract(const QPointF& p) {
     return p - GLSL_floor(p);
 }
 
@@ -161,8 +161,8 @@ qreal NoiseFadeEffectCaller::r(const QPointF& p) const {
 }
 
 qreal NoiseFadeEffectCaller::n(const QPointF& p) const {
-    const QPointF fn = GLSL_floor(p);
-    const QPointF sn = GLSL_smoothstep(QPointF{0. ,0.},
+    const QVector3D fn = GLSL_floor(p);
+    const QVector3D sn = GLSL_smoothstep(QPointF{0. ,0.},
                                        QPointF{1., 1.},
                                        GLSL_fract(p));
 

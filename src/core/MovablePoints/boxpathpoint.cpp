@@ -36,7 +36,7 @@ BoxPathPoint::BoxPathPoint(QPointFAnimator * const associatedAnimator,
     setSelectionEnabled(false);
 }
 
-void BoxPathPoint::setRelativePos(const QPointF &relPos) {
+void BoxPathPoint::setRelativePos(const QVector3D &relPos) {
     const auto bTrans = static_cast<BoxTransformAnimator*>(getTransform());
     bTrans->setPivotFixedTransform(relPos);
 }
@@ -61,7 +61,7 @@ void BoxPathPoint::drawSk(SkCanvas * const canvas,
     Q_UNUSED(mode)
     Q_UNUSED(keyOnCurrent)
     Q_UNUSED(ctrlPressed)
-    const SkPoint absPos = toSkPoint(getAbsolutePos());
+    const SkPoint3 absPos = toSkPoint(getAbsolutePos());
     drawOnAbsPosSk(canvas,
                    absPos,
                    invScale,

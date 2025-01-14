@@ -38,8 +38,8 @@ protected:
                       const MovablePointType &type,
                       const bool blockX);
 public:
-    QPointF getRelativePos() const;
-    void setRelativePos(const QPointF &relPos);
+    QVector3D getRelativePos() const;
+    void setRelativePos(const QVector3D &relPos);
 private:
     const bool mXBlocked = false;
     const stdptr<AnimatedPoint> mCenterPoint;
@@ -62,7 +62,7 @@ public:
     void setVerticalRadius(const qreal verticalRadius);
     void setHorizontalRadius(const qreal horizontalRadius);
     void setRadius(const qreal radius);
-    void moveRadiusesByAbs(const QPointF &absTrans);
+    void moveRadiusesByAbs(const QVector3D &absTrans);
 
     qreal getCurrentXRadius();
     qreal getCurrentYRadius();
