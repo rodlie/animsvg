@@ -27,7 +27,7 @@
 #define SKQTCONVERSIONS_H
 
 #include <QRectF>
-#include <QMatrix>
+#include <QMatrix4x4>
 #include <QColor>
 #include <QFont>
 

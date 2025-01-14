@@ -30,7 +30,7 @@
 #include <QWeakPointer>
 #include "Tasks/updatable.h"
 #include "Animators/animator.h"
-#include <QMatrix>
+#include <QMatrix4x4>
 class BoundingBox;
 class ShaderProgramCallerBase;
 #include "smartPointers/ememory.h"

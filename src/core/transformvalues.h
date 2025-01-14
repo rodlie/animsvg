@@ -26,7 +26,7 @@
 #ifndef TRANSFORMVALUES_H
 #define TRANSFORMVALUES_H
 
-#include <QMatrix>
+#include <QMatrix4x4>
 
 #include "core_global.h"
 
