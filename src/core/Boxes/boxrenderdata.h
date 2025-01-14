@@ -68,7 +68,7 @@ public:
     void drawOnParentLayer(SkCanvas * const canvas);
 
     virtual QVector3D getCenterPosition() {
-        return fRelBoundingRect.center(); // FIXME: should use 3d variant of QRectF
+        return fRelBoundingRect.center();
     }
 
     void delayDataSet() {
