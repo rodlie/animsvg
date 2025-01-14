@@ -228,7 +228,7 @@ void PaintSettingsAnimator::setGradientType(const GradientType type) {
     prp_afterWholeInfluenceRangeChanged();
 }
 
-QMatrix PaintSettingsAnimator::getGradientTransform(const qreal relFrame) const {
+QMatrix4x4 PaintSettingsAnimator::getGradientTransform(const qreal relFrame) const {
     return mGradientTransform->getRelativeTransformAtFrame(relFrame);
 }
 
@@ -269,7 +269,7 @@ void PaintSettingsAnimator::duplicatePaintSettingsNotAnim(
     }
 }
 
-void PaintSettingsAnimator::applyTransform(const QMatrix &transform) {
+void PaintSettingsAnimator::applyTransform(const QMatrix4x4 &transform) {
     mGradientPoints->applyTransform(transform);
 }
 
@@ -478,7 +478,7 @@ void UpdatePaintSettings::updateGradient(const QGradientStops &stops,
     QVector<SkColor> gradColors(nStops);
     QVector<float> gradPos(nStops);
 
-    const QMatrix invertedTransform = transform.inverted();
+    const QMatrix4x4 invertedTransform = transform.inverted();
     const QPointF mappedStart = invertedTransform.map(start);
     const QPointF mappedEnd = invertedTransform.map(finalStop);
 

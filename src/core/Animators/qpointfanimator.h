@@ -94,7 +94,7 @@ public:
     qreal getEffectiveYValue();
     qreal getEffectiveYValue(const qreal relFrame);
 
-    void applyTransform(const QMatrix &transform);
+    void applyTransform(const QMatrix4x4 &transform);
 
     void saveQPointFSVG(SvgExporter& exp,
                         QDomElement& parent,

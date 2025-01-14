@@ -140,7 +140,7 @@ SimpleBrushWrapper* XevExportHelpers::brushFromElement(const QDomElement& ele) {
     return BrushCollectionData::sGetBrush(coll, name);
 }
 
-QMatrix XmlExportHelpers::stringToMatrix(const QString& str) {
+QMatrix4x4 XmlExportHelpers::stringToMatrix(const QString& str) {
     const auto vals = str.split(' ', Qt::SkipEmptyParts);
     if(vals.count() != 6) RuntimeThrow("Invalid matrix value '" + str + "'");
     const qreal m11 = stringToDouble(vals[0]);

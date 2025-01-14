@@ -186,10 +186,10 @@ public:
 
     virtual void updateAllBoxes(const UpdateReason reason);
 
-    virtual QMatrix getRelativeTransformAtCurrentFrame() const;
-    virtual QMatrix getRelativeTransformAtFrame(const qreal relFrame) const;
-    virtual QMatrix getInheritedTransformAtFrame(const qreal relFrame) const;
-    virtual QMatrix getTotalTransformAtFrame(const qreal relFrame) const;
+    virtual QMatrix4x4 getRelativeTransformAtCurrentFrame() const;
+    virtual QMatrix4x4 getRelativeTransformAtFrame(const qreal relFrame) const;
+    virtual QMatrix4x4 getInheritedTransformAtFrame(const qreal relFrame) const;
+    virtual QMatrix4x4 getTotalTransformAtFrame(const qreal relFrame) const;
     virtual QPointF mapAbsPosToRel(const QPointF &absPos);
 
     virtual void applyPaintSetting(const PaintSettingsApplier &setting);
@@ -299,7 +299,7 @@ public:
     void alignGeometry(const Qt::Alignment align, const QRectF& to);
     void alignPivot(const Qt::Alignment align, const QRectF& to);
 
-    QMatrix getTotalTransform() const;
+    QMatrix4x4 getTotalTransform() const;
 
     MovablePoint *getPointAtAbsPos(const QPointF &absPos,
                                    const CanvasMode mode,

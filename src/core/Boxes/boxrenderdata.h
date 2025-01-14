@@ -87,12 +87,12 @@ public:
 
     uint fBoxStateId = 0;
 
-    QMatrix fResolutionScale;
-    QMatrix fScaledTransform;
-    QMatrix fInheritedTransform;
-    QMatrix fRelTransform;
-    QMatrix fTotalTransform;
-    QMatrix fRenderTransform;
+    QMatrix4x4 fResolutionScale;
+    QMatrix4x4 fScaledTransform;
+    QMatrix4x4 fInheritedTransform;
+    QMatrix4x4 fRelTransform;
+    QMatrix4x4 fTotalTransform;
+    QMatrix4x4 fRenderTransform;
 
     bool fRelBoundingRectSet = false;
     QRectF fRelBoundingRect;

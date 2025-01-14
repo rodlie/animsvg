@@ -73,7 +73,7 @@ namespace XmlExportHelpers {
     }
 
     CORE_EXPORT
-    QMatrix stringToMatrix(const QString& str);
+    QMatrix4x4 stringToMatrix(const QString& str);
     CORE_EXPORT
     QString matrixToString(const QMatrix& m);
 };

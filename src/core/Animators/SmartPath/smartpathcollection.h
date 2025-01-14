@@ -57,7 +57,7 @@ public:
 
     SkPath getPathAtRelFrame(const qreal relFrame) const;
 
-    void applyTransform(const QMatrix &transform) const;
+    void applyTransform(const QMatrix4x4 &transform) const;
 
     void loadSkPath(const SkPath& path);
 

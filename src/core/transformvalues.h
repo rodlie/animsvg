@@ -41,7 +41,7 @@ struct CORE_EXPORT TransformValues {
     qreal fShearX = 0;
     qreal fShearY = 0;
 
-    QMatrix calculate() const;
+    QMatrix4x4 calculate() const;
 };
 
 #endif // TRANSFORMVALUES_H

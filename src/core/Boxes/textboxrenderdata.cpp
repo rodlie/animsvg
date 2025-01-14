@@ -121,7 +121,7 @@ void LetterRenderData::initialize(const qreal relFrame,
 
 }
 
-void LetterRenderData::applyTransform(const QMatrix &transform) {
+void LetterRenderData::applyTransform(const QMatrix4x4 &transform) {
     fRelTransform = transform*fRelTransform;
     fTotalTransform = fRelTransform*fInheritedTransform;
     fLetterPos = transform.map(fLetterPos);
@@ -161,7 +161,7 @@ void WordRenderData::initialize(const qreal relFrame,
     }
 }
 
-void WordRenderData::applyTransform(const QMatrix &transform) {
+void WordRenderData::applyTransform(const QMatrix4x4 &transform) {
     fRelTransform = transform*fRelTransform;
     fTotalTransform = fRelTransform*fInheritedTransform;
     fWordPos = transform.map(fWordPos);
@@ -227,7 +227,7 @@ void LineRenderData::initialize(const qreal relFrame,
     if(i0 < line.length()) wordFinished(i0, line.length() - 1);
 }
 
-void LineRenderData::applyTransform(const QMatrix &transform) {
+void LineRenderData::applyTransform(const QMatrix4x4 &transform) {
     fRelTransform = transform*fRelTransform;
     fTotalTransform = fRelTransform*fInheritedTransform;
     fLinePos = transform.map(fLinePos);

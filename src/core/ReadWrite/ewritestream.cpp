@@ -118,7 +118,7 @@ eWriteStream &eWriteStream::operator<<(const QRectF &val) {
     return *this;
 }
 
-eWriteStream &eWriteStream::operator<<(const QMatrix &val) {
+eWriteStream &eWriteStream::operator<<(const QMatrix4x4 &val) {
     write(&val, sizeof(QMatrix));
     return *this;
 }

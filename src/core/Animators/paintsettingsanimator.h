@@ -76,7 +76,7 @@ public:
     GradientType getGradientType() { return mGradientType; }
     void setGradientType(const GradientType type);
 
-    QMatrix getGradientTransform(const qreal relFrame) const;
+    QMatrix4x4 getGradientTransform(const qreal relFrame) const;
     void setGradientTransform(const TransformValues& transform);
 
     GradientPoints* getGradientPoints() const
@@ -136,7 +136,7 @@ struct CORE_EXPORT UpdatePaintSettings {
                         const QPointF &start,
                         const QPointF &finalStop,
                         const GradientType gradientType,
-                        const QMatrix &transform);
+                        const QMatrix4x4 &transform);
     PaintType fPaintType;
     QColor fPaintColor;
     sk_sp<SkShader> fGradient;

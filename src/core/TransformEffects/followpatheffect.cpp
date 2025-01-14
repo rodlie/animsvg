@@ -47,7 +47,7 @@ FollowPathEffect::FollowPathEffect() :
 
 void calculateFollowRotPosChange(
         const SkPath relPath,
-        const QMatrix transform,
+        const QMatrix4x4 transform,
         const bool lengthBased,
         const bool rotate,
         const qreal infl,

@@ -58,7 +58,7 @@ SkRect toSkRect(const QRectF &rect) {
 // m12 - skewY
 // m21 - skewX
 // m22 - scaleY
-QMatrix toQMatrix(const SkMatrix &matrix) {
+QMatrix4x4 toQMatrix(const SkMatrix &matrix) {
     return QMatrix(toQreal(matrix.getScaleX()),
                    toQreal(matrix.getSkewY()),
                    toQreal(matrix.getSkewX()),
@@ -67,7 +67,7 @@ QMatrix toQMatrix(const SkMatrix &matrix) {
                    toQreal(matrix.getTranslateY()));
 }
 
-SkMatrix toSkMatrix(const QMatrix &matrix) {
+SkMatrix toSkMatrix(const QMatrix4x4 &matrix) {
     SkMatrix skMatrix;
     skMatrix.reset();
     skMatrix.set(SkMatrix::kMScaleX, toSkScalar(matrix.m11()));

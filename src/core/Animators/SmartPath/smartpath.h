@@ -144,7 +144,7 @@ public:
 
     NodeList getAndClearLastDetached();
 
-    void applyTransform(const QMatrix &transform)
+    void applyTransform(const QMatrix4x4 &transform)
     { mNodesList.applyTransform(transform); }
 
     bool read(eReadStream& src)

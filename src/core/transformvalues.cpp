@@ -25,8 +25,8 @@
 
 #include "transformvalues.h"
 
-QMatrix TransformValues::calculate() const {
-    QMatrix result;
+QMatrix4x4 TransformValues::calculate() const {
+    QMatrix4x4 result;
     result.translate(fPivotX + fMoveX, fPivotY + fMoveY);
     result.rotate(fRotation);
     result.scale(fScaleX, fScaleY);

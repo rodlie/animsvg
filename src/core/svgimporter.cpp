@@ -84,7 +84,7 @@ struct SvgGradient {
     qreal fY1;
     qreal fX2;
     qreal fY2;
-    QMatrix fTrans;
+    QMatrix4x4 fTrans;
     GradientType fType;
 };
 
@@ -115,7 +115,7 @@ protected:
     GradientType mGradientType = GradientType::LINEAR;
     QPointF mGradientP1;
     QPointF mGradientP2;
-    QMatrix mGradientTransform;
+    QMatrix4x4 mGradientTransform;
 };
 
 class StrokeSvgAttributes : public FillSvgAttributes {
@@ -150,7 +150,7 @@ public:
     void setParent(const BoxSvgAttributes &parent);
 
     SkPathFillType getFillRule() const;
-    const QMatrix &getRelTransform() const;
+    const QMatrix4x4 &getRelTransform() const;
     const FillSvgAttributes &getFillAttributes() const;
     const StrokeSvgAttributes &getStrokeAttributes() const;
     const TextSvgAttributes &getTextAttributes() const;
@@ -169,7 +169,7 @@ protected:
 
     qreal mOpacity = 100;
 
-    QMatrix mRelTransform;
+    QMatrix4x4 mRelTransform;
 
     QString mId;
     QString mLabel;
@@ -668,8 +668,8 @@ bool extractWholeMatrix(const QString& str, QMatrix& target) {
     return false;
 }
 
-QMatrix getMatrixFromString(const QString &str) {
-    QMatrix matrix;
+QMatrix4x4 getMatrixFromString(const QString &str) {
+    QMatrix4x4 matrix;
     if(str.isEmpty()) return matrix;
     const bool found = str.isEmpty() ||
                        extractWholeMatrix(str, matrix) ||
@@ -804,7 +804,7 @@ void loadElement(const QDomElement &element, ContainerBox *parentGroup,
         }
 
         const QString gradTrans = element.attribute("gradientTransform");
-        const QMatrix trans = getMatrixFromString(gradTrans);
+        const QMatrix4x4 trans = getMatrixFromString(gradTrans);
         gGradients.insert(id, {gradient,
                                x1, y1,
                                x2, y2,
@@ -944,7 +944,7 @@ SkPathFillType BoxSvgAttributes::getFillRule() const {
     return mFillRule;
 }
 
-const QMatrix &BoxSvgAttributes::getRelTransform() const {
+const QMatrix4x4 &BoxSvgAttributes::getRelTransform() const {
     return mRelTransform;
 }
 

@@ -178,13 +178,13 @@ BasicTransformAnimator *Property::getTransformAnimator() const {
     return nullptr;
 }
 
-QMatrix Property::getTransform() const {
+QMatrix4x4 Property::getTransform() const {
     const auto trans = getTransformAnimator();
     if(trans) return trans->getTotalTransform();
     return QMatrix();
 
 }
-QMatrix Property::getTransform(const qreal relFrame) const {
+QMatrix4x4 Property::getTransform(const qreal relFrame) const {
     const auto trans = getTransformAnimator();
     if(trans) return trans->getTotalTransformAtFrame(relFrame);
     return QMatrix();

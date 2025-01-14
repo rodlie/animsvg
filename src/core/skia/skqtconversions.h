@@ -72,10 +72,10 @@ extern SkRect toSkRect(const QRectF &rect);
 // m21 - skewX
 // m22 - scaleY
 CORE_EXPORT
-extern QMatrix toQMatrix(const SkMatrix &matrix);
+extern QMatrix4x4 toQMatrix(const SkMatrix &matrix);
 
 CORE_EXPORT
-extern SkMatrix toSkMatrix(const QMatrix &matrix);
+extern SkMatrix toSkMatrix(const QMatrix4x4 &matrix);
 
 extern inline QPointF toQPointF(const SkPoint &point) {
     return QPointF(toQreal(point.x()),

@@ -223,7 +223,7 @@ qsptr<SmartPathAnimator> SmartPathAnimator::createFromDetached() {
     return newAnim;
 }
 
-void SmartPathAnimator::applyTransform(const QMatrix &transform) {
+void SmartPathAnimator::applyTransform(const QMatrix4x4 &transform) {
     const auto& keys = anim_getKeys();
     for(const auto &key : keys) {
         const auto spKey = static_cast<SmartPathKey*>(key);

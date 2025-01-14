@@ -289,12 +289,12 @@ public:
 
     void updateTotalTransform() {}
 
-    QMatrix getTotalTransform() const
+    QMatrix4x4 getTotalTransform() const
     {
         return QMatrix();
     }
 
-    QMatrix getRelativeTransformAtCurrentFrame() const
+    QMatrix4x4 getRelativeTransformAtCurrentFrame() const
     {
         return QMatrix();
     }
@@ -311,7 +311,7 @@ public:
 
     void renderSk(SkCanvas* const canvas,
                   const QRect &drawRect,
-                  const QMatrix &viewTrans,
+                  const QMatrix4x4 &viewTrans,
                   const bool mouseGrabbing);
 
     void setCanvasSize(const int width,
@@ -391,7 +391,7 @@ public:
     stdsptr<BoxRenderData> createRenderData();
 
     void setupRenderData(const qreal relFrame,
-                         const QMatrix &parentM,
+                         const QMatrix4x4 &parentM,
                          BoxRenderData* const data,
                          Canvas* const scene)
     {

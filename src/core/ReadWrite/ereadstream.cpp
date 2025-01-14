@@ -131,7 +131,7 @@ eReadStream &eReadStream::operator>>(QRectF &val) {
     return *this;
 }
 
-eReadStream &eReadStream::operator>>(QMatrix &val) {
+eReadStream &eReadStream::operator>>(QMatrix4x4 &val) {
     read(&val, sizeof(QMatrix));
     return *this;
 }

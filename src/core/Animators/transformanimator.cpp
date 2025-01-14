@@ -178,10 +178,10 @@ SkPoint BasicTransformAnimator::mapFromParent(const SkPoint &parentRelPos) const
     return toSkPoint(mapFromParent(toQPointF(parentRelPos)));
 }
 
-QMatrix BasicTransformAnimator::getRelativeTransformAtFrame(
+QMatrix4x4 BasicTransformAnimator::getRelativeTransformAtFrame(
         const qreal relFrame, QMatrix* postTransform) const {
     Q_UNUSED(postTransform)
-    QMatrix matrix;
+    QMatrix4x4 matrix;
     matrix.translate(mPosAnimator->getEffectiveXValue(relFrame),
                      mPosAnimator->getEffectiveYValue(relFrame));
 
@@ -205,7 +205,7 @@ void BasicTransformAnimator::setRelativePos(const QPointF &relPos) {
 
 void BasicTransformAnimator::rotateRelativeToSavedValue(const qreal rotRel,
                                                         const QPointF &pivot) {
-    QMatrix matrix;
+    QMatrix4x4 matrix;
     matrix.translate(pivot.x(), pivot.y());
     matrix.rotate(rotRel);
     matrix.translate(-pivot.x() + mPosAnimator->getSavedXValue(),
@@ -250,15 +250,15 @@ bool BasicTransformAnimator::rotationFlipped() const {
     return mInheritedTransform.m11() * mInheritedTransform.m22() < 0.;
 }
 
-const QMatrix &BasicTransformAnimator::getInheritedTransform() const {
+const QMatrix4x4 &BasicTransformAnimator::getInheritedTransform() const {
     return mInheritedTransform;
 }
 
-const QMatrix &BasicTransformAnimator::getTotalTransform() const {
+const QMatrix4x4 &BasicTransformAnimator::getTotalTransform() const {
     return mTotalTransform;
 }
 
-const QMatrix &BasicTransformAnimator::getRelativeTransform() const {
+const QMatrix4x4 &BasicTransformAnimator::getRelativeTransform() const {
     return mRelTransform;
 }
 
@@ -275,7 +275,7 @@ void BasicTransformAnimator::setParentTransformAnimator(
 void BasicTransformAnimator::scaleRelativeToSavedValue(const qreal sx,
                                                        const qreal sy,
                                                       const QPointF &pivot) {
-    QMatrix matrix;
+    QMatrix4x4 matrix;
     matrix.translate(pivot.x(), pivot.y());
     matrix.rotate(mRotAnimator->getEffectiveValue());
     matrix.scale(sx, sy);
@@ -299,7 +299,7 @@ QrealAnimator *BasicTransformAnimator::getRotAnimator() const {
     return mRotAnimator.get();
 }
 
-QMatrix BasicTransformAnimator::getInheritedTransformAtFrame(
+QMatrix4x4 BasicTransformAnimator::getInheritedTransformAtFrame(
         const qreal relFrame) const {
     if(mParentTransform) {
         const qreal absFrame = prp_relFrameToAbsFrameF(relFrame);
@@ -311,7 +311,7 @@ QMatrix BasicTransformAnimator::getInheritedTransformAtFrame(
     }
 }
 
-QMatrix BasicTransformAnimator::getTotalTransformAtFrame(
+QMatrix4x4 BasicTransformAnimator::getTotalTransformAtFrame(
         const qreal relFrame) const {
     if(mParentTransform) {
         const qreal absFrame = prp_relFrameToAbsFrameF(relFrame);
@@ -494,12 +494,12 @@ void AdvancedTransformAnimator::startTransformSkipOpacity() {
     startShearTransform();
 }
 
-QMatrix valuesToMatrix(const qreal pivotX, const qreal pivotY,
+QMatrix4x4 valuesToMatrix(const qreal pivotX, const qreal pivotY,
                        const qreal posX, const qreal posY,
                        const qreal rot,
                        const qreal scaleX, const qreal scaleY,
                        const qreal shearX, const qreal shearY) {
-    QMatrix matrix;
+    QMatrix4x4 matrix;
     matrix.translate(pivotX + posX, pivotY + posY);
     matrix.rotate(rot);
     matrix.scale(scaleX, scaleY);
@@ -536,7 +536,7 @@ void AdvancedTransformAnimator::setValues(const TransformValues &values) {
     setShear(values.fShearX, values.fShearY);
 }
 
-QMatrix AdvancedTransformAnimator::getRotScaleShearTransform() {
+QMatrix4x4 AdvancedTransformAnimator::getRotScaleShearTransform() {
     qreal pivotX = mPivotAnimator->getEffectiveXValue();
     qreal pivotY = mPivotAnimator->getEffectiveYValue();
 
@@ -552,7 +552,7 @@ QMatrix AdvancedTransformAnimator::getRotScaleShearTransform() {
     qreal shearY = mShearAnimator->getEffectiveYValue();
 
 
-    QMatrix matrix = valuesToMatrix(pivotX, pivotY,
+    QMatrix4x4 matrix = valuesToMatrix(pivotX, pivotY,
                                     posX, posY,
                                     rot,
                                     scaleX, scaleY,
@@ -561,7 +561,7 @@ QMatrix AdvancedTransformAnimator::getRotScaleShearTransform() {
     return matrix;
 }
 
-QMatrix AdvancedTransformAnimator::getRelativeTransformAtFrame(
+QMatrix4x4 AdvancedTransformAnimator::getRelativeTransformAtFrame(
         const qreal relFrame, QMatrix* postTransform) const {
     qreal pivotX = mPivotAnimator->getEffectiveXValue(relFrame);
     qreal pivotY = mPivotAnimator->getEffectiveYValue(relFrame);
@@ -577,7 +577,7 @@ QMatrix AdvancedTransformAnimator::getRelativeTransformAtFrame(
     qreal shearX = mShearAnimator->getEffectiveXValue(relFrame);
     qreal shearY = mShearAnimator->getEffectiveYValue(relFrame);
 
-    QMatrix postTransformT;
+    QMatrix4x4 postTransformT;
 
     applyTransformEffects(relFrame,
                           pivotX, pivotY,

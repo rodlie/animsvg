@@ -47,7 +47,7 @@ public:
     void setColors(const QColor &startColor, const QColor &endColor);
 
     void setPositions(const QPointF &startPos, const QPointF &endPos);
-    void applyTransform(const QMatrix &transform);;
+    void applyTransform(const QMatrix4x4 &transform);;
 
     QPointF getStartPointAtRelFrame(const int relFrame);
     QPointF getEndPointAtRelFrame(const int relFrame);

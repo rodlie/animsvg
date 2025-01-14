@@ -111,7 +111,7 @@ protected:
         target->setGradientTransform(dec);
     }
 private:
-    const QMatrix mTransform;
+    const QMatrix4x4 mTransform;
 };
 
 class CORE_EXPORT GradientTypePaintSetting : public PaintSetting {

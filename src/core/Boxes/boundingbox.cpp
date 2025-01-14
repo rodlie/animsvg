@@ -737,11 +737,11 @@ void BoundingBox::drawBoundingRect(SkCanvas * const canvas,
                                     true, eSizesUI::widget*0.25f);
 }
 
-QMatrix BoundingBox::getTotalTransform() const {
+QMatrix4x4 BoundingBox::getTotalTransform() const {
     return mTransformAnimator->getTotalTransform();
 }
 
-QMatrix BoundingBox::getRelativeTransformAtCurrentFrame() const {
+QMatrix4x4 BoundingBox::getRelativeTransformAtCurrentFrame() const {
     return getRelativeTransformAtFrame(anim_getCurrentRelFrame());
 }
 
@@ -1064,19 +1064,19 @@ void BoundingBox::addTransformEffect(const qsptr<TransformEffect> &transformEffe
 //    }
 //}
 
-QMatrix BoundingBox::getRelativeTransformAtFrame(const qreal relFrame) const {
+QMatrix4x4 BoundingBox::getRelativeTransformAtFrame(const qreal relFrame) const {
     if(isZero6Dec(relFrame - anim_getCurrentRelFrame()))
         return mTransformAnimator->getRelativeTransform();
     return mTransformAnimator->getRelativeTransformAtFrame(relFrame);
 }
 
-QMatrix BoundingBox::getInheritedTransformAtFrame(const qreal relFrame) const {
+QMatrix4x4 BoundingBox::getInheritedTransformAtFrame(const qreal relFrame) const {
     if(isZero6Dec(relFrame - anim_getCurrentRelFrame()))
         return mTransformAnimator->getInheritedTransform();
     return mTransformAnimator->getInheritedTransformAtFrame(relFrame);
 }
 
-QMatrix BoundingBox::getTotalTransformAtFrame(const qreal relFrame) const {
+QMatrix4x4 BoundingBox::getTotalTransformAtFrame(const qreal relFrame) const {
     if(isZero6Dec(relFrame - anim_getCurrentRelFrame()))
         return mTransformAnimator->getTotalTransform();
     return mTransformAnimator->getTotalTransformAtFrame(relFrame);

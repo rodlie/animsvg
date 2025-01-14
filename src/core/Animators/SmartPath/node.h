@@ -106,7 +106,7 @@ struct CORE_EXPORT Node {
 
     NormalNodeData normalData() const;
 
-    void applyTransform(const QMatrix &transform);
+    void applyTransform(const QMatrix4x4 &transform);
 
     void disableUnnecessaryCtrls();
 
