@@ -25,9 +25,12 @@
 
 #ifndef MOVABLEPOINT_H
 #define MOVABLEPOINT_H
+
+#include <QMatrix4x4>
 #include <QPointF>
 #include <QRectF>
 #include <QPainter>
+
 #include "../smartPointers/ememory.h"
 #include "../skia/skiaincludes.h"
 
