@@ -160,7 +160,7 @@ public:
     const QVector3D &getSavedRelPos() const;
 protected:
     void drawOnAbsPosSk(SkCanvas * const canvas,
-                        const SkPoint &absPos,
+                        const SkPoint3 &absPos,
                         const float invScale,
                         const SkColor &fillColor,
                         const bool keyOnCurrent = false);

@@ -88,9 +88,9 @@ public:
     QVector3D mapRelPosToAbs(const QVector3D &relPos) const;
 
     QVector3D mapFromParent(const QVector3D &parentRelPos) const;
-    SkPoint mapAbsPosToRel(const SkPoint &absPos) const;
-    SkPoint mapRelPosToAbs(const SkPoint &relPos) const;
-    SkPoint mapFromParent(const SkPoint &parentRelPos) const;
+    SkPoint3 mapAbsPosToRel(const SkPoint3 &absPos) const;
+    SkPoint3 mapRelPosToAbs(const SkPoint3 &relPos) const;
+    SkPoint3 mapFromParent(const SkPoint3 &parentRelPos) const;
 
     void scaleRelativeToSavedValue(const qreal sx,
                                    const qreal sy,

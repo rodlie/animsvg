@@ -138,8 +138,8 @@ extern void gSmoothyAbsCtrlsForPtBetween(
         const QVector3D &nextP, QVector3D &c1, QVector3D &c2,
         qreal smoothness);
 extern void gSmoothyAbsCtrlsForPtBetween(
-        const SkPoint &lastP, const SkPoint &currP,
-        const SkPoint &nextP, SkPoint &c1, SkPoint &c2,
+        const SkPoint3 &lastP, const SkPoint3 &currP,
+        const SkPoint3 &nextP, SkPoint3 &c1, SkPoint3 &c2,
         float smoothness);
 
 extern SkPath gPathToPolyline(const SkPath& path);
@@ -151,10 +151,10 @@ extern void gForEverySegmentInPath(
         const SkPath& path,
         const std::function<void(const SkPath&)>& func);
 
-extern void gGetSmoothAbsCtrlsForPtBetween(const SkPoint &prevP,
-                                           const SkPoint &currP,
-                                           const SkPoint &nextP,
-                                           SkPoint &c1, SkPoint &c2,
+extern void gGetSmoothAbsCtrlsForPtBetween(const SkPoint3 &prevP,
+                                           const SkPoint3 &currP,
+                                           const SkPoint3 &nextP,
+                                           SkPoint3 &c1, SkPoint3 &c2,
                                            const float smoothLen);
 
 extern void gAtomicDisplaceFilterPath(const qreal baseSeed,
