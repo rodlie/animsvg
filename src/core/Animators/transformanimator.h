@@ -30,7 +30,7 @@
 #include "../skia/skiaincludes.h"
 #include "transformvalues.h"
 
-#include <QMatrix>
+#include <QMatrix4x4>
 
 class TransformUpdater;
 class BoxPathPoint;
@@ -44,10 +44,10 @@ protected:
     BasicTransformAnimator();
 public:
     virtual void reset();
-    virtual QMatrix getRelativeTransformAtFrame(
-            const qreal relFrame, QMatrix* postTransform = nullptr) const;
-    virtual QMatrix getInheritedTransformAtFrame(const qreal relFrame) const;
-    virtual QMatrix getTotalTransformAtFrame(const qreal relFrame) const;
+    virtual QMatrix4x4 getRelativeTransformAtFrame(
+            const qreal relFrame, QMatrix4x4* postTransform = nullptr) const;
+    virtual QMatrix4x4 getInheritedTransformAtFrame(const qreal relFrame) const;
+    virtual QMatrix4x4 getTotalTransformAtFrame(const qreal relFrame) const;
 
     FrameRange prp_getIdenticalRelRange(const int relFrame) const;
 
@@ -55,9 +55,9 @@ public:
     void resetTranslation();
     void resetRotation();
 
-    void setScale(const qreal sx, const qreal sy);
-    void setPosition(const qreal x, const qreal y);
-    void setRotation(const qreal rot);
+    void setScale(const qreal sx, const qreal sy, const qreal sz);
+    void setPosition(const qreal x, const qreal y, const qreal z);
+    void setRotation(const qreal x_rot, const qreal y_rot, const qreal z_rot);
 
     void startRotTransform();
     void startPosTransform();
@@ -66,17 +66,22 @@ public:
     void setRelativePos(const QPointF &relPos);
     void moveByAbs(const QPointF &absTrans);
 
-    void rotateRelativeToSavedValue(const qreal rotRel);
-    void translate(const qreal dX, const qreal dY);
-    void scale(const qreal sx, const qreal sy);
+    void rotateRelativeToSavedValue(const qreal x_rotRel, const qreal y_rotRel, const qreal z_rotRel);
+    void translate(const qreal dX, const qreal dY, const qreal dZ);
+    void scale(const qreal sx, const qreal sy, const qreal sz);
     void moveRelativeToSavedValue(const qreal dX,
-                                  const qreal dY);
+                                  const qreal dY,
+                                  const qreal dZ);
 
     qreal dx();
     qreal dy();
-    qreal rot();
+    qreal dz();
+    qreal x_rot();
+    qreal y_rot();
+    qreal z_rot();
     qreal xScale();
     qreal yScale();
+    qreal zScale();
     QPointF pos();
 
     QPointF mapAbsPosToRel(const QPointF &absPos) const;
@@ -89,16 +94,19 @@ public:
 
     void scaleRelativeToSavedValue(const qreal sx,
                                    const qreal sy,
+                                   const qreal sz
                                    const QPointF &pivot);
-    void rotateRelativeToSavedValue(const qreal rotRel,
+    void rotateRelativeToSavedValue(const qreal x_rotRel,
+                                    const qreal y_rotRel,
+                                    const qreal z_rotRel,
                                     const QPointF &pivot);
 
     void updateRelativeTransform(const UpdateReason reason);
     void updateInheritedTransform(const UpdateReason reason);
 
-    const QMatrix &getInheritedTransform() const;
-    const QMatrix &getTotalTransform() const;
-    const QMatrix &getRelativeTransform() const;
+    const QMatrix4x4 &getInheritedTransform() const;
+    const QMatrix4x4 &getTotalTransform() const;
+    const QMatrix4x4 &getRelativeTransform() const;
 
     void setParentTransformAnimator(BasicTransformAnimator *parent);
 
@@ -112,10 +120,10 @@ public:
 protected:
     QList<qsptr<BasicTransformAnimator>> mChildBoxes;
 
-    QMatrix mRelTransform;
-    QMatrix mPostTransform;
-    QMatrix mInheritedTransform;
-    QMatrix mTotalTransform;
+    QMatrix4x4 mRelTransform;
+    QMatrix4x4 mPostTransform;
+    QMatrix4x4 mInheritedTransform;
+    QMatrix4x4 mTotalTransform;
 
     ConnContextQPtr<BasicTransformAnimator> mParentTransform;
 
@@ -138,20 +146,20 @@ protected:
     AdvancedTransformAnimator();
 public:
     void reset();
-    QMatrix getRelativeTransformAtFrame(
+    QMatrix4x4 getRelativeTransformAtFrame(
             const qreal relFrame, QMatrix* postTransform = nullptr) const;
 
     void applyTransformEffects(const qreal relFrame,
-                               qreal& pivotX, qreal& pivotY,
-                               qreal& posX, qreal& posY,
-                               qreal& rot,
-                               qreal& scaleX, qreal& scaleY,
-                               qreal& shearX, qreal& shearY,
-                               QMatrix& postTransform) const;
+                               qreal& pivotX, qreal& pivotY, qreal& pivotZ,
+                               qreal& posX, qreal& posY, qreal& posZ,
+                               qreal& x_rot, qreal& y_rot, qreal& z_rot,
+                               qreal& scaleX, qreal& scaleY, qreal& scaleZ,
+                               qreal& shearX, qreal& shearY, qreal& shearZ,
+                               QMatrix4x4& postTransform) const;
 
     void setValues(const TransformValues& values);
 
-    QMatrix getRotScaleShearTransform();
+    QMatrix4x4 getRotScaleShearTransform();
     void startRotScaleShearTransform();
     void resetRotScaleShear();
 
@@ -163,9 +171,10 @@ public:
     QPointF getPivot();
     qreal getPivotX();
     qreal getPivotY();
+    qreal getPivotZ();
 
     void startShearTransform();
-    void setShear(const qreal shearX, const qreal shearY);
+    void setShear(const qreal shearX, const qreal shearY, const qreal shearZ);
 
     qreal getOpacity();
 
@@ -173,7 +182,7 @@ public:
 
     void startOpacityTransform();
     void setOpacity(const qreal newOpacity);
-    void setPivot(const qreal x, const qreal y);
+    void setPivot(const qreal x, const qreal y, const qreal z);
     void startPivotTransform();
 
     void finishPivotTransform();
