@@ -248,7 +248,7 @@ void GraphKey::updateCtrlFromCtrl(const QrealPointType type,
         const qreal len = pointToLen(dP);
 
         newFrameValue = symmetricToPosNewLen(fromPt*pMult, graphPt*pMult, len);
-        newFrameValue = newFrameValue*QPointF{1/pixelsPerFrame, 1/pixelsPerValue};
+        newFrameValue = newFrameValue*QVector3D{1/pixelsPerFrame, 1/pixelsPerValue};
     } else if(mCtrlsMode == CtrlsMode::symmetric) {
         newFrameValue = symmetricToPos(fromPt, graphPt);
     }

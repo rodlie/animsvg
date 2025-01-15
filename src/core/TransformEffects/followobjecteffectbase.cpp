@@ -33,12 +33,12 @@ FollowObjectEffectBase::FollowObjectEffectBase(
         const QString& name, const TransformEffectType type) :
     TargetTransformEffect(name, type) {
     mPosInfluence = enve::make_shared<QVector3DAnimator>(
-                        QPointF{1., 1.}, QPointF{-10., -10.},
-                        QPointF{10., 10.}, QPointF{0.01, 0.01},
+                        QVector3D{1., 1.}, QVector3D{-10., -10.},
+                        QVector3D{10., 10.}, QVector3D{0.01, 0.01},
                         "pos influence");
     mScaleInfluence = enve::make_shared<QVector3DAnimator>(
-                        QPointF{1., 1.}, QPointF{-10., -10.},
-                        QPointF{10., 10.}, QPointF{0.01, 0.01},
+                        QVector3D{1., 1.}, QVector3D{-10., -10.},
+                        QVector3D{10., 10.}, QVector3D{0.01, 0.01},
                         "scale influence");
     mRotInfluence = enve::make_shared<QrealAnimator>(
                         1, -10, 10, 0.01, "rot influence");

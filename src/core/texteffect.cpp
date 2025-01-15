@@ -198,7 +198,7 @@ void TextEffect::prp_drawCanvasControls(
 
     const qreal smoothness = mDiminishSmoothness->getEffectiveValue();
 
-    QList<QPointF> pList{p1, p2, p3, p4};
+    QList<QVector3D> pList{p1, p2, p3, p4};
     std::sort(pList.begin(), pList.end(), ptXLess);
 
     QVector3D prevPt = pList.first();
@@ -382,7 +382,7 @@ QrealSnapshot diminishGuide(const qreal ampl,
                             const QVector3D p3,
                             const QVector3D p4,
                             const qreal smoothness) {
-    QList<QPointF> pList{p1, p2, p3, p4};
+    QList<QVector3D> pList{p1, p2, p3, p4};
     std::sort(pList.begin(), pList.end(), ptXLess);
 
     QrealSnapshot result(ampl, 1, ampl);

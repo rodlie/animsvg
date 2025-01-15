@@ -151,7 +151,7 @@ void FitCurve(Point2* const d, const double error,
     }
 }
 
-void FitCurves::FitCurve(QVector<QPointF>& data, const double error,
+void FitCurves::FitCurve(QVector<QVector3D>& data, const double error,
                          const BezierHandler& bezierHandler,
                          const bool useTangents,
                          const bool split)
@@ -160,7 +160,7 @@ void FitCurves::FitCurve(QVector<QPointF>& data, const double error,
     FitCurve(pt2Data, error, bezierHandler, 0, data.count() - 1, useTangents, split);
 }
 
-void FitCurves::FitCurve(QVector<QPointF>& data, const double error,
+void FitCurves::FitCurve(QVector<QVector3D>& data, const double error,
                          const BezierHandler& bezierHandler,
                          const int min, const int max,
                          const bool useTangents,

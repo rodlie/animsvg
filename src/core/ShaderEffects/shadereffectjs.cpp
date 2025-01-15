@@ -25,7 +25,7 @@
 
 #include "shadereffectjs.h"
 
-#include <QPointF>
+#include <QVector3D>
 #include <QColor>
 #include <QRegularExpression>
 #include <QtMath>

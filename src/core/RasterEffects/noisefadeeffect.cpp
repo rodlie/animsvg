@@ -162,14 +162,14 @@ qreal NoiseFadeEffectCaller::r(const QVector3D p) const {
 
 qreal NoiseFadeEffectCaller::n(const QVector3D p) const {
     const QVector3D fn = GLSL_floor(p);
-    const QVector3D sn = GLSL_smoothstep(QPointF{0. ,0.},
-                                       QPointF{1., 1.},
+    const QVector3D sn = GLSL_smoothstep(QVector3D{0. ,0.},
+                                       QVector3D{1., 1.},
                                        GLSL_fract(p));
 
     const qreal h1 = GLSL_mix(r(fn),
-                              r(fn + QPointF{1., 0.}), sn.x());
-    const qreal h2 = GLSL_mix(r(fn + QPointF{0., 1.}),
-                              r(fn + QPointF{1., 1.}), sn.x());
+                              r(fn + QVector3D{1., 0.}), sn.x());
+    const qreal h2 = GLSL_mix(r(fn + QVector3D{0., 1.}),
+                              r(fn + QVector3D{1., 1.}), sn.x());
     return GLSL_mix(h1 ,h2, sn.y());
 }
 
@@ -203,7 +203,7 @@ void NoiseFadeEffectCaller::processCpu(CpuRenderTools& renderTools,
             const qreal x = xi/imgWidth;
             const qreal y = yi/imgHeight;
 
-            const qreal c = GLSL_smoothstep(t + b, t - b, noise(QPointF{x, y} * .4));
+            const qreal c = GLSL_smoothstep(t + b, t - b, noise(QVector3D{x, y} * .4));
 
             for(int i = 0; i < 4; i++) {
                 *dst++ = *src++ * (1 - c);

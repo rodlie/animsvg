@@ -868,14 +868,14 @@ void BoundingBox::alignPivot(const Qt::Alignment align, const QRect3D& to) {
 void BoundingBox::alignPivotItself(const Qt::Alignment align,
                                    const QRect3D& to,
                                    const AlignRelativeTo relativeTo,
-                                   const QPointF lastPivotAbsPos)
+                                   const QVector3D lastPivotAbsPos)
 {
-    QPointF currentPivot = mTransformAnimator->getPivot();
-    QPointF currentPivotAbsPos = getPivotAbsPos();
+    QVector3D currentPivot = mTransformAnimator->getPivot();
+    QVector3D currentPivotAbsPos = getPivotAbsPos();
 
-    QPointF lastSelectedPivotAbsPos = lastPivotAbsPos;
+    QVector3D lastSelectedPivotAbsPos = lastPivotAbsPos;
 
-    QPointF center = getRelCenterPosition();
+    QVector3D center = getRelCenterPosition();
 
     qreal currentScaleX = mTransformAnimator->xScale();
     qreal currentScaleY = mTransformAnimator->yScale();

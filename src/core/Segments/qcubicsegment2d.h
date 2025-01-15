@@ -26,7 +26,7 @@
 #ifndef QCUBICSEGMENT2D_H
 #define QCUBICSEGMENT2D_H
 #include "../skia/skqtconversions.h"
-#include <QPointF>
+#include <QVector3D>
 #include <QPainterPath>
 #include "../simplemath.h"
 #include "../core_global.h"

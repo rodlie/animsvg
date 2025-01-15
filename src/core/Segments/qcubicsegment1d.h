@@ -29,7 +29,7 @@
 #include "../simplemath.h"
 #include "../core_global.h"
 
-#include <QPointF>
+#include <QVector3D>
 #include <QPainterPath>
 
 #include "ReadWrite/ereadstream.h"

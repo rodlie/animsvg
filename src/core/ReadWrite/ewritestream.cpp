@@ -109,7 +109,7 @@ eWriteStream &eWriteStream::operator<<(const qreal val) {
 }
 
 eWriteStream &eWriteStream::operator<<(const QVector3D &val) {
-    write(&val, sizeof(QPointF));
+    write(&val, sizeof(QVector3D));
     return *this;
 }
 

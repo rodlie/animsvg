@@ -152,7 +152,7 @@ struct CORE_EXPORT CubicList {
     }
 
     int lineIntersections(const QLineF& line,
-                          QList<QPointF>& pts) const;
+                          QList<QVector3D>& pts) const;
 
     typedef QList<qCubicSegment2D>::const_iterator const_iterator;
     const_iterator cbegin() const { return mSegments.cbegin(); }

@@ -28,7 +28,7 @@
 
 #include "../core_global.h"
 
-#include <QPointF>
+#include <QVector3D>
 
 template <typename T>
 struct CubicSegment;
@@ -69,7 +69,7 @@ struct CORE_EXPORT ConicSegment {
 
 typedef ConicSegment<qreal, qreal> qConicSegment1D;
 typedef ConicSegment<float, float> SkConicSegment1D;
-typedef ConicSegment<QPointF, qreal> qConicSegment2D;
+typedef ConicSegment<QVector3D, qreal> qConicSegment2D;
 typedef ConicSegment<SkPoint, float> SkConicSegment2D;
 
 #endif // CONICSEGMENT_H

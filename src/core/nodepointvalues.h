@@ -25,7 +25,7 @@
 
 #ifndef NODEPOINTVALUES_H
 #define NODEPOINTVALUES_H
-#include <QPointF>
+#include <QVector3D>
 #include "core_global.h"
 
 struct CORE_EXPORT NodePointValues {

@@ -31,8 +31,8 @@
 
 namespace SmoothCurves {
     CORE_EXPORT
-    extern void movingAverage(const QVector<QPointF>& data,
-                              QVector<QPointF>& smooth,
+    extern void movingAverage(const QVector<QVector3D>& data,
+                              QVector<QVector3D>& smooth,
                               const bool fixedStart,
                               const bool fixedEnd,
                               const int window);

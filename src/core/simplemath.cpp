@@ -250,7 +250,7 @@ QVector3D gRotPt(const QVector3D &pt, const qreal deg) {
             pt.x() * sin(deg*PI/180) + pt.y() * cos(deg*PI/180)};
 }
 
-QVector3D gQPointFDisplace(const QVector3D pt, const qreal displ) {
+QVector3D gQVector3DDisplace(const QVector3D pt, const qreal displ) {
     return QVector3D(pt.x() + gRandF(-displ, displ),
                      pt.y() + gRandF(-displ, displ),
                      pt.z() + gRandF(-displ, displ));

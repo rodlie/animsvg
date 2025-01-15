@@ -314,10 +314,10 @@ qCubicSegment2D qCubicSegment2D::randomDisplaced(const qreal displ) {
 }
 
 void qCubicSegment2D::randomDisplace(const qreal displ) {
-    setP0(gQPointFDisplace(p0(), displ));
-    setC1(gQPointFDisplace(c1(), displ));
-    setC2(gQPointFDisplace(c2(), displ));
-    setP3(gQPointFDisplace(p3(), displ));
+    setP0(gQVector3DDisplace(p0(), displ));
+    setC1(gQVector3DDisplace(c1(), displ));
+    setC2(gQVector3DDisplace(c2(), displ));
+    setP3(gQVector3DDisplace(p3(), displ));
     mLengthUpToDate = false;
 }
 

@@ -51,15 +51,15 @@ public:
     int nearestSmoothPt(const QVector3D pos, qreal* const dist) const;
     int nearestForceSplit(const QVector3D pos, qreal* const dist) const;
 
-    const QVector<QPointF>& smoothPts() const
+    const QVector<QVector3D>& smoothPts() const
     { return mSmoothPts; }
     const QList<int>& forceSplits() const
     { return mForceSplits; }
 private:
     QList<int> mForceSplits;
     QList<qCubicSegment2D> mFitted;
-    QVector<QPointF> mSmoothPts;
-    QVector<QPointF> mPts;
+    QVector<QVector3D> mSmoothPts;
+    QVector<QVector3D> mPts;
 };
 
 #endif // DRAWPATH_H

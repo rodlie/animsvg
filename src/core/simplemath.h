@@ -191,7 +191,7 @@ extern QVector3D scalePointToNewLen(const QVector3D &point,
 CORE_EXPORT
 extern QVector3D gRotPt(const QVector3D pt, const qreal deg);
 CORE_EXPORT
-extern QVector3D gQPointFDisplace(const QVector3D pt, const qreal displ);
+extern QVector3D gQVector3DDisplace(const QVector3D pt, const qreal displ);
 
 CORE_EXPORT
 extern bool isPointZero(QVector3D pos);

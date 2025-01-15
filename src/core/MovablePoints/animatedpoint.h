@@ -27,7 +27,7 @@
 #define ANIMATEDPOINT_H
 
 #include "movablepoint.h"
-#include <QPointF>
+#include <QVector3D>
 #include <QPainter>
 
 #include "../qrect3d.h"

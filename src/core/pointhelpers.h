@@ -25,7 +25,7 @@
 
 #ifndef POINTHELPERS_H
 #define POINTHELPERS_H
-#include <QPointF>
+#include <QVector3D>
 #include <QString>
 #include <QPainter>
 #include <type_traits>
@@ -122,7 +122,7 @@ extern QVector3D gClosestPointOnRect(const QRect3D &rect,
                                    qreal *dist = nullptr);
 
 extern qCubicSegment2D gBezierLeastSquareV1V2(
-        const qCubicSegment2D &seg, const QList<QPointF> &vs,
+        const qCubicSegment2D &seg, const QList<QVector3D> &vs,
         const int minVs, const int maxVs);
 
 

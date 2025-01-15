@@ -310,7 +310,7 @@ void QrealAnimator::applyExpressionSub(const FrameRange& relRange,
                                        const qreal accuracy) {
     if(!relRange.isValid()) return;
     const int count = qCeil(relRange.span()/qreal(sampleInc));
-    QVector<QPointF> pts;
+    QVector<QVector3D> pts;
     pts.reserve(count);
 
     const qreal frameMultiplier = 100;
@@ -320,7 +320,7 @@ void QrealAnimator::applyExpressionSub(const FrameRange& relRange,
     for(int i = 0; i < count; i++) {
         const qreal relFrame = relRange.fMin + i*sampleInc;
         const qreal value = mExpression->evaluate(relFrame).toNumber();
-        pts << QPointF{relFrame*frameMultiplier, value};
+        pts << QVector3D{relFrame*frameMultiplier, value};
         valSum += qAbs(value);
     }
 
@@ -332,7 +332,7 @@ void QrealAnimator::applyExpressionSub(const FrameRange& relRange,
     const auto adder = [this, frameDivider, &prevKey, action](
                        const int n, const BezierCurve curve) {
         Q_UNUSED(n)
-        const auto qptData = reinterpret_cast<QPointF*>(curve);
+        const auto qptData = reinterpret_cast<QVector3D*>(curve);
         const QVector3D p0 = qptData[0];
         const QVector3D c1 = qptData[1];
         const QVector3D c2 = qptData[2];

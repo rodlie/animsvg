@@ -63,7 +63,7 @@ void DrawPath::fit(const qreal maxError, const bool split) {
 
     const auto adder = [this](const int n, const BezierCurve curve) {
         Q_UNUSED(n)
-        const auto qptData = reinterpret_cast<QPointF*>(curve);
+        const auto qptData = reinterpret_cast<QVector3D*>(curve);
         const QVector3D p0 = qptData[0];
         const QVector3D c1 = qptData[1];
         const QVector3D c2 = qptData[2];

@@ -96,13 +96,13 @@ public:
 
     void applyTransform(const QMatrix4x4 &transform);
 
-    void saveQPointFSVG(SvgExporter& exp,
+    void saveQVector3DSVG(SvgExporter& exp,
                         QDomElement& parent,
                         const FrameRange& visRange,
                         const QString& name,
                         const bool transform = false,
                         const QString& type = "") const;
-    void saveQPointFSVGX(SvgExporter& exp,
+    void saveQVector3DSVGX(SvgExporter& exp,
                          QDomElement& parent,
                          const FrameRange& visRange,
                          const QString& name,
@@ -115,7 +115,7 @@ public:
                          const bool motion = false,
                          const bool motionRotate = false,
                          const QString & motionPath = QString()) const;
-    void saveQPointFSVGY(SvgExporter& exp,
+    void saveQVector3DSVGY(SvgExporter& exp,
                          QDomElement& parent,
                          const FrameRange& visRange,
                          const QString& name,

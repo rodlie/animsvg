@@ -70,7 +70,7 @@ void ZigZagEffectCaller::apply(SkPath &path) {
     QList<QLineF> prevLines;
     for(int i = 0; i < nLines; i++) {
         const QLineF iLine = firstLine.translated(i*transPt);
-        QList<QPointF> intersections;
+        QList<QVector3D> intersections;
         for(auto& seg : segLists) {
 //            intersections.append(iLine.p1());
 //            intersections.append(iLine.p2());

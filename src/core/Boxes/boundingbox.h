@@ -303,7 +303,7 @@ public:
     void alignPivotItself(const Qt::Alignment align,
                           const QRect3D& to,
                           const AlignRelativeTo relativeTo,
-                          const QPointF lastPivotAbsPos);
+                          const QVector3D lastPivotAbsPos);
 
     QMatrix4x4 getTotalTransform() const;
 

@@ -1219,8 +1219,8 @@ void FillSvgAttributes::setPaintType(const PaintType type) {
 void FillSvgAttributes::setGradient(const SvgGradient& gradient) {
     mGradientType = gradient.fType;
     mGradient = gradient.fGradient;
-    mGradientP1 = gradient.fTrans.map(QPointF{gradient.fX1, gradient.fY1});
-    mGradientP2 = gradient.fTrans.map(QPointF{gradient.fX2, gradient.fY2});
+    mGradientP1 = gradient.fTrans.map(QVector3D{gradient.fX1, gradient.fY1});
+    mGradientP2 = gradient.fTrans.map(QVector3D{gradient.fX2, gradient.fY2});
     mGradientTransform = gradient.fTrans;
     if(!mGradient) return;
     setPaintType(GRADIENTPAINT);

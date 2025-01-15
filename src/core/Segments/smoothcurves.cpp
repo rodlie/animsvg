@@ -33,7 +33,7 @@ public:
     const QVector3D average() const;
 private:
     const int mWindow;
-    QVector<QPointF> mWindowData;
+    QVector<QVector3D> mWindowData;
     QVector3D mSum;
     QVector3D mAverage;
     int mIndex;
@@ -43,9 +43,9 @@ private:
 MovingAverage::MovingAverage(const int w) : mWindow(w){
     mFilterComplete = false;
     mIndex = -1;
-    mSum = QPointF{0, 0};
-    mAverage = QPointF{0, 0};
-    mWindowData = QVector<QPointF>(mWindow, QPointF{0, 0});
+    mSum = QVector3D{0, 0};
+    mAverage = QVector3D{0, 0};
+    mWindowData = QVector<QVector3D>(mWindow, QVector3D{0, 0});
 }
 
 void MovingAverage::add(const QVector3D x) {
@@ -67,8 +67,8 @@ const QVector3D MovingAverage::average() const {
     return mAverage;
 }
 
-void SmoothCurves::movingAverage(const QVector<QPointF>& data,
-                                 QVector<QPointF>& smooth,
+void SmoothCurves::movingAverage(const QVector<QVector3D>& data,
+                                 QVector<QVector3D>& smooth,
                                  const bool fixedStart,
                                  const bool fixedEnd,
                                  const int window) {

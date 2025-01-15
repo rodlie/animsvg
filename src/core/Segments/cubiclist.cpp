@@ -290,7 +290,7 @@ void CubicList::updateClosed() {
 
 int cubicBezierLine(const qCubicSegment2D &seg,
                     const QLineF& line,
-                    QList<QPointF>& result);
+                    QList<QVector3D>& result);
 
 bool ascendingX(const QVector3D pt1, const QVector3D pt2) {
     return pt1.x() < pt2.x();
@@ -309,7 +309,7 @@ bool descendingY(const QVector3D pt1, const QVector3D pt2) {
 }
 
 int CubicList::lineIntersections(const QLineF &line,
-                                 QList<QPointF> &pts) const {
+                                 QList<QVector3D> &pts) const {
     if(isZero6Dec(line.length())) return 0;
     for(const auto& seg : mSegments) cubicBezierLine(seg, line, pts);
     if(isZero6Dec(line.dx())) {
@@ -333,7 +333,7 @@ int polySolveCubic(double a, double b, double c,
 
 int cubicBezierLine(const qCubicSegment2D& seg,
                     const QLineF& line,
-                    QList<QPointF>& result) {
+                    QList<QVector3D>& result) {
     const QRect3D segBB = seg.ptsBoundingRect();
     if(segBB.contains(line.p1()) || segBB.contains(line.p2())) {
     } else if(line.intersects(QLineF(segBB.topLeft(), segBB.bottomLeft()),

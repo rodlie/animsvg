@@ -26,7 +26,7 @@
 #ifndef QUADSEGMENT_H
 #define QUADSEGMENT_H
 
-#include <QPointF>
+#include <QVector3D>
 #include "../core_global.h"
 
 struct SkPoint;
@@ -55,7 +55,7 @@ struct CORE_EXPORT QuadSegment {
 
 typedef QuadSegment<qreal> qQuadSegment1D;
 typedef QuadSegment<float> SkQuadSegment1D;
-typedef QuadSegment<QPointF> qQuadSegment2D;
+typedef QuadSegment<QVector3D> qQuadSegment2D;
 typedef QuadSegment<SkPoint> SkQuadSegment2D;
 
 #endif // QUADSEGMENT_H

@@ -242,7 +242,7 @@ void QVector3DAnimator::applyTransform(const QMatrix4x4 &transform) {
     }
 }
 
-void QVector3DAnimator::saveQPointFSVG(SvgExporter& exp,
+void QVector3DAnimator::saveQVector3DSVG(SvgExporter& exp,
                                      QDomElement& parent,
                                      const FrameRange& visRange,
                                      const QString& name,
@@ -256,7 +256,7 @@ void QVector3DAnimator::saveQPointFSVG(SvgExporter& exp,
     }, transform, type);
 }
 
-void QVector3DAnimator::saveQPointFSVGX(SvgExporter& exp,
+void QVector3DAnimator::saveQVector3DSVGX(SvgExporter& exp,
                                       QDomElement& parent,
                                       const FrameRange& visRange,
                                       const QString& name,
@@ -286,7 +286,7 @@ void QVector3DAnimator::saveQPointFSVGX(SvgExporter& exp,
                              motionPath);
 }
 
-void QVector3DAnimator::saveQPointFSVGY(SvgExporter& exp,
+void QVector3DAnimator::saveQVector3DSVGY(SvgExporter& exp,
                                       QDomElement& parent,
                                       const FrameRange& visRange,
                                       const QString& name,

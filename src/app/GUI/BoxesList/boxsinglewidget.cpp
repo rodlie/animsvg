@@ -950,13 +950,13 @@ void BoxSingleWidget::switchBoxLockedAction() {
 void BoxSingleWidget::updateValueSlidersForQVector3DAnimator() {
     if(!mTarget) return;
     const auto target = mTarget->getTarget();
-    const auto asQPointFAnim = enve_cast<QVector3DAnimator*>(target);
-    if(!asQPointFAnim || mTarget->contentVisible()) return;
+    const auto asQVector3DAnim = enve_cast<QVector3DAnimator*>(target);
+    if(!asQVector3DAnim || mTarget->contentVisible()) return;
     if(width() - mFillWidget->x() > 10*eSizesUI::widget) {
-        mValueSlider->setTarget(asQPointFAnim->getXAnimator());
+        mValueSlider->setTarget(asQVector3DAnim->getXAnimator());
         mValueSlider->show();
         mValueSlider->setIsLeftSlider(true);
-        mSecondValueSlider->setTarget(asQPointFAnim->getYAnimator());
+        mSecondValueSlider->setTarget(asQVector3DAnim->getYAnimator());
         mSecondValueSlider->show();
         mSecondValueSlider->setIsRightSlider(true);
     } else {

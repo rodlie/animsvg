@@ -174,10 +174,10 @@ void gGetCtrlsSmoothPos(const QVector3D startPos,
             scalePointToNewLen(
                 (symEndPos*len1 + startPos*len2)/lenSum - centerPos, 1);
     const qreal startCtrlPtLen =
-            qAbs(QPointF::dotProduct(point2Rel, newStartDirection));
+            qAbs(QVector3D::dotProduct(point2Rel, newStartDirection));
     newStartPos = newStartDirection*startCtrlPtLen + centerPos;
     const qreal endCtrlPtLen =
-            qAbs(QPointF::dotProduct(point1Rel, newStartDirection));
+            qAbs(QVector3D::dotProduct(point1Rel, newStartDirection));
     newEndPos = -newStartDirection*endCtrlPtLen + centerPos;
 }
 
@@ -350,7 +350,7 @@ qreal gGetClosestTValueOnBezier(const qCubicSegment1D &seg,
 //}
 
 qCubicSegment2D gBezierLeastSquareV1V2(const qCubicSegment2D &seg,
-                                       const QList<QPointF> &vs,
+                                       const QList<QVector3D> &vs,
                                        const QList<qreal> &ts) {
     qreal v1XInc = 0.;
     qreal v1Dec = 0.;
@@ -378,7 +378,7 @@ qCubicSegment2D gBezierLeastSquareV1V2(const qCubicSegment2D &seg,
 
 qCubicSegment2D gBezierLeastSquareV1V2(
         const qCubicSegment2D &seg,
-        const QList<QPointF> &vs,
+        const QList<QVector3D> &vs,
         const int minVs,
         const int maxVs) {
     QVector3D v1, v2;
@@ -567,7 +567,7 @@ void gGetMaxSmoothAbsCtrlsForPtBetween(
     QVector3D vectP = (sLastP + sNextP)*0.5;
     vectP = QVector3D(vectP.y(), -vectP.x(), vectP.z());
 
-    if(QPointF::dotProduct(vectP, lastP - currP) > 0) vectP = -vectP;
+    if(QVector3D::dotProduct(vectP, lastP - currP) > 0) vectP = -vectP;
 
     const qreal nextDist = pointToLen(currP - nextP)*0.5;
     vectP = scalePointToNewLen(vectP, nextDist);

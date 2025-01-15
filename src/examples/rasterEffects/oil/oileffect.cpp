@@ -17,8 +17,8 @@ OilEffect::OilEffect() :
     RasterEffect("oil painting", HardwareSupport::cpuPreffered,
                  true, RasterEffectType::OIL) {
     mBrushSize = enve::make_shared<QVector3DAnimator>(
-        QPointF{16., 64.}, QPointF{4., 4.},
-        QPointF{999.999, 999.999}, QPointF{1., 1.},
+        QVector3D{16., 64.}, QVector3D{4., 4.},
+        QVector3D{999.999, 999.999}, QVector3D{1., 1.},
         "min", "max", "brush size");
     ca_addChild(mBrushSize);
     connect(mBrushSize->getYAnimator(),

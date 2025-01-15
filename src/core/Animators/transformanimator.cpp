@@ -643,12 +643,12 @@ QDomElement saveSVG_Split(QVector3DAnimator* const anim,
         auto unpivot = exp.createElement("g");
         if(yStatic) {
             const qreal y = multiplier*animY->getEffectiveValue();
-            anim->saveQPointFSVGX(exp, unpivot, visRange, "transform", y,
+            anim->saveQVector3DSVGX(exp, unpivot, visRange, "transform", y,
                                   multiplier, true, type,
                                   beginEvent, endEvent);
         } else {
             const qreal x = multiplier*animX->getEffectiveValue();
-            anim->saveQPointFSVGY(exp, unpivot, visRange, "transform", x,
+            anim->saveQVector3DSVGY(exp, unpivot, visRange, "transform", x,
                                   multiplier, true, type,
                                   beginEvent, endEvent);
         }
@@ -656,11 +656,11 @@ QDomElement saveSVG_Split(QVector3DAnimator* const anim,
         return unpivot;
     } else {
         auto xEle = exp.createElement("g");
-        anim->saveQPointFSVGX(exp, xEle, visRange, "transform", def,
+        anim->saveQVector3DSVGX(exp, xEle, visRange, "transform", def,
                               multiplier, true, type,
                               beginEvent, endEvent);
         auto yEle = exp.createElement("g");
-        anim->saveQPointFSVGY(exp, yEle, visRange, "transform", def,
+        anim->saveQVector3DSVGY(exp, yEle, visRange, "transform", def,
                               multiplier, true, type,
                               beginEvent, endEvent);
 

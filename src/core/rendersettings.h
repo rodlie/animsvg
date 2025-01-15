@@ -28,7 +28,7 @@
 
 #include "core_global.h"
 
-#include <QPointF>
+#include <QVector3D>
 
 #include "ReadWrite/ereadstream.h"
 #include "ReadWrite/ewritestream.h"

@@ -27,7 +27,7 @@
 #define MOVABLEPOINT_H
 
 #include <QMatrix4x4>
-#include <QPointF>
+#include <QVector3D>
 #include <QPainter>
 
 #include "../qrect3d.h"

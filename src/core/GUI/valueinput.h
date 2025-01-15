@@ -30,7 +30,7 @@
 #include "skia/skiaincludes.h"
 
 #include <QString>
-#include <QPointF>
+#include <QVector3D>
 #include <QLocale>
 
 class QPainter;
