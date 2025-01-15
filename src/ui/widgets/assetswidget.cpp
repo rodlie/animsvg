@@ -166,9 +166,9 @@ AssetsWidget::AssetsWidget(QWidget *parent)
         if (!item) { return; }
 
         QMenu menu(this);
-        menu.addAction(tr("Reload"));
-        menu.addAction(tr("Replace"));
-        menu.addAction(tr("Remove"));
+        menu.addAction(QIcon::fromTheme("loop"), tr("Reload"));
+        menu.addAction(QIcon::fromTheme("file_blank"), tr("Replace"));
+        menu.addAction(QIcon::fromTheme("trash"), tr("Remove"));
 
         const auto selectedAct = menu.exec(mTree->mapToGlobal(pos));
         if (selectedAct && item->getCache()) {
