@@ -145,7 +145,7 @@ bool MovablePoint::isPointAtAbsPos(const QVector3D &absPoint,
     return pointToLen(dist) < mRadius*invScale;
 }
 
-void MovablePoint::rectPointsSelection(const QRectF &absRect,
+void MovablePoint::rectPointsSelection(const QRect3D &absRect,
                                        const CanvasMode mode,
                                        const PtOp &adder) {
     if(!selectionEnabled()) return;
@@ -153,7 +153,7 @@ void MovablePoint::rectPointsSelection(const QRectF &absRect,
     if(isContainedInRect(absRect)) adder(this);
 }
 
-bool MovablePoint::isContainedInRect(const QRectF &absRect) {
+bool MovablePoint::isContainedInRect(const QRect3D &absRect) {
     return absRect.contains(getAbsolutePos());
 }
 

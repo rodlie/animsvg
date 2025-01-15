@@ -95,9 +95,9 @@ public:
     QMatrix4x4 fRenderTransform;
 
     bool fRelBoundingRectSet = false;
-    QRectF fRelBoundingRect;
+    QRect3D fRelBoundingRect;
     QRect fGlobalRect;
-    QList<QRectF> fOtherGlobalRects;
+    QList<QRect3D> fOtherGlobalRects;
     QRect fMaxBoundsRect;
 
     QMargins fBaseMargin;
@@ -128,7 +128,7 @@ public:
 protected:
     bool hasEffects() const { return !mEffectsRenderer.isEmpty(); }
 
-    void setBaseGlobalRect(const QRectF &baseRectF);
+    void setBaseGlobalRect(const QRect3D &baseRectF);
 
     //! @brief For use with mypaint based outlines
     SkBitmap mBitmap;

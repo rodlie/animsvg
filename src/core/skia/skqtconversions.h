@@ -26,7 +26,6 @@
 #ifndef SKQTCONVERSIONS_H
 #define SKQTCONVERSIONS_H
 
-#include <QGLCube>
 #include <QMatrix4x4>
 #include <QColor>
 #include <QFont>
@@ -64,9 +63,9 @@ CORE_EXPORT
 extern SkIRect toSkIRect(const QRect &rect);
 
 CORE_EXPORT
-extern QRectF toQRectF(const SkRect &rect);
+extern QRect3D toQRect3D(const SkRect &rect);
 CORE_EXPORT
-extern SkRect toSkRect(const QRectF &rect);
+extern SkRect toSkRect(const QRect3D &rect);
 // m11 - scaleX
 // m12 - skewY
 // m21 - skewX

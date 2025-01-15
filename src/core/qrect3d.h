@@ -23,23 +23,20 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#include "canvasrenderdata.h"
-#include "skia/skiahelpers.h"
+#ifndef FRICTION_CORE_QRECT3D_H
+#define FRICTION_CORE_QRECT3D_H
 
-CanvasRenderData::CanvasRenderData(BoundingBox * const parentBoxT) :
-    ContainerBoxRenderData(parentBoxT) {}
+#include <QRectF>
 
-void CanvasRenderData::updateGlobalRect() {
-    fScaledTransform = fTotalTransform*fResolutionScale;
-    const auto globalRectF = fScaledTransform.mapRect(fRelBoundingRect);
-    const QPoint pos(qFloor(globalRectF.left()),
-                     qFloor(globalRectF.top()));
-    const QSize size(qCeil(globalRectF.width()),
-                     qCeil(globalRectF.height()));
-    fGlobalRect = QRect(pos, size);
-    //setBaseGlobalRect(globalRectF);
-}
+// Adds a z dimension to a QRect3D
+// Extracted from: https://stackoverflow.com/questions/20152342/is-there-3d-analogy-for-qrect-in-qt
 
-void CanvasRenderData::updateRelBoundingRect() {
-    fRelBoundingRect = QRect3D(0, 0, fCanvasWidth, fCanvasHeight);
-}
+class QRect3D : public QRect3D {
+public:
+    QRect3D(int x, int y, int width, int height, int z) : QRect3D(x, y, width, height), m_length(z) {}
+    int z() const { return m_length; }
+private:
+    int m_length;
+};
+
+#endif // FRICTION_CORE_QRECT3D_H

@@ -79,7 +79,7 @@ void PointsHandler::addAllPointsToSelection(const MovablePoint::PtOp& adder,
     }
 }
 
-void PointsHandler::addInRectForSelection(const QRectF &absRect,
+void PointsHandler::addInRectForSelection(const QRect3D &absRect,
                                           const MovablePoint::PtOp& adder,
                                           const CanvasMode mode) const {
     for(const auto& pt : mPts) {

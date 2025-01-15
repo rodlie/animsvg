@@ -414,7 +414,7 @@ qreal GraphKey::getNextKeyValueForGraph() const {
     return nextKey->getValueForGraph();
 }
 
-bool GraphKey::isInsideRect(const QRectF &valueFrameRect) const {
+bool GraphKey::isInsideRect(const QRect3D &valueFrameRect) const {
     const QVector3D keyPoint(getAbsFrame(), getValueForGraph());
     return valueFrameRect.contains(keyPoint);
 }

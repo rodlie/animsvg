@@ -185,7 +185,7 @@ public:
 
     TimelineHighlightWidget *requestHighlighter();
 private:
-    void getKeysInRect(QRectF selectionRect,
+    void getKeysInRect(QRect3D selectionRect,
                        const qreal pixelsPerFrame,
                        QList<Key *> &listKeys);
     void drawKeys(QPainter * const p, const qreal pixelsPerFrame,
@@ -248,7 +248,7 @@ private:
     TimelineHighlightWidget* mHighlighter = nullptr;
 
     BoxScrollWidget *mBoxesListWidget;
-    QRectF mSelectionRect;
+    QRect3D mSelectionRect;
     bool mSelecting = false;
     bool mGraphViewed = false;
     qreal mPixelsPerFrame;

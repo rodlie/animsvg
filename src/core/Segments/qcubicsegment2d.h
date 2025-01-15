@@ -82,8 +82,8 @@ struct CORE_EXPORT qCubicSegment2D {
 
     SkPath toSkPath() const;
 
-    QRectF ptsBoundingRect() const {
-        return qRectF4Points(mP0, mC1, mC2, mP3);
+    QRect3D ptsBoundingRect() const {
+        return QRect3D4Points(mP0, mC1, mC2, mP3);
     }
 
     qCubicSegment1D xSeg() const;

@@ -52,7 +52,7 @@ public:
     void addAllPointsToSelection(const MovablePoint::PtOp &adder,
                                  const CanvasMode mode) const;
 
-    void addInRectForSelection(const QRectF &absRect,
+    void addInRectForSelection(const QRect3D &absRect,
                                const MovablePoint::PtOp &adder,
                                const CanvasMode mode) const;
 

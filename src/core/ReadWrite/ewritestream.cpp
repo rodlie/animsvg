@@ -113,8 +113,8 @@ eWriteStream &eWriteStream::operator<<(const QVector3D &val) {
     return *this;
 }
 
-eWriteStream &eWriteStream::operator<<(const QRectF &val) {
-    write(&val, sizeof(QRectF));
+eWriteStream &eWriteStream::operator<<(const QRect3D &val) {
+    write(&val, sizeof(QRect3D));
     return *this;
 }
 

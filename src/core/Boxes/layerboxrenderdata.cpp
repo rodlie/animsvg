@@ -37,7 +37,7 @@ void ContainerBoxRenderData::transformRenderCanvas(SkCanvas &canvas) const {
 }
 #include "pointhelpers.h"
 void ContainerBoxRenderData::updateRelBoundingRect() {
-    fRelBoundingRect = QRectF();
+    fRelBoundingRect = QRect3D();
     const auto invTrans = fTotalTransform.inverted();
     for(const auto &child : fChildrenRenderData) {
         if(child->fRelBoundingRect.isEmpty()) continue;

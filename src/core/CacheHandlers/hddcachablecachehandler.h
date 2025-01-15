@@ -41,7 +41,7 @@ public:
     HddCachableCacheHandler() : mUsedRange(this) {}
 
     void drawCacheOnTimeline(QPainter * const p,
-                             const QRectF &drawRect,
+                             const QRect3D &drawRect,
                              const int startFrame,
                              const int endFrame,
                              const qreal unit = 1,

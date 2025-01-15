@@ -435,7 +435,7 @@ QVector3D gGetClosestPointOnLineSegment(const QVector3D &a,
     }
 }
 
-QVector3D gClosestPointOnRect(const QRectF &rect,
+QVector3D gClosestPointOnRect(const QRect3D &rect,
                            const QVector3D &point,
                            qreal *dist) {
     qreal minDist = DBL_MAX;

@@ -113,7 +113,7 @@ extern qreal qMax4(qreal v1, qreal v2,
                    qreal v3, qreal v4);
 
 CORE_EXPORT
-extern QRectF qRectF4Points(QVector3D p1, QVector3D c1,
+extern QRect3D QRect3D4Points(QVector3D p1, QVector3D c1,
                             QVector3D c2, QVector3D p2);
 
 CORE_EXPORT

@@ -522,7 +522,7 @@ QVector3D BoundingBox::getPivotAbsPos(const qreal relFrame) {
     return mTransformAnimator->getPivotAbs(relFrame);
 }
 
-void BoundingBox::setRelBoundingRect(const QRectF& relRect) {
+void BoundingBox::setRelBoundingRect(const QRect3D& relRect) {
     mRelRect = relRect;
     mRelRectSk = toSkRect(mRelRect);
     mSkRelBoundingRectPath.reset();
@@ -640,7 +640,7 @@ stdsptr<BoxRenderData> BoundingBox::getCurrentRenderData(const qreal relFrame) c
     return nullptr;
 }
 
-bool BoundingBox::isContainedIn(const QRectF &absRect) const {
+bool BoundingBox::isContainedIn(const QRect3D &absRect) const {
     return absRect.contains(getAbsBoundingRect());
 }
 
@@ -832,9 +832,9 @@ void BoundingBox::setupCanvasMenu(PropertyMenu * const menu)
                 rasterEffectsMenu, &BoundingBox::addRasterEffect);
 }
 
-void BoundingBox::alignGeometry(const QRectF& geometry,
+void BoundingBox::alignGeometry(const QRect3D& geometry,
                                 const Qt::Alignment align,
-                                const QRectF& to) {
+                                const QRect3D& to) {
     QVector3D moveBy{0., 0.};
     if(align & Qt::AlignLeft) {
         moveBy.setX(to.left() - geometry.left());
@@ -856,17 +856,17 @@ void BoundingBox::alignGeometry(const QRectF& geometry,
     finishTransform();
 }
 
-void BoundingBox::alignGeometry(const Qt::Alignment align, const QRectF& to) {
+void BoundingBox::alignGeometry(const Qt::Alignment align, const QRect3D& to) {
     alignGeometry(getAbsBoundingRect(), align, to);
 }
 
-void BoundingBox::alignPivot(const Qt::Alignment align, const QRectF& to) {
+void BoundingBox::alignPivot(const Qt::Alignment align, const QRect3D& to) {
     const QVector3D pivot = getPivotAbsPos();
-    alignGeometry(QRectF(pivot, pivot), align, to);
+    alignGeometry(QRect3D(pivot, pivot), align, to);
 }
 
 void BoundingBox::alignPivotItself(const Qt::Alignment align,
-                                   const QRectF& to,
+                                   const QRect3D& to,
                                    const AlignRelativeTo relativeTo,
                                    const QPointF lastPivotAbsPos)
 {
@@ -874,7 +874,7 @@ void BoundingBox::alignPivotItself(const Qt::Alignment align,
     QPointF currentPivotAbsPos = getPivotAbsPos();
 
     QPointF lastSelectedPivotAbsPos = lastPivotAbsPos;
-    
+
     QPointF center = getRelCenterPosition();
 
     qreal currentScaleX = mTransformAnimator->xScale();
@@ -1072,10 +1072,10 @@ void BoundingBox::setupWithoutRasterEffects(const qreal relFrame,
 
     {
         const auto parent = getParentGroup();
-        QRectF maxBoundsF;
+        QRect3D maxBoundsF;
         if(parent) maxBoundsF = parent->currentGlobalBounds();
         else maxBoundsF = scene->getCurrentBounds();
-        const QRectF scaledMaxBoundsF = data->fResolutionScale.mapRect(maxBoundsF);
+        const QRect3D scaledMaxBoundsF = data->fResolutionScale.mapRect(maxBoundsF);
         data->fMaxBoundsRect = scaledMaxBoundsF.toAlignedRect();
     }
 }
@@ -1159,7 +1159,7 @@ BoxTransformAnimator *BoundingBox::getBoxTransformAnimator() const {
     return mTransformAnimator.get();
 }
 
-const QRectF BoundingBox::getAbsBoundingRect() const {
+const QRect3D BoundingBox::getAbsBoundingRect() const {
     return getTotalTransform().mapRect(mRelRect);
 }
 
@@ -1430,7 +1430,7 @@ void BoundingBox::sClearWriteBoxes() {
 #include "simpletask.h"
 
 void BoundingBox::selectAndAddContainedPointsToList(
-        const QRectF &absRect,
+        const QRect3D &absRect,
         const MovablePoint::PtOp &adder,
         const CanvasMode mode) {
     for(const auto& desc : mCanvasProps) {

@@ -87,12 +87,12 @@ void PathBoxRenderData::updateRelBoundingRect()
     SkPath totalPath;
     totalPath.addPath(fFillPath);
     totalPath.addPath(fOutlinePath);
-    fRelBoundingRect = toQRectF(totalPath.computeTightBounds());
+    fRelBoundingRect = toQRect3D(totalPath.computeTightBounds());
 }
 
 QVector3D PathBoxRenderData::getCenterPosition()
 {
-    return toQRectF(fEditPath.getBounds()).center();
+    return toQRect3D(fEditPath.getBounds()).center();
 }
 
 void PathBoxRenderData::drawSk(SkCanvas * const canvas)

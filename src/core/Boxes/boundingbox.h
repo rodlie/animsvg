@@ -141,7 +141,7 @@ public:
     virtual QVector3D getRelCenterPosition();
 
     virtual void selectAndAddContainedPointsToList(
-            const QRectF &absRect,
+            const QRect3D &absRect,
             const MovablePoint::PtOp& adder,
             const CanvasMode mode);
 
@@ -298,10 +298,10 @@ public:
     void finishTransform();
     void cancelTransform();
 
-    void alignGeometry(const Qt::Alignment align, const QRectF& to);
-    void alignPivot(const Qt::Alignment align, const QRectF& to);
+    void alignGeometry(const Qt::Alignment align, const QRect3D& to);
+    void alignPivot(const Qt::Alignment align, const QRect3D& to);
     void alignPivotItself(const Qt::Alignment align,
-                          const QRectF& to,
+                          const QRect3D& to,
                           const AlignRelativeTo relativeTo,
                           const QPointF lastPivotAbsPos);
 
@@ -327,7 +327,7 @@ public:
     void clearParent();
     void setParentTransform(BasicTransformAnimator *parent);
 
-    bool isContainedIn(const QRectF &absRect) const;
+    bool isContainedIn(const QRect3D &absRect) const;
 
     QVector3D getPivotRelPos(const qreal relFrame);
     QVector3D getPivotAbsPos();
@@ -358,8 +358,8 @@ public:
     void applyParentTransform();
     bool isTransformationStatic() const;
     BoxTransformAnimator *getBoxTransformAnimator() const;
-    const QRectF getAbsBoundingRect() const;
-    const QRectF& getRelBoundingRect() const
+    const QRect3D getAbsBoundingRect() const;
+    const QRect3D& getRelBoundingRect() const
     { return mRelRect; }
     const SkPath &getRelBoundingRectPath() const
     { return mSkRelBoundingRectPath; }
@@ -458,7 +458,7 @@ signals:
     void brushChanged(SimpleBrushWrapper* brush);
     void blendEffectChanged();
 protected:
-    void setRelBoundingRect(const QRectF& relRect);
+    void setRelBoundingRect(const QRect3D& relRect);
 
     uint mStateId = 0;
 
@@ -479,9 +479,9 @@ protected:
     const qsptr<BoxTransformAnimator> mTransformAnimator;
     const qsptr<RasterEffectCollection> mRasterEffectsAnimators;
 private:
-    void alignGeometry(const QRectF& geometry,
+    void alignGeometry(const QRect3D& geometry,
                        const Qt::Alignment align,
-                       const QRectF& to);
+                       const QRect3D& to);
 
     void setCustomPropertiesVisible(const bool visible);
     void setBlendEffectsVisible(const bool visible);
@@ -500,7 +500,7 @@ private:
 
     QVector3D mSavedTransformPivot;
 
-    QRectF mRelRect;
+    QRect3D mRelRect;
     SkRect mRelRectSk;
     SkPath mSkRelBoundingRectPath;
 

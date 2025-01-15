@@ -71,7 +71,7 @@ public:
     eReadStream& operator>>(iValueRange& val);
     eReadStream& operator>>(qreal &val);
     eReadStream& operator>>(QVector3D &val);
-    eReadStream& operator>>(QRectF &val);
+    eReadStream& operator>>(QRect3D &val);
     eReadStream& operator>>(QMatrix4x4 &val);
     eReadStream& operator>>(QColor& val);
     eReadStream& operator>>(QString &val);

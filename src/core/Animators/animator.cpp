@@ -416,7 +416,7 @@ void Animator::anim_setKeyOnCurrentFrame(Key* const key) {
     emit anim_changedKeyOnCurrentFrame(key, QPrivateSignal());
 }
 
-void Animator::anim_getKeysInRect(const QRectF &selectionRect,
+void Animator::anim_getKeysInRect(const QRect3D &selectionRect,
                                  const qreal pixelsPerFrame,
                                  QList<Key*> &keysList,
                                  const int keyRectSize) {
@@ -563,7 +563,7 @@ void anim_drawKey(QPainter * const p,
     switch(type) {
     case KeyFrameType::property: {
         const QVector3D tl = keyCenter + QPointF(-keyRadius, -keyRadius);
-        p->drawRect(QRectF(tl, QSizeF(2*keyRadius, 2*keyRadius)));
+        p->drawRect(QRect3D(tl, QSizeF(2*keyRadius, 2*keyRadius)));
     } break;
     default: {
         p->drawEllipse(keyCenter, keyRadius, keyRadius);

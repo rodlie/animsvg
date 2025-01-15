@@ -97,7 +97,7 @@ public:
     qreal getNextKeyValueForGraph() const;
 
     void makeC0C1Smooth();
-    bool isInsideRect(const QRectF &valueFrameRect) const;
+    bool isInsideRect(const QRect3D &valueFrameRect) const;
 
     void setC0FrameVar(const qreal startFrame);
     void setC1FrameVar(const qreal endFrame);

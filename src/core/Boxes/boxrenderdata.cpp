@@ -230,8 +230,8 @@ void BoxRenderData::dataSet() {
 #include "Boxes/textboxrenderdata.h"
 void BoxRenderData::updateGlobalRect() {
     fScaledTransform = fTotalTransform*fResolutionScale;
-    QRectF baseRectF = fScaledTransform.mapRect(fRelBoundingRect);
-    for(const QRectF &rectT : fOtherGlobalRects) {
+    QRect3D baseRectF = fScaledTransform.mapRect(fRelBoundingRect);
+    for(const QRect3D &rectT : fOtherGlobalRects) {
         baseRectF = baseRectF.united(rectT);
     }
     baseRectF.adjust(-fBaseMargin.left(), -fBaseMargin.top(),
@@ -239,7 +239,7 @@ void BoxRenderData::updateGlobalRect() {
     setBaseGlobalRect(baseRectF);
 }
 
-void BoxRenderData::setBaseGlobalRect(const QRectF& baseRectF) {
+void BoxRenderData::setBaseGlobalRect(const QRect3D& baseRectF) {
     const auto clampedBaseRect = baseRectF.intersected(fMaxBoundsRect);
     SkIRect currRect = toSkRect(clampedBaseRect).roundOut();
     if(!mEffectsRenderer.isEmpty()) {

@@ -79,7 +79,7 @@ public:
 
     virtual void anim_removeAllKeys();
     virtual void anim_shiftAllKeys(const int shift);
-    virtual void anim_getKeysInRect(const QRectF &selectionRect,
+    virtual void anim_getKeysInRect(const QRect3D &selectionRect,
                                     const qreal pixelsPerFrame,
                                     QList<Key*>& keysList,
                                     const int keyRectSize);

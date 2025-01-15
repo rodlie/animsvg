@@ -202,7 +202,7 @@ void Canvas::moveSelectedPointsByAbs(const QVector3D &by,
     }
 }
 
-void Canvas::selectAndAddContainedPointsToSelection(const QRectF& absRect) {
+void Canvas::selectAndAddContainedPointsToSelection(const QRect3D& absRect) {
     const auto adder = [this](MovablePoint* const pt) {
         addPointToSelection(pt);
     };

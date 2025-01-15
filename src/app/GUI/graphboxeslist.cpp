@@ -220,7 +220,7 @@ void KeysView::graphPaint(QPainter *p) {
         }
         while(xL < maxX) {
             if(drawText) {
-                p->drawText(QRectF(xL - inc, 0, 2*inc, 20),
+                p->drawText(QRect3D(xL - inc, 0, 2*inc, 20),
                             Qt::AlignCenter, QString::number(currFrame));
             }
             p->drawLine(xL, 20, xL, height());
@@ -233,7 +233,7 @@ void KeysView::graphPaint(QPainter *p) {
 
     p->setPen(QPen(Qt::green, 2.));
     qreal xL = (mCurrentFrame - mStartFrame)*mPixelsPerFrame;
-    //p->drawText(QRectF(xL - 20, 0, 40, 20),
+    //p->drawText(QRect3D(xL - 20, 0, 40, 20),
     //            Qt::AlignCenter, QString::number(mCurrentFrame));
     p->drawLine(xL, 20, xL, height());*/
     if(graph_mValueLinesVisible) {
@@ -245,7 +245,7 @@ void KeysView::graphPaint(QPainter *p) {
         const auto lines = new QLine[static_cast<uint>(nLines)];
         int currLine = 0;
         while(yL > 0) {
-            p->drawText(QRectF(-eSizesUI::widget/4, yL - incY,
+            p->drawText(QRect3D(-eSizesUI::widget/4, yL - incY,
                                2*eSizesUI::widget, 2*incY),
                         Qt::AlignCenter,
                         QString::number(currValue, 'f', mValuePrec));

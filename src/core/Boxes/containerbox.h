@@ -175,7 +175,7 @@ public:
 
     void deselectAllBoxesFromBoxesGroup();
     void selectAllBoxesFromBoxesGroup();
-    void addContainedBoxesToSelection(const QRectF &rect);
+    void addContainedBoxesToSelection(const QRect3D &rect);
 
     void setIsCurrentGroup_k(const bool bT);
 

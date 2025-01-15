@@ -854,12 +854,12 @@ void Canvas::alignSelectedBoxes(const Qt::Alignment align,
                                 const AlignRelativeTo relativeTo)
 {
     if (mSelectedBoxes.isEmpty()) { return; }
-    QRectF geometry;
+    QRect3D geometry;
     BoundingBox* skip = nullptr;
     switch(relativeTo) {
     case AlignRelativeTo::scene:
     case AlignRelativeTo::boundingBox:
-        geometry = QRectF(0., 0., mWidth, mHeight);
+        geometry = QRect3D(0., 0., mWidth, mHeight);
         break;
     case AlignRelativeTo::lastSelected:
         if (!mLastSelectedBox) { return; }
@@ -869,7 +869,7 @@ void Canvas::alignSelectedBoxes(const Qt::Alignment align,
     case AlignRelativeTo::lastSelectedPivot:
         if (!mLastSelectedBox) { return; }
         skip = mLastSelectedBox;
-        geometry = QRectF(mLastSelectedBox->getPivotAbsPos(),
+        geometry = QRect3D(mLastSelectedBox->getPivotAbsPos(),
                           mLastSelectedBox->getPivotAbsPos());
         break;
     }

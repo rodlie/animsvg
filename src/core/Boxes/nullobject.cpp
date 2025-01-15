@@ -41,7 +41,7 @@ public:
 
     void updatePath();
     bool relPointInsidePath(const QVector3D &relPos);
-    QRectF relBoundingRect();
+    QRect3D relBoundingRect();
 private:
     SkPath mCurrentPath;
 
@@ -158,7 +158,7 @@ bool NullObjectType::relPointInsidePath(const QPointF& relPos) {
     const qreal ten = 10*size;
     switch(type) {
     case Type::square: {
-        QRectF rect(-ten, -ten, 2*ten, 2*ten);
+        QRect3D rect(-ten, -ten, 2*ten, 2*ten);
         return rect.contains(relPos);
     } case Type::circle: {
         QPainterPath path;
@@ -181,9 +181,9 @@ bool NullObjectType::relPointInsidePath(const QPointF& relPos) {
     return false;
 }
 
-QRectF NullObjectType::relBoundingRect() {
+QRect3D NullObjectType::relBoundingRect() {
     const auto skRect = mCurrentPath.computeTightBounds();
-    return toQRectF(skRect);
+    return toQRect3D(skRect);
 }
 
 void NullObject::queTasks() {

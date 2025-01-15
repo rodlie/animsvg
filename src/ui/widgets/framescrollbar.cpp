@@ -93,11 +93,11 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         if (!mRange) {
             const int soundHeight = eSizesUI::widget / 1.5;
             const int rasterHeight = eSizesUI::widget - soundHeight;
-            const QRectF rasterRect(x0, 0, w1, rasterHeight);
+            const QRect3D rasterRect(x0, 0, w1, rasterHeight);
             const auto& rasterCache = mCurrentCanvas->getSceneFramesHandler();
             rasterCache.drawCacheOnTimeline(&p, rasterRect, minFrame, maxFrame);
 
-            const QRectF soundRect(x0, rasterHeight, w1, soundHeight);
+            const QRect3D soundRect(x0, rasterHeight, w1, soundHeight);
             const auto& soundCache = mCurrentCanvas->getSoundCacheHandler();
             soundCache.drawCacheOnTimeline(&p, soundRect, minFrame, maxFrame, fps);
         }
@@ -112,7 +112,7 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
     const qreal threeFourthsHeight = height()*0.75;
     const qreal maxX = width() + eSizesUI::widget;
 
-    QRectF handleRect;
+    QRect3D handleRect;
     const int hLeftFrames = mFirstViewedFrame - minFrame;
     const qreal handleFixedWidth = 16;
     const qreal handleWidth = (mViewedFramesSpan*pixPerFrame);
@@ -151,7 +151,7 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
             const qreal xTT1 = xT + (frameIn.second - mFrameRange.fMin) * pixPerFrame;
             const qreal xTT2 = xT + (frameOut.second - mFrameRange.fMin) * pixPerFrame;
             const int h = mFm.height();
-            const auto rect = QRectF(xTT1, h, xTT2 - xTT1, height() - h);
+            const auto rect = QRect3D(xTT1, h, xTT2 - xTT1, height() - h);
             p.fillRect(rect, QBrush(ThemeSupport::getThemeColorGreenDark(),
                                     Qt::SolidPattern));
             p.drawRect(rect);
@@ -170,7 +170,7 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
 
             const QString drawValue = hasIn ? tr("In") : hasOut ? tr("Out") : getFrameMarkerText(i);
             p.setPen(Qt::NoPen);
-            const auto rect = QRectF(xTT + 1, 0,
+            const auto rect = QRect3D(xTT + 1, 0,
                                      mFm.horizontalAdvance(drawValue) + 2,
                                      mFm.height());
             p.fillRect(rect, QBrush(col, Qt::SolidPattern));
@@ -195,7 +195,7 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
                 p.drawLine(QPointF(xL, threeFourthsHeight + 4), QPointF(xL, height()));
                 QString drawValue = QString::number(currentFrame);
                 if (timecode) { drawValue = AppSupport::getTimeCodeFromFrame(currentFrame, mFps); }
-                p.drawText(QRectF(xL - inc, 0, 2 * inc, threeFourthsHeight + 18), Qt::AlignCenter, drawValue);
+                p.drawText(QRect3D(xL - inc, 0, 2 * inc, threeFourthsHeight + 18), Qt::AlignCenter, drawValue);
                 xL += inc;
                 currentFrame += mDrawFrameInc;
             }

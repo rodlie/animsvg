@@ -362,7 +362,7 @@ Gradient *PaintSettingsAnimator::getGradient() const {
 }
 
 void PaintSettingsAnimator::resetGradientPoints() {
-    const QRectF relRect = mTarget_k->getRelBoundingRect();
+    const QRect3D relRect = mTarget_k->getRelBoundingRect();
     mGradientPoints->anim_setRecording(false);
     mGradientPoints->setPositions(relRect.topLeft(),
                                   relRect.bottomRight());

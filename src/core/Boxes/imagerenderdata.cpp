@@ -32,8 +32,8 @@ ImageRenderData::ImageRenderData(BoundingBox * const parentBoxT) :
 
 void ImageRenderData::updateRelBoundingRect() {
     if(fImage) fRelBoundingRect =
-            QRectF(0, 0, fImage->width(), fImage->height());
-    else fRelBoundingRect = QRectF(0, 0, 0, 0);
+            QRect3D(0, 0, fImage->width(), fImage->height());
+    else fRelBoundingRect = QRect3D(0, 0, 0, 0);
 }
 
 void ImageRenderData::setupRenderData() {

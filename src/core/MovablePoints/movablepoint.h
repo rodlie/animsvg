@@ -28,9 +28,9 @@
 
 #include <QMatrix4x4>
 #include <QPointF>
-#include <QRectF>
 #include <QPainter>
 
+#include "../qrect3d.h"
 #include "../smartPointers/ememory.h"
 #include "../skia/skiaincludes.h"
 
@@ -95,7 +95,7 @@ public:
         return nullptr;
     }
 
-    virtual void rectPointsSelection(const QRectF &absRect,
+    virtual void rectPointsSelection(const QRect3D &absRect,
                                      const CanvasMode mode,
                                      const PtOp &adder);
 
@@ -114,7 +114,7 @@ public:
 
     BasicTransformAnimator *getTransform();
 
-    bool isContainedInRect(const QRectF &absRect);
+    bool isContainedInRect(const QRect3D &absRect);
 
     void setSelected(const bool selected, const Op &deselect = nullptr);
     void deselect();

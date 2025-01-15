@@ -234,7 +234,7 @@ public:
                             const AlignPivot pivot,
                             const AlignRelativeTo relativeTo);
 
-    void selectAndAddContainedPointsToSelection(const QRectF &absRect);
+    void selectAndAddContainedPointsToSelection(const QRect3D &absRect);
 //
     //void newPaintBox(const QVector3D &pos);
 
@@ -544,7 +544,7 @@ public:
     {
         if (mClipToCanvasSize) {
             const auto bRect = Canvas::getCurrentBounds();
-            if (!QRectF(bRect).contains(absPos)) { return nullptr; }
+            if (!QRect3D(bRect).contains(absPos)) { return nullptr; }
         }
         return ContainerBox::getBoxAt(absPos);
     }
@@ -834,7 +834,7 @@ protected:
     bool mSelecting = false;
 //    bool mMoving = false;
 
-    QRectF mSelectionRect;
+    QRect3D mSelectionRect;
     CanvasMode mCurrentMode = CanvasMode::boxTransform;
 
     std::map<int, stdsptr<ConnContextObjList<GraphAnimator*>>> mSelectedForGraph;

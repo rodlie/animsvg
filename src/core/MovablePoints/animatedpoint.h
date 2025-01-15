@@ -28,8 +28,9 @@
 
 #include "movablepoint.h"
 #include <QPointF>
-#include <QRectF>
 #include <QPainter>
+
+#include "../qrect3d.h"
 #include "Animators/qvector3danimator.h"
 #include "skia/skiaincludes.h"
 

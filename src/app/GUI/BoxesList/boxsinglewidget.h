@@ -83,7 +83,7 @@ public:
     Key *getKeyAtPos(const int pressX,
                      const qreal pixelsPerFrame,
                      const int minViewedFrame);
-    void getKeysInRect(const QRectF &selectionRect,
+    void getKeysInRect(const QRect3D &selectionRect,
                        const qreal pixelsPerFrame,
                        QList<Key *> &listKeys);
     TimelineMovable *getRectangleMovableAtPos(

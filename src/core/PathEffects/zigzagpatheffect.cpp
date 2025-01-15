@@ -48,7 +48,7 @@ private:
 
 void ZigZagEffectCaller::apply(SkPath &path) {
     auto segLists = CubicList::sMakeFromSkPath(path);
-    const QRectF pathBounds = toQRectF(path.getBounds());
+    const QRect3D pathBounds = toQRect3D(path.getBounds());
     const auto srcFillType = path.getFillType();
     path.reset();
     path.setFillType(srcFillType);
@@ -58,7 +58,7 @@ void ZigZagEffectCaller::apply(SkPath &path) {
     rotate.rotate(mAngle);
     rotate.translate(-pivot.x(), -pivot.y());
     const QPolygonF linesBBPolygon = rotate.map(QPolygonF(pathBounds));
-    const QRectF secondBB = linesBBPolygon.boundingRect();
+    const QRect3D secondBB = linesBBPolygon.boundingRect();
     const QPolygonF secondLinesBB = rotate.map(QPolygonF(secondBB));
     const QLineF firstLine(secondLinesBB.at(0), secondLinesBB.at(1));
     const QLineF sideLine(secondLinesBB.at(1), secondLinesBB.at(2));

@@ -804,7 +804,7 @@ TimelineMovable* BoxSingleWidget::getRectangleMovableAtPos(
     return nullptr;
 }
 
-void BoxSingleWidget::getKeysInRect(const QRectF &selectionRect,
+void BoxSingleWidget::getKeysInRect(const QRect3D &selectionRect,
                                     const qreal pixelsPerFrame,
                                     QList<Key*>& listKeys) {
     if(isHidden() || !mTarget) return;

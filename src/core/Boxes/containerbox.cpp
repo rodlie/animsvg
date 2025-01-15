@@ -623,7 +623,7 @@ void ContainerBox::updateRelBoundingRect() {
             boundingPaths.addPath(childPath);
         }
     }
-    setRelBoundingRect(toQRectF(boundingPaths.computeTightBounds()));
+    setRelBoundingRect(toQRect3D(boundingPaths.computeTightBounds()));
 }
 
 
@@ -1134,7 +1134,7 @@ void ContainerBox::anim_setAbsFrame(const int frame) {
         cont->anim_setAbsFrame(frame);
 }
 
-void ContainerBox::addContainedBoxesToSelection(const QRectF &rect) {
+void ContainerBox::addContainedBoxesToSelection(const QRect3D &rect) {
     const auto pScene = getParentScene();
     const auto minMax = getContainedMinMax();
     for(int i = minMax.fMin; i <= minMax.fMax; i++) {

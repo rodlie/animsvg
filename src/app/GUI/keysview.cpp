@@ -147,7 +147,7 @@ void KeysView::deleteSelectedKeys() {
 }
 
 
-void KeysView::getKeysInRect(QRectF selectionRect,
+void KeysView::getKeysInRect(QRect3D selectionRect,
                              const qreal pixelsPerFrame,
                              QList<Key*>& listKeys) {
     const auto mainAbs = mBoxesListWidget->getMainAbstration();
@@ -616,7 +616,7 @@ void KeysView::paintEvent(QPaintEvent *) {
         if(mSelecting) {
             p.setPen(QPen(Qt::white, 1.5, Qt::DotLine));
             p.setBrush(Qt::NoBrush);
-            p.drawRect(QRectF((mSelectionRect.x() - mMinViewedFrame)*mPixelsPerFrame,
+            p.drawRect(QRect3D((mSelectionRect.x() - mMinViewedFrame)*mPixelsPerFrame,
                               mSelectionRect.y() - mViewedTop,
                               mSelectionRect.width()*mPixelsPerFrame,
                               mSelectionRect.height()));

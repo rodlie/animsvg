@@ -221,7 +221,7 @@ void QDoubleSlider::paint(QPainter *p,
     p->save();
 
     p->setRenderHint(QPainter::Antialiasing);
-    QRectF boundingRect = rect().adjusted(1, 1, -1, -1);
+    QRect3D boundingRect = rect().adjusted(1, 1, -1, -1);
     p->setPen(Qt::NoPen);
     if (mHovered) { p->setBrush(ThemeSupport::getThemeBaseDarkerColor()); }
     else { p->setBrush(allFill); }
@@ -249,7 +249,7 @@ void QDoubleSlider::paint(QPainter *p,
             if (mHovered) { p->setBrush(ThemeSupport::getThemeHighlightDarkerColor()); }
             else { p->setBrush(sliderFill); }
             const qreal heightRemoval = qMax(0., eSizesUI::widget/2 - valWidth)*0.5;
-            p->drawRoundedRect(QRectF(1, 1, valWidth, height() - 2).
+            p->drawRoundedRect(QRect3D(1, 1, valWidth, height() - 2).
                                adjusted(0, heightRemoval,
                                         0, -heightRemoval), xR, xR);
         }

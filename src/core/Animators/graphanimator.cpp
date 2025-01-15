@@ -376,7 +376,7 @@ qValueRange GraphAnimator::graph_getMinAndMaxValuesBetweenFrames(
 }
 
 
-void GraphAnimator::gAddKeysInRectToList(const QRectF &frameValueRect,
+void GraphAnimator::gAddKeysInRectToList(const QRect3D &frameValueRect,
                                          QList<GraphKey*> &target) {
     const auto& keys = anim_getKeys();
     for(const auto &key : keys) {

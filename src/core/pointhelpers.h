@@ -27,9 +27,10 @@
 #define POINTHELPERS_H
 #include <QPointF>
 #include <QString>
-#include <QRectF>
 #include <QPainter>
 #include <type_traits>
+
+#include "qrect3d.h"
 #include "simplemath.h"
 #include "Segments/conicsegment.h"
 #include "Segments/qcubicsegment1d.h"
@@ -116,7 +117,7 @@ extern qreal gTFromX(const qCubicSegment1D &seg,
 extern QVector3D gGetClosestPointOnLineSegment(const QVector3D &a,
                                              const QVector3D &b,
                                              const QVector3D &p);
-extern QVector3D gClosestPointOnRect(const QRectF &rect,
+extern QVector3D gClosestPointOnRect(const QRect3D &rect,
                                    const QVector3D &point,
                                    qreal *dist = nullptr);
 

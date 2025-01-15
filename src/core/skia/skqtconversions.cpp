@@ -41,14 +41,14 @@ SkIRect toSkIRect(const QRect &rect) {
                              rect.right(), rect.bottom());
 }
 
-QRectF toQRectF(const SkRect &rect) {
-    return QRectF(toQreal(rect.x()),
+QRect3D toQRect3D(const SkRect &rect) {
+    return QRect3D(toQreal(rect.x()),
                   toQreal(rect.y()),
                   toQreal(rect.width()),
                   toQreal(rect.height()));
 }
 
-SkRect toSkRect(const QRectF &rect) {
+SkRect toSkRect(const QRect3D &rect) {
     return SkRect::MakeXYWH(toSkScalar(rect.x()),
                             toSkScalar(rect.y()),
                             toSkScalar(rect.width()),

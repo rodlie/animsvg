@@ -57,7 +57,7 @@ public:
 
     void applyTransform(const QMatrix& transform);
 
-    QRectF fBoundingRect;
+    QRect3D fBoundingRect;
     QVector3D fLetterPos;
     QVector3D fOriginalPos;
 
@@ -82,7 +82,7 @@ public:
     void applyTransform(const QMatrix4x4 &transform);
     void queAllLetters();
 
-    QRectF fBoundingRect;
+    QRect3D fBoundingRect;
     QVector3D fWordPos;
     QVector3D fOriginalPos;
     QList<stdsptr<LetterRenderData>> fLetters;

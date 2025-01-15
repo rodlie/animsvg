@@ -219,9 +219,9 @@ qreal qMax4(qreal v1, qreal v2, qreal v3, qreal v4) {
     return qMax(v1, qMax(v2, qMax(v3, v4) ) );
 }
 
-QRectF qRectF4Points(QVector3D p1, QVector3D c1,
+QRect3D QRect3D4Points(QVector3D p1, QVector3D c1,
                      QVector3D c2, QVector3D p2) {
-    return QRectF(QPointF(qMin4(p1.x(), c1.x(), c2.x(), p2.x()),
+    return QRect3D(QPointF(qMin4(p1.x(), c1.x(), c2.x(), p2.x()),
                           qMin4(p1.y(), c1.y(), c2.y(), p2.y())),
                   QPointF(qMax4(p1.x(), c1.x(), c2.x(), p2.x()),
                           qMax4(p1.y(), c1.y(), c2.y(), p2.y())));

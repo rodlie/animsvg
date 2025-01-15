@@ -28,7 +28,7 @@
 #include "themesupport.h"
 
 void HddCachableCacheHandler::drawCacheOnTimeline(QPainter * const p,
-                                                  const QRectF& drawRect,
+                                                  const QRect3D& drawRect,
                                                   const int startFrame,
                                                   const int endFrame,
                                                   const qreal unit,
