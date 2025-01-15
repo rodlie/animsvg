@@ -33,12 +33,12 @@ GradientPoints::GradientPoints(BoundingBox * const parent) :
 
     setPointsHandler(enve::make_shared<PointsHandler>());
 
-    mStartAnimator = enve::make_shared<QPointFAnimator>("point1");
+    mStartAnimator = enve::make_shared<QVector3DAnimator>("point1");
     ca_addChild(mStartAnimator);
     mStartPoint = enve::make_shared<GradientPoint>(mStartAnimator.get(), parent);
     getPointsHandler()->appendPt(mStartPoint);
 
-    mEndAnimator = enve::make_shared<QPointFAnimator>("point2");
+    mEndAnimator = enve::make_shared<QVector3DAnimator>("point2");
     ca_addChild(mEndAnimator);
 
     mEndPoint = enve::make_shared<GradientPoint>(mEndAnimator.get(), parent);

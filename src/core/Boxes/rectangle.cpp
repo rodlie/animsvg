@@ -33,14 +33,14 @@
 RectangleBox::RectangleBox() : PathBox("RectangleBox", eBoxType::rectangle) {
     setPointsHandler(enve::make_shared<PointsHandler>());
 
-    mTopLeftAnimator = enve::make_shared<QPointFAnimator>("top left");
+    mTopLeftAnimator = enve::make_shared<QVector3DAnimator>("top left");
     mTopLeftPoint = enve::make_shared<AnimatedPoint>(
                 mTopLeftAnimator.get(), mTransformAnimator.data(),
                 TYPE_PATH_POINT);
     getPointsHandler()->appendPt(mTopLeftPoint);
     mTopLeftPoint->setRelativePos(QVector3D(0, 0, 0));
 
-    mBottomRightAnimator = enve::make_shared<QPointFAnimator>("bottom right");
+    mBottomRightAnimator = enve::make_shared<QVector3DAnimator>("bottom right");
     mBottomRightPoint = enve::make_shared<AnimatedPoint>(
                 mBottomRightAnimator.get(), mTransformAnimator.data(),
                 TYPE_PATH_POINT);
@@ -56,7 +56,7 @@ RectangleBox::RectangleBox() : PathBox("RectangleBox", eBoxType::rectangle) {
     ca_prependChild(mTopLeftAnimator.get(), mRasterEffectsAnimators);
     ca_prependChild(mBottomRightAnimator.get(), mRasterEffectsAnimators);
 
-    mRadiusAnimator = enve::make_shared<QPointFAnimator>("round radius");
+    mRadiusAnimator = enve::make_shared<QVector3DAnimator>("round radius");
     mRadiusAnimator->setValuesRange(0, 9999);
 
     mRadiusPoint = enve::make_shared<AnimatedPoint>(

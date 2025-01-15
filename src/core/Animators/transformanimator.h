@@ -35,7 +35,7 @@
 class TransformUpdater;
 class BoxPathPoint;
 class MovablePoint;
-class QPointFAnimator;
+class QVector3DAnimator;
 
 class CORE_EXPORT BasicTransformAnimator : public StaticComplexAnimator {
     e_OBJECT
@@ -110,8 +110,8 @@ public:
 
     void setParentTransformAnimator(BasicTransformAnimator *parent);
 
-    QPointFAnimator *getPosAnimator() const;
-    QPointFAnimator *getScaleAnimator() const;
+    QVector3DAnimator *getPosAnimator() const;
+    QVector3DAnimator *getScaleAnimator() const;
     QrealAnimator *getRotAnimator() const;
 
     void updateTotalTransform(const UpdateReason reason);
@@ -127,8 +127,8 @@ protected:
 
     ConnContextQPtr<BasicTransformAnimator> mParentTransform;
 
-    qsptr<QPointFAnimator> mPosAnimator;
-    qsptr<QPointFAnimator> mScaleAnimator;
+    qsptr<QVector3DAnimator> mPosAnimator;
+    qsptr<QVector3DAnimator> mScaleAnimator;
     qsptr<QrealAnimator> mRotAnimator;
     qsptr<ComboBoxProperty> mSVGBeginProperty;
     qsptr<ComboBoxProperty> mSVGEndProperty;
@@ -194,11 +194,11 @@ public:
     bool posOrPivotRecording() const;
     bool rotOrScaleOrPivotRecording() const;
 
-    QPointFAnimator *getShearAnimator() const {
+    QVector3DAnimator *getShearAnimator() const {
         return mShearAnimator.get();
     }
 
-    QPointFAnimator *getPivotAnimator() const {
+    QVector3DAnimator *getPivotAnimator() const {
         return mPivotAnimator.get();
     }
 
@@ -206,8 +206,8 @@ public:
         return mOpacityAnimator.get();
     }
 private:
-    qsptr<QPointFAnimator> mPivotAnimator;
-    qsptr<QPointFAnimator> mShearAnimator;
+    qsptr<QVector3DAnimator> mPivotAnimator;
+    qsptr<QVector3DAnimator> mShearAnimator;
     qsptr<QrealAnimator> mOpacityAnimator;
 };
 

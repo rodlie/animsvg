@@ -50,8 +50,8 @@ protected:
                 BoundingBox* const oldTarget,
                 BoundingBox* const newTarget) override;
 
-    qsptr<QPointFAnimator> mPosInfluence;
-    qsptr<QPointFAnimator> mScaleInfluence;
+    qsptr<QVector3DAnimator> mPosInfluence;
+    qsptr<QVector3DAnimator> mScaleInfluence;
     qsptr<QrealAnimator> mRotInfluence;
 };
 

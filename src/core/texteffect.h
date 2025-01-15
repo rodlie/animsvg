@@ -85,10 +85,10 @@ private:
     qsptr<StaticComplexAnimator> mDiminishCont;
     qsptr<QrealAnimator> mDiminishInfluence;
 
-    qsptr<QPointFAnimator> mP1Anim;
-    qsptr<QPointFAnimator> mP2Anim;
-    qsptr<QPointFAnimator> mP3Anim;
-    qsptr<QPointFAnimator> mP4Anim;
+    qsptr<QVector3DAnimator> mP1Anim;
+    qsptr<QVector3DAnimator> mP2Anim;
+    qsptr<QVector3DAnimator> mP3Anim;
+    qsptr<QVector3DAnimator> mP4Anim;
 
     stdsptr<AnimatedPoint> mP1Pt;
     stdsptr<AnimatedPoint> mP2Pt;

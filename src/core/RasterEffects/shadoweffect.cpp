@@ -42,7 +42,7 @@ ShadowEffect::ShadowEffect() :
     mBlurRadius = enve::make_shared<QrealAnimator>("blur radius");
     mOpacity = enve::make_shared<QrealAnimator>(1, 0, 1, 0.01, "opacity");
     mColor = enve::make_shared<ColorAnimator>();
-    mTranslation = enve::make_shared<QPointFAnimator>("translation");
+    mTranslation = enve::make_shared<QVector3DAnimator>("translation");
 
     mBlurRadius->setValueRange(0, 300);
     mBlurRadius->setCurrentBaseValue(10);

@@ -29,7 +29,7 @@
 class GradientPoint;
 class MovablePoint;
 class PathBox;
-class QPointFAnimator;
+class QVector3DAnimator;
 #include "skia/skiaincludes.h"
 
 class CORE_EXPORT GradientPoints : public StaticComplexAnimator {
@@ -56,13 +56,13 @@ public:
 
     bool enabled() const { return mEnabled; }
 
-    QPointFAnimator* startAnimator() const { return mStartAnimator.get(); }
-    QPointFAnimator* endAnimator() const { return mEndAnimator.get(); }
+    QVector3DAnimator* startAnimator() const { return mStartAnimator.get(); }
+    QVector3DAnimator* endAnimator() const { return mEndAnimator.get(); }
 private:
     bool mEnabled;
 
-    qsptr<QPointFAnimator> mStartAnimator;
-    qsptr<QPointFAnimator> mEndAnimator;
+    qsptr<QVector3DAnimator> mStartAnimator;
+    qsptr<QVector3DAnimator> mEndAnimator;
 
     stdsptr<GradientPoint> mStartPoint;
     stdsptr<GradientPoint> mEndPoint;

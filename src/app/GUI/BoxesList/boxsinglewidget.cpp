@@ -524,8 +524,8 @@ void BoxSingleWidget::setTargetAbstraction(SWT_Abstraction *abs) {
             });
         }
         if(complexAnimator && !abs->contentVisible()) {
-            if(enve_cast<QPointFAnimator*>(prop)) {
-                updateValueSlidersForQPointFAnimator();
+            if(enve_cast<QVector3DAnimator*>(prop)) {
+                updateValueSlidersForQVector3DAnimator();
                 valueSliderVisible = mValueSlider->isVisible();
                 secondValueSliderVisible = mSecondValueSlider->isVisible();
             } else {
@@ -947,10 +947,10 @@ void BoxSingleWidget::switchBoxLockedAction() {
     update();
 }
 
-void BoxSingleWidget::updateValueSlidersForQPointFAnimator() {
+void BoxSingleWidget::updateValueSlidersForQVector3DAnimator() {
     if(!mTarget) return;
     const auto target = mTarget->getTarget();
-    const auto asQPointFAnim = enve_cast<QPointFAnimator*>(target);
+    const auto asQPointFAnim = enve_cast<QVector3DAnimator*>(target);
     if(!asQPointFAnim || mTarget->contentVisible()) return;
     if(width() - mFillWidget->x() > 10*eSizesUI::widget) {
         mValueSlider->setTarget(asQPointFAnim->getXAnimator());
@@ -989,5 +989,5 @@ void BoxSingleWidget::resizeEvent(QResizeEvent *) {
     updateCompositionBoxVisible();
     updatePathCompositionBoxVisible();
     updateFillTypeBoxVisible();
-    updateValueSlidersForQPointFAnimator();
+    updateValueSlidersForQVector3DAnimator();
 }

@@ -32,11 +32,11 @@
 FollowObjectEffectBase::FollowObjectEffectBase(
         const QString& name, const TransformEffectType type) :
     TargetTransformEffect(name, type) {
-    mPosInfluence = enve::make_shared<QPointFAnimator>(
+    mPosInfluence = enve::make_shared<QVector3DAnimator>(
                         QPointF{1., 1.}, QPointF{-10., -10.},
                         QPointF{10., 10.}, QPointF{0.01, 0.01},
                         "pos influence");
-    mScaleInfluence = enve::make_shared<QPointFAnimator>(
+    mScaleInfluence = enve::make_shared<QVector3DAnimator>(
                         QPointF{1., 1.}, QPointF{-10., -10.},
                         QPointF{10., 10.}, QPointF{0.01, 0.01},
                         "scale influence");

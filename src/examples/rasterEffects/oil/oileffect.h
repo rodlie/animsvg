@@ -18,7 +18,7 @@ public:
             const qreal relFrame, const qreal resolution,
             const qreal influence, BoxRenderData* const data) const;
 private:
-    qsptr<QPointFAnimator> mBrushSize;
+    qsptr<QVector3DAnimator> mBrushSize;
     qsptr<QrealAnimator> mAccuracy;
     qsptr<QrealAnimator> mStrokeLength;
     qsptr<QrealAnimator> mMaxStrokes;

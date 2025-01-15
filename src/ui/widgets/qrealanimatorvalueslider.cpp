@@ -79,7 +79,7 @@ QrealAnimatorValueSlider::QrealAnimatorValueSlider(QString name,
 QrealAnimator* QrealAnimatorValueSlider::getTransformTargetSibling() {
     if(mTransformTarget) {
         const auto parent = mTransformTarget->getParent();
-        if(const auto qPA = enve_cast<QPointFAnimator*>(parent)) {
+        if(const auto qPA = enve_cast<QVector3DAnimator*>(parent)) {
             const bool thisX = qPA->getXAnimator() == mTransformTarget;
             return thisX ? qPA->getYAnimator() :
                            qPA->getXAnimator();

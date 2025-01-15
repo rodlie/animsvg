@@ -35,7 +35,7 @@ class Expression;
 class CORE_EXPORT QrealAnimator :  public GraphAnimator {
     Q_OBJECT
     e_OBJECT
-    friend class QPointFAnimator;
+    friend class QVector3DAnimator;
 protected:
     QrealAnimator(const QString& name);
     QrealAnimator(const qreal iniVal,

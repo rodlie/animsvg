@@ -35,10 +35,10 @@
 
 BasicTransformAnimator::BasicTransformAnimator() :
     StaticComplexAnimator("transform") {
-    mPosAnimator = enve::make_shared<QPointFAnimator>("translation");
+    mPosAnimator = enve::make_shared<QVector3DAnimator>("translation");
     mPosAnimator->setBaseValue(QVector3D(0, 0, 0));
 
-    mScaleAnimator = enve::make_shared<QPointFAnimator>("scale");
+    mScaleAnimator = enve::make_shared<QVector3DAnimator>("scale");
     mScaleAnimator->setBaseValue(QPointF(1, 1));
     mScaleAnimator->setPrefferedValueStep(0.05);
 
@@ -287,11 +287,11 @@ void BasicTransformAnimator::scaleRelativeToSavedValue(const qreal sx,
     mPosAnimator->setBaseValue(QPointF(matrix.dx(), matrix.dy()));
 }
 
-QPointFAnimator *BasicTransformAnimator::getPosAnimator() const {
+QVector3DAnimator *BasicTransformAnimator::getPosAnimator() const {
     return mPosAnimator.get();
 }
 
-QPointFAnimator *BasicTransformAnimator::getScaleAnimator() const {
+QVector3DAnimator *BasicTransformAnimator::getScaleAnimator() const {
     return mScaleAnimator.get();
 }
 
@@ -336,12 +336,12 @@ FrameRange BasicTransformAnimator::prp_getIdenticalRelRange(const int relFrame) 
 }
 
 AdvancedTransformAnimator::AdvancedTransformAnimator() {
-    mShearAnimator = enve::make_shared<QPointFAnimator>("shear");
+    mShearAnimator = enve::make_shared<QVector3DAnimator>("shear");
     mShearAnimator->setBaseValue(QVector3D(0, 0, 0));
     mShearAnimator->setValuesRange(-100, 100);
     mShearAnimator->setPrefferedValueStep(0.1);
 
-    mPivotAnimator = enve::make_shared<QPointFAnimator>("pivot");
+    mPivotAnimator = enve::make_shared<QVector3DAnimator>("pivot");
     mPivotAnimator->setBaseValue(QVector3D(0, 0, 0));
 
     mOpacityAnimator = enve::make_shared<QrealAnimator>("opacity");
@@ -621,7 +621,7 @@ const QString BoxTransformAnimator::getSVGPropertyAction(const int value)
     return QString();
 }
 
-QDomElement saveSVG_Split(QPointFAnimator* const anim,
+QDomElement saveSVG_Split(QVector3DAnimator* const anim,
                           const FrameRange& visRange,
                           const qreal multiplier,
                           const qreal def,

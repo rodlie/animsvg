@@ -77,7 +77,7 @@ QString vec2ValScript(const QString& name,
                            QString::number(value.y()) + "]";
 }
 
-void qPointFAnimatorCreate(ShaderEffectJS &engine,
+void QVector3DAnimatorCreate(ShaderEffectJS &engine,
                            const bool glValue,
                            const GLint loc,
                            Property * const property,
@@ -86,7 +86,7 @@ void qPointFAnimatorCreate(ShaderEffectJS &engine,
                            const qreal influence,
                            UniformSpecifiers& uniSpec)
 {
-    const auto anim = static_cast<QPointFAnimator*>(property);
+    const auto anim = static_cast<QVector3DAnimator*>(property);
     const QVector3D val = anim->getEffectiveValue(relFrame)*resolution*influence;
     const QString valScript = vec2ValScript(anim->prp_getName(), val);
     engine.addSetter(val);
@@ -155,7 +155,7 @@ void UniformSpecifierCreator::create(ShaderEffectJS &engine,
                                  mInfluenceScaled ? influence : 1,
                                  uniSpec);
     case ShaderPropertyType::vec2Property:
-        return qPointFAnimatorCreate(engine,
+        return QVector3DAnimatorCreate(engine,
                                      fGLValue,
                                      loc,
                                      property,

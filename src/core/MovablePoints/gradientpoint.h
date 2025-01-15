@@ -31,7 +31,7 @@ class PathBox;
 class CORE_EXPORT GradientPoint : public AnimatedPoint {
     e_OBJECT
 public:
-    GradientPoint(QPointFAnimator* const associatedAnimator,
+    GradientPoint(QVector3DAnimator* const associatedAnimator,
                   BoundingBox * const parent);
     void setColor(const QColor &fillColor);
     void drawSk(SkCanvas * const canvas,

@@ -54,7 +54,7 @@ class CORE_EXPORT QVector3DAnimatorCreator : public ShaderPropertyCreator {
     const QString fNameY;
 
     qsptr<Property> create() const {
-        return enve::make_shared<QPointFAnimator>(
+        return enve::make_shared<QVector3DAnimator>(
                     fIniVal, fMinVal, fMaxVal, fStep, fNameX, fNameY, fNameUI);
     }
 };

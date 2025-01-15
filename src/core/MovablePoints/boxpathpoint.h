@@ -30,7 +30,7 @@ class BoxTransformAnimator;
 class CORE_EXPORT BoxPathPoint : public AnimatedPoint {
     e_OBJECT
 protected:
-    BoxPathPoint(QPointFAnimator * const associatedAnimator,
+    BoxPathPoint(QVector3DAnimator * const associatedAnimator,
                  BoxTransformAnimator * const boxTrans);
 public:
     void setRelativePos(const QPointF& relPos);

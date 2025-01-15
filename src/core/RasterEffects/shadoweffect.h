@@ -24,7 +24,7 @@ private:
     qsptr<QrealAnimator> mBlurRadius;
     qsptr<QrealAnimator> mOpacity;
     qsptr<ColorAnimator> mColor;
-    qsptr<QPointFAnimator> mTranslation;
+    qsptr<QVector3DAnimator> mTranslation;
 };
 
 #endif // SHADOWEFFECT_H

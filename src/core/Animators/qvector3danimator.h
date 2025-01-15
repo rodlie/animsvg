@@ -23,21 +23,21 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef QPOINTFANIMATOR_H
-#define QPOINTFANIMATOR_H
+#ifndef QVector3DAnimator_H
+#define QVector3DAnimator_H
 #include "staticcomplexanimator.h"
 #include "../skia/skiaincludes.h"
 
-class CORE_EXPORT QPointFAnimator : public StaticComplexAnimator {
+class CORE_EXPORT QVector3DAnimator : public StaticComplexAnimator {
     e_OBJECT
 protected:
-    QPointFAnimator(const QString& name);
-    QPointFAnimator(const QPointF& iniValue,
+    QVector3DAnimator(const QString& name);
+    QVector3DAnimator(const QPointF& iniValue,
                     const QPointF& minValue,
                     const QPointF& maxValue,
                     const QPointF& valueStep,
                     const QString& name);
-    QPointFAnimator(const QPointF& iniValue,
+    QVector3DAnimator(const QPointF& iniValue,
                     const QPointF& minValue,
                     const QPointF& maxValue,
                     const QPointF& valueStep,
@@ -134,4 +134,4 @@ protected:
     qsptr<QrealAnimator> mYAnimator;
 };
 
-#endif // QPOINTFANIMATOR_H
+#endif // QVector3DAnimator_H
