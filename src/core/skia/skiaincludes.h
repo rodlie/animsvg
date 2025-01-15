@@ -42,6 +42,7 @@ QT_WARNING_DISABLE_GCC("-Wattributes")
 #include "include/gpu/GrBackendSurface.h"
 #include "include/gpu/GrContext.h"
 
+#include "include/core/SkPoint3.h"
 #include "include/core/SkCanvas.h"
 #include "include/core/SkSurface.h"
 #include "include/core/SkPixelRef.h"
