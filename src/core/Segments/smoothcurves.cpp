@@ -29,8 +29,8 @@ class MovingAverage {
 public:
     MovingAverage(const int w);
 
-    void add(const QPointF&);
-    const QPointF& average() const;
+    void add(const QVector3D);
+    const QVector3D average() const;
 private:
     const int mWindow;
     QVector<QPointF> mWindowData;
@@ -48,7 +48,7 @@ MovingAverage::MovingAverage(const int w) : mWindow(w){
     mWindowData = QVector<QPointF>(mWindow, QPointF{0, 0});
 }
 
-void MovingAverage::add(const QPointF& x) {
+void MovingAverage::add(const QVector3D x) {
     mIndex = (mIndex + 1) % mWindow;
     mSum -= mWindowData[mIndex];
     mWindowData[mIndex] = x;
@@ -63,7 +63,7 @@ void MovingAverage::add(const QPointF& x) {
     }
 }
 
-const QPointF& MovingAverage::average() const {
+const QVector3D MovingAverage::average() const {
     return mAverage;
 }
 

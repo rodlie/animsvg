@@ -39,7 +39,7 @@ BasicTransformAnimator::BasicTransformAnimator() :
     mPosAnimator->setBaseValue(QVector3D(0, 0, 0));
 
     mScaleAnimator = enve::make_shared<QVector3DAnimator>("scale");
-    mScaleAnimator->setBaseValue(QPointF(1, 1));
+    mScaleAnimator->setBaseValue(QVector3D(1, 1, 1));
     mScaleAnimator->setPrefferedValueStep(0.05);
 
     mRotAnimator = enve::make_shared<QrealAnimator>("rotation");
@@ -65,7 +65,7 @@ BasicTransformAnimator::BasicTransformAnimator() :
 
 void BasicTransformAnimator::resetScale() {
     mScaleAnimator->prp_startTransform();
-    mScaleAnimator->setBaseValue(QPointF(1, 1));
+    mScaleAnimator->setBaseValue(QVector3D(1, 1, 1));
     mScaleAnimator->prp_finishTransform();
 }
 
@@ -87,12 +87,12 @@ void BasicTransformAnimator::reset() {
     resetRotation();
 }
 
-void BasicTransformAnimator::setScale(const qreal sx, const qreal sy) {
-    mScaleAnimator->setBaseValue(QPointF(sx, sy));
+void BasicTransformAnimator::setScale(const qreal sx, const qreal sy, const qreal sz) {
+    mScaleAnimator->setBaseValue(QVector3D(sx, sy, sz));
 }
 
-void BasicTransformAnimator::setPosition(const qreal x, const qreal y) {
-    mPosAnimator->setBaseValue(QPointF(x, y));
+void BasicTransformAnimator::setPosition(const qreal x, const qreal y, const qreal z) {
+    mPosAnimator->setBaseValue(QVector3D(x, y, z));
 }
 
 void BasicTransformAnimator::setRotation(const qreal rot) {
@@ -167,15 +167,15 @@ QVector3D BasicTransformAnimator::mapFromParent(const QVector3D &parentRelPos) c
 }
 
 SkPoint3 BasicTransformAnimator::mapAbsPosToRel(const SkPoint3 &absPos) const {
-    return toSkPoint(mapAbsPosToRel(toQPointF(absPos)));
+    return toSkPoint(mapAbsPosToRel(toQVector3D(absPos)));
 }
 
 SkPoint3 BasicTransformAnimator::mapRelPosToAbs(const SkPoint3 &relPos) const {
-    return toSkPoint(mapRelPosToAbs(toQPointF(relPos)));
+    return toSkPoint(mapRelPosToAbs(toQVector3D(relPos)));
 }
 
 SkPoint3 BasicTransformAnimator::mapFromParent(const SkPoint3 &parentRelPos) const {
-    return toSkPoint(mapFromParent(toQPointF(parentRelPos)));
+    return toSkPoint(mapFromParent(toQVector3D(parentRelPos)));
 }
 
 QMatrix4x4 BasicTransformAnimator::getRelativeTransformAtFrame(
@@ -212,7 +212,7 @@ void BasicTransformAnimator::rotateRelativeToSavedValue(const qreal rotRel,
                      -pivot.y() + mPosAnimator->getSavedYValue());
     const bool flip = rotationFlipped();
     rotateRelativeToSavedValue(flip ? -rotRel : rotRel);
-    mPosAnimator->setBaseValue(QPointF(matrix.dx(), matrix.dy()));
+    mPosAnimator->setBaseValue(QVector3D(matrix.dx(), matrix.dy(), matrix.dz()));
 }
 
 void BasicTransformAnimator::updateRelativeTransform(const UpdateReason reason) {
@@ -284,7 +284,7 @@ void BasicTransformAnimator::scaleRelativeToSavedValue(const qreal sx,
                      -pivot.y() + mPosAnimator->getSavedYValue());
 
     scale(sx, sy);
-    mPosAnimator->setBaseValue(QPointF(matrix.dx(), matrix.dy()));
+    mPosAnimator->setBaseValue(QVector3D(matrix.dx(), matrix.dy(), matrix.dz()));
 }
 
 QVector3DAnimator *BasicTransformAnimator::getPosAnimator() const {
@@ -383,8 +383,8 @@ void AdvancedTransformAnimator::setOpacity(const qreal newOpacity) {
     mOpacityAnimator->setCurrentBaseValue(newOpacity);
 }
 
-void AdvancedTransformAnimator::setPivot(const qreal x, const qreal y) {
-    mPivotAnimator->setBaseValue(QPointF(x, y));
+void AdvancedTransformAnimator::setPivot(const qreal x, const qreal y, const qreal z) {
+    mPivotAnimator->setBaseValue(QVector3D(x, y, z));
 }
 
 void AdvancedTransformAnimator::startPivotTransform() {

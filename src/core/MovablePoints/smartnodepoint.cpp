@@ -258,8 +258,8 @@ SmartCtrlPoint *SmartNodePoint::getC2Pt() {
 }
 
 void drawCtrlPtLine(SkCanvas * const canvas,
-                    const QPointF& qCtrlAbsPos,
-                    const QPointF& qAbsPos,
+                    const QVector3D qCtrlAbsPos,
+                    const QVector3D qAbsPos,
                     const SkPoint& skAbsPos,
                     const float invScale) {
     if(pointToLen(qCtrlAbsPos - qAbsPos) > 1) {

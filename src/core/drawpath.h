@@ -38,7 +38,7 @@ class CORE_EXPORT DrawPath {
 public:
     DrawPath();
 
-    void lineTo(const QPointF& pos);
+    void lineTo(const QVector3D pos);
     void smooth(const int window);
     void fit(const qreal maxError, const bool split);
     QList<qCubicSegment2D>& getFitted()
@@ -48,8 +48,8 @@ public:
     void addForceSplit(const int id);
     void removeForceSplit(const int id);
 
-    int nearestSmoothPt(const QPointF& pos, qreal* const dist) const;
-    int nearestForceSplit(const QPointF& pos, qreal* const dist) const;
+    int nearestSmoothPt(const QVector3D pos, qreal* const dist) const;
+    int nearestForceSplit(const QVector3D pos, qreal* const dist) const;
 
     const QVector<QPointF>& smoothPts() const
     { return mSmoothPts; }

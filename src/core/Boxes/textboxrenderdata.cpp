@@ -151,7 +151,7 @@ void WordRenderData::initialize(const qreal relFrame,
 
     for(const auto& letterStr : word) {
         const auto letter = enve::make_shared<LetterRenderData>(parent);
-        letter->initialize(relFrame, QPointF(xPos, pos.y()),
+        letter->initialize(relFrame, QVector3D(xPos, pos.y(), pos.z()),
                            letterStr, font, parent, scene);
 
         fLetters << letter;
@@ -205,7 +205,7 @@ void LineRenderData::initialize(const qreal relFrame,
             letterSpacing, scene](const int i0, const int i) {
         const QString wordStr = line.mid(i0, i - i0 + 1);
         const auto word = enve::make_shared<WordRenderData>(parent);
-        word->initialize(relFrame, QPointF(xPos, pos.y()), wordStr, font,
+        word->initialize(relFrame, QVector3D(xPos, pos.y(), pos.z()), wordStr, font,
                          letterSpacing, parent, scene);
         fWords << word;
         fChildrenRenderData << word;
@@ -288,8 +288,8 @@ void TextBoxRenderData::initialize(const QString &text,
         const qreal lineWidth = horizontalAdvance(font, lineStr, letterSpacing,
                                                   wordSpacing);
         const qreal xPos = textLineX(hAlignment, lineWidth, maxWidth) + xTranslate;
-        const auto line = enve::make_shared<LineRenderData>(parent);
-        line->initialize(fRelFrame, QPointF(xPos, yPos), lineStr,
+        const auto line = enve::make_shared<LineRenderData>(parent); // FIXME: z prop?
+        line->initialize(fRelFrame, QVector3D(xPos, yPos, 0), lineStr,
                          font, letterSpacing, wordSpacing, parent, scene);
         fLines << line;
         fChildrenRenderData << line;

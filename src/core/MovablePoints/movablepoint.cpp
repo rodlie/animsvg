@@ -195,7 +195,7 @@ void MovablePoint::scale(const qreal scaleXBy,
     setRelativePos(scaleMatrix.map(mSavedRelPos));
 }
 
-void MovablePoint::moveToAbs(const QPointF& absPos) {
+void MovablePoint::moveToAbs(const QVector3D absPos) {
     setAbsolutePos(absPos);
 }
 

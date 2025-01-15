@@ -72,7 +72,7 @@ public:
     WordRenderData(TextBox* const parent);
 
     void initialize(const qreal relFrame,
-                    const QPointF& pos,
+                    const QVector3D pos,
                     const QString& word,
                     const SkFont &font,
                     const qreal letterSpacing,
@@ -93,7 +93,7 @@ public:
     LineRenderData(TextBox* const parent);
 
     void initialize(const qreal relFrame,
-                    const QPointF& pos,
+                    const QVector3D pos,
                     const QString& line,
                     const SkFont &font,
                     const qreal letterSpacing,

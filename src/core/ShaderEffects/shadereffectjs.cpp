@@ -221,7 +221,7 @@ void ShaderEffectJS::setSceneRect(const SkIRect& rect)
     ThreadSafeQJSEngine::call(&mEngine, [&]{ m_eSetSceneRect.call(args); });
 }
 
-QJSValue ShaderEffectJS::toValue(const QPointF& val)
+QJSValue ShaderEffectJS::toValue(const QVector3D val)
 {
     QJSValue arr = mEngine.newArray(2);
     arr.setProperty(0, val.x());

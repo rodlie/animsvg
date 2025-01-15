@@ -220,7 +220,7 @@ QrealPoint *GraphKey::mousePress(const qreal frame,
     return nullptr;
 }
 
-QVector3D operator*(const QPointF& p1, const QPointF& p2) {
+QVector3D operator*(const QVector3D p1, const QVector3D p2) {
     return {p1.x()*p2.x(), p1.y()*p2.y()};
 }
 
@@ -232,12 +232,12 @@ void GraphKey::updateCtrlFromCtrl(const QrealPointType type,
     QVector3D toPt;
     QrealPoint *targetPt;
     if(type == QrealPointType::c1Pt) {
-        toPt = QPointF(getC0Frame(), getC0Value());
-        fromPt = QPointF(getC1Frame(), getC1Value());
+        toPt = QVector3D(getC0Frame(), getC0Value(), 0);
+        fromPt = QVector3D(getC1Frame(), getC1Value(), 0);
         targetPt = mC0Point.get();
     } else {
-        fromPt = QPointF(getC0Frame(), getC0Value());
-        toPt = QPointF(getC1Frame(), getC1Value());
+        fromPt = QVector3D(getC0Frame(), getC0Value(), 0);
+        toPt = QVector3D(getC1Frame(), getC1Value(), 0);
         targetPt = mC1Point.get();
     }
     QVector3D newFrameValue;

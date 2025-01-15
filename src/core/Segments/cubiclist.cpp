@@ -128,26 +128,26 @@ QList<CubicList> CubicList::sMakeFromSkPath(const SkPath &src) {
         SkPoint3 pts[4];
         switch(iter.next(pts)) {
         case SkPath::kLine_Verb: {
-            QVector3D pt1 = toQPointF(pts[1]);
+            QVector3D pt1 = toQVector3D(pts[1]);
             segs << qCubicSegment2D(lastPos, lastPos, pt1, pt1);
             lastPos = pt1;
         } break;
         case SkPath::kQuad_Verb: {
-            QVector3D pt2 = toQPointF(pts[2]);
-            segs << qCubicSegment2D::sFromQuad(lastPos, toQPointF(pts[1]), pt2);
+            QVector3D pt2 = toQVector3D(pts[2]);
+            segs << qCubicSegment2D::sFromQuad(lastPos, toQVector3D(pts[1]), pt2);
             lastPos = pt2;
         } break;
         case SkPath::kConic_Verb: {
-            QVector3D pt2 = toQPointF(pts[2]);
-            segs << qCubicSegment2D::sFromConic(lastPos, toQPointF(pts[1]), pt2,
+            QVector3D pt2 = toQVector3D(pts[2]);
+            segs << qCubicSegment2D::sFromConic(lastPos, toQVector3D(pts[1]), pt2,
                                                toQreal(iter.conicWeight()));
             lastPos = pt2;
         } break;
         case SkPath::kCubic_Verb: {
-            QVector3D pt3 = toQPointF(pts[3]);
+            QVector3D pt3 = toQVector3D(pts[3]);
             segs << qCubicSegment2D(lastPos,
-                                    toQPointF(pts[1]),
-                                    toQPointF(pts[2]),
+                                    toQVector3D(pts[1]),
+                                    toQVector3D(pts[2]),
                                     pt3);
             lastPos = pt3;
         } break;
@@ -160,7 +160,7 @@ QList<CubicList> CubicList::sMakeFromSkPath(const SkPath &src) {
                 result << segs;
                 segs.clear();
             }
-            lastMovePos = toQPointF(pts[0]);
+            lastMovePos = toQVector3D(pts[0]);
             lastPos = lastMovePos;
         } break;
         case SkPath::kDone_Verb: {
@@ -292,19 +292,19 @@ int cubicBezierLine(const qCubicSegment2D &seg,
                     const QLineF& line,
                     QList<QPointF>& result);
 
-bool ascendingX(const QPointF& pt1, const QPointF& pt2) {
+bool ascendingX(const QVector3D pt1, const QVector3D pt2) {
     return pt1.x() < pt2.x();
 }
 
-bool descendingX(const QPointF& pt1, const QPointF& pt2) {
+bool descendingX(const QVector3D pt1, const QVector3D pt2) {
     return pt1.x() > pt2.x();
 }
 
-bool ascendingY(const QPointF& pt1, const QPointF& pt2) {
+bool ascendingY(const QVector3D pt1, const QVector3D pt2) {
     return pt1.y() < pt2.y();
 }
 
-bool descendingY(const QPointF& pt1, const QPointF& pt2) {
+bool descendingY(const QVector3D pt1, const QVector3D pt2) {
     return pt1.y() > pt2.y();
 }
 

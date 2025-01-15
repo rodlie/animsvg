@@ -178,9 +178,9 @@ public:
         return mNode_d->getType();
     }
 
-    void c0Moved(const QPointF& c0);
+    void c0Moved(const QVector3D c0);
 
-    void c2Moved(const QPointF& c2);
+    void c2Moved(const QVector3D c2);
 
     void setNode(const Node * const node) {
         mNode_d = node;

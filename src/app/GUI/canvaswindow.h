@@ -172,7 +172,7 @@ signals:
 public:
     void setCurrentCanvas(const int id);
 
-    QVector3D mapToCanvasCoord(const QPointF& windowCoord);
+    QVector3D mapToCanvasCoord(const QVector3D windowCoord);
     void translateView(const QVector3D &trans);
     void zoomView(const qreal scaleBy,
                   const QVector3D &absOrigin);

@@ -380,7 +380,7 @@ void Canvas::scaleSelectedBy(const qreal scaleBy,
 
 void Canvas::scaleSelectedBy(const qreal scaleXBy,
                              const qreal scaleYBy,
-                             const QPointF& absOrigin,
+                             const QVector3D absOrigin,
                              const bool startTrans) {
     if(mDocument.fLocalPivot) {
         if(startTrans) {
@@ -687,7 +687,7 @@ void Canvas::moveSelectedBoxesByAbs(const QVector3D &by,
 }
 
 //QVector3D BoxesGroup::getRelCenterPosition() {
-//    QVector3D posSum = QPointF(0., 0.);
+//    QVector3D posSum = QVector3D(0., 0., 0.);
 //    if(mChildren.isEmpty()) return posSum;
 //    int count = mChildren.length();
 //    for(const auto& box : mChildren) {

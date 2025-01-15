@@ -32,15 +32,15 @@ class CORE_EXPORT QVector3DAnimator : public StaticComplexAnimator {
     e_OBJECT
 protected:
     QVector3DAnimator(const QString& name);
-    QVector3DAnimator(const QPointF& iniValue,
-                    const QPointF& minValue,
-                    const QPointF& maxValue,
-                    const QPointF& valueStep,
+    QVector3DAnimator(const QVector3D iniValue,
+                    const QVector3D minValue,
+                    const QVector3D maxValue,
+                    const QVector3D valueStep,
                     const QString& name);
-    QVector3DAnimator(const QPointF& iniValue,
-                    const QPointF& minValue,
-                    const QPointF& maxValue,
-                    const QPointF& valueStep,
+    QVector3DAnimator(const QVector3D iniValue,
+                    const QVector3D minValue,
+                    const QVector3D maxValue,
+                    const QVector3D valueStep,
                     const QString& nameX,
                     const QString& nameY,
                     const QString& name);

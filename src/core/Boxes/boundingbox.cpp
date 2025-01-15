@@ -1113,8 +1113,9 @@ void BoundingBox::cancelTransform() {
 }
 
 QVector3D BoundingBox::getAbsolutePos() const {
-    return QPointF(mTransformAnimator->getTotalTransform().dx(),
-                   mTransformAnimator->getTotalTransform().dy());
+    return QVector3D(mTransformAnimator->getTotalTransform().dx(),
+                     mTransformAnimator->getTotalTransform().dy(),
+                     mTransformAnimator->getTotalTransform().dz());
 }
 
 void BoundingBox::updateDrawRenderContainerTransform() {

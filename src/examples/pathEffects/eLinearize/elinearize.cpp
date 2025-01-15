@@ -93,7 +93,7 @@ void eLinearize000EffectCaller::apply(SkPath &path) {
     path.setFillType(src.getFillType());
 
     SkPath::Iter iter(src, false);
-    SkPoint pts[4];
+    SkPoint3 pts[4];
     for(;;) {
         switch(iter.next(pts)) {
         case SkPath::kLine_Verb: {

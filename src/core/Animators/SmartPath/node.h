@@ -71,8 +71,8 @@ struct CORE_EXPORT Node {
     friend class ListOfNodes;
 
     Node();
-    Node(const QPointF& p1);
-    Node(const QPointF& c0, const QPointF& p1, const QPointF& c2);
+    Node(const QVector3D p1);
+    Node(const QVector3D c0, const QVector3D p1, const QVector3D c2);
     Node(const NormalNodeData& data);
     Node(const qreal t);
 
@@ -94,9 +94,9 @@ struct CORE_EXPORT Node {
     QVector3D c2() const { return mC2Enabled ? mC2 : mP1; }
     qreal t() const { return mT; }
 
-    void setC0(const QPointF& c0) { mC0 = c0; }
-    void setC2(const QPointF& c2) { mC2 = c2; }
-    void setP1(const QPointF& p1) { mP1 = p1; }
+    void setC0(const QVector3D c0) { mC0 = c0; }
+    void setC2(const QVector3D c2) { mC2 = c2; }
+    void setP1(const QVector3D p1) { mP1 = p1; }
     void setT(const qreal t) { mT = t; }
 
     NodeType getType() const { return mType; }

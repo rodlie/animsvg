@@ -10,7 +10,7 @@ public:
     ShadowEffectCaller(const HardwareSupport hwSupport,
                        const qreal radius,
                        const QColor& color,
-                       const QPointF& translation,
+                       const QVector3D translation,
                        const qreal opacity,
                        const QMargins& margin) :
         RasterEffectCaller(hwSupport, true, margin),

@@ -30,11 +30,12 @@
 #include "skia/skqtconversions.h"
 
 qCubicSegment2D::qCubicSegment2D(const qCubicSegment1D &xSeg,
-                                 const qCubicSegment1D &ySeg) {
-    mP0 = QPointF(xSeg.p0(), ySeg.p0());
-    mC1 = QPointF(xSeg.c1(), ySeg.c1());
-    mC2 = QPointF(xSeg.c2(), ySeg.c2());
-    mP3 = QPointF(xSeg.c1(), ySeg.c1());
+                                 const qCubicSegment1D &ySeg,
+                                 const qCubicSegment1D &zSeg) {
+    mP0 = QVector3D(xSeg.p0(), ySeg.p0(), zSeg.p0());
+    mC1 = QVector3D(xSeg.c1(), ySeg.c1(), zSeg.c1());
+    mC2 = QVector3D(xSeg.c2(), ySeg.c2(), zSeg.c2());
+    mP3 = QVector3D(xSeg.c1(), ySeg.c1(), zSeg.c1());
 }
 
 SkPath qCubicSegment2D::toSkPath() const {
@@ -294,7 +295,7 @@ void qCubicSegment2D::rotate(const qreal deg) {
     mLengthUpToDate = false;
 }
 
-void qCubicSegment2D::makePassThroughRel(const QPointF& relPos, const qreal t) {
+void qCubicSegment2D::makePassThroughRel(const QVector3D relPos, const qreal t) {
     if(t < 0.001 || t > 0.999) return;
     const qreal oneMinusT = 1 - t;
     QVector3D dPos = relPos - posAtT(t);

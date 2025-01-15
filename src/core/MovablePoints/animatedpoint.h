@@ -69,7 +69,7 @@ public:
         return mAssociatedAnimator_k->getYAnimator();
     }
 protected:
-    void setValue(const QPointF& value) {
+    void setValue(const QVector3D value) {
         mAssociatedAnimator_k->setBaseValue(value);
     }
 

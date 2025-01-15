@@ -56,12 +56,12 @@ qreal RandomGrid::sGetRandomValue(const qreal baseSeed, const qreal gridSize,
     const QPoint gridId1{qCeil(gridIdF.x()), qCeil(gridIdF.y())};
     const QPoint gridId2{qFloor(gridIdF.x()), qCeil(gridIdF.y())};
     const QPoint gridId3{qCeil(gridIdF.x()), qFloor(gridIdF.y())};
-    const QPoint gridId4{qFloor(gridIdF.x()), qFloor(gridIdF.y())};
+    const QVector3D gridId4{qFloor(gridIdF.x()), qFloor(gridIdF.y()), qFloor(gridIdF.z())};
 
-    const qreal gridId1Dist = pointToLen(QPointF(gridId1) * gridSize - pos);
-    const qreal gridId2Dist = pointToLen(QPointF(gridId2) * gridSize - pos);
-    const qreal gridId3Dist = pointToLen(QPointF(gridId3) * gridSize - pos);
-    const qreal gridId4Dist = pointToLen(QPointF(gridId4) * gridSize - pos);
+    const qreal gridId1Dist = pointToLen(gridId1 * gridSize - pos);
+    const qreal gridId2Dist = pointToLen(gridId2 * gridSize - pos);
+    const qreal gridId3Dist = pointToLen(gridId3 * gridSize - pos);
+    const qreal gridId4Dist = pointToLen(gridId4 * gridSize - pos);
 
     const qreal grid1W = 1 - clamp(gridId1Dist/gridSize, 0, 1);
     const qreal grid2W = 1 - clamp(gridId2Dist/gridSize, 0, 1);

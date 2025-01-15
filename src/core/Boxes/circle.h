@@ -58,7 +58,7 @@ public:
                 const int frame1, const int frame2) const;
     void saveSVG(SvgExporter& exp, DomEleTask* const task) const;
 
-    void setCenter(const QPointF& center);
+    void setCenter(const QVector3D center);
     void setVerticalRadius(const qreal verticalRadius);
     void setHorizontalRadius(const qreal horizontalRadius);
     void setRadius(const qreal radius);

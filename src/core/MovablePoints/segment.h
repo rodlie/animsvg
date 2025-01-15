@@ -70,7 +70,7 @@ public:
     NormalSegment(SmartNodePoint * const firstNode,
                   SmartNodePoint * const lastNode);
 
-    SmartNodePoint* divideAtAbsPos(const QPointF& absPos);
+    SmartNodePoint* divideAtAbsPos(const QVector3D absPos);
     SmartNodePoint *divideAtT(const qreal &t);
 
     QVector3D getRelPosAtT(const qreal t) const;
@@ -110,7 +110,7 @@ public:
 
     SmartNodePoint* getNodeAt(const int id) const;
 
-    SubSegment getClosestSubSegment(const QPointF& relPos,
+    SubSegment getClosestSubSegment(const QVector3D relPos,
                                     qreal& minDist) const {
         auto relSeg = getAsRelSegment();
         qreal closestT;
@@ -118,7 +118,7 @@ public:
         return subSegmentAtT(closestT);
     }
 
-    SubSegment getClosestSubSegmentForDummy(const QPointF& relPos,
+    SubSegment getClosestSubSegmentForDummy(const QVector3D relPos,
                                             qreal& minDist) const;
 
     void afterChanged() const {
@@ -130,11 +130,11 @@ public:
 
     void updateDissolved();
 
-    qreal closestRelT(const QPointF& relPos) const {
+    qreal closestRelT(const QVector3D relPos) const {
         return getAsRelSegment().tValueForPointClosestTo(relPos);
     }
 
-    qreal closestAbsT(const QPointF& absPos) const {
+    qreal closestAbsT(const QVector3D absPos) const {
         return getAsAbsSegment().tValueForPointClosestTo(absPos);
     }
 private:

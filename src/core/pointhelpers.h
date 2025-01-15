@@ -71,31 +71,31 @@ extern qreal gSolveForP2(const qreal p0, const qreal p1,
                          const qreal p3, const qreal t,
                          const qreal value);
 
-extern CtrlsMode gGuessCtrlsMode(const QPointF& c0,
-                                 const QPointF& p1,
-                                 const QPointF& c2,
+extern CtrlsMode gGuessCtrlsMode(const QVector3D c0,
+                                 const QVector3D p1,
+                                 const QVector3D c2,
                                  const bool c0Enabled,
                                  const bool c2Enabled);
 
-extern bool gIsSymmetric(const QPointF& startPos,
-                         const QPointF& centerPos,
-                         const QPointF& endPos,
+extern bool gIsSymmetric(const QVector3D startPos,
+                         const QVector3D centerPos,
+                         const QVector3D endPos,
                          const qreal threshold = 0.01);
 
-extern bool gIsSmooth(const QPointF& startPos,
-                      const QPointF& centerPos,
-                      const QPointF& endPos,
+extern bool gIsSmooth(const QVector3D startPos,
+                      const QVector3D centerPos,
+                      const QVector3D endPos,
                       const qreal threshold = 0.01);
 
-extern void gGetCtrlsSymmetricPos(const QPointF& startPos,
-                                  const QPointF& centerPos,
-                                  const QPointF& endPos,
+extern void gGetCtrlsSymmetricPos(const QVector3D startPos,
+                                  const QVector3D centerPos,
+                                  const QVector3D endPos,
                                   QVector3D &newStartPos,
                                   QVector3D &newEndPos);
 
-extern void gGetCtrlsSmoothPos(const QPointF& startPos,
-                               const QPointF& centerPos,
-                               const QPointF& endPos,
+extern void gGetCtrlsSmoothPos(const QVector3D startPos,
+                               const QVector3D centerPos,
+                               const QVector3D endPos,
                                QVector3D &newStartPos,
                                QVector3D &newEndPos);
 
@@ -193,9 +193,9 @@ qreal gMapTFromFragment(const qreal minAbsT,
                         const qreal relT);
 
 void gGetValuesForNodeInsertion(
-        const QPointF& prevP1, QPointF& prevC2,
-        QPointF& newC0, QPointF& newP1, QPointF& newC2,
-        QVector3D &nextC0, const QPointF& nextP1,
+        const QVector3D prevP1, QVector3D prevC2,
+        QVector3D newC0, QVector3D newP1, QVector3D newC2,
+        QVector3D &nextC0, const QVector3D nextP1,
         qreal t);
 
 void gGetValuesForNodeRemoval(

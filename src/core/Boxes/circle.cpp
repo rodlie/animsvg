@@ -51,7 +51,7 @@ Circle::Circle() : PathBox("Circle", eBoxType::circle) {
                 mHorizontalRadiusAnimator.get(), mTransformAnimator.get(),
                 mCenterPoint.get(), TYPE_PATH_POINT, false);
     getPointsHandler()->appendPt(mHorizontalRadiusPoint);
-    mHorizontalRadiusPoint->setRelativePos(QPointF(10, 0));
+    mHorizontalRadiusPoint->setRelativePos(QVector3D(10, 0, 0));
     const auto hXAnimator = mHorizontalRadiusAnimator->getXAnimator();
     ca_prependChild(mPathEffectsAnimators.data(),
                             hXAnimator->ref<QrealAnimator>());
@@ -63,7 +63,7 @@ Circle::Circle() : PathBox("Circle", eBoxType::circle) {
                 mVerticalRadiusAnimator.get(), mTransformAnimator.get(),
                 mCenterPoint.get(), TYPE_PATH_POINT, true);
     getPointsHandler()->appendPt(mVerticalRadiusPoint);
-    mVerticalRadiusPoint->setRelativePos(QPointF(0, 10));
+    mVerticalRadiusPoint->setRelativePos(QVector3D(0, 10, 0));
     const auto vYAnimator = mVerticalRadiusAnimator->getYAnimator();
     ca_prependChild(mPathEffectsAnimators.data(),
                             vYAnimator->ref<QrealAnimator>());
@@ -88,13 +88,13 @@ void Circle::moveRadiusesByAbs(const QVector3D &absTrans) {
 void Circle::setVerticalRadius(const qreal verticalRadius) {
     const QVector3D centerPos = mCenterPoint->getRelativePos();
     mVerticalRadiusPoint->setRelativePos(
-                centerPos + QPointF(0, verticalRadius));
+                centerPos + QVector3D(0, verticalRadius, 0));
 }
 
 void Circle::setHorizontalRadius(const qreal horizontalRadius) {
     const QVector3D centerPos = mCenterPoint->getRelativePos();
     mHorizontalRadiusPoint->setRelativePos(
-                centerPos + QPointF(horizontalRadius, 0));
+                centerPos + QVector3D(horizontalRadius, 0, 0));
 }
 
 void Circle::setRadius(const qreal radius) {
@@ -107,24 +107,24 @@ SkPath Circle::getRelativePath(const qreal relFrame) const {
     const qreal xRad = mHorizontalRadiusAnimator->getEffectiveXValue(relFrame);
     const qreal yRad = mVerticalRadiusAnimator->getEffectiveYValue(relFrame);
     SkPath path;
-    const auto p0 = center + QPointF(0, -yRad);
-    const auto p1 = center + QPointF(xRad, 0);
-    const auto p2 = center + QPointF(0, yRad);
-    const auto p3 = center + QPointF(-xRad, 0);
+    const auto p0 = center + QVector3D(0, -yRad, 0);
+    const auto p1 = center + QVector3D(xRad, 0, 0);
+    const auto p2 = center + QVector3D(0, yRad, 0);
+    const auto p3 = center + QVector3D(-xRad, 0, 0);
     const qreal c = 0.551915024494;
 
     path.moveTo(toSkPoint(p0));
-    path.cubicTo(toSkPoint(p0 + QPointF(c*xRad, 0)),
-                 toSkPoint(p1 + QPointF(0, -c*yRad)),
+    path.cubicTo(toSkPoint(p0 + QVector3D(c*xRad, 0, 0)),
+                 toSkPoint(p1 + QVector3D(0, -c*yRad, 0)),
                  toSkPoint(p1));
-    path.cubicTo(toSkPoint(p1 + QPointF(0, c*yRad)),
-                 toSkPoint(p2 + QPointF(c*xRad, 0)),
+    path.cubicTo(toSkPoint(p1 + QVector3D(0, c*yRad, 0)),
+                 toSkPoint(p2 + QVector3D(c*xRad, 0, 0)),
                  toSkPoint(p2));
-    path.cubicTo(toSkPoint(p2 + QPointF(-c*xRad, 0)),
-                 toSkPoint(p3 + QPointF(0, c*yRad)),
+    path.cubicTo(toSkPoint(p2 + QVector3D(-c*xRad, 0, 0)),
+                 toSkPoint(p3 + QVector3D(0, c*yRad, 0)),
                  toSkPoint(p3));
-    path.cubicTo(toSkPoint(p3 + QPointF(0, -c*yRad)),
-                 toSkPoint(p0 + QPointF(-c*xRad, 0)),
+    path.cubicTo(toSkPoint(p3 + QVector3D(0, -c*yRad, 0)),
+                 toSkPoint(p0 + QVector3D(-c*xRad, 0, 0)),
                  toSkPoint(p0));
     path.close();
     return path;
@@ -196,8 +196,8 @@ QVector3D CircleRadiusPoint::getRelativePos() const {
 void CircleRadiusPoint::setRelativePos(const QVector3D &relPos) {
     const QVector3D centerPos = mCenterPoint->getRelativePos();
     if(mXBlocked) {
-        setValue(QPointF(0, relPos.y() - centerPos.y()));
+        setValue(QVector3D(0, relPos.y() - centerPos.y(), 0));
     } else {
-        setValue(QPointF(relPos.x() - centerPos.x(), 0));
+        setValue(QVector3D(relPos.x() - centerPos.x(), 0, 0));
     }
 }

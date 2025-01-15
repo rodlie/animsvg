@@ -76,19 +76,20 @@ extern QMatrix4x4 toQMatrix(const SkMatrix &matrix);
 CORE_EXPORT
 extern SkMatrix toSkMatrix(const QMatrix4x4 &matrix);
 
-extern inline QVector3D toQPointF(const SkPoint3 &point) {
+extern inline QVector3D toQVector3D(const SkPoint3 &point) {
     return QVector3D(toQreal(point.x()),
                      toQreal(point.y()),
                      toQreal(point.z()));
 }
 
 extern inline SkPoint3 toSkPoint(const QVector3D &point) {
-    return SkPoint::Make(toSkScalar(point.x()),
-                         toSkScalar(point.y()));
+    return SkPoint3::Make(toSkScalar(point.x()),
+                          toSkScalar(point.y()),
+                          toSkScalar(point.z()));
 }
 
-extern inline SkPoint3 toSkPoint(const QPoint &point) {
-    return SkPoint::Make(point.x(), point.y());
+extern inline SkPoint3 toSkPoint(const QVector3D &point) {
+    return SkPoint3::Make(point.x(), point.y(), point.z());
 }
 
 CORE_EXPORT
@@ -106,9 +107,9 @@ CORE_EXPORT
 extern sk_sp<SkImage> toSkImage(const QImage& qImg);
 
 CORE_EXPORT
-extern void switchSkQ(const QPointF& qPos, SkPoint& skPos);
+extern void switchSkQ(const QVector3D qPos, SkPoint& skPos);
 CORE_EXPORT
-extern void switchSkQ(const SkPoint& skPos, QPointF& qPos);
+extern void switchSkQ(const SkPoint& skPos, QVector3D qPos);
 CORE_EXPORT
 extern void switchSkQ(const qreal q, float& sk);
 CORE_EXPORT

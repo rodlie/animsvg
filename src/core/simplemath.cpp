@@ -30,7 +30,7 @@ qreal signedSquare(const qreal val) {
     return val*val*SIGN(val);
 }
 
-qreal distSign(const QPointF& distPt) {
+qreal distSign(const QVector3D distPt) {
     const qreal val = signedSquare(distPt.x()) + signedSquare(distPt.y());
     if(val > 0) return sqrt(val);
     else return -sqrt(-val);
@@ -54,7 +54,7 @@ float pointToLen(const SkPoint3 &point) {
     return SkScalarSqrt(point.x()*point.x() + point.y()*point.y());
 }
 
-QVector3D scalePointToNewLen(const QPointF& point,
+QVector3D scalePointToNewLen(const QVector3D point,
                            const qreal newLen) {
     const qreal currLen = pointToLen(point);
     if(isZero4Dec(currLen)) return QVector3D(0, 0, 0);
@@ -221,14 +221,16 @@ qreal qMax4(qreal v1, qreal v2, qreal v3, qreal v4) {
 
 QRect3D QRect3D4Points(QVector3D p1, QVector3D c1,
                      QVector3D c2, QVector3D p2) {
-    return QRect3D(QPointF(qMin4(p1.x(), c1.x(), c2.x(), p2.x()),
-                          qMin4(p1.y(), c1.y(), c2.y(), p2.y())),
-                  QPointF(qMax4(p1.x(), c1.x(), c2.x(), p2.x()),
-                          qMax4(p1.y(), c1.y(), c2.y(), p2.y())));
+    return QRect3D(QVector3D(qMin4(p1.x(), c1.x(), c2.x(), p2.x()),
+                             qMin4(p1.y(), c1.y(), c2.y(), p2.y()),
+                             0), // FIXME: z prop?
+                  QVector3D(qMax4(p1.x(), c1.x(), c2.x(), p2.x()),
+                            qMax4(p1.y(), c1.y(), c2.y(), p2.y()),
+                            0)); // FIXME: z prop?
 }
 
 QVector3D rotateVector90Degrees(const QVector3D &pt) {
-    return QPointF(-pt.y(), pt.x()); // y is downwards
+    return QVector3D(-pt.y(), pt.x(), pt.z()); // y is downwards
 }
 
 qreal degreesBetweenVectors(const QVector3D &pt1,
@@ -248,7 +250,8 @@ QVector3D gRotPt(const QVector3D &pt, const qreal deg) {
             pt.x() * sin(deg*PI/180) + pt.y() * cos(deg*PI/180)};
 }
 
-QVector3D gQPointFDisplace(const QPointF& pt, const qreal displ) {
-    return QPointF(pt.x() + gRandF(-displ, displ),
-                   pt.y() + gRandF(-displ, displ));
+QVector3D gQPointFDisplace(const QVector3D pt, const qreal displ) {
+    return QVector3D(pt.x() + gRandF(-displ, displ),
+                     pt.y() + gRandF(-displ, displ),
+                     pt.z() + gRandF(-displ, displ));
 }

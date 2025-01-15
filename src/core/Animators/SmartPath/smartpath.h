@@ -44,9 +44,9 @@ public:
 
     void actionRemoveNode(const int nodeId, const bool approx);
 
-    int actionAddFirstNode(const QPointF& c0,
-                           const QPointF& p1,
-                           const QPointF& c2);
+    int actionAddFirstNode(const QVector3D c0,
+                           const QVector3D p1,
+                           const QVector3D c2);
     int actionAddFirstNode(const NormalNodeData &data);
 
     void actionMoveNodeBetween(const int movedNodeId,
@@ -79,13 +79,13 @@ public:
 
     void actionSetDissolvedNodeT(const int nodeId, const qreal t);
 
-    void actionSetNormalNodeValues(const int nodeId, const QPointF& c0,
-                                   const QPointF& p1, const QPointF& c2);
+    void actionSetNormalNodeValues(const int nodeId, const QVector3D c0,
+                                   const QVector3D p1, const QVector3D c2);
     void actionSetNormalNodeValues(const int nodeId, const NormalNodeData& data);
 
-    void actionSetNormalNodeP1(const int nodeId, const QPointF& p1);
-    void actionSetNormalNodeC0(const int nodeId, const QPointF& c0);
-    void actionSetNormalNodeC2(const int nodeId, const QPointF& c2);
+    void actionSetNormalNodeP1(const int nodeId, const QVector3D p1);
+    void actionSetNormalNodeC0(const int nodeId, const QVector3D c0);
+    void actionSetNormalNodeC2(const int nodeId, const QVector3D c2);
 
     void actionSetNormalNodeCtrlsMode(const int nodeId, const CtrlsMode mode);
 

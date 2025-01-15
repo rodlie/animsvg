@@ -52,12 +52,12 @@ public:
     qreal getRawXValue() const;
     qreal getRawYValue() const;
 
-    QVector3D getClampedSavedValue(const QPointF& relTo) const;
-    QVector3D getClampedValue(const QPointF& relTo) const;
+    QVector3D getClampedSavedValue(const QVector3D relTo) const;
+    QVector3D getClampedValue(const QVector3D relTo) const;
 
     void setXValue(const qreal value);
     void setYValue(const qreal value);
-    void setValue(const QPointF& value);
+    void setValue(const QVector3D value);
 
     void clampValue();
 

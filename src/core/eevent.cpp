@@ -25,8 +25,8 @@
 
 #include "eevent.h"
 
-eEvent::eEvent(const QPointF& pos, const QPointF& lastPos,
-               const QPointF& lastPressPos, const bool mouseGrabbing,
+eEvent::eEvent(const QVector3D pos, const QVector3D lastPos,
+               const QVector3D lastPressPos, const bool mouseGrabbing,
                const qreal scale, const QPoint& globalPos,
                const Qt::MouseButtons buttons,
                const Qt::KeyboardModifiers modifiers,
@@ -42,8 +42,8 @@ eEvent::eEvent(const QPointF& pos, const QPointF& lastPos,
     fWidget(widget) {}
 
 eMouseEvent::eMouseEvent(const bool synth,
-                         const QPointF& pos, const QPointF& lastPos,
-                         const QPointF& lastPressPos, const bool mouseGrabbing,
+                         const QVector3D pos, const QVector3D lastPos,
+                         const QVector3D lastPressPos, const bool mouseGrabbing,
                          const qreal scale, const QPoint& globalPos,
                          const Qt::MouseButton button,
                          const Qt::MouseButtons buttons,
@@ -60,8 +60,8 @@ eMouseEvent::eMouseEvent(const bool synth,
            releaseMouse, grabMouse,
            widget), fSynth(synth), fButton(button) {}
 
-eMouseEvent::eMouseEvent(const QPointF& pos, const QPointF& lastPos,
-                         const QPointF& lastPressPos, const bool mouseGrabbing,
+eMouseEvent::eMouseEvent(const QVector3D pos, const QVector3D lastPos,
+                         const QVector3D lastPressPos, const bool mouseGrabbing,
                          const qreal scale, const QMouseEvent* const e,
                          std::function<void()> releaseMouse,
                          std::function<void()> grabMouse,
@@ -72,8 +72,8 @@ eMouseEvent::eMouseEvent(const QPointF& pos, const QPointF& lastPos,
                 e->buttons(), e->modifiers(), e->timestamp(),
                 releaseMouse, grabMouse, widget) {}
 
-eKeyEvent::eKeyEvent(const QPointF& pos, const QPointF& lastPos,
-                     const QPointF& lastPressPos, const bool mouseGrabbing,
+eKeyEvent::eKeyEvent(const QVector3D pos, const QVector3D lastPos,
+                     const QVector3D lastPressPos, const bool mouseGrabbing,
                      const qreal scale, const QPoint globalPos,
                      const Qt::MouseButtons buttons, const QKeyEvent* const e,
                      std::function<void()> releaseMouse,

@@ -33,7 +33,7 @@ protected:
     BoxPathPoint(QVector3DAnimator * const associatedAnimator,
                  BoxTransformAnimator * const boxTrans);
 public:
-    void setRelativePos(const QPointF& relPos);
+    void setRelativePos(const QVector3D relPos);
 
     void startTransform();
     void finishTransform();

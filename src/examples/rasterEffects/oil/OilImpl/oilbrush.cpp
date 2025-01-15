@@ -72,7 +72,7 @@ void OilBrush::updatePosition(const SkPoint& newPosition, bool updateBristlesEle
 	}
 
 	// Update the average position
-	SkPoint prevAveragePosition = averagePosition;
+	SkPoint3 prevAveragePosition = averagePosition;
     averagePosition.set(0, 0);
 	int counter = 0;
 

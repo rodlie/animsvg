@@ -166,7 +166,7 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
             const QColor col = hasMark ? colOrange : colGreen;
             p.setPen(QPen(col, 2, Qt::SolidLine));
             const qreal xTT = xT + (i - mFrameRange.fMin + 1)*pixPerFrame;
-            p.drawLine(QPointF(xTT, 0), QPointF(xTT, mFm.height() + 4));
+            p.drawLine(QVector3D(xTT, 0, 0), QVector3D(xTT, mFm.height() + 4, 0));
 
             const QString drawValue = hasIn ? tr("In") : hasOut ? tr("Out") : getFrameMarkerText(i);
             p.setPen(Qt::NoPen);
@@ -183,7 +183,7 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         p.setPen(QPen(Qt::darkGray, 2));
         for (int i = mMinFrame; i <= mMaxFrame; i += iInc) {
             const qreal xTT = xT + (i - mFrameRange.fMin + 1)*pixPerFrame;
-            p.drawLine(QPointF(xTT, threeFourthsHeight + 6), QPointF(xTT, height()));
+            p.drawLine(QVector3D(xTT, threeFourthsHeight + 6, 0), QVector3D(xTT, height(), 0));
         }
 
         // draw main
@@ -192,7 +192,7 @@ void FrameScrollBar::paintEvent(QPaintEvent *) {
         bool timecode = mDisplayTime && mFps > 0;
         if (qAbs(pixPerFrame) > 0.11) {
             while (xL < maxX) {
-                p.drawLine(QPointF(xL, threeFourthsHeight + 4), QPointF(xL, height()));
+                p.drawLine(QVector3D(xL, threeFourthsHeight + 4, 0), QVector3D(xL, height(), 0));
                 QString drawValue = QString::number(currentFrame);
                 if (timecode) { drawValue = AppSupport::getTimeCodeFromFrame(currentFrame, mFps); }
                 p.drawText(QRect3D(xL - inc, 0, 2 * inc, threeFourthsHeight + 18), Qt::AlignCenter, drawValue);

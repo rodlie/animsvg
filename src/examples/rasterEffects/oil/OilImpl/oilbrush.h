@@ -98,7 +98,7 @@ protected:
 	/**
 	 * @brief The brush central position
 	 */
-	SkPoint position;
+	SkPoint3 position;
 
 	/**
 	 * @brief The brush size

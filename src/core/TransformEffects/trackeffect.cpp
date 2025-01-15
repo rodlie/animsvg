@@ -36,9 +36,9 @@ TrackEffect::TrackEffect() :
     ca_prependChild(targetProperty(), mInfluence);
 }
 
-qreal calculateTrackAngle(const QPointF& parentPos,
-                          const QPointF& targetPos) {
-    const QLineF baseLine(parentPos, parentPos + QPointF(100., 0.));
+qreal calculateTrackAngle(const QVector3D parentPos,
+                          const QVector3D targetPos) {
+    const QLineF baseLine(parentPos, parentPos + QVector3D(100., 0., 0.));
     const QLineF trackLine(parentPos, targetPos);
     qreal trackAngle = trackLine.angleTo(baseLine);
     if(trackAngle > 180) trackAngle -= 360;

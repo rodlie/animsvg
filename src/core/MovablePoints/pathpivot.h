@@ -46,7 +46,7 @@ public:
                           const float interval);
     bool isVisible(const CanvasMode mode) const;
 
-    void setMousePos(const QPointF& pos) { mMousePos = pos; }
+    void setMousePos(const QVector3D pos) { mMousePos = pos; }
 private:
     const Canvas * const mCanvas = nullptr;
     QVector3D mMousePos;

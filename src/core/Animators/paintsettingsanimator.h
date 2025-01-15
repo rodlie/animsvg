@@ -69,7 +69,7 @@ public:
     void setCurrentColor(const QColor &color,
                          const bool &history = false);
     ColorAnimator *getColorAnimator();
-    void setGradientPointsPos(const QPointF& pt1, const QPointF& pt2);
+    void setGradientPointsPos(const QVector3D pt1, const QVector3D pt2);
 
     void duplicateColorAnimatorFrom(ColorAnimator *source);
     QColor getColor(const qreal relFrame) const;

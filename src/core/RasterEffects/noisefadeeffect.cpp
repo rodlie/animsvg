@@ -83,9 +83,9 @@ protected:
         gl->glUniform1f(sTimeU, mTime);
     }
 private:
-    qreal r(const QPointF& p) const;
-    qreal n(const QPointF& p) const;
-    qreal noise(const QPointF& p) const;
+    qreal r(const QVector3D p) const;
+    qreal n(const QVector3D p) const;
+    qreal noise(const QVector3D p) const;
 
     static bool sInitialized;
     static GLuint sProgramId;
@@ -131,15 +131,15 @@ qreal GLSL_smoothstep(const qreal edge0,
     return t * t * (3.0 - 2.0 * t);
 }
 
-QVector3D GLSL_smoothstep(const QPointF& edge0,
-                        const QPointF& edge1,
-                        const QPointF& x) {
+QVector3D GLSL_smoothstep(const QVector3D edge0,
+                        const QVector3D edge1,
+                        const QVector3D x) {
     const qreal rx = GLSL_smoothstep(edge0.x(), edge1.x(), x.x());
     const qreal ry = GLSL_smoothstep(edge0.y(), edge1.y(), x.y());
     return {rx, ry};
 }
 
-QVector3D GLSL_floor(const QPointF& p) {
+QVector3D GLSL_floor(const QVector3D p) {
     return {floor(p.x()), floor(p.y())};
 }
 
@@ -151,16 +151,16 @@ qreal GLSL_fract(const qreal x) {
     return x - floor(x);
 }
 
-QVector3D GLSL_fract(const QPointF& p) {
+QVector3D GLSL_fract(const QVector3D p) {
     return p - GLSL_floor(p);
 }
 
-qreal NoiseFadeEffectCaller::r(const QPointF& p) const {
+qreal NoiseFadeEffectCaller::r(const QVector3D p) const {
     return GLSL_fract(cos((p.x() + 0.00001*mSeed)*42.98 +
                           (p.y() + 0.00001*mSeed)*43.23) * 1127.53);
 }
 
-qreal NoiseFadeEffectCaller::n(const QPointF& p) const {
+qreal NoiseFadeEffectCaller::n(const QVector3D p) const {
     const QVector3D fn = GLSL_floor(p);
     const QVector3D sn = GLSL_smoothstep(QPointF{0. ,0.},
                                        QPointF{1., 1.},
@@ -173,7 +173,7 @@ qreal NoiseFadeEffectCaller::n(const QPointF& p) const {
     return GLSL_mix(h1 ,h2, sn.y());
 }
 
-qreal NoiseFadeEffectCaller::noise(const QPointF& p) const {
+qreal NoiseFadeEffectCaller::noise(const QVector3D p) const {
     const qreal s = mSize*0.001;
     return 0.58 * n(p/(32.*s)) +
            0.2 * n(p/(16.*s)) +

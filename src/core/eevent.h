@@ -32,9 +32,9 @@
 
 class eEvent {
 protected:
-    eEvent(const QPointF& pos,
-           const QPointF& lastPos,
-           const QPointF& lastPressPos,
+    eEvent(const QVector3D pos,
+           const QVector3D lastPos,
+           const QVector3D lastPressPos,
            const bool mouseGrabbing,
            const qreal scale,
            const QPoint& globalPos,
@@ -70,9 +70,9 @@ public:
 class CORE_EXPORT eMouseEvent : public eEvent {
 protected:
     eMouseEvent(const bool synth,
-                const QPointF& pos,
-                const QPointF& lastPos,
-                const QPointF& lastPressPos,
+                const QVector3D pos,
+                const QVector3D lastPos,
+                const QVector3D lastPressPos,
                 const bool mouseGrabbing,
                 const qreal scale,
                 const QPoint& globalPos,
@@ -84,9 +84,9 @@ protected:
                 std::function<void()> grabMouse,
                 QWidget * const widget);
 public:
-    eMouseEvent(const QPointF& pos,
-                const QPointF& lastPos,
-                const QPointF& lastPressPos,
+    eMouseEvent(const QVector3D pos,
+                const QVector3D lastPos,
+                const QVector3D lastPressPos,
                 const bool mouseGrabbing,
                 const qreal scale,
                 const QMouseEvent * const e,
@@ -100,9 +100,9 @@ public:
 
 class CORE_EXPORT eKeyEvent : public eMouseEvent {
 public:
-    eKeyEvent(const QPointF& pos,
-              const QPointF& lastPos,
-              const QPointF& lastPressPos,
+    eKeyEvent(const QVector3D pos,
+              const QVector3D lastPos,
+              const QVector3D lastPressPos,
               const bool mouseGrabbing,
               const qreal scale,
               const QPoint globalPos,

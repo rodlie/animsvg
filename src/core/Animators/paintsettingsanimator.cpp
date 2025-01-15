@@ -492,7 +492,7 @@ void UpdatePaintSettings::updateGradient(const QGradientStops &stops,
     for(int i = 0; i < nStops; i++) {
         const QGradientStop &stopT = stops.at(i);
         const QColor col = stopT.second;
-        gradPoints[i] = SkPoint::Make(currX, currY);
+        gradPoints[i] = SkPoint3::Make(currX, currY);
         gradColors[i] = toSkColor(col);
         gradPos[i] = currT;
 

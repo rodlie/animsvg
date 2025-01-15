@@ -164,7 +164,7 @@ TextEffect::TextEffect() : eEffect("text effect") {
     prp_enabledDrawingOnCanvas();
 }
 
-bool ptXLess(const QPointF& p1, const QPointF& p2)
+bool ptXLess(const QVector3D p1, const QVector3D p2)
 { return p1.x() < p2.x(); }
 
 qreal TextEffect::getGuideLineHeight() const {
@@ -304,7 +304,7 @@ QMimeData *TextEffect::SWT_createMimeData() {
 
 QMatrix4x4 TextEffect::getTransform(const qreal relFrame,
                                  const qreal influence,
-                                 const QPointF& addPivot) const {
+                                 const QVector3D addPivot) const {
     const auto pivotAnim = mTransform->getPivotAnimator();
     const auto posAnim = mTransform->getPosAnimator();
     const auto rotAnim = mTransform->getRotAnimator();
@@ -377,10 +377,10 @@ void TextEffect::applyToLine(LineRenderData * const lineData,
 }
 
 QrealSnapshot diminishGuide(const qreal ampl,
-                            const QPointF& p1,
-                            const QPointF& p2,
-                            const QPointF& p3,
-                            const QPointF& p4,
+                            const QVector3D p1,
+                            const QVector3D p2,
+                            const QVector3D p3,
+                            const QVector3D p4,
                             const qreal smoothness) {
     QList<QPointF> pList{p1, p2, p3, p4};
     std::sort(pList.begin(), pList.end(), ptXLess);

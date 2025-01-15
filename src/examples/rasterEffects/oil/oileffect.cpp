@@ -67,7 +67,7 @@ QMargins OilEffect::getMargin() const {
 
 class OilEffectCaller : public RasterEffectCaller {
 public:
-    OilEffectCaller(const QPointF& brushSize,
+    OilEffectCaller(const QVector3D brushSize,
                     const qreal accuracy,
                     const qreal strokeLength,
                     const qreal resolution,

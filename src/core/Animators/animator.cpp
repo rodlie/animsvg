@@ -562,7 +562,7 @@ void anim_drawKey(QPainter * const p,
                             0.5*rowHeight);
     switch(type) {
     case KeyFrameType::property: {
-        const QVector3D tl = keyCenter + QPointF(-keyRadius, -keyRadius);
+        const QVector3D tl = keyCenter + QVector3D(-keyRadius, -keyRadius, -keyRadius);
         p->drawRect(QRect3D(tl, QSizeF(2*keyRadius, 2*keyRadius)));
     } break;
     default: {

@@ -33,10 +33,10 @@ namespace MatrixDecomposition {
     TransformValues decompose(const QMatrix& transform);
     CORE_EXPORT
     TransformValues decomposePivoted(const QMatrix& transform,
-                                     const QPointF& pivot);
+                                     const QVector3D pivot);
     CORE_EXPORT
     TransformValues setPivotKeepTransform(const TransformValues& transform,
-                                          const QPointF& newPivot);
+                                          const QVector3D newPivot);
 };
 
 #endif // MATRIXDECOMPOSITION_H

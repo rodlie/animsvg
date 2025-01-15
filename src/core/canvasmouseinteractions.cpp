@@ -426,8 +426,8 @@ SmartNodePoint* drawPathAppend(const QList<qCubicSegment2D>& fitted,
 }
 
 qsptr<SmartVectorPath> drawPathNew(QList<qCubicSegment2D>& fitted) {
-    const QPointF& begin = fitted.first().p0();
-    const QPointF& end = fitted.last().p3();
+    const QVector3D begin = fitted.first().p0();
+    const QVector3D end = fitted.last().p3();
     const qreal beginEndDist = pointToLen(end - begin);
     const bool close = beginEndDist < 7 && fitted.count() > 1;
     if(close) fitted.last().setP3(begin);
@@ -454,8 +454,8 @@ void Canvas::drawPathFinish(const qreal invScale) {
 
     auto& fitted = mDrawPath.getFitted();
     if(!fitted.isEmpty()) {
-        const QPointF& begin = fitted.first().p0();
-        const QPointF& end = fitted.last().p3();
+        const QVector3D begin = fitted.first().p0();
+        const QVector3D end = fitted.last().p3();
         const auto beginHover = getPointAtAbsPos(begin, mCurrentMode, invScale);
         const auto beginNode = enve_cast<SmartNodePoint*>(beginHover);
         const auto endHover = getPointAtAbsPos(end, mCurrentMode, invScale);

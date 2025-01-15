@@ -68,7 +68,7 @@ TimelineHighlightWidget *KeysView::requestHighlighter() {
 
 void KeysView::dropEvent(QDropEvent *event) {
     const int frame = qRound(xToFrame(event->posF().x()));
-    Actions::sInstance->handleDropEvent(event, QPointF(0, 0), frame);
+    Actions::sInstance->handleDropEvent(event, QVector3D(0, 0, 0), frame);
 }
 
 void KeysView::dragEnterEvent(QDragEnterEvent *event)
@@ -251,7 +251,7 @@ void KeysView::wheelEvent(QWheelEvent *e)
         if (!mPanEvent) { emit wheelEventSignal(e); }
         if (mSelecting) {
             const QVector3D posU = mapFromGlobal(QCursor::pos()) +
-                           QPointF(-eSizesUI::widget/2, 0.);
+                           QVector3D(-eSizesUI::widget/2, 0., 0);
             mSelectionRect.setBottom(posU.y() + mViewedTop);
         }
         //mBoxesList->handleWheelEvent(e);
@@ -572,7 +572,7 @@ void KeysView::paintEvent(QPaintEvent *) {
 
     for(int i = minFrame; i <= maxFrame; i += iInc) {
         const qreal xTT = xT + (i - mMinViewedFrame + 1)*mPixelsPerFrame;
-        p.drawLine(QPointF(xTT, 0), QPointF(xTT, height()));
+        p.drawLine(QVector3D(xTT, 0, 0), QVector3D(xTT, height(), 0));
     }
 
     // draw markers (and in/out)
@@ -584,7 +584,7 @@ void KeysView::paintEvent(QPaintEvent *) {
         const QColor col = hasMark ? ThemeSupport::getThemeFrameMarkerColor() : ThemeSupport::getThemeColorGreen();
         p.setPen(QPen(col, 2, Qt::DotLine));
         const qreal xTT = xT + (i - mMinViewedFrame + 1)*mPixelsPerFrame;
-        p.drawLine(QPointF(xTT, 0), QPointF(xTT, height()));
+        p.drawLine(QVector3D(xTT, 0, 0), QVector3D(xTT, height(), 0));
     }
 
     if (mCurrentScene) {
@@ -592,7 +592,7 @@ void KeysView::paintEvent(QPaintEvent *) {
            mCurrentScene->getCurrentFrame() >= minFrame) {
             xT = (mCurrentScene->getCurrentFrame() - mMinViewedFrame)*mPixelsPerFrame + mPixelsPerFrame*0.5;
             p.setPen(QPen(ThemeSupport::getThemeHighlightColor(), 2));
-            p.drawLine(QPointF(xT, 0), QPointF(xT, height()));
+            p.drawLine(QVector3D(xT, 0, 0), QVector3D(xT, height(), 0));
         }
     }
 
@@ -725,7 +725,7 @@ void KeysView::scrollRight() {
     emit changedViewedFrames({mMinViewedFrame, mMaxViewedFrame});
     if(mSelecting) {
         mSelectionRect.setBottomRight(mSelectionRect.bottomRight() +
-                                      QPointF(inc, 0));
+                                      QVector3D(inc, 0, 0));
     } else if(mMovingKeys) {
         mLastPressPos.setX(mLastPressPos.x() - qRound(inc*mPixelsPerFrame));
         handleMouseMove(mLastMovePos, QApplication::mouseButtons());
@@ -741,7 +741,7 @@ void KeysView::scrollLeft() {
     emit changedViewedFrames({mMinViewedFrame, mMaxViewedFrame});
     if(mSelecting) {
         mSelectionRect.setBottomRight(mSelectionRect.bottomRight() -
-                                      QPointF(inc, 0));
+                                      QVector3D(inc, 0, 0));
     } else if(mMovingKeys) {
         mLastPressPos.setX(mLastPressPos.x() + qRound(inc*mPixelsPerFrame));
         handleMouseMove(mLastMovePos, QApplication::mouseButtons());

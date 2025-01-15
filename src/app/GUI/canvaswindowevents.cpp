@@ -31,7 +31,7 @@
 #include <QResizeEvent>
 #include <QEvent>
 
-QVector3D CanvasWindow::mapToCanvasCoord(const QPointF& windowCoord)
+QVector3D CanvasWindow::mapToCanvasCoord(const QVector3D windowCoord)
 {
     qreal pixelRatio = devicePixelRatioF();
     return mViewTransform.inverted().scale(pixelRatio, pixelRatio).map(windowCoord);

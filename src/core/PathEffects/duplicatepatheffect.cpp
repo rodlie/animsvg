@@ -30,7 +30,7 @@
 DuplicatePathEffect::DuplicatePathEffect() :
     PathEffect("duplicate effect", PathEffectType::Duplicate) {
     mTranslation = enve::make_shared<QVector3DAnimator>("translation");
-    mTranslation->setBaseValue(QPointF(10, 10));
+    mTranslation->setBaseValue(QVector3D(10, 10, 10)); // FIXME: z prop?
     ca_addChild(mTranslation);
 
     mCount = enve::make_shared<IntAnimator>(1, 0, 25, 1, "count");

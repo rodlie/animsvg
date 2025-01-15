@@ -102,7 +102,7 @@ public:
     virtual void setTransform(BasicTransformAnimator * const trans);
     virtual void updateRadius() { setRadius(5); }
 
-    void moveToAbs(const QPointF& absPos);
+    void moveToAbs(const QVector3D absPos);
     void moveByAbs(const QVector3D &absTrans);
     void moveToRel(const QVector3D &relPos);
     void moveByRel(const QVector3D &relTranslation);

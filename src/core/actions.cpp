@@ -655,7 +655,7 @@ void Actions::setPathEffectsVisible(const bool bT) {
 #include "importhandler.h"
 
 eBoxOrSound* Actions::handleDropEvent(QDropEvent * const event,
-                                      const QPointF& relDropPos,
+                                      const QVector3D relDropPos,
                                       const int frame)
 {
     if (!mActiveScene) { return nullptr; }

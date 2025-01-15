@@ -71,7 +71,7 @@ void calculateFollowRotPosChange(
         if(reverse) t2 = 0.9999;
         const auto p2 = qpath.pointAtPercent(t2);
 
-        const QLineF baseLine(QPointF(0., 0.), QPointF(100., 0.));
+        const QLineF baseLine(QVector3D(0., 0., 0.), QVector3D(100., 0., 0.));
         QLineF l;
         if(reverse) l = QLineF(p2, p1);
         else l = QLineF(p1, p2);

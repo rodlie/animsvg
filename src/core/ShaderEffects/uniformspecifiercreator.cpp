@@ -71,7 +71,7 @@ void intAnimatorCreate(ShaderEffectJS &engine,
 }
 
 QString vec2ValScript(const QString& name,
-                      const QPointF& value)
+                      const QVector3D value)
 {
     return name + " = [" + QString::number(value.x()) + "," +
                            QString::number(value.y()) + "]";

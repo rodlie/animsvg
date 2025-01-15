@@ -52,7 +52,7 @@ public:
     // actions on DUMMY and DISSOLVED
     void promoteToNormal(const int nodeId);
     void demoteToDissolved(const int nodeId, const bool approx);
-    int moveToClosestSegment(const int nodeId, const QPointF& relPos);
+    int moveToClosestSegment(const int nodeId, const QVector3D relPos);
 
     void mergeNodes(const int nodeId1, const int nodeId2);
 
@@ -69,7 +69,7 @@ public:
     SmartNodePoint* getNextNode(const int startId) const;
     SmartNodePoint* getPrevNormalNode(const int startId) const;
     SmartNodePoint* getNextNormalNode(const int startId) const;
-    SmartNodePoint* getClosestNode(const QPointF& absPos, const qreal& maxDist) const;
+    SmartNodePoint* getClosestNode(const QVector3D absPos, const qreal& maxDist) const;
 
     void updateAllPoints();
     void updateAllPointsRadius();

@@ -37,7 +37,7 @@ public:
     eShadowCaller(const HardwareSupport hwSupport,
                   const qreal radius,
                   const QColor& color,
-                  const QPointF& translation,
+                  const QVector3D translation,
                   const qreal opacity,
                   const QMargins& margin) :
         RasterEffectCaller(hwSupport, true, margin),
@@ -55,7 +55,7 @@ private:
 
     const float mRadius;
     const SkColor mColor;
-    const SkPoint mTranslation;
+    const SkPoint3 mTranslation;
     const SkScalar mOpacity;
 };
 

@@ -428,7 +428,7 @@ bool SmartPath::isClockwise() const {
     if(mNodesList.isEmpty()) return false;
     QVector3D prevPos = mNodesList.at(0)->p1();
     qreal sum = 0;
-    const auto lineTo = [&prevPos, &sum](const QPointF& pos) {
+    const auto lineTo = [&prevPos, &sum](const QVector3D pos) {
         sum += (pos.x() - prevPos.x()) * (pos.y() + prevPos.y());
         prevPos = pos;
     };

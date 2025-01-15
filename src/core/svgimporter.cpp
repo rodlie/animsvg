@@ -510,7 +510,7 @@ void loadCircle(const QDomElement &pathElement,
     circle = enve::make_shared<Circle>();
     circle->setHorizontalRadius(rX);
     circle->setVerticalRadius(rY);
-    circle->setCenter(QPointF(cXstr.toDouble(), cYstr.toDouble()));
+    circle->setCenter(QVector3D(cXstr.toDouble(), cYstr.toDouble(), cZstr.toDouble()));
     circle->planCenterPivotPosition();
 
     attributes.apply(circle.data());
@@ -531,9 +531,9 @@ void loadRect(const QDomElement &pathElement,
     const auto rect = enve::make_shared<RectangleBox>();
     rect->planCenterPivotPosition();
 
-    const auto topLeft = QPointF(xStr.toDouble(), yStr.toDouble());
+    const auto topLeft = QVector3D(xStr.toDouble(), yStr.toDouble(), zStr.toDouble());
     rect->setTopLeftPos(topLeft);
-    rect->setBottomRightPos(topLeft + QPointF(wStr.toDouble(), hStr.toDouble()));
+    rect->setBottomRightPos(topLeft + QVector3D(wStr.toDouble(), hStr.toDouble(), dStr.toDouble()));
     if(rYstr.isEmpty()) {
         rect->setYRadius(rXstr.toDouble());
         rect->setXRadius(rXstr.toDouble());
@@ -578,7 +578,7 @@ void loadText(const QDomElement &pathElement,
     const auto textBox = enve::make_shared<TextBox>();
     textBox->planCenterPivotPosition();
 
-    textBox->moveByRel(QPointF(xStr.toDouble(), yStr.toDouble()));
+    textBox->moveByRel(QVector3D(xStr.toDouble(), yStr.toDouble(), zStr.toDouble()));
     textBox->setCurrentValue(pathElement.text());
 
     attributes.apply(textBox.data());

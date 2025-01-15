@@ -112,7 +112,7 @@ bool ILBB::relPointInsidePath(const QVector3D &relPos) const {
 template <typename BoxT>
 QVector3D ILBB::getRelCenterPosition() {
     const auto linkTarget = getLinkTarget();
-    if(!linkTarget) return QPointF();
+    if(!linkTarget) return QVector3D();
     return linkTarget->getRelCenterPosition();
 }
 

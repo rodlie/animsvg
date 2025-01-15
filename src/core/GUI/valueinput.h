@@ -116,7 +116,7 @@ public:
         setDisplayedValue({value, value});
     }
 
-    void setDisplayedValue(const QPointF& value) {
+    void setDisplayedValue(const QVector3D value) {
         mDisplayValue = value;
     }
 

@@ -489,13 +489,13 @@ void NodeList::setPath(const SkPath &path) {
         switch(verb) {
             case SkPath::kMove_Verb: {
                 if(firstNode) return;
-                const QVector3D qPt = toQPointF(pts[0]);
+                const QVector3D qPt = toQVector3D(pts[0]);
                 firstNode = appendAndGetNode(Node(qPt));
                 prevNode = firstNode;
             }
                 break;
             case SkPath::kLine_Verb: {
-                const QVector3D qPt = toQPointF(pts[1]);
+                const QVector3D qPt = toQVector3D(pts[1]);
 
                 prevNode->setC2Enabled(false);
                 prevNode->mC2 = prevNode->mP1;
@@ -510,9 +510,9 @@ void NodeList::setPath(const SkPath &path) {
             }
                 break;
             case SkPath::kConic_Verb: {
-                const QVector3D p0 = toQPointF(pts[0]);
-                const QVector3D p1 = toQPointF(pts[1]);
-                const QVector3D p2 = toQPointF(pts[2]);
+                const QVector3D p0 = toQVector3D(pts[0]);
+                const QVector3D p1 = toQVector3D(pts[1]);
+                const QVector3D p2 = toQVector3D(pts[2]);
                 const qreal weight = SkScalarToDouble(iter.conicWeight());
 
                 const auto seg = qCubicSegment2D::sFromConic(p0, p1, p2, weight);
@@ -531,9 +531,9 @@ void NodeList::setPath(const SkPath &path) {
                 continue;
             }
             case SkPath::kCubic_Verb: {
-                const QVector3D c0Pt = toQPointF(pts[1]);
-                const QVector3D c1Pt = toQPointF(pts[2]);
-                const QVector3D p2Pt = toQPointF(pts[3]);
+                const QVector3D c0Pt = toQVector3D(pts[1]);
+                const QVector3D c1Pt = toQVector3D(pts[2]);
+                const QVector3D p2Pt = toQVector3D(pts[3]);
 
                 prevNode->setC2Enabled(true);
                 prevNode->mC2 = c0Pt;

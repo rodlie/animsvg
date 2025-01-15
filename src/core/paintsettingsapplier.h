@@ -89,7 +89,7 @@ private:
 class CORE_EXPORT GradientPtsPosSetting : public PaintSetting {
 public:
     GradientPtsPosSetting(const Target& target,
-                          const QPointF& pt1, const QPointF& pt2) :
+                          const QVector3D pt1, const QVector3D pt2) :
         PaintSetting(target), mPt1(pt1), mPt2(pt2) {}
 protected:
     void applyToPS(PaintSettingsAnimator * const target) const {

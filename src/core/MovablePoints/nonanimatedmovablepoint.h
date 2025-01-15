@@ -40,7 +40,7 @@ public:
     void cancelTransform();
 
     QVector3D getValue() const { return mValue; }
-    void setValue(const QPointF& value) { mValue = value; }
+    void setValue(const QVector3D value) { mValue = value; }
 private:
     QVector3D mValue;
 };

@@ -207,7 +207,7 @@ bool attrToBool(const QDomElement &elem,
     }
 }
 
-QVector3D attrToQPointF(const QDomElement &elem,
+QVector3D attrToQVector3D(const QDomElement &elem,
                       const QString& elemName,
                       const QString& attr,
                       const QString& def,
@@ -305,10 +305,10 @@ void parseVec2PropertyCreators(const QString& name,
                                stdsptr<UniformSpecifierCreator>& uniC) {
     const QString nameX = elem.attribute("xnameUI", "x");
     const QString nameY = elem.attribute("ynameUI", "y");
-    const QVector3D minVal = attrToQPointF(elem, name, "min", "0", true);
-    const QVector3D maxVal = attrToQPointF(elem, name, "max", "100", true);
-    const QVector3D iniVal = attrToQPointF(elem, name, "ini", "0", true);
-    const QVector3D stepVal = attrToQPointF(elem, name, "step", "1", true);
+    const QVector3D minVal = attrToQVector3D(elem, name, "min", "0", true);
+    const QVector3D maxVal = attrToQVector3D(elem, name, "max", "100", true);
+    const QVector3D iniVal = attrToQVector3D(elem, name, "ini", "0", true);
+    const QVector3D stepVal = attrToQVector3D(elem, name, "step", "1", true);
     const bool glValue = attrToBool(elem, name, "glValue", "false");
     const bool resolutionScaled = attrToBool(elem, name, "resolutionScaled", "false");
     const bool influenceScaled = attrToBool(elem, name, "influenceScaled", "false");

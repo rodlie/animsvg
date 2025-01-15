@@ -333,10 +333,10 @@ void QrealAnimator::applyExpressionSub(const FrameRange& relRange,
                        const int n, const BezierCurve curve) {
         Q_UNUSED(n)
         const auto qptData = reinterpret_cast<QPointF*>(curve);
-        const QPointF& p0 = qptData[0];
-        const QPointF& c1 = qptData[1];
-        const QPointF& c2 = qptData[2];
-        const QPointF& p3 = qptData[3];
+        const QVector3D p0 = qptData[0];
+        const QVector3D c1 = qptData[1];
+        const QVector3D c2 = qptData[2];
+        const QVector3D p3 = qptData[3];
 
         const int frame0 = qRound(p0.x()*frameDivider);
         const qreal frame1 = c1.x()*frameDivider;
@@ -580,12 +580,15 @@ QPainterPath QrealAnimator::graph_getPathForSegment(
     if(prevKey) {
         path.moveTo(prevKey->getRelFrame(), prevKey->getValueForGraph());
         if(nextKey) {
-            path.cubicTo(QPointF(prevKey->getC1Frame(),
-                                 prevKey->getC1Value()),
-                         QPointF(nextKey->getC0Frame(),
-                                 nextKey->getC0Value()),
-                         QPointF(nextKey->getRelFrame(),
-                                 nextKey->getValueForGraph()));
+            path.cubicTo(QVector3D(prevKey->getC1Frame(),
+                                 prevKey->getC1Value(),
+                                 0),
+                         QVector3D(nextKey->getC0Frame(),
+                                 nextKey->getC0Value(),
+                                 0),
+                         QVector3D(nextKey->getRelFrame(),
+                                 nextKey->getValueForGraph(),
+                                 0));
         } else {
             path.lineTo(50000, prevKey->getValueForGraph());
         }

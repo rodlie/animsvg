@@ -122,7 +122,7 @@ SkPath toSkPath(const QPainterPath &qPath) {
             else path.cubicTo(endPt, startPt, toPt);
             firstOther = !firstOther;
         }
-        if(i == iMax && SkPoint::Distance(movePt, toPt) < 0.001f)
+        if(i == iMax && SkPoint3::Distance(movePt, toPt) < 0.001f)
             path.close();
     }
     return path;
@@ -138,19 +138,19 @@ QPainterPath toQPainterPath(const SkPath& path) {
         switch(verb) {
             case SkPath::kMove_Verb: {
                 const SkPoint3 pt = pts[0];
-                qPath.moveTo(toQPointF(pt));
+                qPath.moveTo(toQVector3D(pt));
             }
                 break;
             case SkPath::kLine_Verb: {
                 const SkPoint3 pt = pts[1];
 
-                qPath.lineTo(toQPointF(pt));
+                qPath.lineTo(toQVector3D(pt));
             }
                 break;
             case SkPath::kConic_Verb: {
-                const QVector3D p0 = toQPointF(pts[0]);
-                const QVector3D p1 = toQPointF(pts[1]);
-                const QVector3D p2 = toQPointF(pts[2]);
+                const QVector3D p0 = toQVector3D(pts[0]);
+                const QVector3D p1 = toQVector3D(pts[1]);
+                const QVector3D p2 = toQVector3D(pts[2]);
                 const qreal weight = SkScalarToDouble(iter.conicWeight());
 
                 const auto seg = qCubicSegment2D::sFromConic(p0, p1, p2, weight);
@@ -164,9 +164,9 @@ QPainterPath toQPainterPath(const SkPath& path) {
                 const SkPoint3 endPt = pts[1];
                 const SkPoint3 startPt = pts[2];
                 const SkPoint3 targetPt = pts[3];
-                qPath.cubicTo(toQPointF(endPt),
-                              toQPointF(startPt),
-                              toQPointF(targetPt));
+                qPath.cubicTo(toQVector3D(endPt),
+                              toQVector3D(startPt),
+                              toQVector3D(targetPt));
             }
                 break;
             case SkPath::kClose_Verb:
@@ -175,8 +175,8 @@ QPainterPath toQPainterPath(const SkPath& path) {
             case SkPath::kQuad_Verb: {
                 const SkPoint3 ctrlPt = pts[1];
                 const SkPoint3 targetPt = pts[2];
-                qPath.quadTo(toQPointF(ctrlPt),
-                             toQPointF(targetPt));
+                qPath.quadTo(toQVector3D(ctrlPt),
+                             toQVector3D(targetPt));
             }
                 break;
             case SkPath::kDone_Verb:
@@ -197,7 +197,7 @@ void switchSkQ(const QVector3D &qPos, SkPoint3 &skPos) {
 }
 
 void switchSkQ(const SkPoint3 &skPos, QVector3D &qPos) {
-    qPos = toQPointF(skPos);
+    qPos = toQVector3D(skPos);
 }
 
 void switchSkQ(const qreal q, float &sk) {

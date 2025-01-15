@@ -73,7 +73,7 @@ public:
     eWriteStream& operator<<(const uint64_t val);
     eWriteStream& operator<<(const iValueRange val);
     eWriteStream& operator<<(const qreal val);
-    eWriteStream& operator<<(const QPointF& val);
+    eWriteStream& operator<<(const QVector3D val);
     eWriteStream& operator<<(const QRect3D& val);
     eWriteStream& operator<<(const QMatrix& val);
     eWriteStream& operator<<(const QColor& val);

@@ -59,7 +59,7 @@ CORE_EXPORT
 extern qreal signedSquare(const qreal val);
 
 CORE_EXPORT
-extern qreal distSign(const QPointF& distPt);
+extern qreal distSign(const QVector3D distPt);
 
 CORE_EXPORT
 extern unsigned char truncateU8(const int val);
@@ -178,8 +178,8 @@ CORE_EXPORT
 extern QVector3D symmetricToPos(const QVector3D &toMirror,
                               const QVector3D &mirrorCenter);
 CORE_EXPORT
-extern QVector3D symmetricToPosNewLen(const QPointF& toMirror,
-                                    const QPointF& mirrorCenter,
+extern QVector3D symmetricToPosNewLen(const QVector3D toMirror,
+                                    const QVector3D mirrorCenter,
                                     const qreal newLen);
 CORE_EXPORT
 extern qreal pointToLen(QVector3D point);
@@ -189,9 +189,9 @@ CORE_EXPORT
 extern QVector3D scalePointToNewLen(const QVector3D &point,
                                   const qreal newLen);
 CORE_EXPORT
-extern QVector3D gRotPt(const QPointF& pt, const qreal deg);
+extern QVector3D gRotPt(const QVector3D pt, const qreal deg);
 CORE_EXPORT
-extern QVector3D gQPointFDisplace(const QPointF& pt, const qreal displ);
+extern QVector3D gQPointFDisplace(const QVector3D pt, const qreal displ);
 
 CORE_EXPORT
 extern bool isPointZero(QVector3D pos);

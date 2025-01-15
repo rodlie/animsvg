@@ -253,12 +253,15 @@ QPainterPath GraphAnimator::graph_getPathForSegment(
         path.moveTo(prevKey->getRelFrame(),
                     prevKey->getValueForGraph());
         if(nextKey) {
-            path.cubicTo(QPointF(prevKey->getC1Frame(),
-                                 prevKey->getC1Value()),
-                         QPointF(nextKey->getC0Frame(),
-                                 nextKey->getC0Value()),
-                         QPointF(nextKey->getRelFrame(),
-                                 nextKey->getValueForGraph()));
+            path.cubicTo(QVector3D(prevKey->getC1Frame(),
+                                 prevKey->getC1Value(),
+                                 0),
+                         QVector3D(nextKey->getC0Frame(),
+                                 nextKey->getC0Value(),
+                                 0),
+                         QVector3D(nextKey->getRelFrame(),
+                                 nextKey->getValueForGraph(),
+                                 0));
         } else {
             path.lineTo(50000, 50000);
         }

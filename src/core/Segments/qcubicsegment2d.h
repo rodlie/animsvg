@@ -46,12 +46,12 @@ struct CORE_EXPORT PosAndT {
 
 struct CORE_EXPORT qCubicSegment2D {
     typedef std::pair<qCubicSegment2D, qCubicSegment2D> Pair;
-    qCubicSegment2D(const QPointF& p0, const QPointF& c1,
-                    const QPointF& c2, const QPointF& p1) {
+    qCubicSegment2D(const QVector3D p0, const QVector3D c1,
+                    const QVector3D c2, const QVector3D p1) {
         mP0 = p0; mC1 = c1; mC2 = c2; mP3 = p1;
     }
 
-    qCubicSegment2D(const QPointF& p) {
+    qCubicSegment2D(const QVector3D p) {
         mP0 = p; mC1 = p; mC2 = p; mP3 = p;
     }
 
@@ -64,19 +64,19 @@ struct CORE_EXPORT qCubicSegment2D {
         return sFromLine(line.p1(), line.p2());
     }
 
-    static qCubicSegment2D sFromLine(const QPointF& p0, const QPointF& p1) {
+    static qCubicSegment2D sFromLine(const QVector3D p0, const QVector3D p1) {
         return qCubicSegment2D(p0, p0*(2./3) + p1*(1./3),
                                p0*(1./3) + p1*(2./3), p1);
     }
 
-    static qCubicSegment2D sFromConic(const QPointF& p0, const QPointF& c,
-                                      const QPointF& p1, const qreal weight) {
+    static qCubicSegment2D sFromConic(const QVector3D p0, const QVector3D c,
+                                      const QVector3D p1, const qreal weight) {
         qreal u = 4*weight/(3*(1 + weight));
         return qCubicSegment2D(p0, p0*(1 - u) + c*u, p1*(1 - u) + c*u, p1);
     }
 
-    static qCubicSegment2D sFromQuad(const QPointF& p0, const QPointF& c,
-                                     const QPointF& p1) {
+    static qCubicSegment2D sFromQuad(const QVector3D p0, const QVector3D c,
+                                     const QVector3D p1) {
         return qCubicSegment2D(p0, p0 + 2*(c - p0)/3, p1 + 2*(c - p1)/3, p1);
     }
 
@@ -97,7 +97,7 @@ struct CORE_EXPORT qCubicSegment2D {
 
     QVector3D posAtT(const qreal t) const;
     QVector3D posAtLength(const qreal len) const;
-    qreal tAtPos(const QPointF& pos) const;
+    qreal tAtPos(const QVector3D pos) const;
 
     qreal length() const;
     qreal tAtLength(const qreal len) const;
@@ -111,13 +111,13 @@ struct CORE_EXPORT qCubicSegment2D {
     const QVector3D &c2() const;
     const QVector3D &p3() const;
 
-    void setP0(const QPointF& p0);
-    void setC1(const QPointF& c1);
-    void setC2(const QPointF& c2);
-    void setP3(const QPointF& p3);
+    void setP0(const QVector3D p0);
+    void setC1(const QVector3D c1);
+    void setC2(const QVector3D c2);
+    void setP3(const QVector3D p3);
 
-    qreal tValueForPointClosestTo(const QPointF& p);
-    PosAndT closestPosAndT(const QPointF& p);
+    qreal tValueForPointClosestTo(const QVector3D p);
+    PosAndT closestPosAndT(const QVector3D p);
     qreal minDistanceTo(const QVector3D &p,
                         qreal * const pBestT = nullptr,
                         QVector3D * const pBestPos = nullptr) const;

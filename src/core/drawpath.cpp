@@ -31,7 +31,7 @@
 
 DrawPath::DrawPath() {}
 
-void DrawPath::lineTo(const QPointF& pos) {
+void DrawPath::lineTo(const QVector3D pos) {
     if(!mPts.isEmpty()) {
         const QVector3D lastPos = mPts.last();
         const QVector3D dPos = pos - lastPos;
@@ -46,9 +46,9 @@ void DrawPath::lineTo(const QPointF& pos) {
     mPts.append(pos);
 }
 
-QVector3D operator*(const QPointF& p1, const QPointF& p2);
+QVector3D operator*(const QVector3D p1, const QVector3D p2);
 
-QVector3D operator/(const QPointF& p1, const QPointF& p2) {
+QVector3D operator/(const QVector3D p1, const QVector3D p2) {
     return {p1.x()/p2.x(), p1.y()/p2.y()};
 }
 
@@ -64,10 +64,10 @@ void DrawPath::fit(const qreal maxError, const bool split) {
     const auto adder = [this](const int n, const BezierCurve curve) {
         Q_UNUSED(n)
         const auto qptData = reinterpret_cast<QPointF*>(curve);
-        const QPointF& p0 = qptData[0];
-        const QPointF& c1 = qptData[1];
-        const QPointF& c2 = qptData[2];
-        const QPointF& p3 = qptData[3];
+        const QVector3D p0 = qptData[0];
+        const QVector3D c1 = qptData[1];
+        const QVector3D c2 = qptData[2];
+        const QVector3D p3 = qptData[3];
 
         mFitted.append(qCubicSegment2D{p0, c1, c2, p3});
     };
@@ -98,7 +98,7 @@ void DrawPath::removeForceSplit(const int id) {
     mForceSplits.removeOne(id);
 }
 
-int DrawPath::nearestSmoothPt(const QPointF& pos, qreal* const dist) const {
+int DrawPath::nearestSmoothPt(const QVector3D pos, qreal* const dist) const {
     int nearestSmoothId = -1;
     qreal minDist = DBL_MAX;
     for(int i = 0; i < mSmoothPts.count(); i++) {
@@ -113,11 +113,11 @@ int DrawPath::nearestSmoothPt(const QPointF& pos, qreal* const dist) const {
     return nearestSmoothId;
 }
 
-int DrawPath::nearestForceSplit(const QPointF& pos, qreal* const dist) const {
+int DrawPath::nearestForceSplit(const QVector3D pos, qreal* const dist) const {
     int nearestSplitId = -1;
     qreal minDist = DBL_MAX;
     for(const int split : mForceSplits) {
-        const QPointF& splitPos = mSmoothPts.at(split);
+        const QVector3D splitPos = mSmoothPts.at(split);
         const qreal dist = pointToLen(pos - splitPos);
         if(dist < minDist) {
             minDist = dist;

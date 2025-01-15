@@ -151,7 +151,7 @@ void NullObjectType::updatePath() {
     }
 }
 
-bool NullObjectType::relPointInsidePath(const QPointF& relPos) {
+bool NullObjectType::relPointInsidePath(const QVector3D relPos) {
     const int val = getCurrentValue();
     const Type type = static_cast<Type>(val);
     const qreal size = mSize->getEffectiveValue();
