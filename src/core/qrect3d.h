@@ -31,9 +31,9 @@
 // Adds a z dimension to a QRect3D
 // Extracted from: https://stackoverflow.com/questions/20152342/is-there-3d-analogy-for-qrect-in-qt
 
-class QRect3D : public QRect3D {
+class QRect3D : public QRectF {
 public:
-    QRect3D(int x, int y, int width, int height, int z) : QRect3D(x, y, width, height), m_length(z) {}
+    QRect3D(int x, int y, int width, int height, int z) : QRectF(x, y, width, height), m_length(z) {}
     int z() const { return m_length; }
 private:
     int m_length;
