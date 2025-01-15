@@ -866,13 +866,13 @@ void BoxSingleWidget::paintEvent(QPaintEvent *) {
                 }
             }
             if(const auto path = enve_cast<SmartPathAnimator*>(prop)) {
-                const QRect colRect(QPoint{nameX, 0},
+                const QRect3D colRect(QVector3D{nameX, 0, 0},
                                     QSize{eSizesUI::widget, eSizesUI::widget});
                 p.setPen(Qt::NoPen);
                 p.setRenderHint(QPainter::Antialiasing, true);
                 p.setBrush(path->getPathColor());
                 const int radius = qRound(eSizesUI::widget*0.2);
-                p.drawEllipse(colRect.center() + QPoint(0, 2),
+                p.drawEllipse(colRect.center() + QVector3D(0, 2, 0),
                               radius, radius);
                 p.setRenderHint(QPainter::Antialiasing, false);
                 nameX += eSizesUI::widget;

@@ -121,7 +121,7 @@ void CurrentGradientWidget::paintGL() {
     }
 }
 
-void CurrentGradientWidget::colorRightPress(const int x, const QPoint &point) {
+void CurrentGradientWidget::colorRightPress(const int x, const QVector3D &point) {
     if(!mGradient) return;
     if(mReordering) {
         mGradient->restoreOrder();

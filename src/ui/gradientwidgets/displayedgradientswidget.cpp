@@ -213,7 +213,7 @@ void DisplayedGradientsWidget::gradientLeftPressed(const int gradId) {
 }
 
 void DisplayedGradientsWidget::gradientContextMenuReq(
-        const int gradId, const QPoint& globalPos) {
+        const int gradId, const QVector3D& globalPos) {
     if(!mScene) return;
     mContextMenuGradientId = gradId;
     const bool gradPressed = gradId < mGradients.count() && gradId >= 0;
@@ -276,7 +276,7 @@ void DisplayedGradientsWidget::mousePressEvent(QMouseEvent *event) {
         gradientLeftPressed(gradientId);
     } else if(event->button() == Qt::RightButton) {
         gradientContextMenuReq(gradientId, event->globalPos());
-        const QPoint relCursorPos = mapFromGlobal(QCursor::pos());
+        const QVector3D relCursorPos = mapFromGlobal(QCursor::pos());
         if(relCursorPos.x() < 0 || relCursorPos.y() < 0 ||
            relCursorPos.x() > width() || relCursorPos.y() > height()) {
             mHoveredGradientId = -1;

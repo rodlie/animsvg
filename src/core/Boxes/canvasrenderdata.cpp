@@ -32,7 +32,7 @@ CanvasRenderData::CanvasRenderData(BoundingBox * const parentBoxT) :
 void CanvasRenderData::updateGlobalRect() {
     fScaledTransform = fTotalTransform*fResolutionScale;
     const auto globalRectF = fScaledTransform.mapRect(fRelBoundingRect);
-    const QPoint pos(qFloor(globalRectF.left()),
+    const QVector3D pos(qFloor(globalRectF.left()),
                      qFloor(globalRectF.top()));
     const QSize size(qCeil(globalRectF.width()),
                      qCeil(globalRectF.height()));

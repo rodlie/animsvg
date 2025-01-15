@@ -513,7 +513,7 @@ void OutputProfilesListButton::mousePressEvent(QMouseEvent *e) {
         actionT->setData(QVariant(-1));
         menu.addAction(actionT);
 
-        QAction *selectedAction = menu.exec(mapToGlobal(QPoint(0, height())));
+        QAction *selectedAction = menu.exec(mapToGlobal(QVector3D(0, height(), 0)));
         if(selectedAction) {
             int profileId = selectedAction->data().toInt();
             if(profileId == -1) {

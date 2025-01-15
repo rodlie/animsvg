@@ -207,7 +207,7 @@ void CanvasToolBar::setDimension(const QSize dim,
     Document::sInstance->actionFinished();
 }
 
-void CanvasToolBar::showContextMenu(const QPoint &pos)
+void CanvasToolBar::showContextMenu(const QVector3D &pos)
 {
     QMenu menu(this);
     {

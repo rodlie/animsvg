@@ -521,12 +521,12 @@ void Canvas::drawPathFinish(const qreal invScale) {
     drawPathClear();
 }
 
-const QColor Canvas::pickPixelColor(const QPoint &pos)
+const QColor Canvas::pickPixelColor(const QVector3D &pos)
 {
     // try the "safe" option first
     if (QApplication::activeWindow()) {
         const auto nPos = QApplication::activeWindow()->mapFromGlobal(pos);
-        return QApplication::activeWindow()->grab(QRect(QPoint(nPos.x(), nPos.y()),
+        return QApplication::activeWindow()->grab(QRect(QVector3D(nPos.x(), nPos.y(), nPos.z()),
                                                         QSize(1, 1))).toImage().pixel(0, 0);
     }
 

@@ -98,7 +98,7 @@ void ToolBar::setup()
     });
 }
 
-void ToolBar::showContextMenu(const QPoint &pos)
+void ToolBar::showContextMenu(const QVector3D &pos)
 {
     QMenu menu(this);
     {

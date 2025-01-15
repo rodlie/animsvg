@@ -43,7 +43,7 @@ public:
     explicit CurrentGradientWidget(QWidget *parent = nullptr);
 
     void setCurrentGradient(Gradient * const gradient);
-    void colorRightPress(const int x, const QPoint &point);
+    void colorRightPress(const int x, const QVector3D &point);
     void colorLeftPress(const int x);
     void setCurrentColorId(const int id);
     void colorAdd();

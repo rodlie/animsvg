@@ -72,7 +72,7 @@ protected:
 
 private:
     void updateTopGradientId();
-    void gradientContextMenuReq(const int gradId, const QPoint &globalPos);
+    void gradientContextMenuReq(const int gradId, const QVector3D &globalPos);
     void gradientLeftPressed(const int gradId);
 
     ConnContextQPtr<Canvas> mScene;

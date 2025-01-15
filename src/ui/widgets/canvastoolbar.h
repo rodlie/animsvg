@@ -55,7 +55,7 @@ namespace Friction
                                Canvas * const target);
             void setDimension(const QSize dim,
                               Canvas * const target);
-            void showContextMenu(const QPoint &pos);
+            void showContextMenu(const QVector3D &pos);
 
             QSpinBox *mSpinWidth;
             QSpinBox *mSpinHeight;

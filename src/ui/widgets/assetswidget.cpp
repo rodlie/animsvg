@@ -161,7 +161,7 @@ AssetsWidget::AssetsWidget(QWidget *parent)
     mLayout->addWidget(mTree);
 
     connect(mTree, &QTreeWidget::customContextMenuRequested,
-            this, [this](const QPoint &pos) {
+            this, [this](const QVector3D &pos) {
         AssetsWidgetItem *item = dynamic_cast<AssetsWidgetItem*>(mTree->itemAt(pos));
         if (!item) { return; }
 

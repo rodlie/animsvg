@@ -112,7 +112,7 @@ void BoxTargetWidget::mousePressEvent(QMouseEvent *event) {
                 act->setDisabled(true);
             }
         }
-        menu.exec(mapToGlobal(QPoint(0, height())));
+        menu.exec(mapToGlobal(QVector3D(0, height(), 0)));
     } else if(event->button() == Qt::RightButton) {
 
     }

@@ -210,7 +210,7 @@ QAction *ColorToolBar::addSpacer(QWidget *widget)
     return addWidget(widget);
 }
 
-void ColorToolBar::showContextMenu(const QPoint &pos)
+void ColorToolBar::showContextMenu(const QVector3D &pos)
 {
     QMenu menu(this);
 

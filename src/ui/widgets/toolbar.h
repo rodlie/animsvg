@@ -49,7 +49,7 @@ namespace Friction
         private:
             bool mIconsOnly;
             void setup();
-            void showContextMenu(const QPoint &pos);
+            void showContextMenu(const QVector3D &pos);
             QAction* addSpacer(QWidget *widget);
             void setEnableAction(const QString &title,
                                  const bool &enable);

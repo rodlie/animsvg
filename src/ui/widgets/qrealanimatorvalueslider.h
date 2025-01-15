@@ -55,7 +55,7 @@ public:
 
 protected:
     void paint(QPainter *p);
-    void openContextMenu(const QPoint &globalPos);
+    void openContextMenu(const QVector3D &globalPos);
     QString getEditText() const;
 
     void startTransform(const qreal value);

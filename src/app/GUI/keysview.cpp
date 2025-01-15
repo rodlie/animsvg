@@ -312,7 +312,7 @@ TimelineMovable *KeysView::getRectangleMovableAtPos(
 
 void KeysView::mousePressEvent(QMouseEvent *e) {
     KFT_setFocus();
-    const QPoint posU = e->pos() + QPoint(-eSizesUI::widget/2, 0);
+    const QVector3D posU = e->pos() + QVector3D(-eSizesUI::widget/2, 0, 0);
     if(e->button() == Qt::MiddleButton) {
         if(mGraphViewed) gMiddlePress(posU);
         else middlePress(posU);
@@ -417,8 +417,8 @@ bool KeysView::KFT_keyPressEvent(QKeyEvent *event)
             inputHandled = true;
         }
     }
-    const QPoint posU = mapFromGlobal(QCursor::pos()) +
-            QPoint(-eSizesUI::widget/2, 0);
+    const QVector3D posU = mapFromGlobal(QCursor::pos()) +
+            QVector3D(-eSizesUI::widget/2, 0, 0);
     if(inputHandled) {
         handleMouseMove(mLastMovePos, QApplication::mouseButtons());
     } else if(event->key() == Qt::Key_Escape) {
@@ -663,7 +663,7 @@ Key *KeysView::getKeyAtPos(const int pressX, const int pressY,
     return nullptr;
 }
 
-void KeysView::updateHovered(const QPoint &posU) {
+void KeysView::updateHovered(const QVector3D &posU) {
     if(mGraphViewed) {
         clearHoveredKey();
         clearHoveredMovable();
@@ -749,7 +749,7 @@ void KeysView::scrollLeft() {
     update();
 }
 
-void KeysView::handleMouseMoveScroll(const QPoint &pos) {
+void KeysView::handleMouseMoveScroll(const QVector3D &pos) {
     if(pos.x() < eSizesUI::widget/2) {
         if(!mScrollTimer->isActive()) {
             connect(mScrollTimer, &QTimer::timeout,
@@ -768,9 +768,9 @@ void KeysView::handleMouseMoveScroll(const QPoint &pos) {
     }
 }
 
-void KeysView::handleMouseMove(const QPoint &pos,
+void KeysView::handleMouseMove(const QVector3D &pos,
                                const Qt::MouseButtons &buttons) {
-    const QPoint posU = pos + QPoint(-eSizesUI::widget/2, 0);
+    const QVector3D posU = pos + QVector3D(-eSizesUI::widget/2, 0, 0);
     if(buttons & Qt::MiddleButton) {
         if (mGraphViewed) { graphMiddleMove(posU); }
         else { middleMove(posU); }
@@ -1014,7 +1014,7 @@ void KeysView::mouseReleaseEvent(QMouseEvent *e) {
             }
         }
     }
-    updateHovered(e->pos() + QPoint(-eSizesUI::widget/2, 0));
+    updateHovered(e->pos() + QVector3D(-eSizesUI::widget/2, 0, 0));
     releaseMouseAndDontTrack();
 
     mValueInput.clearAndDisableInput();

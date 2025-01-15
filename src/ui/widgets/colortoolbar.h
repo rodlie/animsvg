@@ -66,7 +66,7 @@ namespace Friction
             QAction *mRightSpacerAct;
             ConnContextQPtr<Canvas> mCanvas;
 
-            void showContextMenu(const QPoint &pos);
+            void showContextMenu(const QVector3D &pos);
         };
     }
 }

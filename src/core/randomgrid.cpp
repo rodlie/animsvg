@@ -49,13 +49,13 @@ qreal RandomGrid::sGetRandomValue(const qreal baseSeed, const qreal gridSize,
                                   const QVector3D &pos) {
     const QVector3D gridIdF = pos/gridSize;
     if(isInteger4Dec(gridIdF.x()) && isInteger4Dec(gridIdF.y())) {
-        const QPoint gridId = QPoint{qRound(gridIdF.x()), qRound(gridIdF.y())};
+        const QVector3D gridId = QVector3D{qRound(gridIdF.x()), qRound(gridIdF.y()), qRound(gridIdF.z())};
         return sGetRandomValue(baseSeed, gridId);
     }
 
-    const QPoint gridId1{qCeil(gridIdF.x()), qCeil(gridIdF.y())};
-    const QPoint gridId2{qFloor(gridIdF.x()), qCeil(gridIdF.y())};
-    const QPoint gridId3{qCeil(gridIdF.x()), qFloor(gridIdF.y())};
+    const QVector3D gridId1{qCeil(gridIdF.x()), qCeil(gridIdF.y())};
+    const QVector3D gridId2{qFloor(gridIdF.x()), qCeil(gridIdF.y())};
+    const QVector3D gridId3{qCeil(gridIdF.x()), qFloor(gridIdF.y())};
     const QVector3D gridId4{qFloor(gridIdF.x()), qFloor(gridIdF.y()), qFloor(gridIdF.z())};
 
     const qreal gridId1Dist = pointToLen(gridId1 * gridSize - pos);
@@ -84,7 +84,7 @@ qreal RandomGrid::sGetRandomValue(const qreal min, const qreal max,
     return sGetRandomValue(baseSeed, gridSize, pos)*(max - min) + min;
 }
 
-qreal RandomGrid::sGetRandomValue(const qreal baseSeed, const QPoint &gridId) {
+qreal RandomGrid::sGetRandomValue(const qreal baseSeed, const QVector3D &gridId) {
     const int seedInc = gridId.x()*100 + gridId.y()*1000;
     if(isInteger4Dec(baseSeed)) {
         QRandomGenerator rand(static_cast<quint32>(qRound(baseSeed) + seedInc));

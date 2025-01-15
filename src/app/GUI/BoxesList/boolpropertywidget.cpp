@@ -81,9 +81,9 @@ void BoolPropertyWidget::paintEvent(QPaintEvent *) {
         value = mTarget->getValue();
     }
     if(value) {
-        p.setPen(QPen(Qt::white, 2.));
-        p.drawLine(QPoint(6, height()/2), QPoint(width()/2, height() - 6));
-        p.drawLine(QPoint(width()/2, height() - 6), QPoint(width() - 6, 6));
+        p.setPen(QPen(Qt::white, 2.)); // FIXME: z prop?
+            p.drawLine(QVector3D(6, height()/2, 0), QVector3D(width()/2, height() - 6, 0));
+        p.drawLine(QVector3D(width()/2, height() - 6, 0), QVector3D(width() - 6, 6, 0));
     }
 
     p.end();
@@ -98,4 +98,3 @@ void BoolPropertyWidget::leaveEvent(QEvent *) {
     mHovered = false;
     update();
 }
-

@@ -143,7 +143,7 @@ private:
     BoxScroller* const mParent;
 
     bool mDragPressPos = false;
-    QPoint mDragStartPos;
+    QVector3D mDragStartPos;
 
     bool mHover = false;
 

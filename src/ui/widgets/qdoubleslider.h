@@ -96,7 +96,7 @@ public:
     { return qBound(mMinValue, value, mMaxValue); }
 protected:
     virtual void paint(QPainter *p);
-    virtual void openContextMenu(const QPoint &globalPos)
+    virtual void openContextMenu(const QVector3D &globalPos)
     { Q_UNUSED(globalPos) }
     virtual QString getEditText() const
     { return mValueString; }
@@ -160,7 +160,7 @@ private:
     qreal mMaxValue = 0;
     qreal mPrefferedValueStep = 1;
 
-    QPoint mGlobalPressPos;
+    QVector3D mGlobalPressPos;
     qreal mLastValue;
     bool mShowValueSlider = true;
     bool mAutoAdjustWidth = true;

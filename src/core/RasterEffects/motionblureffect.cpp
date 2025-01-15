@@ -318,7 +318,7 @@ void MotionBlurCaller::processCpu(CpuRenderTools& renderTools,
         if(!rasterImg) continue;
         SkPixmap samplePixmap;
         if(!rasterImg->peekPixels(&samplePixmap)) continue;
-        QPoint offset = sample->fGlobalRect.topLeft() - data.fPos;
+        QVector3D offset = sample->fGlobalRect.topLeft() - data.fPos;
         SkPixmap samplePart;
         const auto sampleTile = data.fTexTile.makeOffset(-offset.x(), -offset.y());
         if(!samplePixmap.extractSubset(&samplePart, sampleTile)) continue;

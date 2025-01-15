@@ -44,7 +44,7 @@ public:
                                  const qreal baseSeed, const qreal gridSize,
                                  const QVector3D pos);
 private:
-    static qreal sGetRandomValue(const qreal baseSeed, const QPoint& gridId);
+    static qreal sGetRandomValue(const qreal baseSeed, const QVector3D& gridId);
 
     qsptr<QrealAnimator> mGridSize;
     qsptr<QrealAnimator> mSeed;

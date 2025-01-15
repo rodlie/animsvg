@@ -120,7 +120,7 @@ public:
 protected:
     ValueInput mValueInput;
 
-    QPoint mLastMovePos;
+    QVector3D mLastMovePos;
 
 #ifdef Q_OS_MAC
     bool event(QEvent *e);
@@ -206,8 +206,8 @@ private:
 
     void scrollRight();
     void scrollLeft();
-    void handleMouseMoveScroll(const QPoint &pos);
-    void handleMouseMove(const QPoint &pos, const Qt::MouseButtons &buttons);
+    void handleMouseMoveScroll(const QVector3D &pos);
+    void handleMouseMove(const QVector3D &pos, const Qt::MouseButtons &buttons);
     void graphConstrainAnimatorCtrlsFrameValues();
     void graphGetAnimatorsMinMaxValue(qreal &minVal, qreal &maxVal);
     void graphMakeSegmentsSmoothAction(const bool smooth);
@@ -217,7 +217,7 @@ private:
 
     QTimer *mScrollTimer;
 
-    void updateHovered(const QPoint &posU);
+    void updateHovered(const QVector3D &posU);
 
     QPointer<TimelineMovable> mHoveredMovable;
     stdptr<Key> mHoveredKey;
@@ -260,7 +260,7 @@ private:
     Key *mLastPressedKey = nullptr;
     bool mFirstMove = false;
     qreal mMoveDFrame = 0;
-    QPoint mLastPressPos;
+    QVector3D mLastPressPos;
     bool mMovingKeys = false;
     bool mScalingKeys = false;
     bool mMovingRect = false;

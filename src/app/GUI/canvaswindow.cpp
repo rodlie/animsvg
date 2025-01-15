@@ -197,7 +197,7 @@ void CanvasWindow::tabletEvent(QTabletEvent *e)
     Q_UNUSED(e)
     /*if(!mCurrentCanvas) return;
     const auto canvasMode = mDocument.fCanvasMode;
-    const QPoint globalPos = mapToGlobal(QPoint(0, 0));
+    const QVector3D globalPos = mapToGlobal(QVector3D(0, 0, 0));
     const qreal x = e->hiResGlobalX() - globalPos.x();
     const qreal y = e->hiResGlobalY() - globalPos.y();
     mCurrentCanvas->tabletEvent(e, mapToCanvasCoord({x, y}));
@@ -620,7 +620,7 @@ bool CanvasWindow::KFT_keyReleaseEvent(QKeyEvent *event)
     if (!mCurrentCanvas) { return false; }
     if (mCurrentCanvas->isPreviewingOrRendering()) { return false; }
     if (!isMouseGrabber()) { return false; }
-    const QPoint globalPos = QCursor::pos();
+    const QVector3D globalPos = QCursor::pos();
     const auto pos = mapToCanvasCoord(mapFromGlobal(globalPos));
     const eKeyEvent e(pos, mPrevMousePos, mPrevPressPos, mMouseGrabber,
                       mViewTransform.m11(), globalPos,
@@ -639,7 +639,7 @@ bool CanvasWindow::KFT_keyPressEvent(QKeyEvent *event)
 #endif
     if (!mCurrentCanvas) { return false; }
     if (mCurrentCanvas->isPreviewingOrRendering()) { return false; }
-    const QPoint globalPos = QCursor::pos();
+    const QVector3D globalPos = QCursor::pos();
     const auto pos = mapToCanvasCoord(mapFromGlobal(globalPos));
     const eKeyEvent e(pos, mPrevMousePos, mPrevPressPos, mMouseGrabber,
                       mViewTransform.m11(), globalPos,

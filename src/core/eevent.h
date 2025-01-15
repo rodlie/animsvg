@@ -37,7 +37,7 @@ protected:
            const QVector3D lastPressPos,
            const bool mouseGrabbing,
            const qreal scale,
-           const QPoint& globalPos,
+           const QVector3D& globalPos,
            const Qt::MouseButtons buttons,
            const Qt::KeyboardModifiers modifiers,
            const ulong& timestamp,
@@ -58,7 +58,7 @@ public:
     QVector3D fLastPressPos;
     bool fMouseGrabbing;
     qreal fScale;
-    QPoint fGlobalPos;
+    QVector3D fGlobalPos;
     Qt::MouseButtons fButtons;
     Qt::KeyboardModifiers fModifiers;
     ulong fTimestamp;
@@ -75,7 +75,7 @@ protected:
                 const QVector3D lastPressPos,
                 const bool mouseGrabbing,
                 const qreal scale,
-                const QPoint& globalPos,
+                const QVector3D& globalPos,
                 const Qt::MouseButton button,
                 const Qt::MouseButtons buttons,
                 const Qt::KeyboardModifiers modifiers,
@@ -105,7 +105,7 @@ public:
               const QVector3D lastPressPos,
               const bool mouseGrabbing,
               const qreal scale,
-              const QPoint globalPos,
+              const QVector3D globalPos,
               const Qt::MouseButtons buttons,
               const QKeyEvent * const e,
               std::function<void()> releaseMouse,

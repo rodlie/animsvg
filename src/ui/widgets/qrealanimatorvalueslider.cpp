@@ -248,7 +248,7 @@ bool QrealAnimatorValueSlider::isTargetDisabled() {
 }
 
 void QrealAnimatorValueSlider::openContextMenu(
-        const QPoint &globalPos) {
+        const QVector3D &globalPos) {
     if(!mTarget) return;
     const auto aTarget = *mTarget;
     QMenu menu(this);

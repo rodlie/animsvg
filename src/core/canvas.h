@@ -741,7 +741,7 @@ private:
     void drawPathClear();
     void drawPathFinish(const qreal invScale);
 
-    const QColor pickPixelColor(const QPoint &pos);
+    const QColor pickPixelColor(const QVector3D &pos);
     void applyPixelColor(const QColor &color,
                          const bool &fill);
 

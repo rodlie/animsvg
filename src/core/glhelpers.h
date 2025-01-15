@@ -69,7 +69,7 @@ struct CORE_EXPORT CpuRenderData {
     SkIRect fTexTile;
 
     //! @brief Pixel {0, 0} position in scene coordinates
-    QPoint fPos;
+    QVector3D fPos;
 
     //! @brief Texture size
     uint fWidth;
