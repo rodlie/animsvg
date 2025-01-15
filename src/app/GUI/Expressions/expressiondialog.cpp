@@ -453,15 +453,15 @@ ExpressionDialog::ExpressionDialog(QrealAnimator* const target,
 
     easingPresetLayout->addWidget(easingPresetButtonWidget);
 
+    QWidget *editorWidget = new QWidget(this);
+    mTabEditor = mTab->addTab(editorWidget, tr("Editor"));
+    const auto mainLayout = new QVBoxLayout(editorWidget);
+
     if (populateEasingPresets()) {
         mTabEasingPreset = mTab->addTab(easingPresetWidget, tr("Easing"));
     } else {
         easingPresetWidget->setVisible(false);
     }
-
-    QWidget *editorWidget = new QWidget(this);
-    mTabEditor = mTab->addTab(editorWidget, tr("Editor"));
-    const auto mainLayout = new QVBoxLayout(editorWidget);
 
     const auto tabLayout = new QHBoxLayout;
     tabLayout->setSpacing(0);
