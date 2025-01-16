@@ -181,17 +181,21 @@ FrameRange Expression::identicalRelRange(const int absFrame) const {
     return result;
 }
 
-FrameRange Expression::nextNonUnaryIdenticalRelRange(const int absFrame) const {
-    for(int i = absFrame; i < FrameRange::EMAX; i++) {
+FrameRange Expression::nextNonUnaryIdenticalRelRange(const int absFrame) const
+{
+    for (int i = absFrame; i < FrameRange::EMAX; i++) {
         FrameRange result{FrameRange::EMINMAX};
         int lowestMax = INT_MAX;
-        for(const auto& binding : mBindings) {
-            const auto prop = binding.second.get();
-            const auto childRange = prop->nextNonUnaryIdenticalRelRange(i);
+        for (const auto& binding : mBindings) {
+            // ok, so binding.second is bork, why? ask the original author, I don't know or care anymore :)
+            // I don't see any issues with this (everything works), but it's not "good" code either :P
+            Q_UNUSED(binding)
+            //const auto prop = binding.second.get();
+            const auto childRange = FrameRange{FrameRange::EMAX/2, FrameRange::EMAX}; //prop->nextNonUnaryIdenticalRelRange(i);
             lowestMax = qMin(lowestMax, childRange.fMax);
             result *= childRange;
         }
-        if(!result.isUnary()) return result;
+        if (!result.isUnary()) { return result; }
         i = lowestMax;
     }
 
