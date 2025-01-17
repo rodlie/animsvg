@@ -42,7 +42,7 @@ public:
     QIcon icon(const QFileInfo & info) const {
         const QString name = info.fileName();
         if(name.endsWith(".friction") ||
-           name.endsWith(".ev")) return mEvIcon;
+           name.endsWith(".fdesign")) return mEvIcon;
         return QFileIconProvider::icon(info);
     }
 private:

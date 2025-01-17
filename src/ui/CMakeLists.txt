@@ -25,6 +25,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../cmake
 include(friction-version)
 include(friction-meta)
 include(friction-common)
+include(friction-quazip)
 include(friction-ffmpeg)
 
 message("-- ffmpeg include: ${FFMPEG_INCLUDE_DIRS}")
@@ -34,6 +35,7 @@ message("-- skia libraries: ${SKIA_LIBRARIES_DIRS} ${SKIA_LIBRARIES}")
 add_definitions(-DUI_LIBRARY)
 
 include_directories(
+    ${QUAZIP_INCLUDE_DIRS}
     ${FFMPEG_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/../core
@@ -208,6 +210,7 @@ set_target_properties(
 target_link_directories(
     ${PROJECT_NAME}
     PRIVATE
+    ${QUAZIP_LIBRARIES}
     ${FFMPEG_LIBRARIES_DIRS}
     ${SKIA_LIBRARIES_DIRS}
 )

@@ -29,6 +29,7 @@
 namespace XevFormat {
     enum {
         initial,
+        fdesign,
 
         nextVersion
     };

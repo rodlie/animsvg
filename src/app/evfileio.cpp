@@ -187,7 +187,7 @@ void MainWindow::saveToFileXEV(const QString &path) {
         auto& fileSaver = xevfileSaver->fileSaver();
 
         fileSaver.processText("mimetype", [](QTextStream& stream) {
-            stream << "application/enve";
+            stream << "application/friction";
         }, false);
 
         fileSaver.process("Thumbnails/thumbnail.png", [this](QIODevice* const dst) {
