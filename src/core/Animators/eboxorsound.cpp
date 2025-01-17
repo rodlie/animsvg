@@ -30,6 +30,8 @@
 #include "Properties/emimedata.h"
 #include "Sound/esound.h"
 
+using namespace Friction::Core;
+
 eBoxOrSound::eBoxOrSound(const QString &name) :
     StaticComplexAnimator(name) {
     ca_setDisabledWhenEmpty(false);

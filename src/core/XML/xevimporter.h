@@ -29,8 +29,8 @@
 #include "xmlexporthelpers.h"
 
 #include "runtimewriteid.h"
+#include "zipfileloader.h"
 
-class ZipFileLoader;
 class BoundingBox;
 
 class CORE_EXPORT XevReadBoxesHandler {
@@ -50,7 +50,7 @@ private:
 class XevImporter {
 public:
     XevImporter(XevReadBoxesHandler& xevReadBoxesHandler,
-                ZipFileLoader& fileLoader,
+                Friction::Core::ZipFileLoader& fileLoader,
                 const RuntimeIdToWriteId& objListIdConv,
                 const QString& path,
                 const QString& assetsPath = "");
@@ -69,7 +69,7 @@ public:
     QString relPathToAbsPath(const QString& relPath) const;
 private:
     XevReadBoxesHandler& mXevReadBoxesHandler;
-    ZipFileLoader& mFileLoader;
+    Friction::Core::ZipFileLoader& mFileLoader;
     const RuntimeIdToWriteId& mObjectListIdConv;
     const QString mPath;
     const QString mAssetsPath;

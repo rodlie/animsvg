@@ -27,6 +27,8 @@
 
 #include "../zipfileloader.h"
 
+using namespace Friction::Core;
+
 XevReadBoxesHandler::~XevReadBoxesHandler() {
     for(const auto& task : mDoneTasks) task(*this);
 }

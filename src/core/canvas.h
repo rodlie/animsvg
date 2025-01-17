@@ -592,7 +592,7 @@ public:
                             const RuntimeIdToWriteId &objListIdConv,
                             const QString &path) const;
     void readBoxOrSoundXEV(XevReadBoxesHandler &boxReadHandler,
-                           ZipFileLoader &fileLoader,
+                           Friction::Core::ZipFileLoader &fileLoader,
                            const QString &path,
                            const RuntimeIdToWriteId &objListIdConv);
 

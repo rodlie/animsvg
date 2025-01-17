@@ -163,10 +163,10 @@ public:
     void writeScenesXEV(const std::shared_ptr<XevZipFileSaver>& xevFileSaver,
                         const RuntimeIdToWriteId& objListIdConv) const;
 
-    void readDocumentXEV(ZipFileLoader& fileLoader,
+    void readDocumentXEV(Friction::Core::ZipFileLoader& fileLoader,
                          QList<Canvas*>& scenes);
     void readScenesXEV(XevReadBoxesHandler& boxReadHandler,
-                       ZipFileLoader& fileLoader,
+                       Friction::Core::ZipFileLoader& fileLoader,
                        const QList<Canvas*>& scenes,
                        const RuntimeIdToWriteId& objListIdConv);
 

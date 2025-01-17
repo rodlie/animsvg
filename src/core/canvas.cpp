@@ -49,6 +49,8 @@
 #include "simpletask.h"
 #include "themesupport.h"
 
+using namespace Friction::Core;
+
 Canvas::Canvas(Document &document,
                const int canvasWidth,
                const int canvasHeight,

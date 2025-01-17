@@ -23,31 +23,40 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef ZIPFILELOADER_H
-#define ZIPFILELOADER_H
+#ifndef FRICTION_ZIPFILE_LOADER_H
+#define FRICTION_ZIPFILE_LOADER_H
 
+#include "core_global.h"
+
+#include <functional>
+#include <QDir>
+#include <QTextStream>
 #include <quazipfile.h>
 
-#include <QDir>
+namespace Friction
+{
+    namespace Core
+    {
+        class CORE_EXPORT ZipFileLoader
+        {
+        public:
+            ZipFileLoader();
 
-#include "exceptions.h"
+            void setZipPath(const QString& path);
 
-class CORE_EXPORT ZipFileLoader {
-public:
-    ZipFileLoader();
+            using Processor = std::function<void(QIODevice* const src)>;
+            void process(const QString& file, const Processor& func);
+            using TextProcessor = std::function<void(QTextStream& stream)>;
+            void processText(const QString& file, const TextProcessor& func);
 
-    void setZipPath(const QString& path);
+            QString relPathToAbsPath(const QString& relPath) const;
 
-    using Processor = std::function<void(QIODevice* const src)>;
-    void process(const QString& file, const Processor& func);
-    using TextProcessor = std::function<void(QTextStream& stream)>;
-    void processText(const QString& file, const TextProcessor& func);
+        private:
+            QDir mDir;
+            QuaZip mZip;
+            QuaZipFile mFile;
+        };
+    }
+}
 
-    QString relPathToAbsPath(const QString& relPath) const;
-private:
-    QDir mDir;
-    QuaZip mZip;
-    QuaZipFile mFile;
-};
-
-#endif // ZIPFILELOADER_H
+#endif // FRICTION_ZIPFILE_LOADER_H

@@ -70,6 +70,8 @@
 #include "ReadWrite/ewritestream.h"
 #include "XML/runtimewriteid.h"
 
+using namespace Friction;
+
 void MainWindow::loadEVFile(const QString &path)
 {
     QFile file(path);
@@ -190,7 +192,7 @@ void MainWindow::saveToFileXEV(const QString &path) {
             stream << "application/friction";
         }, false);
 
-        fileSaver.process("Thumbnails/thumbnail.png", [this](QIODevice* const dst) {
+        /*fileSaver.process("Thumbnails/thumbnail.png", [this](QIODevice* const dst) {
             const qreal scale = 256./width();
             QImage img(qRound(width()*scale),
                        qRound(height()*scale),
@@ -199,7 +201,7 @@ void MainWindow::saveToFileXEV(const QString &path) {
             p.scale(scale, scale);
             render(&p);
             img.save(dst, "PNG");
-        }, false);
+        }, false);*/
 
         RuntimeIdToWriteId objListIdConv;
         objListIdConv.assign(mObjectSettingsWidget->getId());
@@ -222,7 +224,7 @@ void MainWindow::saveToFileXEV(const QString &path) {
 
 void MainWindow::loadXevFile(const QString &path) {
     try {
-        ZipFileLoader fileLoader;
+        Core::ZipFileLoader fileLoader;
         fileLoader.setZipPath(path);
 
         QList<Canvas*> scenes;

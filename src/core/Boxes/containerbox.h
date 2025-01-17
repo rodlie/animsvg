@@ -138,14 +138,14 @@ public:
                             const RuntimeIdToWriteId& objListIdConv,
                             const QString& path) const;
     void readBoxOrSoundXEV(XevReadBoxesHandler& boxReadHandler,
-                           ZipFileLoader& fileLoader, const QString& path,
+                           Friction::Core::ZipFileLoader& fileLoader, const QString& path,
                            const RuntimeIdToWriteId& objListIdConv);
 
     virtual bool isFlipBook() const;
     virtual iValueRange getContainedMinMax() const;
 
     void readAllContainedXEV(XevReadBoxesHandler& boxReadHandler,
-                             ZipFileLoader& fileLoader, const QString& path,
+                             Friction::Core::ZipFileLoader& fileLoader, const QString& path,
                              const RuntimeIdToWriteId& objListIdConv);
 
     void queChildrenTasks();

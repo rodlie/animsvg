@@ -34,6 +34,8 @@
 #include "canvas.h"
 #include "appsupport.h"
 
+using namespace Friction::Core;
+
 void Document::writeBookmarked(eWriteStream &dst) const {
     dst << fColors.count();
     for(const auto &col : fColors) {

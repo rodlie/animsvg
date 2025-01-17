@@ -65,7 +65,7 @@ public:
                                     const RuntimeIdToWriteId& objListIdConv,
                                     const QString& path) const;
     virtual void readBoxOrSoundXEV(XevReadBoxesHandler& boxReadHandler,
-                                   ZipFileLoader& fileLoader, const QString& path,
+                                   Friction::Core::ZipFileLoader& fileLoader, const QString& path,
                                    const RuntimeIdToWriteId& objListIdConv);
 
     TimelineMovable *anim_getTimelineMovable(
