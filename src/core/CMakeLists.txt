@@ -331,7 +331,7 @@ set(
     Animators/qrealanimator.cpp
     Animators/qrealkey.cpp
     Animators/qrealvalueeffect.cpp
-    Animators/qpointfanimator.cpp
+    Animators/qvector3danimator.cpp
     MovablePoints/movablepoint.cpp
     MovablePoints/nonanimatedmovablepoint.cpp
     MovablePoints/animatedpoint.cpp
@@ -528,7 +528,7 @@ set(
     Segments/smoothcurves.h
     ShaderEffects/PropertyCreators/coloranimatorcreator.h
     ShaderEffects/PropertyCreators/intanimatorcreator.h
-    ShaderEffects/PropertyCreators/qpointfanimatorcreator.h
+    ShaderEffects/PropertyCreators/qvector3danimatorcreator.h
     ShaderEffects/PropertyCreators/qrealanimatorcreator.h
     ShaderEffects/PropertyCreators/shaderpropertycreator.h
     ShaderEffects/shadereffect.h
@@ -667,7 +667,7 @@ set(
     Animators/qrealanimator.h
     Animators/qrealkey.h
     Animators/qrealvalueeffect.h
-    Animators/qpointfanimator.h
+    Animators/qvector3danimator.h
     MovablePoints/movablepoint.h
     MovablePoints/nonanimatedmovablepoint.h
     MovablePoints/animatedpoint.h
@@ -690,6 +690,7 @@ set(
     renderinstancesettings.h
     videoencoder.h
     formatoptions.h
+    qrect3d.h
 )
 
 if(NOT WIN32)
