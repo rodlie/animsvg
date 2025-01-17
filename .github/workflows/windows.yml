@@ -1,6 +1,6 @@
 name: Windows
 
-on: [push, pull_request]
+on: workflow_dispatch
 
 jobs:
   release:
