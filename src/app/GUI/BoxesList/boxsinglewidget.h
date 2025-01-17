@@ -121,7 +121,7 @@ protected:
     void updateFillTypeBoxVisible();
 
     void clearAndHideValueAnimators();
-    void updateValueSlidersForQPointFAnimator();
+    void updateValueSlidersForQVector3DAnimator();
 private:
     ContainerBox *getPromoteTargetGroup();
 
