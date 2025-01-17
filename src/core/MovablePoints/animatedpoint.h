@@ -30,7 +30,7 @@
 #include <QPointF>
 #include <QRectF>
 #include <QPainter>
-#include "Animators/qpointfanimator.h"
+#include "Animators/qvector3danimator.h"
 #include "skia/skiaincludes.h"
 
 class BoundingBox;
@@ -38,17 +38,17 @@ class NodePoint;
 
 class PropertyUpdater;
 
-class QPointFAnimator;
+class QVector3DAnimator;
 
 class CORE_EXPORT AnimatedPoint : public MovablePoint {
     e_OBJECT
 protected:
-    AnimatedPoint(QPointFAnimator * const associatedAnimator,
+    AnimatedPoint(QVector3DAnimator * const associatedAnimator,
                   const MovablePointType type);
-    AnimatedPoint(QPointFAnimator * const associatedAnimator,
+    AnimatedPoint(QVector3DAnimator * const associatedAnimator,
                   BasicTransformAnimator * const trans,
                   const MovablePointType type);
-public:    
+public:
     QPointF getRelativePos() const;
     void setRelativePos(const QPointF &relPos);
 
@@ -56,7 +56,7 @@ public:
     void finishTransform();
     void cancelTransform();
 
-    QPointFAnimator * getAnimator() const {
+    QVector3DAnimator * getAnimator() const {
         return mAssociatedAnimator_k;
     }
 
@@ -76,7 +76,7 @@ protected:
         return mAssociatedAnimator_k->getBaseValue();
     }
 private:
-    QPointFAnimator* const mAssociatedAnimator_k;
+    QVector3DAnimator* const mAssociatedAnimator_k;
 };
 
 #endif // ANIMATEDPOINT_H

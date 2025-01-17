@@ -32,7 +32,7 @@ enum class CanvasMode : short;
 class CORE_EXPORT CircleRadiusPoint : public AnimatedPoint {
     e_OBJECT
 protected:
-    CircleRadiusPoint(QPointFAnimator * const associatedAnimator,
+    CircleRadiusPoint(QVector3DAnimator * const associatedAnimator,
                       BasicTransformAnimator * const parent,
                       AnimatedPoint * const centerPoint,
                       const MovablePointType &type,
@@ -73,9 +73,9 @@ private:
     stdsptr<CircleRadiusPoint> mHorizontalRadiusPoint;
     stdsptr<CircleRadiusPoint> mVerticalRadiusPoint;
 
-    qsptr<QPointFAnimator> mCenterAnimator;
-    qsptr<QPointFAnimator> mHorizontalRadiusAnimator;
-    qsptr<QPointFAnimator> mVerticalRadiusAnimator;
+    qsptr<QVector3DAnimator> mCenterAnimator;
+    qsptr<QVector3DAnimator> mHorizontalRadiusAnimator;
+    qsptr<QVector3DAnimator> mVerticalRadiusAnimator;
 };
 
 #endif // CIRCLE_H

@@ -39,7 +39,7 @@
 #include "RasterEffects/rastereffect.h"
 #include "RasterEffects/customrastereffectcreator.h"
 #include "internallinkbox.h"
-#include "Animators/qpointfanimator.h"
+#include "Animators/qvector3danimator.h"
 #include "MovablePoints/pathpointshandler.h"
 #include "typemenu.h"
 #include "patheffectsmenu.h"
@@ -346,12 +346,18 @@ void BoundingBox::applyTransformEffects(
         qreal& scaleX, qreal& scaleY,
         qreal& shearX, qreal& shearY,
         QMatrix& postTransform) {
+    qreal &pivotZ = 0.;
+    qreal &posZ = 0.;
+    qreal &rotY = 0.;
+    qreal &rotZ = 0.;
+    qreal &scaleZ = 0.;
+    qreal &shearZ = 0.;
     mTransformEffectCollection->applyEffects(relFrame,
-                                             pivotX, pivotY,
-                                             posX, posY,
-                                             rot,
-                                             scaleX, scaleY,
-                                             shearX, shearY,
+                                             pivotX, pivotY, pivotZ,
+                                             posX, posY, posZ,
+                                             rot, rotY, rotZ,
+                                             scaleX, scaleY, scaleZ,
+                                             shearX, shearY, shearZ,
                                              postTransform, this);
 }
 
@@ -764,7 +770,7 @@ void BoundingBox::setRotate(const qreal rot)
 }
 
 void BoundingBox::rotateBy(const qreal rot) {
-    mTransformAnimator->rotateRelativeToSavedValue(rot);
+    mTransformAnimator->rotateRelativeToSavedValue(rot, rot);
 }
 
 void BoundingBox::rotateRelativeToSavedPivot(const qreal rot) {
@@ -874,11 +880,11 @@ void BoundingBox::alignPivotItself(const Qt::Alignment align,
     QPointF currentPivotAbsPos = getPivotAbsPos();
 
     QPointF lastSelectedPivotAbsPos = lastPivotAbsPos;
-    
+
     QPointF center = getRelCenterPosition();
 
-    qreal currentScaleX = mTransformAnimator->xScale();
-    qreal currentScaleY = mTransformAnimator->yScale();
+    qreal currentScaleX = mTransformAnimator->sx();
+    qreal currentScaleY = mTransformAnimator->sy();
 
     switch (relativeTo) {
     case AlignRelativeTo::scene:

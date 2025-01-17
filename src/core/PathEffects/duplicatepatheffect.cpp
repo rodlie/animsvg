@@ -24,13 +24,13 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "duplicatepatheffect.h"
-#include "Animators/qpointfanimator.h"
+#include "Animators/qvector3danimator.h"
 #include "Animators/intanimator.h"
 
 DuplicatePathEffect::DuplicatePathEffect() :
     PathEffect("duplicate effect", PathEffectType::Duplicate) {
-    mTranslation = enve::make_shared<QPointFAnimator>("translation");
-    mTranslation->setBaseValue(QPointF(10, 10));
+    mTranslation = enve::make_shared<QVector3DAnimator>("translation");
+    mTranslation->setBaseValue(10, 10, 0);
     ca_addChild(mTranslation);
 
     mCount = enve::make_shared<IntAnimator>(1, 0, 25, 1, "count");

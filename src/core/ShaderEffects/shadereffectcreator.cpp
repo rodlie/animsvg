@@ -48,7 +48,7 @@ bool ShaderEffectCreator::compatible(const QList<ShaderPropertyType> &props) con
             if(!iCompatible) return false;
         } break;
         case ShaderPropertyType::vec2Property: {
-            const bool iCompatible = enve_cast<QPointFAnimatorCreator*>(prop);
+            const bool iCompatible = enve_cast<QVector3DAnimatorCreator*>(prop);
             if(!iCompatible) return false;
         } break;
         case ShaderPropertyType::colorProperty: {
@@ -80,7 +80,7 @@ ShaderPropertyType creatorPropertyType(ShaderPropertyCreator* const prop) {
         return ShaderPropertyType::floatProperty;
     } else if(enve_cast<IntAnimatorCreator*>(prop)) {
         return ShaderPropertyType::intProperty;
-    } else if(enve_cast<QPointFAnimatorCreator*>(prop)) {
+    } else if(enve_cast<QVector3DAnimatorCreator*>(prop)) {
         return ShaderPropertyType::vec2Property;
     } else if(enve_cast<ColorAnimatorCreator*>(prop)) {
         return ShaderPropertyType::colorProperty;
@@ -207,25 +207,34 @@ bool attrToBool(const QDomElement &elem,
     }
 }
 
+QVector3D attrToQVector3D(const QDomElement &elem,
+                          const QString& elemName,
+                          const QString& attr,
+                          const QString& def,
+                          const bool allowSingleValue) {
+    const QString valS = elem.attribute(attr, def);
+    const QRegExp rx("\\[" REGEX_THREE_FLOATS "\\]");
+    if(rx.exactMatch(valS)) {
+        rx.indexIn(valS);
+        const QStringList xyz = rx.capturedTexts();
+        return {xyz.at(1).toFloat(), xyz.at(2).toFloat(), xyz.at(3).toFloat()}; // FIXME: we're losing some precision here
+    } else if(allowSingleValue) {
+        bool ok;
+        auto value = valS.toFloat(&ok);
+        if(!ok) RuntimeThrow("Invalid '" + attr + "' value \"" + valS + "\" for '" +
+                             elemName + "'.\nExpected \"[x, y]\" or \"x\".");
+        return {value, value, value};
+    } else RuntimeThrow("Invalid '" + attr + "' value \"" + valS + "\" for '" +
+                         elemName + "'.\nExpected \"[x, y]\".");
+}
+
 QPointF attrToQPointF(const QDomElement &elem,
                       const QString& elemName,
                       const QString& attr,
                       const QString& def,
                       const bool allowSingleValue) {
-    const QString valS = elem.attribute(attr, def);
-    const QRegExp rx("\\[" REGEX_TWO_FLOATS "\\]");
-    if(rx.exactMatch(valS)) {
-        rx.indexIn(valS);
-        const QStringList xy = rx.capturedTexts();
-        return {xy.at(1).toDouble(), xy.at(2).toDouble()};
-    } else if(allowSingleValue) {
-        bool ok;
-        qreal value = valS.toDouble(&ok);
-        if(!ok) RuntimeThrow("Invalid '" + attr + "' value \"" + valS + "\" for '" +
-                             elemName + "'.\nExpected \"[x, y]\" or \"x\".");
-        return {value, value};
-    } else RuntimeThrow("Invalid '" + attr + "' value \"" + valS + "\" for '" +
-                         elemName + "'.\nExpected \"[x, y]\".");
+    auto vector = attrToQVector3D(elem, elemName, attr, def, allowSingleValue);
+    return QPointF(vector.x(), vector.y());
 }
 
 QColor attrToQColor(const QDomElement &elem,
@@ -305,17 +314,18 @@ void parseVec2PropertyCreators(const QString& name,
                                stdsptr<UniformSpecifierCreator>& uniC) {
     const QString nameX = elem.attribute("xnameUI", "x");
     const QString nameY = elem.attribute("ynameUI", "y");
-    const QPointF minVal = attrToQPointF(elem, name, "min", "0", true);
-    const QPointF maxVal = attrToQPointF(elem, name, "max", "100", true);
-    const QPointF iniVal = attrToQPointF(elem, name, "ini", "0", true);
-    const QPointF stepVal = attrToQPointF(elem, name, "step", "1", true);
+    const QString nameZ = elem.attribute("znameUI", "z");
+    const QVector3D minVal = attrToQVector3D(elem, name, "min", "0", true);
+    const QVector3D maxVal = attrToQVector3D(elem, name, "max", "100", true);
+    const QVector3D iniVal = attrToQVector3D(elem, name, "ini", "0", true);
+    const QVector3D stepVal = attrToQVector3D(elem, name, "step", "1", true);
     const bool glValue = attrToBool(elem, name, "glValue", "false");
     const bool resolutionScaled = attrToBool(elem, name, "resolutionScaled", "false");
     const bool influenceScaled = attrToBool(elem, name, "influenceScaled", "false");
 
-    propC = enve::make_shared<QPointFAnimatorCreator>(
+    propC = enve::make_shared<QVector3DAnimatorCreator>(
                 iniVal, minVal, maxVal, stepVal, glValue,
-                nameX, nameY, name, nameUI);
+                nameX, nameY, nameZ, name, nameUI);
     uniC = enve::make_shared<UniformSpecifierCreator>(
                 ShaderPropertyType::vec2Property, glValue,
                 resolutionScaled, influenceScaled);

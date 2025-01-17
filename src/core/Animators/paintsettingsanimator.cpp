@@ -35,7 +35,7 @@
 #include "canvas.h"
 #include "transformanimator.h"
 #include "simpletask.h"
-#include "qpointfanimator.h"
+#include "qvector3danimator.h"
 
 PaintSettingsAnimator::PaintSettingsAnimator(const QString &name,
                                              BoundingBox * const parent) :

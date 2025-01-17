@@ -27,7 +27,7 @@
 #define DUPLICATEPATHEFFECT_H
 #include "PathEffects/patheffect.h"
 class IntAnimator;
-class QPointFAnimator;
+class QVector3DAnimator;
 
 class CORE_EXPORT DuplicatePathEffect : public PathEffect {
     e_OBJECT
@@ -39,7 +39,7 @@ public:
     bool skipZeroInfluence(const qreal relFrame) const;
 private:
     qsptr<IntAnimator> mCount;
-    qsptr<QPointFAnimator> mTranslation;
+    qsptr<QVector3DAnimator> mTranslation;
 };
 
 #endif // DUPLICATEPATHEFFECT_H

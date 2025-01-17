@@ -25,12 +25,14 @@
 
 #ifndef GRADIENTPOINTS_H
 #define GRADIENTPOINTS_H
+
 #include "Animators/staticcomplexanimator.h"
+#include "skia/skiaincludes.h"
+
 class GradientPoint;
 class MovablePoint;
 class PathBox;
-class QPointFAnimator;
-#include "skia/skiaincludes.h"
+class QVector3DAnimator;
 
 class CORE_EXPORT GradientPoints : public StaticComplexAnimator {
     e_OBJECT
@@ -56,13 +58,13 @@ public:
 
     bool enabled() const { return mEnabled; }
 
-    QPointFAnimator* startAnimator() const { return mStartAnimator.get(); }
-    QPointFAnimator* endAnimator() const { return mEndAnimator.get(); }
+    QVector3DAnimator* startAnimator() const { return mStartAnimator.get(); }
+    QVector3DAnimator* endAnimator() const { return mEndAnimator.get(); }
 private:
     bool mEnabled;
 
-    qsptr<QPointFAnimator> mStartAnimator;
-    qsptr<QPointFAnimator> mEndAnimator;
+    qsptr<QVector3DAnimator> mStartAnimator;
+    qsptr<QVector3DAnimator> mEndAnimator;
 
     stdsptr<GradientPoint> mStartPoint;
     stdsptr<GradientPoint> mEndPoint;

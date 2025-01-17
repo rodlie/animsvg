@@ -44,7 +44,7 @@ PropertyBinding::PropertyBinding(const Validator& validator,
 }
 
 #include "Animators/qrealanimator.h"
-#include "Animators/qpointfanimator.h"
+#include "Animators/qvector3danimator.h"
 
 qsptr<PropertyBinding> PropertyBinding::sCreate(
         const QString& binding,
@@ -53,7 +53,7 @@ qsptr<PropertyBinding> PropertyBinding::sCreate(
     const auto prop = sFindPropertyToBind(binding, validator, context);
     if(!prop) return nullptr;
     if(const auto qa = enve_cast<QrealAnimator*>(prop)) {
-    } else if(const auto pa = enve_cast<QPointFAnimator*>(prop)) {
+    } else if(const auto pa = enve_cast<QVector3DAnimator*>(prop)) {
     } else return nullptr;
     const auto result = new PropertyBinding(validator, context);
     result->bindProperty(binding, prop);

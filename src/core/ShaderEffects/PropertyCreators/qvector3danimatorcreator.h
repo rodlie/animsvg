@@ -23,39 +23,44 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef QPOINTFANIMATORCREATOR_H
-#define QPOINTFANIMATORCREATOR_H
+#ifndef QVECTOR3DANIMATORCREATOR_H
+#define QVECTOR3DANIMATORCREATOR_H
 
-#include "Animators/qpointfanimator.h"
+#include <QVector3D>
+
+#include "Animators/qvector3danimator.h"
 #include "shaderpropertycreator.h"
 
-class CORE_EXPORT QPointFAnimatorCreator : public ShaderPropertyCreator {
+class CORE_EXPORT QVector3DAnimatorCreator : public ShaderPropertyCreator {
     e_OBJECT
-    QPointFAnimatorCreator(const QPointF iniVal,
-                           const QPointF minVal,
-                           const QPointF maxVal,
-                           const QPointF step,
+    QVector3DAnimatorCreator(const QVector3D iniVal,
+                           const QVector3D minVal,
+                           const QVector3D maxVal,
+                           const QVector3D step,
                            const bool glValue,
                            const QString& nameX,
                            const QString& nameY,
+                           const QString& nameZ,
                            const QString& name,
                            const QString& nameUI) :
         ShaderPropertyCreator(glValue, name, nameUI),
         fIniVal(iniVal), fMinVal(minVal),
         fMaxVal(maxVal), fStep(step),
-        fNameX(nameX), fNameY(nameY) {}
+        fNameX(nameX), fNameY(nameY),
+        fNameZ(nameZ) {}
 
-    const QPointF fIniVal;
-    const QPointF fMinVal;
-    const QPointF fMaxVal;
-    const QPointF fStep;
+    const QVector3D fIniVal;
+    const QVector3D fMinVal;
+    const QVector3D fMaxVal;
+    const QVector3D fStep;
     const QString fNameX;
     const QString fNameY;
+    const QString fNameZ;
 
     qsptr<Property> create() const {
-        return enve::make_shared<QPointFAnimator>(
-                    fIniVal, fMinVal, fMaxVal, fStep, fNameX, fNameY, fNameUI);
+        return enve::make_shared<QVector3DAnimator>(
+                    fIniVal, fMinVal, fMaxVal, fStep, fNameX, fNameY, fNameZ, fNameUI);
     }
 };
 
-#endif // QPOINTFANIMATORCREATOR_H
+#endif // QVECTOR3DANIMATORCREATOR_H
