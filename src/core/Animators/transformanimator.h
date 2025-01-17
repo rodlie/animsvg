@@ -170,17 +170,9 @@ public:
             const qreal relFrame, QMatrix* postTransform = nullptr) const;
 
     void applyTransformEffects(const qreal relFrame,
-                               qreal& pivotX, qreal& pivotY,
-                               qreal& posX, qreal& posY,
-                               qreal& rot,
-                               qreal& scaleX, qreal& scaleY,
-                               qreal& shearX, qreal& shearY,
-                               QMatrix& postTransform) const;
-
-    void applyTransformEffects(const qreal relFrame,
                                qreal& pivotX, qreal& pivotY, qreal& pivotZ,
                                qreal& posX, qreal& posY, qreal& posZ,
-                               qreal& rot,
+                               qreal& rotX, qreal& rotY, qreal& rotZ,
                                qreal& scaleX, qreal& scaleY, qreal& scaleZ,
                                qreal& shearX, qreal& shearY, qreal& shearZ,
                                QMatrix& postTransform) const;

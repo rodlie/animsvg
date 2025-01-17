@@ -565,7 +565,7 @@ void AdvancedTransformAnimator::applyTransformEffects(
         const qreal relFrame,
         qreal& pivotX, qreal& pivotY, qreal& pivotZ,
         qreal& posX, qreal& posY, qreal& posZ,
-        qreal& rot,
+        qreal& rotX, qreal& rotY, qreal& rotZ,
         qreal& scaleX, qreal& scaleY, qreal& scaleZ,
         qreal& shearX, qreal& shearY, qreal& shearZ,
         QMatrix& postTransform) const {
@@ -574,7 +574,7 @@ void AdvancedTransformAnimator::applyTransformEffects(
     parent->applyTransformEffects(relFrame,
                                   pivotX, pivotY, pivotZ,
                                   posX, posY, posZ,
-                                  rot,
+                                  rotX, rotY, rotZ,
                                   scaleX, scaleY, scaleZ,
                                   shearX, shearY, shearZ,
                                   postTransform);

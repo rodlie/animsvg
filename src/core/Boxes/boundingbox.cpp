@@ -340,22 +340,16 @@ const QStringList BoundingBox::checkRasterEffectsForSVGSupport()
 
 void BoundingBox::applyTransformEffects(
         const qreal relFrame,
-        qreal& pivotX, qreal& pivotY,
-        qreal& posX, qreal& posY,
-        qreal& rot,
-        qreal& scaleX, qreal& scaleY,
-        qreal& shearX, qreal& shearY,
+        qreal& pivotX, qreal& pivotY, qreal& pivotZ,
+        qreal& posX, qreal& posY, qreal& posZ,
+        qreal& rotX, qreal& rotY, qreal& rotZ,
+        qreal& scaleX, qreal& scaleY, qreal& scaleZ,
+        qreal& shearX, qreal& shearY, qreal& shearZ,
         QMatrix& postTransform) {
-    qreal &pivotZ = 0.;
-    qreal &posZ = 0.;
-    qreal &rotY = 0.;
-    qreal &rotZ = 0.;
-    qreal &scaleZ = 0.;
-    qreal &shearZ = 0.;
     mTransformEffectCollection->applyEffects(relFrame,
                                              pivotX, pivotY, pivotZ,
                                              posX, posY, posZ,
-                                             rot, rotY, rotZ,
+                                             rotX, rotY, rotZ,
                                              scaleX, scaleY, scaleZ,
                                              shearX, shearY, shearZ,
                                              postTransform, this);
