@@ -71,14 +71,14 @@ eShadow::eShadow() :
     mBlurRadius = enve::make_shared<QrealAnimator>("blur radius");
     mOpacity = enve::make_shared<QrealAnimator>("opacity");
     mColor = enve::make_shared<ColorAnimator>();
-    mTranslation = enve::make_shared<QPointFAnimator>("translation");
+    mTranslation = enve::make_shared<QVector3DAnimator>("translation");
 
     mBlurRadius->setValueRange(0, 300);
     mBlurRadius->setCurrentBaseValue(10);
     ca_addChild(mBlurRadius);
 
     mTranslation->setValuesRange(-1000, 1000);
-    mTranslation->setBaseValue(QPointF(0, 0));
+    mTranslation->setBaseValue(QVector3D(0, 0, 0));
     ca_addChild(mTranslation);
 
     mColor->setColor(Qt::black);

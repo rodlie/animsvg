@@ -24,7 +24,7 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "qrealanimatorvalueslider.h"
-#include "Animators/qpointfanimator.h"
+#include "Animators/qvector3danimator.h"
 #include "themesupport.h"
 #include "canvas.h"
 #include "Private/document.h"
@@ -79,7 +79,7 @@ QrealAnimatorValueSlider::QrealAnimatorValueSlider(QString name,
 QrealAnimator* QrealAnimatorValueSlider::getTransformTargetSibling() {
     if(mTransformTarget) {
         const auto parent = mTransformTarget->getParent();
-        if(const auto qPA = enve_cast<QPointFAnimator*>(parent)) {
+        if(const auto qPA = enve_cast<QVector3DAnimator*>(parent)) {
             const bool thisX = qPA->getXAnimator() == mTransformTarget;
             return thisX ? qPA->getYAnimator() :
                            qPA->getXAnimator();
