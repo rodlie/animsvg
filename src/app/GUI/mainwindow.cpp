@@ -1792,7 +1792,7 @@ void MainWindow::openFile()
         const QString title = tr("Open File", "OpenDialog_Title");
         const QString files = tr("Friction Files %1", "OpenDialog_FileType");
         const QString openPath = eDialogs::openFile(title, defPath,
-                                                    files.arg("(*.friction *.ev)"));
+                                                    files.arg("(*.friction *.fdesign)"));
         if (!openPath.isEmpty()) { openFile(openPath); }
         enable();
     }
@@ -1804,11 +1804,11 @@ void MainWindow::openFile(const QString& openPath)
     try {
         QFileInfo fi(openPath);
         const QString suffix = fi.suffix();
-        if (suffix == "friction" || suffix == "ev") {
+        if (suffix == "friction") {
             loadEVFile(openPath);
-        } /*else if (suffix == "xev") {
+        } else if (suffix == "fdesign") {
             loadXevFile(openPath);
-        }*/ else { RuntimeThrow("Unrecognized file extension " + suffix); }
+        } else { RuntimeThrow("Unrecognized file extension " + suffix); }
         mDocument.setPath(openPath);
         setFileChangedSinceSaving(false);
         updateLastOpenDir(openPath);
