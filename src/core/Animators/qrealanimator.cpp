@@ -1006,7 +1006,7 @@ void QrealAnimator::prp_readPropertyXEV_impl(
          SimpleTask::sScheduleContexted(this,
          [this, bindings, definitions, script]() {
              setExpression(Expression::sCreate(
-                               definitions, bindings, script, this,
+                               bindings, definitions, script, this,
                                Expression::sQrealAnimatorTester));
          });
     }
