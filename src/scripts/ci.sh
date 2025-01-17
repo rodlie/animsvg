@@ -53,6 +53,7 @@ qtdeclarative5-dev-tools \
 qtdeclarative5-dev \
 qtmultimedia5-dev \
 qttools5-dev-tools \
+libquazip5-dev \
 libexpat1-dev \
 libfreetype-dev \
 libjpeg-turbo8-dev \

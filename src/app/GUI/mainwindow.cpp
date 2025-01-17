@@ -167,7 +167,7 @@ MainWindow::MainWindow(Document& document,
     Q_ASSERT(!sInstance);
     sInstance = this;
 
-    //ImportHandler::sInstance->addImporter<eXevImporter>(); // not supported yet, see own branch
+    ImportHandler::sInstance->addImporter<eXevImporter>(); // not supported yet
     ImportHandler::sInstance->addImporter<evImporter>();
     ImportHandler::sInstance->addImporter<eSvgImporter>();
     //ImportHandler::sInstance->addImporter<eOraImporter>(); // removed, will be added back soonish
@@ -1847,11 +1847,11 @@ void MainWindow::saveFile(const QString& path,
         const QString suffix = fi.suffix();
         if (suffix == "friction" || suffix == "ev") {
             saveToFile(path);
-        } /*else if (suffix == "xev") {
+        } else if (suffix == "xev") {
             saveToFileXEV(path);
             const auto& inst = DialogsInterface::instance();
             inst.displayMessageToUser("Please note that the XEV format is still in the testing phase.");
-        }*/ else { RuntimeThrow("Unrecognized file extension " + suffix); }
+        } else { RuntimeThrow("Unrecognized file extension " + suffix); }
         if (setPath) mDocument.setPath(path);
         setFileChangedSinceSaving(false);
         updateLastSaveDir(path);
@@ -1871,13 +1871,13 @@ void MainWindow::saveFileAs(const bool setPath)
 
     const QString title = tr("Save File", "SaveDialog_Title");
     const QString fileType = tr("Friction Files %1", "SaveDialog_FileType");
-    QString saveAs = eDialogs::saveFile(title, defPath, fileType.arg("(*.friction)"));
+    QString saveAs = eDialogs::saveFile(title, defPath, fileType.arg("(*.friction *.xev)"));
     enableEventFilter();
     if (!saveAs.isEmpty()) {
         //const bool isXEV = saveAs.right(4) == ".xev";
         //if (!isXEV && saveAs.right(3) != ".ev") { saveAs += ".ev"; }
         QString suffix = QString::fromUtf8(".friction");
-        if (!saveAs.endsWith(suffix)) { saveAs.append(suffix); }
+        if (!saveAs.endsWith(suffix) && !saveAs.endsWith(".xev")) { saveAs.append(suffix); }
         saveFile(saveAs, setPath);
     }
 }

@@ -27,7 +27,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../cmake
 include(friction-version)
 include(friction-meta)
 include(friction-common)
-#include(friction-quazip)
+include(friction-quazip)
 include(friction-ffmpeg)
 
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
@@ -111,7 +111,7 @@ if(WIN32)
 endif()
 
 include_directories(
-    #${QUAZIP_INCLUDE_DIRS}
+    ${QUAZIP_INCLUDE_DIRS}
     ${QSCINTILLA_INCLUDE_DIRS}
     ${FFMPEG_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/../core
@@ -288,7 +288,7 @@ target_link_directories(
     PRIVATE
     ${FFMPEG_LIBRARIES_DIRS}
     ${QSCINTILLA_LIBRARIES_DIRS}
-    #${QUAZIP_LIBRARIES_DIRS}
+    ${QUAZIP_LIBRARIES_DIRS}
     ${SKIA_LIBRARIES_DIRS}
 )
 
@@ -313,7 +313,7 @@ target_link_libraries(
     ${PROJECT_NAME}core
     ${PROJECT_NAME}ui
     ${QT_LIBRARIES}
-    #${QUAZIP_LIBRARIES}
+    ${QUAZIP_LIBRARIES}
     ${QSCINTILLA_LIBRARIES}
     ${FFMPEG_LIBRARIES}
     ${SKIA_LIBRARIES}
