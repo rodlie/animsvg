@@ -23,29 +23,39 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#ifndef ZIPFILESAVER_H
-#define ZIPFILESAVER_H
+#ifndef FRICTION_ZIPFILE_SAVER_H
+#define FRICTION_ZIPFILE_SAVER_H
 
+#include "core_global.h"
+
+#include <functional>
+#include <QTextStream>
+#include <QIODevice>
 #include <quazipfile.h>
 
-#include "exceptions.h"
+namespace Friction
+{
+    namespace Core
+    {
+        class CORE_EXPORT ZipFileSaver
+        {
+        public:
+            ZipFileSaver();
 
-class CORE_EXPORT ZipFileSaver {
-public:
-    ZipFileSaver();
+            void setZipPath(const QString& path);
+            void setIoDevice(QIODevice * const src);
 
-    void setZipPath(const QString& path);
-    void setIoDevice(QIODevice * const src);
-
-    using Processor = std::function<void(QIODevice* const dst)>;
-    void process(const QString& file, const Processor& func,
-                 const bool compress = true);
-    using TextProcessor = std::function<void(QTextStream& stream)>;
-    void processText(const QString& file, const TextProcessor& func,
-                     const bool compress = true);
-private:
-    QuaZip mZip;
-    QuaZipFile mFile;
-};
+            using Processor = std::function<void(QIODevice* const dst)>;
+            void process(const QString& file, const Processor& func,
+                         const bool compress = true);
+            using TextProcessor = std::function<void(QTextStream& stream)>;
+            void processText(const QString& file, const TextProcessor& func,
+                             const bool compress = true);
+        private:
+            QuaZip mZip;
+            QuaZipFile mFile;
+        };
+    }
+}
 
 #endif // ZIPFILESAVER_H

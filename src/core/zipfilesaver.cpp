@@ -24,40 +24,52 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "zipfilesaver.h"
+#include "exceptions.h"
+
+using namespace Friction::Core;
 
 ZipFileSaver::ZipFileSaver() {}
 
-void ZipFileSaver::setZipPath(const QString &path) {
+void ZipFileSaver::setZipPath(const QString &path)
+{
     mZip.setZipName(path);
-    if(!mZip.open(QuaZip::mdCreate))
-        RuntimeThrow("Could not create " + path);
-    mFile.setZip(&mZip);
-}
-
-void ZipFileSaver::setIoDevice(QIODevice * const src) {
-    mZip.setIoDevice(src);
-    if(!mZip.open(QuaZip::mdCreate))
-        RuntimeThrow("Could not open QIODevice");
-    mFile.setZip(&mZip);
-}
-
-void ZipFileSaver::process(const QString &file, const Processor &func,
-                           const bool compress) {
-    if(!mFile.open(QIODevice::WriteOnly, QuaZipNewInfo(file),
-                   NULL, compress ? Z_DEFLATED : 0)) {
-        RuntimeThrow("Could not open " + file + " in " + mZip.getZipName());
+    if (!mZip.open(QuaZip::mdCreate)) {
+        RuntimeThrow(QObject::tr("Could not create %1").arg(path));
     }
-    try {
-        func(&mFile);
-    } catch(...) {
+    mFile.setZip(&mZip);
+}
+
+void ZipFileSaver::setIoDevice(QIODevice * const src)
+{
+    mZip.setIoDevice(src);
+    if (!mZip.open(QuaZip::mdCreate)) {
+        RuntimeThrow(QObject::tr("Could not open QIODevice"));
+    }
+    mFile.setZip(&mZip);
+}
+
+void ZipFileSaver::process(const QString &file,
+                           const Processor &func,
+                           const bool compress)
+{
+    if (!mFile.open(QIODevice::WriteOnly,
+                    QuaZipNewInfo(file),
+                    NULL, compress ? Z_DEFLATED : 0)) {
+        RuntimeThrow(QObject::tr("Could not open %1 in %2").arg(file,
+                                                                mZip.getZipName()));
+    }
+    try { func(&mFile); } catch(...) {
         mFile.close();
-        RuntimeThrow("Could not write " + file + " to " + mZip.getZipName());
+        RuntimeThrow(QObject::tr("Could not write %1 to %2").arg(file,
+                                                                 mZip.getZipName()));
     }
     mFile.close();
 }
 
-void ZipFileSaver::processText(const QString& file, const TextProcessor& func,
-                               const bool compress) {
+void ZipFileSaver::processText(const QString& file,
+                               const TextProcessor& func,
+                               const bool compress)
+{
     process(file, [&func](QIODevice* const dst) {
         QTextStream stream(dst);
         func(stream);

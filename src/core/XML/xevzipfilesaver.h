@@ -34,7 +34,7 @@ class CORE_EXPORT XevZipFileSaver {
 public:
     XevZipFileSaver();
 
-    ZipFileSaver& fileSaver() { return mFileSaver; }
+    Friction::Core::ZipFileSaver& fileSaver() { return mFileSaver; }
 
     void setPath(const QString& path);
 
@@ -42,7 +42,7 @@ public:
 private:
     QDir mDir;
     QFile mFile;
-    ZipFileSaver mFileSaver;
+    Friction::Core::ZipFileSaver mFileSaver;
 };
 
 #endif // XEVZIPFILESAVER_H

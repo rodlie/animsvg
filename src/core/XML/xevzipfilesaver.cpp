@@ -24,6 +24,7 @@
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
 #include "xevzipfilesaver.h"
+#include "exceptions.h"
 
 XevZipFileSaver::XevZipFileSaver() {}
 
