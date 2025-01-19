@@ -26,7 +26,7 @@
 #include "followobjecteffectbase.h"
 #include "Boxes/boundingbox.h"
 #include "Animators/transformanimator.h"
-#include "Animators/qpointfanimator.h"
+#include "Animators/qvector3danimator.h"
 
 FollowObjectEffectBase::FollowObjectEffectBase(
         const QString& name, const TransformEffectType type) :
@@ -110,19 +110,28 @@ void FollowObjectEffectBase::setRotScaleAfterTargetChange(
 
     const qreal scaleXInfl = mScaleInfluence->getEffectiveXValue();
     const qreal scaleYInfl = mScaleInfluence->getEffectiveYValue();
-    const qreal rotInfl = mRotInfluence->getEffectiveValue();
+    const qreal scaleZInfl = mRotInfluence->getEffectiveZValue();
+    const qreal rotXInfl = mRotInfluence->getEffectiveXValue();
+    const qreal rotYInfl = mRotInfluence->getEffectiveYValue();
+    const qreal rotZInfl = mRotInfluence->getEffectiveZValue();
 
-    qreal rot = 0.;
+    qreal rotX = 0.;
+    qreal rotY = 0.;
+    qreal rotZ = 0.;
     qreal scaleX = 1.;
     qreal scaleY = 1.;
+    qreal scaleZ = 1.;
     if(oldTarget) {
         const auto trans = oldTarget->getTransformAnimator();
         const auto rotAnim = trans->getRotAnimator();
         const auto scaleAnim = trans->getScaleAnimator();
 
-        rot += rotAnim->getEffectiveValue()*rotInfl;
+        rotX += rotAnim->getEffectiveXValue()*rotXInfl;
+        rotY += rotAnim->getEffectiveYValue()*rotYInfl;
+        rotZ += rotAnim->getEffectiveZValue()*rotZInfl;
         scaleX *= 1 + (scaleAnim->getEffectiveXValue() - 1)*scaleXInfl;
         scaleY *= 1 + (scaleAnim->getEffectiveYValue() - 1)*scaleYInfl;
+        scaleZ *= 1 + (scaleAnim->getEffectiveZValue() - 1)*scaleZInfl;
     }
 
     if(newTarget) {
@@ -130,9 +139,12 @@ void FollowObjectEffectBase::setRotScaleAfterTargetChange(
         const auto rotAnim = trans->getRotAnimator();
         const auto scaleAnim = trans->getScaleAnimator();
 
-        rot -= rotAnim->getEffectiveValue()*rotInfl;
+        rotX -= rotAnim->getEffectiveXValue()*rotXInfl;
+        rotY -= rotAnim->getEffectiveYValue()*rotYInfl;
+        rotZ -= rotAnim->getEffectiveZValue()*rotZInfl;
         const qreal scaleXDiv = 1 + (scaleAnim->getEffectiveXValue() - 1)*scaleXInfl;
         const qreal scaleYDiv = 1 + (scaleAnim->getEffectiveYValue() - 1)*scaleYInfl;
+        const qreal scaleZDiv = 1 + (scaleAnim->getEffectiveZValue() - 1)*scaleYInfl;
         if(!isZero4Dec(scaleXDiv)) {
             scaleX /= scaleXDiv;
         }
@@ -140,11 +152,15 @@ void FollowObjectEffectBase::setRotScaleAfterTargetChange(
         if(!isZero4Dec(scaleYDiv)) {
             scaleY /= scaleYDiv;
         }
+
+        if (!isZero4Dec(scaleZDiv)) {
+            scaleZ /= scaleZDiv;
+        }
     }
 
     parent->startRotTransform();
-    parent->rotateBy(rot);
+    parent->rotateBy(rotX, rotY, rotZ);
 
     parent->startScaleTransform();
-    parent->scale(scaleX, scaleY);
+    parent->scale(scaleX, scaleY, scaleZ);
 }

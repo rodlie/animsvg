@@ -28,7 +28,8 @@
 
 #include "targettransformeffect.h"
 
-#include "Animators/qpointfanimator.h"
+#include "Animators/qrealanimator.h"
+#include "Animators/qvector3danimator.h"
 
 class QVector3D;
 

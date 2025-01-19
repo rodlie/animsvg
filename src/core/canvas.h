@@ -24,6 +24,7 @@
 
 #include "Boxes/containerbox.h"
 #include "colorhelpers.h"
+#include <QThread>
 #include "CacheHandlers/hddcachablecachehandler.h"
 #include "skia/skiaincludes.h"
 #include "GUI/valueinput.h"
@@ -34,12 +35,15 @@
 //#include "Paint/drawableautotiledsurface.h"
 #include "canvasbase.h"
 //#include "Paint/animatedsurface.h"
+#include <QAction>
 #include "Animators/outlinesettingsanimator.h"
 //#include "Paint/painttarget.h"
 #include "CacheHandlers/usepointer.h"
 #include "CacheHandlers/sceneframecontainer.h"
 #include "undoredo.h"
 #include "drawpath.h"
+#include <QMouseEvent>
+#include <QTabletEvent>
 
 class AnimatedSurface;
 //class PaintBox;

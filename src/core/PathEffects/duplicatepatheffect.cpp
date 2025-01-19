@@ -30,7 +30,7 @@
 DuplicatePathEffect::DuplicatePathEffect() :
     PathEffect("duplicate effect", PathEffectType::Duplicate) {
     mTranslation = enve::make_shared<QPointFAnimator>("translation");
-    mTranslation->setBaseValue(10, 10);
+    mTranslation->setBaseValue(QPointF(10, 10));
     ca_addChild(mTranslation);
 
     mCount = enve::make_shared<IntAnimator>(1, 0, 25, 1, "count");

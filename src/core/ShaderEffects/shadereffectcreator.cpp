@@ -29,6 +29,9 @@
 #include "shadervaluehandler.h"
 #include "regexhelpers.h"
 #include "uniformspecifiercreator.h"
+#include "PropertyCreators/qrealanimatorcreator.h"
+#include "PropertyCreators/qpointfanimatorcreator.h"
+#include "PropertyCreators/qvector3danimatorcreator.h"
 
 #include <QDomDocument>
 
@@ -319,18 +322,17 @@ void parseVec2PropertyCreators(const QString& name,
                                stdsptr<UniformSpecifierCreator>& uniC) {
     const QString nameX = elem.attribute("xnameUI", "x");
     const QString nameY = elem.attribute("ynameUI", "y");
-    const QString nameZ = elem.attribute("znameUI", "z");
-    const QVector3D minVal = attrToQVector3D(elem, name, "min", "0", true);
-    const QVector3D maxVal = attrToQVector3D(elem, name, "max", "100", true);
-    const QVector3D iniVal = attrToQVector3D(elem, name, "ini", "0", true);
-    const QVector3D stepVal = attrToQVector3D(elem, name, "step", "1", true);
+    const auto minVal = attrToQPointF(elem, name, "min", "0", true);
+    const auto maxVal = attrToQPointF(elem, name, "max", "100", true);
+    const auto iniVal = attrToQPointF(elem, name, "ini", "0", true);
+    const auto stepVal = attrToQPointF(elem, name, "step", "1", true);
     const bool glValue = attrToBool(elem, name, "glValue", "false");
     const bool resolutionScaled = attrToBool(elem, name, "resolutionScaled", "false");
     const bool influenceScaled = attrToBool(elem, name, "influenceScaled", "false");
 
     propC = enve::make_shared<QPointFAnimatorCreator>(
                 iniVal, minVal, maxVal, stepVal, glValue,
-                nameX, nameY, nameZ, name, nameUI);
+                nameX, nameY, name, nameUI);
     uniC = enve::make_shared<UniformSpecifierCreator>(
                 ShaderPropertyType::vec2Property, glValue,
                 resolutionScaled, influenceScaled);

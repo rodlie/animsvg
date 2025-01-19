@@ -28,7 +28,6 @@
 #include "MovablePoints/movablepoint.h"
 #include "Animators/gradientpoints.h"
 #include "Animators/transformanimator.h"
-#include "Animators/qpointfanimator.h"
 #include "MovablePoints/pointshandler.h"
 #include "PathEffects/patheffectcollection.h"
 

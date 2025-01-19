@@ -78,7 +78,7 @@ eShadow::eShadow() :
     ca_addChild(mBlurRadius);
 
     mTranslation->setValuesRange(-1000, 1000);
-    mTranslation->setBaseValue(QVector3D(0, 0, 0));
+    mTranslation->setBaseValue(QPointF(0, 0));
     ca_addChild(mTranslation);
 
     mColor->setColor(Qt::black);

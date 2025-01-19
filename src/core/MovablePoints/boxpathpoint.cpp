@@ -26,9 +26,10 @@
 #include "boxpathpoint.h"
 #include "pointhelpers.h"
 #include "Animators/transformanimator.h"
+#include "Animators/qpointfanimator.h"
 #include "themesupport.h"
 
-BoxPathPoint::BoxPathPoint(QVector3DAnimator * const associatedAnimator,
+BoxPathPoint::BoxPathPoint(QPointFAnimator * const associatedAnimator,
                            BoxTransformAnimator * const boxTrans) :
     AnimatedPoint(associatedAnimator, TYPE_PIVOT_POINT) {
     setRadius(7);
