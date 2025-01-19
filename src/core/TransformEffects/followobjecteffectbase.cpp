@@ -26,7 +26,7 @@
 #include "followobjecteffectbase.h"
 #include "Boxes/boundingbox.h"
 #include "Animators/transformanimator.h"
-#include "Animators/qvector3danimator.h"
+#include "Animators/qpointfanimator.h"
 
 FollowObjectEffectBase::FollowObjectEffectBase(
         const QString& name, const TransformEffectType type) :

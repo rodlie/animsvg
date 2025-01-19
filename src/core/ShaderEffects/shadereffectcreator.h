@@ -26,7 +26,7 @@
 #ifndef SHADEREFFECTCREATOR_H
 #define SHADEREFFECTCREATOR_H
 
-#include "../Animators/qvector3danimator.h"
+#include "../Animators/qpointfanimator.h"
 #include "shadereffectprogram.h"
 
 class ShaderEffect;

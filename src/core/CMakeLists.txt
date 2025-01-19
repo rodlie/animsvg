@@ -331,6 +331,7 @@ set(
     Animators/qrealanimator.cpp
     Animators/qrealkey.cpp
     Animators/qrealvalueeffect.cpp
+    Animators/qpointfanimator.cpp
     Animators/qvector3danimator.cpp
     MovablePoints/movablepoint.cpp
     MovablePoints/nonanimatedmovablepoint.cpp
@@ -667,6 +668,7 @@ set(
     Animators/qrealanimator.h
     Animators/qrealkey.h
     Animators/qrealvalueeffect.h
+    Animators/qpointfanimator.h
     Animators/qvector3danimator.h
     MovablePoints/movablepoint.h
     MovablePoints/nonanimatedmovablepoint.h

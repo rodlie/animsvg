@@ -26,12 +26,13 @@
 #include "customproperties.h"
 
 #include "qrealanimator.h"
+#include "qpointfanimator.h"
 #include "qvector3danimator.h"
 
 #include "typemenu.h"
 
 enum class PropertyType {
-    QrealAnimator, QVector3DAnimator
+    QrealAnimator, QPointFAnimator, QVector3DAnimator
 };
 
 template <typename T>
@@ -57,11 +58,17 @@ void CustomProperties::prp_setupTreeViewMenu(PropertyMenu * const menu) {
         menu->addPlainAction(QIcon::fromTheme("preferences"), tr("Add Single Value Property"), aOp);
     }
     {
+        const PropertyMenu::PlainSelectedOp<CustomProperties> aOp = [parent](CustomProperties* target) {
+            execPropertyDialog<QPointFAnimator>(target, parent);
+        };
+        menu->addPlainAction(QIcon::fromTheme("preferences"), tr("Add Two Value Property"), aOp);
+    }
+    {
         const PropertyMenu::PlainSelectedOp<CustomProperties> aOp =
         [parent](CustomProperties* target) {
             execPropertyDialog<QVector3DAnimator>(target, parent);
         };
-        menu->addPlainAction(QIcon::fromTheme("preferences"), tr("Add Two Value Property"), aOp);
+        menu->addPlainAction(QIcon::fromTheme("preferences"), tr("Add Three Value Property"), aOp);
     }
     menu->addSeparator();
     CustomPropertiesBase::prp_setupTreeViewMenu(menu);
@@ -90,6 +97,9 @@ qsptr<Animator> createCProperty(const PropertyType type) {
     case PropertyType::QrealAnimator:
         return enve::make_shared<NamedProperty<QrealAnimator>>("");
         break;
+    case PropertyType::QPointFAnimator:
+        return enve::make_shared<NamedProperty<QPointFAnimator>>("");
+        break;
     case PropertyType::QVector3DAnimator:
         return enve::make_shared<NamedProperty<QVector3DAnimator>>("");
         break;
@@ -113,6 +123,8 @@ PropertyType cPropertyType(Animator * const obj) {
     PropertyType type;
     if(enve_cast<QrealAnimator*>(obj)) {
         type = PropertyType::QrealAnimator;
+    } else if(enve_cast<QPointFAnimator*>(obj)) {
+        type = PropertyType::QPointFAnimator;
     } else if(enve_cast<QVector3DAnimator*>(obj)) {
         type = PropertyType::QVector3DAnimator;
     } else RuntimeThrow("Unsupported Type");

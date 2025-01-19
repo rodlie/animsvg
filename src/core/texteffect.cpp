@@ -29,7 +29,7 @@
 #include "Boxes/textboxrenderdata.h"
 #include "Boxes/textbox.h"
 
-#include "Animators/qvector3danimator.h"
+#include "Animators/qpointfanimator.h"
 #include "MovablePoints/animatedpoint.h"
 
 class TextEffectPoint : public AnimatedPoint {
@@ -70,19 +70,19 @@ TextEffect::TextEffect() : eEffect("text effect") {
     mDiminishInfluence = enve::make_shared<QrealAnimator>(
                 1, 0, 1, 0.1, "influence");
 
-    mP1Anim = enve::make_shared<QVector3DAnimator>("point 1");
+    mP1Anim = enve::make_shared<QPointFAnimator>("point 1");
     mP1Anim->getYAnimator()->setValueRange(0, 1);
     mP1Anim->getYAnimator()->setPrefferedValueStep(0.1);
     mP1Anim->setBaseValue(-40, 0);
-    mP2Anim = enve::make_shared<QVector3DAnimator>("point 2");
+    mP2Anim = enve::make_shared<QPointFAnimator>("point 2");
     mP2Anim->getYAnimator()->setValueRange(0, 1);
     mP2Anim->getYAnimator()->setPrefferedValueStep(0.1);
     mP2Anim->setBaseValue(-10, 1);
-    mP3Anim = enve::make_shared<QVector3DAnimator>("point 3");
+    mP3Anim = enve::make_shared<QPointFAnimator>("point 3");
     mP3Anim->getYAnimator()->setValueRange(0, 1);
     mP3Anim->getYAnimator()->setPrefferedValueStep(0.1);
     mP3Anim->setBaseValue(20, 1);
-    mP4Anim = enve::make_shared<QVector3DAnimator>("point 4");
+    mP4Anim = enve::make_shared<QPointFAnimator>("point 4");
     mP4Anim->getYAnimator()->setValueRange(0, 1);
     mP4Anim->getYAnimator()->setPrefferedValueStep(0.1);
     mP4Anim->setBaseValue(50, 0, 0);

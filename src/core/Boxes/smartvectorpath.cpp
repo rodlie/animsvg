@@ -36,7 +36,7 @@
 #include "MovablePoints/segment.h"
 #include "Animators/SmartPath/smartpathanimator.h"
 #include "PathEffects/patheffectcollection.h"
-#include "Animators/qvector3danimator.h"
+#include "Animators/qpointfanimator.h"
 #include "svgexporter.h"
 
 SmartVectorPath::SmartVectorPath() :

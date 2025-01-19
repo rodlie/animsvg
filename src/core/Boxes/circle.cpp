@@ -28,13 +28,14 @@
 #include "MovablePoints/movablepoint.h"
 #include "Animators/gradientpoints.h"
 #include "Animators/transformanimator.h"
+#include "Animators/qpointfanimator.h"
 #include "MovablePoints/pointshandler.h"
 #include "PathEffects/patheffectcollection.h"
 
 Circle::Circle() : PathBox("Circle", eBoxType::circle) {
     setPointsHandler(enve::make_shared<PointsHandler>());
 
-    mCenterAnimator = enve::make_shared<QVector3DAnimator>("center");
+    mCenterAnimator = enve::make_shared<QPointFAnimator>("center");
     mCenterPoint = enve::make_shared<AnimatedPoint>(mCenterAnimator.get(),
                                              mTransformAnimator.get(),
                                              TYPE_PATH_POINT);
@@ -46,7 +47,7 @@ Circle::Circle() : PathBox("Circle", eBoxType::circle) {
                             mCenterAnimator);
 
     mHorizontalRadiusAnimator =
-            enve::make_shared<QVector3DAnimator>("horizontal radius");
+            enve::make_shared<QPointFAnimator>("horizontal radius");
     mHorizontalRadiusPoint = enve::make_shared<CircleRadiusPoint>(
                 mHorizontalRadiusAnimator.get(), mTransformAnimator.get(),
                 mCenterPoint.get(), TYPE_PATH_POINT, false);
@@ -58,7 +59,7 @@ Circle::Circle() : PathBox("Circle", eBoxType::circle) {
     hXAnimator->prp_setName("horizontal radius");
 
     mVerticalRadiusAnimator =
-            enve::make_shared<QVector3DAnimator>("vertical radius");
+            enve::make_shared<QPointFAnimator>("vertical radius");
     mVerticalRadiusPoint = enve::make_shared<CircleRadiusPoint>(
                 mVerticalRadiusAnimator.get(), mTransformAnimator.get(),
                 mCenterPoint.get(), TYPE_PATH_POINT, true);
@@ -177,7 +178,7 @@ void Circle::saveSVG(SvgExporter& exp, DomEleTask* const task) const {
     savePathBoxSVG(exp, ele, task->visRange());
 }
 
-CircleRadiusPoint::CircleRadiusPoint(QVector3DAnimator * const associatedAnimator,
+CircleRadiusPoint::CircleRadiusPoint(QPointFAnimator * const associatedAnimator,
                                      BasicTransformAnimator * const parent,
                                      AnimatedPoint * const centerPoint,
                                      const MovablePointType &type,

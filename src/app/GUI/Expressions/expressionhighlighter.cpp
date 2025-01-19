@@ -26,7 +26,7 @@
 #include "expressionhighlighter.h"
 
 #include "Animators/complexanimator.h"
-#include "Animators/qvector3danimator.h"
+#include "Animators/qpointfanimator.h"
 #include "Animators/coloranimator.h"
 
 #include "expressioneditor.h"
@@ -153,7 +153,7 @@ void ExpressionHighlighter::highlightBlock(const QString &text) {
             bool error = false;
             const auto qra = enve_cast<QrealAnimator*>(obj);
             const auto ca = enve_cast<ComplexAnimator*>(obj);
-            const auto pa = enve_cast<QVector3DAnimator*>(obj);
+            const auto pa = enve_cast<QPointFAnimator*>(obj);
             const auto co = enve_cast<ColorAnimator*>(obj);
 
             const bool validFinal = qra || pa || co;

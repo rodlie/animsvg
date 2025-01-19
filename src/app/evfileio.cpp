@@ -25,6 +25,7 @@
 
 #include <fstream>
 #include "Animators/qrealanimator.h"
+#include "Animators/qpointfanimator.h"
 #include "Animators/qvector3danimator.h"
 #include "Animators/coloranimator.h"
 #include "Animators/qstringanimator.h"

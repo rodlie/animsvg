@@ -25,6 +25,7 @@
 
 #ifndef CIRCLE_H
 #define CIRCLE_H
+
 #include "MovablePoints/animatedpoint.h"
 
 enum class CanvasMode : short;
@@ -32,7 +33,7 @@ enum class CanvasMode : short;
 class CORE_EXPORT CircleRadiusPoint : public AnimatedPoint {
     e_OBJECT
 protected:
-    CircleRadiusPoint(QVector3DAnimator * const associatedAnimator,
+    CircleRadiusPoint(QPointFAnimator * const associatedAnimator,
                       BasicTransformAnimator * const parent,
                       AnimatedPoint * const centerPoint,
                       const MovablePointType &type,
@@ -73,9 +74,9 @@ private:
     stdsptr<CircleRadiusPoint> mHorizontalRadiusPoint;
     stdsptr<CircleRadiusPoint> mVerticalRadiusPoint;
 
-    qsptr<QVector3DAnimator> mCenterAnimator;
-    qsptr<QVector3DAnimator> mHorizontalRadiusAnimator;
-    qsptr<QVector3DAnimator> mVerticalRadiusAnimator;
+    qsptr<QPointFAnimator> mCenterAnimator;
+    qsptr<QPointFAnimator> mHorizontalRadiusAnimator;
+    qsptr<QPointFAnimator> mVerticalRadiusAnimator;
 };
 
 #endif // CIRCLE_H

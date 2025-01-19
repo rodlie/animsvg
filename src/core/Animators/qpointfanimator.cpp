@@ -23,273 +23,199 @@
 
 // Fork of enve - Copyright (C) 2016-2020 Maurycy Liebner
 
-#include "qvector3danimator.h"
-
-#include <QVector3D>
+#include "qpointfanimator.h"
 
 #include "qrealanimator.h"
 #include "qrealkey.h"
 #include "svgexporter.h"
 #include "clipboardcontainer.h"
 
-QVector3DAnimator::QVector3DAnimator(const QString &name) :
+QPointFAnimator::QPointFAnimator(const QString &name) :
     StaticComplexAnimator(name) {
     mXAnimator = enve::make_shared<QrealAnimator>("x");
     mYAnimator = enve::make_shared<QrealAnimator>("y");
-    mZAnimator = enve::make_shared<QrealAnimator>("z");
     ca_addChild(mXAnimator);
     ca_addChild(mYAnimator);
-    ca_addChild(mZAnimator);
 }
 
-QVector3DAnimator::QVector3DAnimator(const QVector3D &iniValue,
-                                 const QVector3D &minValue,
-                                 const QVector3D &maxValue,
-                                 const QVector3D &valueStep,
+QPointFAnimator::QPointFAnimator(const QPointF &iniValue,
+                                 const QPointF &minValue,
+                                 const QPointF &maxValue,
+                                 const QPointF &valueStep,
                                  const QString &name) :
-    QVector3DAnimator(name) {
+    QPointFAnimator(name) {
     mXAnimator->setValueRange(minValue.x(), maxValue.x());
     mYAnimator->setValueRange(minValue.y(), maxValue.y());
-    mZAnimator->setValueRange(minValue.z(), maxValue.z());
-
     mXAnimator->setPrefferedValueStep(valueStep.x());
     mYAnimator->setPrefferedValueStep(valueStep.y());
-    mZAnimator->setPrefferedValueStep(valueStep.z());
-
     setBaseValue(iniValue);
 }
 
-QVector3DAnimator::QVector3DAnimator(const QVector3D &iniValue,
-                                 const QVector3D &minValue,
-                                 const QVector3D &maxValue,
-                                 const QVector3D &valueStep,
+QPointFAnimator::QPointFAnimator(const QPointF &iniValue,
+                                 const QPointF &minValue,
+                                 const QPointF &maxValue,
+                                 const QPointF &valueStep,
                                  const QString& nameX,
                                  const QString& nameY,
-                                 const QString& nameZ,
                                  const QString &name) :
-    QVector3DAnimator(iniValue, minValue, maxValue, valueStep, name) {
+    QPointFAnimator(iniValue, minValue, maxValue, valueStep, name) {
     mXAnimator->prp_setName(nameX);
     mYAnimator->prp_setName(nameY);
-    mZAnimator->prp_setName(nameZ);
 }
 
-QJSValue toArray(QJSEngine& e, const QVector3D& value) {
+QJSValue toArray(QJSEngine& e, const QPointF& value) {
     auto array = e.newArray(2);
     array.setProperty(0, value.x());
     array.setProperty(1, value.y());
-    array.setProperty(2, value.z());
     return array;
 }
 
-QJSValue QVector3DAnimator::prp_getBaseJSValue(QJSEngine& e) const {
+QJSValue QPointFAnimator::prp_getBaseJSValue(QJSEngine& e) const {
     return toArray(e, getBaseValue());
 }
 
-QJSValue QVector3DAnimator::prp_getBaseJSValue(QJSEngine& e, const qreal relFrame) const {
+QJSValue QPointFAnimator::prp_getBaseJSValue(QJSEngine& e, const qreal relFrame) const {
     return toArray(e, getBaseValue(relFrame));
 }
 
-QJSValue QVector3DAnimator::prp_getEffectiveJSValue(QJSEngine& e) const {
+QJSValue QPointFAnimator::prp_getEffectiveJSValue(QJSEngine& e) const {
     return toArray(e, getEffectiveValue());
 }
 
-QJSValue QVector3DAnimator::prp_getEffectiveJSValue(QJSEngine& e, const qreal relFrame) const {
+QJSValue QPointFAnimator::prp_getEffectiveJSValue(QJSEngine& e, const qreal relFrame) const {
     return toArray(e, getEffectiveValue(relFrame));
 }
 
-QVector3D QVector3DAnimator::getBaseValue() const {
-    return QVector3D(mXAnimator->getCurrentBaseValue(),
-                     mYAnimator->getCurrentBaseValue(),
-                     mZAnimator->getCurrentBaseValue());
+QPointF QPointFAnimator::getBaseValue() const {
+    return QPointF(mXAnimator->getCurrentBaseValue(),
+                   mYAnimator->getCurrentBaseValue());
 }
 
-QVector3D QVector3DAnimator::getEffectiveValue() const {
-    return QVector3D(mXAnimator->getEffectiveValue(),
-                     mYAnimator->getEffectiveValue(),
-                     mZAnimator->getEffectiveValue());
+QPointF QPointFAnimator::getEffectiveValue() const {
+    return QPointF(mXAnimator->getEffectiveValue(),
+                   mYAnimator->getEffectiveValue());
 }
 
-QVector3D QVector3DAnimator::getBaseValueAtAbsFrame(const qreal frame) const {
+QPointF QPointFAnimator::getBaseValueAtAbsFrame(const qreal frame) const {
     return getBaseValue(prp_absFrameToRelFrameF(frame));
 }
 
-QVector3D QVector3DAnimator::getBaseValue(const qreal relFrame) const {
-    return QVector3D(mXAnimator->getBaseValue(relFrame),
-                     mYAnimator->getBaseValue(relFrame),
-                     mZAnimator->getBaseValue(relFrame));
+QPointF QPointFAnimator::getBaseValue(const qreal relFrame) const {
+    return QPointF(mXAnimator->getBaseValue(relFrame),
+                   mYAnimator->getBaseValue(relFrame));
 }
 
-QVector3D QVector3DAnimator::getEffectiveValueAtAbsFrame(const qreal frame) const {
+QPointF QPointFAnimator::getEffectiveValueAtAbsFrame(const qreal frame) const {
     return getEffectiveValue(prp_absFrameToRelFrameF(frame));
 }
 
-QVector3D QVector3DAnimator::getEffectiveValue(const qreal relFrame) const {
-    return QVector3D(mXAnimator->getEffectiveValue(relFrame),
-                     mYAnimator->getEffectiveValue(relFrame),
-                     mZAnimator->getEffectiveValue(relFrame));
+QPointF QPointFAnimator::getEffectiveValue(const qreal relFrame) const {
+    return QPointF(mXAnimator->getEffectiveValue(relFrame),
+                   mYAnimator->getEffectiveValue(relFrame));
 }
 
-void QVector3DAnimator::setPrefferedValueStep(const qreal valueStep) {
+void QPointFAnimator::setPrefferedValueStep(const qreal valueStep) {
     mXAnimator->setPrefferedValueStep(valueStep);
     mYAnimator->setPrefferedValueStep(valueStep);
-    mZAnimator->setPrefferedValueStep(valueStep);
 }
 
-bool QVector3DAnimator::getBeingTransformed() {
+bool QPointFAnimator::getBeingTransformed() {
     return mXAnimator->getBeingTransformed() ||
-            mYAnimator->getBeingTransformed() ||
-            mZAnimator->getBeingTransformed();
+            mYAnimator->getBeingTransformed();
 }
 
-qreal QVector3DAnimator::getEffectiveXValue() {
+qreal QPointFAnimator::getEffectiveXValue() {
     return mXAnimator->getEffectiveValue();
 }
 
-qreal QVector3DAnimator::getEffectiveYValue() {
+qreal QPointFAnimator::getEffectiveYValue() {
     return mYAnimator->getEffectiveValue();
 }
 
-qreal QVector3DAnimator::getEffectiveZValue() {
-    return mZAnimator->getEffectiveValue();
-}
-
-qreal QVector3DAnimator::getEffectiveXValue(const qreal relFrame) {
+qreal QPointFAnimator::getEffectiveXValue(const qreal relFrame) {
     return mXAnimator->getEffectiveValue(relFrame);
 }
 
-qreal QVector3DAnimator::getEffectiveYValue(const qreal relFrame) {
+qreal QPointFAnimator::getEffectiveYValue(const qreal relFrame) {
     return mYAnimator->getEffectiveValue(relFrame);
 }
 
-qreal QVector3DAnimator::getEffectiveZValue(const qreal relFrame) {
-    return mZAnimator->getEffectiveValue(relFrame);
-}
-
-void QVector3DAnimator::setBaseValue(const QVector3D &val) {
+void QPointFAnimator::setBaseValue(const QPointF &val) {
     mXAnimator->setCurrentBaseValue(val.x());
     mYAnimator->setCurrentBaseValue(val.y());
-    mZAnimator->setCurrentBaseValue(val.z());
 }
 
-void QVector3DAnimator::setValuesRange(const qreal minVal,
+void QPointFAnimator::setValuesRange(const qreal minVal,
                                      const qreal maxVal) {
     mXAnimator->setValueRange(minVal, maxVal);
     mYAnimator->setValueRange(minVal, maxVal);
-    mZAnimator->setValueRange(minVal, maxVal);
 }
 
-void QVector3DAnimator::setBaseValueWithoutCallingUpdater(
-        const QVector3D &val) {
+void QPointFAnimator::setBaseValueWithoutCallingUpdater(
+        const QPointF &val) {
     mXAnimator->setCurrentBaseValueNoUpdate(val.x());
     mYAnimator->setCurrentBaseValueNoUpdate(val.y());
-    mZAnimator->setCurrentBaseValueNoUpdate(val.z());
 }
 
-void QVector3DAnimator::incBaseValuesWithoutCallingUpdater(
+void QPointFAnimator::incBaseValuesWithoutCallingUpdater(
         const qreal x, const qreal y) {
     mXAnimator->incCurrentValueNoUpdate(x);
     mYAnimator->incCurrentValueNoUpdate(y);
 }
 
-void QVector3DAnimator::incBaseValuesWithoutCallingUpdater(
-        const qreal x, const qreal y, const qreal z) {
-    mXAnimator->incCurrentValueNoUpdate(x);
-    mYAnimator->incCurrentValueNoUpdate(y);
-    mZAnimator->incCurrentValueNoUpdate(z);
-}
-
-void QVector3DAnimator::incBaseValues(const qreal x, const qreal y) {
+void QPointFAnimator::incBaseValues(const qreal x, const qreal y) {
     mXAnimator->incCurrentBaseValue(x);
     mYAnimator->incCurrentBaseValue(y);
 }
 
-void QVector3DAnimator::incBaseValues(const qreal x, const qreal y, const qreal z) {
-    mXAnimator->incCurrentBaseValue(x);
-    mYAnimator->incCurrentBaseValue(y);
-    mZAnimator->incCurrentBaseValue(z);
-}
-
-void QVector3DAnimator::incAllBaseValues(const qreal x, const qreal y) {
+void QPointFAnimator::incAllBaseValues(const qreal x, const qreal y) {
     mXAnimator->incAllValues(x);
     mYAnimator->incAllValues(y);
 }
 
-void QVector3DAnimator::incAllBaseValues(const qreal x, const qreal y, const qreal z) {
-    mXAnimator->incAllValues(x);
-    mYAnimator->incAllValues(y);
-    mZAnimator->incAllValues(z);
-}
-
-void QVector3DAnimator::incSavedValueToCurrentValue(const qreal incXBy,
+void QPointFAnimator::incSavedValueToCurrentValue(const qreal incXBy,
                                                   const qreal incYBy) {
     mXAnimator->incSavedValueToCurrentValue(incXBy);
     mYAnimator->incSavedValueToCurrentValue(incYBy);
 }
 
-void QVector3DAnimator::incSavedValueToCurrentValue(const qreal incXBy,
-                                                  const qreal incYBy,
-                                                  const qreal incZBy) {
-    mXAnimator->incSavedValueToCurrentValue(incXBy);
-    mYAnimator->incSavedValueToCurrentValue(incYBy);
-    mZAnimator->incSavedValueToCurrentValue(incZBy);
-}
-
-QrealAnimator *QVector3DAnimator::getXAnimator() {
+QrealAnimator *QPointFAnimator::getXAnimator() {
     return mXAnimator.data();
 }
 
-QrealAnimator *QVector3DAnimator::getYAnimator() {
+QrealAnimator *QPointFAnimator::getYAnimator() {
     return mYAnimator.data();
 }
 
-QrealAnimator *QVector3DAnimator::getZAnimator() {
-    return mZAnimator.data();
-}
-
-void QVector3DAnimator::multSavedValueToCurrentValue(const qreal sx,
-                                                   const qreal sy) { // TODO
+void QPointFAnimator::multSavedValueToCurrentValue(const qreal sx,
+                                                   const qreal sy) {
     mXAnimator->multSavedValueToCurrentValue(sx);
     mYAnimator->multSavedValueToCurrentValue(sy);
 }
 
-void QVector3DAnimator::multSavedValueToCurrentValue(const qreal sx,
-                                                   const qreal sy,
-                                                   const qreal sz) {
-    mXAnimator->multSavedValueToCurrentValue(sx);
-    mYAnimator->multSavedValueToCurrentValue(sy);
-    mZAnimator->multSavedValueToCurrentValue(sz);
-}
-
-void QVector3DAnimator::multCurrentValues(const qreal sx, const qreal sy, const qreal sz) {
+void QPointFAnimator::multCurrentValues(const qreal sx, const qreal sy) {
     mXAnimator->multCurrentBaseValue(sx);
     mYAnimator->multCurrentBaseValue(sy);
-    mZAnimator->multCurrentBaseValue(sz);
 }
 
-QVector3D QVector3DAnimator::getSavedValue() {
-    return QVector3D(mXAnimator->getSavedBaseValue(),
-                     mYAnimator->getSavedBaseValue(),
-                     mZAnimator->getSavedBaseValue());
+QPointF QPointFAnimator::getSavedValue() {
+    return QPointF(mXAnimator->getSavedBaseValue(),
+                   mYAnimator->getSavedBaseValue());
 }
 
-qreal QVector3DAnimator::getSavedXValue() {
+qreal QPointFAnimator::getSavedXValue() {
     return mXAnimator->getSavedBaseValue();
 }
 
-qreal QVector3DAnimator::getSavedYValue() {
+qreal QPointFAnimator::getSavedYValue() {
     return mYAnimator->getSavedBaseValue();
 }
 
-qreal QVector3DAnimator::getSavedZValue() {
-    return mZAnimator->getSavedBaseValue();
-}
-
-void QVector3DAnimator::applyTransform(const QMatrix4x4 &transform) {
+void QPointFAnimator::applyTransform(const QMatrix &transform) {
     mXAnimator->anim_coordinateKeysWith(mYAnimator.get());
     const auto& xKeys = mXAnimator->anim_getKeys();
     const auto& yKeys = mYAnimator->anim_getKeys();
-    const auto& zKeys = mZAnimator->anim_getKeys();
-    Q_ASSERT(xKeys.count() == yKeys.count() == zKeys.count());
+    Q_ASSERT(xKeys.count() == yKeys.count());
     const int nKeys = xKeys.count();
     if(nKeys == 0) {
         prp_startTransform();
@@ -299,31 +225,24 @@ void QVector3DAnimator::applyTransform(const QMatrix4x4 &transform) {
         for(int i = 0; i < nKeys; i++) {
             const auto xKey = xKeys.atId<QrealKey>(i);
             const auto yKey = yKeys.atId<QrealKey>(i);
-            const auto zKey = zKeys.atId<QrealKey>(i);
-            const QVector3D oldValue(xKey->getValue(), yKey->getValue(), zKey->getValue());
-            const QVector3D newValue = transform.map(oldValue);
-
+            const QPointF oldValue(xKey->getValue(), yKey->getValue());
+            const QPointF newValue = transform.map(oldValue);
             xKey->startValueTransform();
             yKey->startValueTransform();
-            zKey->startValueTransform();
-
             xKey->setValue(newValue.x());
             yKey->setValue(newValue.y());
-            zKey->setValue(newValue.z());
-
             xKey->finishValueTransform();
             yKey->finishValueTransform();
-            zKey->finishValueTransform();
         }
     }
 }
 
-void QVector3DAnimator::saveQVector3DSVG(SvgExporter& exp,
+void QPointFAnimator::saveQPointFSVG(SvgExporter& exp,
                                      QDomElement& parent,
                                      const FrameRange& visRange,
                                      const QString& name,
                                      const bool transform,
-                                     const QString& type) const { // TODO: add suport for z prop
+                                     const QString& type) const {
     Animator::saveSVG(exp, parent, visRange, name,
                       [this](const int relFrame) {
         const auto value = getEffectiveValue(relFrame);
@@ -332,7 +251,7 @@ void QVector3DAnimator::saveQVector3DSVG(SvgExporter& exp,
     }, transform, type);
 }
 
-void QVector3DAnimator::saveQVector3DSVGX(SvgExporter& exp,
+void QPointFAnimator::saveQPointFSVGX(SvgExporter& exp,
                                       QDomElement& parent,
                                       const FrameRange& visRange,
                                       const QString& name,
@@ -362,7 +281,7 @@ void QVector3DAnimator::saveQVector3DSVGX(SvgExporter& exp,
                              motionPath);
 }
 
-void QVector3DAnimator::saveQVector3DSVGY(SvgExporter& exp,
+void QPointFAnimator::saveQPointFSVGY(SvgExporter& exp,
                                       QDomElement& parent,
                                       const FrameRange& visRange,
                                       const QString& name,
@@ -392,8 +311,7 @@ void QVector3DAnimator::saveQVector3DSVGY(SvgExporter& exp,
                              motionPath);
 }
 
-// Writes the properties to the Timeline widget
-QDomElement QVector3DAnimator::prp_writePropertyXEV_impl(const XevExporter& exp) const {
+QDomElement QPointFAnimator::prp_writePropertyXEV_impl(const XevExporter& exp) const {
     auto result = exp.createElement("Vec2");
 
     auto x = mXAnimator->prp_writeNamedPropertyXEV("X", exp);
@@ -401,9 +319,6 @@ QDomElement QVector3DAnimator::prp_writePropertyXEV_impl(const XevExporter& exp)
 
     auto y = mYAnimator->prp_writeNamedPropertyXEV("Y", exp);
     result.appendChild(y);
-
-    auto z = mZAnimator->prp_writeNamedPropertyXEV("Z", exp);
-    result.appendChild(z);
 
     return result;
 }

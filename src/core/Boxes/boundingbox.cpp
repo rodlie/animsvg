@@ -39,7 +39,7 @@
 #include "RasterEffects/rastereffect.h"
 #include "RasterEffects/customrastereffectcreator.h"
 #include "internallinkbox.h"
-#include "Animators/qvector3danimator.h"
+#include "Animators/qpointfanimator.h"
 #include "MovablePoints/pathpointshandler.h"
 #include "typemenu.h"
 #include "patheffectsmenu.h"

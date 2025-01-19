@@ -29,7 +29,7 @@
 #include "eshadow_global.h"
 #include "enveCore/skia/skqtconversions.h"
 #include "enveCore/Animators/coloranimator.h"
-#include "enveCore/Animators/qvector3danimator.h"
+#include "enveCore/Animators/qpointfanimator.h"
 #include "enveCore/gpurendertools.h"
 
 class eShadowCaller : public RasterEffectCaller {
@@ -73,7 +73,7 @@ private:
     qsptr<QrealAnimator> mBlurRadius;
     qsptr<QrealAnimator> mOpacity;
     qsptr<ColorAnimator> mColor;
-    qsptr<QVector3DAnimator> mTranslation;
+    qsptr<QPointFAnimator> mTranslation;
 };
 
 #endif // ESHADOW_H

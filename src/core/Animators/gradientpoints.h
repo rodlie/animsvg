@@ -33,6 +33,7 @@ class GradientPoint;
 class MovablePoint;
 class PathBox;
 class QVector3DAnimator;
+class QPointFAnimator;
 
 class CORE_EXPORT GradientPoints : public StaticComplexAnimator {
     e_OBJECT
@@ -58,13 +59,13 @@ public:
 
     bool enabled() const { return mEnabled; }
 
-    QVector3DAnimator* startAnimator() const { return mStartAnimator.get(); }
-    QVector3DAnimator* endAnimator() const { return mEndAnimator.get(); }
+    QPointFAnimator* startAnimator() const { return mStartAnimator.get(); }
+    QPointFAnimator* endAnimator() const { return mEndAnimator.get(); }
 private:
     bool mEnabled;
 
-    qsptr<QVector3DAnimator> mStartAnimator;
-    qsptr<QVector3DAnimator> mEndAnimator;
+    qsptr<QPointFAnimator> mStartAnimator;
+    qsptr<QPointFAnimator> mEndAnimator;
 
     stdsptr<GradientPoint> mStartPoint;
     stdsptr<GradientPoint> mEndPoint;

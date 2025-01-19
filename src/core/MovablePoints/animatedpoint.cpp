@@ -28,12 +28,12 @@
 #include "pointhelpers.h"
 
 AnimatedPoint::AnimatedPoint(
-        QVector3DAnimator * const associatedAnimator,
+        QPointFAnimator * const associatedAnimator,
         const MovablePointType type) :
     MovablePoint(type),
     mAssociatedAnimator_k(associatedAnimator) {}
 
-AnimatedPoint::AnimatedPoint(QVector3DAnimator * const associatedAnimator,
+AnimatedPoint::AnimatedPoint(QPointFAnimator * const associatedAnimator,
                              BasicTransformAnimator * const trans,
                              const MovablePointType type) :
     AnimatedPoint(associatedAnimator, type) {

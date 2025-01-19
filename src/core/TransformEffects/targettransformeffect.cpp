@@ -28,7 +28,7 @@
 #include "Boxes/boundingbox.h"
 #include "Animators/transformanimator.h"
 #include "Animators/qrealanimator.h"
-#include "Animators/qvector3danimator.h"
+#include "Animators/qpointfanimator.h"
 
 TargetTransformEffect::TargetTransformEffect(
         const QString& name,

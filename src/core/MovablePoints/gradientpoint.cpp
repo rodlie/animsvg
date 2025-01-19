@@ -26,9 +26,10 @@
 #include "gradientpoint.h"
 #include "pointhelpers.h"
 #include "Boxes/pathbox.h"
+#include "Animators/qpointfanimator.h"
 #include "Animators/transformanimator.h"
 
-GradientPoint::GradientPoint(QVector3DAnimator * const associatedAnimator,
+GradientPoint::GradientPoint(QPointFAnimator * const associatedAnimator,
                              BoundingBox* const parent) :
     AnimatedPoint(associatedAnimator, parent->getTransformAnimator(),
                   TYPE_GRADIENT_POINT) {}

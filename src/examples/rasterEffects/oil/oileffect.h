@@ -3,7 +3,7 @@
 
 #include "rastereffect.h"
 
-#include "Animators/qvector3danimator.h"
+#include "Animators/qpointfanimator.h"
 
 class CORE_EXPORT OilEffect : public RasterEffect {
     e_OBJECT
@@ -18,7 +18,7 @@ public:
             const qreal relFrame, const qreal resolution,
             const qreal influence, BoxRenderData* const data) const;
 private:
-    qsptr<QVector3DAnimator> mBrushSize;
+    qsptr<QPointFAnimator> mBrushSize;
     qsptr<QrealAnimator> mAccuracy;
     qsptr<QrealAnimator> mStrokeLength;
     qsptr<QrealAnimator> mMaxStrokes;

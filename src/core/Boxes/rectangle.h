@@ -27,7 +27,7 @@
 #define RECTANGLE_H
 #include "Boxes/pathbox.h"
 class AnimatedPoint;
-class QVector3DAnimator;
+class QPointFAnimator;
 class CORE_EXPORT RectangleBox : public PathBox {
     e_OBJECT
 protected:
@@ -48,9 +48,9 @@ public:
     void setYRadius(const qreal radiusY);
     void setXRadius(const qreal radiusX);
 private:
-    qsptr<QVector3DAnimator> mTopLeftAnimator;
-    qsptr<QVector3DAnimator> mBottomRightAnimator;
-    qsptr<QVector3DAnimator> mRadiusAnimator;
+    qsptr<QPointFAnimator> mTopLeftAnimator;
+    qsptr<QPointFAnimator> mBottomRightAnimator;
+    qsptr<QPointFAnimator> mRadiusAnimator;
 
     stdsptr<AnimatedPoint> mTopLeftPoint;
     stdsptr<AnimatedPoint> mBottomRightPoint;
