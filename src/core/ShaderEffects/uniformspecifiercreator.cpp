@@ -155,14 +155,23 @@ void UniformSpecifierCreator::create(ShaderEffectJS &engine,
                                  mInfluenceScaled ? influence : 1,
                                  uniSpec);
     case ShaderPropertyType::vec2Property:
-        return QVector3DAnimatorCreate(engine,
-                                       fGLValue,
-                                       loc,
-                                       property,
-                                       relFrame,
-                                       mResolutionScaled ? resolution : 1,
-                                       mInfluenceScaled ? influence : 1,
-                                       uniSpec);
+        return QPointFAnimatorCreate(engine,
+                                     fGLValue,
+                                     loc,
+                                     property,
+                                     relFrame,
+                                     mResolutionScaled ? resolution : 1,
+                                     mInfluenceScaled ? influence : 1,
+                                     uniSpec);
+    case ShaderPropertyType::vec3Property:
+        return QVector3DAnimatorCreator(engine,
+                                        fGLValue,
+                                        loc,
+                                        property,
+                                        relFrame,
+                                        mResolutionScaled ? resolution : 1,
+                                        mInfluenceScaled ? influence : 1,
+                                        uniSpec);
     case ShaderPropertyType::colorProperty:
         return colorAnimatorCreate(engine,
                                    fGLValue,

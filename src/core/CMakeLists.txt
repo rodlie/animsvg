@@ -529,6 +529,7 @@ set(
     Segments/smoothcurves.h
     ShaderEffects/PropertyCreators/coloranimatorcreator.h
     ShaderEffects/PropertyCreators/intanimatorcreator.h
+    ShaderEffects/PropertyCreators/qpointfanimatorcreator.h
     ShaderEffects/PropertyCreators/qvector3danimatorcreator.h
     ShaderEffects/PropertyCreators/qrealanimatorcreator.h
     ShaderEffects/PropertyCreators/shaderpropertycreator.h
